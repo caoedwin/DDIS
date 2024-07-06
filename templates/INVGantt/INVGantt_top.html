@@ -1,0 +1,1198 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}INV_top{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 70%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+     .showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
+
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0rem;
+}
+
+.container-echart{
+   text-align: center;
+   width: 50%;
+   background-color: #F5F7FA;
+   padding: 5px;
+   border: 1px solid #fff5d4;
+}
+
+
+.showDataArea #main {
+
+}
+
+.container{
+   background-color: #409EFF;
+
+}
+
+
+ .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+ .dashboard {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+     flex-wrap: nowrap;
+}
+.dashboard #myChart1 {
+    height: 100%;
+    width: 50%;
+}
+.dashboard #myChart2 {
+    height: 100%;
+    width: 50%;
+}
+    .el-button--mini, .el-b utton--mini.is-round {
+    padding: 1px 5px;
+}
+    .el-collapse-item__header{
+
+        background-image: linear-gradient(to right, rgba(0,139,139,0), rgba(0,139,139,1));
+        {#background-image: linear-gradient(to right, rgba(70,130,180,0), rgba(70,130,180,1));#}
+    }
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+        {% csrf_token %}
+<el-collapse v-model="activeName" ref="activeName" @change="handleChange">
+  <el-collapse-item name="3">
+      <template slot="title">
+          <h5>Y${systemTime}，INV Test status</h5>
+      </template>
+
+    <div class="row" style="white-space: nowrap;">
+        <div class="col-md-2" style="margin-top: 2px">
+            <label style="color: #000000;font-size: medium" for="Customer">Customer:</label>
+                  <select id="Customer3" ref="Customer3"   v-model="selectedCustomer3" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;margin-top: 2px">
+                           <option value="All">All</option>
+                           <option v-for="(item,key,index) in selectItem" >${ item }</option>
+                  </select>
+            <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+        </div>
+         <div class="col-md-3">
+            <template>
+            <div class="block">
+                <label style="color: #000000;font-size: medium" for="Customer">Year:</label>
+            <el-date-picker
+                  v-model="selectedYear3"
+                  id="selectedYear3"
+                  type="year"
+                  ref="selectedYear3"
+                  value-format="yyyy"
+                  placeholder="选择年">
+            </el-date-picker>
+          </div>
+                </template>
+            </div>
+    <div class="col-md-1">
+        <el-button :loading="elbuttonloading3" size="small" style="background:#428bca;color:#fff;margin-top: 5px" value="Search" name="Search" @click="SEARCH3">Search</el-button>
+    </div>
+
+    </div>
+    <p class="selectItem" v-cloak  v-if="showCustomer3" style="color: #000000;font-size: medium;">當前表格信息：${ showCustomer3 }/${ showYear3 }</p>
+          <template v-cloak>
+              <el-table  stripe border  :data="tableData4" style="width: 50%;float: left" id="out-table1"
+              v-loading="tableloading3"
+            element-loading-text="數據更新中，請稍後"
+            border>
+                <el-table-column prop="Project" label="Project" align="center" width="120"></el-table-column>
+                <el-table-column prop="Pass" label="Pass" align="center" width="100" ></el-table-column>
+                <el-table-column prop="Fail" label="Fail" align="center" width="100" ></el-table-column>
+                <el-table-column prop="Ongoing" label="Ongoing" align="center" width="100" ></el-table-column>
+                <el-table-column prop="Planning" label="Planning" align="center" width="100"></el-table-column>
+                <el-table-column prop="Total" label="Open" align="center"></el-table-column>
+              </el-table>
+          </template>
+       <!--柱状图-->
+      <div class="container-echart"  style="float: right" v-cloak>
+          <div class="Quatity" id="main5" style="height:400px"></div>
+      </div>
+
+    </el-collapse-item>
+
+  <el-collapse-item name="1" >
+
+      <template slot="title" >
+         <h5>Y${systemTime}，INV execution project TOP10</h5>
+      </template>
+
+    <div class="row" style="white-space: nowrap;">
+        <div class="col-md-2" style="margin-top: 2px">
+            <label style="color: #000000;font-size: medium" for="Customer">Customer:</label>
+                  <select id="Customer1" ref="Customer1"   v-model="selectedCustomer1" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;margin-top: 2px">
+                           <option value="All">All</option>
+                           <option v-for="(item,key,index) in selectItem" >${ item }</option>
+                  </select>
+            <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+        </div>
+         <div class="col-md-3">
+            <template>
+            <div class="block">
+                <label style="color: #000000;font-size: medium" for="Customer">Year:</label>
+            <el-date-picker
+                  v-model="selectedYear1"
+                  id="selectedYear1"
+                  type="year"
+                  ref="selectedYear1"
+                  value-format="yyyy"
+                  placeholder="选择年">
+            </el-date-picker>
+          </div>
+                </template>
+            </div>
+    <div class="col-md-1">
+        <el-button size="small" :loading="elbuttonloading1" style="background:#428bca;color:#fff;margin-top: 5px" value="Search" name="Search" @click="SEARCH1">Search</el-button>
+    </div>
+
+    </div>
+       <p class="selectItem" v-cloak  v-if="showCustomer1" style="color: #000000;font-size: medium;">當前表格信息：${ showCustomer1 }/${ showYear1 }</p>
+        <template v-cloak>
+          <el-table stripe border  :data="tableData1" style="width: 50%;float: left" id="out-table1"
+          v-loading="tableloading1"
+            element-loading-text="數據更新中，請稍後"
+            border>
+            <el-table-column prop="Project" label="Project" align="center" width="120"></el-table-column>
+            <el-table-column prop="Standard_test_time" label="Standard_test_time" align="center" width="160"></el-table-column>
+            <el-table-column prop="Retest_time" label="Retest_time" align="center" width="120"></el-table-column>
+            <el-table-column prop="Total_Attend_time" label="Total_Attend_time" align="center" width="140"></el-table-column>
+            <el-table-column prop="Total" label="Total" align="center" ></el-table-column>
+          </el-table>
+         </template>
+
+      <!--柱状图-->
+      <div  class="container-echart" style="float: right" v-cloak>
+          <div class="Quatity" id="main2" style="height:400px;"></div>
+      </div>
+  </el-collapse-item>
+
+  <el-collapse-item name="2">
+      <template slot="title">
+          <h5>Y${systemTime}，INV TP Category TOP10</h5>
+      </template>
+
+    <div class="row" style="white-space: nowrap;">
+        <div class="col-md-2" style="margin-top: 2px">
+            <label style="color: #000000;font-size: medium" for="Customer">Customer:</label>
+                  <select id="Customer2" ref="Customer2"   v-model="selectedCustomer2" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;margin-top: 2px">
+                           <option value="All">All</option>
+                           <option v-for="(item,key,index) in selectItem" >${ item }</option>
+                  </select>
+            <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+        </div>
+         <div class="col-md-3">
+            <template>
+            <div class="block">
+                <label style="color: #000000;font-size: medium" for="Customer">Year:</label>
+            <el-date-picker
+                  v-model="selectedYear2"
+                  id="selectedYear2"
+                  type="year"
+                  ref="selectedYear2"
+                  value-format="yyyy"
+                  placeholder="选择年">
+            </el-date-picker>
+          </div>
+                </template>
+            </div>
+    <div class="col-md-1">
+        <el-button size="small" :loading="elbuttonloading2" style="background:#428bca;color:#fff;margin-top: 5px" value="Search" name="Search" @click="SEARCH2">Search</el-button>
+    </div>
+
+    </div>
+     <p class="selectItem" v-cloak   v-if="showCustomer2" style="color: #000000;font-size: medium;">當前表格信息：${ showCustomer2 }/${ showYear2 }</p>
+      <p><h5>TP Category Top10</h5></p>
+      <template v-cloak>
+          <el-table stripe border  :data="tableData2" style="width: 50%;float: left" id="out-table2"
+          v-loading="tableloading2"
+            element-loading-text="數據更新中，請稍後"
+            border>
+            <el-table-column prop="KeyPart" label="TP Category" align="center" width="160" ></el-table-column>
+            <el-table-column prop="Pass" label="Pass" align="center" width="120" ></el-table-column>
+            <el-table-column prop="Fail" label="Fail" align="center" width="120" ></el-table-column>
+            <el-table-column prop="Ongoing" label="Ongoing" align="center" width="120" ></el-table-column>
+            <el-table-column prop="Total" label="Total" align="center" ></el-table-column>
+          </el-table>
+      </template>
+
+      <div  class="container-echart" style="height:523px;float: left" id="echarts1" v-cloak>
+          <div class="Quatity" id="main3" style="height:450px;"></div>
+      </div>
+      <p style="color: #ffffff">keyparts</p>
+      {% comment %}<p><h5>Failed keyparts Top10</h5></p>
+      <template  v-cloak>
+          <el-table stripe border  :data="tableData3" style="width: 50%;float: left" id="out-table2" >
+            <el-table-column prop="KeyPart" label="KeyPart" align="center" width="160" ></el-table-column>
+            <el-table-column prop="Pass" label="Pass" align="center" width="120" ></el-table-column>
+            <el-table-column prop="Fail" label="Fail" align="center" width="120" ></el-table-column>
+            <el-table-column prop="Ongoing" label="Ongoing" align="center" width="120" ></el-table-column>
+            <el-table-column prop="Total" label="Total" align="center" ></el-table-column>
+          </el-table>
+      </template>
+
+      <div  class="container-echart"  style="height:523px;float: right" v-cloak>
+          <div class="Quatity" id="main4" style="height:450px;"></div>
+      </div>{% endcomment %}
+
+  </el-collapse-item>
+
+
+
+  <el-collapse-item name="4">
+      <template slot="title">
+          <h5>Comparison of INV quantity in previous years</h5>
+      </template>
+
+    <div class="row" style="white-space: nowrap;">
+        <div class="col-md-2" style="margin-top: 2px">
+            <label style="color: #000000;font-size: medium" for="Customer">Customer:</label>
+                  <select id="Customer4" ref="Customer4"   v-model="selectedCustomer4" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;margin-top: 2px">
+                           <option value="All">All</option>
+                           <option v-for="(item,key,index) in selectItem" >${ item }</option>
+                  </select>
+            <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+        </div>
+         {% comment %}<div class="col-md-3">
+            <template>
+            <div class="block">
+                <label style="color: #000000;font-size: medium" for="Customer">Year:</label>
+            <el-date-picker
+                  v-model="selectedYear4"
+                  id="selectedYear4"
+                  type="year"
+                  ref="selectedYear4"
+                  value-format="yyyy"
+                  placeholder="选择年">
+            </el-date-picker>
+          </div>
+                </template>
+            </div>{% endcomment %}
+    <div class="col-md-1">
+        <el-button :loading="elbuttonloading4" size="small" style="background:#428bca;color:#fff;margin-top: 5px" value="Search" name="Search" @click="SEARCH4">Search</el-button>
+    </div>
+
+    </div>
+     <p class="selectItem" v-cloak  v-if="showCustomer4" style="color: #000000;font-size: medium;">當前表格信息：${ showCustomer4 }{% comment %}/${ showYear4 }{% endcomment %}</p>
+          <template v-cloak>
+              <el-table  stripe border  :data="tableData5" style="width: 50%;float: left" id="out-table1"
+              v-loading="tableloading4"
+            element-loading-text="數據更新中，請稍後"
+            border>
+                <el-table-column prop="Year" label="Year" align="center" width="120"></el-table-column>
+                <el-table-column prop="PASS" label="PASS" align="center" width="120" ></el-table-column>
+                <el-table-column prop="FAIL" label="FAIL" align="center" width="120" ></el-table-column>
+                <el-table-column prop="Total" label="Total" align="center" width="120" ></el-table-column>
+                <el-table-column prop="Failure" label="Failure" align="center"></el-table-column>
+{#                <el-table-column prop="Total" label="Total" align="center"></el-table-column>#}
+              </el-table>
+          </template>
+      <!--柱状图-->
+      <div class="container-echart" style="float: right" v-cloak>
+          <div class="Quatity" id="main6" style="height:400px;"></div>
+      </div>
+
+    </el-collapse-item>
+
+</el-collapse>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                Sum:{},
+                tableData1: [],
+                tableData2: [],
+                tableData3: [],
+                tableData4: [],
+                tableData5: [],
+                selectItem: [],
+                selectedYear: '',
+                selectedYear1: '',
+                selectedYear2: '',
+                selectedYear3: '',
+                selectedYear4: '',
+                selectedCustomer: null,
+                selectedCustomer1: null,
+                selectedCustomer2: null,
+                selectedCustomer3: null,
+                selectedCustomer4: null,
+                showCustomer: '',
+                showCustomer1: '',
+                showCustomer2: '',
+                showCustomer3: '',
+                showCustomer4: '',
+                showYear: '',
+                showYear1: '',
+                showYear2: '',
+                showYear3: '',
+                showYear4: '',
+                systemTime: '',
+                customerError:false,
+                title: [],
+                settable:false,
+                Top10:[],
+                activeName: ['1','2','3','4'],
+                coloroder:{'Pass': "#589800", 'Fail': "#FF0000", 'Ongoing': "#FFFF00", 'Planning': "#FFFFFF"},
+                condition:null,
+                elbuttonloading1: false,
+                tableloading1: false,
+                elbuttonloading2: false,
+                tableloading2: false,
+                elbuttonloading3: false,
+                tableloading3: false,
+                elbuttonloading4: false,
+                tableloading4: false,
+            }
+        },
+        mounted() {        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+            this.addDate();
+       },
+        methods: {
+
+
+            handleChange(val) {
+                console.log(val);
+            },
+
+
+            addDate () {
+                let nowDate = new Date();
+                let date = nowDate.getFullYear();
+                this.systemTime = date;
+            },
+
+            getdata: function (e) {
+                this.elbuttonloading1 = true;
+                this.tableloading1 = true;
+                this.elbuttonloading2 = true;
+                this.tableloading2 = true;
+                this.elbuttonloading3 = true;
+                this.tableloading3 = true;
+                this.elbuttonloading4 = true;
+                this.tableloading4 = true;
+                var myChart3 = echarts.init(document.getElementById('main2'));
+                myChart3.showLoading() // 在获取数据之前, 显示加载动画
+                var myChart4 = echarts.init(document.getElementById('main3'));
+                myChart4.showLoading() // 在获取数据之前, 显示加载动画
+                var myChart6 = echarts.init(document.getElementById('main5'));
+                myChart6.showLoading() // 在获取数据之前, 显示加载动画
+                var myChart7 = echarts.init(document.getElementById('main6'));
+                myChart7.showLoading() // 在获取数据之前, 显示加载动画
+                let data = {"isGetData": e,};
+                axios.post("/INVGantt/INVGantt-top/", Qs.stringify(data), {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    }
+                }).then((res) => {
+                    this.selectItem = res.data.select;
+                    this.tableData1 = res.data['content1'];
+                    this.tableData2 = res.data['content2'];
+                    this.tableData3 = res.data['content3'];
+                    this.tableData4 = res.data['content4'];
+                    this.tableData5 = res.data['content5'];
+                    this.Top10 = res.data['Top10'];
+                    this.Execution_Project = res.data['Execution_Project'];
+                    this.Test_Status = res.data['Test_Status'];
+                    this.Failed_Keyparts = res.data['Failed_Keyparts'];
+                    this.Keyparts = res.data['Keyparts'];
+                    this.INV_Quantity = res.data['INV_Quantity'];
+                    this.settable = false;
+                    //1
+                    var Execution_Project_label = [];
+                    for (var i = 0; i < this.Execution_Project.length; i++) {
+                        var getExecution_Project_label = this.Execution_Project[i].name;
+                        Execution_Project_label.push(getExecution_Project_label);
+                    }
+
+                    var Test_Status_label = [];
+                    for (var i = 0; i < this.Test_Status.length; i++) {
+                        var getTest_Status_label = this.Test_Status[i].name;
+                        Test_Status_label.push(getTest_Status_label);
+                    }
+
+                    var INV_Quantity_label = [];
+                    for (var i = 0; i < this.INV_Quantity.length; i++) {
+                        var getINV_Quantity_label = this.INV_Quantity[i].name;
+                        INV_Quantity_label.push(getINV_Quantity_label);
+                    }
+
+                    /**  在此处进行，宽度设置                         */
+                    var byId = function (id) {
+                       var domInit = $('#' + id);
+                       domInit.width($('#main2').width());
+                       var width = domInit.width();
+                       //var height = domInit.height();
+                       return document.getElementById(id);
+                   };
+
+                    // 指定图表的配置项和数据
+                    var option3 = {
+                        color: ['#589800', '#FF0000'],
+                        title: {
+                            text: 'Execution Top10',
+                            textStyle: {
+                                fontSize: 20,
+                            },
+                            x: 'center',
+                            y: 'top',
+                            textAlign: 'left',
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            },
+                            textAlign: 'left',
+                        },
+                        legend: {
+                            left: 'center',
+                            top: 'bottom',
+                            data: Execution_Project_label,
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: this.Top10.Customer_key,//['A39','C38N','C38A']
+                                axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: this.Execution_Project
+                    };
+                    {#var myChart3 = echarts.init(document.getElementById('main2'));#}
+
+                    var option4 = {
+                        title: {
+                            text: 'TP Category Top 10',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+
+                            left: 'center',
+                            top: 'bottom',
+                            data: this.Top10.Keyparts_key
+                        },
+                        series: [
+                            {
+                                name: 'TP Category Top 10',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '50%'],
+                                data: this.Keyparts,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    {#var myChart4 = echarts.init(document.getElementById('main3'));#}
+
+                    {% comment %}var option5 = {
+                        title: {
+                            text: 'Fail keyparts Top 10',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+
+                        legend: {
+
+                            left: 'center',
+                            top: 'bottom',
+                            data: this.Top10.Failed_Keyparts_key
+                        },
+                        series: [
+                            {
+                                name: 'failed keyparts',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '50%'],
+                                data: this.Failed_Keyparts,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    var myChart5 = echarts.init(document.getElementById('main4'));{% endcomment %}
+
+                    var option6 = {
+                        color: ['#589800', '#FF0000', "#FFFF00", "#00FFFF"],
+                        title: {
+                            text: 'INV Test status',
+                            textStyle: {
+                                fontSize: 20,
+                            },
+                            x: 'center',
+                            y: 'top',
+                            textAlign: 'left',
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            },
+                            textAlign: 'left',
+                        },
+                        legend: {
+                            left: 'center',
+                            top: 'bottom',
+                            data: Test_Status_label,
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: this.Top10.Project_key,
+                                axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: this.Test_Status
+                    };
+                    {#var myChart6 = echarts.init(document.getElementById('main5'));#}
+
+                    var option7 = {
+                         color: ['#589800', '#FF0000', "#FFFF00", "#00FFFF"],
+                         title: {
+                         text: 'Comparis in previous years',
+                         textStyle: {
+                                       fontSize: 20,
+                                    },
+                                    x: 'center',
+                                    y: 'top',
+                                    textAlign: 'left',
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                    },
+                                    textAlign: 'left',
+                                },
+                                legend: {
+                                    left: 'center',
+                                    top: 'bottom',
+                                    data: INV_Quantity_label,
+                                },
+                                grid: {
+                                    left: '3%',
+                                    right: '4%',
+                                    bottom: '5%',
+                                    containLabel: true
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'value'
+                                    }
+
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'category',
+                                        data: this.Top10.Quantity_key,//['A39','C38N','C38A']
+                                        Label: {//坐标轴刻度标签的相关设置。
+                                            rotate: "45",
+                                            show: true,
+                                            position: 'insideRight'
+                                        },
+                                    }
+                                ],
+                                series: this.INV_Quantity
+                            };
+                    {#var myChart7 = echarts.init(document.getElementById('main6'));#}
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart3.setOption(option3, true);
+
+                    myChart4.setOption(option4, true);
+
+                    {% comment %}myChart5.setOption(option5, true);{% endcomment %}
+
+                    myChart6.setOption(option6, true);
+
+                    myChart7.setOption(option7, true);
+
+                    window.addEventListener('resize', function() {
+                            myChart3.resize();
+                            myChart4.resize();
+                            myChart5.resize();
+                            myChart6.resize();
+                            myChart7.resize();
+                         })
+                    this.elbuttonloading1 = false;
+                    this.tableloading1 = false;
+                    this.elbuttonloading2 = false;
+                    this.tableloading2 = false;
+                    this.elbuttonloading3 = false;
+                    this.tableloading3 = false;
+                    this.elbuttonloading4 = false;
+                    this.tableloading4 = false;
+                    myChart3.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    myChart4.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    myChart6.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    myChart7.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+                });
+            },
+
+            SEARCH1: function () {
+                if (this.$refs.Customer1.value == '') {
+                    this.customerError = true;
+                    return false;
+                } else {
+                    this.elbuttonloading1 = true;
+                    this.tableloading1 = true;
+                    var myChart3 = echarts.init(document.getElementById('main2'));
+                    myChart3.showLoading() // 在获取数据之前, 显示加载动画
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer1.value;
+                    let Date = this.$refs.selectedYear1.value;
+                    let data = {
+                        "isGetData": "SEARCH1",
+                        "Date": Date,
+                        "Customer": Customer,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/INVGantt/INVGantt-top/", Qs.stringify(data, {indices: false}), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.showCustomer1 = this.selectedCustomer1;
+                        this.showYear1 = Date;
+                        this.selectItem = res.data.select;
+                        this.tableData1 = res.data['content1'];
+                        this.Top10 = res.data['Top10'];
+                        this.Execution_Project = res.data['Execution_Project'];
+                        this.settable = false;
+
+                        var Execution_Project_label = [];
+                        for (var i = 0; i < this.Execution_Project.length; i++) {
+                            var getExecution_Project_label = this.Execution_Project[i].name;
+                            Execution_Project_label.push(getExecution_Project_label);
+                        }
+
+                        /**  在此处进行，宽度设置                         */
+                        var byId = function (id) {
+                            var domInit = $('#' + id);
+                            domInit.width($(window).width() * 0.4);
+                            var width = domInit.width();
+                            var height = domInit.height();
+                            return document.getElementById(id);
+                        };
+
+                        // 指定图表的配置项和数据
+                        var option3 = {
+                            color: ['#589800', '#FF0000'],
+                            title: {
+                                text: 'By Customer',
+                                textStyle: {
+                                    fontSize: 20,
+                                },
+                                x: 'center',
+                                y: 'top',
+                                textAlign: 'left',
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                },
+                                textAlign: 'left',
+                            },
+                            legend: {
+                                left: 'center',
+                                top: 'bottom',
+                                data: Execution_Project_label,
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: this.Top10.Customer_key,//['A39','C38N','C38A']
+                                    axisLabel: {//坐标轴刻度标签的相关设置。
+                                        interval: 0,
+                                        rotate: "45"
+                                    },
+                                    axisTick: {
+                                        alignWithLabel: true
+                                    }
+                                }
+
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: this.Execution_Project
+                        };
+                        {#var myChart3 = echarts.init(byId('main2'));#}
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart3.setOption(option3, true);
+
+                        window.addEventListener('resize', function () {
+                            myChart3.resize();
+                        })
+                        this.elbuttonloading1 = false;
+                        this.tableloading1 = false;
+                        myChart3.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    })
+                    this.settable = true;
+                }
+            },
+
+            SEARCH2: function () {
+                if (this.$refs.Customer2.value == '') {
+                    this.customerError = true;
+                    return false;
+                } else {
+                    this.elbuttonloading2 = true;
+                    this.tableloading2 = true;
+                    var myChart4 = echarts.init(document.getElementById('main3'));
+                    myChart4.showLoading() // 在获取数据之前, 显示加载动画
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer2.value;
+                    let Date = this.$refs.selectedYear2.value;
+                    let data = {
+                        "isGetData": "SEARCH2",
+                        "Date": Date,
+                        "Customer": Customer,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/INVGantt/INVGantt-top/", Qs.stringify(data, {indices: false}), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.showYear2 = Date;
+                        this.showCustomer2 = this.selectedCustomer2;
+                        this.selectItem = res.data.select;
+                        this.tableData2 = res.data['content2'];
+                        this.tableData3 = res.data['content3'];
+                        this.Top10 = res.data['Top10'];
+                        this.Failed_Keyparts = res.data['Failed_Keyparts'];
+                        this.Keyparts = res.data['Keyparts'];
+                        this.settable = false;
+
+                        /**  在此处进行，宽度设置                         */
+                        var byId = function (id) {
+                            var domInit = $('#' + id);
+                            domInit.width($(window).width() * 0.4);
+                            var width = domInit.width();
+                            var height = domInit.height();
+                            return document.getElementById(id);
+                        };
+
+                        // 指定图表的配置项和数据
+                        var option4 = {
+                            title: {
+                                text: 'Total Keyparts Top 10',
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: '{a} <br/>{b} : {c} ({d}%)'
+                            },
+                            legend: {
+
+                                left: 'center',
+                                top: 'bottom',
+                                data: this.Top10.Keyparts_key
+                            },
+                            series: [
+                                {
+                                    name: 'Total keyparts Top 10',
+                                    type: 'pie',
+                                    radius: '55%',
+                                    center: ['50%', '50%'],
+                                    data: this.Keyparts,
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+                        {#var myChart4 = echarts.init(byId('main3'));#}
+
+                        {% comment %}var option5 = {
+                            title: {
+                                text: 'Fail keyparts Top 10',
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: '{a} <br/>{b} : {c} ({d}%)'
+                            },
+
+                            legend: {
+
+                                left: 'center',
+                                top: 'bottom',
+                                data: this.Top10.Failed_Keyparts_key
+                            },
+                            series: [
+                                {
+                                    name: 'failed keyparts',
+                                    type: 'pie',
+                                    radius: '55%',
+                                    center: ['50%', '50%'],
+                                    data: this.Failed_Keyparts,
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+                        var myChart5 = echarts.init(byId('main4'));{% endcomment %}
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart4.setOption(option4, true);
+
+                        {% comment %}myChart5.setOption(option5, true);{% endcomment %}
+
+                        window.addEventListener('resize', function () {
+
+                            myChart4.resize();
+                            myChart5.resize();
+
+                        })
+                        this.elbuttonloading2 = false;
+                        this.tableloading2 = false;
+                        myChart4.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+                    })
+                    this.settable = true;
+                }
+            },
+
+            SEARCH3: function () {
+                if (this.$refs.Customer3.value == '') {
+                    this.customerError = true;
+                    return false;
+                } else {
+                    this.elbuttonloading3 = true;
+                    this.tableloading3 = true;
+                    var myChart6 = echarts.init(document.getElementById('main5'));
+                    myChart6.showLoading() // 在获取数据之前, 显示加载动画
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer3.value;
+                    let Date = this.$refs.selectedYear3.value;
+                    let data = {
+                        "isGetData": "SEARCH3",
+                        "Customer": Customer,
+                        "Date": Date,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/INVGantt/INVGantt-top/", Qs.stringify(data, {indices: false}), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res)=>{
+                        this.condition = Customer;
+                        this.showCustomer3 = this.selectedCustomer3;
+                        this.showYear3 = Date;
+                        this.selectItem = res.data.select;
+                        this.tableData4 = res.data['content4'];
+                        this.Top10 = res.data['Top10'];
+                        this.Test_Status = res.data['Test_Status'];
+                        this.settable = false;
+
+                        var Test_Status_label = [];
+                        for (var i = 0; i < this.Test_Status.length; i++) {
+                            var getTest_Status_label = this.Test_Status[i].name;
+                            Test_Status_label.push(getTest_Status_label);
+                        }
+
+                        /**  在此处进行，宽度设置                         */
+                        var byId = function (id) {
+                            var domInit = $('#' + id);
+                            domInit.width($(window).width() * 0.4);
+                            var width = domInit.width();
+                            var height = domInit.height();
+                            return document.getElementById(id);
+                        };
+
+                        // 指定图表的配置项和数据
+                        var option6 = {
+                            color: ['#589800', '#FF0000', "#FFFF00", "#00FFFF"],
+                            title: {
+                                text: 'Y2020，INV Test status',
+                                textStyle: {
+                                    fontSize: 20,
+                                },
+                                x: 'center',
+                                y: 'top',
+                                textAlign: 'left',
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                },
+                                textAlign: 'left',
+                            },
+                            legend: {
+                                left: 'center',
+                                top: 'bottom',
+                                data: Test_Status_label,
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: this.Top10.Project_key,
+                                    axisLabel: {//坐标轴刻度标签的相关设置。
+                                        interval: 0,
+                                        rotate: "45"
+                                    },
+                                    axisTick: {
+                                        alignWithLabel: true
+                                    }
+                                }
+
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: this.Test_Status
+                        };
+                        {#var myChart6 = echarts.init(byId('main5'));#}
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart6.setOption(option6, true);
+
+                        window.addEventListener('resize', function() {
+                                myChart6.resize();
+                         })
+                        this.elbuttonloading3 = false;
+                        this.tableloading3 = false;
+                        myChart6.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+                    })
+                    this.settable = true;
+                }
+            },
+
+            SEARCH4: function () {
+                if (this.$refs.Customer4.value == '') {
+                    this.customerError = true;
+                    return false;
+                } else {
+                    this.elbuttonloading4 = true;
+                    this.tableloading4 = true;
+                    var myChart7 = echarts.init(document.getElementById('main6'));
+                    myChart7.showLoading() // 在获取数据之前, 显示加载动画
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer4.value;
+                    {% comment %}let Date = this.$refs.selectedYear4.value;{% endcomment %}
+                    let data = {
+                        "isGetData": "SEARCH4",
+                        "Date": Date,
+                        "Customer": Customer,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/INVGantt/INVGantt-top/", Qs.stringify(data, {indices: false}), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.showYear4 = Date;
+                        this.showCustomer4 = this.selectedCustomer4;
+                        this.selectItem = res.data.select;
+                        this.tableData5 = res.data['content5'];
+                        this.Top10 = res.data['Top10'];
+                        this.INV_Quantity = res.data['INV_Quantity'];
+                        this.settable = false;
+                        var INV_Quantity_label = [];
+                        for (var i = 0; i < this.INV_Quantity.length; i++) {
+                            var getINV_Quantity_label = this.INV_Quantity[i].name;
+                            INV_Quantity_label.push(getINV_Quantity_label);
+                        }
+
+                        /**  在此处进行，宽度设置                         */
+                        var byId = function (id) {
+                            var domInit = $('#' + id);
+                            domInit.width($(window).width() * 0.4);
+                            var width = domInit.width();
+                            var height = domInit.height();
+                            return document.getElementById(id);
+                        };
+
+                        // 指定图表的配置项和数据
+                        var option7 = {
+                            color: ['#589800', '#FF0000', "#FFFF00", "#00FFFF"],
+                            title: {
+                                text: 'Comparis in previous years',
+                                textStyle: {
+                                    fontSize: 20,
+                                },
+                                x: 'center',
+                                y: 'top',
+                                textAlign: 'left',
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                },
+                                textAlign: 'left',
+                            },
+                            legend: {
+                                left: 'center',
+                                top: 'bottom',
+                                data: INV_Quantity_label,
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '5%',
+                                containLabel: true
+                            },
+                            xAxis: [
+                                {
+                                    type: 'value'
+                                }
+
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'category',
+                                    data: this.Top10.Quantity_key,//['A39','C38N','C38A']
+                                    Label: {//坐标轴刻度标签的相关设置。
+                                        rotate: "45",
+                                        show: true,
+                                        position: 'insideRight'
+                                    },
+                                }
+                            ],
+                            series: this.INV_Quantity
+                        };
+                        {#var myChart7 = echarts.init(byId('main6'));#}
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart7.setOption(option7, true);
+
+                        window.addEventListener('resize', function () {
+                            myChart7.resize();
+
+                        })
+                        this.elbuttonloading4 = false;
+                        this.tableloading4 = false;
+                        myChart7.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+                    })
+                    this.settable = true;
+                }
+            },
+
+        }
+    })
+ </script>
+{% endblock %}
+

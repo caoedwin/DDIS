@@ -1,0 +1,730 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}LNV_OBI{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+
+    .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
+        color: #f2ed07;
+    }
+
+    .el-tabs--card>.el-tabs__header .el-tabs__item{
+        color: white;
+        width: 100px;
+        text-align: center;
+    }
+
+
+  .selectMsg label{
+      font-weight: 800;
+      font-size:18px;
+      margin-right: 10px;
+      color:black;
+  }
+
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:black;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    body .el-table th.gutter{
+      display: table-cell!important;
+    }
+    body .el-table colgroup.gutter{
+      display: table-cell!important;
+    }
+
+  .tableAround{
+    padding: 20px;
+    margin-top: 15px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #c0c0c0;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,255);
+}
+
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 15px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="app">
+        <div style="float: right;font-size: large;color: antiquewhite;">
+              <span class="showNum" style="margin-left: 30px">本頁已選 <span id="selectNum">0</span> 條</span>
+        </div>
+    <el-dialog title="新增Category" :visible.sync="append1" :before-close="closeDialog1" center>
+               <template>
+                 <el-form ref="form1"  :model="form1" :rules="rule1" >
+                      <el-form-item label="Category:" prop="Category">
+                              <el-input  v-model="form1.Category" ></el-input>
+                      </el-form-item>
+                 </el-form>
+                 <span slot="footer" class="dialog-footer">
+                      <el-button type="primary" @click="addSubmit1('form1')">確定</el-button>
+                 </span>
+            </template>
+    </el-dialog>
+    <el-dialog title="修改Category" :visible.sync="edit1" :before-close="closeDialog2" center>
+               <template>
+                 <el-form ref="form2"  :model="form2">
+                      <el-form-item label="Category:" prop="Category">
+                              <el-input  v-model="form2.Category" ></el-input>
+                      </el-form-item>
+                 </el-form>
+                 <span slot="footer" class="dialog-footer">
+                      <el-button type="primary" @click="addSubmit2()">確定</el-button>
+                 </span>
+            </template>
+    </el-dialog>
+    <el-dialog title="新增Series" :visible.sync="append2" :before-close="closeDialog3" center>
+               <template>
+                 <el-form ref="form3"  :model="form3" :rules="rule2" >
+                      <el-form-item label="Series:" prop="Series">
+                              <el-input  v-model="form3.Series" ></el-input>
+                      </el-form-item>
+                 </el-form>
+                 <span slot="footer" class="dialog-footer">
+                      <el-button type="primary" @click="addSubmit3('form3')">確定</el-button>
+                 </span>
+            </template>
+    </el-dialog>
+    <el-dialog title="修改Series" :visible.sync="edit2" :before-close="closeDialog4" center>
+               <template>
+                 <el-form ref="form4"  :model="form4">
+                      <el-form-item label="Series:" prop="Series">
+                              <el-input  v-model="form4.Series" ></el-input>
+                      </el-form-item>
+                 </el-form>
+                 <span slot="footer" class="dialog-footer">
+                      <el-button type="primary" @click="addSubmit4()">確定</el-button>
+                 </span>
+            </template>
+    </el-dialog>
+        <template>
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="Category" name="first">
+                <div class="tableAround" v-cloak>
+                     <div class="row" style="margin-bottom: 20px;">
+                           <div class="selectMsg">
+                                 <label>Category: </label>
+                                 <select  ref="Category"  v-model="Category"  style="height:40px;width:120px;border-radius:5px;">
+                                       <option value="All">All</option>
+                                       <option v-for="(item,key,index) in sectionCategory" >${ item }</option>
+                                 </select>
+                           </div>
+                           <el-button @click="search1" v-cloak style="height:40px;border-color:black;color:black;margin-left: 20px;background-color:#7fa0ff">搜索</el-button>
+                           <el-button v-if="canEdit==1" @click="Add1()" size="medium" style="margin-left: 100px;background-color: #69ec57" ><i class="el-icon-circle-plus"></i>新增</el-button>
+                           <el-button v-if="canEdit==1" @click="Edit1()" size="medium" style="margin-left: 50px;background-color:#00CCFF" ><i class="el-icon-edit"></i>修改</el-button>
+                           <el-button v-if="canEdit==1" @click="Delete1()" size="medium" style="margin-left: 50px;background-color:#FF6666"><i class="el-icon-remove"></i>刪除</el-button>
+                     </div>
+                 <el-table height="700" ref="multipleTable" border stripe style="border-radius: 10px;word-break: keep-all"
+                           :data="CategoryTable" @selection-change="handleSelectionChange"
+                           :row-key="getRowKeys"
+                           :header-cell-style="{background:'white','border-bottom':'1px solid rgb(103, 194, 58)'}">
+                   <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+                  <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
+                  <el-table-column  prop="Category" label="Category" align="center"></el-table-column>
+              </el-table>
+            </div>
+            </el-tab-pane>
+            <el-tab-pane label="Series" name="second">
+                <div class="tableAround" v-cloak>
+                     <div class="row" style="margin-bottom: 20px;">
+                           <div class="selectMsg">
+                                 <label>Series: </label>
+                                 <select  ref="Series"  v-model="Series"  style="height:40px;width:120px;border-radius:5px;">
+                                       <option value="All">All</option>
+                                       <option v-for="(item,key,index) in sectionSeries" >${ item }</option>
+                                 </select>
+                           </div>
+                           <el-button @click="search2" v-cloak style="height:40px;border-color:black;color:black;margin-left: 20px;background-color:#7fa0ff">搜索</el-button>
+                           <el-button v-if="canEdit==1" @click="Add2()" size="medium" style="margin-left: 100px;background-color: #69ec57" ><i class="el-icon-circle-plus"></i>新增</el-button>
+                           <el-button v-if="canEdit==1" @click="Edit2()" size="medium" style="margin-left: 50px;background-color:#00CCFF" ><i class="el-icon-edit"></i>修改</el-button>
+                           <el-button v-if="canEdit==1" @click="Delete2()" size="medium" style="margin-left: 50px;background-color:#FF6666"><i class="el-icon-remove"></i>刪除</el-button>
+                     </div>
+                 <el-table height="700" ref="multipleTable1" border stripe style="border-radius: 10px;word-break: keep-all"
+                           :data="SeriesTable" @selection-change="handleSelectionChange"
+                           :row-key="getRowKeys"
+                           :header-cell-style="{background:'white','border-bottom':'1px solid rgb(103, 194, 58)'}">
+                   <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+                  <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
+                  <el-table-column  prop="Series" label="Series" align="center"></el-table-column>
+              </el-table>
+            </div>
+            </el-tab-pane>
+          </el-tabs>
+        </template>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+             activeName: 'first',
+             Category:'',
+             Series:'',
+             sectionCategory:[],
+             sectionSeries:[],
+             CategoryTable:[],
+             SeriesTable:[],
+             visible: false,
+             insert:false,
+             update:false,
+             search:'',
+             tableContent: [],
+             canEdit:false,
+             append1:false,
+             append2:false,
+             edit1:false,
+             edit2:false,
+             labelPosition:'right',
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             {#totalNum: null,#}
+             selectItem:[],
+             {#sectionPlatform:[],#}
+             sectionSeries:[],
+             selectedCustomer:null,
+             selectedProjectName:null,
+             selectedCategory:null,
+             selectedSeries:null,
+             selectedPN:null,
+             excelFile:null,
+             fileName:"未選擇文件",
+             multipleSelection: [],
+             formData:[],
+             formData1:[],
+             formData2:[],
+             formData3:[],
+             form1: {
+                  Category: '',
+             },
+             form2: {
+                  Category: '',
+             },
+             form3: {
+                  Series: '',
+             },
+             form4: {
+                  Series: '',
+             },
+             rule1: {
+              Category: [
+                { required: true, message: '请輸入Category', trigger: 'blur' },
+              ],
+            },
+             rule2: {
+              Series: [
+                { required: true, message: '请輸入Series', trigger: 'blur' },
+              ],
+            },
+             editid1: '',
+             editid2: '',
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/OBIDeviceResult/OBIDeviceResult_options/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.CategoryTable = res.data.content;
+                this.SeriesTable = res.data.content1;
+                {#this.totalNum=this.tableContent.length;#}
+                this.sectionCategory = res.data.sectionCategory;
+                this.sectionSeries = res.data.sectionSeries;
+                this.canEdit = res.data.canEdit;
+         });
+
+        },
+
+          handleClick(tab, event) {
+            console.log(tab, event);
+          },
+
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+         },
+
+            handleSelectionChange(rows) {
+                this.multipleSelection = rows;
+                var len=document.getElementById("selectNum");
+                len.innerHTML=this.multipleSelection.length;
+            },
+
+
+            search1 :function(){
+               let Category = this.$refs.Category.value;
+               let data ={"isGetData":"SearchCategory","Category":Category,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/OBIDeviceResult/OBIDeviceResult_options/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.CategoryTable = res.data.content;
+                  {#this.totalNum=this.tableContent.length;#}
+                  {#this.sectionPlatform=res.data.sectionPlatform;#}
+                })
+            },
+            search2 :function(){
+               let Series = this.$refs.Series.value;
+               let data ={"isGetData":"SearchSeries","Series":Series,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/OBIDeviceResult/OBIDeviceResult_options/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.SeriesTable = res.data.content1;
+
+                })
+            },
+            Add1(){
+                 this.append1=true;
+                 this.$refs.multipleTable.clearSelection()
+            },
+
+            Add2(){
+                 this.append2=true;
+                 this.$refs.multipleTable1.clearSelection()
+            },
+
+            closeDialog1(){　
+                 this.append1 = false;
+                 this.$refs.form1.resetFields();
+            },
+
+            Edit1:function(){
+                if(this.multipleSelection.length==0){
+                     this.$alert('未勾选数据！', '提示', {
+                         type: 'warning',
+                      })
+                  }else if(this.multipleSelection.length==1){
+                    this.edit1 = true;
+                    this.form2.Category = this.multipleSelection[0].Category;
+                    this.editid1 = this.multipleSelection[0].id;
+                }else{
+                    this.$alert('只能编辑单条数据！', '提示', {
+                         type: 'warning',
+                    })
+                }
+            },
+            closeDialog2(){　
+                 this.edit1 = false;
+                 this.$refs.form2.resetFields();
+            },
+            Edit2:function(){
+                if(this.multipleSelection.length==0){
+                     this.$alert('未勾选数据！', '提示', {
+                         type: 'warning',
+                      })
+                  }else if(this.multipleSelection.length==1){
+                    this.edit2 = true;
+                    this.form4.Series = this.multipleSelection[0].Series;
+                    this.editid2 = this.multipleSelection[0].id;
+                }else{
+                    this.$alert('只能编辑单条数据！', '提示', {
+                         type: 'warning',
+                    })
+                }
+            },
+            closeDialog3(){　
+                 this.append2 = false;
+                 this.$refs.form3.resetFields();
+            },
+            closeDialog4(){　
+                 this.edit2 = false;
+                 this.$refs.form4.resetFields();
+            },
+
+            Delete1(){
+                 if(this.multipleSelection.length==0){
+                     this.$alert('未勾选数据！', '提示', {
+                         type: 'warning',
+                      })
+                  }else{
+                      this.$confirm('您正在刪除數據, 是否繼續?', '提示', {
+                              confirmButtonText: '確定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                      }).then(() => {
+                         let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                         let params = [];
+                         checkArr.forEach(function (item) {
+                             {#console.log(item);#}
+                             params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                         });
+                         //console.log(params);
+                         let data ={"isGetData":"DeleteCategory","DeleteId":params,
+                             "Category_search":this.$refs.Category.value,
+                             "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                         axios.post("/OBIDeviceResult/OBIDeviceResult_options/",data).then((res) => {
+                             if(res.data.err_MSG!=='') {
+                                this.$alert(res.data.err_MSG, '提示', {
+                                      dangerouslyUseHTMLString: true,
+                                      confirmButtonText: '确定',
+                                    });
+                            }else {
+                                 this.$message({
+                                     type: 'success',
+                                     message: '刪除成功!'
+                                 });
+                            }
+                             this.CategoryTable = res.data.content;
+                             this.sectionCategory=res.data.sectionCategory;
+                             this.$refs.multipleTable.clearSelection()
+                            })
+
+                  }).catch(() => {
+                        this.$refs.multipleTable.clearSelection();
+                        this.$message({
+                        type: 'info',
+                        message: '已取消刪除'
+                        });
+                  });
+               }
+            },
+
+            Delete2(){
+                 if(this.multipleSelection.length==0){
+                     this.$alert('未勾选数据！', '提示', {
+                         type: 'warning',
+                      })
+                  }else{
+                      this.$confirm('您正在刪除數據, 是否繼續?', '提示', {
+                              confirmButtonText: '確定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                      }).then(() => {
+                         let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                         let params = [];
+                         checkArr.forEach(function (item) {
+                             {#console.log(item);#}
+                             params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                         });
+                         //console.log(params);
+                         let data ={"isGetData":"DeleteSeries","DeleteId":params,
+                             "Series_search":this.$refs.Series.value,
+                             "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                         axios.post("/OBIDeviceResult/OBIDeviceResult_options/",data).then((res) => {
+                             if(res.data.err_MSG!=='') {
+                                this.$alert(res.data.err_MSG, '提示', {
+                                      dangerouslyUseHTMLString: true,
+                                      confirmButtonText: '确定',
+                                    });
+                            }else {
+                                 this.$message({
+                                     type: 'success',
+                                     message: '刪除成功!'
+                                 });
+                            }
+                             this.SeriesTable = res.data.content1;
+                             this.sectionSeries=res.data.sectionSeries;
+                             this.$refs.multipleTable1.clearSelection()
+                            })
+
+                  }).catch(() => {
+                        this.$refs.multipleTable1.clearSelection();
+                        this.$message({
+                        type: 'info',
+                        message: '已取消刪除'
+                        });
+                  });
+               }
+            },
+            addSubmit1(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                if (this.formData.length==0){this.formData = new FormData();}
+                  this.formData.append('CategorySearch', this.$refs.Category.value);
+                  this.formData.append('Category', this.$refs.form1.model.Category);
+                  this.formData.append('action', 'addSubmitCategory');
+                  axios.post("/OBIDeviceResult/OBIDeviceResult_options/", this.formData,{
+                              headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                          }).then((res)=>{
+                              this.CategoryTable = res.data.content;
+                              this.sectionCategory=res.data.sectionCategory;
+                              this.err_MSG=res.data.err_MSG;
+                              this.formData = new FormData();
+                              if(this.err_MSG){
+                                  this.$alert(this.err_MSG, '提示', {
+                                        type: 'warning',
+                                  });
+                                  this.append1 = true;
+                              }else{
+                                  try {
+                                          this.$refs.form1.resetFields();
+                                          {#this.$refs.upload.clearFiles();#}
+                                  } catch (e) {
+
+                                  }
+                                  this.append1 = false;
+                              }
+                  })
+                } else {
+                  console.log('error submit!!');
+                  return false;
+                }
+              });
+            },
+
+            addSubmit2() {
+                if (this.formData1.length==0){this.formData1 = new FormData();}
+                  this.formData1.append('CategorySearch', this.$refs.Category.value);
+                  this.formData1.append('Category', this.$refs.form2.model.Category);
+                  this.formData1.append('editid1', this.editid1);
+                  this.formData1.append('action', 'editSubmitCategory');
+                  axios.post("/OBIDeviceResult/OBIDeviceResult_options/", this.formData1,{
+                              headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                          }).then((res)=>{
+                              this.CategoryTable = res.data.content;
+                              this.sectionCategory=res.data.sectionCategory;
+                              this.err_MSG=res.data.err_MSG;
+                              this.formData1 = new FormData();
+                              if(this.err_MSG){
+                                  this.$alert(this.err_MSG, '提示', {
+                                        type: 'warning',
+                                  });
+                                  this.edit1 = true;
+                              }else{
+                                  try {
+                                          this.$refs.form2.resetFields();
+                                  } catch (e) {
+
+                                  }
+                                  this.edit1 = false;
+                              }
+                  })
+            },
+
+            addSubmit3(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                if (this.formData2.length==0){this.formData2 = new FormData();}
+                  this.formData2.append('SeriesSearch', this.$refs.Series.value);
+                  this.formData2.append('Series', this.$refs.form3.model.Series);
+                  this.formData2.append('action', 'addSubmitSeries');
+                  axios.post("/OBIDeviceResult/OBIDeviceResult_options/", this.formData2,{
+                              headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                          }).then((res)=>{
+                              this.SeriesTable = res.data.content1;
+                              this.sectionSeries=res.data.sectionSeries;
+                              this.err_MSG=res.data.err_MSG;
+                              this.formData2 = new FormData();
+                              if(this.err_MSG){
+                                  this.$alert(this.err_MSG, '提示', {
+                                        type: 'warning',
+                                  });
+                                  this.append2 = true;
+                              }else{
+                                  try {
+                                          this.$refs.form3.resetFields();
+                                          {#this.$refs.upload.clearFiles();#}
+                                  } catch (e) {
+
+                                  }
+                                  this.append2 = false;
+                              }
+                  })
+                } else {
+                  console.log('error submit!!');
+                  return false;
+                }
+              });
+            },
+
+            addSubmit4() {
+                if ( this.formData3.length == 0 ){this.formData3 = new FormData();}
+                  this.formData3.append('SeriesSearch', this.$refs.Series.value);
+                  this.formData3.append('Series', this.$refs.form4.model.Series);
+                  this.formData3.append('editid2', this.editid2);
+                  this.formData3.append('action', 'editSubmitSeries');
+                  axios.post("/OBIDeviceResult/OBIDeviceResult_options/", this.formData3,{
+                              headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                          }).then((res)=>{
+                              this.SeriesTable = res.data.content1;
+                              this.sectionSeries=res.data.sectionSeries;
+                              this.err_MSG=res.data.err_MSG;
+                              this.formData3 = new FormData();
+                              if(this.err_MSG){
+                                  this.$alert(this.err_MSG, '提示', {
+                                        type: 'warning',
+                                  });
+                                  this.edit2 = true;
+                              }else{
+                                  try {
+                                          this.$refs.form2.resetFields();
+                                  } catch (e) {
+
+                                  }
+                                  this.edit2 = false;
+                              }
+                  })
+            },
+
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        },
+
+         getRowKeys (row) {
+              return row.id
+            },
+
+     },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    {#console.log(111);#}
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    {#console.log(this.Totalsize);#}
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                datas() {
+                        this.currentPage = 1;
+                }
+            },
+ })
+</script>
+{% endblock %}

@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Package_Upload{% endblock %}
+
+{% block css %}
+
+     <link href="/static/css/b_upload.css" rel="stylesheet">
+     <link href="/static/css/uploadbutton.css" rel="stylesheet">
+    <style>
+
+   /* h3,input{
+        float: left;
+    }
+    select{
+        float: left;
+    }
+    h4{
+    float:left;
+    }*/
+ .projectdiv{
+    display: flex;
+    height:30px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius:5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+    .degreediv{
+        display: block;
+    height:30px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius:5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .duandiv{
+        display: block;
+    height:30px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius:5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .zhongdiv{
+        display: block;
+    height:30px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius:5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .changdiv,.customerdiv,.phasediv{
+        display: block;
+    height:30px;
+    {% comment %}padding: .375rem .75rem;{% endcomment %}
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius:5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .leftdiv,.rightdiv,.topdiv,.bottomdiv,.zhengdiv,.fandiv{
+        display: block;
+    height:30px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius:5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div  style="color:white;{% comment %}background:#343957;line-height:40px;padding-left:10px{% endcomment %};">Load Excel:</div>
+    <br/>
+    <div style="background-color: rgba(255,255,255,0.2);height:50px;width:1150px;margin:0 auto;border-radius:10px 10px 10px 10px;" >
+     <div class="shangchuan">
+
+     <input type="file" name="files"   id="xlsxUpload" accept=".xlsx" style="color:#FFF;position:relative;top:10px;left:30px;"/>
+
+     <input type="button" name="button1" id="xlsxSubmit" onclick="Upload(this)" style=" background:#343957;position:relative;left:50px;top:10px;color:#fff;width:80px;text-align:center;height:32px;line-height:32px;font-size:13px;" value="上传"/>
+
+     </div>
+    </div>
+    <hr/>
+    <div style="color:white;{% comment %}background:#343957;line-height:40px;padding-left:10px;{% endcomment %}">Add Manually:
+        <div id="showResult" >上传结果：<span id="showErrResult"></span></div>
+    </div>
+    <br/>
+    <form method="post" id="myform" action="/Package/Package-upload/" enctype="multipart/form-data">
+      <div  style="background-color: rgba(255,255,255,0.3);height:85px;width:1150px;margin:0 auto;border-radius:10px 10px 0px 0px;" >
+        <div class="container-head">
+
+            <div class="row">
+                <div class="col-md-4" style="color:white;">客户:</div>
+                <div class="col-md-4" style="color:white;">专案:</div>
+                <div class="col-md-4" style="color:white;">Phase:</div>
+            </div>
+           <!-- <div class="row">
+                <div class="col-md-4">
+                     <select style="height:30px;border-radius:5px 5px 5px 5px;" name="customer0" size="1" >
+                     <option value="0" selected>    </option>
+                         <option value="1" > C38(NB)</option>
+                         <option value="2" >C38(AIO)</option>
+                         <option value="3" > A39</option>
+                         <option value="4" > Other</option>
+                     </select>
+                </div>
+                <div class="col-md-4">
+                     {{ package_upload.Project }}
+                </div>
+                <div class="col-md-4">
+                    <select style="height:30px;weight:50px;border-radius:5px 5px 5px 5px;"  name="Phases" size="1" >
+                    <option value="0" selected>    </option>
+                    <option value="1" > B(FVT)</option>
+                    <option value="2" >C(SIT)</option>
+                    <option value="3" > INV</option>
+                    <option value="4" > Other</option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="row">
+                <div class="col-md-4" >{{ package_upload.Customer }}</div>
+                <div class="col-md-4" >{{ package_upload.Project }}</div>
+                <div class="col-md-4" >{{ package_upload.Phase }}</div>
+            </div>
+        </div>
+      </div>
+
+            <div style="background-color: rgba(255,255,255,0.2);height:215px;width:1150px;margin:0 auto;border-radius:0px 0px 0px 0px;">
+              <div class="container-body">
+                  <div class="row">
+                      <div class="col-md-12" ><h5 style="color:white;">G-value: </h5></div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3" style="color:white;">角:</div>
+                      <div class="col-md-3" style="color:white;">短棱:</div>
+                      <div class="col-md-3" style="color:white;">中棱:</div>
+                      <div class="col-md-3" style="color:white;">长棱:</div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">{{ package_upload.degree }}</div>
+                      <div class="col-md-3">{{ package_upload.duan }}</div>
+                      <div class="col-md-3">{{ package_upload.zhong }}</div>
+                      <div class="col-md-3">{{ package_upload.chang }}</div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-2" style="color:white;">左面:</div>
+                      <div class="col-md-2" style="color:white;">右面:</div>
+                      <div class="col-md-2" style="color:white;">上面:</div>
+                      <div class="col-md-2" style="color:white;">底面:</div>
+                      <div class="col-md-2" style="color:white;">正面:</div>
+                      <div class="col-md-2" style="color:white;">反面:</div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-2">{{ package_upload.left }}</div>
+                      <div class="col-md-2">{{ package_upload.right }}</div>
+                      <div class="col-md-2">{{ package_upload.top }}</div>
+                      <div class="col-md-2">{{ package_upload.bottom }}</div>
+                      <div class="col-md-2">{{ package_upload.zheng }}</div>
+                      <div class="col-md-2">{{ package_upload.fan }}</div>
+                  </div>
+              </div>
+            </div>
+            <div style="background-color: rgba(255,255,255,0.3);width:1150px;margin:0 auto;border-radius:0px 0px 10px 10px;">
+                <div class="col-md-2" style="color: #FFF">包装方式:</div>
+                <div class="col-md-12">{{ package_upload.Pattern }}</div>
+            </div>
+            <div style="background-color: rgba(255,255,255,0.2);height:240px;width:1150px;margin:0 auto;border-radius:0px 0px 10px 10px;">
+                <div style="position:relative;top:10px;left:10px;">
+        <h5 style="color:white;">备注:</h5><textarea name="Conclusion" style="border-radius:5px 5px 5px 5px;" cols="145" rows="6">   </textarea>
+                    </div>
+        <br/>
+        <!-- <input type="submit" name="upload" style="background: #79ace9;color: #FFF;position:relative;right:250px;"  value="录入" class="button"/>-->
+
+
+        </div>
+
+            <div style="background-color: rgba(255,255,255,0.4);height:80px;width:1150px;margin:0 auto;border-radius:0px 0px 10px 10px;" class="breadcrumb">
+
+                            <span style="color:#FFF">附件</span>
+                             <div class="col-sm-8">
+                                 <input style="color: #FFF" type="file" id="upload-file" name="myfiles" multiple="">
+                             </div>
+            </div>
+    {% csrf_token %}
+        <button type="submit" id="upload1" style="background:#343957;color: #FFF;position:relative;top:10px;left:880px;width:80px;text-align:center;height:32px;line-height:32px;font-size:13px;" value="上传" name="Upload">Upload</button>
+</form>
+{% comment %}<div class="card" style="background-color:rgba(255,255,255,0.2)">
+          {% csrf_token %}
+          <!--<div class="card-header">Execl</div>-->
+          <div class="card-body">
+           <div class="b-fileUpload">
+                   <p>Execl 文件上傳:</p>
+                   <input type="file" id="xlsxUpload"  accept=".xlsx"/>
+                   <input type="button" id="xlsxSubmit" onclick="Upload(this)" VALUE="Submit">
+           </div>
+          </div>
+  </div>{% endcomment %}
+<!-- 彈出信息提示，用來顯示內容上傳成功和失敗 -->
+<div class="modal fade show" id="returnMsg" tabindex="-1" role="dialog" aria-labelledby="returnTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="returnTitle" style="position: relative;top:8px;">Upload Result</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" style="position: relative;bottom:5px;">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="msgContent"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+            </div>
+          </div>
+        </div>
+        </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/xlsx/xlsx.js"></script>
+<script src="/static/js/xlsx/xlsx.core.min.js"></script>
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+<script>
+    function only_num(obj){
+        　　　　//得到第一个字符是否为负号
+        var num = obj.value.charAt(0);
+        　　　　//先把非数字的都替换掉，除了数字和.
+        obj.value = obj.value.replace(/[^\d\.]/g,'');
+        　　　　//必须保证第一个为数字而不是.
+        obj.value = obj.value.replace(/^\./g,'');
+        　　　　//保证只有出现一个.而没有多个.
+        obj.value = obj.value.replace(/\.{2,}/g,'.');
+        　　　　//保证.只出现一次，而不能出现两次以上
+        obj.value = obj.value.replace('.','$#$').replace(/\./g,'').replace('$#$','.');
+        　　　　//如果第一位是负号，则允许添加
+        if(num == '-'){
+        　　obj.value = '-'+obj.value;
+        　　　　}
+        　　}
+</script>
+<script>
+var backResult=['Pass','Fail','上传数据成功','上传数据重复'];
+window.onload=function(){
+    var el =document.getElementById("showErrResult");
+
+    var result={{ result  }};
+    console.log(backResult[result]);
+    if(result==0){
+
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"green"});
+        $("#showResult").css({"display":"block"});
+        //alert(backResult[result+2]);
+        setTimeout(function () {
+            $("#showResult").css({"display":"none"});
+        },3000);
+    }
+    else if(result==1){
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"red"});
+        $("#showResult").css({"display":"block"});
+        alert(backResult[result+2]);
+    }
+    else {
+
+    }
+
+
+}
+</script>
+    <script src="/static/js/ImgUpload.js"></script>
+{% endblock %}

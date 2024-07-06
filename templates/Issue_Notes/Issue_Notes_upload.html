@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}CQM_upload{% endblock %}
+{% block css %}
+<link href="/static/css/b_upload.css" rel="stylesheet">
+<link href="/static/css/uploadbutton.css" rel="stylesheet">
+<style>
+    .first-part textarea{
+        font-size: 1.2rem;
+        line-height: 1.5;
+        color: #FFF;
+        background-clip: padding-box;
+        height: 100px;
+        resize: none;
+    }
+    .second-part{
+        margin: 20px 0;
+    }
+    option{
+        background-color: white;
+        color: black;
+    }
+    #showResult{
+        position: absolute;
+        top:40px;
+        right:50px;
+    }
+    .modal.fade.in{
+        opacity: 1;
+    }
+    .modal-header .close{
+        margin-bottom:  0 ;
+         font-size: 22px;
+         padding: 0;
+         font-weight: bold;
+    }
+
+    #returnTitle{
+        margin-bottom: auto;
+        margin-top:auto;
+    }
+ </style>
+{% endblock %}
+{% block content %}
+<div class="container">
+ {% comment %} <div class="card" style="background-color:rgba(255,255,255,0.3)">
+          <div class="card-body">
+           <div class="b-fileUpload">
+                   <p style="color: #FFF">Excel 文件上傳:</p>
+                   <input type="file" style="color: #FFF" id="xlsxUpload"  accept=".xlsx"/>
+                   <input type="button" id="xlsxSubmit" onclick="Upload(this)" VALUE="Submit">
+           </div>
+          </div>
+  </div>{% endcomment %}
+     <form method="POST" action="/Issue_Notes/Issue_Notes-upload/" id="fm">
+      <div class="card" style="background: rgba(255,255,255,0.2);">
+        <div class="card-header title" style="color: #FFF">Issue Notes Upload</div>
+          <div id="showResult" class="err_msg">上传结果：<span id="showErrResult"></span></div>
+          <div class="card-body" >
+        <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">Customer</span>
+                     </div>
+                      {{ Issue_Notes.Customer }}
+           <div class="input-group-prepend">
+                       <span class="input-group-text  Label">Project_Code</span>
+                     </div>
+                      {{ Issue_Notes.Project_Code }}
+
+        </div>
+         </div>
+
+          <div class="card-body" >
+           <div class="first-part">
+           <div class="input-group-prepend ">
+                       <span class="input-group-text  Label">Platform</span>
+                     </div>
+                      {{ Issue_Notes.Platform }}
+            <div class="input-group-prepend">
+                       <span class="input-group-text  Label">TDMS_NO</span>
+                     </div>
+                      {{ Issue_Notes.TDMS_NO }}
+
+               </div>
+           </div>
+          <div class="card-body" >
+        <div class="first-part">
+           <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Issue_Title</span>
+                     </div>
+                      {{ Issue_Notes.Issue_Title }}
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Root_Cause</span>
+                     </div>
+                      {{ Issue_Notes.Root_Cause }}
+            </div>
+              </div>
+          <div class="card-body" >
+        <div class="first-part">
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Solution</span>
+                     </div>
+                      {{ Issue_Notes.Solution }}
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">PL</span>
+                     </div>
+                      {{ Issue_Notes.PL }}
+        </div>
+         </div>
+
+          <div class="card-body" >
+       <div class="forth-part">
+            <div class="center">
+             <button type="submit" onclick="" class="btn btn-info" name="Upload" id="btn">Upload</button>
+             <button class="btn btn-default">Cancel</button>
+            </div>
+       </div>
+     </div>
+
+     {% csrf_token %}
+      </div>
+    </form>
+ </div>
+    <!-- 彈出信息提示，用來顯示內容上傳成功和失敗 -->
+<div class="modal fade" id="returnMsg" tabindex="-1" role="dialog" aria-labelledby="returnTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" >
+              <h5 class="modal-title" id="returnTitle">数据已存在</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="msgContent"  style="max-height: 500px;overflow: auto;"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+            </div>
+          </div>
+        </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block scripts1 %}
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/xlsx/xlsx.core.min.js"></script>
+<script src="/static/js/xlsx/xlsx_pop.js"></script>
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+ <script>
+    $(function(){
+
+       $('#btn').click(function () {
+           console.log("begin");
+            $.ajax({
+                url: '/Issue_Notes/Issue_Notes_upload',
+                type: 'POST',
+                dataType: 'JSON',
+                data: $('#fm').serialize(),
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg) {
+                        console.log("success");
+                    }else{
+                        console.log(arg.message);
+                    }
+                }
+            })
+
+        })
+
+    })
+
+ </script>
+ <script>
+var backResult=['Pass','Fail','上传数据成功','上传数据重复'];
+window.onload=function(){
+    var el =document.getElementById("showErrResult");
+
+    var result={{ result  }};
+    var canEdit=1//{{ canEdit  }};
+    console.log(backResult[result]);
+    if(result==0&&canEdit==1){
+
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"green"});
+        $("#showResult").css({"display":"block"});
+        //alert(backResult[result+2]);
+        setTimeout(function () {
+            $("#showResult").css({"display":"none"});
+        },3000);
+    }
+    else if(result==1&&canEdit==1){
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"red"});
+        $("#showResult").css({"display":"block"});
+        alert(backResult[result+2]);
+    }
+    else {
+        alert("您没有上传此表单的权限。");
+    }
+    var isNum = function (value) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(value)) {
+        return true;
+        }
+        return false;
+    }
+
+    //关闭滚轮事件
+    var inputMouseScroll = document.getElementsByClassName("form-control-new");
+    //console.log(inputMouseScroll[0]);
+    for(var formNum in inputMouseScroll){
+          //console.log(typeof(formNum));
+        if(isNum(formNum)){
+           //console.log(inputMouseScroll[formNum]);
+           inputMouseScroll[formNum].addEventListener("mousewheel",function(evt){
+           evt = evt || window.event;
+           if(evt.preventDefault) {
+           // Firefox
+          evt.preventDefault();
+          evt.stopPropagation();
+        } else {
+          // IE
+          evt.cancelBubble=true;
+          evt.returnValue = false;
+        }
+      });
+        }
+    }
+
+}
+</script>
+{% endblock %}
+

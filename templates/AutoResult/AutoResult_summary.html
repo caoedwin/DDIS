@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Auto_Summary{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<link href="/static/css/bouncing.css" rel="stylesheet">
+<style>
+    .el-icon-warning:before {
+    color:yellowgreen;
+    font-size: medium;
+}
+
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 60%;
+    margin: 10px 5px 5px 10px;
+    position: relative;
+}
+.inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+
+   .showDataArea{
+    {#display: flex;#}
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
+
+}
+.showDataArea .container-echart{
+   text-align: center;
+   width: 100%;
+   background-color: #F5F7FA;
+   padding: 5px;
+   border: 1px solid #fff5d4;
+}
+.showDataArea .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.showDataArea .showText {
+    font-size: 18px;
+    margin-bottom: 10px;
+    margin-top: -10px;
+    color: white;
+}
+  .el-table .el-table__row.warning-row {
+    background: oldlace!important;
+  }
+  .el-table .el-table__row.warning-row:hover{
+   background: oldlace!important;
+  }
+   .el-table .info-row {
+    background: #8b968d!important;
+  }
+   .el-table .info-row:hover{
+     background: #8b968d!important;
+   }
+    .el-table .danger-row {
+    background: #F56C6C!important;
+  }
+   .el-table .danger-row:hover{
+    background: #F56C6C!important;
+   }
+  .el-table .success-row {
+    background: #a8c97f!important;
+  }
+  .el-table .success-row:hover{
+    background-color: #a8c97f!important;
+  }
+  .el-table  .cell{
+     text-align: left;
+      white-space: pre-line;
+ }
+
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+    <div class="row" style="white-space: nowrap;">
+        <div class="col-md-4">
+             <label style="color: white;font-weight: 800;font-size:18px;" for="Year" v-cloak>Year</label>&nbsp;
+             <el-date-picker
+                  v-model="selectedYear"
+                  ref="Year"
+                  type="year"
+                  value-format="yyyy"
+                  placeholder="选择年">
+             </el-date-picker>
+            <div class="inputError" v-cloak v-show="customerError">年份未選擇</div>
+        </div>
+        <div class="col-md-1">
+           <el-button size="small" style="background:#428bca;color:#fff;margin-top: 4px;" value="Search" name="Search" @click="selectMsg()">Search</el-button>
+
+           <el-tooltip class="item" effect="dark" placement="right" style="margin-left: 20px;">
+               <div slot="content" style="font-size: 14px;">
+            　　统计方式:<br/>
+            　　1. 评估每个项目1cycle/1phase/1project所节省人参与时间;<br/>
+            　　2. NPI专案測試過幾個Phase就登记几个1 or 2;<br/>
+            　　3. OS Refresh和INV則填寫大概使用多少次.
+              </div>
+               <i class="el-icon-warning"></i>
+           </el-tooltip>
+        </div>
+    </div>
+     <div v-cloak>
+        {% csrf_token %}
+          <div class="showDataArea" v-cloak>
+              <div class="showText">自動化項目總數：${ ItemSummary }</div>
+              <!--柱状图-->
+              <div class="container-echart" v-cloak>
+                  <div class="Quatity" id="main2" style="height:400px;"></div>
+              </div>
+          </div>
+     </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/babel">
+  new Vue ({
+    el:"#app",
+    delimiters: ['${', '}'],
+    data() {
+      return {
+        customerError: false,
+        selectedYear: "",
+        ItemSummary: null,
+        CategoryData: [],
+        VA_NVA: [],
+
+      }
+    },
+    mounted(){
+         this.getdata("first");
+    },
+    methods: {
+
+      getdata:function(e){
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/AutoResult/AutoResult_summary/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.ItemSummary = res.data.ItemSummary;
+                this.CategoryData = res.data.CategoryData;
+                this.VA_NVA = res.data.VA_NVA;
+
+                var date = new Date();
+                var dateYear = date.getFullYear();
+
+                var VA_NVA_label = [];
+                for (var i = 0; i < this.VA_NVA.length; i++) {
+                    var getVA_NVA_label = this.VA_NVA[i].name;
+                    VA_NVA_label.push(getVA_NVA_label);
+                }
+
+                    // 指定图表的配置项和数据
+                    var option3 = {
+                        color: ["#FFC000", "#00B0F0"],
+                        title: {
+                            text: dateYear + '總實際效益Hrs',
+                            textStyle: {
+                                fontSize: 20,
+                            },
+                            x: 'center',
+                            y: 'top',
+                            textAlign: 'left',
+                        },
+                        toolbox:{//保存圖片
+                            feature:{
+                                saveAsImage:{}
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            },
+                            textAlign: 'left',
+                        },
+                        legend: {
+                            left: 'center',
+                            top: 'bottom',
+                            data: VA_NVA_label,
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: this.CategoryData,
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: this.VA_NVA
+                    };
+                    var myChart3 = echarts.init(document.getElementById('main2'));
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart3.setOption(option3, true);
+                    window.addEventListener('resize', () => {
+                        myChart3.resize();
+                    })
+            });
+
+      },
+
+      selectMsg :function(){
+          let Year = this.$refs.Year.value;
+          if( Year == ''){
+                this.customerError = true;
+                return
+          }else{
+              this.customerError = false;
+              let msg = {
+                  "isGetData" : "Search" , "Year":Year
+              }
+              const loading = this.$loading({
+                               lock: true,
+                               text: 'Loading',
+                               spinner: 'el-icon-loading',
+                               background: 'rgba(0, 0, 0, 0.7)'
+                        });
+               axios.post("/AutoResult/AutoResult_summary/",Qs.stringify(msg,{indices:false}),{
+                        headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    } ).then((res) => {
+                    this.ItemSummary = res.data.ItemSummary;
+                    this.CategoryData = res.data.CategoryData;
+                    this.VA_NVA = res.data.VA_NVA;
+
+                    var VA_NVA_label = [];
+                    for (var i = 0; i < this.VA_NVA.length; i++) {
+                        var getVA_NVA_label = this.VA_NVA[i].name;
+                        VA_NVA_label.push(getVA_NVA_label);
+                    }
+
+                        // 指定图表的配置项和数据
+                        var option3 = {
+                            color: ["#FFC000", "#00B0F0"],
+                            title: {
+                                text: Year + '總實際效益Hrs',
+                                textStyle: {
+                                    fontSize: 20,
+                                },
+                                x: 'center',
+                                y: 'top',
+                                textAlign: 'left',
+                            },
+                            toolbox:{//保存圖片
+                                feature:{
+                                    saveAsImage:{}
+                                }
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'shadow'
+                                },
+                                textAlign: 'left',
+                            },
+                            legend: {
+                                left: 'center',
+                                top: 'bottom',
+                                data: VA_NVA_label,
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: this.CategoryData,
+                                    axisTick: {
+                                        alignWithLabel: true
+                                    }
+                                }
+
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value'
+                                }
+                            ],
+                            series: this.VA_NVA
+                        };
+                        var myChart3 = echarts.init(document.getElementById('main2'));
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart3.setOption(option3, true);
+                        window.addEventListener('resize', () => {
+                            myChart3.resize();
+                        })
+                        loading.close();
+               })
+          }
+      },
+    },
+  })
+</script>
+{% endblock %}

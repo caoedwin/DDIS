@@ -1,0 +1,1001 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}IssuesBreakdown_edit{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+        .el-table th .gutter {
+            display: table-cell !important;
+        }
+
+        label {
+            color: white;
+        }
+
+        .selectMsg {
+            font-size: 16px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .selectMsg label {
+            font-weight: 800;
+            margin-right: 10px;
+            color: aliceblue;
+        }
+
+        .customerContent, .departmentContent, .lessonContent, .groupemployeesContent {
+            margin-left: 20px;
+        }
+
+        .inputError {
+            text-align: center;
+            color: crimson;
+            background-color: beige;
+            width: 50%;
+            margin-left: 100px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .inputError:before {
+            display: block;
+            content: '';
+            border-width: 8px 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent beige transparent;
+
+            /* 定位 */
+            position: absolute;
+            left: 50%;
+            top: -16px;
+        }
+
+        .fileUploadContent {
+            display: inline-flex;
+            display: -webkit-inline-flex;
+        }
+
+        .fileUploadContent label {
+            display: inline-block;
+            word-break: keep-all;
+            line-height: 30px;
+        }
+
+        .el-checkbox__label {
+            font-size: 18px;
+        }
+
+        .fileUploadContent {
+            padding-left: 15px;
+            margin-bottom: 10px;
+        }
+
+        .inputPackage {
+            background: #2980b9; /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            display: block;
+            position: relative;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .inputPackage span {
+            position: absolute;
+            line-height: 100%;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            color: aliceblue;
+        }
+
+        .fileUploadContent .showFileName {
+            line-height: 40px;
+            margin-left: 20px;
+            font-size: 18px;
+            color: aliceblue;
+        }
+
+        .inputPackage input {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .selectItem {
+            font-size: 20px;
+            font-weight: bold;
+            color: aliceblue;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .el-pagination__total, .el-pagination__jump {
+            color: white;
+        }
+
+        .gutter {
+            display: block !important;
+            width: 17px !important;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        #sh {
+            font-size: 18px;
+            font-family: 微软雅黑;
+            border: 2px solid #9f9ca1;
+        }
+
+        #sh::-webkit-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh::-moz-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh:-ms-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        .el-table .cell {
+            white-space: pre-line;
+            text-align: left;
+        }
+
+
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="app">
+        <!--搜索框-->
+        <div class="selectMsg">
+
+            <div class="customerContent">
+                <label for="customer">Customer</label>
+                <select ref="Customer" @change="changeCustomer" v-model="customer"
+                        style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option value="C38(NB)">C38(NB)</option>
+                    <option value="C38(AIO)">C38(AIO)</option>
+                    <option value="C85">C85</option>
+                    <option value="T88(AIO)">T88(AIO)</option>
+                    {#                       <option v-for="(item,key,index) in customerOptions" >${ key }</option>#}
+                </select>
+                <div class="inputError" v-cloak v-show="customerError">不能為空</div>
+            </div>
+            <div class="departmentContent">
+                <label for="department">ProjectCode</label>
+                <el-select ref="ProjectcodeCompal" v-model="ProjectcodeCompal" filterable clearable>
+                    <el-option
+                            v-for="item in SectionProjectcode"
+                            :key="item.Projectcode"
+                            :label="item.Projectcode"
+                            :value="item.Projectcode">
+                    </el-option>
+                </el-select>
+                {#                  <select  ref="Department" v-model="department" style="height:40px;border-radius:5px 5px 5px 5px;width:120px;">#}
+                {#                       <option v-for="(item,key,index) in ProjectCodeOption">${ item.Department }</option>#}
+                {#                  </select>#}
+                {#                  <div class="inputError" v-cloak  v-show="departmentError">不能為空</div>#}
+            </div>
+            <div style="margin-left: 100px;">
+                <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索
+                </el-button>
+                <el-button @click="exportExcel" type="info" v-cloak style="height:40px">導出</el-button>
+                {#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
+                <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak
+                           style="margin-left: 20px;width: 80px;">清空
+                </el-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/static/src/modelfiles/FFRT issues breakdown.xlsx"
+                   style="color: orange;font-size: 16px">模板下载<img
+                        src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>
+            </div>
+
+        </div>
+        <div v-cloak class="fileUploadContent" v-if="permission===1">
+            <div class="inputPackage" v-cloak>
+                <span v-cloak>請選擇文件</span>
+                <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+            </div>
+            <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+            <span class="showFileName" v-cloak>${ fileName }</span>
+        </div>
+
+        <el-dialog :visible.sync="appendss" :close-on-click-modal="false">
+            <template>
+                <el-form ref="form" :model="form" :rules="rules" :label-position="labelPosition" label-width="180px">
+                    <el-form-item label="Customer" prop="Customer">
+                        <el-select v-model="form.Customer" placeholder="請選擇" @change="changeProjectcode">
+                            <el-option label="C38(NB)" value="C38(NB)"></el-option>
+                            <el-option label="C38(AIO)" value="C38(AIO)"></el-option>
+                            <el-option label="C85" value="C85"></el-option>
+                            <el-option label="T88(AIO)" value="T88(AIO)"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="Projectcode(Compal)" prop="ProjectcodeCompal">
+                        <el-select v-model="form.ProjectcodeCompal" clearable filterable placeholder="請選擇">
+                            <el-option
+                                    v-for="item in SectionProjectcode"
+                                    :key="item.Projectcode"
+                                    :label="item.Projectcode"
+                                    :value="item.Projectcode">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="Lowlight item" prop="Lowlight_item">
+                        <el-input v-model="form.Lowlight_item"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Root cause" prop="Root_cause">
+                        <el-input v-model="form.Root_cause"></el-input>
+                    </el-form-item>
+                    <el-form-item label="LD" prop="LD">
+                        <el-input v-model="form.LD"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Owner" prop="Owner">
+                        <el-input v-model="form.Owner"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Mitigation_plan" prop="Mitigation_plan">
+                        <el-input v-model="form.Mitigation_plan"></el-input>
+                    </el-form-item>
+                    <div class="el-form-item__content" style="margin-left: 220px;">
+                        <el-form-item>
+                            <el-button type="primary" @click="onAppend('form')">確定</el-button>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </template>
+        </el-dialog>
+        <el-dialog :visible.sync="update1" :close-on-click-modal="false">
+            <template>
+                <el-form ref="form" :model="form" :rules="rules" :label-position="labelPosition" label-width="180px">
+                    <el-form-item label="Lowlight item" prop="Lowlight_item">
+                        <el-input v-model="form.Lowlight_item"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Root cause" prop="Root_cause">
+                        <el-input v-model="form.Root_cause"></el-input>
+                    </el-form-item>
+                    <el-form-item label="LD" prop="LD">
+                        <el-input v-model="form.LD"></el-input>
+                    </el-form-item>
+                    <div class="el-form-item__content" style="margin-left: 220px;">
+                        <el-form-item>
+                            <el-button type="primary" @click="updateData1('form')">確定</el-button>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </template>
+        </el-dialog>
+        <el-dialog :visible.sync="update2" :close-on-click-modal="false">
+            <template>
+                <el-form ref="form" :model="form" :rules="rules" :label-position="labelPosition" label-width="180px">
+                    <el-form-item label="Owner" prop="Owner">
+                        <el-input v-model="form.Owner"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Mitigation_plan" prop="Mitigation_plan">
+                        <el-input v-model="form.Mitigation_plan"></el-input>
+                    </el-form-item>
+                    <div class="el-form-item__content" style="margin-left: 220px;">
+                        <el-form-item>
+                            <el-button type="primary" @click="updateData2('form')">確定</el-button>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </template>
+        </el-dialog>
+        <el-dialog :visible.sync="update3" :close-on-click-modal="false">
+            <template>
+                <el-form ref="form" :model="form" :rules="rules" :label-position="labelPosition" label-width="180px">
+                    <el-form-item label="Mitigation_plan" prop="Mitigation_plan">
+                        <el-input v-model="form.Mitigation_plan"></el-input>
+                    </el-form-item>
+                    <div class="el-form-item__content" style="margin-left: 220px;">
+                        <el-form-item>
+                            <el-button type="primary" @click="updateData3('form')">確定</el-button>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </template>
+        </el-dialog>
+        <div class="tableAround">
+
+            <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input>
+            <br>
+            {#    <span  class="selectItem" v-cloak  v-if="showCustomer&&showDepartment&&showLesson">當前表格信息：${ showYear }/${ showCustomer }/${ showDepartment }/${ showLesson }/${ showGroupEmployees } </span>#}
+            <el-table id="out-table" ref="tableRef" height="700" border stripe
+                      :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
+                      style="min-width: 100%;border-radius: 10px;" @selection-change="handleSelectionChange"
+                      :row-key="getRowKeys"
+                      :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                      v-loading="tableloading"
+                      element-loading-text="數據更新中，請稍後"
+                      border>
+                {#              <el-table-column type="selection" width="50"></el-table-column>#}
+                <el-table-column type="index" :index="indexMethod"></el-table-column>
+                <el-table-column prop="Project" label="Project" align="center" width="100"></el-table-column>
+                {#              <el-table-column  prop="FFRT_Entry_unclose_issue" label="FFRT Entry unclose issue" align="center" width="155"></el-table-column>#}
+                {#              <el-table-column  prop="SIT_Exit_unclose_issue" label="SIT Exit unclose issue" align="center" width="135"></el-table-column>#}
+                {#              <el-table-column  prop="first_FFRT" label="1st FFRT" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="second_FFRT" label="2nd FFRT" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="third_FFRT" label="3rd FFRT" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="fourth_FFRT" label="4th FFRT" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="fifth_FFRT" label="5th FFRT" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="sixth_FFRT" label="6th FFRT" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="issue_def" label="分類" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="Remark" label="Remark" align="center" width="120"></el-table-column>#}
+                {#              <el-table-column  prop="FFRT" label="FFRT" align="center" width="120"></el-table-column>#}
+                <el-table-column prop="Defect_ID" label="Defect ID" align="center" width="120"></el-table-column>
+                <el-table-column prop="Title" label="Title" align="center" width="280"></el-table-column>
+                <el-table-column prop="Create_date" label="Create date" align="center" width="120"></el-table-column>
+                <el-table-column prop="Update_date" label="Update date" align="center" width="120"></el-table-column>
+                <el-table-column prop="Status" label="Status" align="center" width="120"></el-table-column>
+                <el-table-column prop="Severity" label="Severity" align="center" width="120"></el-table-column>
+                <el-table-column prop="Category" label="Category" align="center" width="120"></el-table-column>
+                <el-table-column prop="Component" label="Component" align="center" width="120"></el-table-column>
+                <el-table-column prop="BIOS_KBC" label="BIOS/KBC" align="center" width="120"></el-table-column>
+                <el-table-column prop="Comments" label="Comments" align="center" width="300"></el-table-column>
+                <el-table-column prop="Author" label="Author" align="center" width="120"></el-table-column>
+                <el-table-column prop="Assign_to" label="Assign to" align="center" width="120"></el-table-column>
+                <el-table-column prop="Description" label="Description" align="center" width="300"></el-table-column>
+                <el-table-column prop="Reproduce_steps" label="Reproduce steps" align="center"
+                                 width="300"></el-table-column>
+                <el-table-column prop="Age" label="Age" align="center"></el-table-column>
+
+            </el-table>
+            <div class="block">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                               :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script type="text/babel">
+        new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: function () {
+                return {
+                    excelFile: null,
+                    uploadFile: null,
+                    fileName: "未選擇文件",
+                    search: '',
+                    loading: false,
+                    SectionProjectcode: [],
+                    ProjectCodeOption: [],
+                    ProjectcodeCompal: "",
+                    customer: '',
+                    editpermission: 0,
+                    permission: 0,
+                    customerOptions: {},
+                    customerError: false,
+                    department: '',
+                    departmentOptions: [],
+                    departmentError: false,
+                    tableContent: [],
+                    update1: false,
+                    update2: false,
+                    update3: false,
+                    ID: "",
+                    labelPosition: 'right',
+                    tableloading: false,
+                    elbuttonloading: false,
+                    form: {
+                        Customer: '',
+                        ProjectcodeCompal: '',
+                        Lowlight_item: '',
+                        Root_cause: '',
+                        LD: '',
+                        Owner: '',
+                        Mitigation_plan: '',
+
+                    },
+                    formData: [],
+                    multiDeleteVisible: false,
+                    multipleSelection: [],
+                    //表格信息顯示
+                    showCustomer: '',
+                    showDepartment: '',
+                    //新增信息
+                    appendss: false,
+                    //分页
+                    currentPage: 1,//默认显示第一页
+                    pageSize: 20,//默认每页显示100条
+                    totalNum: null,
+                    errMsg: null,
+                    rules: {
+                        Customer: [
+                            {required: true, message: "不能為空", trigger: ['blur', 'change']}
+                        ],
+                        ProjectcodeCompal: [
+                            {required: true, message: "不能為空", trigger: ['blur', 'change']}
+                        ],
+                    },
+
+
+                }
+            },
+            mounted() {        // 页面渲染后触发该区域内容 即页面初始化
+                this.getdata("first");
+            },
+            methods: {
+                //获取数据
+                getdata: function (e) {
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
+                    this.Titleoptions1 = [];
+                    let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.ProjectCodeOption = res.data.ProjectCodeOption;
+                        this.permission = res.data.permission;
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        //console.log(this.totalNum)
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
+                        this.$nextTick(() => {
+                            this.$refs.tableRef.doLayout()
+                        })
+                    });
+                },
+
+                exportExcel: function () {
+                    /* 从表生成工作簿对象 */
+                    {#console.log(document.querySelector("#out-table"));#}
+                    let temp = [];
+                    temp.push(Number(this.currentPage));
+                    temp.push(Number(this.pageSize));
+                    {#console.log(temp);#}
+                    this.currentPage = 1;
+                    this.pageSize = this.tableContent.length;
+                    {#console.log(temp, this.defaultPage1, this.pageSize);#}
+                    setTimeout(() => {
+                        let table = document.querySelector("#out-table").cloneNode(true);
+                        let fix = table.querySelector(".el-table__fixed");
+                        let wb;
+                        if (fix) {
+                            wb = XLSX.utils.table_to_book(table.removeChild(fix), {raw: true});
+                            table.appendChild(fix);
+                        } else {
+                            wb = XLSX.utils.table_to_book(table, {raw: true});
+                        }
+                        console.log("wb", wb);
+                        /* 获取二进制字符串作为输出 */
+                        var wbout = XLSX.write(wb, {
+                            bookType: "xlsx",
+                            bookSST: true,
+                            type: "array"
+                        });
+                        console.log("wbout", wbout);
+                        try {
+                            saveAs(
+                                //Blob 对象表示一个不可变、原始数据的类文件对象。
+                                //Blob 表示的不一定是JavaScript原生格式的数据。
+                                //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                                //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                                new Blob([wbout], {type: "application/octet-stream"}),
+                                //设置导出文件名称
+                                "sheetjs.xlsx"
+                            );
+
+                        } catch (e) {
+                            if (typeof console !== "undefined") console.log(e, wbout);
+                        }
+                        this.currentPage = temp[0];
+                        this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                        temp = [];
+                        return wbout;
+                    }, 100);
+                },
+
+
+                //级联
+                changeCustomer: function () {
+                    if (this.$refs.Customer.value === "") {
+                        this.departmentOptions = [""];
+                        return false;
+                    }
+                    this.SectionProjectcode = this.ProjectCodeOption[this.$refs.Customer.value];
+                    this.ProjectcodeCompal = "";
+                },
+
+                changeProjectcode: function () {
+                    this.SectionProjectcode = this.ProjectCodeOption[this.form.Customer];
+                },
+
+                {% comment %}
+                        changeLesson:function(index){
+                            if(this.$refs.Lesson.value ==""){
+                                  this.groupemployeesOptions=[""];
+                                  return false;
+                             }
+                             this.groupemployeesOptions=this.lessonOptions[this.$refs.Lesson.value];
+                             this.groupemployees="";
+                             console.log(this.groupemployeesOptions);
+                        },
+                {% endcomment %}
+                //上传搜索项：以此选项搜索符合条件的内容
+                find: function () {
+
+                    if (this.$refs.Customer.value === "") {
+                        this.customerError = true;
+                        return false;
+                    }
+                    {% comment %}
+                    if(this.$refs.ProjectcodeCompal.value ==""){
+                          this.departmentError= true;
+                          return false;
+                    }
+                    {% endcomment %}
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
+                    let Customer = this.$refs.Customer.value;
+                    let Projectcode = this.$refs.ProjectcodeCompal.value;
+                    let data = {
+                        "isGetData": "SEARCH",
+                        "Customer": Customer,
+                        "Projectcode": Projectcode,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.permission = res.data.permission;
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
+                        this.$nextTick(() => {
+                            this.$refs.tableRef.doLayout()
+                        })
+                    })
+
+                    this.customerError = false;
+                    //this.departmentError= false;
+
+                },
+
+                indexMethod(index) {
+                    return index + 1;
+                },
+
+                handleSelectionChange(rows) {
+                    this.multipleSelection = rows;
+                },
+
+                getRowKeys(row) {
+                    return row.id
+                },
+
+
+                updateFile: function (e) {
+                    const first = "未選擇文件";
+                    let newValue = e.target.files;
+                    if (newValue) {
+                        let file = document.getElementById('upload');
+                        let filename = file.files[0].name;
+                        let fileType = filename.substr(filename.lastIndexOf(".") + 1);
+                        console.log(fileType.toLowerCase());
+                        if ((fileType.toLowerCase() === 'xlsx') || (fileType.toLowerCase() === 'xls')) {
+                            //console.log(this.excelFile);
+                            this.fileName = filename;
+                            this.uploadFile = file.files[0];
+                        } else {
+                            alert("上傳類型不為'xlsx'或'xls'");
+                            try {
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    } else {
+                        this.uploadFile = null;
+                        this.fileName = first;
+                    }
+                },
+                fileUpload: function () {
+                    const first = "未選擇文件";
+                    if (this.uploadFile) {
+                        //1.解析Excel
+                        let outputResult;
+                        let _this = this;
+                        let files = this.uploadFile;
+                        let undefined_to_null = function (value) {
+                            if (value === undefined) {
+                                value = null;
+                            }
+                            //console.log(value,value === undefined,value == undefined);
+                            return value;
+                        }
+                        var fileReader = new FileReader();
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0,0,0,0.7)'
+                        });
+                        fileReader.onload = function (ev) {
+                            try {
+                                // _this.loading=true;
+                                var data = ev.target.result,
+                                    workbook = XLSX.read(data, {
+                                        type: 'binary'
+                                    }), // 以二进制流方式读取得到整份excel表格对象
+                                    persons = []; // 存储获取到的数据
+                            } catch (e) {
+                                //_this.loading=false;
+                                loading.close();
+                                return;
+                            }
+                            for (var sheet in workbook.Sheets) {
+                                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                                    var fromTo = workbook.Sheets[sheet]['!ref'];
+                                    // console.log(fromTo);
+                                    var datas = workbook.Sheets[sheet];
+                                    // 如果有不规范数据可以在这里进行处理datas
+                                    persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                                    //break; // 只读了第一张表
+                                }
+                            }
+                            // 数据保存在result
+                            let result = JSON.stringify(persons);
+                            //将之前张开的树形结构收起
+                            //_this.reset();
+                            //2.上傳數據
+                            let Customer = _this.$refs.Customer.value;
+                            let Projectcode = _this.$refs.ProjectcodeCompal.value;
+                            axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", {
+                                "isGetData": "upload",
+                                "Customer": Customer,
+                                "Projectcode": Projectcode,
+                                "ExcelData": result
+                            }, {
+                                headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            }).then((res) => {
+                                //console.log(res.data,"first");//上传成功的操作
+                                _this.tableContent = res.data.content;
+                                _this.totalNum = _this.tableContent.length;
+                                _this.$nextTick(() => {
+                                    _this.$refs.tableRef.doLayout()
+                                })
+                                _this.errMsg = res.data.errMsg;
+                                _this.permission = res.data.permission;
+                                _this.uploadFile = null;
+                                _this.fileName = first;
+                                //_this.loading=false;
+                                loading.close();
+                                //上传成功的操作
+                                if (_this.errMsg) {
+                                    _this.$alert(_this.errMsg, '提示', {
+                                        type: 'warning',
+                                    })
+                                } else {
+                                    _this.$message({
+                                        message: '上傳成功',
+                                        type: 'success',
+                                    })
+                                }
+                                //接受数据的初始化
+                                try {
+                                } catch (e) {
+                                    console.log("错误异常" + e);
+                                }
+                            }).catch(function (e) {
+                                //_this.loading=false;
+                                loading.close();
+                                _this.uploadFile = null;
+                                var warning = confirm("上傳異常");
+                                console.log("上傳錯誤信息" + e);
+                            });
+                        };
+                        try {
+                            //console.log(fileReader.onload());
+                            fileReader.readAsBinaryString(files);
+                            //console.log(fileReader.readAsBinaryString(files));
+                        }
+                        catch (e) {
+                            //this.loading=false;
+                            loading.close();
+                            console.log(e);
+                            alert("文件上傳異常");
+                            return;
+                        }
+                        //console.log(outputResult);
+
+                    } else {
+                        //this.loading=false;
+                        loading.close();
+                        alert("未選擇文件");
+                        return false;
+                    }
+                    this.excelFile = '';
+                },
+
+
+                addData() {
+                    this.appendss = true;
+                    {% comment %}
+                        let msg = {
+                          "isGetData" : "addData", "Customer":Customer, "ProjectcodeCompal":ProjectcodeCompal,
+                      }
+                       axios.post("/IssuesBreakdown/IssuesBreakdown_edit/",Qs.stringify(msg),{
+                                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                            } ).then((res) => {
+                                this.ProjectCodeOption=res.data.ProjectCodeOption;
+                       })
+                     {% endcomment %}
+                },
+
+                deleteData() {
+                    let Customer = this.$refs.Customer.value;
+                    let Projectcode = this.$refs.ProjectcodeCompal.value;
+                    var warning = confirm('此操作将永久删除该机种所有数据, 是否继续?')
+                    if (warning) {
+                        let data = {
+                            "isGetData": "MUTIDELETE",
+                            "Customer": Customer,
+                            "Projectcode": Projectcode,
+                            "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                        };
+                        axios.post('/IssuesBreakdown/IssuesBreakdown_edit/', data).then((res) => {
+
+                            this.tableContent = res.data.content;
+                            this.totalNum = this.tableContent.length;
+                            this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                            })
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            this.permission = res.data.permission;
+                        })
+                    } else {
+                        return false;
+                    }
+
+                },
+
+                onAppend() {
+                    this.$refs['form'].validate((valid) => {
+                        if (valid) {
+                            if (this.formData.length === 0) {
+                                this.formData = new FormData();
+                            }
+                            this.formData.append('searchCustomer', this.$refs.Customer.value)
+                            this.formData.append('searchProjectcodeCompal', this.$refs.ProjectcodeCompal.value)
+                            this.formData.append('Customer', this.$refs.form.model.Customer)
+                            this.formData.append('ProjectcodeCompal', this.$refs.form.model.ProjectcodeCompal)
+                            this.formData.append('Lowlight_item', this.$refs.form.model.Lowlight_item)
+                            this.formData.append('Root_cause', this.$refs.form.model.Root_cause)
+                            this.formData.append('LD', this.$refs.form.model.LD)
+                            this.formData.append('Owner', this.$refs.form.model.Owner)
+                            this.formData.append('Mitigation_plan', this.$refs.form.model.Mitigation_plan)
+                            this.formData.append("action", 'onSubmit');
+                            console.log(this.formData)
+                            axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", this.formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                    'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                                } //改变头格式，原生默认上传json格式
+                            }).then((res) => {
+                                this.tableContent = res.data.content;
+                                this.totalNum = this.tableContent.length;
+                                this.errMsg = res.data.errMsg;
+                                this.formData = new FormData();
+                                if (this.errMsg) {
+                                    this.$alert(this.errMsg, '提示', {
+                                        type: 'warning',
+                                    });
+                                    this.appendss = true;
+                                } else {
+                                    try {
+                                        this.$refs.form.resetFields();
+                                    } catch (e) {
+
+                                    }
+                                    this.appendss = false;
+                                    this.$nextTick(() => {
+                                        this.$refs.tableRef.doLayout()
+                                    })
+                                }
+
+                            })
+
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    })
+                },
+
+                updateData1() {
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchCustomer', this.$refs.Customer.value)
+                    this.formData.append('searchProjectcodeCompal', this.$refs.ProjectcodeCompal.value)
+                    this.formData.append('ID', this.ID)
+                    this.formData.append('Lowlight_item', this.$refs.form.model.Lowlight_item)
+                    this.formData.append('Root_cause', this.$refs.form.model.Root_cause)
+                    this.formData.append('LD', this.$refs.form.model.LD)
+                    this.formData.append("action", 'onSubmit1');
+                    console.log(this.formData)
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.errMsg = res.data.errMsg;
+                        this.formData = new FormData();
+                        if (this.errMsg) {
+                            this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                            });
+                            this.update1 = true;
+                        } else {
+                            try {
+                                this.$refs.form.resetFields();
+                            } catch (e) {
+
+                            }
+                            this.update1 = false;
+                            this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                            })
+                        }
+
+                    })
+                },
+
+                updateData2() {
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchCustomer', this.$refs.Customer.value);
+                    this.formData.append('searchProjectcodeCompal', this.$refs.ProjectcodeCompal.value);
+                    this.formData.append('ID', this.ID);
+                    this.formData.append('Owner', this.$refs.form.model.Owner);
+                    this.formData.append('Mitigation_plan', this.$refs.form.model.Mitigation_plan);
+                    this.formData.append("action", 'onSubmit2');
+                    console.log(this.formData)
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.errMsg = res.data.errMsg;
+                        this.formData = new FormData();
+                        if (this.errMsg) {
+                            this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                            });
+                            this.update2 = true;
+                        } else {
+                            try {
+                                this.$refs.form.resetFields();
+                            } catch (e) {
+
+                            }
+                            this.update2 = false;
+                            this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                            })
+                        }
+
+                    })
+                },
+
+                updateData3() {
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchCustomer', this.$refs.Customer.value)
+                    this.formData.append('searchProjectcodeCompal', this.$refs.ProjectcodeCompal.value)
+                    this.formData.append('ID', this.ID)
+                    this.formData.append('Mitigation_plan', this.$refs.form.model.Mitigation_plan)
+                    this.formData.append("action", 'onSubmit3');
+                    console.log(this.formData)
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.errMsg = res.data.errMsg;
+                        this.formData = new FormData();
+                        if (this.errMsg) {
+                            this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                            });
+                            this.update3 = true;
+                        } else {
+                            try {
+                                this.$refs.form.resetFields();
+                            } catch (e) {
+
+                            }
+                            this.update3 = false;
+                            this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                            })
+                        }
+
+                    })
+                },
+
+                //分页
+                handleSizeChange(val) {
+                    //console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+                },
+                handleCurrentChange(val) {
+                    //console.log(`当前页: ${val}`);
+                    this.currentPage = val;
+                    //console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+                },
+
+            },
+            computed: {
+                datas() {//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search = this.search;
+                    if (search) {
+                        return this.tableContent.filter(data => {//axios返回时接受数据的变量
+                            return Object.keys(data).some(key => {
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed() {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    console.log(this.Totalsize);
+                    return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        })
+    </script>
+{% endblock %}
+
+
+

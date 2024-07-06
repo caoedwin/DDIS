@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_upload{% endblock %}
+
+{% block css %}
+<style>
+	.menu { padding:0; margin:0; list-style-type:none;}
+	.menu li {background:#343957; margin-right:1px; float:left; color:#fff; }
+	.menu li a { display:block; width:80px; text-align:center; height:32px; line-height:32px; color:#fff; font-size:13px; text-decoration:none;}
+
+	.cur{ background:#D96C00; font-weight:bold;}
+</style>
+{% endblock %}
+
+{% block content %}
+
+    {% comment %}<div class="row">
+        <div class="col-lg-12">
+          <ul class="menu" id="menu">
+            <li><a href="/Lesson_upload/">Add</a></li>
+            <li><a href="/Lesson_edit/">Edit</a></li>
+            <li><a href="/Lesson_search/">Search</a></li>
+          </ul>
+        </div>
+    </div>{% endcomment %}
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+
+        <!-- Breadcrumbs-->
+        <form class='form-Test' action="/redit_Lesson/{{ id }}/" method="POST" οnsubmit="return submitCheck();" id="index" enctype="multipart/form-data">
+               <!-- <div class="container-fluid"> -->
+            <div style="color:#FFF;font-weight: bolder;">{{ message_redit }}</div>
+        <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Category.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Category}}
+                      </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Object.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Object}}
+                      </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Symptom.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                      <div class="form-group">
+                        {{ lesson_form.Symptom }}
+                      </div>
+
+
+
+                    {% comment %}<div class="col-md-3">
+
+                        <div class="input"style="padding-top: 15px;">
+                        <center>
+                            <span ><span style="color: red;">*</span>Solution/Action</span> <Br> <input type="text" style="background-color:rgba(255,255,255,0.5);" class="form-control" name="Comments" id="comments">
+                        </center>
+                        </div>
+                    </div>{% endcomment %}
+                        {% comment %}{{ form.content.label_tag }}
+                        {{ form.content }}{% endcomment %}
+
+
+
+            </div>
+        <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Reproduce_Steps.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Reproduce_Steps}}
+                      </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Root_Cause.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Root_Cause}}
+                      </div>
+            </div>
+            {% comment %}<div class="form-group">{% endcomment %}
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Solution.label_tag }}</span>
+            {% comment %}</div>{% endcomment %}
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                  <div class="form-group">
+                    {{ lesson_form.Solution}}
+                  </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Action.label_tag }}</span>
+            {% comment %}</div>{% endcomment %}
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                  <div class="form-group">
+                    {{ lesson_form.Action}}
+                  </div>
+            </div>
+
+            <span style="color:#FFF">Photo</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                            <div class="col-sm-8"><span style="color:#FFF">Old Photo</span></div>
+                            <div class="col-sm-12">
+                                {% for i in lesson_formdefault.Photo.all %}
+                                      <a href="/media/{{ i.img }}" class="test-popup-link"><img src="/media/{{ i.img }}" height="50" width="100" alt="" /></a>
+                                {% endfor %}
+                                <select  name="choose" style="background-color:rgba(255,255,255,0);color: #FFF;border-width:0px">
+                            　　　　<option style="color: #0f0f10">保留原图片</option>
+                            　　　　<option style="color: #0f0f10">删除原图片</option>
+                            　　</select>
+                            </div>
+                            {% comment %}<div class="list">
+                                <label class="item item-radio">
+                                  <input type="radio" name="group" value="keepimg" checked="checked">
+                                   <div class="radio-content">
+                                   <div class="item-content" style="color: #FFF">
+                                    Keep old photo
+                                   </div>
+                                   <i class="radio-icon ion-checkmark"></i>
+                                  </div>
+                                </label>
+
+                                <label class="item item-radio">
+                                  <input type="radio" name="group" value="delimg">
+                                  <div class="radio-content">
+                                   <div class="item-content" style="color: #FFF">
+                                    Del old photo
+                                   </div>
+                                   <i class="radio-icon ion-checkmark"></i>
+                                  </div>
+                                </label>
+                            </div>{% endcomment %}
+                             <div class="col-sm-8">
+                                 <input type="file" id="upload-file" name="myfiles" multiple="">
+                             </div>
+            </div>
+            <span style="color:#FFF">video</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                             <div class="col-sm-8"><span style="color:#FFF">Old videos</span></div>
+                            <div class="col-sm-12">
+                                {% for i in lesson_formdefault.video.all %}
+                                      <video width="200" height="100" controls>
+                                            <source src="/media/{{ i.files }}" type="video/mp4">     # 播放器形式
+                                            您的浏览器不支持 video 标签。
+                                        </video>
+                                {% endfor %}
+                                <select  name="choosev" style="background-color:rgba(255,255,255,0);color: #FFF;border-width:0px">
+                            　　　　<option style="color: #0f0f10">保留原视频</option>
+                            　　　　<option style="color: #0f0f10">删除原视频</option>
+                            　　</select>
+                            </div>
+                             <div class="col-sm-8">
+                                 <input type="file" id="upload-file" name="myvideos" multiple="">
+                             </div>
+                <button type="submit" name="Redit" style="font-weight: bolder;color: #0c0c0c">Redit{% comment %}<img src="/static/src/upload.jpg" height="25" width="40">{% endcomment %}</button>
+{#                <input type="submit"  class="rounded-circle" style="background: #79ace9;color: #FFF" value="Upload" />#}
+                  {% csrf_token %}
+            </div>
+
+        </form>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+// 表单元素提交时ＪＳ判断输入的值，为空时则不刷新页面返回，不为空跳转并传值到新页面
+ function submitCheck(){
+ 	var txt1 = document.getElementById("name");
+ 	var txt2 = document.getElementById("pwd");
+    var txt3 = document.getElementById("yzm");
+    if(txt1.value==""){
+    	alert("请输入用户名！");
+	    txt1.focus();
+	    return false;
+    }else if(txt2.value==""){
+    	alert("请输入密码！");
+	    txt2.focus();
+	    return false;
+    }else if(txt3.value==""){
+    	alert("请输入验证码！");
+	    txt3.focus();
+	    return false;
+    }
+    return true;
+  }
+</script>
+    <script type="text/javascript">
+      var urlstr = location.href;
+      //alert(urlstr);
+      var urlstatus=false;
+      $("#menu a").each(function () {
+        if ((urlstr + '/').indexOf($(this).attr('href')) > -1&&$(this).attr('href')!='') {
+          $(this).addClass('cur'); urlstatus = true;
+        } else {
+          $(this).removeClass('cur');
+        }
+      });
+      if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); }
+    </script>
+    <script src="/static/js/ImgUpload.js"></script>
+
+{% endblock %}

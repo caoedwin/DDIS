@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}LNV_OBI{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+    {#transform: scale(0.8,0.8);#}
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:black;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    body .el-table th.gutter{
+      display: table-cell!important;
+    }
+    body .el-table colgroup.gutter{
+      display: table-cell!important;
+    }
+
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #c0c0c0;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,255);
+}
+
+#sh {
+    font-size:18px;
+    font-family:微软雅黑;
+    border: 2px solid #9f9ca1;
+}
+
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="content" id="yincang">spec</div>
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/obispec.png">
+    </div>
+    <div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-4">
+    <label style="color: #FFF;font-size: 16px;" for="Customer">Customer</label>
+       <select id="Customer" ref="Customer" v-model="selectedCustomer" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+           <option value="All">All</option>
+           <option v-for="(item,key,index) in selectItem" >${ item }</option>
+       </select>
+    <label style="color: #FFF;margin-left: 10px;font-size: 16px;" for="ProjectName">Project Name</label>
+         <el-autocomplete
+                  class="inline-input"
+                  v-model="selectedProjectName"
+                  ref="ProjectName"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入ProjectName"
+                  @select="handleSelect">
+         </el-autocomplete>
+    <label style="color: #FFF;margin-left: 10px;font-size: 16px;" for="Platform">Platform</label>
+       <select id="Platform" ref="Platform" v-model="selectedPlatform" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+           <option value="All">All</option>
+           <option v-for="(item,key,index) in sectionPlatform" >${ item }</option>
+       </select>
+    <label style="color: #FFF;margin-left: 10px;font-size: 16px;" for="PN">PN</label>
+         <el-autocomplete
+                  class="inline-input"
+                  v-model="selectedPN"
+                  ref="PN"
+                  :fetch-suggestions="querySearchPN"
+                  placeholder="请输入PN"
+                  @select="handleSelect">
+         </el-autocomplete>
+    <el-button size="small" :loading="elbuttonloading" style="background:#428bca;color:#fff;margin-left: 50px;" value="Search" name="Search" @click="selectMsg()">Search</el-button>
+    <el-button size="small" @click="exportExcel" type="info" v-if="canEdit==1">Export</el-button>
+    </div>
+</div>
+<div class="tableAround" v-cloak >
+    {% csrf_token %}
+    <template>
+    <el-input type="text" v-model="search"  id="sh" placeholder="請輸入關鍵字搜索..."></el-input>
+    <el-table id="out-table" border stripe height="750" @sort-change='sortChange' :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+              :header-cell-style="{background:'white','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              style="border-radius: 10px;word-break: keep-all" :cell-style="addColor"
+    v-loading="tableloading"
+    element-loading-text="正在加载中，请稍后"
+    border>
+        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+        <el-table-column prop="Customer" label="Customer" sortable='custom' align="center" width="85" fixed>
+        </el-table-column>
+        <el-table-column prop="Project_Name" label="Project name" sortable='custom' align="center" width="95" fixed>
+        </el-table-column>
+        <el-table-column prop="Platform" label="Platform" sortable='custom' align="center" width="100">
+        </el-table-column>
+        <el-table-column prop="Series" label="Series" sortable='custom' align="center" width="100">
+        </el-table-column>
+        <el-table-column prop="Category" label="Category" sortable='custom' width="100" align="center">
+        </el-table-column>
+        <el-table-column prop="Device_No" label="Device No." width="90" sortable='custom' align="center">
+        </el-table-column>
+        <el-table-column prop="PN" label="P/N" align="center" sortable='custom' width="105">
+        </el-table-column>
+        <el-table-column prop="Device_Name" label="Device name" sortable='custom' align="center" width="140">
+        </el-table-column>
+        <el-table-column prop="Test_Result" label="Test result" sortable='custom' align="center" width="100">
+        </el-table-column>
+        <el-table-column prop="FW_Ver" label="FW version" sortable='custom' align="center" width="100">
+        </el-table-column>
+        <el-table-column prop="Software_Ver" label="Software version" sortable='custom' width="100" align="center">
+        </el-table-column>
+        <el-table-column prop="HW_ID_ver" label="HW ID version" sortable='custom' width="100" align="center">
+        </el-table-column>
+        <el-table-column prop="Test_Phase" label="Test Phase" sortable='custom' width="100" align="center">
+        </el-table-column>
+        <el-table-column prop="Comments" label="Comments" sortable='custom' width="160" align="center">
+        </el-table-column>
+    </el-table>
+    <div class="block">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+        </el-pagination>
+    </div>
+    </template>
+</div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+             visible: false,
+             search:'',
+             tableContent: [],
+             canEdit:false,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum: null,
+             selectItem:[],
+             selectProjectName:[],
+             selectPN:[],
+             sectionPlatform:[],
+             selectedCustomer:null,
+             selectedProjectName:'',
+             selectedPlatform:null,
+             selectedPN:'',
+             elbuttonloading:false,
+             tableloading:false,
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/OBIDeviceResult/OBIDeviceResult_search/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.selectItem=res.data.select;
+                this.selectProjectName=res.data.selectProjectName;
+                this.selectPN=res.data.selectPN;
+                this.tableContent = res.data.content;
+                this.totalNum=this.tableContent.length;
+                this.sectionPlatform = res.data.sectionPlatform;
+                this.canEdit = res.data.canEdit;
+         });
+
+        },
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+         },
+
+            //模糊匹配
+          querySearch(queryString, cb) {
+            var projectName = this.selectProjectName;
+            var results = queryString ? projectName.filter(this.createFilter(queryString)) : projectName;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+          },
+
+          querySearchPN(queryString, cb) {
+            var pn = this.selectPN;
+            var results = queryString ? pn.filter(this.createFilter(queryString)) : pn;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+          },
+          createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+          handleSelect(item) {
+            console.log(item);
+          },
+
+        sortChange: function(column){
+            this.currentPage = 1 // return to the first page after sorting
+                if (column.prop === 'Customer') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                } else if (column.prop === 'Project_Name') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Platform') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Series') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Category') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Device_No') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'PN') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Device_name') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Test_Result') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'FW_Ver') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Software_Ver') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'HW_ID_ver') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Test_Phase') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Comments') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }
+                 this.showed_data = this.tableContent.slice(0, this.pageSize) // 排序完显示到第一页
+
+        },
+            //排序方法
+           sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+      exportExcel:function (){
+          let temp=[];
+         temp.push(Number(this.currentPage));
+         temp.push(Number(this.pageSize));
+          this.currentPage = 1; //当前页为第一页
+          this.pageSize = this.Totalsize; //每页大小限制条数：为总条数（将表格数据全部渲染出来在第一页上）
+        this.$nextTick(function () {
+               /* 从表生成工作簿对象 */
+             let table = document.querySelector("#out-table").cloneNode(true);
+             // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+             table.removeChild(table.querySelector(".el-table__fixed"))
+                //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+            var wb = XLSX.utils.table_to_book(table,{raw:true});
+            /* 获取二进制字符串作为输出 */
+            var wbout = XLSX.write(wb, {
+                bookType: "xlsx",
+                bookSST: true,
+                type: "array"
+            });
+            try {
+                saveAs(
+                //Blob 对象表示一个不可变、原始数据的类文件对象。
+                //Blob 表示的不一定是JavaScript原生格式的数据。
+                //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                new Blob([wbout], { type: "application/octet-stream" }),
+                //设置导出文件名称
+                "sheetjs.xlsx"
+                );
+            } catch (e) {
+                if (typeof console !== "undefined") console.log(e, wbout);
+            }
+            this.currentPage=temp[0];
+            this.pageSize=temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+            temp=[];
+            return wbout;
+            });
+        },
+
+          //上传搜索项：以此选项搜索符合条件的内容
+         selectMsg :function(row){
+            this.elbuttonloading=true;
+            this.tableloading=true;
+           let Customer = this.$refs.Customer.value;
+           let ProjectName = this.$refs.ProjectName.value;
+           let Platform = this.$refs.Platform.value;
+           let PN = this.$refs.PN.value;
+           let data ={"isGetData":"SEARCH","Customer":Customer,"ProjectName":ProjectName,"Platform":Platform,"PN":PN,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+           axios.post("/OBIDeviceResult/OBIDeviceResult_search/",Qs.stringify(data), {
+           headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+               this.canEdit = res.data.canEdit;
+               this.tableContent = res.data.content;
+               this.totalNum=this.tableContent.length;
+               this.elbuttonloading=false;
+                this.tableloading=false;
+           });
+        },
+
+        addColor({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 9 && row.Test_Result == 'F') {
+                           return {
+                                     color: '#FF0000'
+                                   }
+                   }
+                   if (columnIndex === 9 && (row.Test_Result == 'Qd' || row.Test_Result == 'Qd_C' || row.Test_Result == 'Qd_L')){
+                           return {
+                                     backgroundColor: '#33FF33'
+                                   }
+                   }
+
+        },
+
+
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        },
+
+     },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    {#console.log(111);#}
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    {#console.log(this.Totalsize);#}
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                datas() {
+                        this.currentPage = 1;
+                }
+            },
+ })
+</script>
+{% endblock %}

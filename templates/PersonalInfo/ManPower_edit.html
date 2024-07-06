@@ -1,0 +1,1116 @@
+submit{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}MainPower_edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .fullScreen{
+     position: fixed;
+     top:0;
+     left:0;
+     height:100%;
+     width: 100%;
+     background: rgba(0,0,0,0.7);
+     z-index: 101;
+     overflow:hidden;
+    }
+
+    .fullScreen section {
+     position:fixed;
+     top:50%;
+     left:50%;
+     transform:translate(-50%,-50%);
+     text-align: center;
+     font-size: 18px;
+     font-weight: 800;
+     color: #337ab7;
+   }
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 160px;
+}
+
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 35px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 15px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/cqmspec.png">
+    </div>
+    <div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-8">
+        <label style="color: #FFF" for="Customer">客戶別</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value="All">All</option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+{#        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>#}
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Year1">年份</label>
+            <el-date-picker
+              id="Year1"
+              v-model="Year1"
+              size="small"
+              type="year"
+              ref="Year1"
+              value-format="yyyy"
+              placeholder="选择年"
+              @change="changeYear">
+            </el-date-picker>
+{#        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>#}
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Chu">處</label>
+           <select id="Chu" ref="Chu"  @change="changeChu" v-model="selectedChu" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value="All">All</option>
+               <option v-for="(item,key,index) in selectChu" >${ item.Chu }</option>
+           </select>
+{#        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>#}
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Ministry">部</label>
+           <select id="Ministry" ref="Ministry"  @change="changeMinistry" v-model="selectedMinistry" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value="All">All</option>
+               <option v-for="(item,key,index) in selectSection" >${ key }</option>
+           </select>
+{#        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>#}
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Section">課別</label>
+           <select id="Section" ref="Section"   v-model="selectedSection" style="height:30px;width:120px;border-radius:5px 5px 5px 5px;">
+               <option value="All">All</option>
+               <option v-for="(item,key,index) in selectCategory" >${ item.Section }</option>
+           </select>
+{#        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>#}
+    </div>
+
+    <div class="col-md-1">
+        <el-button :loading="elbuttonloading" size="small" style="background:#428bca;color:#fff;margin: 2px;" value="Search" name="Search" @click="selectMsg">Search</el-button>
+    </div>
+    <div  class="col-md-1" style="margin-left: 120px;margin-right:10px;line-height: 40px" v-if="permission===1">
+            <a href="/static/src/modelfiles/MainPower.xlsx" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>
+            </div>
+    <div v-cloak class="fileUploadContent" v-if="permission===1">
+        <div class="inputPackage" v-cloak>
+              <span v-cloak>請選擇文件</span>
+              <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+        </div>
+        <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+        <span class="showFileName" v-cloak >${ fileName }</span>
+    </div>
+    <br>
+    <div v-cloak style="width: 100%;height: 100%;margin-top: 10px;margin-left: 15px;margin-bottom: 10px">
+         <el-button type="danger" v-if="permission===1" @click="multiDelete"  v-cloak>批量删除</el-button>
+    </div>
+</div>
+
+<el-dialog :visible.sync="update" :close-on-click-modal="false">
+    <template>
+    <el-form ref="form" :model="form" label-width="120px" size="medium">
+  <el-form-item label="客戶別">
+        <el-select v-model="form.Customer" placeholder="请选择" :disabled="!(permission===1)">
+            <el-option label="C38(NB)" value="C38(NB)"></el-option>
+            <el-option label="C38(AIO)" value="C38(AIO)"></el-option>
+            <el-option label="A39" value="A39"></el-option>
+        </el-select>
+      </el-form-item>
+<el-row>
+  <el-col span="10">
+  <el-form-item label="部門代碼">
+        <el-select v-model="form.Department_Code" placeholder="请选择" :disabled="!(permission===1)">
+            <el-option
+                v-for="item in sectionOption"
+                :key="item"
+                :label="item"
+                :value="item">
+            </el-option>
+        </el-select>
+      </el-form-item>
+  </el-col>
+  <el-col span="10">
+      <el-form-item label="處">
+        <el-input v-model="form.Chu" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+  </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="部">
+        <el-input v-model="form.Ministry" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="課">
+        <el-input v-model="form.Section" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+{#      <el-form-item label="項次">#}
+{#        <el-input v-model="form.Item" :disabled="!(permission===1)"></el-input>#}
+{#      </el-form-item>#}
+      <el-form-item label="項次">
+            <el-select v-model="form.Item" placeholder="请选择" :disabled="!(permission===1)">
+                <el-option
+                    v-for="item in itemOption"
+                    :key="item"
+                    :label="item"
+                    :value="item">
+                </el-option>
+            </el-select>
+          </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="職稱">
+        <el-input v-model="form.Title" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+{% comment %}<el-row>
+    <el-col span="10">
+      <el-form-item label="CodeNoH01">
+        <el-input v-model="form.CodeNoH01" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="CodeNoH02">
+        <el-input v-model="form.CodeNoH02" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>{% endcomment %}
+<el-row>
+    <el-col span="10">
+      <el-form-item label="年份">
+        <el-input v-model="form.Year" :disabled="!(permission===1)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="目前在職人力">
+        <el-input v-model="form.Current_Workforce" :disabled=true></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="一月">
+        <el-input v-model="form.Jan" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="二月">
+        <el-input v-model="form.Feb" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="三月">
+        <el-input v-model="form.Mar" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="四月">
+        <el-input v-model="form.Apr" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="五月">
+        <el-input  v-model="form.May" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="六月">
+         <el-input v-model="form.Jun" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="七月">
+         <el-input v-model="form.Jul" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="八月">
+         <el-input v-model="form.Aug" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="九月">
+         <el-input v-model="form.Sep" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="十月">
+         <el-input v-model="form.Oct" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<el-row>
+    <el-col span="10">
+      <el-form-item label="十一月">
+         <el-input v-model="form.Nov" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col span="10">
+      <el-form-item label="十二月">
+         <el-input v-model="form.Dec" :disabled="!(permission===1 || permission===2)"></el-input>
+      </el-form-item>
+    </el-col>
+</el-row>
+<div class="el-form-item__content" style="margin-left: 200px;">
+{#<div style="margin-right: 300px;">#}
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">更新</el-button>
+  </el-form-item>
+ </div>
+</el-form>
+</template>
+</el-dialog>
+{#          <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject }/${ showPhase }<span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>#}
+    {% csrf_token %}
+        <template>
+    <el-table border stripe ref="multipleTable"  tooltip-effect="dark"  height="700" :data="tableContent.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+     :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900}" style="width: 100%"
+     @selection-change="handleSelectionChange"
+    v-loading="tableloading"
+            element-loading-text="數據更新中，請稍後"
+            border>
+        <el-table-column type="selection" width="50" align="center"></el-table-column>
+        <el-table-column  label="Edit" align="center" fixed>
+            <template slot-scope="scope">
+                <el-button style="border:0;color: #D9B300" width="20" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+{#                <el-button style="border:0;color: #D9B300" width="20" type="i" class="el-icon-delete"  @click="alertID(scope.row.id);update=true"></el-button>#}
+            </template>
+        </el-table-column>
+        <el-table-column type="index" :index="indexMethod" width="50" align="center" fixed></el-table-column>
+         <el-table-column prop="Customer" label="客戶別" align="center" width="100">
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell"   v-model="scope.row.Department_Code"></el-input>#}
+{#                <span>${ department_code[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Department_Code" label="部門代碼" align="center" width="120" >
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell"   v-model="scope.row.Department_Code"></el-input>#}
+{#                <span>${ department_code[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Chu" label="處" align="center" width="90" >
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Chu"></el-input>#}
+{#                    <span>${ chu[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#             </template>#}
+        </el-table-column>
+        <el-table-column prop="Ministry" label="部" align="center" width="90" >
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-model="scope.row.Ministry"></el-input>#}
+{#                <span>${ ministry[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Section" label="課" align="center"  >
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-model="scope.row.Section"></el-input>#}
+{#                <span>${ section[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Item" label="項次" width="80" align="center">
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-model="scope.row.Item"></el-input>#}
+{#                <span>${ item[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#           </template>#}
+        </el-table-column>
+        <el-table-column prop="Title" label="職稱" align="center" width="120">
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-model="scope.row.Title"></el-input>#}
+{#                <span>${ title[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        {% comment %}<el-table-column prop="CodeNoH01" label="CodeNoH01" align="center" width="132">
+{#            <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-model="scope.row.CodeNoH01"></el-input>#}
+{#                <span>${ codenoh01[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="CodeNoH02" label="CodeNoH02" align="center" width="132">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.CodeNoH02"></el-input>#}
+{#                <span>${ codenoh02[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>{% endcomment %}
+        <el-table-column prop="Year" label="年份" align="center" width="110">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Year"></el-input>#}
+{#                    <span>${ year[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Current_Workforce" label="目前在職人力" align="center" width="140">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Current_Workforce"></el-input>#}
+{#                    <span>${ current_workforce[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Jan" label="一月" width="80" align="center">
+{#             <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Jan"></el-input>#}
+{#                      <span>${ jan[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#             </template>#}
+        </el-table-column>
+        <el-table-column prop="Feb" label="二月" width="80" align="center">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Feb"></el-input>#}
+{#                      <span>${ feb[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Mar" label="三月" width="80" align="center">
+{#           <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-if="showEdit[scope.$index]" v-model="scope.row.Mar"></el-input>#}
+{#                      <span v-else="showEdit[scope.$index]">${ mar[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#           </template>#}
+        </el-table-column>
+        <el-table-column prop="Apr" label="四月" width="80" align="center">
+{#           <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-if="showEdit[scope.$index]" v-model="scope.row.Apr"></el-input>#}
+{#                      <span v-else="showEdit[scope.$index]">${ apr[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#           </template>#}
+        </el-table-column>
+        <el-table-column prop="May" label="五月" width="80" align="center">
+{#           <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.May"></el-input>#}
+{#                      <span>${ may[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#           </template>#}
+        </el-table-column>
+        <el-table-column prop="Jun" label="六月" align="center" width="80">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Jun"></el-input>#}
+{#                    <span>${ jun[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Jul" label="七月" align="center" width="80">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Jul"></el-input>#}
+{#                    <span>${ jul[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Aug" label="八月" align="center" width="80">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Aug"></el-input>#}
+{#                    <span>${ aug[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Sep" label="九月" align="center" width="80">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Sep"></el-input>#}
+{#                    <span>${ sep[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Oct" label="十月" align="center" width="80">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Oct"></el-input>#}
+{#                    <span>${ oct[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Nov" label="十一月" align="center" width="100">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Nov"></el-input>#}
+{#                    <span>${ nov[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+        <el-table-column prop="Dec" label="十二月" width="100" align="center">
+{#            <template slot-scope="scope">#}
+{#                <el-input class="edit-cell" v-model="scope.row.Dec"></el-input>#}
+{#                    <span>${ dec[scope.$index+(currentPage-1)*pageSize] }</span>#}
+{#            </template>#}
+        </el-table-column>
+
+    <!--loading-->
+  <div v-if="loading" v-cloak class="fullScreen">
+    <section v-cloak v-if="loading">
+      <div class='sk-fading-circle'>
+        <div class='sk-circle sk-circle-1'></div>
+        <div class='sk-circle sk-circle-2'></div>
+        <div class='sk-circle sk-circle-3'></div>
+        <div class='sk-circle sk-circle-4'></div>
+        <div class='sk-circle sk-circle-5'></div>
+        <div class='sk-circle sk-circle-6'></div>
+        <div class='sk-circle sk-circle-7'></div>
+        <div class='sk-circle sk-circle-8'></div>
+        <div class='sk-circle sk-circle-9'></div>
+        <div class='sk-circle sk-circle-10'></div>
+        <div class='sk-circle sk-circle-11'></div>
+        <div class='sk-circle sk-circle-12'></div>
+      </div>
+        <span>正在上傳，請稍等</span>
+    </section>
+ </div>
+{#        <el-table-column label="操作" width="120" align="center" fixed="right">#}
+{#        <template slot-scope="scope">#}
+{#            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">保存</el-button>#}
+{#            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">取消</el-button>#}
+{##}
+{#            <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>#}
+{#            <el-button type="text" size="small"     @click.native="historyRow(scope.$index, scope.row);dialogTableVisible = true"    v-if="!showBtn[scope.$index]">历史</el-button>#}
+{#        </template>#}
+{#    </el-table-column>#}
+    </el-table>
+    <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="totalNum">
+    </el-pagination>
+  </div>
+    </template>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+             visible: false,
+             settable:false,
+             multipleSelectionFlag:false,
+             multiDeleteVisible:false,
+             multipleSelection: [],
+             update:false,
+             tableContent: [],
+             searchalert:[],
+             showEdit:[], //显示编辑框
+             showBtn:[],
+             showBtnOrdinary: true,
+             //權限flag
+             disabled: false,
+             showCustomer:null,
+             showProject:null,
+             showPhase:null,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum:null,
+             selectItem:{},
+             selectedCustomer:null,
+             selectedDepartment:null,
+             selectedMinistry:null,
+             selectedProject:null,
+             selectedCategory:null,
+             selectedSection:null,
+             selectedChu:null,
+             selectSection:'',
+             selectMinistry:'',
+             selectChu:[],
+             selectKe:[],
+             sectionOption: [],
+             itemOption: [],
+             selectCategory:[],
+             comment:null,
+             statu:null,
+             errMsg:'',
+             permission:null,
+             dialogTableVisible:false,
+             changeindex:null,
+             customerError:false,
+             Year1: '',
+             excelFile:null,
+             fileName:"未選擇文件",
+             department:'',
+             CustomerSerch:'',
+             YearSerch:'',
+             ChuSerch:'',
+             MinistrySerch:'',
+             SectionSerch:'',
+             loading:false,
+             elbuttonloading: false,
+             tableloading: false,
+             form: {
+                  id: '',
+                  name: '',
+                  Customer: '',
+                  Department_Code: '',
+                  Chu: '',
+                  Ministry: '',
+                  Section: '',
+                  Item: '',
+                  Title: '',
+                  CodeNoH01: '',
+                  CodeNoH02: '',
+                  Year: '',
+                  Current_Workforce: '',
+                  Jan: '',
+                  Feb: '',
+                  Mar: '',
+                  Apr: '',
+                  May: '',
+                  Jun: '',
+                  Jul: '',
+                  Aug: '',
+                  Sep: '',
+                  Oct: '',
+                  Nov: '',
+                  Dec: '',
+
+             },
+             formData:[]
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+     },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            this.elbuttonloading = true;
+                this.tableloading = true;
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/PersonalInfo/ManPower-edit/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                {#this.loading=false;#}
+                this.tableContent=res.data.content;
+                this.selectItem=res.data.select;
+                {#this.tableContent=res.data.content;#}
+                this.selectYear = res.data.selectYear;
+                {#this.selectSection = res.data.selectSection;#}
+                this.sectionOption = res.data.sectionOption;
+                this.itemOption = res.data.itemOption;
+                this.permission = res.data.permission;
+                this.department = res.data.department;
+                this.elbuttonloading = false;
+                this.tableloading = false;
+         });
+
+        },
+
+         //索引
+         indexMethod(index) {
+            return index +1;
+         },
+         //分页
+         handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+         },
+
+          //上传搜索项：以此选项搜索符合条件的内容
+
+             selectMsg :function(){
+               this.elbuttonloading = true;
+               this.tableloading = true;
+               let Customer = this.$refs.Customer.value;
+               let Year1 = this.$refs.Year1.value;
+               let Chu = this.$refs.Chu.value;
+               let Ministry = this.$refs.Ministry.value;
+               let Section = this.$refs.Section.value;
+               this.CustomerSearch = this.$refs.Customer.value;
+               this.YearSearch = this.$refs.Year1.value;
+               this.ChuSearch = this.$refs.Chu.value;
+               this.MinistrySearch = this.$refs.Ministry.value;
+               this.SectionSearch = this.$refs.Section.value;
+               let data ={"isGetData":"SEARCH","Customer":Customer,"Year":Year1,"Chu":Chu,"Ministry":Ministry,"Section":Section,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/PersonalInfo/ManPower-edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.tableContent=res.data.content;//用sort-change方法对分页后台排序时，默认排序列
+                  this.selectItem=res.data.select;
+                  this.selectYear = res.data.selectYear;
+                  {#this.selectMinistry = res.data.selectMinistry;#}
+                  {#this.selectSection = res.data.selectSection;#}
+                  this.sectionOption = res.data.sectionOption;
+                  this.itemOption = res.data.itemOption;
+                  this.totalNum=this.tableContent.length;
+                  this.elbuttonloading = false;
+                  this.tableloading = false;
+
+                })
+             },
+
+            changeYear:function () {
+                 if(this.$refs.Year1.value ==''){
+                      this.selectChu=[""];
+                      return false;
+                 }
+                 let date = this.$refs.Year1.value;
+                 console.log(date);
+                 this.selectChu=this.selectYear[this.$refs.Year1.value];
+                 this.selectedChu="";
+             },
+
+            changeChu:function () {
+                let Chu = this.$refs.Chu.value;
+                let date = this.$refs.Year1.value;
+                 if(Chu == ""){
+                      this.selectKe=[""];
+                      return false;
+                 }
+                let data = {"isGetData": "changeChu","Year":date, "chu":Chu,"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/ManPower-edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectSection = res.data.selectSection;
+                });
+             },
+
+            changeMinistry:function () {
+                let Ministry = this.$refs.Ministry.value;
+                let Chu = this.$refs.Chu.value;
+                 if(Ministry == ""){
+                      this.selectCategory=[""];
+                      return false;
+                 }
+                 this.selectCategory=this.selectSection[this.$refs.Ministry.value];
+                 this.selectedCategory="";
+             },
+
+        alertID:function(id,row){
+            let Customer = this.$refs.Customer.value;
+            let Year1 = this.$refs.Year1.value;
+            let Chu = this.$refs.Chu.value;
+            let Ministry = this.$refs.Ministry.value;
+            let Section = this.$refs.Section.value;
+            if(this.permission === 1 || (this.permission === 2 && row.Department_Code == this.department)){
+                this.update = true;
+            }else {
+                    this.$message({
+                              showClose: true,
+                              message: '只能編輯本課別人員的信息',
+                              type: 'warning'
+                    });
+            }
+            let msg = {
+              "isGetData" : "alertID" ,"ID":id, "Customer": Customer, "Year": Year1, "Chu": Chu,
+                "Ministry": Ministry, "Section": Section
+            };
+            axios.post("/PersonalInfo/ManPower-edit/",Qs.stringify(msg,{indices:false}),{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                } ).then((res) => {
+                             {% comment %}this.sectionOption = res.data.sectionOption;
+                             this.tableContent = res.data.content;{% endcomment %}
+                             //this.department = res.data.department;
+                             //this.form = res.data.form;
+                             this.editID = id;
+                             this.permission = res.data.permission;
+                             this.form.Customer = row.Customer;
+                             this.form.Department_Code = row.Department_Code;
+                             this.form.Chu = row.Chu;
+                             this.form.Ministry = row.Ministry;
+                             this.form.Section = row.Section;
+                             this.form.Item = row.Item;
+                             this.form.Title = row.Title;
+                             this.form.CodeNoH01 = row.CodeNoH01;
+                             this.form.CodeNoH02 = row.CodeNoH02;
+                             this.form.Year = row.Year;
+                             this.form.Current_Workforce = row.Current_Workforce;
+                             this.form.Jan = row.Jan;
+                             this.form.Feb = row.Feb;
+                             this.form.Mar = row.Mar;
+                             this.form.Apr = row.Apr;
+                             this.form.May = row.May;
+                             this.form.Jun = row.Jun;
+                             this.form.Jul = row.Jul;
+                             this.form.Aug = row.Aug;
+                             this.form.Sep = row.Sep;
+                             this.form.Oct = row.Oct;
+                             this.form.Nov = row.Nov;
+                             this.form.Dec = row.Dec;
+
+           })
+      },
+        onSubmit() {
+            console.log('submit!',this.$refs.form.model,typeof (this.$refs.form.model),this.formData);
+            {#var submitData = new FormData();#}
+            if (this.formData.length==0){this.formData = new FormData();}
+            {#this.formData.append('serchCategory', this.serchCategory)#}
+            this.formData.append('id', this.editID);
+            this.formData.append('Customer', this.$refs.form.model.Customer);
+            this.formData.append('Department_Code', this.$refs.form.model.Department_Code);
+            this.formData.append('Chu', this.$refs.form.model.Chu);
+            this.formData.append('Ministry', this.$refs.form.model.Ministry);
+            this.formData.append('Section', this.$refs.form.model.Section);
+            this.formData.append('Item', this.$refs.form.model.Item);
+            this.formData.append('Title', this.$refs.form.model.Title);
+            this.formData.append('CodeNoH01', this.$refs.form.model.CodeNoH01);
+            this.formData.append('CodeNoH02', this.$refs.form.model.CodeNoH02);
+            this.formData.append('Year', this.$refs.form.model.Year);
+            this.formData.append('Current_Workforce', this.$refs.form.model.Current_Workforce);
+            this.formData.append('Jan', this.$refs.form.model.Jan);
+            this.formData.append('Feb', this.$refs.form.model.Feb);
+            this.formData.append('Mar', this.$refs.form.model.Mar);
+            this.formData.append('Apr', this.$refs.form.model.Apr);
+            this.formData.append('May', this.$refs.form.model.May);
+            this.formData.append('Jun', this.$refs.form.model.Jun);
+            this.formData.append('Jul', this.$refs.form.model.Jul);
+            this.formData.append('Aug', this.$refs.form.model.Aug);
+            this.formData.append('Sep', this.$refs.form.model.Sep);
+            this.formData.append('Oct', this.$refs.form.model.Oct);
+            this.formData.append('Nov', this.$refs.form.model.Nov);
+            this.formData.append('Dec', this.$refs.form.model.Dec);
+            this.formData.append('CustomerSearch', this.CustomerSearch);
+            this.formData.append('YearSearch', this.YearSearch);
+            this.formData.append('ChuSearch', this.ChuSearch);
+            this.formData.append('MinistrySearch', this.MinistrySearch);
+            this.formData.append('SectionSearch', this.SectionSearch);
+            this.formData.append("action",'submit');
+            console.log(this.formData);
+            axios.post("/PersonalInfo/ManPower-edit/", this.formData,{
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res)=>{
+                        this.tableContent = res.data.content;
+                        this.update=false;
+                        this.formData = new FormData();
+
+            })
+          },
+          updateFile:function(e){
+                const first="未選擇文件";
+                let newValue= e.target.files;
+                console.log(newValue,"r");
+                if(newValue){
+                 let file=document.getElementById('upload');
+                 let filename= file.files[0].name;
+                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
+                 console.log(fileType.toLowerCase());
+                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                      //console.log(this.excelFile);
+                     this.fileName=filename;
+                     this.uploadFile=file.files[0];
+                     console.log(this.uploadFile,"m");
+                 }else{
+                     alert("上傳類型不為'xlsx'或'xls'");
+                       try{
+                         }catch(e){
+                             console.log(e);
+                         }
+                 }
+             }else{
+                 this.uploadFile=null;
+                 this.fileName=first;
+             }
+          },
+         //批量上傳
+          fileUpload:function(){
+                    const first="未選擇文件";
+                    let Customer = this.$refs.Customer.value;
+                    let Year = this.$refs.Year1.value;
+                    let Chu = this.$refs.Chu.value;
+                    let Ministry = this.$refs.Ministry.value;
+                    let Section = this.$refs.Section.value;
+                    if(this.uploadFile){
+                        //if(Customer == ''||Year == ''||Chu === ''||Ministry === ''||Section === ''){
+                           // alert("請選擇要修改的表單");
+                           // return false;
+                        //}else{
+                       //1.解析Excel
+                       let outputResult;
+                       let _this= this;
+                       let files = this.uploadFile;
+                       let undefined_to_null=function(value){
+                           if(value == undefined){
+                               value=null;
+                           }
+                           //console.log(value,value === undefined,value == undefined);
+                           return value;
+                       };
+                       var fileReader = new FileReader ();
+                        const loading = this.$loading({
+                              lock: true,
+                              text: 'Loading',
+                              spinner: 'el-icon-loading',
+                              background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                       fileReader.onload = function (ev) {
+                         try {
+                         {#_this.loading=true;#}
+                         var data = ev.target.result,
+                          workbook = XLSX.read(data, {
+                            type: 'binary'
+                         }), //以二进制流方式读取得到整份excel表格对象
+                          persons = []; // 存储获取到的数据
+                       } catch (e) {
+                         {#_this.loading=false;#}
+                             loading.close();
+                         return;
+                      }
+                      for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        var fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo);
+                        var datas = workbook.Sheets[sheet];
+                        //如果有不规范数据可以在这里进行处理datas
+                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                        //break; //只读了第一张表
+                    }
+                }
+                     //数据保存在result
+                      let result=JSON.stringify(persons);
+                       //将之前张开的树形结构收起
+                          //_this.reset();
+                       //2.上傳數據
+                        axios.post("/PersonalInfo/ManPower-edit/" ,{"customer":Customer,"year":Year,"chu":Chu,'ministry':Ministry,'section':Section,"ExcelData":result},{
+                        headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    }).then((res) => {
+                        //console.log(res.data,"first");//上传成功的操作
+                        _this.tableContent = res.data.content;
+                        _this.totalNum=_this.tableContent.length;
+                        _this.errMsg=res.data.errMsg;
+                        _this.uploadFile=null;
+                        _this.fileName=first;
+                        {#_this.loading=false;#}
+                        loading.close();
+                        //上传成功的操作
+                        if(_this.errMsg){
+                            _this.$alert(_this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+                            _this.$message({
+                                message: '上傳成功',
+                                type: 'success',
+                            })
+                        }
+                        //接受数据的初始化
+                        try{
+                        }catch(e)
+                        {
+                           console.log("错误异常"+e);
+                        }
+                    }).catch(function (e) {
+                            {#_this.loading=false;#}
+                            loading.close();
+                            _this.uploadFile=null;
+                            var warning =confirm("上傳異常");
+                            console.log("上傳錯誤信息"+e);
+                        });
+               };
+                       try{
+                       //console.log(fileReader.onload());
+                       fileReader.readAsBinaryString(files);
+                       //console.log(fileReader.readAsBinaryString(files));
+                       }
+                       catch(e){
+                             {#this.loading=false;#}
+                             loading.close();
+                             console.log(e);
+                             alert("文件上傳異常") ;
+                             return;
+                        }
+                      //console.log(outputResult);
+                  // }
+                 }else{
+                  {#this.loading=false;#}
+                  loading.close();
+                  alert("未選擇文件");
+                  return false;
+              }
+          },
+           handleSelectionChange(val) {
+                this.multipleSelection = val;
+                if (this.multipleSelection.length == 0) {
+                    // 如不进行判断则勾选完毕后批量删除按钮还是会在
+                    this.multipleSelectionFlag = false;
+                }
+                this.multipleSelectionFlag = true;
+            },
+           multiDelete() {
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+                if(warning) {
+                     this.multiDeleteVisible = false;
+                     let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                     let params = [];
+                     let self = this;
+                     checkArr.forEach(function (item) {
+                         console.log(item);
+                         params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                });
+                 console.log(params);
+                   let Customer = this.$refs.Customer.value;
+                   let Year = this.$refs.Year1.value;
+                   let Chu = this.$refs.Chu.value;
+                   let Ministry = this.$refs.Ministry.value;
+                   let Section = this.$refs.Section.value;
+                   let data = {
+                       "isGetData": "MUTICANCEL",
+                       "params": params,Customer,"Year":Year,"Chu":Chu,"Ministry":Ministry,"Section":Section,
+                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                   };
+                   axios.post('/PersonalInfo/ManPower-edit/', data).then((res) =>{
+                         this.tableContent = res.data.content;
+                            this.totalNum=this.tableContent.length;
+                         console.log(this.tableContent,'mul')
+                         self.$message({
+                             message: '删除成功',
+                             type: 'success'
+                     });
+
+                 this.tableContent = res.data.content;
+             })
+         }else{
+             return false;
+         }
+            },
+
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        }
+     }
+ })
+</script>
+{% endblock %}

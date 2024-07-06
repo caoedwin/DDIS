@@ -1,0 +1,2152 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}TestPlan_SW{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="/static/css/ElementUI.css">
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+<style>
+[v-cloak]{
+  display: none;
+}
+@media screen and (min-width: 1324px )and ( max-width: 1587px){
+    .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+     .selectMsg .el-select{
+       width: 150px;
+   }
+}
+@media screen and (min-width: 1203px ) and ( max-width: 1323px) {
+   .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+   .selectMsg .el-select{
+       width: 120px;
+   }
+   .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+}
+@media screen and (min-width:1000px ) and (max-width: 1202px){
+      .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .selectMsg{
+        flex-wrap: nowrap;
+    }
+   {% comment %}  .selectMsg .el-select{
+       width: 120px;
+     }{% endcomment %}
+     .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+      .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+}
+@media screen and (min-width:709px ) and (max-width: 1000px){
+    .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+    #app .selectMsg{
+        flex-wrap: nowrap;
+    }
+}
+@media screen  and (max-width: 708px){
+    .customerContent .el-select{
+        display: flex;
+    }
+    .projectContent {
+        margin-left: 0;
+    }
+    #app .selectMsg .el-select {
+        padding-right: 0;
+    }
+     .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+    #app .selectMsg{
+        flex-wrap: nowrap;
+    }
+}
+  .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+      color:aliceblue;
+  }
+  .selectMsg label:last-child{
+     margin-left: 15px;
+   }
+  .selectMsg #project{
+      margin-left: 0;
+  }
+  .selectMsg .Button{
+      height:40px;
+  }
+  .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+      width: auto;
+  }
+  el-table__header .is-group.has-gutter .cell{
+      word-break: break-word;
+  }
+  el-table__header .is-group.has-gutter tr th{
+      min-width: 120px;
+  }
+  .el-table .warning-row {
+    background: oldlace;
+  }
+  .el-table .info-row {
+    background: #909399;
+  }
+  .el-table .title-row {
+    background: #08d9d6;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped.title-row td{
+    background: #08d9d6
+  }
+  /* NO.1 */
+   .el-table--striped .el-table__body tr.el-table__row--striped.title-row td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+  }
+   .el-table__row--level-0 td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+   }
+   .el-table__indent, .el-table__placeholder{
+       display: none;
+   }
+   .select_inner {
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #DCDFE6;
+    {% comment %}-webkit-box-sizing: border-box;{% endcomment %}
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 12px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+   }
+  .el-table .danger-row {
+    background: #F56C6C;
+  }
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .el-table  .cell{
+     text-align: center;
+ }
+  .headerStyle{
+       background-color:#fafafa;
+       font-weight:800;
+       {% comment %}border-bottom:1px solid rgb(103, 194, 58);{% endcomment %}
+  }
+  .headerStyle .el-icon-info{
+       color: cornflowerblue;
+  }
+  .headerStyle i{
+      padding:6px;
+  }
+  .tooltipsFont {
+      font-weight: bold;
+      color:black;
+      font-size: 12px;
+  }
+
+ .el-table__fixed,
+.el-table__fixed-right {
+  height: 100% !important;
+}
+  .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+  .invalidInput .el-input__inner{
+     border: 1px solid red;
+     color:red ;
+}
+  .invalidNum{
+      color:red;
+  }
+  .projectContent{
+     margin-left: 20px;
+}
+  .phaseContent{
+    margin-right: 20px;
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 40px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+  .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}  /* NO.2 */
+  /* input clear */
+  .el-input.el-input--suffix:hover .inputClear{
+      visibility: visible;
+  }
+  .inputClear{
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      visibility:hidden;
+  }
+  .el-pagination.is-background{
+      text-align: right;
+      margin: 10px 0 0 0;
+  }
+  .el-pagination__total,.el-pagination__jump{
+      color: white;
+  }
+  .clearShow{
+      visibility: visible;
+  }
+  .pass{
+    background-color: aquamarine;
+}
+  .fail{
+    background-color: crimson;
+    color:antiquewhite;
+}
+  .el-form-item label{
+      margin-bottom: 0;
+  }
+  .el-form.el-form--label-top.el-form--inline{
+      text-align: center;
+  }
+  .el-dialog__footer .dialog-footer{
+      text-align: center;
+  }
+  .el-form.el-form--inline{
+      text-align: center;
+  }
+  .el-form.el-form--inline .el-form-item__content{
+      width:100%;
+  }
+  .ElDialog .el-dialog{
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+  }
+  .ElDialog .el-dialog__body{
+      height: 650px;
+      overflow-y:auto;
+  }
+   .ElDialog .el-dialog__body .el-form-item__label{
+       font-weight: 600;
+   }
+  .ElDialog .el-dialog__footer{
+      padding: 10px;
+      background: #F2F2F2;
+      -webkit-border-radius: 0 0 10px 10px;
+      -moz-border-radius: 0 0 10px 10px;
+      border-radius: 0 0 10px 10px;
+  }
+  .ElDialog .el-dialog__header{
+      background: #F2F2F2;
+      -webkit-border-radius: 10px 10px 0 0;
+      -moz-border-radius: 10px 10px 0 0;
+      border-radius: 10px 10px 0 0;
+      font-weight: bold;
+  }
+ .ElDialog .dialog-title{
+      font-size: 18px;
+      font-weight: bold;
+      color: black;
+ }
+.el-form-item.planingContent .el-form-item__content{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.el-form-item.planingContent .el-form-item__content .item{
+   flex-grow: 0;
+   margin: 0 20px 20px 0;
+   display: flex;
+}
+.el-form-item.planingContent .el-form-item__content .item label{
+    width: 365px;
+    font-weight: 500;
+    text-align: left;
+}
+.el-form-item .dialog-select{
+    width:100%;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+  <div class="selectMsg" >
+    <div class="customerContent">
+    <label for="customer" v-cloak>客戶別 </label>
+     <el-select  v-model="customer" width="80%" >
+            <el-option v-for="item in customerOptions" :label="item.label" :value="item.value"  ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+    </div>
+    <div class="projectContent" >
+   <label for="project" v-cloak>專案號</label>
+        <el-select  v-model="project"  placeholder="請輸入專案號" style="margin-right: 20px" width="80%" clearable >
+            <el-option v-for="item in projectvalue"  :label="item.project" :value="item.project" ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+    </div>
+    <div class="phaseContent" >
+         <label for="phase" v-cloak>Phase</label>
+        <el-select v-model="phase" width="80%" id="phase" >
+            <el-option v-for="(item,index) in phasevalue" :key="index" :label="phaseName[item]" :value="phasevalue[index]"></el-option>
+        </el-select><br>
+        <div class="inputError" v-cloak  v-show="phaseError">phase號不能為空</div>
+    </div>
+    <div class="phaseContent">
+      <label for="category" v-cloak>Category</label>
+          <el-select v-model="category" >
+          <el-option label="" value=""></el-option>
+          <el-option v-for="(item) in categoryItem" :label="item.caseid" :value="item.caseid"></el-option>
+         </el-select><br>
+        <div class="inputError" v-cloak  v-show="categoryError">類別不能為空</div>
+    </div>
+    <el-button @click="find" v-cloak type="primary" class="Button">查找</el-button>
+  </div>
+  <div v-cloak class="fileUploadContent"    v-if="canEdit">
+            <div class="inputPackage" v-cloak>
+                 <span v-cloak>請選擇文件</span>
+                 <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+            </div>
+         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+        <span class="showFileName" v-cloak >${ fileName }</span>
+
+{#      <el-button @click="Add()" size="medium" style="margin-left:30px;background-color:#75e5a7;color:white;"><i class="el-icon-circle-plus"></i>SKU錄入</el-button>#}
+     </div>
+    <div v-cloak class="fileUploadContent"    v-if="canEdit"  style="float:right">
+        <el-button @click="Delete" v-cloak type="primary" class="Button">清空数据</el-button>
+    </div>
+
+{#    <el-dialog :visible.sync="appendss">#}
+{#           <template>#}
+{#             <el-form ref="formappend"  :model="formappend"   :label-position="labelPosition" label-width="105px" :selfUpdate="true">#}
+{#                  <el-form-item label="ScheduleBegin">#}
+{#                          <el-date-picker v-model="formappend.ScheduleBegin" type="date" value-format="yyyy-MM-dd" placeholder="選擇日期"></el-date-picker>#}
+{#                  </el-form-item>#}
+{#                  <el-form-item label="ScheduleEnd">#}
+{#                          <el-date-picker v-model="formappend.ScheduleEnd" type="date" value-format="yyyy-MM-dd" placeholder="選擇日期"></el-date-picker>#}
+{#                  </el-form-item>#}
+{#                  <el-form-item label="Full_Function_Duration">#}
+{#                          <el-input  v-model="formappend.Full_Function_Duration"></el-input>#}
+{#                  </el-form-item>#}
+{#                  <el-form-item label="Gerber">#}
+{#                          <el-date-picker v-model="formappend.Gerber" type="date" value-format="yyyy-MM-dd" placeholder="選擇日期"></el-date-picker>#}
+{#                  </el-form-item>#}
+{#                 <el-form-item label="SKU1">#}
+{#                        <el-form-item label="CPU">#}
+{#                          <el-input  v-model="formappend.CPU1"></el-input>#}
+{#                        </el-form-item>#}
+{#                        <el-form-item label="VGA">#}
+{#                          <el-input  v-model="formappend.VGA1"></el-input>#}
+{#                        </el-form-item>#}
+{#                  </el-form-item>#}
+{#                 <el-form-item label="SKU2">#}
+{#                        <el-form-item label="CPU">#}
+{#                          <el-input  v-model="formappend.CPU2"></el-input>#}
+{#                        </el-form-item>#}
+{#                        <el-form-item label="VGA">#}
+{#                          <el-input  v-model="formappend.VGA2"></el-input>#}
+{#                        </el-form-item>#}
+{#                  </el-form-item>#}
+{#                  <el-form-item>#}
+{#                        <el-button type="primary" @click="addSubmit(formappend)">確定</el-button>#}
+{#                  </el-form-item>#}
+{#             </el-form>#}
+{#        </template>#}
+{#     </el-dialog>#}
+
+  <div class="tableAround" v-cloak >
+  {% csrf_token %}
+ <!--數據表-->
+ <!--提示信息-->
+  <span  class="selectItem" v-cloak  v-if="showCustomer&&showProject&&phaseName[showPhase]">當前表格信息：${ showCustomer }/${ showProject }/${ phaseName[showPhase]}/${ showCategory } <span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+   <el-button v-cloak v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" style="height:40px;margin:0 20px 8px 10px;float:right;width:116px" type="success" @click="addMsg"> <i v-cloak class="el-icon-circle-plus-outline"></i> 添加信息</el-button>
+  <el-table v-cloak height="750" border :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize){% comment %}.slice(scrollArray[0],scrollArray[1]){% endcomment %}"
+    ref="multipleTable"
+    tooltip-effect="dark"
+    stripe
+    id="out-table"
+    style="border-radius: 10px;
+    word-break: keep-all"
+    :row-class-name="tableRowClassName"
+    :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }"
+      element-loading-text="拼命加载中"
+	  element-loading-spinner="el-icon-loading"
+	  element-loading-background="rgba(0, 0, 0, 0.8)">
+      <!--無需編輯-->
+      <el-table-column width="45" label="No."  prop="index"  fixed></el-table-column>
+      <el-table-column width="100" label="Case ID"  prop="caseid" align="left" fixed></el-table-column>
+      <el-table-column width="160" label="Case Name" prop="casename" fixed></el-table-column>
+      <!--:key="Math.random()" => 为了解决数据错位 即前一列覆盖掉后一列 -->
+      <el-table-column width="160" label="Test Items" prop="testitem" {% comment %}v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" :key="Math.random()" v-cloak{% endcomment %}></el-table-column>
+      <el-table-column width="120" label="Version" prop="version"></el-table-column>
+      <el-table-column width="120" label="Release Date"prop="releasedate"></el-table-column>
+      <el-table-column width="120" label="Owner" prop="owner"></el-table-column>
+      <el-table-column width="120" label="priority" prop="priority"></el-table-column>
+      <!--:key="1" => 为了解决数据错位 （即前一列覆盖掉后一列）且使用Math.random()会产生抖动 ，换成固定值则正常 -->
+      <el-table-column width="120"  v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20"  label="TDMS Total Time"  :key="1" >
+          <template slot-scope="scope">
+              <span v-if="scope.row.id " v-cloak >${ scope.row.basetime + scope.row.unattendedtime }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120"  label="Base Time" prop="basetime"></el-table-column>
+      <el-table-column width="120"  label="(TDMS)Attended Time" prop="unattendedtime"></el-table-column>
+      <el-table-column width="120"  label="Base Automation Time(1SKU)" prop="basetimeA"></el-table-column>
+      <el-table-column width="120"  label="Chramshell" prop="chramshell"></el-table-column>
+
+      <el-table-column width="160"  label="Convertible">
+          <el-table-column label="NB Mode" prop="conver_NB"></el-table-column>
+          <el-table-column width="100" label="Yoga Pad Mode/Flex 300°" prop="conver_Yoga"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Detachable">
+          <el-table-column label="Pad Mode" prop="detach_Pad"></el-table-column>
+          <el-table-column label="W Dock Mode" prop="detach_W"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Phase">
+          <el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="FVT" prop="PhaseF"></el-table-column>
+          <el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="SIT" prop="PhaseS"></el-table-column>
+          <el-table-column v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" v-cloak label="FFRT" prop="PhaseFFRT"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Coverage" prop="coverage"></el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120"  label="Feature Support">
+          <template slot-scope="scope">
+                  <select class="select_inner"  placeholder="" v-if="scope.row.isSet && canEdit" v-model="FS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]" @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %},{'id':1})" >
+                     <option label=" " value=""></option>
+                     <option label="Y" value="Y"></option>
+                     <option label="N" value="N"></option>
+                  </select>
+                  <span v-else="scope.row.isSet && canEdit"  >${ scope.row.FS }</span>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Base Time-Support">
+           <template slot-scope="scope">
+                  <span v-if="scope.row.isSet && canEdit">${ (!BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
+                  <span v-else="scope.row.isSet && canEdit" >
+                      ${ (!scope.row.BTS && scope.row.BTS !== 0)?0:scope.row.BTS }
+                  </span>
+                </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫工程師名" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>TE</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="TE[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(TE, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':TE[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              </div>
+              <span  v-else="scope.row.isSet && canEdit">${ scope.row.TE }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫該項測試的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Schedule</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="schedule[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(schedule, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':schedule[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              </div>
+               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.schedule }</span>
+                </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120"  >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填入根據LNV SW Test martrix 安排的 Test Plan所需測試的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Project Test SKU Follow Matrix</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+                  <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit" {% comment %}:class="{'invalidInput':starttime[scope.$index]!==undefined && starttime[scope.$index]!=='' && isNaN(starttime[scope.$index]/1)}"{% endcomment %}>
+                      <input placeholder="請輸入內容" type="text"   v-model="starttime[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"  @input="initData(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}, {'id':2})">
+                      <span @click="clear( starttime, scope.$index + (currentPage-1)*pagesize,'change',scope.row,{'id':2})" :class="{'clearShow':starttime[scope.$index + (currentPage-1)*pagesize] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                  </div>
+                  <span v-else="scope.row.isSet && canEdit">${ scope.row.starttime }</span>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="添加total SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Time w/ Config follow Matrix(?SKU)</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope" >
+              <span v-if="scope.row.isSet && canEdit">${ (!TFC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && TFC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:TFC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
+              <span v-else="scope.row.isSet && canEdit">${ (!scope.row.TFC && scope.row.TFC !== 0)?0:scope.row.TFC }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="Automation Mark: Y;Automation Can't Mark:N" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Automation item</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                  <select class="select_inner" placeholder="" v-if="scope.row.isSet && canEdit" v-model="conAitem[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]" @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %},{'id':3})">
+                     <option label=" " value=""></option>
+                     <option label="Y" value="Y"></option>
+                     <option label="N" value="N"></option>
+                  </select>
+                  <span v-else="scope.row.isSet && (canEdit)" >${ scope.row.conAitem }</span>
+           </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Config-Automation time">
+          <template slot-scope="scope">
+              <span v-if="scope.row.isSet && canEdit">${ (!CAT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && CAT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:CAT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
+              <span v-else="scope.row.isSet && canEdit">${ (!scope.row.CAT && scope.row.CAT !== 0)?0:scope.row.CAT }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120"  >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage Mark: Y;Leverage Can't Mark:N" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Leverage item</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                  <select class="select_inner" placeholder="" v-if="scope.row.isSet && canEdit " v-model="conLitem[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]">
+                     <option label=" " value=""></option>
+                     <option label="Y" value="Y"></option>
+                     <option label="N" value="N"></option>
+                  </select>
+                  <span v-else="scope.row.isSet && (canEdit)" >${ scope.row.conLitem }</span>
+           </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Config-Leverage time">
+           <template slot-scope="scope">
+               <span v-if="scope.row.isSet && canEdit">${ (!CLT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && CLT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:CLT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
+               <span  v-else="scope.row.isSet && canEdit" :class="{'invalidNum': scope.row.CLT <0}">${ (!scope.row.CLT && scope.row.CLT !== 0)?0:scope.row.CLT }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="180" >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Comments</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                 <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="comments1[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(comments1, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':comments1[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                 </div>
+                <span v-else="scope.row.isSet && (canEdit)">${ scope.row.comments1 }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="Smart Mark: Y;Smart Can't Mark:N" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart item</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                  <select class="select_inner" placeholder="" v-if="scope.row.isSet && canEdit" v-model="conSitem[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]">
+                     <option label=" " value=""></option>
+                     <option label="Y" value="Y"></option>
+                     <option label="N" value="N"></option>
+                  </select>
+                  <span v-else="scope.row.isSet && (canEdit)" >${ scope.row.conSitem }</span>
+           </template>
+      </el-table-column>
+      <el-table-column width="120"  >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Smart 的百分比" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart item占總case比例</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+               <span v-if="scope.row.isSet && canEdit" >${ (!conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}].toFixed(2) }</span>
+               <span v-else="scope.row.isSet && canEdit">${ (!scope.row.conSitemInAll && scope.row.conSitemInAll !== 0)?0:scope.row.conSitemInAll.toFixed(2) }</span>
+          </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Config-Smart Time">
+           <template scope="scope">
+             <span v-if="scope.row.isSet && canEdit">${ (!CST[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && CST[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:CST[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}].toFixed(2) }</span>
+             <span v-else="scope.row.isSet && canEdit" :class="{'invalidNum': scope.row.CST <0}"> ${(!scope.row.CST && scope.row.CST !== 0)?0:scope.row.CST.toFixed(2) }</span>
+           </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="180"  label="Comments">
+          <template slot="header" slot-scope="scope" >
+              <el-tooltip content="Smart 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Comments</span>
+              </el-tooltip>
+          </template>
+
+           <template scope="scope">
+                <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="comments2[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(comments2, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':comments2[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                </div>
+               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.comments2 }</span>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Project test SKU-optimize">
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Stress,Mobile phone nearing(CPI test)機台特殊性，需手動輸入" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Project test SKU-optimize</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+               <span v-if="scope.row.isSet && canEdit">${ (!proTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && proTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:proTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
+               <span v-else="scope.row.isSet && canEdit">${ (!scope.row.proTS && scope.row.proTS !== 0)?0:scope.row.proTS }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120"  label="Attend time-optimize" >
+           <template scope="scope" >
+               <span v-if="scope.row.isSet && canEdit">${ (!ATO[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && ATO[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:ATO[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}].toFixed(2) }</span>
+               <span v-else="scope.row.isSet && canEdit" :class="{'invalidNum': scope.row.ATO <0}">${ (!scope.row.ATO && scope.row.ATO!== 0)?0:scope.row.ATO.toFixed(2) }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column min-width="220" >
+       <template slot="header" slot-scope="scope">
+              <el-tooltip  placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <div slot="content">通過左側Leverage,Reduction,Automation之後合理挑選TestSKU並生成的Test plan<br/>V means: need test;X means:no need test<br/>A means: Automation;L means:Leverage;S means:Smart</div>
+                  <span><i class="el-icon-info"></i>Planning after optimize</span>
+              </el-tooltip>
+          </template>
+
+       <el-table-column  v-for="(item,key,index) in SKUNum" v-bind:key="item.skuNo" :label="item.skuNo" >
+           <el-table-column  :label="item.VGA">
+                <el-table-column  :label="item.CPU" width="120">
+                  <template slot-scope="scope">
+                   <select class="select_inner" placeholder="" v-if="scope.row.isSet && canEdit" v-model="planOptimize[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}][key]" @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %},{'id':4})">
+                        <option label="未选择" value=''></option>
+                        <option label="V" value="V"></option>
+                        <option label="X" value="X"></option>
+                        <option label="A" value="A"></option>
+                        <option label="L" value="L"></option>
+                        <option label="S" value="S"></option>
+                   </select>
+                   <span v-else="scope.row.isSet && canEdit">${ scope.row.planOptimize[key] }</span>
+                </template>
+                </el-table-column>
+           </el-table-column>
+
+       </el-table-column>
+
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 Retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest cycle</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+                <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit" {% comment %}:class="{'invalidInput':CRC[scope.$index]!==undefined && CRC[scope.$index]!=='' && isNaN(CRC[scope.$index]/1)}"{% endcomment %}><input placeholder="請輸入內容" type="text"  v-model.lazy="CRC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(CRC, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':CRC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                {% comment %} <el-date-picker size="small" v-if="showinput(scope.row,scope.$index) && canEdit" v-model="CRT[scope.row.id]" type="date" placeholder="选择日期" clearable></el-date-picker>{% endcomment %}
+               </div>
+               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.CRC }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest SKU</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit" {% comment %}:class="{'invalidInput':CRS[scope.$index]!==undefined && CRS[scope.$index]!=='' && isNaN(CRS[scope.$index]/1)}"{% endcomment %}><input placeholder="請輸入內容" type="text"  v-model.lazy="CRS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"   class="el-input__inner"><span @click="clear(CRS, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':CRS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                {% comment %} <el-date-picker size="small" v-if="showinput(scope.row,scope.$index) && canEdit" v-model="CRT[scope.row.id]" type="date" placeholder="选择日期" clearable></el-date-picker>{% endcomment %}
+              </div>
+              <span v-else="scope.row.isSet && (canEdit)">${ scope.row.CRS }</span>
+              </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的s時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest Time</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="请输入内容" type="text"  v-model.lazy="CRT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(CRT, scope.$index + (currentPage-1)*pagesize){% comment %}+scrollArray[0]{% endcomment %}" :class="{'clearShow':CRT[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              </div>
+               <span v-else="scope.row.isSet && canEdit">${ scope.row.CRT }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="120" label="修改" fixed="right">
+          <template slot-scope="scope">
+              <el-button type="text" size="small" @click="edit(scope.row,scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" v-if="!(scope.row.isSet)">編輯</el-button>
+              <el-button type="text" size="small" @click="saveData(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" v-if="(scope.row.isSet)">保存</el-button>
+              <el-button type="text" size="small" v-if="(scope.row.isSet)" @click="cancel(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})">取消</el-button>
+          </template>
+      </el-table-column>
+  </el-table>
+  <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[20, 50, 100, 150]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length"
+      :hide-on-single-page="!tableData.length">
+
+    </el-pagination>
+</div>
+    <el-dialog  :visible.sync="dialogFormVisible" :before-close="handleClose" width="80%" class="ElDialog">
+        <div slot="title">
+            <span class="dialog-title">${'添加信息(' + showCustomer +'/'+ showProject +'/FFRT)'}</span>
+        </div>
+     <el-form :model="form" :inline="true" :rules="rules"  ref="form" :selfUpdate="true">
+      <el-form-item style="width:100%;">
+        <!-- 因需清除表单内容，elementUI要求必须加上prop才能使用！-->
+        <el-form-item label="Case ID" style="width:35%;" prop="caseid">
+            <el-input v-model="form.caseid" ></el-input>
+        </el-form-item>
+        <el-form-item label="Case Name" style="width:35%;" prop="casename">
+             <el-input  autocomplete="off" v-model="form.casename" clearable></el-input>
+        </el-form-item>
+    </el-form-item>
+
+      <el-form-item style="width:100%;">
+           <el-form-item label="Test Item"  style="width:35%;" prop="testitem">
+      <el-input  autocomplete="off" v-model="form.testitem" clearable></el-input>
+    </el-form-item>
+           <el-form-item label="Version" style="width:35%;" prop="version">
+      <el-input  autocomplete="off" v-model="form.version" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;">
+          <el-form-item label="Release Date" style="width:25%;" prop="releasedate">
+      <el-input  autocomplete="off" v-model="form.releasedate" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Owner" style="width:25%;" prop="owner">
+      <el-input  autocomplete="off" v-model="form.owner" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Priority" style="width:25%;" prop="priority">
+      <el-input v-model="form.priority" autocomplete="off" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;">
+          <el-form-item label="Base time"  style="width:25%;" prop="basetime">
+      <el-input  autocomplete="off" v-model="form.basetime" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Unattended time" style="width:25%;" prop="unattendedtime">
+      <el-input  autocomplete="off" v-model="form.unattendedtime" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Base Automation time" style="width:25%;" prop="basetimeA">
+      <el-input  autocomplete="off" v-model="form.basetimeA" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;">
+           <el-form-item label="chramshell" style="width:25%;" prop="chramshell">
+      <el-input  autocomplete="off" v-model="form.chramshell" clearable></el-input>
+    </el-form-item>
+           <el-form-item label="Convertible_NB" style="width:25%;" prop="conver_NB">
+      <el-input  autocomplete="off" v-model="form.conver_NB" clearable></el-input>
+    </el-form-item>
+           <el-form-item label="Convertible_Yoga/Flex 300" style="width:25%;" prop="conver_Yoga">
+      <el-input  autocomplete="off" v-model="form.conver_Yoga" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;">
+          <el-form-item label="Detachable_Pad" style="width:25%;" prop="detach_Pad">
+      <el-input  autocomplete="off" v-model="form.detach_Pad" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Detachable_W Dock" style="width:25%;" prop="detach_W">
+      <el-input  autocomplete="off" v-model="form.detach_W" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Phase_FFRT" style="width:25%;" prop="PhaseF">
+      <el-input  autocomplete="off" v-model="form.PhaseF" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;">
+          <el-form-item label="Feature Support"  style="width:35%;" prop="FS">
+      <el-select  autocomplete="off" v-model="form.FS" @change="initDataForFFRT({'id':1})" class="dialog-select" >
+          <el-option label="" value=""></el-option>
+          <el-option label="Y" value="Y"></el-option>
+          <el-option label="N" value="N"></el-option>
+      </el-select>
+    </el-form-item>
+          <el-form-item label="Base Time Support" style="width:35%;" prop="BTS">
+      <el-input  autocomplete="off" v-model="form.BTS" readonly="true"></el-input>
+    </el-form-item>
+      </el-form-item>
+
+       <el-form-item style="width:100%;">
+          <el-form-item label="TE" style="width:35%;" prop="TE">
+      <el-input  autocomplete="off" v-model="form.TE" clearable></el-input>
+    </el-form-item>
+          <el-form-item label="Schedule" style="width:35%;" prop="schedule">
+      <el-input  autocomplete="off" v-model="form.schedule" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+
+       <el-form-item style="width:100%;">
+          <el-form-item label="Project Test SKU follow Matrix" style="width:35%;" prop="starttime">
+              <el-input  autocomplete="off" v-model.number="form.starttime" @change="initDataForFFRT({'id':2})"  clearable></el-input>
+           </el-form-item>
+          <el-form-item label="Time W/Config-follow Matrix" style="width:35%;" prop="TFC">
+            <el-input  autocomplete="off" v-model="form.TFC" readonly="true"></el-input>
+          </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;">
+          <el-form-item label="Config Automation Item" style="width:35%;" prop="conAitem">
+             <el-select  autocomplete="off" v-model="form.conAitem"  @change="initDataForFFRT({'id':3})" class="dialog-select" >
+                 <el-option label="" value=""></el-option>
+                <el-option label="Y" value="Y"></el-option>
+                <el-option label="N" value="N"></el-option>
+             </el-select>
+           </el-form-item>
+          <el-form-item label="Config Automation Time" style="width:35%;" prop="CAT">
+      <el-input  autocomplete="off" v-model="form.CAT" readonly="true"></el-input>
+    </el-form-item>
+      </el-form-item>
+
+       <el-form-item style="width:100%;">
+          <el-form-item label="Config Leverage Item" style="width:35%;" prop="conLitem">
+            <el-select  autocomplete="off" v-model="form.conLitem"  class="dialog-select" >
+                 <el-option label="" value=""></el-option>
+                 <el-option label="Y" value="Y"></el-option>
+                 <el-option label="N" value="N"></el-option>
+             </el-select>
+           </el-form-item>
+          <el-form-item label="Config Leverage Time" style="width:35%;" prop="CLT">
+             <el-input  autocomplete="off" v-model="form.CLT" readonly="true"></el-input>
+          </el-form-item>
+      </el-form-item>
+
+       <el-form-item style="width:100%;">
+          <el-form-item label="Comments (Leverage 的考量因素)" style="width:70%;" prop="comments1">
+      <el-input  type="textarea"  autocomplete="off" :row="4" v-model="form.comments1" ></el-input>
+    </el-form-item>
+       </el-form-item>
+
+       <el-form-item style="width:100%;">
+           <el-form-item label="Config Smart Item" style="width:25%;" prop="conSitem">
+      <el-select  autocomplete="off" v-model="form.conSitem"  class="dialog-select" >
+                 <el-option label="" value=""></el-option>
+                 <el-option label="Y" value="Y"></el-option>
+                 <el-option label="N" value="N"></el-option>
+             </el-select>
+    </el-form-item>
+           <el-form-item label="Config Smart Item 占總 Case 比例" style="width:25%;" prop="conSitemInAll">
+      <el-input  autocomplete="off" v-model="form.conSitemInAll" readonly="true"></el-input>
+    </el-form-item>
+           <el-form-item label="Config Smart Time" style="width:25%;" prop="CST">
+      <el-input  autocomplete="off" v-model="form.CST" readonly="true"></el-input>
+    </el-form-item>
+       </el-form-item>
+
+      <el-form-item style="width:100%;">
+    <el-form-item label="Comments (Smart 的考量因素)" style="width:70%;" prop="comments2">
+      <el-input  type="textarea"  autocomplete="off" :row="4" v-model="form.comments2"></el-input>
+    </el-form-item>
+</el-form-item>
+
+      <el-form-item style="width:100%;">
+          <el-form-item label="Project Test SKU-Optimize" style="width:35%;" prop="proTS">
+             <el-input  autocomplete="off" v-model="form.proTS" readonly="true"></el-input>
+          </el-form-item>
+          <el-form-item label="Attend Time Optimize" style="width:35%;" prop="ATO">
+              <el-input  autocomplete="off" v-model="form.ATO" readonly="true"></el-input>
+          </el-form-item>
+      </el-form-item>
+
+      <el-form-item style="width:100%;" prop="planOptimize">
+         <el-form-item label="Planing After Optimize" style="width:75%;" class="planingContent">
+             <div v-for="(val , index) in SKUNum" class="item" v-cloak>
+             <label>${val.skuNo+" / "+val.VGA+" / "+val.CPU}</label><el-select  autocomplete="off" v-model="form.planOptimize[index]"  @change="initDataForFFRT({'id':4})" class="dialog-select">
+                   <el-option label="未选择" value=''></el-option>
+                   <el-option label="V" value="V"></el-option>
+                   <el-option label="X" value="X"></el-option>
+                   <el-option label="A" value="A"></el-option>
+                   <el-option label="L" value="L"></el-option>
+                   <el-option label="S" value="S"></el-option>
+              </el-select>
+             </div>
+         </el-form-item>
+       </el-form-item>
+
+      <el-form-item style="width:100%;">
+         <el-form-item label="Config Retest Cycle" style="width:25%;" prop="CRC">
+      <el-input  autocomplete="off" v-model.number="form.CRC" clearable></el-input>
+    </el-form-item>
+         <el-form-item label="Config Retest SKU" style="width:25%;" prop="CRS">
+      <el-input  autocomplete="off" v-model.number="form.CRS" clearable></el-input>
+    </el-form-item>
+         <el-form-item label="Config Retest Time" style="width:25%;" prop="CRT">
+      <el-input  autocomplete="off" v-model="form.CRT" clearable></el-input>
+    </el-form-item>
+      </el-form-item>
+        </el-form>
+      <div slot="footer" class="dialog-footer">
+    <el-button @click="cancelSubmit('form',handleClose)">取 消</el-button>
+    <el-button type="primary" @click="otherSubmit">保存</el-button>
+  </div>
+
+
+    </el-dialog>
+
+    <!--loading-->
+  <div v-if="loading" v-cloak class="fullScreen">
+    <section v-cloak v-if="loading">
+      <div class='sk-fading-circle'>
+        <div class='sk-circle sk-circle-1'></div>
+        <div class='sk-circle sk-circle-2'></div>
+        <div class='sk-circle sk-circle-3'></div>
+        <div class='sk-circle sk-circle-4'></div>
+        <div class='sk-circle sk-circle-5'></div>
+        <div class='sk-circle sk-circle-6'></div>
+        <div class='sk-circle sk-circle-7'></div>
+        <div class='sk-circle sk-circle-8'></div>
+        <div class='sk-circle sk-circle-9'></div>
+        <div class='sk-circle sk-circle-10'></div>
+        <div class='sk-circle sk-circle-11'></div>
+        <div class='sk-circle sk-circle-12'></div>
+      </div>
+        <span>正在上傳，請稍等</span>
+    </section>
+ </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/date-picker.js"></script>
+<script src="/static/js/Element/dialog.js"></script>
+<script src="/static/js/Element/form.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script src="/static/js/Element/tooltip.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/pagination.js"></script>
+<script type="text/babel">
+  new Vue ({
+    el:"#app",
+    delimiters: ['${', '}'],
+    data() {
+      return {
+          formData:[],
+      appendss:false,
+        labelPosition:'right',
+      formappend: {
+                ScheduleBegin:'',
+                ScheduleEnd:'',
+                Full_Function_Duration:'',
+                Gerber:'',
+                CPU1:'',
+                VGA1:'',
+                CPU2:'',
+                VGA2:'',
+            },
+        // customer選擇
+        customerOptions:[{
+            "label":"C38(NB)",
+            "value":"C38(NB)",
+        },
+            {% comment %}{
+            "label":"C38(AIO)",
+            "value":"C38(AIO)",
+        },{% endcomment %}
+            {
+            "label":"A39",
+            "value":"A39",
+        }
+        ],
+        //表格源數據
+        tableData:[],
+        selectMsg:[],
+        // error 提示
+        customer:'',
+        project:'',
+        phase:'',
+        category:'',
+        showCustomer:'',
+        showProject:'',
+        showPhase:'',
+        showCategory:'',
+        projectvalue:[],
+        phasevalue:[],
+        //category
+        categoryItem:[],
+        projectError:false,
+        customerError:false,
+        phaseError:false,
+        categoryError:'',
+        phaseName:["B(FVT)", "C(SIT)", "SIT2", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others",],
+        columnName:[],
+        fileName:"未選擇文件",
+        //用來與獲取的數據進行比較，尋找那些數據發生變化
+        //updateFlag:false,
+        //loading flag
+        loading:false,
+        //權限flag
+        canEdit:false,
+        showTips:false,
+        //文件上傳
+        excelFile:null,
+        uploadFile:null,
+        /* SW 需要用的值 */
+        // SKU No
+        SKUNum:null,
+        //计算返回的值
+        //totalTime:{},
+        FS:[],
+        TE:[],
+        schedule:[],
+        TFC:[],
+        TS:[],
+        timeConF:[],
+        starttime:[],
+        conAitem:[],
+        conAtime:[],
+        conLitem:[],
+        conSitem:[],
+        CAT:[],
+        CLT:[],
+        CST:[],
+        conSitemInAll:[],
+        comments1:[],
+        comments2:[],
+        planOptimize:[],
+        BTS:[],
+        CRC:[],
+        CRS:[],
+        CRT:[],
+        proTS:[],
+        ATO:[],
+        //分頁變量
+        currentPage:1,
+        pagesize:100,
+{#        scrollArray:[0,10],#}
+        //FFRT
+        dialogFormVisible: false,
+        form: {
+            casename:'',
+            caseid:'',
+            testitem:'',
+            releasedate:'',
+            version:'',
+            owner:'',
+            priority:'',
+            basetime:'',
+            basetimeA:'',
+            unattendedtime:'',
+            chramshell:'',
+            cover_NB:'',
+            cover_Yoga:'',
+            detach_Pad:'',
+            detach_W:'',
+            PhaseF:'',
+            FS:'',
+            TE:'',
+            schedule:'',
+            TFC:0,
+            starttime:'',
+            conAitem:'',
+            conLitem:'',
+            conSitem:'',
+            CAT:0,
+            CLT:0,
+            CST:0,
+            conSitemInAll:0,
+            comments1:'',
+            comments2:'',
+            planOptimize:[],
+            BTS:0,
+            CRC:'',
+            CRS:'',
+            CRT:0,
+            proTS:0,
+            ATO:0,
+        },
+        rules:{
+            starttime:[{type:'number',message:'請輸入數字類型',trigger: 'change'}],
+            CRC:[{type:'number',message:'請輸入數字類型',trigger: 'change'}],
+            CRS:[{type:'number',message:'請輸入數字類型',trigger: 'change'}],
+        }
+      }
+    },
+    //首先获取customer ，project ，phase 搜索信息
+    created(){
+        axios.get("/TestPlanSW/TestPlanSW-edit/?action=first" ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.selectMsg=res.data;
+        })
+    },
+    mounted(){
+         //未保存提示窗
+         let _this = this;
+         window.onbeforeunload =function () {
+            let result= _this.checkChangedData();
+            if (result){
+                return false;
+            }
+          }
+           this.$nextTick(()=> {
+              //滚动监听事件
+              console.log(this.$refs.multipleTable);
+             this.$refs.multipleTable.bodyWrapper.addEventListener('scroll',this.computedScroll )
+             })
+     },
+    methods: {
+       //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+      getdata:function(e){
+                let _this=this;
+                axios.get("/TestPlanSW/TestPlanSW-edit/?action="+e ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.loading=false;
+                    //上传成功的操作
+                    this.SKUNum=res.data['SKU'];
+                    this.tableData=res.data['content'];
+                    for(let i=0;i<res.data.content.length;i++){
+                        let id = res.data.content[i].id;
+                        Vue.set(this.tableData[i],'isSet',0);
+                        Vue.set(this.tableData[i],'index',i+1);
+                    }
+                    //解決數據量少產生的錯位BUG！！！
+                    this.$nextTick(() => {
+                        //重新計算表格高度
+                        this.$refs.multipleTable.doLayout()
+                    })
+                    this.canEdit=res.data['canEdit'];
+                    this.columnName=['Planning after optimize'];
+                    if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{this.showTip()},1);
+                    }
+                    //接受数据的初始化
+                    try{
+                    }catch(e)
+                    {
+                       console.log("错误异常"+e);
+                    }
+
+                }).catch(function (e) {
+                       _this.loading=false;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+                //顯示當前表格的信息
+               //console.log(this.selectMsg);
+               this.showCustomer=this.customer;
+               this.showProject=this.project;
+               this.showPhase=this.phase;
+               this.showCategory=this.category;
+            },
+        Add(){
+                 this.formappend={
+                    ScheduleBegin:'',
+                    ScheduleEnd:'',
+                    Full_Function_Duration:'',
+                    Gerber:'',
+                    CPU1:'',
+                    VGA1:'',
+                    CPU2:'',
+                    VGA2:'',
+                };
+                 this.appendss=true;
+            },
+            addSubmit(){
+                this.$refs.formappend.validate((valid) => {
+                   if (valid) {
+                        if (this.formData.length==0){this.formData = new FormData();}
+                        this.formData.append("action",'SKUSubmit');
+                        this.formData.append("showCustomer",this.showCustomer);
+                        this.formData.append("showProject",this.showProject);
+                        this.formData.append("showPhase",this.showPhase);
+                        this.formData.append("showCategory",this.showCategory);
+                        this.formData.append('ScheduleBegin', this.$refs.formappend.model.ScheduleBegin)
+                        this.formData.append('ScheduleEnd', this.$refs.formappend.model.ScheduleEnd)
+                        this.formData.append('Full_Function_Duration', this.$refs.formappend.model.Full_Function_Duration)
+                        this.formData.append('Gerber', this.$refs.formappend.model.Gerber)
+                        this.formData.append('SKU1', this.$refs.formappend.model.CPU1+'/'+this.$refs.formappend.model.VGA1)
+                        this.formData.append('SKU2', this.$refs.formappend.model.CPU2+'/'+this.$refs.formappend.model.VGA2)
+                        console.log(this.formData)
+                        axios.post("/TestPlanSW/TestPlanSW-edit/", this.formData,{
+                                    headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                                }).then((res)=>{
+                                this.tableData=res.data['content'];
+                                this.appendss=false;
+                                this.formData = new FormData();
+
+                        })
+                   } else {
+                        console.log('error submit!');
+                        return false;
+                   }
+                });
+            },
+      clearContents(){
+        this.FS =[];
+        this.schedule=[];
+        this.starttime=[];
+        this.conAitem=[];
+        this.TE=[];
+        this.conLitem=[];
+        this.comments1=[];
+        this.comments2=[];
+        this.TFC=[];
+        this.conAtime=[];
+        this.conSitem=[];
+        this.CAT=[];
+        this.CLT=[];
+        this.CST=[];
+        this.conSitemInAll=[];
+        this.BTS=[];
+        this.CRC=[];
+        this.CRS=[];
+        this.CRT=[];
+        this.proTS=[];
+        this.ATO=[];
+        for(let i = 0,length=this.planOptimize.length;i<length;i++){
+            this.planOptimize[i]=[];
+        }
+      },
+      clear(num, val, flag ,row,change){
+          let _this = this
+          if(!num[val] && num[val] !== 0){
+              return false;
+          }else{
+            Vue.set(num, val, "");
+          }
+          if( flag=== 'change'){
+              _this.initData(row, val, change);
+          }
+      },
+      edit(row, index){
+          console.log(this.tableData[index]);
+          Vue.set(this.starttime,index,row.starttime);
+          Vue.set(this.FS,index,row.FS);
+          Vue.set(this.TE,index,row.TE);
+          Vue.set(this.schedule,index,row.schedule);
+          Vue.set(this.conAitem,index,row.conAitem);
+          Vue.set(this.conLitem,index,row.conLitem);
+          Vue.set(this.conSitem,index,row.conSitem);
+          Vue.set(this.comments1,index,row.comments1);
+          Vue.set(this.comments2,index,row.comments2);
+          Vue.set(this.CRC,index,row.CRC);
+          Vue.set(this.CRS,index,row.CRS);
+          Vue.set(this.CRT,index,row.CRT);
+          Vue.set(this.planOptimize,index,[]);
+          for(let i = 0 , length = row.planOptimize.length;i<length;i++){
+              console.log(this.planOptimize[index]);
+              Vue.set(this.planOptimize[index],i,row.planOptimize[i]);
+          }
+          //無需修改項
+          Vue.set(this.BTS,index,row.BTS);
+          Vue.set(this.TFC,index,row.TFC);
+          Vue.set(this.CAT,index,row.CAT);
+          Vue.set(this.CLT,index,row.CLT);
+          Vue.set(this.CST,index,row.CST);
+          Vue.set(this.proTS,index,row.proTS);
+          Vue.set(this.ATO,index,row.ATO);
+          Vue.set(this.conSitemInAll,index,row.conSitemInAll);
+          //打開修改框
+          row.isSet = 1 ;
+          console.log(this.tableData[index],index,row,row.isSet);
+          console.log(this.conSitemInAll,index,row.conSitemInAll, "conSitemInAll");
+      },
+      //cancel
+      cancel(row,index){
+          row.isSet=0;
+          this.$message('取消編輯');
+      },
+      //saveData
+      saveData:function(row, index){
+           //是否选择搜素信息
+          if(this.showCustomer==''|| this.showProject==''|| this.showPhase===''|| this.showCategory ===''){
+              alert("請選擇要修改的表單");
+              return false;
+          }
+         //1.判断是否发生更改
+         //2.判断输入值是否符合规则
+          let changeFlag = 0;
+          if(this.starttime[index] !== row.starttime){
+              if(!isNaN(this.starttime[index]/1)){
+                  changeFlag =1;
+              }else{
+                  alert("輸入值不合法")
+                  return
+              }
+          }
+          if(this.CRC[index] !== row.CRC){
+              if(!isNaN(this.CRC[index]/1)){
+                  changeFlag =1;
+              }else{
+                  alert("輸入值不合法")
+                  return
+              }
+          }
+          if(this.CRS[index] !== row.CRS){
+              if(!isNaN(this.CRS[index]/1)){
+                  changeFlag =1;
+              }else{
+                  alert("輸入值不合法")
+                  return
+              }
+          }
+          if(this.CRT[index] !== row.CRT){
+              changeFlag =1;
+          }
+          if(this.FS[index] !== row.FS){
+              changeFlag =1;
+          }
+          if(this.TE[index] !== row.TE){
+              changeFlag =1;
+          }
+          if(this.schedule[index] !== row.schedule){
+              changeFlag =1;
+          }
+          if(this.comments1[index] !== row.comments1){
+              changeFlag =1;
+          }
+          if(this.comments2[index] !== row.comments2){
+              changeFlag =1;
+          }
+          if(this.conAitem[index] !== row.conAitem){
+              changeFlag =1;
+          }
+          if(this.conLitem[index] !== row.conLitem){
+              changeFlag =1;
+          }
+          if(this.conSitem[index] !== row.conSitem){
+              changeFlag =1;
+          }
+          for(let i = 0 , length =this.planOptimize[index].length;i<length;i++){
+              console.log("planOptimize",this.planOptimize[index][i],row.planOptimize[i]);
+              if(this.planOptimize[index][i] !== row.planOptimize[i]){
+                   changeFlag =1;
+              }
+          }
+          if(changeFlag === 0){
+              alert("輸入值未發生改變");
+              return false;
+          }else{
+              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
+              axios.post("/TestPlanSW/TestPlanSW-edit/" ,Qs.stringify(result, {indices:false}),{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    //flag:editResult
+                  if (res.data.editResult === 1){
+                         //3.发生改变且符合规则，向后台发送数据
+                         //4.后台返回储存成功，将改变值赋给表格
+                         row.starttime = this.starttime[index] ;
+                         row.FS = this.FS[index] ;
+                         row.TE = this.TE[index] ;
+                         row.schedule = this.schedule[index] ;
+                         row.conAitem = this.conAitem[index] ;
+                         row.conLitem = this.conLitem[index] ;
+                         row.conSitem = this.conSitem[index] ;
+                         row.comments1 = this.comments1[index] ;
+                         row.comments2 = this.comments2[index] ;
+                         row.CRC = this.CRC[index] ;
+                         row.CRS = this.CRS[index] ;
+                         row.CRT = this.CRT[index] ;
+                          //無需修改項
+                         row.BTS = this.BTS[index] ;
+                         row.TFC = this.TFC[index] ;
+                         row.CAT = this.CAT[index] ;
+                         row.CLT = this.CLT[index] ;
+                         row.CST = this.CST[index] ;
+                         row.proTS = this.proTS[index] ;
+                         row.ATO = this.ATO[index] ;
+                         row.conSitemInAll = this.conSitemInAll[index] ;
+                         for(let i = 0,length = this.planOptimize[index].length;i<length;i++){
+                             row.planOptimize[i] = this.planOptimize[index][i];
+                         }
+                         //關閉修改框
+                         row.isSet = 0;
+                         //上傳成功提示框
+                         this.$message({
+                             message:'修改成功',
+                             type:'success'
+                         })
+                  }
+                  else{
+                      //上傳失敗提示框
+                      this.$message({
+                          message:'上傳未成功',
+                          type:'error'
+                      })
+                  }
+              }).catch((e) => {
+                  this.$message.error('服務器連接錯誤');
+                  console.log("上傳錯誤信息："+e);
+              })
+          }
+
+
+      },
+      tableRowClassName({row, rowIndex}) {
+          if(!row.id){
+            return 'title-row'
+          }
+
+      },
+      setCurrent:function(row) {
+      },
+      //文件更改
+      updateFile:function(e){
+            const first="未選擇文件";
+            let newValue= e.target.files;
+            if(newValue){
+             let file=document.getElementById('upload');
+             let filename= file.files[0].name;
+             let fileType=filename.substr(filename.lastIndexOf(".")+1);
+             console.log(fileType.toLowerCase());
+             if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                  //console.log(this.excelFile);
+                 this.fileName=filename;
+                 this.uploadFile=file.files[0];
+             }else{
+                 alert("上傳類型不為'xlsx'或'xls'");
+                   try{
+                     }catch(e){
+                         console.log(e);
+                     }
+             }
+         }else{
+             this.uploadFile=null;
+             this.fileName=first;
+         }
+      },
+      //批量上傳
+      fileUpload:function(){
+              const first="未選擇文件";
+              if(this.uploadFile){
+                if(this.showCustomer==''||this.showProject==''||this.showPhase===''||this.showCategory === ''){
+                   alert("請選擇要修改的表單");
+                   return false;
+               }else{
+                  //1.解析Excel
+                   let outputResult;
+                   let _this= this;
+                   let files = this.uploadFile;
+                   let undefined_to_null=function(value){
+                       if(value == undefined){
+                           value=null;
+                       }
+                       //console.log(value,value === undefined,value == undefined);
+                       return value;
+                   }
+                   var fileReader = new FileReader ();
+                   fileReader.onload = function (ev) {
+                     try {
+                     _this.loading=true;
+                     var data = ev.target.result,
+                      workbook = XLSX.read(data, {
+                        type: 'binary'
+                     }), // 以二进制流方式读取得到整份excel表格对象
+                      persons = []; // 存储获取到的数据
+                   } catch (e) {
+                     _this.loading=false;
+                     return;
+                  }
+                  for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    var fromTo = workbook.Sheets[sheet]['!ref'];
+                    // console.log(fromTo);
+                    var datas = workbook.Sheets[sheet];
+                    // 如果有不规范数据可以在这里进行处理datas
+                    persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                    //console.log(typeof (persons),'111')
+                    //break; // 只读了第一张表
+                }
+            }
+                 // 数据保存在result
+                  let result=JSON.stringify(persons);
+                  //console.log(typeof (result),'2222')
+                  //console.log(typeof ({"customer":_this.showCustomer,"project":_this.showProject,"phase":_this.showPhase,'category':_this.showCategory,"ExcelData":result}),'233')
+                       console.log({"customer":_this.showCustomer,"project":_this.showProject,"phase":_this.showPhase,'category':_this.showCategory,"ExcelData":result},'333333')
+                   //将之前张开的树形结构收起
+                      //_this.reset();
+                   //2.上傳數據
+                    axios.post("/TestPlanSW/TestPlanSW-edit/" ,{"customer":_this.showCustomer,"project":_this.showProject,"phase":_this.showPhase,'category':_this.showCategory,"ExcelData":result},{
+                    headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    console.log(res.data,"first");//上传成功的操作
+                    _this.uploadFile=null;
+                    _this.fileName=first;
+                   _this.loading=false;
+                    //上传成功的操作
+                   _this.$message({
+                       message:'上傳成功',
+                       type:'success',
+                   })
+                    //接受数据的初始化
+                    try{
+                    }catch(e)
+                    {
+                       console.log("错误异常"+e);
+                    }
+                }).catch(function (e) {
+                        _this.loading=false;
+                        _this.uploadFile=null;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+           };
+                   try{
+                   //console.log(fileReader.onload());
+                   fileReader.readAsBinaryString(files);
+                   //console.log(fileReader.readAsBinaryString(files));
+                   }
+                   catch(e){
+                         this.loading=false;
+                         console.log(e);
+                         alert("文件上傳異常") ;
+                         return;
+                    }
+                  //console.log(outputResult);
+               }
+             }else{
+              this.loading=false;
+              alert("未選擇文件");
+              return false;
+          }
+      },
+      //查找表格
+      find:function(){
+          //customer和project和phase未填
+          let _this = this;
+          if(this.customer==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+          this.customerError = false;
+          if(this.project==''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+          this.projectError = false;
+          if(this.phase===''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+          this.phaseError=false;
+          if(this.category===''){
+                   //alert("專案號未填寫");
+                 this.categoryError = true;
+                  return false;
+               };
+          this.categoryError=false;
+          //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+          //判断是否是第一次查询
+          let parameter = "getContent&customer="+this.customer+"&project="+this.project+"&phase="+this.phase+"&category="+encodeURIComponent(this.category);
+          if(this.showCustomer ||this.showProject || this.showPhase || this.showCategory){
+              //判断是否有未更改的值
+              let result= this.checkChangedData();
+              if(!result){
+                  try{
+                      console.log("清除");
+                      this.clearContents();
+                      this.getdata(parameter);
+
+                  }catch(e){ console.log(e);}
+              }else{
+                  console.log("未更新");
+                  var warning =confirm("檢測到當前填寫的部分數據未保存，請及時點擊保存，以免數據丟失 是否繼續搜索?");
+                  if(warning){
+                    this.clearContents();
+                    this.getdata(parameter);
+                    }else{
+                        //取消動作
+                        return false;
+                    }
+              }
+          }else{
+             // 判断为第一次查询
+             this.getdata(parameter);
+          }
+      },
+      //删除机种Phase的所有数据
+      Delete:function() {
+          var warning = confirm('此操作将永久删除数据！！！ 请确保有新数据可以重新上传。是否继续?');
+          if (warning) {
+              //customer和project和phase未填
+              let _this = this;
+              if (this.customer == '') {
+                  //alert("客戶別未選擇");
+                  this.customerError = true;
+                  return false;
+              }
+              ;
+              this.customerError = false;
+              if (this.project == '') {
+                  //alert("專案號未填寫");
+                  this.projectError = true;
+                  return false;
+              }
+              ;
+              this.projectError = false;
+              if (this.phase === '') {
+                  //alert("專案號未填寫");
+                  this.phaseError = true;
+                  return false;
+              }
+              ;
+              this.phaseError = false;
+              if (this.category === '') {
+                  //alert("專案號未填寫");
+                  this.categoryError = true;
+                  return false;
+              }
+              ;
+              this.categoryError = false;
+              //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+              //判断是否是第一次查询
+              let parameter = "DeleteAll&customer=" + this.customer + "&project=" + this.project + "&phase=" + this.phase + "&category=" + encodeURIComponent(this.category);
+              if (this.showCustomer || this.showProject || this.showPhase || this.showCategory) {
+                  //判断是否有未更改的值
+                  let result = this.checkChangedData();
+                  if (!result) {
+                      try {
+                          console.log("清除");
+                          this.clearContents();
+                          this.getdata(parameter);
+                      } catch (e) {
+                          console.log(e);
+                      }
+                  } else {
+                      console.log("未更新");
+                      var warning = confirm("檢測到當前填寫的部分數據未保存，請及時點擊保存，以免數據丟失 是否繼續搜索?");
+                      if (warning) {
+                          this.clearContents();
+                          this.getdata(parameter);
+                      } else {
+                          //取消動作
+                          return false;
+                      }
+                  }
+              } else {
+                  // 判断为第一次查询
+                  this.getdata(parameter);
+              }
+          }
+      },
+       //检查是否发生数据改变
+      checkChangedData(){
+          for(let i = 0 , length= this.tableData.length;i<length;i++ ){
+              //如果有存在正在修改的數據，返回true
+              if(this.tableData[i].isSet === 1){
+                  return true;
+              }
+          }
+          //否則返回false
+          return false;
+      },
+      showTip(){
+          if( this.showCustomer&&this.showProject&&this.phaseName[this.showPhase]&&this.showCategory){
+             if(!this.canEdit){
+                this.showTips = true ;
+             }else{
+                 this.showTips = false ;
+             }
+          }else{
+              this.showTips = false ;
+          }
+      },
+      //局部初始化公式
+      initData:function(row, key, change){
+          if(!row){
+              return false;
+          }
+          console.log(change, change.id,"changed");
+           let caseid_temp =row.caseid;
+           let sum =[0,0,0,0,0];
+           //计算数量
+           //[0:未选择,1:V, 2:X, 3:A, 4:L, 5:X]
+           let pl = this.planOptimize[key].length;
+             for(let num=0;num<pl;num++){
+                   switch(this.planOptimize[key][num]){
+                       case "V": sum[0]++;break;
+                       case "X": sum[1]++;break;
+                       case "A": sum[2]++;break;
+                       case "L": sum[3]++;break;
+                       case "S": sum[4]++;break;
+                   }
+               }
+           //AJ
+           this.proTS[key]=sum[0];
+           // U
+           if(change.id === 1){
+               //console.log("U");
+               if (this.FS[key] === 'Y' && caseid_temp !== 'PSA005_15') {
+                         this.BTS[key]= row.basetime;
+                      } else {
+                          this.BTS[key] = 0;
+                      }
+           }
+           // Y
+           if(change.id ===1 || change.id ===2){
+               //console.log("Y");
+               if(caseid_temp.slice(0,3) ==='STA'){
+                   if(caseid_temp === 'STA017'){
+                       this.TFC[key]=this.BTS[key] * 5;
+                   }else{
+                       //console.log('sta017');
+                       this.TFC[key]=isNaN(this.BTS[key] * this.starttime[key])?0:(this.BTS[key] * this.starttime[key])/2;
+                   }
+               }else if(caseid_temp.slice(0,3) ==='GMA'){
+                   //console.log('gma');
+                   this.TFC[key]=0;
+               }
+               else if(caseid_temp.toLowerCase() ==='compal_2'){
+                    //console.log('compal2');
+                    this.TFC[key]=this.BTS[key] * 5;
+               }
+               else{
+                    //console.log('other');
+                    this.TFC[key]=isNaN(this.BTS[key] * this.starttime[key])?0:this.BTS[key] * this.starttime[key];
+               }
+           }
+           //AB
+           if(change.id ===2 || change.id ===3){
+               //console.log("AB");
+              if(caseid_temp.toLowerCase() ==='uth001_07'||this.conAitem[key] !== "Y" ){
+               this.CAT[key]=0;
+           }
+              else if(caseid_temp.toLowerCase() === 'compal_2'||caseid_temp ==='STA017') {
+               this.CAT[key]=row.basetimeA * 5;
+           }
+              else{
+                  this.CAT[key]=row.basetimeA * this.proTS[key];
+               {#this.CAT[key]=isNaN(row.basetimeA * this.conAitem[key])?0:row.basetimeA * this.conAitem[key];#}
+           }
+           }
+           //AD
+           if(change.id ===2 || change.id ===3 || change.id ===4){
+             //console.log("AD");
+             this.CLT[key]=(row.basetime - this.CAT[key]) * sum[3];
+             }
+           //AG
+          if(change.id ===4 || change.id ===1){
+              //console.log("AG");
+              this.conSitemInAll[key]=(isNaN(sum[4]/(sum[0]+sum[4]))?0:(sum[4]/(sum[0]+sum[4])));
+          }
+           //AH
+          //console.log("AH");
+          console.log('TFC:',this.TFC[key],'CAT',this.CAT[key],'CLT',this.CLT[key],'CONSITEMALL',this.conSitemInAll[key]);
+          this.CST[key]=(this.TFC[key] - this.CAT[key] - this.CLT[key]) * this.conSitemInAll[key];
+
+          //AK
+          //console.log("AK");
+          this.ATO[key]=((this.TFC[key] - this.CAT[key] - this.CLT[key])-this.CST[key]);
+      },
+       //编辑窗口的计算公式 for FFRT
+      initDataForFFRT:function(change){
+          {% comment %}if(!row){
+              return false;
+          }{% endcomment %}
+          console.log(change.id,"changed");
+           let caseid_temp =this.form.caseid;
+           let sum =[0,0,0,0,0];
+           //计算数量
+           //[0:未选择,1:V, 2:X, 3:A, 4:L, 5:X]
+           let pl = this.form.planOptimize.length;
+             for(let num=0;num<pl;num++){
+                   switch(this.form.planOptimize[num]){
+                       case "V": sum[0]++;break;
+                       case "X": sum[1]++;break;
+                       case "A": sum[2]++;break;
+                       case "L": sum[3]++;break;
+                       case "S": sum[4]++;break;
+                       default: break;
+                   }
+               }
+           //AJ
+           this.form.proTS=sum[0];
+           // U
+           if(change.id === 1){
+               //console.log("U");
+               if (this.form.FS === "Y" && caseid_temp !== 'PSA005_15') {
+                         this.form.BTS= this.form.basetime;
+                      } else {
+                          this.form.BTS = 0;
+                      }
+           }
+           // Y
+           if(change.id ===1 || change.id ===2){
+               //console.log("Y");
+               if(caseid_temp.slice(0,3) ==='STA'){
+                   if(caseid_temp === 'STA017'){
+                       this.form.TFC=this.form.BTS * 5;
+                   }else{
+                       //console.log('sta017');
+                       this.form.TFC=isNaN(this.form.BTS * this.form.starttime)?0:(this.form.BTS * this.form.starttime)/2;
+                   }
+               }else if(caseid_temp.slice(0,3) ==='GMA'){
+                   //console.log('gma');
+                   this.form.TFC=0;
+               }
+               else if(caseid_temp.toLowerCase() ==='compal_2'){
+                    //console.log('compal2');
+                    this.form.TFC=this.form.BTS * 5;
+               }
+               else{
+                    //console.log('other');
+                    this.form.TFC=isNaN(this.form.BTS * this.form.starttime)?0:this.form.BTS * this.form.starttime;
+               }
+           }
+           //AB
+           if(change.id ===2 || change.id ===3){
+               //console.log("AB");
+              if(caseid_temp.toLowerCase() ==='uth001_07'||this.form.conAitem !== "Y" ){
+               this.form.CAT=0;
+           }
+              else if(caseid_temp.toLowerCase() === 'compal_2'||caseid_temp ==='STA017') {
+               this.form.CAT=this.form.basetimeA * 5;
+           }
+              else{
+                  this.form.CAT=this.form.basetimeA * this.form.proTS;
+               {#this.form.CAT=isNaN(this.form.basetimeA * this.form.conAitem)?0:this.form.basetimeA * this.form.conAitem;#}
+           }
+           }
+           //AD
+           if(change.id ===2 || change.id ===3 || change.id ===4){
+             //console.log("AD");
+             this.form.CLT=(this.form.basetime - this.form.CAT) * sum[3];
+             }
+           //AG
+          if(change.id ===4 || change.id ===1){
+              //console.log("AG");
+              this.form.conSitemInAll=(isNaN(sum[4]/(sum[0]+sum[4]))?0:sum[4]/(sum[0]+sum[4]))>0.5?1:0;
+          }
+           //AH
+          //console.log("AH");
+          this.form.CST=(this.form.TFC - this.form.CAT - this.form.CLT) * this.form.conSitemInAll;
+          //AK
+          //console.log("AK");
+          this.form.ATO=((this.form.TFC - this.form.CAT - this.form.CLT)-this.form.CST);
+      },
+      //分頁方法
+      handleSizeChange(val) {
+        console.log(val);
+          this.pageSize = val;
+{#        this.pagesize=val;let dec = this.tableData.length - (this.pagesize * (this.currentPage-1));#}
+{#        let flag = (parseInt(dec) >= 10)?10:dec;#}
+{#        this.$set(this.scrollArray,0,0);#}
+{#        this.$set(this.scrollArray,1,flag);#}
+{#        this.$nextTick(() => {#}
+{#            this.$refs.multipleTable.bodyWrapper.scrollTop = 0;#}
+{#        })#}
+        //console.log(this.$refs.multipleTable.bodyWrapper.scrollY);
+      },
+      handleCurrentChange(val) {
+        console.log(val);
+        this.currentPage=val;
+{#        let dec = this.tableData.length - (this.pagesize * (this.currentPage-1));#}
+{#        let flag = (parseInt(dec) >= 10)?10:dec;#}
+{#        this.$set(this.scrollArray,0,0);#}
+{#        this.$set(this.scrollArray,1,flag);#}
+{#        this.$nextTick(() => {#}
+{#            this.$refs.multipleTable.bodyWrapper.scrollTop = 0;#}
+{#        })#}
+      },
+        //打开编辑窗口
+       addMsg(){
+          console.log("addmsg")
+          for(let i = 0;i<this.SKUNum.length;i++){
+             this.form.planOptimize[i] = '';
+          }
+          this.dialogFormVisible = true;
+
+      },
+      //是否关闭编辑窗
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
+      //FFRT 手动资料上传
+      otherSubmit(){
+          let submitData = this.$refs.form.model;
+          submitData['customer'] = this.showCustomer;
+          submitData['project'] = this.showProject;
+          submitData['Phase'] = this.showPhase;
+          submitData['category'] = this.showCategory;
+          submitData['action'] = 'submitFFRTData';
+          axios.post("/TestPlanSW/TestPlanSW-edit/" ,Qs.stringify(submitData ,{indices:false}),{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res)=>{
+                    if(res.data.submitResult === 1){
+                        this.$refs.form.resetFields();
+                        this.$message({
+                            message:"上传成功",
+                            type:"success"
+                        })
+                        this.form.planOptimize =[];
+                        this.dialogFormVisible=false;
+                    }else{
+                        this.$message({
+                            message:"上传失败，请重试",
+                            type:"error"
+                        })
+                    }
+          }).catch((e) => {
+                  this.$message.error('服務器連接錯誤');
+                  console.log("上傳錯誤信息："+e);
+              })
+
+        },
+      //取消上传
+      cancelSubmit(form,handleClose){
+          let _this = this;
+          //点击取消出现是否取消弹框
+          this.handleClose(()=>{
+              _this.$refs[form].resetFields();
+              _this.form.planOptimize =[];
+              _this.dialogFormVisible = false
+          });
+
+      },
+          //滚动加载
+{#      computedScroll(e){#}
+{#                 //显示高度#}
+{#                 let currentHight = e.target.scrollHeight;#}
+{#                 //显示高度 - 滚动高度#}
+{#                 let scrollHeight = e.target.clientHeight;#}
+{#                 //滚动高度#}
+{#                 let scroll = e.target.scrollTop;#}
+{#                 //当前的显示小节数#}
+{#                 let _this =this;#}
+{#                //到达小节的最后部分，可以触发下一个小节#}
+{#                // console.log(currentHight ,"-", scrollHeight,"=",currentHight - scrollHeight ,"<=",scroll);#}
+{#                //判斷scroll是否到達底部：判斷規則為距離底部 30px#}
+{#                 if((currentHight - scrollHeight)-30 <= Math.ceil(scroll)){#}
+{#                     //到達數據的最底部：顯示的數組的第二位（即數組區間的最大值） === 頁面最大的值#}
+{#                     // 頁面的最大值分為兩種情況 1：分頁數據 = 分頁的最大顯示數量  2：分頁數據 < 分頁的最大顯示數量#}
+{#                     let currentMax = Math.min(this.pagesize * this.currentPage,this.tableData.length);#}
+{#                     let currentScr = this.scrollArray[1]+(this.pagesize * (this.currentPage-1));#}
+{#                     //console.log("first",currentMax,currentScr,parseInt(currentScr) === parseInt(currentMax));#}
+{#                     if(parseInt(currentScr) === parseInt(currentMax)){#}
+{#                        return#}
+{#                     } else{#}
+{#                           //判断到滚动到底部但非最底部，数据需显示下一小节#}
+{#                           for(let i = 1;i>=0;i--){#}
+{#                               let num = this.scrollArray[i];#}
+{#                               if(this.scrollArray[i]+(this.pagesize * (this.currentPage-1)) < currentMax){#}
+{#                                   this.$set(this.scrollArray,i,num+1);#}
+{#                               }#}
+{#                           }#}
+{#                          setTimeout(()=>{e.target.scrollTop = e.target.scrollTop - 8;},10);#}
+{#                     }#}
+{#                 }else if(scroll <= 20){#}
+{#                           if(this.scrollArray[0] === 0){#}
+{#                               console.log("top",this.scrollArray);#}
+{#                               return#}
+{#                           }else{#}
+{#                               for(let i = 0;i<=1;i++){#}
+{#                               let num = this.scrollArray[i];#}
+{#                               this.$set(this.scrollArray,i,--num);#}
+{#                           }#}
+{#                          setTimeout(()=>{e.target.scrollTop = e.target.scrollTop +8;},10)#}
+{#                           }#}
+{#                 }#}
+{#             },#}
+    },
+    //计算公式：根据所填选项，显示数据
+    watch: {
+       //關閉customer和project 未輸入提示 以及依據選項產生聯動
+       customer(newValue,oldValue){
+           //關閉錯誤提示
+           this.customerError = false;
+           //清除上次搜索過的記錄
+           this.project='';
+           this.phase='';
+           this.category='';
+           this.projectvalue=this.selectMsg[newValue];
+           immediate:true
+       },
+       project(newValue,oldValue){
+           //關閉錯誤提示
+           this.projectError = false;
+           //清除上次搜索過的記錄
+           this.phase='';
+           this.category='';
+           if(this.customer == ''){
+               return false;
+           }
+           //console.log(this.selectMsg['0'][this.customer]);
+           //遍歷所有數據進行查找
+           for(let index =0; index < this.selectMsg[this.customer].length;index++){
+               //查找當前選項
+                if(this.selectMsg[this.customer][index]['project'] == newValue){
+                    this.phasevalue = this.selectMsg[this.customer][index]['phase'];
+                    return ;
+                }
+           }
+       },
+       phase(newValue,oldValue){
+           this.phaseError = false;
+           this.categoryError= false;
+           this.category='';
+           if(newValue !== ''){
+               if(this.customer !== '' && this.project !== ''  && this.phase !== ''  ){
+                 let parameter = ""+this.customer+"&project="+this.project+"&phase="+this.phase;
+                 axios.get("/TestPlanSW/TestPlanSW-edit/?action=getCategory&customer="+this.customer+"&project="+this.project+"&phase="+this.phase ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.categoryItem = res.data['MockData'];
+               })
+               }
+               else{
+                   alert("請選擇完整信息");
+                   return false;
+               }
+
+           }else{
+               return false
+           }
+       },
+       category(newValue, oldValue){
+         this.categoryError= false;
+       },
+       //监听数组产生出已修改的ID，根据这些ID再判断是否发生更改
+},
+  })
+</script>
+{% endblock %}

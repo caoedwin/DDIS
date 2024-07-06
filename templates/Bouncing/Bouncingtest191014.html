@@ -1,0 +1,460 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_upload{% endblock %}
+{% block css %}
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+<style>
+.content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+#container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    {% comment %}width:400px;
+    height: 120px;{% endcomment %}
+    background-image:url("/static/images/spec/blackboardback.jpg") ;
+    border: 2px solid  #deb887;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="content" id="yincang">spec</div>
+<div id="container-yansebiaoshi">
+    <div class="spec">
+             <span style="font-size:20px;color: #FFF">Spec:</span><br>
+             <span>1.Peak&nbspvalue<=8mm</span><br>
+             <span>2.Durationg<=2s</span><br>
+           </div>
+</div>
+<div id="app" class="row" >
+{% comment %} <div class="new-title">
+     <p>Bouncing&nbsptest&nbspraw&nbspdata</p>
+ </div>{% endcomment %}
+ <div class="card-body" id="publicMsg">
+           <label for="Customer">Customer</label>
+           <select id="Customer" ref="customer" @change="changeCustomer">
+               <option value=""></option>
+               <option v-for="(item,key,index) in selectItem" v-model="selectedCustomer">${ key }</option>
+
+           </select>
+           <label for="Project">Project</label>
+            {% comment %}<label>${ projectdefault }</label>{% endcomment %}
+           <select id="Project" v-model="projectdefault" ref="project">
+                <option value="" selected="selected"></option>
+               <option v-for="(item,index) in selectProject">${ item }</option>
+           </select>
+           <br>
+           <div class="searchContent">
+               <label for="p_c_cover">C cover</label>
+               <select id="p_c_cover" ref="c_cover">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.C_cover_list">${ item }</option>
+               </select>
+               <label for="p_d_cover">D cover</label>
+               <select id="p_d_cover" ref="d_cover">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.D_cover_list">${ item }</option>
+               </select>
+               <label for="p_hinge_s">Hinge supplier</label>
+               <select id="p_hinge_s" ref="hinge_s">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.HS_list">${ item }</option>
+               </select>
+               <label for="p_torque ">Torque</label>
+               <select id="p_torque" ref="torque">
+                   <option></option>
+                   <option>Min</option>
+                   <option>Max</option>
+               </select>
+               <label for="p_p_f">Push Force</label>
+               <select id="p_p_f" ref="p_f">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.Push_list">${ item }</option>
+               </select>
+               <button  type="button" @click="selectMsg">Search</button>
+           </div>
+       </div>
+ <div class="table-responsive" style="max-height: 500px;color:#FFF;background-color:rgba(255,255,255,0.2);width:calc(100% - 30px);">
+    <table id="bootstrap-data-table-export" class="table table-striped table-bordered" width="100%" cellspacing="0" style="color:#FFF">
+        <thead>
+            <tr>
+{#                <th style="color:#FFF">Edit</th>#}
+                <th style="color:#FFF">Customer</th>
+                <th style="color:#FFF">Project</th>
+                <th style="color:#FFF">C&nbspcover</th>
+                <th style="color:#FFF">D&nbspcover</th>
+                <th style="color:#FFF">Hinge</th>
+                <th style="color:#FFF">Torque</th>
+                <th style="color:#FFF">Push Force</th>
+                <th style="color:#FFF">P_V&nbspLeft</th>
+                <th style="color:#FFF">P_V&nbspRight</th>
+                <th style="color:#FFF">D&nbspLeft</th>
+                <th style="color:#FFF">D&nbspRight</th>
+                <th style="color:#FFF">Remark</th>
+                {% comment %}<th style="color:#FFF">Editor</th>
+                <th style="color:#FFF">Edit time</th>{% endcomment %}
+            </tr>
+
+        </thead>
+        <tbody>
+        <tr v-for="(items,index) in tableContent" :id="editNo(index)">
+{#            <td ref="index"  @click="edit($event,items.id)" :id="makeNo(index)" ><span><i class="ti-pencil-alt" style="color: #FFF"></i></span></td>#}
+            <td style="color:#FFF">${ items.Customer }</td>
+            <td style="color:#FFF">${ items.Project }</td>
+            <td style="color:#FFF" v-model="tempdata[0]" >${ items.C_cover }</td>
+            <td style="color:#FFF" >${ items.D_cover }</td>
+            <td style="color:#FFF" >${ items.Hinge_s }</td>
+            <td style="color:#FFF" >${ items.Torque }</td>
+            <td style="color:#FFF" >${ items.Push_F }</td>
+            <td :class="[items.PV_L>8?'fail':'pass']">${ items.PV_L }</td>
+            <td :class="[items.PV_R>8?'fail':'pass']">${ items.PV_R }</td>
+            <td :class="[items.D_L>2?'fail':'pass']">${ items.D_L }</td>
+            <td :class="[items.D_R>2?'fail':'pass']">${ items.D_R }</td>
+            <td style="color:#FFF" >${ items.CON }</td>
+            {% comment %}<td style="color:#FFF" >${ items.editor }</td>
+            <td style="color:#FFF" >${ items.edit_time }</td>{% endcomment %}
+        </tr>
+        </tbody>
+    </table>
+ </div>
+
+<!--  编辑框：当表格中的编辑按钮发生点击后，编辑框弹出且将原有数据填入其中   -->
+ <div class="fullScreen" v-if="choose">
+  <div v-if="choose" v-cloak class="editWindow">
+     <div class="close">
+         <button class="close" type="button" data-dismiss="modal" aria-label="Close" @click="close">
+                <span aria-hidden="true">×</span>
+         </button>
+     </div>
+     <div class="editContent">
+         <div class="inline_content" >
+             <div class="inline-child"><div>C cover Materall</div><input :class="[verify['input_c_cover']?'errorStyle':'commonStyle']" v-cloak type="text" v-model="tempdataName.C_cover" id="c_cover" @blur="write($event)"><br><div v-show="verify['input_c_cover']" id="c_cover_error" style="position: absolute"></div></div>
+            <div class="inline-child"><div>D cover Materall</div><input v-cloak type="text" ref="d_cover" v-model="tempdataName.D_cover" id="d_cover" @blur="write($event)" :class="[verify['input_d_cover']?'errorStyle':'commonStyle']"><br><div v-show="verify['input_d_cover']" id="d_cover_error" style="position: absolute"></div></div>
+          <div class="inline-child"><div>Hinge supplier</div><input v-cloak type="text" v-model="tempdataName.Hinge_s" @blur="write($event)" id="hinge_s" :class="[verify['input_hinge_s']?'errorStyle':'commonStyle']"><br><div v-show="verify['input_hinge_s']" id="hinge_s_error" style="position: absolute"></div></div>
+         </div>
+      <div class="inline_content" >
+         <div class="inline-child"><div>Torque</div><input v-cloak type="text" v-model="tempdataName.Torque" disabled="disabled" ></div>
+         <div class="inline-child"><div>Push Force</div><input v-cloak type="text" v-model="tempdataName.Push_F" id="P_F" :class="[verify['input_P_F']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_P_F']" id="P_F_error" style="position: absolute"></div></div>
+      </div>
+      <div class="inline_content" >
+         <div class="inline-child"><div>P-L</div><input v-cloak type="text" v-model="tempdataName.PV_L" id="P_L" :class="[verify['input_P_L']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_P_L']" id="P_L_error" style="position: absolute"></div></div>
+         <div class="inline-child"><div>P-R</div><input v-cloak type="text" v-model="tempdataName.PV_R" id="P_R" :class="[verify['input_P_R']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_P_R']" id="P_R_error" style="position: absolute"></div></div>
+      </div>
+      <div class="inline_content" >
+         <div class="inline-child"><div>D-L</div><input v-cloak type="text" v-model="tempdataName.D_L" id="D_L" :class="[verify['input_D_L']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_D_L']" id="D_L_error" style="position: absolute"></div></div>
+          <div class="inline-child"><div>D-R</div><input v-cloak type="text" v-model="tempdataName.D_R" id="D_R" :class="[verify['input_D_R']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_D_R']" id="D_R_error" style="position: absolute"></div></div>
+      </div>
+      <div class="inline_content">
+
+              <div>Conclusion</div><textarea rows="5" cols="75" type="text" v-model="tempdataName.CON"></textarea></div>
+
+      <div class="inline_content">
+        <div class="inline-child">
+            <button id="editSubmit" @click="edit_submit">Submit</button>
+            <button id="editCancel" @click="close">Cancel</button>
+        </div>
+     </div>
+     </div>
+  </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+{#<script src="/static/js/element/index.js"></script>#}
+{#<script src="https://unpkg.com/element-ui/lib/index.js"></script>#}
+<script src="/static/js/qs.js"></script>
+<script type="text/babel">
+
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+        console.log("ggg");
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+
+    new Vue({
+
+       el:"#app",
+       delimiters: ['${', '}'],
+       data() {
+         return{
+                //error:false,
+                others:{},
+                projectdefault:null,
+                result:{},
+                selectProject:[],
+                selectedCustomer:null,
+                selectItem:{},
+                choose:false,//关闭页面的值
+                tableContent:null,//搜索页面表格中显示的数据来源
+                tempdata:[],
+                titleName:[],
+                tempdataName:{},//编辑页面表格中显示的数据来源
+                selectId:null,
+                test:"",
+                //验证的style的标志:用于判断哪个输入框出现验证错误
+                verify:{
+                    input_c_cover:false,
+                    input_d_cover:false,
+                    input_hinge_s:false,
+                    input_P_F:false,
+                    input_P_L:false,
+                    input_P_R:false,
+                    input_D_L:false,
+                    input_D_R:false,
+                },
+               //这个对象是为输入框划分等级，1：代表不能为空 2：代表必须为小数或正整数 3：未来会增加日期格式
+                inputId:{
+                    c_cover:1,
+                    d_cover:1,
+                    input_hinge_s:1,
+                    P_F:2,
+                    P_L:2,
+                    P_R:2,
+                    D_L:2,
+                    D_R:2,
+                }
+
+            }
+
+
+       },
+       mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");//此时会上传一个"first"的字符串，用来区分接下来的edit操作
+              },
+       methods:{
+             //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+             getdata:function(e){
+                let data = {"isGetData":e};
+                axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(data), {
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    console.log(res.data.content);//上传成功的操作
+                    this.dataTableDestroy();
+                    this.tableContent=res.data.content;// 将返回的数据传递给data内的tableContent
+                    this.selectItem=res.data.select;
+                    this.others=res.data.others;
+                    this.dataTableInit();
+                });
+
+            },
+             //为编辑按钮设置ID
+             makeNo:function(e){
+             return "td" + e ;
+            },
+             //点击编辑按钮，弹出修改界面
+             edit:function(e,id){
+              //console.log(e.currentTarget.id);
+              var hasTabId = e.currentTarget.id;  //获取触发点击事件的元素ID(这里指页面表格显示的临时ID，并非获取数据的真实ID)
+              var chooseTr= document.getElementById(hasTabId).parentNode.id ; //获取触发点击事件的父级元素的ID(此ID同上)
+              var tr = document.getElementById(chooseTr);
+              //生成title数组:
+              //由于无法获取对象的key,所以动态生成一个title的数组
+              for(var key in this.tableContent[0]){
+                 if(key!="id"){
+                     this.titleName.push(key);
+                 }
+              }
+             //生成一个临时数组用于存放节点内容，即表格中的每一项数据；
+              var tab=[];
+              for(var i= 1;i<=tr.childNodes.length-1;i++ ) {
+               // 遍历子节点会出现空节点，为此需要删除无效节点
+               if(tr.childNodes[i].nodeType==1){
+                //console.log(tr.childNodes[i].innerHTML);
+                tab.push(tr.childNodes[i].innerHTML); //生成修改选项的所有值的数组
+
+                }
+              }
+              for(var i = 0; i< tab.length;i++){
+                this.tempdataName[this.titleName[i]]=tab[i];
+               }
+              tab.push(chooseTr.slice(4));
+              this.tempdataName['index']=chooseTr.slice(4);
+              this.tempdataName['id']=id;
+              this.tempdata=tab;
+              this.selectId=id;
+              //console.log(this.tempdata);
+              this.choose= true; //最后打开修改界面
+            },
+             //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+               let customer = this.$refs.customer.value;
+               let project = this.$refs.project.value;
+               let c_cover = this.$refs.c_cover.value;
+               let d_cover = this.$refs.d_cover.value;
+               let hinge_s = this.$refs.hinge_s.value;
+               let torque = this.$refs.torque.value;
+               let p_f = this.$refs.p_f.value;
+               let data ={"customer":customer,"project":project,"c_cover":c_cover,"d_cover":d_cover,"hinge_s":hinge_s,"torque":torque,"p_f":p_f};
+               axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.dataTableDestroy();
+                  this.tableContent=res.data.content;//更改tableContent的值，由于双向绑定，页面表格显示的值也会随之更新
+                  this.dataTableInit();
+                })
+             },
+             //生成tr的ID
+             editNo:function(index){
+               return "row_" + index ;
+              },
+              //关闭修改界面
+             close:function(){
+                this.choose = false; //关闭修改窗口
+                for (let item in this.verify){
+                   this.$set(this.verify,item,false); //将判断输入框的是否发生验证错误的值恢复为默认false
+                }
+
+             },
+             //修改界面的提交按钮事件：
+             //1. 首先上传提交修改内容 ；
+             edit_submit:function(){
+
+               //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+               //console.log(this.tempdataName);
+                //检查是否出现重复
+                 let num=1;
+                 //console.log(this.selectId);
+                 //判断是否有输入框发生验证错误，有则返回false，没有则继续验证
+                 for(var items in this.verify ){
+                     //console.log(items);
+                     if (this.verify[items]){
+                         return false;
+                     }
+                 }
+                 //验证编辑内容是否发生改变，没有则停止上传，否则将编辑内容上传
+                 for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ) {
+                    //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+                    //console.log(this.tempdataName[item]);
+                     if(this.tempdataName.hasOwnProperty(item) && Object.values(this.tableContent)[this.tempdataName['index']].hasOwnProperty(item)){
+                         if(Object.values(this.tableContent)[this.tempdataName['index']][item]!=this.tempdataName[item]){
+                            num=1;
+                            break;
+                     }else{
+                        //console.log((Object.keys(this.tempdataName)).length);
+                    }
+                     }
+                 }
+                 if(num == 0){
+                            alert("内容未更新");
+                            return false;
+                        }
+                 this.tempdataName["isGetData"]='edit0';
+
+                 axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(this.tempdataName), {
+                  headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                   }).then((res) => {
+                    console.log("已修改");
+                    this.getdata("edit");
+                    //2.再将修改后的内容在表格上显示出来
+                    // for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ){
+                    //    // Object.values(this.tableContent)[this.tempdataName['index']][item]=this.tempdataName[item];
+                    // }
+                    this.choose= false;//关闭页面
+                })
+
+             },
+             //表单验证函数
+             write:function (event) {
+                //console.log(event.currentTarget.id);
+                let err_msg=document.getElementById(event.currentTarget.id+"_error"); //获取输入框后的error提示框的ID
+                err_msg.innerHTML="";//将error提示框的初始值设置为空，否则会不断添加内容，不会清除
+                var num =/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;//验证输入是否为小数或正整数的正则表达式规则
+                //console.log(event.currentTarget.value);
+                //console.log(num.test(event.currentTarget.value));
+                //验证一：是否为空（因为所有输入值都不能为空，所以判断放在第一位，即所有验证值都要经历此项判断）
+                if(event.currentTarget.value.length ==0){
+                    //console.log(event);
+                    //var temp = 'input_' + event.currentTarget.id ;
+                    //console.log(event.currentTarget.id);
+                   // console.log("11",this.verify["input_"+event.currentTarget.id]);
+                    //let err_msg=document.getElementById(event.currentTarget.id);
+                    err_msg.innerHTML="輸入不可為空";
+                    this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                    return false;
+                }
+                //验证一：是否为空（在data的inputId中定义为2）
+                if(this.inputId[event.currentTarget.id] ==2 ){
+                    if(!num.test(event.currentTarget.value)){
+                     err_msg.innerHTML="請輸入小數或正整數";
+                     this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                     return false;
+                 }
+                }
+                //若判断都符合要求，verify的相应值应该为false
+                this.$set(this.verify,"input_"+event.currentTarget.id,false);
+             },
+             changeCustomer:function () {
+                 if(this.$refs.customer.value ==""){
+                      this.selectProject=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.customer.value];
+                 this.projectDefault="";
+                 console.log(this.selectProject);
+             },
+             dataTableInit:function(){
+               Vue.nextTick(() => {
+                $('#bootstrap-data-table-export').DataTable({
+                    dom: 'lBfrtip',
+                    //retrieve: true,
+                    bAutoWidth: true,
+                    lengthMenu: [[100, 25, 50, -1], [100, 25, 50, "All"]],
+                    buttons: [
+
+                    ]
+                });
+                console.log("dom");
+            })
+             },
+             dataTableDestroy:function () {
+                 $('#bootstrap-data-table-export').DataTable().destroy();
+             }
+
+          }
+
+})
+
+
+
+</script>
+<script src="/static/js/lib/data-table/dataTables.buttons.min.js"></script>
+<script src="/static/js/lib/data-table/buttons.flash.min.js"></script>
+<script src="/static/js/lib/data-table/jszip.min.js"></script>
+<script src="/static/js/lib/data-table/pdfmake.min.js"></script>
+<script src="/static/js/lib/data-table/vfs_fonts.js"></script>
+<script src="/static/js/lib/data-table/buttons.html5.min.js"></script>
+<script src="/static/js/lib/data-table/buttons.print.min.js"></script>
+{#<script src="/static/js/lib/data-table/datatables-init.js"></script>#}
+<script src="/static/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+
+{% endblock %}

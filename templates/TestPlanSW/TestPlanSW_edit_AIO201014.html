@@ -1,0 +1,2094 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}TestPlan_AIO{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+    <style>
+[v-cloak]{
+  display: none;
+}
+@media screen and (min-width: 1324px )and ( max-width: 1587px){
+    .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+     .selectMsg .el-select{
+       width: 150px;
+   }
+}
+@media screen and (min-width: 1203px ) and ( max-width: 1323px) {
+   .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+   .selectMsg .el-select{
+       width: 120px;
+   }
+   .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+}
+@media screen and (min-width:1000px ) and (max-width: 1202px){
+      .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .selectMsg{
+        flex-wrap: nowrap;
+    }
+   {% comment %}  .selectMsg .el-select{
+       width: 120px;
+     }{% endcomment %}
+     .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+      .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+}
+@media screen and (min-width:709px ) and (max-width: 1000px){
+    .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+    #app .selectMsg{
+        flex-wrap: nowrap;
+    }
+}
+@media screen  and (max-width: 708px){
+    .customerContent .el-select{
+        display: flex;
+    }
+    .projectContent {
+        margin-left: 0;
+    }
+    #app .selectMsg .el-select {
+        padding-right: 0;
+    }
+     .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+    #app .selectMsg{
+        flex-wrap: nowrap;
+    }
+}
+  .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+      color:aliceblue;
+  }
+  .selectMsg label:last-child{
+     margin-left: 15px;
+   }
+  .selectMsg #project{
+      margin-left: 0;
+  }
+  .selectMsg .Button{
+      height:40px;
+  }
+  .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+      width: auto;
+  }
+{#  el-table__header .is-group.has-gutter .cell{#}
+{#      word-break: break-word;#}
+{#  }#}
+{#  el-table__header .is-group.has-gutter tr th{#}
+{#      min-width: 120px;#}
+{#  }#}
+  .el-table .warning-row {
+    background: oldlace;
+  }
+  .el-table .info-row {
+    background: #909399;
+  }
+  .el-table .title-row {
+    background: #08d9d6;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped.title-row td{
+    background: #08d9d6
+  }
+  /* NO.1 */
+   .el-table--striped .el-table__body tr.el-table__row--striped.title-row td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+  }
+   .el-table__row--level-0 td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+   }
+   .el-table__indent, .el-table__placeholder{
+       display: none;
+   }
+   .select_inner {
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #DCDFE6;
+    {% comment %}-webkit-box-sizing: border-box;{% endcomment %}
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 12px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+   }
+  .el-table .danger-row {
+    background: #F56C6C;
+  }
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .el-table  .cell{
+     text-align: center;
+ }
+  .headerStyle{
+       background-color:#fafafa;
+       font-weight:800;
+       {% comment %}border-bottom:1px solid rgb(103, 194, 58);{% endcomment %}
+  }
+  .headerStyle .el-icon-info{
+       color: cornflowerblue;
+  }
+  .headerStyle i{
+      padding:6px;
+  }
+  .tooltipsFont {
+      font-weight: bold;
+      color:black;
+      font-size: 12px;
+  }
+
+ .el-table__fixed,
+.el-table__fixed-right {
+  height: 100% !important;
+}
+  .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+  .invalidInput .el-input__inner{
+     border: 1px solid red;
+     color:red ;
+}
+  .invalidNum{
+      color:red;
+  }
+  .projectContent{
+     margin-left: 20px;
+}
+  .phaseContent{
+    margin-right: 20px;
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 40px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+  .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}  /* NO.2 */
+  /* input clear */
+  .el-input.el-input--suffix:hover .inputClear{
+      visibility: visible;
+  }
+  .inputClear{
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      visibility:hidden;
+  }
+  .el-pagination.is-background{
+      text-align: right;
+      margin: 10px 0 0 0;
+  }
+  .el-pagination__total,.el-pagination__jump{
+      color: white;
+  }
+  .clearShow{
+      visibility: visible;
+  }
+  .pass{
+    background-color: aquamarine;
+}
+  .fail{
+    background-color: crimson;
+    color:antiquewhite;
+}
+  .el-form-item label{
+      margin-bottom: 0;
+  }
+  .el-form.el-form--label-top.el-form--inline{
+      text-align: center;
+  }
+  .el-dialog__footer .dialog-footer{
+      text-align: center;
+  }
+  .el-form.el-form--inline{
+      text-align: center;
+  }
+  .el-form.el-form--inline .el-form-item__content{
+      width:100%;
+  }
+  .ElDialog .el-dialog{
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+  }
+  .ElDialog .el-dialog__body{
+      height: 650px;
+      overflow-y:auto;
+  }
+   .ElDialog .el-dialog__body .el-form-item__label{
+       font-weight: 600;
+   }
+  .ElDialog .el-dialog__footer{
+      padding: 10px;
+      background: #F2F2F2;
+      -webkit-border-radius: 0 0 10px 10px;
+      -moz-border-radius: 0 0 10px 10px;
+      border-radius: 0 0 10px 10px;
+  }
+  .ElDialog .el-dialog__header{
+      background: #F2F2F2;
+      -webkit-border-radius: 10px 10px 0 0;
+      -moz-border-radius: 10px 10px 0 0;
+      border-radius: 10px 10px 0 0;
+      font-weight: bold;
+  }
+ .ElDialog .dialog-title{
+      font-size: 18px;
+      font-weight: bold;
+      color: black;
+ }
+.el-form-item.planingContent .el-form-item__content{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.el-form-item.planingContent .el-form-item__content .item{
+   flex-grow: 0;
+   margin: 0 20px 20px 0;
+   display: flex;
+}
+.el-form-item.planingContent .el-form-item__content .item label{
+    width: 365px;
+    font-weight: 500;
+    text-align: left;
+}
+.el-form-item .dialog-select{
+    width:100%;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="selectMsg" >
+    <div class="customerContent">
+    <label for="customer" v-cloak>客戶別 </label>
+     <el-select  v-model="customer" width="80%" >
+            <el-option v-for="item in customerOptions" :label="item.label" :value="item.value"  ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+    </div>
+    <div class="projectContent" >
+   <label for="project" v-cloak>專案號</label>
+        <el-select  v-model="project"  placeholder="請輸入專案號" style="margin-right: 20px" width="80%" clearable >
+            <el-option v-for="item in projectvalue"  :label="item.project" :value="item.project" ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+    </div>
+    <div class="phaseContent" >
+         <label for="phase" v-cloak>Phase</label>
+        <el-select v-model="phase" width="80%" id="phase" >
+            <el-option v-for="(item,index) in phasevalue" :key="index" :label="phaseName[item]" :value="phasevalue[index]"></el-option>
+        </el-select><br>
+        <div class="inputError" v-cloak  v-show="phaseError">phase號不能為空</div>
+    </div>
+    <div class="phaseContent">
+      <label for="category" v-cloak>Category</label>
+          <el-select v-model="category" >
+          <el-option label="" value=""></el-option>
+          <el-option v-for="(item) in categoryItem" :label="item.caseid" :value="item.caseid"></el-option>
+         </el-select><br>
+        <div class="inputError" v-cloak  v-show="categoryError">類別不能為空</div>
+    </div>
+    <el-button @click="find" v-cloak type="primary" class="Button">查找</el-button>
+  </div>
+<div v-cloak class="fileUploadContent"    v-if="canEdit">
+            <div class="inputPackage" v-cloak>
+                 <span v-cloak>請選擇文件</span>
+                 <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+            </div>
+         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+        <span class="showFileName" v-cloak >${ fileName }</span>
+     </div>
+<div class="tableAround" v-cloak >
+  {% csrf_token %}
+ <!--數據表-->
+ <!--提示信息-->
+  <span  class="selectItem" v-cloak  v-if="showCustomer&&showProject&&phaseName[showPhase]">當前表格信息：${ showCustomer }/${ showProject }/${ phaseName[showPhase]}/${ showCategory } <span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+   <el-button v-cloak v-if="showPhase === 14||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19" style="height:40px;margin:0 20px 8px 10px;float:right;width:116px" type="success" @click="addMsg"> <i v-cloak class="el-icon-circle-plus-outline"></i> 添加信息</el-button>
+  <el-table v-cloak height="750" border :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize){% comment %}.slice(scrollArray[0],scrollArray[1]){% endcomment %}"
+    ref="multipleTable"
+    tooltip-effect="dark"
+    stripe
+    id="out-table"
+    style="border-radius: 10px;
+    word-break: keep-all"
+    :row-class-name="tableRowClassName"
+    :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }"
+      element-loading-text="拼命加载中"
+	  element-loading-spinner="el-icon-loading"
+	  element-loading-background="rgba(0, 0, 0, 0.8)">
+      <!--無需編輯-->
+      <el-table-column width="45" label="No."  prop="index"  fixed></el-table-column>
+      <el-table-column width="100" label="Category"  prop="Category" align="left" fixed></el-table-column>
+      <el-table-column width="160" label="Test Title" prop="Test_Title" fixed></el-table-column>
+      <el-table-column width="160" label="Sub Test Title" prop="Sub_Test_Title" fixed></el-table-column>
+      <!--:key="Math.random()" => 为了解决数据错位 即前一列覆盖掉后一列 -->
+      <el-table-column width="160" label="Test Item" prop="Test_Item"   v-cloak></el-table-column>
+      <el-table-column width="120" label="Priority" prop="Priority"></el-table-column>
+      <el-table-column width="120" label="Release Date"prop="Release_Date"></el-table-column>
+      <el-table-column width="120" label="Owner" prop="Owner"></el-table-column>
+      <!--:key="1" => 为了解决数据错位 （即前一列覆盖掉后一列）且使用Math.random()会产生抖动 ，换成固定值则正常 -->
+      <el-table-column label="Actual Time">
+          <el-table-column width="130"   label="Total Time(A+U)"  :key="1" >
+              <template slot-scope="scope">
+                  <span  v-cloak >${ scope.row.Attend_Time + scope.row.Unattend_Time }</span>
+              </template>
+          </el-table-column>
+          <el-table-column width="120"  label="Attend Time" prop="Attend_Time"></el-table-column>
+          <el-table-column width="120"  label="Unattend Time" prop="Unattend_Time"></el-table-column>
+          <el-table-column width="120"  label="Automation" prop="Automation"></el-table-column>
+      </el-table-column>
+      <el-table-column label="DQMS Test Plan">
+          <el-table-column width="130"  label="Attend Time(hrs)" prop="Attend_Time_hrs"></el-table-column>
+          <el-table-column width="130"  label="Unattend Time(hrs)" prop="Unattend_Time_hrs"></el-table-column>
+      </el-table-column>
+      <el-table-column width="110"  label="Test Units/Config" prop="TUC"></el-table-column>
+      <el-table-column width="120"  label="Smart Item" prop="Smart_Item"></el-table-column>
+      <el-table-column label="AIO SW Test Plan Matrix for Planning">
+          <el-table-column width="90"  label="Cusumer" prop="Cusumer"></el-table-column>
+          <el-table-column width="110"  label="Commercial" prop="Commercial"></el-table-column>
+          <el-table-column   label="SDV" prop="SDV"></el-table-column>
+          <el-table-column   label="SIT" prop="SIT"></el-table-column>
+          <el-table-column width="90"  label="Coverage" prop="Coverage"></el-table-column>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="130"  label="Feature Support">
+          <template slot-scope="scope">
+                  <select class="select_inner"  placeholder="" v-if="showEdit[scope.$index] && canEdit" v-model="FS[scope.$index + (currentPage-1)*pagesize]" @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize,{'id':1})">
+                     <option label=" " value=""></option>
+                     <option label="Y" value="Y"></option>
+                     <option label="N" value="N"></option>
+                  </select>
+                  <span v-else="showEdit[scope.$index] && canEdit"  >${ scope.row.FS }</span>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="160"  label="Base Time-Support">
+           <template slot-scope="scope">
+                  <span v-if="showEdit[scope.$index] && canEdit">${ BTS[scope.$index + (currentPage-1)*pagesize] }</span>
+                  <span v-else="showEdit[scope.$index] && canEdit" >
+                      ${ scope.row.BTS }
+                  </span>
+                </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫工程師名" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>TE</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="TE[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner"><span @click="clear(TE, scope.$index + (currentPage-1)*pagesize)" :class="{'clearShow':TE[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              </div>
+              <span  v-else="showEdit[scope.$index] && canEdit">${ scope.row.TE }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫該項測試的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Schedule</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="schedule[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner"><span @click="clear(schedule, scope.$index + (currentPage-1)*pagesize)" :class="{'clearShow':schedule[scope.$index + (currentPage-1)*pagesize] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              </div>
+               <span v-else="showEdit[scope.$index] && (canEdit)">${ scope.row.schedule }</span>
+                </template>
+      </el-table-column>
+      <!--无需編輯-->
+      <el-table-column width="160" >-
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="打X以外的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-all test units</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+               <span>${ scope.row.NUMX }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="總測試時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-all test time</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+               <span>${ scope.row.NUMX_TIME }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="打A的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Automation Item</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+               <span>${ scope.row.NUMA }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="乘以自動化取代的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Automation time</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+{#              <span v-if="showBtn[scope.$index] && canEdit">${ (!CAT[scope.$index + (currentPage-1)*pagesize] && CAT[scope.$index + (currentPage-1)*pagesize] !== 0)?0:CAT[scope.$index + (currentPage-1)*pagesize] }</span>#}
+{#              <span v-else="showBtn[scope.$index] && canEdit">${ (!scope.row.CAT && scope.row.CAT !== 0)?0:scope.row.CAT }</span>#}
+               <span>${ scope.row.NUMA * scope.row.TUC * scope.row.Automation }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="打L的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Leverage Item</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+               <span>${ scope.row.NUML }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage測項的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Leverage time</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+{#               <span v-if="showEdit[scope.$index] && canEdit">${ (!CLT[scope.$index + (currentPage-1)*pagesize] && CLT[scope.$index + (currentPage-1)*pagesize] !== 0)?0:CLT[scope.$index + (currentPage-1)*pagesize] }</span>#}
+{#               <span  v-else="showEdit[scope.$index] && canEdit" :class="{'invalidNum': scope.row.CLT <0}">${ (!scope.row.CLT && scope.row.CLT !== 0)?0:scope.row.CLT }</span>#}
+            <span>${ scope.row.NUML * scope.row.TUC * scope.row.Attend_Time }</span>
+          </template>
+      </el-table-column>
+     <el-table-column width="120"  >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Smart 的百分比" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart item占總case比例</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+{#               <span v-if="showEdit[scope.$index] && canEdit" >${ (!conSitemInAll[scope.$index + (currentPage-1)*pagesize] && conSitemInAll[scope.$index + (currentPage-1)*pagesize] !== 0)?0:conSitemInAll[scope.$index + (currentPage-1)*pagesize] }</span>#}
+{#               <span v-else="showEdit[scope.$index] && canEdit">${ (!scope.row.conSitemInAll && scope.row.conSitemInAll !== 0)?0:scope.row.conSitemInAll }</span>#}
+                 <span>${ (scope.row.Smart_Item == 'Y')?1:0 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="如果此项测试可以smart test，则打V 的SKU数量*测试机台数/ 2" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart time</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+{#             <span v-if="showEdit[scope.$index] && canEdit">${ (!CST[scope.$index + (currentPage-1)*pagesize] && CST[scope.$index + (currentPage-1)*pagesize] !== 0)?0:CST[scope.$index + (currentPage-1)*pagesize] }</span>#}
+{#             <span v-else="showEdit[scope.$index] && canEdit" :class="{'invalidNum': scope.row.CST <0}"> ${(!scope.row.CST && scope.row.CST !== 0)?0:scope.row.CST }</span>#}
+                <span>${ (scope.row.Smart_Item == 'Y')?(scope.row.NUMX * scope.row.Attend_Time * scope.row.TUC / 2):0 }</span>
+           </template>
+      </el-table-column>
+      <el-table-column width="180" >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage/Smart 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Comments</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                 <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="comments[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner"><span @click="clear(comments, scope.$index + (currentPage-1)*pagesize)" :class="{'clearShow':comments[scope.$index + (currentPage-1)*pagesize] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                 </div>
+                <span v-else="showEdit[scope.$index] && (canEdit)">${ scope.row.comments }</span>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Project test SKU-optimize">
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Stress,Mobile phone nearing(CPI test)機台特殊性，需手動輸入" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Project test SKU-optimize</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+               <span v-if="showEdit[scope.$index] && canEdit">${ (!proTS[scope.$index + (currentPage-1)*pagesize] && proTS[scope.$index + (currentPage-1)*pagesize] !== 0)?0:proTS[scope.$index + (currentPage-1)*pagesize] }</span>
+               <span v-else="showEdit[scope.$index] && canEdit">${ (!scope.row.proTS && scope.row.proTS !== 0)?0:scope.row.proTS }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120"  label="Attend time-optimize" >
+           <template scope="scope" >
+               <span v-if="showEdit[scope.$index] && canEdit">${ (!ATO[scope.$index + (currentPage-1)*pagesize] && ATO[scope.$index + (currentPage-1)*pagesize] !== 0)?0:ATO[scope.$index + (currentPage-1)*pagesize]{% comment %}.toFixed(2){% endcomment %} }</span>
+               <span v-else="showEdit[scope.$index] && canEdit" :class="{'invalidNum': scope.row.ATO <0}">${ (!scope.row.ATO && scope.row.ATO!== 0)?0:scope.row.ATO{% comment %}.toFixed(2){% endcomment %} }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column min-width="220" >
+       <template slot="header" slot-scope="scope">
+              <el-tooltip  placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <div slot="content">通過左側Leverage,Reduction,Automation之後合理挑選TestSKU並生成的Test plan<br/>V means: need test;X means:no need test<br/>A means: Automation;L means:Leverage;S means:Smart</div>
+                  <span><i class="el-icon-info"></i>Planning after optimize</span>
+              </el-tooltip>
+          </template>
+
+       <el-table-column  v-for="(item,key,index) in SKUNum" v-bind:key="item.skuNo" :label="item.skuNo" >
+           <el-table-column  :label="item.VGA">
+                <el-table-column  :label="item.CPU" width="120">
+                  <template slot-scope="scope">
+                   <select class="select_inner" placeholder="" v-if="showEdit[scope.$index] && canEdit" v-model="planOptimize[scope.$index + (currentPage-1)*pagesize][key]" @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize,{'id':2})">
+                        <option label="未选择" value=''></option>
+                        <option label="V" value="V"></option>
+                        <option label="X" value="X"></option>
+                        <option label="A" value="A"></option>
+                        <option label="L" value="L"></option>
+                        <option label="S" value="S"></option>
+                   </select>
+                   <span v-else="showEdit[scope.$index] && canEdit">${ scope.row.planOptimize[key] }</span>
+                </template>
+                </el-table-column>
+           </el-table-column>
+
+       </el-table-column>
+
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 Retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest cycle</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+                <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit" ><input placeholder="請輸入內容" type="text"  v-model.lazy="CRC[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner"><span @click="clear(CRC, scope.$index + (currentPage-1)*pagesize)" :class="{'clearShow':CRC[scope.$index + (currentPage-1)*pagesize] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+               </div>
+               <span v-else="showEdit[scope.$index] && (canEdit)">${ scope.row.CRC }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest SKU</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+              <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit" ><input placeholder="請輸入內容" type="text"  v-model.lazy="CRS[scope.$index + (currentPage-1)*pagesize]"   class="el-input__inner"><span @click="clear(CRS, scope.$index + (currentPage-1)*pagesize)" :class="{'clearShow':CRS[scope.$index + (currentPage-1)*pagesize] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              </div>
+              <span v-else="showEdit[scope.$index] && (canEdit)">${ scope.row.CRS }</span>
+              </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的s時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest Time</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+
+{#               <span>${ scope.row.CRT }</span>#}
+              <span >${ scope.row.CRC*scope.row.CRS*scope.row.BTS }</span>
+                </template>
+      </el-table-column>
+      <el-table-column width="120" label="修改" fixed="right">
+          <template slot-scope="scope">
+              <el-button type="text" size="small" @click="edit(scope.row,scope.$index + (currentPage-1)*pagesize)" v-if="!showBtn[scope.$index]">編輯</el-button>
+              <el-button type="text" size="small" @click="saveData(scope.row, scope.$index + (currentPage-1)*pagesize)" v-if="showBtn[scope.$index]">保存</el-button>
+              <el-button type="text" size="small" v-if="showBtn[scope.$index]" @click="cancel(scope.row, scope.$index + (currentPage-1)*pagesize)">取消</el-button>
+          </template>
+      </el-table-column>
+  </el-table>
+  <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[20, 50, 100, 150]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length"
+      :hide-on-single-page="!tableData.length">
+
+    </el-pagination>
+</div>
+
+
+
+<div v-if="loading" v-cloak class="fullScreen">
+    <section v-cloak v-if="loading">
+      <div class='sk-fading-circle'>
+        <div class='sk-circle sk-circle-1'></div>
+        <div class='sk-circle sk-circle-2'></div>
+        <div class='sk-circle sk-circle-3'></div>
+        <div class='sk-circle sk-circle-4'></div>
+        <div class='sk-circle sk-circle-5'></div>
+        <div class='sk-circle sk-circle-6'></div>
+        <div class='sk-circle sk-circle-7'></div>
+        <div class='sk-circle sk-circle-8'></div>
+        <div class='sk-circle sk-circle-9'></div>
+        <div class='sk-circle sk-circle-10'></div>
+        <div class='sk-circle sk-circle-11'></div>
+        <div class='sk-circle sk-circle-12'></div>
+      </div>
+        <span>正在上傳，請稍等</span>
+    </section>
+ </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/date-picker.js"></script>
+<script src="/static/js/Element/dialog.js"></script>
+<script src="/static/js/Element/form.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script src="/static/js/Element/tooltip.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/pagination.js"></script>
+<script type="text/babel">
+  new Vue ({
+    el:"#app",
+    delimiters: ['${', '}'],
+    data() {
+      return {
+           loading:false,
+      tableData:[],
+      selectMsg:[],
+      customer:'',
+      project:'',
+      phase:'',
+      category:'',
+      showCustomer:'',
+      showProject:'',
+      showPhase:'',
+      showCategory:'',
+      projectvalue:[],
+      phasevalue:[],
+      categoryItem:[],
+      projectError:false,
+      customerError:false,
+      phaseError:false,
+      categoryError:'',
+      customerOptions:[
+          {
+            "label":"C38(AIO)",
+            "value":"C38(AIO)",
+        }
+      ],
+      phaseName:["B(SDV)", "C(SIT)", "EELP+"],
+      canEdit:false,
+      showTips:false,
+      fileName:"未選擇文件",
+      //文件上傳
+      excelFile:null,
+      uploadFile:null,
+      currentPage:1,
+      pagesize:100,
+      totalNum: null,
+      showEdit: [], //显示编辑框
+      showBtn: [],
+      showBtnOrdinary: true,
+      SKUNum:null,
+
+        FS:[],
+        TE:[],
+        schedule:[],
+        NUMX:[],
+        NUMX_TIME:[],
+        NUMA:[],
+        NUML:[],
+        CAT:[],
+        CLT:[],
+        CST:[],
+        conSitemInAll:[],
+        comments:[],
+        planOptimize:[],
+        BTS:[],
+        CRC:[],
+        CRS:[],
+        CRT:[],
+        proTS:[],
+        ATO:[],
+      }
+    },
+       created(){
+        axios.get("/TestPlanSW/TestPlanSW-edit-AIO/?action=first" ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.selectMsg=res.data;
+
+        })
+    },
+
+      methods: {
+          tableRowClassName({row, rowIndex}) {
+          if(!row.id){
+            return 'title-row'
+          }
+      },
+          handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+              },
+          handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                  this.currentPage = val;
+          },
+          clear(num, val, flag ,row,change){
+          let _this = this
+          if(!num[val] && num[val] !== 0){
+              return false;
+          }else{
+            Vue.set(num, val, "");
+          }
+          if( flag=== 'change'){
+              _this.initData(row, val, change);
+          }
+      },
+          getdata:function(e){
+                {% comment %}let data = {"isGetData":e,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};{% endcomment %}
+                axios.get("/TestPlanSW/TestPlanSW-edit-AIO/?action="+e , {
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    {#this.customerOptions=res.data.customerOptions;#}
+                    console.log(this.customerOptions,'sxsx')
+                    this.canEdit=res.data['canEdit'];
+                    this.tableData=res.data['content'];
+                    this.totalNum=this.tableData.length;
+                    this.SKUNum=res.data['SKU'];
+                    if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{this.showTip()},1);
+                    }
+                    for(let i=0;i<res.data.content.length;i++){
+                        let id = res.data.content[i].id;
+                        Vue.set(this.tableData[i],'index',i+1);
+                    }
+                    this.$nextTick(() => {
+                        //重新計算表格高度
+                        this.$refs.multipleTable.doLayout()
+                    })
+                });
+               this.showCustomer=this.customer;
+               this.showProject=this.project;
+               this.showPhase=this.phase;
+               this.showCategory=this.category;
+            },
+           edit(row, index){
+{#                  console.log(this.tableData[index]);#}
+                  Vue.set(this.FS,index,row.FS);
+                  Vue.set(this.TE,index,row.TE);
+                  Vue.set(this.schedule,index,row.schedule);
+                  Vue.set(this.comments,index,row.comments);
+                  Vue.set(this.CRC,index,row.CRC);
+                  Vue.set(this.CRS,index,row.CRS);
+                  Vue.set(this.CRT,index,row.CRT);
+                  Vue.set(this.planOptimize,index,[]);
+                  for(let i = 0 , length = row.planOptimize.length;i<length;i++){
+{#                      console.log(this.planOptimize[index]);#}
+                      Vue.set(this.planOptimize[index],i,row.planOptimize[i]);
+                  }
+                  //無需修改項
+                  Vue.set(this.NUMX,index,row.NUMX);
+                  Vue.set(this.NUMX_TIME,index,row.NUMX_TIME);
+                  Vue.set(this.NUMA,index,row.NUMA);
+                  Vue.set(this.CAT,index,row.CAT);
+                  Vue.set(this.NUML,index,row.NUML);
+                  Vue.set(this.CLT,index,row.CLT);
+                  Vue.set(this.CST,index,row.CST);
+                  Vue.set(this.proTS,index,row.proTS);
+                  Vue.set(this.ATO,index,row.ATO);
+                  Vue.set(this.conSitemInAll,index,row.conSitemInAll);
+                  //打開修改框
+                  this.$set(this.showEdit,index,true);
+                  this.$set(this.showBtn,index,true);
+{#                  console.log(this.tableData[index],index,row);#}
+              },
+          saveData:function(row, index){
+           //是否选择搜素信息
+              if(this.showCustomer==''|| this.showProject==''|| this.showPhase===''|| this.showCategory ===''){
+                  alert("請選擇要修改的表單");
+                  return false;
+              }
+             //1.判断是否发生更改
+             //2.判断输入值是否符合规则
+              let changeFlag = 0;
+              if(this.CRC[index] !== row.CRC){
+                  if(!isNaN(this.CRC[index]/1)){
+                      changeFlag =1;
+                  }else{
+                      alert("輸入值不合法")
+                      return
+                  }
+              }
+              if(this.CRS[index] !== row.CRS){
+                  if(!isNaN(this.CRS[index]/1)){
+                      changeFlag =1;
+                  }else{
+                      alert("輸入值不合法")
+                      return
+                  }
+              }
+              if(this.CRT[index] !== row.CRT){
+                  changeFlag =1;
+              }
+              if(this.FS[index] !== row.FS){
+                  changeFlag =1;
+              }
+              if(this.TE[index] !== row.TE){
+                  changeFlag =1;
+              }
+              if(this.schedule[index] !== row.schedule){
+                  changeFlag =1;
+              }
+              if(this.comments[index] !== row.comments){
+                  changeFlag =1;
+              }
+              for(let i = 0 , length =this.planOptimize[index].length;i<length;i++){
+                  console.log("planOptimize",this.planOptimize[index][i],row.planOptimize[i]);
+                  if(this.planOptimize[index][i] !== row.planOptimize[i]){
+                       changeFlag =1;
+                  }
+              }
+              if(changeFlag === 0){
+                  alert("輸入值未發生改變");
+                  return false;
+              }else{
+                  let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'NUMX_TIME':this.NUMX_TIME[index],'NUMX':this.NUMX[index],'TE':this.TE[index],'schedule':this.schedule[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments':this.comments[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
+                  axios.post("/TestPlanSW/TestPlanSW-edit-AIO/" ,Qs.stringify(result, {indices:false}),{
+                        headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        //flag:editResult
+                      console.log(res.data.editResult)
+                      if (res.data.editResult === 1){
+                             //3.发生改变且符合规则，向后台发送数据
+                             //4.后台返回储存成功，将改变值赋给表格
+
+                             row.FS = this.FS[index] ;
+                             row.TE = this.TE[index] ;
+                             row.schedule = this.schedule[index]
+                             row.comments = this.comments[index] ;
+                             row.CRC = this.CRC[index] ;
+                             row.CRS = this.CRS[index] ;
+                             row.CRT = this.CRT[index] ;
+                              //無需修改項
+                             row.NUMX = this.NUMX[index] ;
+                             row.BTS = this.BTS[index] ;
+                             row.NUMX_TIME = this.NUMX_TIME[index] ;
+                             row.NUMA = this.NUMA[index] ;
+                             row.NUML = this.NUML[index] ;
+                             row.CAT = this.CAT[index] ;
+                             row.CLT = this.CLT[index] ;
+                             row.CST = this.CST[index] ;
+                             row.proTS = this.proTS[index] ;
+                             row.ATO = this.ATO[index] ;
+                             row.conSitemInAll = this.conSitemInAll[index] ;
+                             for(let i = 0,length = this.planOptimize[index].length;i<length;i++){
+                                 row.planOptimize[i] = this.planOptimize[index][i];
+                             }
+                             //關閉修改框
+                             this.$set(this.showEdit,index,false);
+                             this.$set(this.showBtn,index,false) ;
+                             //上傳成功提示框
+                             this.$message({
+                                 message:'修改成功',
+                                 type:'success'
+                             })
+                      }
+                      else{
+                          //上傳失敗提示框
+                          this.$message({
+                              message:'上傳未成功',
+                              type:'error'
+                          })
+                      }
+                  }).catch((e) => {
+                      this.$message.error('服務器連接錯誤');
+                      console.log("上傳錯誤信息："+e);
+                  })
+              }
+
+
+          },
+          cancel(row,index){
+             this.$set(this.showEdit,index,false);
+             this.$set(this.showBtn,index,false) ;
+              this.$message('取消編輯');
+          },
+           //局部初始化公式
+      initData:function(row, key, change){
+          if(!row){
+              return false;
+          }
+          console.log(change.id,"changed");
+           let sum =[0,0,0,0,0];
+           //计算数量
+           //[0:未选择,1:V, 2:X, 3:A, 4:L, 5:X]
+           let pl = this.planOptimize[key].length;
+             for(let num=0;num<pl;num++){
+                   switch(this.planOptimize[key][num]){
+                       case "V": sum[0]++;break;
+                       case "X": sum[1]++;break;
+                       case "A": sum[2]++;break;
+                       case "L": sum[3]++;break;
+                       case "S": sum[4]++;break;
+                   }
+               }
+           //AJ
+           this.proTS[key]=sum[0];
+           this.NUMX[key]=sum[0]+sum[2]+sum[3]+sum[4];
+           {#this.NUMA[key]=sum[2];#}
+           if (row.Automation > 0) {
+                  this.NUMA[key] = sum[0];
+              } else {
+                  this.NUMA[key] = 0;
+              }
+           this.NUML[key]=sum[3];
+          if(change.id === 1) {
+              if (this.FS[key] === 'Y') {
+                  this.BTS[key] = row.Attend_Time;
+              }
+          }
+          if(change.id === 2) {
+              this.NUMX_TIME[key] = row.Attend_Time * this.NUMX[key] * row.TUC;
+              {% comment %}this.CAT[key] = this.NUMA[key] * row.TUC * row.Automation;
+              this.CLT[key] = this.NUML[key] * row.TUC * row.Attend_Time;
+              if (row.Smart_Item == 'Y') {
+                  this.conSitemInAll[key] = 1;
+                  this.CST[key] = this.NUMX * row.Attend_Time * row.TUC / 2;
+              } else {
+                  this.conSitemInAll[key] = 0;
+                  this.CST[key] = 0;
+              }{% endcomment %}
+          }
+          console.log('NUMX_TIME:',this.NUMX_TIME[key],'CAT',this.CAT[key],'CLT',this.CLT[key],'CONSITEMALL',this.conSitemInAll[key]);
+          this.ATO[key]=((this.NUMX_TIME[key] - this.CAT[key] - this.CLT[key])-this.CST[key]);
+          {#this.CRT[key]=this.CRC[key]*this.CRS[key]*this.BTS[key];#}
+      },
+          //查找表格
+          find:function(){
+              //customer和project和phase未填
+              let _this = this;
+              if(this.customer==''){
+                       //alert("客戶別未選擇");
+                        this.customerError = true;
+                       return false;
+                   };
+              this.customerError = false;
+              if(this.project==''){
+                       //alert("專案號未填寫");
+                     this.projectError = true;
+                      return false;
+                   };
+              this.projectError = false;
+              if(this.phase===''){
+                       //alert("專案號未填寫");
+                     this.phaseError = true;
+                      return false;
+                   };
+              this.phaseError=false;
+              if(this.category===''){
+                       //alert("專案號未填寫");
+                     this.categoryError = true;
+                      return false;
+                   };
+              this.categoryError=false;
+              //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+              //判断是否是第一次查询
+              let parameter = "getContent&customer="+this.customer+"&project="+this.project+"&phase="+this.phase+"&category="+encodeURIComponent(this.category);
+              if(this.showCustomer ||this.showProject || this.showPhase || this.showCategory){
+                  //判断是否有未更改的值
+                  let result= this.checkChangedData();
+                  if(!result){
+                      try{
+                          console.log("清除");
+                          this.clearContents();
+                          this.getdata(parameter);
+
+                      }catch(e){ console.log(e);}
+                  }else{
+                      console.log("未更新");
+                      var warning =confirm("檢測到當前填寫的部分數據未保存，請及時點擊保存，以免數據丟失 是否繼續搜索?");
+                      if(warning){
+                        this.clearContents();
+                        this.getdata(parameter);
+                        }else{
+                            //取消動作
+                            return false;
+                        }
+                  }
+              }else{
+                 // 判断为第一次查询
+                 this.getdata(parameter);
+              }
+          },
+               clearContents(){
+                  this.FS =[];
+                  this.schedule=[];
+                  this.NUMX=[];
+                  this.NUMX_TIME=[];
+                  this.TE=[];
+                  this.NUMA=[];
+                  this.NUML=[];
+                  this.comments=[];
+                  this.CAT=[];
+                  this.CLT=[];
+                  this.CST=[];
+                  this.conSitemInAll=[];
+                  this.BTS=[];
+                  this.CRC=[];
+                  this.CRS=[];
+                  this.CRT=[];
+                  this.proTS=[];
+                  this.ATO=[];
+                  for(let i = 0,length=this.planOptimize.length;i<length;i++){
+                      this.planOptimize[i]=[];
+                  }
+                },
+                              //检查是否发生数据改变
+                checkChangedData(){
+                    for(let i = 0 , length= this.tableData.length;i<length;i++ ){
+                        //如果有存在正在修改的數據，返回true
+                        if(this.tableData[i].showEdit === 1){
+                            return true;
+                        }
+                    }
+                    //否則返回false
+                    return false;
+                },
+          showTip(){
+              if( this.showCustomer&&this.showProject&&this.phaseName[this.showPhase]&&this.showCategory){
+                 if(!this.canEdit){
+                    this.showTips = true ;
+                 }else{
+                     this.showTips = false ;
+                 }
+              }else{
+                  this.showTips = false ;
+              }
+          },
+          //文件更改
+          updateFile:function(e){
+                const first="未選擇文件";
+                let newValue= e.target.files;
+                if(newValue){
+                 let file=document.getElementById('upload');
+                 let filename= file.files[0].name;
+                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
+                 console.log(fileType.toLowerCase());
+                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                      //console.log(this.excelFile);
+                     this.fileName=filename;
+                     this.uploadFile=file.files[0];
+                 }else{
+                     alert("上傳類型不為'xlsx'或'xls'");
+                       try{
+                         }catch(e){
+                             console.log(e);
+                         }
+                 }
+             }else{
+                 this.uploadFile=null;
+                 this.fileName=first;
+             }
+          },
+              //批量上傳
+          fileUpload:function(){
+                  const first="未選擇文件";
+                  if(this.uploadFile){
+                    if(this.showCustomer==''||this.showProject==''||this.showPhase===''||this.showCategory === ''){
+                       alert("請選擇要修改的表單");
+                       return false;
+                   }else{
+                      //1.解析Excel
+                       let outputResult;
+                       let _this= this;
+                       let files = this.uploadFile;
+                       let undefined_to_null=function(value){
+                           if(value == undefined){
+                               value=null;
+                           }
+                           //console.log(value,value === undefined,value == undefined);
+                           return value;
+                       }
+                       var fileReader = new FileReader ();
+                       fileReader.onload = function (ev) {
+                         try {
+                         _this.loading=true;
+                         var data = ev.target.result,
+                          workbook = XLSX.read(data, {
+                            type: 'binary'
+                         }), // 以二进制流方式读取得到整份excel表格对象
+                          persons = []; // 存储获取到的数据
+                       } catch (e) {
+                         _this.loading=false;
+                         return;
+                      }
+                      for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        var fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo);
+                        var datas = workbook.Sheets[sheet];
+                        // 如果有不规范数据可以在这里进行处理datas
+                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                        //break; // 只读了第一张表
+                    }
+                }
+                     // 数据保存在result
+                      let result=JSON.stringify(persons);
+                       //将之前张开的树形结构收起
+                          //_this.reset();
+                       //2.上傳數據
+                        axios.post("/TestPlanSW/TestPlanSW-edit-AIO/" ,{"customer":_this.showCustomer,"project":_this.showProject,"phase":_this.showPhase,'category':_this.showCategory,"ExcelData":result},{
+                        headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    }).then((res) => {
+                        //console.log(res.data,"first");//上传成功的操作
+                            _this.canEdit=res.data['canEdit'];
+                    _this.tableData=res.data['content'];
+                    {% comment %}console.log(this.tableData);
+                    console.log(this.tableData[0].Priority);{% endcomment %}
+                    _this.totalNum=_this.tableData.length;
+                    _this.SKUNum=res.data['SKU'];
+
+
+                        _this.uploadFile=null;
+                        _this.fileName=first;
+                       _this.loading=false;
+                        //上传成功的操作
+                       _this.$message({
+                           message:'上傳成功',
+                           type:'success',
+                       })
+                        //接受数据的初始化
+                        try{
+                        }catch(e)
+                        {
+                           console.log("错误异常"+e);
+                        }
+                    }).catch(function (e) {
+                            _this.loading=false;
+                            _this.uploadFile=null;
+                            var warning =confirm("上傳異常");
+                            console.log("上傳錯誤信息"+e);
+                        });
+               };
+                       try{
+                       //console.log(fileReader.onload());
+                       fileReader.readAsBinaryString(files);
+                       //console.log(fileReader.readAsBinaryString(files));
+                       }
+                       catch(e){
+                             this.loading=false;
+                             console.log(e);
+                             alert("文件上傳異常") ;
+                             return;
+                        }
+                      //console.log(outputResult);
+                   }
+                 }else{
+                  this.loading=false;
+                  alert("未選擇文件");
+                  return false;
+              }
+          },
+      },
+       //计算公式：根据所填选项，显示数据
+    watch: {
+       //關閉customer和project 未輸入提示 以及依據選項產生聯動
+       customer(newValue,oldValue){
+           //關閉錯誤提示
+           this.customerError = false;
+           //清除上次搜索過的記錄
+           this.project='';
+           this.phase='';
+           this.category='';
+           this.projectvalue=this.selectMsg[newValue];
+           immediate:true
+       },
+       project(newValue,oldValue){
+           //關閉錯誤提示
+           this.projectError = false;
+           //清除上次搜索過的記錄
+           this.phase='';
+           this.category='';
+           if(this.customer == ''){
+               return false;
+           }
+           //console.log(this.selectMsg['0'][this.customer]);
+           //遍歷所有數據進行查找
+           for(let index =0; index < this.selectMsg[this.customer].length;index++){
+               //查找當前選項
+                if(this.selectMsg[this.customer][index]['project'] == newValue){
+                    this.phasevalue = this.selectMsg[this.customer][index]['phase'];
+                    return ;
+                }
+           }
+       },
+       phase(newValue,oldValue){
+           this.phaseError = false;
+           this.categoryError= false;
+           this.category='';
+           if(newValue !== ''){
+               if(this.customer !== '' && this.project !== ''  && this.phase !== ''  ){
+                 let parameter = ""+this.customer+"&project="+this.project+"&phase="+this.phase;
+                 axios.get("/TestPlanSW/TestPlanSW-edit-AIO/?action=getCategory&customer="+this.customer+"&project="+this.project+"&phase="+this.phase ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.categoryItem = res.data['MockData'];
+               })
+               }
+               else{
+                   alert("請選擇完整信息");
+                   return false;
+               }
+
+           }else{
+               return false
+           }
+       },
+       category(newValue, oldValue){
+         this.categoryError= false;
+       },
+       //监听数组产生出已修改的ID，根据这些ID再判断是否发生更改
+},
+  })
+</script>
+{% endblock %}
+
+
+
+
+{% comment %}
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Bouncing_upload{% endblock %}
+{% block css %}
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+ <link href="/static/css/lib/data-table/dataTables.bootstrap.min.css" rel="stylesheet">
+<style>
+tbody tr td:last-child {
+    text-align: left;
+}
+.con_td{
+    display:flex;
+    justify-content: space-between;
+    border: none !important;
+
+}
+.con_td .ti-zoom-in,.ti-zoom-out{
+    line-height: 32px;
+    font-size:12px;
+    margin-left: 1%;
+}
+.content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    -ms-writing-mode:tb-rl;
+    writing-mode:vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+    box-shadow:2px 2px 8px #000;
+}
+#container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    width:400px;
+    height: 120px;
+    background-image:url("/static/images/spec/blackboardback.jpg") ;
+    border: 2px solid  #deb887;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="content" id="yincang">spec</div>
+<div id="container-yansebiaoshi">
+    <div class="spec">
+             <span style="font-size:20px;color: #FFF">Spec:</span><br>
+             <span>1.Peak&nbspvalue<=8mm</span><br>
+             <span>2.Durationg<=2s</span><br>
+           </div>
+</div>
+<div id="app" class="row" >
+ <div class="new-title">
+     <p>Bouncing&nbsptest&nbspraw&nbspdata</p>
+ </div>
+ <div class="card-body" id="publicMsg">
+           <label for="Customer">客户</label>
+           <select id="Customer" ref="customer" @change="changeCustomer">
+               <option value=""></option>
+               <option v-for="(item,key,index) in selectItem" v-model="selectedCustomer">${ key }</option>
+
+           </select>
+           <label for="Project">专案</label>
+            <label>${ projectdefault }</label>
+           <select id="Project" v-model="projectdefault" ref="project">
+                <option value="" selected="selected"></option>
+               <option v-for="(item,index) in selectProject">${ item }</option>
+           </select>
+           <label for="p_a_cover">A件</label>
+               <select id="p_a_cover" ref="a_cover">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.A_cover_list">${ item }</option>
+               </select>
+               <label for="p_c_cover">C件</label>
+               <select id="p_c_cover" ref="c_cover">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.C_cover_list">${ item }</option>
+               </select>
+               <label for="p_d_cover">D件</label>
+               <select id="p_d_cover" ref="d_cover">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.D_cover_list">${ item }</option>
+               </select>
+           <br>
+           <div class="searchContent">
+
+               <label for="p_hinge_s">转轴</label>
+               <select id="p_hinge_s" ref="hinge_s">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.HS_list">${ item }</option>
+               </select>
+               <label for="p_torque ">扭力</label>
+               <select id="p_torque" ref="torque">
+                   <option></option>
+                   <option>Min</option>
+                   <option>Max</option>
+               </select>
+               <label for="p_p_f">推力</label>
+               <select id="p_p_f" ref="p_f">
+                   <option value="" selected="selected"></option>
+                   <option v-for="(item,index) in others.Push_list">${ item }</option>
+               </select>
+               <button  type="button" @click="selectMsg">Search</button>
+           </div>
+     {% csrf_token %}
+       </div>
+
+
+ <div class="table-responsive" style="max-height: 1000px;color:#FFF;background-color:rgba(255,255,255,0.9);width:calc(100% - 30px);">
+    <table id="bootstrap-data-table-export" class="table table-striped table-bordered" width="100%" cellspacing="0" style="color:#FFF">
+        <thead>
+            <tr>
+                <th>编辑</th>
+                <th>客户</th>
+                <th>专案</th>
+                <th>A件</th>
+                <th>C件</th>
+                <th>D件</th>
+                <th>转轴</th>
+                <th>扭力</th>
+                <th>推力</th>
+                <th>左峰值</th>
+                <th>右峰值</th>
+                <th>Dur左</th>
+                <th>Dur右</th>
+                <th>备注</th>
+                <th >附件</th>
+                <th style="color:#FFF">Editor</th>
+                <th style="color:#FFF">Edit time</th>
+            </tr>
+
+        </thead>
+        <tbody>
+        <tr v-for="(items,index) in tableContent" :id="editNo(index)">
+            <td ref="index"  @click="edit($event,items.id)" :id="makeNo(index)" ><span><i class="ti-pencil-alt" style="color:#D9B300"></i></span></td>
+            <td >${ items.Customer }</td>
+            <td >${ items.Project }</td>
+            <td >${ items.A_cover }</td>
+            <td v-model="tempdata[0]" >${ items.C_cover }</td>
+            <td >${ items.D_cover }</td>
+            <td >${ items.Hinge_s }</td>
+            <td >${ items.Torque }</td>
+            <td >${ items.Push_F }</td>
+            <td :class="[items.PV_L>=8?'fail':'pass']">${ items.PV_L }</td>
+            <td :class="[items.PV_R>=8?'fail':'pass']">${ items.PV_R }</td>
+            <td :class="[items.D_L>=2?'fail':'pass']">${ items.D_L }</td>
+            <td :class="[items.D_R>=2?'fail':'pass']">${ items.D_R }</td>
+             <td   :id="'on'+index" class="con_td" @mouseover="showDes($event)" @mouseleave="hiddenDes($event)" ><div :id="'con'+index" class="con">${ items.CON }</div><i :id="'n'+index" class="ti-zoom-in"  @click="showAll($event)"></i></td>
+            <td style="color:#FFF" >${ items.editor }</td>
+            <td style="color:#FFF" >${ items.edit_time }</td>
+            <td  >
+
+{#                                                                                <img src="../media/{{ i.img }}" height="100" width="200" alt="" />#}
+              ${ items.Photo_P }
+               <li v-for="index in  items.file_B ">
+                   ${ index }
+                <a v-bind:href="'/media/'+index" class="example-image-link" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img v-bind:src="'/media/'+index" class="example-image" height="50" width="100" alt="" /><img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+                <a v-bind:href="'/media/'+index" class="test-popup-link"><img v-bind:src="'/media/'+index" height="50" width="100" alt="" /></a>
+               </li>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+ </div>
+
+<!--  编辑框：当表格中的编辑按钮发生点击后，编辑框弹出且将原有数据填入其中   -->
+ <div class="fullScreen" v-if="choose" v-cloak>
+  <div v-if="choose" v-cloak class="editWindow" id="editWindow" >
+     <div class="close" @mousedown="moveWindow($event)"  id="moveWindowButton">
+         <button class="close" type="button" data-dismiss="modal" aria-label="Close" @click="close">
+                <span aria-hidden="true">×</span>
+         </button>
+     </div>
+     <div class="editContent">
+         <div class="inline_content" >
+             <div class="inline-child"><div>A件</div><input :class="[verify['input_a_cover']?'errorStyle':'commonStyle']" v-cloak type="text" v-model="tempdataName.A_cover" id="a_cover" @blur="write($event)"><br><div v-show="verify['input_a_cover']" id="a_cover_error" style="position: absolute"></div></div>
+             <div class="inline-child"><div>C件</div><input :class="[verify['input_c_cover']?'errorStyle':'commonStyle']" v-cloak type="text" v-model="tempdataName.C_cover" id="c_cover" @blur="write($event)"><br><div v-show="verify['input_c_cover']" id="c_cover_error" style="position: absolute"></div></div>
+            <div class="inline-child"><div>D件</div><input v-cloak type="text" v-model="tempdataName.D_cover" id="d_cover" @blur="write($event)" :class="[verify['input_d_cover']?'errorStyle':'commonStyle']"><br><div v-show="verify['input_d_cover']" id="d_cover_error" style="position: absolute"></div></div>
+          <div class="inline-child"><div>转轴</div><input v-cloak type="text" v-model="tempdataName.Hinge_s" @blur="write($event)" id="hinge_s" :class="[verify['input_hinge_s']?'errorStyle':'commonStyle']"><br><div v-show="verify['input_hinge_s']" id="hinge_s_error" style="position: absolute"></div></div>
+         </div>
+      <div class="inline_content" >
+         <div class="inline-child"><div>扭力</div><input v-cloak type="text" v-model="tempdataName.Torque" disabled="disabled" ></div>
+         <div class="inline-child"><div>推力</div><input v-cloak type="text" v-model="tempdataName.Push_F" id="P_F" :class="[verify['input_P_F']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_P_F']" id="P_F_error" style="position: absolute"></div></div>
+      </div>
+      <div class="inline_content" >
+         <div class="inline-child"><div>左峰值</div><input v-cloak type="text" v-model="tempdataName.PV_L" id="P_L" :class="[verify['input_P_L']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_P_L']" id="P_L_error" style="position: absolute"></div></div>
+         <div class="inline-child"><div>右峰值</div><input v-cloak type="text" v-model="tempdataName.PV_R" id="P_R" :class="[verify['input_P_R']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_P_R']" id="P_R_error" style="position: absolute"></div></div>
+      </div>
+      <div class="inline_content" >
+         <div class="inline-child"><div>Dur左</div><input v-cloak type="text" v-model="tempdataName.D_L" id="D_L" :class="[verify['input_D_L']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_D_L']" id="D_L_error" style="position: absolute"></div></div>
+          <div class="inline-child"><div>Dur右</div><input v-cloak type="text" v-model="tempdataName.D_R" id="D_R" :class="[verify['input_D_R']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_D_R']" id="D_R_error" style="position: absolute"></div></div>
+      </div>
+      <div class="inline_content">
+
+              <div>结论</div><textarea rows="5" cols="75" type="text" v-model="tempdataName.CON"></textarea></div><br>
+      <div class="inline_content">
+          <div style="margin-top: 10px">备注:</div><textarea rows="5" cols="75" type="text" v-model="tempdataName.Remark"></textarea></div><br>
+           <div class="fileUploadButton" >選擇文件
+               <input type="file" id="file" @change="selectImg($event)" multiple="multiple" title="">
+           </div>
+
+           <ul  class="showContent">
+           <li style="font-weight: 500;font-size: 17px;">已選擇內容：</li>
+           <li v-for="(item,key,index) in saveFile">
+              <i class="ti-trash" :value="index" @click="delFile(key)" style="margin-right: 10px;font-size:12px"></i><span>${ index + 1 }. ${ item.name }</span>
+          </li>
+           </ul>
+      <div class="inline_content">
+        <div class="inline-child">
+            <button id="editSubmit" @click="edit_submit">Submit</button>
+            <button id="editCancel" @click="close">Cancel</button>
+        </div>
+     </div>
+     </div>
+  </div>
+  </div>
+    <div v-if="loading" v-cloak class="fullScreen">
+            <section v-if="loading" v-cloak>
+                      <div class='sk-fading-circle'>
+                        <div class='sk-circle sk-circle-1'></div>
+                        <div class='sk-circle sk-circle-2'></div>
+                        <div class='sk-circle sk-circle-3'></div>
+                        <div class='sk-circle sk-circle-4'></div>
+                        <div class='sk-circle sk-circle-5'></div>
+                        <div class='sk-circle sk-circle-6'></div>
+                        <div class='sk-circle sk-circle-7'></div>
+                        <div class='sk-circle sk-circle-8'></div>
+                        <div class='sk-circle sk-circle-9'></div>
+                        <div class='sk-circle sk-circle-10'></div>
+                        <div class='sk-circle sk-circle-11'></div>
+                        <div class='sk-circle sk-circle-12'></div>
+                      </div>
+                        <span>正在上傳，請稍等</span>
+                    </section>
+         </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+{#<script src="/static/js/element/index.js"></script>#}
+{#<script src="https://unpkg.com/element-ui/lib/index.js"></script>#}
+<script src="/static/js/qs.js"></script>
+<script type="text/babel">
+
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle("slide");
+        console.log("ggg");
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+
+
+
+    new Vue({
+
+       el:"#app",
+       delimiters: ['${', '}'],
+       data() {
+         return{
+                //error:false,
+                others:{},
+                projectdefault:null,
+                result:{},
+                selectProject:[],
+                selectedCustomer:null,
+                selectItem:{},
+                choose:false,//关闭页面的值
+                tableContent:null,//搜索页面表格中显示的数据来源
+                tempdata:[],
+                titleName:[],
+                tempdataName:{},//编辑页面表格中显示的数据来源
+                selectId:null,
+                test:"",
+                isDown:false,
+                saveFile:{},
+                maxSize:5242880,
+                loading:false,
+                //验证的style的标志:用于判断哪个输入框出现验证错误
+                verify:{
+                    input_a_cover:false,
+                    input_c_cover:false,
+                    input_d_cover:false,
+                    input_hinge_s:false,
+                    input_P_F:false,
+                    input_P_L:false,
+                    input_P_R:false,
+                    input_D_L:false,
+                    input_D_R:false,
+                },
+               //这个对象是为输入框划分等级，1：代表不能为空 2：代表必须为小数或正整数 3：未来会增加日期格式
+                inputId:{
+                    a_cover:1,
+                    c_cover:1,
+                    d_cover:1,
+                    input_hinge_s:1,
+                    P_F:2,
+                    P_L:2,
+                    P_R:2,
+                    D_L:2,
+                    D_R:2,
+                }
+
+            }
+
+
+       },
+       mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");//此时会上传一个"first"的字符串，用来区分接下来的edit操作
+              },
+       methods:{
+             //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+             getdata:function(e){
+                let data = {"isGetData":e,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(data), {
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    console.log(res.data.content);//上传成功的操作
+                    this.dataTableDestroy();
+                    this.tableContent=res.data.content;// 将返回的数据传递给data内的tableContent
+                    this.selectItem=res.data.select;
+                    this.others=res.data.others;
+                    this.dataTableInit();
+                });
+
+            },
+             //为编辑按钮设置ID
+             makeNo:function(e){
+             return "td" + e ;
+            },
+             //点击出现全部内容
+             showAll:function(e){
+                 let con = e.currentTarget.id;
+                 //$('#'+con).css({"display":"none"});
+                 if($('#'+con).attr('class')=="ti-zoom-in"){
+                     $('#co'+con).css({"white-space":"inherit","text-overflow":"inherit","overflow":"inherit","word-wrap":"break-word"});
+                     let conHeight=$('#co'+con).height()+"px";
+                     $('#'+con).css({"line-height":conHeight});
+                     $('#'+con).removeClass().addClass("ti-zoom-out");
+                 }else{
+                     $('#co'+con).css({"white-space":"nowrap","text-overflow":"ellipsis","overflow":"hidden"});
+                     let conHeight=$('#co'+con).height()+"px";
+                     $('#'+con).css({"line-height":"32px"});
+                     $('#'+con).removeClass().addClass("ti-zoom-in");
+                 }
+
+                 //console.log($('#'+con).attr('class'),123);
+             },
+             //移动edit Window
+             moveWindow:function(e){
+                let moveWindowButton = document.getElementById("editWindow");
+                //获取鼠标位置
+                var x= e.clientX;
+                var y= e.clientY;
+                 //获取左部和顶部的偏移量
+                var l = moveWindowButton.offsetLeft;
+                var t = moveWindowButton.offsetTop;
+                document.getElementById("moveWindowButton").style.cursor = 'move';
+                //鼠标按下的flag
+                this.isDown=true;
+                //console.log("mouseevent",this.isDown)
+                 //视图区域的鼠标移动函数
+                document.onmousemove = function(e) {
+                    //console.log("todo")
+                if (this.isDown == false) {
+                    //若flag显示为false，则须跳出函数
+                      return false;
+                }
+                //获取x和y
+                var nx = e.clientX;
+                var ny = e.clientY;
+                //计算移动后的左偏移量和顶部的偏移量
+                var nl = nx - (x - l);
+                var nt = ny - (y - t);
+                //console.log(nl,nt);
+                //console.log(document.getElementById("editWindow"),"381");
+                //编辑区域位置更新
+                moveWindowButton.style.left = nl + 'px';
+                moveWindowButton.style.top = nt + 'px';
+                moveWindowButton.onmouseup = function (e) {
+                    this.isDown =false;
+                    document.getElementById("moveWindowButton").style.cursor = 'default';
+                    //中断鼠标移动函数
+                    document.onmousemove = null;
+                }
+}
+             },
+             //点击编辑按钮，弹出修改界面
+             edit:function(e,id){
+              //console.log(e.currentTarget.id);
+              var hasTabId = e.currentTarget.id;  //获取触发点击事件的元素ID(这里指页面表格显示的临时ID，并非获取数据的真实ID)
+              var chooseTr= document.getElementById(hasTabId).parentNode.id ; //获取触发点击事件的父级元素的ID(此ID同上)
+              var tr = document.getElementById(chooseTr);
+              //生成title数组:
+              //由于无法获取对象的key,所以动态生成一个title的数组
+              for(var key in this.tableContent[0]){
+                 if(key!="id"){
+                     this.titleName.push(key);
+                 }
+              }
+             //生成一个临时数组用于存放节点内容，即表格中的每一项数据；
+              var tab=[];
+              for(var i= 1;i<=tr.childNodes.length-1;i++ ) {
+               // 遍历子节点会出现空节点，为此需要删除无效节点
+               if(tr.childNodes[i].nodeType==1){
+                //console.log(tr.childNodes[i].childNodes.length,"368");
+                //若出现一个td中有两个子节点，则取第一个节点内容--->针对conclusion
+                if(tr.childNodes[i].childNodes.length > 1){
+                    tab.push(tr.childNodes[i].childNodes[0].innerHTML);
+                }else{
+                     tab.push(tr.childNodes[i].innerHTML); //生成修改选项的所有值的数组
+                }
+
+                }
+              }
+              for(var i = 0; i< tab.length;i++){
+                this.tempdataName[this.titleName[i]]=tab[i];
+                console.log(tab[i]);
+               }
+              tab.push(chooseTr.slice(4));
+
+              this.tempdataName['index']=chooseTr.slice(4);
+              this.tempdataName['id']=id;
+              this.tempdata=tab;
+              this.selectId=id;
+              //console.log(this.tempdata);
+              this.choose= true; //最后打开修改界面
+            },
+             //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+               let customer = this.$refs.customer.value;
+               let project = this.$refs.project.value;
+
+               let a_cover = this.$refs.a_cover.value;
+               let c_cover = this.$refs.c_cover.value;
+               let d_cover = this.$refs.d_cover.value;
+               let hinge_s = this.$refs.hinge_s.value;
+               let torque = this.$refs.torque.value;
+               let p_f = this.$refs.p_f.value;
+               console.log('1234');
+               let data ={"customer":customer,"project":project,"a_cover":a_cover,"c_cover":c_cover,"d_cover":d_cover,"hinge_s":hinge_s,"torque":torque,"p_f":p_f,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+               axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.dataTableDestroy();
+                  this.tableContent=res.data.content;//更改tableContent的值，由于双向绑定，页面表格显示的值也会随之更新
+                  this.dataTableInit();
+                })
+             },
+             //生成tr的ID
+             editNo:function(index){
+               return "row_" + index ;
+              },
+              //关闭修改界面
+             close:function(){
+                this.choose = false; //关闭修改窗口
+                for (let item in this.verify){
+                   this.$set(this.verify,item,false); //将判断输入框的是否发生验证错误的值恢复为默认false
+                }
+
+             },
+             //修改界面的提交按钮事件：
+             //1. 首先上传提交修改内容 ；
+             edit_submit:function(){
+
+               //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+               //console.log(this.tempdataName);
+                //检查是否出现重复
+                 let num=0;
+                 //console.log(this.selectId);
+                 //判断是否有输入框发生验证错误，有则返回false，没有则继续验证
+                 for(var items in this.verify ){
+                     //console.log(items);
+                     if (this.verify[items]){
+                         return false;
+                     }
+                 }
+
+
+
+                 //验证编辑内容是否发生改变，没有则停止上传，否则将编辑内容上传
+                for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ) {
+                    //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+                    //console.log(this.tempdataName[item]);
+                     if(this.tempdataName.hasOwnProperty(item) && Object.values(this.tableContent)[this.tempdataName['index']].hasOwnProperty(item)){
+                         if(Object.values(this.tableContent)[this.tempdataName['index']][item]!=this.tempdataName[item]){
+                            num=1;
+                            break;
+                     }else{
+                        //console.log((Object.keys(this.tempdataName)).length);
+                    }
+                     }
+                 }
+                console.log("507",JSON.stringify(this.saveFile) );
+                 if(num == 0&&JSON.stringify(this.saveFile) == "{}"){
+                            alert("内容未更新");
+                            return false;
+                        }
+                 for(var item in this.saveFile){
+
+                 }
+                 this.tempdataName["isGetData"]='edit0';
+                 console.log("508");
+                 var FD = new FormData() ;
+                 console.log("510");
+                 for(var i in this.tempdataName){
+                     console.log(i,this.tempdataName[i],"temp");
+                     FD.append(i,this.tempdataName[i]);
+
+                     //console.log(document.getElementById('file').files);
+                 }
+                  console.log("517");
+                 //var fileList = this.saveFile;
+                 //Object.setProptypeOf(this.saveFile,FileList);
+                 //var temp ;
+                 //Object.getProptypeOf(temp);
+                 //console.log(temp);
+                 //console.log(this.saveFile.length);
+                 //console.log(document.getElementById('file').files);
+                  let Len = (Object.keys(this.saveFile)).length;
+                  let sum =0;
+                 //console.log(this.saveFile,"501",Len);
+                  for(let num in this.saveFile){
+                     let idx = this.saveFile[num].name.lastIndexOf(".");
+                     if(idx != -1){
+                         let ext = this.saveFile[num].name.substr(idx+1).toUpperCase();
+                         ext = ext.toLowerCase( );
+                         console.log(ext , sum);
+                         if (ext === 'zip' || ext === '7z' || ext==='rar'){
+                             if (sum < this.maxSize && (sum + this.saveFile[num].size) < this.maxSize ){
+                                 sum += this.saveFile[num].size;
+                                  FD.append("file", this.saveFile[num]);
+                             }else{
+                                 alert("上傳文件大小應小於5M");
+                                 this.saveFile={};
+                                 return false;
+                             }
+                         }else{
+                             alert("請上傳正確格式的壓縮文件（例如 rar , zip ,7z）")
+                             this.saveFile={};
+                             return false;
+                         }
+                     }else{
+
+                     }
+
+                     //console.log("file", this.saveFile[num],document.getElementById('file').files[num]);
+                 }
+                  //FD.append("file",document.getElementById('file').files)
+
+                 this.choose= false;//关闭页面
+                 this.loading= true;
+                 axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(FD)FD, {
+                  headers:{ 'Content-Type': 'multipart/form-data' },
+
+                  // headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                   }).then((res) => {
+                    this.loading= false;
+                    console.log("已修改");
+                    this.getdata("edit");
+                    this.saveFile={};
+                    //2.再将修改后的内容在表格上显示出来
+                    // for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ){
+                    //    // Object.values(this.tableContent)[this.tempdataName['index']][item]=this.tempdataName[item];
+                    // }
+
+                })
+
+             },
+
+               //选择图片
+             selectImg:function(e){
+                 //console.log(e.target.result,e.files,"482");
+
+                     var self =this;
+                    // console.log(this.saveFile,"554");
+                     var Len = (Object.keys(this.saveFile)).length;
+                     //console.log(len);
+                     //var reads = new FileReader();
+                     var f = document.getElementById('file').files;
+                     var repeat =function(obj,Object){
+                         for(var i in Object){
+                             if (obj.name ==Object[i].name){
+                                // console.log("repeat");
+                                 return true;
+                             }
+                         }
+                     };
+                     for(let n=0;n<f.length;n++){
+                         if(repeat(f[n],this.saveFile)){
+                             continue;
+                         }
+                        //this.saveFile[Len + n] = f[n];
+                         Vue.set(this.saveFile,Len+n,f[n]);
+
+                     }
+                     document.getElementById("file").value="";
+                     //console.log(document.getElementById("file").value,"602");
+
+
+
+             },
+               //刪除選中的文件
+             delFile:function(e){
+
+                 Vue.delete(this.saveFile,e);
+               //  console.log(e,this.saveFile,"594");
+             },
+
+             //表单验证函数
+             write:function (event) {
+                //console.log(event.currentTarget.id);
+                let err_msg=document.getElementById(event.currentTarget.id+"_error"); //获取输入框后的error提示框的ID
+                err_msg.innerHTML="";//将error提示框的初始值设置为空，否则会不断添加内容，不会清除
+                var num =/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;//验证输入是否为小数或正整数的正则表达式规则
+                //console.log(event.currentTarget.value);
+                //console.log(num.test(event.currentTarget.value));
+                //验证一：是否为空（因为所有输入值都不能为空，所以判断放在第一位，即所有验证值都要经历此项判断）
+                if(event.currentTarget.value.length ==0){
+                    //console.log(event);
+                    //var temp = 'input_' + event.currentTarget.id ;
+                    //console.log(event.currentTarget.id);
+                   // console.log("11",this.verify["input_"+event.currentTarget.id]);
+                    //let err_msg=document.getElementById(event.currentTarget.id);
+                    err_msg.innerHTML="輸入不可為空";
+                    this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                    return false;
+                }
+                //验证一：是否为空（在data的inputId中定义为2）
+                if(this.inputId[event.currentTarget.id] ==2 ){
+                    if(!num.test(event.currentTarget.value)){
+                     err_msg.innerHTML="請輸入小數或正整數";
+                     this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                     return false;
+                 }
+                }
+                //若判断都符合要求，verify的相应值应该为false
+                this.$set(this.verify,"input_"+event.currentTarget.id,false);
+             },
+             changeCustomer:function () {
+                 if(this.$refs.customer.value ==""){
+                      this.selectProject=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.customer.value];
+                 this.projectDefault="";
+                 console.log(this.selectProject);
+             },
+             dataTableInit:function(){
+               Vue.nextTick(() => {
+                $('#bootstrap-data-table-export').DataTable({
+                    dom: 'lBfrtip',
+                    //retrieve: true,
+                    bAutoWidth: false,
+                    lengthMenu: [[100, 25, 50, -1], [100, 25, 50, "All"]],
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                });
+                console.log("dom");
+            })
+             },
+             dataTableDestroy:function () {
+                 $('#bootstrap-data-table-export').DataTable().destroy();
+             }
+
+          }
+
+})
+</script>
+<script src="/static/js/lib/data-table/dataTables.buttons.min.js"></script>
+<script src="/static/js/lib/data-table/buttons.flash.min.js"></script>
+<script src="/static/js/lib/data-table/jszip.min.js"></script>
+<script src="/static/js/lib/data-table/pdfmake.min.js"></script>
+<script src="/static/js/lib/data-table/vfs_fonts.js"></script>
+<script src="/static/js/lib/data-table/buttons.html5.min.js"></script>
+<script src="/static/js/lib/data-table/buttons.print.min.js"></script>
+{#<script src="/static/js/lib/data-table/datatables-init.js"></script>#}
+<script src="/static/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+
+{% endblock %}
+
+{% endcomment %}

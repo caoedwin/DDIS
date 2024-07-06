@@ -1,0 +1,1566 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}IncumbencyPerIn_summary{% endblock %}
+{% block css %}
+<style>
+.selectMsg{
+     font-size:16px;
+     padding: 15px;
+     display: flex;
+     flex-wrap: wrap;
+}
+.selectMsg label{
+  font-weight: 800;
+  margin-right: 10px;
+  color:aliceblue;
+}
+.selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+.tableAround{
+padding: 20px;
+-moz-box-shadow: 0px 0px 10px #333333;
+-webkit-box-shadow: 0px 0px 10px #333333;
+box-shadow: 0px 0px 10px #333333;
+border-radius: 10px;
+background-color: rgba(255,255,255,0.1);
+}
+
+.el-collapse-item__header{
+    background-image: linear-gradient(to right, rgba(0,139,139,0), rgba(0,139,139,1));
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+      <div class="selectMsg" >
+           <div class="yearContent">
+                 <label for="year">年份: </label>
+                 <el-date-picker ref="Year" value-format="yyyy" v-model="year" type="year" placeholder="選擇年份" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;"></el-date-picker>
+           </div>
+                 <el-button @click="search" :loading="elbuttonloading" v-cloak type="primary" style="height:40px;margin-left: 20px">搜索</el-button>
+      </div>
+    <div class="tableAround" v-cloak >
+    <span  class="selectItem" v-cloak  v-if="searchYear">當前信息年份：${ searchYear } </span>
+          <el-collapse v-model="activeNames" @change="handleChange">
+              <el-collapse-item title="By 月份" name="1">
+                   <div class="monthTablecontent">
+                       <el-table border :data="monthTable" :span-method="objectSpanMethod"
+                                 :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor"
+                       v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                           <el-table-column prop="Customer" label="客戶別" align="center"></el-table-column>
+                           <el-table-column prop="Classify" :label="searchYear" align="center"></el-table-column>
+                           <el-table-column prop="Jan" label="一月" align="center"></el-table-column>
+                           <el-table-column prop="Feb" label="二月" align="center"></el-table-column>
+                           <el-table-column prop="Mar" label="三月" align="center"></el-table-column>
+                           <el-table-column prop="Apr" label="四月" align="center"></el-table-column>
+                           <el-table-column prop="May" label="五月" align="center"></el-table-column>
+                           <el-table-column prop="Jun" label="六月" align="center"></el-table-column>
+                           <el-table-column prop="Jul" label="七月" align="center"></el-table-column>
+                           <el-table-column prop="Aug" label="八月" align="center"></el-table-column>
+                           <el-table-column prop="Sep" label="九月" align="center"></el-table-column>
+                           <el-table-column prop="Oct" label="十月" align="center"></el-table-column>
+                           <el-table-column prop="Nov" label="十一月" align="center"></el-table-column>
+                           <el-table-column prop="Dec" label="十二月" align="center"></el-table-column>
+                           <el-table-column prop="monthSummary" label="合計" align="center"></el-table-column>
+                       </el-table>
+                   </div>
+                  <div class="container-echart"v-cloak>
+                      <div  id="monthDiagram1" style="height:400px;"></div>
+                      <div  id="monthDiagram2" style="height:400px;"></div>
+                  </div>
+              </el-collapse-item>
+              <el-collapse-item title="By 職稱" name="2">
+                  <div class="titleTablecontent">
+                       <el-table border :data="titleTable" show-summary
+                                 :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor2"
+                       v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                           <el-table-column prop="Title" label="職稱" align="center"></el-table-column>
+                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">
+                           </el-table-column>
+                           <el-table-column prop="titleSummary" label="合計" align="center"></el-table-column>
+                       </el-table>
+                  </div>
+                  <div class="container-echart"v-cloak>
+                      <div  id="titleDiagramDQADIV" style="height:400px;"></div>
+                  </div>
+              </el-collapse-item>
+              <el-collapse-item title="By 年資" name="3">
+                  <div class="seniorityTablecontent">
+                       <el-table border :data="seniorityTable" show-summary
+                                 :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor2"
+                       v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                           <el-table-column prop="Seniority" label="年資" align="center"></el-table-column>
+                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">
+                           </el-table-column>
+                           <el-table-column prop="senioritySummary" label="合計" align="center"></el-table-column>
+                       </el-table>
+                  </div>
+                  <div class="container-echart"v-cloak>
+                      <div  id="seniorityDiagram1" style="height:400px;"></div>
+                  </div>
+              </el-collapse-item>
+{#              <el-collapse-item title="By 學歷" name="4">#}
+{#                  <div class="educationTablecontent">#}
+{#                       <el-table border :data="educationTable" show-summary>#}
+{#                           <el-table-column prop="Education" label="學歷" align="center"></el-table-column>#}
+{#                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">#}
+{#                           </el-table-column>#}
+{#                           <el-table-column prop="educationSummary" label="合計" align="center"></el-table-column>#}
+{#                           <el-table-column prop="accountFor" label="占%" align="center"></el-table-column>#}
+{#                       </el-table>#}
+{#                  </div>#}
+{#                  <div class="container-echart"v-cloak>#}
+{#                      <div  id="educationDiagram1" style="height:400px;"></div>#}
+{#                  </div>#}
+{#              </el-collapse-item>#}
+              <el-collapse-item title="By 專業" name="4">
+                  <div class="professionTablecontent">
+                       <el-table border :data="professionTable" :span-method="daLeiSpanMethod" show-summary
+                                 :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor3"
+                       v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                           <el-table-column prop="daLei" label="" align="center"></el-table-column>
+                           <el-table-column prop="Profession" label="專業" align="center"></el-table-column>
+                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">
+                           </el-table-column>
+                           <el-table-column prop="professionSummary" label="合計" align="center"></el-table-column>
+                       </el-table>
+                  </div>
+              </el-collapse-item>
+{#              <el-collapse-item title="By 地區" name="6">#}
+{#                  <div class="regionsTablecontent">#}
+{#                       <el-table border :data="regionsTable" show-summary>#}
+{#                           <el-table-column prop="Regions" label="" align="center"></el-table-column>#}
+{#                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">#}
+{#                           </el-table-column>#}
+{#                           <el-table-column prop="regionsSummary" label="合計" align="center"></el-table-column>#}
+{#                       </el-table>#}
+{#                  </div>#}
+{##}
+{#              </el-collapse-item>#}
+          </el-collapse>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+               year:'',
+               {#activeNames:['1','2','3','4','5','6'],#}
+               activeNames:['1','2','3','4'],
+               monthTable:[],
+               titleTable:[],
+               seniorityTable:[],
+               {#educationTable:[],#}
+               professionTable:[],
+               {#regionsTable:[],#}
+               searchYear:null,
+               monthDiagram1Data:[],
+               DataCustomer:[],
+               DataCustomer1:[],
+               DataRenCi:[],
+               monthDiagram2Data:{},
+               titleDiagram:{},
+               seniorityDiagram:{},
+               educationDiagram:{},
+               selectItem:[],
+               heBingNum:[],
+                elbuttonloading: false,
+                tableloading: false,
+                myChart7:{},
+                myChart3:{},
+                myChart2:{},
+                myChart1:{},
+
+             }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            handleChange(val) {               //折疊面板變化
+                console.log(val);
+            },
+            getdata: function (e) {          //获取数据
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                this.myChart7 = echarts.init(document.getElementById('seniorityDiagram1'));
+                this.myChart7.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart3 = echarts.init(document.getElementById('titleDiagramDQADIV'));
+                this.myChart3.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart1 = echarts.init(document.getElementById('monthDiagram1'));
+                this.myChart1.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart2 = echarts.init(document.getElementById('monthDiagram2'));
+                this.myChart2.showLoading() // 在获取数据之前, 显示加载动画
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/Summary2/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectItem=res.data.selectItem;
+                    this.monthTable=res.data.monthTable;
+                    this.searchYear=res.data.searchYear;
+                    this.titleTable=res.data.titleTable;
+                    this.seniorityTable=res.data.seniorityTable;
+                    {#this.educationTable=res.data.educationTable;#}
+                    this.professionTable=res.data.professionTable;
+                    {#this.regionsTable=res.data.regionsTable;#}
+
+                    this.heBingNum=res.data.heBingNum;
+
+                    this.monthDiagram1Data=res.data.monthDiagram1Data;   //月份圖
+                    this.monthDiagram2Data=res.data.monthDiagram2Data;
+                    this.monthDiagram();
+                    this.titleDiagram=res.data.titleDiagram;   //職稱分佈圖
+                    this.titleDiagramss();
+                    this.seniorityDiagram=res.data.seniorityDiagram;   //年資分佈圖
+                    this.seniorityDiagramss();
+                    {#this.educationDiagram=res.data.educationDiagram;  //學歷分佈圖#}
+                    {#this.educationDiagramss();#}
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+
+                 });
+            },
+            search :function(){            //上传搜索项：以此选项搜索符合条件的内容
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                this.myChart7 = echarts.init(document.getElementById('seniorityDiagram1'));
+                this.myChart7.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart3 = echarts.init(document.getElementById('titleDiagramDQADIV'));
+                this.myChart3.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart1 = echarts.init(document.getElementById('monthDiagram1'));
+                this.myChart1.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart2 = echarts.init(document.getElementById('monthDiagram2'));
+                this.myChart2.showLoading() // 在获取数据之前, 显示加载动画
+               let Year=this.$refs.Year.value;
+               let data ={"isGetData":"SEARCH","Year":Year,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/PersonalInfo/Summary2/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectItem=res.data.selectItem;
+                    this.monthTable=res.data.monthTable;
+                    this.titleTable=res.data.titleTable;
+                    this.seniorityTable=res.data.seniorityTable;
+                    {#this.educationTable=res.data.educationTable;#}
+                    this.professionTable=res.data.professionTable;
+                    {#this.regionsTable=res.data.regionsTable;#}
+
+                    this.heBingNum=res.data.heBingNum;
+
+                    this.monthDiagram1Data=res.data.monthDiagram1Data;
+                    this.monthDiagram2Data=res.data.monthDiagram2Data;
+                    this.monthDiagram();
+                    this.titleDiagram=res.data.titleDiagram;
+                    this.titleDiagramss();
+                    this.seniorityDiagram=res.data.seniorityDiagram;
+                    this.seniorityDiagramss();
+                    {#this.educationDiagram=res.data.educationDiagram;#}
+                    {#this.educationDiagramss();#}
+                   this.elbuttonloading = false;
+                   this.tableloading = false;
+
+
+
+
+
+
+                })
+                       this.searchYear=Year;
+            },
+            objectSpanMethod({ row, column, rowIndex, columnIndex }) {               //合併行
+                if (columnIndex === 0) {
+                  if (rowIndex % 5 === 0) {
+                    return {
+                      rowspan: 5,
+                      colspan: 1
+                    };
+                  } else {
+                    return {
+                      rowspan: 0,
+                      colspan: 0
+                    };
+                  }
+                }
+            },
+
+            daLeiSpanMethod({ row, column, rowIndex, columnIndex }) {
+                if (columnIndex === 0) {    //用于设置要合并的列
+                      if (rowIndex===0) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[0],　　　　　//合并的行数
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[1],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[2],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[3],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                        }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]+this.heBingNum[3]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[4],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]+this.heBingNum[3]+this.heBingNum[4]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[5],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]+this.heBingNum[3]+this.heBingNum[4]+this.heBingNum[5]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[6],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }
+                      else {
+                        return {
+                          rowspan: 0,
+                          colspan: 0
+                        };
+                      }
+                }
+            },
+    {% comment %}
+            educationDiagramss(){
+                var myChart9 = echarts.init(document.getElementById('educationDiagram1'));
+                var option9 = {
+                    title: {
+                        text: '在職人力學歷分佈',
+                        textStyle: {
+                        fontSize:30
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['合計', '占%']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: this.educationDiagram.educationDiagramname,
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '合計',
+                            min: 0,
+                            max: 1000,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                interval: 500,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '占%',
+                            min: 0,
+                            max: 100,
+                            interval: 50,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series:[
+                        {
+                            name: '合計',
+                            type: 'bar',
+                            barWidth: '50',
+                            data: this.educationDiagram.educationDiagramHE
+                        },
+                        {
+                            name: '占%',
+                            type: 'line',
+                            barWidth: '50',
+                            yAxisIndex: 1,
+                            data: this.educationDiagram.educationDiagramZH
+                        }
+                    ]
+                };
+                    myChart9.clear();
+                    myChart9.setOption(option9);
+                    window.addEventListener('resize', ()=>{
+                       myChart9.resize();
+                     // 使用刚指定的配置项和数据显示图表。
+                    })
+            },
+    {% endcomment %}
+            seniorityDiagramss(){
+                {#var myChart7 = echarts.init(document.getElementById('seniorityDiagram1'));#}
+                {#myChart7.showLoading() // 在获取数据之前, 显示加载动画#}
+                var option7 = {
+                        color: ['#FFC0CB', '#9370DB', '#87CEFA', '#9ACD32', '#F0E68C', '#778899', '#AFEEEE'],
+                        title: {
+                            text: '在職人員年資分佈圖',
+                            textStyle: {
+                            fontSize:30
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        legend: {
+                            data:this.seniorityDiagram.legendData
+                         },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data:this.seniorityDiagram.seniorityDiagramname,
+                                axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                            type: 'value',
+                            name: '人次',
+                            min: 0,
+                            {#max: 200,#}
+                            interval: 50,
+                            axisLabel: {
+                                formatter: '{value}'
+                             }
+                            }
+                        ],
+                        series: this.seniorityDiagram.seniorityDiagramData,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                  };
+                    this.myChart7.clear();
+                    this.myChart7.setOption(option7);
+                    window.addEventListener('resize', ()=>{
+                       this.myChart7.resize();
+                     // 使用刚指定的配置项和数据显示图表。
+                    })
+                this.myChart7.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+            },
+            titleDiagramss(){
+                {#var myChart3 = echarts.init(document.getElementById('titleDiagramDQADIV'));#}
+                {#myChart3.showLoading() // 在获取数据之前, 显示加载动画#}
+                  var option3 = {
+                        color: ['#FFC0CB', '#9370DB', '#87CEFA', '#9ACD32', '#F0E68C', '#778899', '#AFEEEE'],
+                        title: {
+                            text: '在職人員職稱分佈圖',
+                            textStyle: {
+                            fontSize:30
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        legend: {
+                            data:this.titleDiagram.legendData
+                         },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data:this.titleDiagram.titleDiagramname,
+                                axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                            type: 'value',
+                            name: '人次',
+                            {#min: 10,#}
+                            {#max: 300,#}
+                            interval: 50,
+                            axisLabel: {
+                                formatter: '{value}'
+                             }
+                            }
+                        ],
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        series:this.titleDiagram.titleDiagramData,
+            };
+                    this.myChart3.clear();
+                    this.myChart3.setOption(option3);
+                    window.addEventListener('resize', ()=>{
+                       this.myChart3.resize();
+                     // 使用刚指定的配置项和数据显示图表。
+                    })
+                this.myChart3.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+            },
+            addColor({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 14) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFEEDD'
+                                   }
+                   }
+
+        },
+            addColor2({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 4) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFEEDD'
+                                   }
+                   }
+
+        },
+            addColor3({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 5) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFEEDD'
+                                   }
+                   }
+
+        },
+
+            changeRowColor({row, column, rowIndex, columnIndex}) {
+            if( rowIndex % 2 == 0){
+               return {
+                         background: 'white'
+               }
+            }else{
+               return {
+                         background: '#FFF0F5'
+                         {#background: '#FFFAF0'#}
+               }
+            }
+        },
+            monthDiagram(){
+                let _this = this
+                const list = []
+              const bottom = 80 // 控制线的位置
+              const height = 26
+              for (var i = 0; i < 3; i++) {
+                list.push({
+                  type: 'line',
+                  bottom: bottom - i * height,
+                  right: 50,
+                  {#left: 50,#}
+                  style: {
+                    fill: '#000000',
+                    stroke: '#000000'
+                  },
+                  shape: { // 几条线
+                    x1: 11,
+                    y1: 0,
+                    x2: 2000,
+                    y2: 0
+                  }
+                })
+              }
+
+                var option1 = {
+                    color: ['#FFC0CB', '#9370DB', '#87CEFA', '#9ACD32', '#F0E68C', '#778899', '#AFEEEE'],
+                    title: {
+                        text: '各月份在職統計',
+                        textStyle: {
+                        fontSize:30
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['A31', 'A32', 'C38', '預算', '在職']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '人次（各客戶別）',
+                            min: 0,
+                            {#max: 1000,#}
+                            {#max: Math.ceil(Math.max.apply(null,this.DataCustomer)/5)*5,#}
+                            {#interval: 200,#}
+                            {#interval: Math.ceil(Math.max.apply(null,this.DataCustomer)/5),#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '預算/在職人次',
+                            min: 0,
+                            {#max: Math.ceil(Math.max.apply(null,this.DataRenCi)/5)*5,#}
+                            {#max: 1000,#}
+                            {#interval: Math.ceil(Math.max.apply(null,this.DataRenCi)/5),#}
+                            {#interval: 200,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series:this.monthDiagram1Data,
+                };
+                var option2 = {
+                    color: ['#808080'],
+                    title: [{
+                        text: '各月份離職統計',
+                        textStyle: {
+                        fontSize:30
+                        }
+
+                    },
+                        {
+                        text: '\n人數\n占總%',
+                        bottom: 24, // 控制表格Y轴方向
+                        left: 0,
+                        textStyle: {
+                          color: '#000000',
+                          lineHeight: 26,
+                          fontSize: 16,
+                          fontWeight:'normal',
+                      }
+
+                    }
+                        ],
+
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    grid: {
+                      bottom: 120,
+                      left: '80px',
+                      right: '50px'
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['離職', '離職率%']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                            {#axisLabel: {//坐标轴刻度标签的相关设置。#}
+                            {#        interval: 0,#}
+                            {#        rotate: "45"#}
+                            {#    },#}
+                            axisTick: {
+                                length: 94 // 竖线的长度
+                            },
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    {#rotate: "45"#}
+
+                              formatter(value, index) {
+                                  console.log(value)
+                                var data1 = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+                                {#var data1 = ["助技員", "技術員", "助工師", "工程師", "資工師", "副課長", "襄理"]#}
+                                var data2 = _this.monthDiagram2Data.LIZHI
+                                var data3 = _this.monthDiagram2Data.LIZHILV
+                                {#var data2 = [32, 30, 63, 23, 48, 4, 4]#}
+                                {#  console.log(data2,data3)#}
+                                var indexNum = 0
+                                for (var i = 0; i < data1.length; i++) {
+                                  if (value === data1[i]) {
+                                    indexNum = i
+                                  }
+                                }
+                                return (
+                                  '{table|' +
+                                  value +
+                                  '}\n{table|' +
+                                  data2[indexNum] +
+                                  '}\n{table|'+
+                                  data3[indexNum] +
+                                  '}\n{table|' +
+                                  '}'
+                                )
+                              },
+                              rich: {
+                                table: {
+                                  lineHeight: 30,
+                                  align: 'center',
+                                  fontSize:16
+
+                                }
+                              }
+
+                            },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '離職人次',
+                            min: 0,
+                            {#max: 30,#}
+                            {#interval: 5,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '離職率%',
+                            min: 0,
+                            {#max: 0.3,#}
+                            {#interval: 0.05,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series:[
+                        {
+                            'name': '離職',
+                            'type': 'bar',
+                            'data':this.monthDiagram2Data.LIZHI,
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                        },
+                        {
+                            'name': '離職率%',
+                            'type': 'line',
+                            'yAxisIndex': 1,
+                            'data':this.monthDiagram2Data.LIZHILV,
+                        }
+                    ],
+                    graphic: list
+                };
+                _this.myChart1.clear();
+                _this.myChart2.clear();
+                _this.myChart1.setOption(option1);
+                _this.myChart2.setOption(option2);
+                window.addEventListener('resize', ()=>{
+                   _this.myChart1.resize();
+                   _this.myChart2.resize();
+                 // 使用刚指定的配置项和数据显示图表。
+                })
+                   _this.myChart1.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                   _this.myChart2.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+            }
+
+        }
+    })
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}CQM_search{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+<style>
+.content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+.el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .el-table td.is-right, .el-table th.is-right {
+    white-space: pre-line;
+    text-align: left;
+}
+    .el-table .cell{
+        white-space: pre-line;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+.form-search{
+    outline-style: none ;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 0px;
+    width: 620px;
+    font-size: 20px;
+    font-family: "Microsoft soft";
+}
+input:focus{
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+.labe,.form-search{
+    display: inline-block;
+}
+.labe{
+    width:120px ;
+    font-size: 20px;
+    padding: 5px 0px;
+    color:black;
+    text-align: center;
+}
+.el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+.oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+.el-table .my-cell {
+    vertical-align: top
+  }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="content" id="yincang">spec</div>
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/cqmspec.png">
+    </div>
+  <div id="app">
+  <div class="row" style="white-space: nowrap;">
+                    <div class="col-md-10">
+                    <label style="color: #FFF" for="Customer">Customer</label>
+           <select id="Customer" ref="Customer"  @change="changeCustomer" v-model="selectedCustomer" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectItem" >${ key }</option>
+           </select>
+
+                        　<label style="color: #FFF" for="Project">Project</label>
+           <select id="Project" ref="Project"   v-model="selectedProject" style="height:30px;border-radius:5px 5px 5px 5px;width:90px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectProject">${ item.Project }</option>
+           </select>
+                        <label style="color: #FFF" for="Category">Category</label>
+           <select id="Category" ref="Category"   v-model="selectedCategory" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectCategory" >${ item.Category }</option>
+           </select>
+
+            <el-row class="demo-autocomplete">
+              <el-col :span="12">
+                <label for="Compal_R1_PN" style="color: #fff;">Compal_R1_PN</label>
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="selectedCompal_R1_PN"
+                  ref="Compal_R1_PN"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入Compal_R1_PN"
+                  :trigger-on-focus="false"
+                  @select="handleSelect"
+                ></el-autocomplete>
+              </el-col>
+              <el-col :span="12">
+                <label for="Compal_R3_PN" style="color: #fff;">Compal_R3_PN</label>
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="selectedCompal_R3_PN"
+                  ref="Compal_R3_PN"
+                  :fetch-suggestions="querySearch2"
+                  placeholder="请输入Compal_R3_PN"
+                  :trigger-on-focus="false"
+                  @select="handleSelect2"
+                ></el-autocomplete>
+              </el-col>
+            </el-row>
+                    <label for="Compal_R1_PN" style="color: #fff;">Compal_R1_PN</label>
+           <select id="Compal_R1_PN" ref="Compal_R1_PN"   v-model="selectedCompal_R1_PN" style="height:30px;width:120px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectCompal_R1_PN" >${ item }</option>
+           </select>
+
+                    <label for="Compal_R3_PN" style="color: #fff;">Compal_R3_PN</label>
+           <select id="Customer" ref="Compal_R3_PN"   v-model="selectedCompal_R3_PN" style="height:30px;width:120px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectCompal_R3_PN" >${ item }</option>
+           </select>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="selectMsg">Search</el-button>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" @click="exportExcel" type="info" >Export</el-button>
+                    </div>
+      </div>
+{#     <div class="labe" style="border-radius: 3px;background-color:grey">模糊搜索</div> <input type="text" v-model="search" class="form-search" placeholder="Search...">#}
+     <hr/>
+  <template >
+      <el-input type="text" v-model="search"  placeholder="Search..."></el-input>
+      <el-table  id="out-table" border stripe height="700" @sort-change='sortChange' :default-sort = "{prop: 'Compal_R1_PN', order: 'ascending'}" :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)" :cell-style="addClass" style="width: 100%">
+          <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+          <el-table-column prop="Project" label="Project" align="center" width="90" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Material_Group" label="Category" align="center" width="102" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Keyparts" label="*Keyparts (Option items)" align="center" width="193" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Character" label="Parameter (Option items)" align="center" width="193" sortable='custom'></el-table-column>
+          <el-table-column prop="Phase" label="Phase" align="center" width="100" sortable='custom'></el-table-column>
+          <el-table-column prop="Supplier" label="Supplier" align="center" width="88" sortable='custom'></el-table-column>
+          <el-table-column prop="Compal_R1_PN" label="Compal_R1_PN" align="center" width="140" sortable='custom'></el-table-column>
+          <el-table-column  label="DQA test result" align="center">
+          <el-table-column prop="Testresult" label="Test result" align="center" width="110" sortable='custom'>
+              <template slot-scope="scope">
+                  <el-tooltip v-if="scope.row.Comments" class="item" effect="dark" placement="top">
+                            <div v-html="ToBreak(scope.row.Comments)" slot="content"></div>
+                            <div class="oneLine">${ scope.row.Testresult }</div>
+                        </el-tooltip>
+                   <span v-else="scope.row.Comments">${ scope.row.Testresult }</span>
+              </template>
+          </el-table-column>
+          <el-table-column prop="Reliability" label="Reliability" align="center" width="110" sortable='custom'></el-table-column>
+          <el-table-column prop="Compatibility" label="Compatibility" align="center" width="130" sortable='custom'></el-table-column>
+          </el-table-column>
+          <el-table-column  label="RD test result" align="center">
+          <el-table-column prop="ESD" label="ESD" align="center" width="70" sortable='custom'></el-table-column>
+          <el-table-column prop="EMI" label="EMI" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="RF" label="RF" align="center" width="60" sortable='custom'></el-table-column>
+          </el-table-column>
+          <el-table-column prop="PMsummary" label="*PM summary RD test result" align="center" width="200" sortable='custom'></el-table-column>
+          <el-table-column  label="JQE test result" align="center">
+          <el-table-column prop="Controlrun" label="Control run" align="center" width="120" sortable='custom'></el-table-column>
+          </el-table-column>
+          <el-table-column prop="PID" label="*PID (Option items)" align="center" width="160" sortable='custom'></el-table-column>
+          <el-table-column prop="VID" label="*VID (Option items)" align="center" width="160" sortable='custom'></el-table-column>
+          <el-table-column prop="HW" label="*HW (Option items)" align="center" width="160" sortable='custom'></el-table-column>
+          <el-table-column prop="FW" label="*FW (Option items)" align="center" width="160" sortable='custom'></el-table-column>
+
+          <el-table-column prop="R1_PN_Description" label="Model Name" align="center" width="300" sortable='custom'></el-table-column>
+
+          <el-table-column prop="Compal_R3_PN" label="Compal_R3_PN" align="center" width="140" sortable='custom'></el-table-column>
+
+          <el-table-column prop="Comments" label="Comments" align="left" width="400" sortable='custom'>
+              <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" placement="top">
+                            <div v-html="ToBreak(scope.row.Comments)" slot="content"></div>
+                            <div class="oneLine">${ scope.row.Comments }</div>
+                        </el-tooltip>
+
+              </template>
+          </el-table-column>
+          <el-table-column label="操作" width="120" align="center" fixed="right">
+              <template slot-scope="scope">
+                <el-button type="text" size="small"     @click.native="historyRow(scope.$index, scope.row);dialogTableVisible = true">历史</el-button>
+                  </template>
+          </el-table-column>
+          </el-table>
+      <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+    </el-pagination>
+  </div>
+      </template>
+<el-dialog :title="'ChangeId:'+changeindex" :visible.sync="dialogTableVisible">
+   <el-table border height="500" :data="historyRecord " :default-sort="{prop:'changeTime', order:'descending'}">
+    <el-table-column property="oldContent" label="oldContent" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="newContent" label="newContent" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="changeOwner" label="changeOwner" min-width="150" sortable></el-table-column>
+    <el-table-column property="changeTime" label="changeTime" left min-width="150" sortable></el-table-column>
+   </el-table>
+</el-dialog>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+    new Vue({
+    el:'#app',
+    delimiters: ['${', '}'],
+    data: function () {
+            return {
+                visible: false,
+                tableContent: [],
+                historyRecord:[],
+                selectedCustomer:null,
+                selectedProject:null,
+                selectedCategory:null,
+                selectedCompal_R1_PN:'',
+                selectedCompal_R3_PN:'',
+                selectItem:[],
+                selectProject:[],
+                selectCategory:[],
+                selectCompal_R1_PN:[],
+                selectCompal_R3_PN:[],
+                selectId:null,
+                result:{},
+                choose:false,
+                currentPage: 1,//默认显示第一页
+                pageSize:100,//默认每页显示100条
+                totalNum: null,
+                tableData: [], // 数据列表
+                currpage: 1, //当前页码
+                proptype: "" ,//存放column.prop的字符串值
+                dialogTableVisible: false,
+                search:'',
+                changeindex:null,
+                Totalsize:null,
+            }
+        },
+    mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+            this.selectedCompal_R1_PN = this.loadAll();
+            this.selectedCompal_R3_PN = this.loadAll();
+        },
+        methods: {
+        //edwin:可筛选输入框
+            querySearch(queryString, cb) {
+            var selectCompal_R1_PN = this.selectCompal_R1_PN;
+            //console.log(queryString,'p1');
+            console.log(this.selectCompal_R1_PN,'p1');
+            var results = queryString ? selectCompal_R1_PN.filter(this.createFilter(queryString)) : selectCompal_R1_PN;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+          },
+          createFilter(queryString) {
+                //console.log(queryString,'p2');
+
+            return (restaurant) => {
+                //console.log(restaurant);
+              return (
+                  //console.log(restaurant),
+                  restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+            querySearch2(queryString, cb) {
+            var selectCompal_R3_PN = this.selectCompal_R3_PN;
+            var results = queryString ? selectCompal_R3_PN.filter(this.createFilter2(queryString)) : selectCompal_R3_PN;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+          },
+          createFilter2(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+
+            handleSelect(item) {
+                console.log(item);
+              },
+            handleSelect2(item) {
+                console.log(item);
+              },
+            sortChange: function(column){
+                console.log(column.prop,column.order,column,"order")
+            this.currentPage = 1 // return to the first page after sorting
+                if (column.prop === 'Project') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Material_Group') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Keyparts') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Character') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'PID') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'VID') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'HW') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'FW') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Supplier') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'R1_PN_Description') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Compal_R1_PN') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Compal_R3_PN') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Phase') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Reliability') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Compatibility') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Testresult') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'ESD') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'EMI') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'RF') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'PMsummary') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Controlrun') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Comments') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }
+                else{
+                    this.dataList = this.tableContent.sort(this.sortFun("Compal_R1_PN", column.order === 'ascending'));
+                    console.log(this.dataList,"Compal_R1_PN");
+                }
+
+                    this.showed_data = this.tableContent.slice(0, this.pageSize) // 排序完显示到第一页
+                    console.log('Finished');
+                    console.log(this.showed_data);
+
+        },
+            //排序方法
+           sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+           handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+      },
+           handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+          this.currentPage = val;
+          console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+      },
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/CQM/CQM_search/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent = res.data.content;
+                    this.selectItem = res.data.select;
+{#                    this.selectCategory = res.data.selectCategory;#}
+                    this.selectCompal_R1_PN=res.data.selectCompal_R1_PN;
+                    console.log(this.selectCompal_R1_PN)
+                    this.selectCompal_R3_PN=res.data.selectCompal_R3_PN;
+                    this.totalNum=this.tableContent.length;
+
+                });
+            },
+            indexMethod(index) {
+                    return index +1;
+            },
+            //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+               let Customer = this.$refs.Customer.value;
+               let Project = this.$refs.Project.value;
+                 let Category = this.$refs.Category.value;
+                 console.log(this.selectedCompal_R1_PN);
+                 console.log(this.$refs.Compal_R1_PN.value);
+               let Compal_R1_PN = this.$refs.Compal_R1_PN.value;
+                let Compal_R3_PN = this.$refs.Compal_R3_PN.value;
+               let data ={"isGetData":"SEARCH","Customer":Customer,"Project":Project,"Category":Category,"Compal_R1_PN":Compal_R1_PN,"Compal_R3_PN":Compal_R3_PN,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/CQM/CQM_search/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.tableContent=res.data.content.sort(this.sortFun("Compal_R1_PN",  'ascending'));//用sort-change方法对分页后台排序时，默认排序列
+                  this.selectItem=res.data.select;
+{#                  this.selectCategory = res.data.selectCategory;#}
+                    this.selectCompal_R1_PN=res.data.selectCompal_R1_PN;
+                    this.selectCompal_R3_PN=res.data.selectCompal_R3_PN;
+                  this.totalNum=this.tableContent.length;
+                })
+             },
+            historyRow(index,row){
+             let data = {"isGetData": "history", "id":this.tableContent[index]['id'],"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                };
+                axios.post("/CQM/CQM_search/", data, {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                     this.historyRecord = res.data.history;
+                      this.changeindex= index+1;
+                });
+        },
+            //级联
+             changeCustomer:function () {
+                 if(this.$refs.Customer.value ==""){
+                      this.selectProject=[""];
+                      this.selectCategory=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.Customer.value];
+                 this.selectCategory = this.selectItem[this.$refs.Customer.value];
+                 this.selectedProject="";
+                this.selectedCategory="";
+                 console.log(this.selectProject,this.selectCategory);
+             },
+            //導出表格
+      exportExcel:function (){
+/* 从表生成工作簿对象 */
+        console.log(document.querySelector("#out-table"));
+            //customer和project和phase未填
+         if(this.showCustomer === ''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+         if(this.showProject === ''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+         if(this.showPhase === ''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+         let temp=[];
+         temp.push(Number(this.currentPage));
+         temp.push(Number(this.pageSize));
+         console.log(temp)
+         this.currentPage=1;
+         this.pageSize=this.tableContent.length;
+         console.log(temp,this.defaultPage1,this.pageSize);
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[0].colSpan = 1;
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[1].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[2].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[1].getElementsByTagName('tr')[0].getElementsByTagName('td')[1].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[1].getElementsByTagName('tr')[0].getElementsByTagName('td')[2].display ="table-row";
+         setTimeout(() => { let table = document.querySelector("#out-table").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"))
+         table.removeChild(table.querySelector(".el-table__fixed-right"))//左右都有固定列
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        console.log("wb",wb);
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        console.log("wbout",wbout);
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        this.currentPage=temp[0];
+            this.pageSize=temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+            //console.log(this.currentPage,this.pageSize)
+            temp=[];
+        return wbout;},1000) ;
+        },
+      test:function (row) {
+          console.log("trt");
+      },
+        addClass({row, column, rowIndex, columnIndex}) {
+              console.log('addcolor',rowIndex, columnIndex)
+              if (columnIndex === 8 && (row.Reliability === 'Qd'|| row.Reliability === 'Qd_C' || row.Reliability === 'Qd_L' || row.Reliability === 'Qd-C' || row.Reliability === 'Qd-L')) {
+                  console.log("lie",row)
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+              if (columnIndex === 9 && (row.Compatibility === 'Qd' || row.Compatibility === 'Qd_C' || row.Compatibility === 'Qd_L' || row.Compatibility === 'Qd-C' || row.Compatibility === 'Qd-L')) {
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+              if (columnIndex === 8 && (row.Testresult === 'Qd' || row.Testresult === 'Qd_C' || row.Testresult === 'Qd_L' || row.Testresult === 'Qd-C' || row.Testresult === 'Qd-L')) {
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+
+{#              if (columnIndex === 13 && row.Reliability === 'T') {#}
+{#                  return {#}
+{#                      background: '#FFFF00'#}
+{#                  }#}
+{#              }#}
+{#              if (columnIndex === 14 && row.Compatibility === 'T') {#}
+{#                  return {#}
+{#                      background: '#FFFF00'#}
+{#                  }#}
+{#              }#}
+{#              if (columnIndex === 15 && row.Testresult === 'T') {#}
+{#                  return {#}
+{#                      background: '#FFFF00'#}
+{#                  }#}
+{#              }#}
+
+
+              if (columnIndex === 8 && (row.Reliability === 'F' || row.Reliability === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+              if (columnIndex === 9 && (row.Compatibility === 'F' || row.Compatibility === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+              if (columnIndex === 8 && (row.Testresult === 'F' || row.Testresult === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+
+
+              if (columnIndex === 8 && row.Reliability === 'Drpd') {
+                  return {
+                      background: '#696969'
+                  }
+              }
+              if (columnIndex === 9 && row.Compatibility === 'Drpd' ) {
+                  return {
+                      background: '#696969'
+                  }
+              }
+              if (columnIndex === 8 && row.Testresult === 'Drpd' ) {
+                  return {
+                      background: '#696969'
+                  }
+              }
+          },
+        ToBreak (val) {
+
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        }
+        },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    console.log(this.Totalsize);
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                    console.log("watch",this.showed_data)
+                }
+            },
+})
+</script>
+{% endblock %}
+{% endcomment %}
+
+

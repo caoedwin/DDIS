@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}人员履历-我的签核{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+
+/* 解决el-table 表线不齐 */
+.el-table th.gutter {
+  display: table-cell !important;
+}
+
+
+.showNum{
+font-size: 20px;
+font-weight: bold;
+color: white;
+}
+.el-tabs__item{
+color:white;
+}
+
+ .el-pagination__total,.el-pagination__jump{
+    color:white;
+}
+
+#sh {
+        font-size:18px;
+        font-family:微软雅黑;
+        border: 2px solid #9f9ca1;
+}
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="111" style="margin-bottom:20px;">
+      <span class="showNum" style="margin-left: 30px">已選 <span id="selectNum">0</span> 條</span>
+    <el-button type="primary" plain @click="Approve()" size="medium" style="margin-left: 50px">同意</el-button>
+    <el-button type="danger" plain @click="Refuse()" size="medium" style="margin-left: 50px">拒絕</el-button>
+</div>
+
+
+<template>
+<el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input><br>
+<el-table height="700" ref="multipleTable" border stripe
+          @selection-change="handleSelectionChange" :row-key="getRowKeys"
+          :data="datas.slice((currentPage-1)*pageSize,(currentPage)*pageSize)"
+          :header-cell-style="{
+                           'background-color':'#fafafa',
+                           'font-weight':'800',
+                           'border-bottom':'1px solid rgb(103, 194, 58)'}">
+        <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+        <el-table-column type="index" label="No." :index="indexMethod" align="center"></el-table-column>
+{#        <el-table-column  prop="Proposer_Name" label="待簽核人" align="center"></el-table-column>#}
+{#        <el-table-column  prop="Status" label="狀態" align="center"></el-table-column>#}
+        <el-table-column  prop="Department_Code" label="課別" align="center"></el-table-column>
+        <el-table-column  prop="Proposer_Num" label="工號" align="center"></el-table-column>
+        <el-table-column  prop="Proposer_Name" label="姓名(中)" align="center"></el-table-column>
+        <el-table-column  prop="Position_Now" label="職稱" align="center"></el-table-column>
+        <el-table-column  prop="Project" label="Project" align="center"></el-table-column>
+        <el-table-column  prop="SS_Date" label="SS時間" align="center"></el-table-column>
+        <el-table-column  prop="Year" label="年份" align="center"></el-table-column>
+        <el-table-column  prop="Time_Interval" label="時間區間" align="center"></el-table-column>
+        <el-table-column  prop="Phase" label="Phase" align="center"></el-table-column>
+        <el-table-column  prop="Role" label="Role" align="center"></el-table-column>
+        <el-table-column  prop="Function" label="Function" align="center"></el-table-column>
+        <el-table-column  prop="SubFunction_Com" label="Sub Function-Compatibility" align="center"></el-table-column>
+        <el-table-column  prop="KeypartNum" label="Keypart數量" align="center"></el-table-column>
+        <el-table-column  prop="Comments" label="Comments" align="center"></el-table-column>
+</el-table>
+<br/>
+<div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+    </el-pagination>
+</div>
+</template>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+
+            search:'',
+            tableContent:[],
+            sectionSubFun: [],
+            multipleSelection: [],
+            currentPage: 1,//默认显示第一页
+            pageSize:100,//默认每页显示100条
+            totalNum: null,
+            CanShow: 1,
+            num: 0,
+            flag: 0,
+            ssdate: '',
+            editID:'',
+
+
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalExperience/My-approve/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent=res.data.EXPtable;
+                    this.totalNum=this.tableContent.length;
+
+                });
+            },
+
+            handleSizeChange(val) {
+                  this.pageSize = val;
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+            },
+
+
+            handleSelectionChange(rows) {
+                this.multipleSelection = rows;
+                let len=document.getElementById("selectNum")
+                len.innerHTML=this.multipleSelection.length;
+            },
+
+            Approve() {
+                 if(this.multipleSelection.length===0){
+                    alert('未勾选数据！')
+                  }else{
+                      this.$confirm('是否同意所勾選的數據?', '提示', {
+                              confirmButtonText: '確定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                      }).then(() => {
+                             let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                             let params = [];
+                             let self = this;
+                             checkArr.forEach(function (item) {
+                                 params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                             });
+                             let data ={"isGetData":"ApporveData","ApporveId":params,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                             axios.post("/PersonalExperience/My-approve/",data).then((res) => {
+                                        this.tableContent=res.data.EXPtable;
+                                        this.totalNum=this.tableContent.length;
+                                    })
+                                    this.$refs.multipleTable.clearSelection()
+                             this.$message({
+                             type: 'success',
+                             message: '操作成功!'
+                             });
+                      }).catch(() => {
+                            this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                            });
+                      });
+               }
+            },
+
+
+            Refuse(){
+                 if(this.multipleSelection.length===0){
+                    alert('未勾选数据！')
+                  }else{
+                      this.$confirm('是否拒絕所勾選的數據?', '提示', {
+                              confirmButtonText: '確定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                      }).then(() => {
+                             let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                             let params = [];
+                             let self = this;
+                             checkArr.forEach(function (item) {
+                                 params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                             });
+                             let data ={"isGetData":"RefuseData","RefuseId":params,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                             axios.post("/PersonalExperience/My-approve/",data).then((res) => {
+                                        this.tableContent=res.data.EXPtable;
+                                        this.totalNum=this.tableContent.length;
+                                    })
+                                    this.$refs.multipleTable.clearSelection()
+                             this.$message({
+                             type: 'success',
+                             message: '操作成功!'
+                             });
+                      }).catch(() => {
+                            this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                            });
+                      });
+               }
+            },
+
+
+            indexMethod(index) {
+                return index + 1;
+            },
+
+            getRowKeys (row) {
+              return row.id;
+            },
+
+        },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+    })
+    </script>
+
+{% endblock %}
+
+
+
+
+

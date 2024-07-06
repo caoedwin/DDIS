@@ -1,0 +1,506 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_upload{% endblock %}
+{% block css %}
+
+
+    <!-- Styles -->
+    <link href="/static/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/lib/themify-icons.css" rel="stylesheet">
+    <link href="/static/css/lib/data-table/buttons.bootstrap.min.css" rel="stylesheet" />
+    <link href="/static/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="/static/css/lib/helper.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet" />
+    <link href="/static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <style>
+	.menu { padding:0; margin:0; list-style-type:none;}
+	.menu li {background:#343957; margin-right:1px; float:left; color:#fff; }
+	.menu li a { display:block; width:80px; text-align:center; height:32px; line-height:32px; color:#fff; font-size:13px; text-decoration:none;}
+
+	.cur{ background:#D96C00; font-weight:bold;}
+    </style>
+    <style>
+    .pass{
+        background-color:rgba(0,255,0,0.9);
+        {#background: #00FF00;#}
+        color:#000;
+    }
+    .fail{
+        {#background: #fff;#}
+        background-color:rgba(255,255,255,0.9);
+        color:red;
+    }
+    </style>
+{% endblock %}
+{% block style %}
+
+{% endblock %}
+{% block content %}
+
+   {% comment %} <div class="row">
+        <div class="col-lg-6">
+          <ul class="menu" id="menu">
+            <li><a href="{% url "CDM:CDM_upload"%}">Add</a></li>
+            <li><a href="{% url "CDM:CDM_edit"%}">Edit</a></li>
+            <li><a href="{% url "CDM:CDM_search"%}">Search</a></li>
+          </ul>
+        </div>
+    </div>{% endcomment %}
+        <div style="text-align:right">
+          <img src="/static/src/CDM_Spec.jpg" height="122" width="426" alt="" />
+        </div>
+
+
+
+    <div class="row" style="background-color:rgba(255,255,255,0)">
+        <div class="col-lg-12">
+            <form id='units' method="POST">
+                    {% csrf_token %}
+              <div class="input-group-sm">
+                  <div class="row">
+                    <div class="col-lg-2">
+                          <span style="color:#FFF">Customer</span>
+                            <div class="form-group">
+                            <select  class="form-control-sm" id="Customer" name="Customer" style="width: 120px">
+                                            <option value=""></option>
+                                            {% for line in Customer_list %}
+                                                <option value={{line.Customer}}>{{line.Customer}}</option>
+                                            {% endfor %}
+                                          </select>
+                            </div>
+                    </div>
+                    <div class="col-lg-2">
+                        　　<span style="color:#FFF;float: left">Project</span>
+                            <div class="form-group">
+                            <select  class="form-control-sm" id="Project" name="Project" style="width: 120px">
+                                            <option value=""></option>
+                                            {% for line in project_list %}
+                                                <option value={{line.Project}}>{{line.Project}}</option>
+                                            {% endfor %}
+                                          </select>
+                            </div>
+                    </div>
+                    <div class="col-lg-2">
+                        　　<span style="color:#FFF;float: left">SKU_NO</span>
+                            <div class="form-group">
+                            <select  class="form-control-sm" id="SKU_NO" name="SKU_NO" style="width: 120px">
+                                            <option value=""></option>
+                                            {% for line in SKU_NO_list %}
+                                                <option value={{line.SKU_NO}}>{{line.SKU_NO}}</option>
+                                            {% endfor %}
+                                          </select>
+                            </div>
+                    </div>
+                    <div class="col-lg-2">
+                        　　<span style="color:#FFF;float: left">C cover</span>
+                            <div class="form-group">
+                            <select  class="form-control-sm" id="C_cover_Material" name="C_cover_Material" style="width: 120px">
+                                            <option value=""></option>
+                                            {% for line in C_cover_Material_list %}
+                                                <option value={{line.C_cover_Material}}>{{line.C_cover_Material}}</option>
+                                            {% endfor %}
+                                          </select>
+                            </div>
+                    </div>
+                    <div class="col-lg-2">
+                        　　<span style="color:#FFF;float: left">D cover</span>
+                            <div class="form-group">
+                            <select  class="form-control-sm" id="D_cover_Material" name="D_cover_Material" style="width: 120px">
+                                            <option value=""></option>
+                                            {% for line in D_cover_Material_list %}
+                                                <option value={{line.D_cover_Material}}>{{line.D_cover_Material}}</option>
+                                            {% endfor %}
+                                          </select>
+                            </div>
+                    </div>
+                    <div class="col-lg-2 {% comment %}offset-lg-2{% endcomment %}">
+                        <span style="color:#FFF;visibility: hidden">Material</span>
+                            <div class="form-group">
+                               <button type="submit"  style="font-weight: bolder;color: #0c0c0c"  name="Search">Search{% comment %}<img src="/static/src/upload.jpg" height="25" width="40">{% endcomment %}</button>
+                             </center>
+                              {% csrf_token %}
+                            </div>
+                    </div>
+
+                  </div>
+              </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <section id="main-content">
+                    <div class="card-header" style="color:#FFF">
+{#                        <i class="fas fa-table"></i>#}
+                    </div>
+
+                        <div class="card-body" style="background-color:rgba(255,255,255,0.2)">
+                            <div class="table-responsive" style="max-height: 500px;color:#FFF;">
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="color:#FFF">
+                                            <thead>
+                                                <tr>
+                                                    <th style="color:#FFF">id</th>
+                                                    <th style="color:#FFF">Customer</th>
+                                                    <th style="color:#FFF">Project</th>
+                                                    <th style="color:#FFF">SKU</th>
+                                                    <th style="color:#FFF">C_cover</th>
+                                                    <th style="color:#FFF">D_cover</th>
+                                                    <th style="color:#FFF">L1</th>
+                                                    <th style="color:#FFF">L2</th>
+                                                    <th style="color:#FFF">L3</th>
+                                                    <th style="color:#FFF">L4</th>
+                                                    <th style="color:#FFF">L5</th>
+                                                    <th style="color:#FFF">L6</th>
+                                                    <th style="color:#FFF">L7</th>
+                                                    <th style="color:#FFF">Ave</th>
+                                                    <th style="color:#FFF">Conclusion</th>
+                                                    <th style="color:#FFF">SS_Data</th>
+                                                    {% comment %}<th style="color:#FFF">Latest editor</th>
+                                                    <th style="color:#FFF">Latest edit_time</th>{% endcomment %}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for line in CDM_list %}
+                                                    <tr id={{ line.id }}>
+                                                        <td style="color:#FFF">{{ line.id }}</td>
+                                                        <td style="color:#FFF">{{ line.Customer }}</td>
+                                                        <td style="color:#FFF">{{ line.Project }}</td>
+                                                        <td style="color:#FFF">{{ line.SKU_NO }}</td>
+                                                        <td style="color:#FFF">{{ line.C_cover_Material }}</td>
+                                                        <td style="color:#FFF">{{ line.D_cover_Material }}</td>
+                                                        {% if  line.Point1 < 2 %}<td class="pass">{{ line.Point1 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point1 }}</td>{% endif %}
+                                                        {% if  line.Point2 < 2 %}<td class="pass">{{ line.Point2 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point2 }}</td>{% endif %}
+                                                        {% if  line.Point3 < 2 %}<td class="pass">{{ line.Point3 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point3 }}</td>{% endif %}
+                                                        {% if  line.Point4 < 2 %}<td class="pass">{{ line.Point4 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point4 }}</td>{% endif %}
+                                                        {% if  line.Point5 < 2 %}<td class="pass">{{ line.Point5 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point5 }}</td>{% endif %}
+                                                        {% if  line.Point6 < 2 %}<td class="pass">{{ line.Point6 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point6 }}</td>{% endif %}
+                                                        {% if  line.Point7 < 2 %}<td class="pass">{{ line.Point7 }}</td>
+                                                        {% else %}<td class="fail">{{ line.Point7 }}</td>{% endif %}
+                                                        {% if  line.Ave < 2 %}<td class="pass">{{ line.Ave }}</td>
+                                                        {% else %}<td class="fail">{{ line.Ave }}</td>{% endif %}
+                                                        <td style="color:#FFF">{{ line.Conclusion }}</td>
+                                                        <td style="color:#FFF">{{ line.SS_Data }}</td>
+                                                      {% comment %}  <td style="color:#FFF">{{ line.editor }}</td>
+                                                        <td style="color:#FFF">{{ line.edit_time }}</td>{% endcomment %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+{#                                </div>#}
+{#                            </div>#}
+                            <!-- /# card -->
+                        </div>
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+                </section>
+{% endblock %}
+
+{% block scripts %}
+{#    <script src="/static/js/lib/jquery.min.js"></script>#}
+{#    <script src="/static/js/lib/jquery.nanoscroller.min.js"></script>#}
+{#    <!-- nano scroller -->#}
+{#    <script src="/static/js/lib/menubar/sidebar.js"></script>#}
+{#    <script src="/static/js/lib/preloader/pace.min.js"></script>#}
+{#    <!-- sidebar -->#}
+{##}
+{#    <!-- bootstrap -->#}
+{##}
+{#    <script src="/static/js/lib/bootstrap.min.js"></script><script src="/static/js/scripts.js"></script>#}
+    <!-- scripit init-->
+{#    <script src="/static/js/lib/data-table/datatables.min.js"></script>#}
+{#    <script src="/static/js/lib/data-table/buttons.dataTables.min.js"></script>#}
+    <script src="/static/js/lib/data-table/dataTables.buttons.min.js"></script>
+    <script src="/static/js/lib/data-table/buttons.flash.min.js"></script>
+    <script src="/static/js/lib/data-table/jszip.min.js"></script>
+    <script src="/static/js/lib/data-table/pdfmake.min.js"></script>
+    <script src="/static/js/lib/data-table/vfs_fonts.js"></script>
+    <script src="/static/js/lib/data-table/buttons.html5.min.js"></script>
+    <script src="/static/js/lib/data-table/buttons.print.min.js"></script>
+    <script src="/static/js/lib/data-table/datatables-init.js"></script>
+    <script src="/static/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="/static/js/demo/datatables-demo.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <script src="/static/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script src="/static/js/CDMsearch.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script type="text/babel">
+
+    new Vue({
+
+       el:"#app",
+       delimiters: ['${', '}'],
+       data() {
+         return{
+                //error:false,
+                others:{},
+                projectdefault:null,
+                result:{},
+                selectProject:[],
+                selectedCustomer:null,
+                selectItem:{},
+                choose:false,//关闭页面的值
+                tableContent:null,//搜索页面表格中显示的数据来源
+                tempdata:[],
+                titleName:[],
+                tempdataName:{"isGetData":'edit0'},//编辑页面表格中显示的数据来源
+                selectId:null,
+                test:"",
+                //验证的style的标志:用于判断哪个输入框出现验证错误
+                verify:{
+                    input_c_cover:false,
+                    input_d_cover:false,
+                    input_hinge_s:false,
+                    input_P_F:false,
+                    input_P_L:false,
+                    input_P_R:false,
+                    input_D_L:false,
+                    input_D_R:false,
+                },
+               //这个对象是为输入框划分等级，1：代表不能为空 2：代表必须为小数或正整数 3：未来会增加日期格式
+                inputId:{
+                    c_cover:1,
+                    d_cover:1,
+                    input_hinge_s:1,
+                    P_F:2,
+                    P_L:2,
+                    P_R:2,
+                    D_L:2,
+                    D_R:2,
+                }
+
+            }
+
+
+       },
+       mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");//此时会上传一个"first"的字符串，用来区分接下来的edit操作
+              },
+       methods:{
+             //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+             getdata:function(e){
+                let data = {"isGetData":e};
+                axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(data), {
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    console.log(res.data.content);//上传成功的操作
+                    this.dataTableDestroy();
+                    this.tableContent=res.data.content;// 将返回的数据传递给data内的tableContent
+                    this.selectItem=res.data.select;
+                    this.others=res.data.others;
+                    this.dataTableInit();
+                });
+
+            },
+             //为编辑按钮设置ID
+             makeNo:function(e){
+             return "td" + e ;
+            },
+             //点击编辑按钮，弹出修改界面
+             edit:function(e,id){
+              //console.log(e.currentTarget.id);
+              var hasTabId = e.currentTarget.id;  //获取触发点击事件的元素ID(这里指页面表格显示的临时ID，并非获取数据的真实ID)
+              var chooseTr= document.getElementById(hasTabId).parentNode.id ; //获取触发点击事件的父级元素的ID(此ID同上)
+              var tr = document.getElementById(chooseTr);
+              //生成title数组:
+              //由于无法获取对象的key,所以动态生成一个title的数组
+              for(var key in this.tableContent[0]){
+                 if(key!="id"){
+                     this.titleName.push(key);
+                 }
+              }
+             //生成一个临时数组用于存放节点内容，即表格中的每一项数据；
+              var tab=[];
+              for(var i= 1;i<=tr.childNodes.length-1;i++ ) {
+               // 遍历子节点会出现空节点，为此需要删除无效节点
+               if(tr.childNodes[i].nodeType==1){
+                //console.log(tr.childNodes[i].innerHTML);
+                tab.push(tr.childNodes[i].innerHTML); //生成修改选项的所有值的数组
+
+                }
+              }
+              for(var i = 0; i< tab.length;i++){
+                this.tempdataName[this.titleName[i]]=tab[i];
+               }
+              tab.push(chooseTr.slice(4));
+              this.tempdataName['index']=chooseTr.slice(4);
+              this.tempdataName['id']=id;
+              this.tempdata=tab;
+              this.selectId=id;
+              //console.log(this.tempdata);
+              this.choose= true; //最后打开修改界面
+            },
+             //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+               let customer = this.$refs.customer.value;
+               let project = this.$refs.project.value;
+               let c_cover = this.$refs.c_cover.value;
+               let d_cover = this.$refs.d_cover.value;
+               let hinge_s = this.$refs.hinge_s.value;
+               let torque = this.$refs.torque.value;
+               let p_f = this.$refs.p_f.value;
+               let data ={"customer":customer,"project":project,"c_cover":c_cover,"d_cover":d_cover,"hinge_s":hinge_s,"torque":torque,"p_f":p_f};
+               axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.dataTableDestroy();
+                  this.tableContent=res.data.content;//更改tableContent的值，由于双向绑定，页面表格显示的值也会随之更新
+                  this.dataTableInit();
+                })
+             },
+             //生成tr的ID
+             editNo:function(index){
+               return "row_" + index ;
+              },
+              //关闭修改界面
+             close:function(){
+                this.choose = false; //关闭修改窗口
+                for (let item in this.verify){
+                   this.$set(this.verify,item,false); //将判断输入框的是否发生验证错误的值恢复为默认false
+                }
+
+             },
+             //修改界面的提交按钮事件：
+             //1. 首先上传提交修改内容 ；
+             edit_submit:function(){
+
+               //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+               //console.log(this.tempdataName);
+                //检查是否出现重复
+                 let num=1;
+                 //console.log(this.selectId);
+                 //判断是否有输入框发生验证错误，有则返回false，没有则继续验证
+                 for(var items in this.verify ){
+                     //console.log(items);
+                     if (this.verify[items]){
+                         return false;
+                     }
+                 }
+                 //验证编辑内容是否发生改变，没有则停止上传，否则将编辑内容上传
+                 for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ) {
+                    //console.log(Object.values(this.tableContent)[this.tempdataName['index']][item]);
+                    //console.log(this.tempdataName[item]);
+                    if(Object.values(this.tableContent)[this.tempdataName['index']][item]!=this.tempdataName[item]){
+                        break;
+                    }else{
+                        num++;
+                        //console.log((Object.keys(this.tempdataName)).length);
+                        if(num ==  (Object.keys(this.tempdataName)).length){
+
+                            alert("数据未发生改变");
+                            return false;
+                        }
+
+                    }
+                 }
+
+                 axios.post("/Bouncing/Bouncing-edit/",Qs.stringify(this.tempdataName), {
+                  headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                   }).then((res) => {
+                    console.log("已修改");
+                    this.getdata("edit");
+                    //2.再将修改后的内容在表格上显示出来
+                    // for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ){
+                    //    // Object.values(this.tableContent)[this.tempdataName['index']][item]=this.tempdataName[item];
+                    // }
+                    this.choose= false;//关闭页面
+                })
+
+             },
+             //表单验证函数
+             write:function (event) {
+                //console.log(event.currentTarget.id);
+                let err_msg=document.getElementById(event.currentTarget.id+"_error"); //获取输入框后的error提示框的ID
+                err_msg.innerHTML="";//将error提示框的初始值设置为空，否则会不断添加内容，不会清除
+                var num =/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;//验证输入是否为小数或正整数的正则表达式规则
+                //console.log(event.currentTarget.value);
+                //console.log(num.test(event.currentTarget.value));
+                //验证一：是否为空（因为所有输入值都不能为空，所以判断放在第一位，即所有验证值都要经历此项判断）
+                if(event.currentTarget.value.length ==0){
+                    //console.log(event);
+                    //var temp = 'input_' + event.currentTarget.id ;
+                    //console.log(event.currentTarget.id);
+                   // console.log("11",this.verify["input_"+event.currentTarget.id]);
+                    //let err_msg=document.getElementById(event.currentTarget.id);
+                    err_msg.innerHTML="輸入不可為空";
+                    this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                    return false;
+                }
+                //验证一：是否为空（在data的inputId中定义为2）
+                if(this.inputId[event.currentTarget.id] ==2 ){
+                    if(!num.test(event.currentTarget.value)){
+                     err_msg.innerHTML="請輸入小數或正整數";
+                     this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                     return false;
+                 }
+                }
+                //若判断都符合要求，verify的相应值应该为false
+                this.$set(this.verify,"input_"+event.currentTarget.id,false);
+             },
+             changeCustomer:function () {
+                 if(this.$refs.customer.value ==""){
+                      this.selectProject=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.customer.value];
+                 this.projectDefault="";
+                 console.log(this.selectProject);
+             },
+             dataTableInit:function(){
+               Vue.nextTick(() => {
+                $('#bootstrap-data-table-export').DataTable({
+                    dom: 'lBfrtip',
+                    //retrieve: true,
+                    bAutoWidth: true,
+                    lengthMenu: [[100, 25, 50, -1], [100, 25, 50, "All"]],
+                    buttons: [
+
+                    ]
+                });
+                console.log("dom");
+            })
+             },
+             dataTableDestroy:function () {
+                 $('#bootstrap-data-table-export').DataTable().destroy();
+             }
+
+          }
+
+})
+
+
+
+</script>
+    <script>
+
+        // 查看图片
+        $('.test-popup-link').magnificPopup({
+            type: 'image'
+        });
+
+    </script>
+    <script type="text/javascript">
+      var urlstr = location.href;
+      //alert(urlstr);
+      var urlstatus=false;
+      $("#menu a").each(function () {
+        if ((urlstr + '/').indexOf($(this).attr('href')) > -1&&$(this).attr('href')!='') {
+          $(this).addClass('cur'); urlstatus = true;
+        } else {
+          $(this).removeClass('cur');
+        }
+      });
+      if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); }
+    </script>
+{% endblock %}

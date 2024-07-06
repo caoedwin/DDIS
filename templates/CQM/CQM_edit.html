@@ -1,0 +1,848 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}CQM_edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    body .el-table th.gutter{
+      display: table-cell!important;
+    }
+    body .el-table colgroup.gutter{
+      display: table-cell!important;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="content" id="yincang">spec</div>
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/cqmspec.png">
+    </div>
+    <div id="app">
+<div class="row" style="white-space: nowrap;">
+                    <div class="col-md-4">
+                    <label style="color: #FFF" for="Customer">Customer</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value=""> </option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+                        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" :loading="elbuttonloading" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT()">Search</el-button>
+                    </div>
+                      <div class="col-md-1">
+                    <el-button size="small" type="danger" v-if="(statu === 4 || statu === 5)&&canEdit" @click="multiDelete">批量删除</el-button>
+                  </div>
+</div>
+        <el-dialog :visible.sync="settable" >
+  <el-table border stripe :default-sort="{prop:'SS',order:'descending'}" height="500" :data="searchalert" @row-click="selectMsg"
+  v-loading="tableloading1"
+        element-loading-text="數據更新中，請稍後"
+        border>
+    <el-table-column property="YEAR" label="YEAR" width="90" sortable></el-table-column>
+    <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+    <el-table-column property="Phase" label="Phase" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode1" label="PRJENGCODE1" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode2" label="PRJENGCODE2" width="140" sortable></el-table-column>
+    <el-table-column property="PROJECT" label="MKT CODE" width="200"></el-table-column>
+    <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+    <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+    <el-table-column property="PLATFORM" label="PLATFORM" width="200"></el-table-column>
+    <el-table-column property="VGA" label="VGA" width="110"></el-table-column>
+    <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+    <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+    <el-table-column property="LD" label="LD" width="110"></el-table-column>
+    <el-table-column property="DQA PL" label="DQA PL" width="110"></el-table-column>
+    <el-table-column property="TYPE" label="TYPE" width="110"></el-table-column>
+    <el-table-column property="PPA" label="PPA" width="110"></el-table-column>
+    <el-table-column property="PQE" label="PQE" width="110"></el-table-column>
+  </el-table>
+</el-dialog>
+          <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject }/${ showPhase }<span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+    <template>
+    <el-table border stripe height="750" ref="multipleTable" @selection-change="handleSelectionChange" :row-key="getRowKeys" :data="tableContent.slice((currentPage-1)*pageSize,currentPage*pageSize)" :cell-style="addClass"
+    v-loading="tableloading"
+        element-loading-text="數據更新中，請稍後"
+        border>
+        <el-table-column type="selection" width="50" fixed></el-table-column>
+        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+        <el-table-column label="Project" align="center" width="90" fixed>
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.Project"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit">${ project[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Category" align="center" width="110" fixed>
+            <template slot-scope="scope">
+            {% comment %}<el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.Material_Group"></el-input>{% endcomment %}
+                <el-select class="edit-cell"  v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"  v-model="scope.row.Material_Group">
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Active_Pen"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Adapter"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Battery"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Camera"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Card_Reader"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="CPU"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="EMMC"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Finger_Print"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="HDD"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Keyboard"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="LAN"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Memory"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="ODD"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Panel"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Power_Cord"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Speaker"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="SSD"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Touch_Pad"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="TPM"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="TCM"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="UFS"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="VRAM"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="VGA"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="WLAN"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="WWAN"></el-option>
+                    <el-option v-if="showCustomer==='C38(NB)'||showCustomer==='T89(NB)'" value="Others"></el-option>
+
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Adapter"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Camera"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="CPU"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Fan"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="HDD"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Keyboard"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Panel"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="MIC"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Mouse"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="ODD"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Power_Cord"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Memory"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Speaker"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="SSD"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Stand"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Thermal module"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="VGA"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="VRAM"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Wireless KB/MS"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="WLAN+BT combo"></el-option>
+                    <el-option v-if="showCustomer==='C38(AIO)'" value="Others"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ material_group[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*Keyparts (Option items)" align="center" width="194" fixed>
+            <template slot-scope="scope">
+            <el-input type="textarea" :rows="2" class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Keyparts"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ keyparts[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Parameter (Option items)" align="center" width="194">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Character"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ character[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Phase" align="center" width="83">
+            <template slot-scope="scope">
+          <el-select class="edit-cell" filterable allow-create v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"  v-model="scope.row.Phase">
+                <el-option value="FVT"></el-option>
+                <el-option value="SIT"></el-option>
+                <el-option value="OOC"></el-option>
+                <el-option value="INV"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ phase[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Supplier" align="center" width="91">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Supplier"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ supplier[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Compal_R1_PN" align="center" width="132">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Compal_R1_PN"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r1[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column  label="DQA test result" align="center">
+            <el-table-column label="Test result" align="center" width="100">
+            <template slot-scope="scope">
+                <span class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 6)&&canEdit">${ scope.row.Testresult }</span>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 6)">${ testresult[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+              <el-table-column label="Reliability" align="center" width="110">
+            <template slot-scope="scope">
+            <el-select class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 6)&&canEdit"  @change="changeresult(scope.row,scope.$index)"  v-model="scope.row.Reliability">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 6)">${ reliability[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+              <el-table-column label="Compatibility" align="center" width="110">
+            <template slot-scope="scope">
+            <el-select class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"  @change="changeresult(scope.row,scope.$index)"  v-model="scope.row.Compatibility">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compatibility[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+             </el-table-column>
+                <el-table-column  label="RD test result" align="center">
+            <el-table-column label="ESD" width="50" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 2 || statu === 4)&&canEdit"    v-model="scope.row.ESD"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 2 || statu === 4)">${ esd[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="EMI" width="50" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 2 || statu === 4)&&canEdit"    v-model="scope.row.EMI"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 2 || statu === 4)">${ emi[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="RF" width="50" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 2 || statu === 4)&&canEdit"    v-model="scope.row.RF"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 2 || statu === 4)">${ rf[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+        </el-table-column>
+        <el-table-column label="*PM summary RD test result" width="200" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 1 || statu === 4)&&canEdit"    v-model="scope.row.PMsummary"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 1 || statu === 4)">${ pmsummary[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+        <el-table-column  label="JQE test result" align="center">
+            <el-table-column label="Control run" width="115" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 3 || statu === 4)&&canEdit"    v-model="scope.row.Controlrun"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 3 || statu === 4)">${ controlrun[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+            </el-table-column>
+        <el-table-column label="*PID (Option items)" align="center" width="186">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5) &&canEdit"    v-model="scope.row.PID"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ pid[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*VID (Option items)" align="center" width="182">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.VID"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ vid[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*HW (Option items)" align="center" width="183">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.HW"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ hw[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*FW (Option items)" align="center" width="178">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.FW"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ fw[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+
+        <el-table-column label="Model Name" align="center" width="300">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.R1_PN_Description"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ r1_pn[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Compal_R3_PN" align="center" width="116">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Compal_R3_PN"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r3[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="R1S" align="center" width="116">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.R1S"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ r1s[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Comments" width="400" align="left">
+                <template slot-scope="scope">
+                      <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index] && (statu === 1 || statu === 2 || statu === 3)&&canEdit"    v-model="scope.row.Comment"></textarea>
+                      <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5 || statu === 6)&&canEdit"    v-model="scope.row.Comments"></textarea>
+{#                      <span v-else="showEdit[scope.$index] && (statu === 1 || statu === 2 || statu === 3|| statu === 4|| statu === 5|| statu === 6)">${ comments[scope.$index+(currentPage-1)*pageSize] }</span>#}
+                      <el-tooltip v-else="showEdit[scope.$index] && (statu === 1 || statu === 2 || statu === 3|| statu === 4|| statu === 5|| statu === 6)" class="item" effect="dark" placement="top">
+                            <div v-html="ToBreak(comments[scope.$index+(currentPage-1)*pageSize])" slot="content"></div>
+                            <div class="oneLine">${ comments[scope.$index+(currentPage-1)*pageSize] }</div>
+                        </el-tooltip>
+                </template>
+            </el-table-column>
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <template slot-scope="scope">
+            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">保存</el-button>
+            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">取消</el-button>
+
+            <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>
+            <el-button type="text" size="small"     @click.native="historyRow(scope.$index, scope.row);dialogTableVisible = true"    v-if="!showBtn[scope.$index]">历史</el-button>
+        </template>
+    </el-table-column>
+    </el-table>
+    <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalNum">
+    </el-pagination>
+  </div>
+    </template>
+    <el-dialog :title="'ChangeId:'+changeindex" :visible.sync="dialogTableVisible">
+  <el-table border height="500" :data="historyRecord" :default-sort="{prop:'changeTime', order:'descending'}"
+  v-loading="tableloading2"
+        element-loading-text="數據更新中，請稍後"
+        borde>
+    <el-table-column property="oldContent" label="oldContent"  style="white-space: pre-line" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="newContent" label="newContent"  style="white-space: pre-line" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="changeOwner" label="changeOwner" min-width="150" sortable></el-table-column>
+    <el-table-column property="changeTime" label="changeTime" left min-width="150" sortable></el-table-column>
+  </el-table>
+</el-dialog>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+              options: [{value: 'Qd', label: 'Qd'}, {value: 'Qd_L', label: 'Qd_L'}, {value: 'Qd_C', label: 'Qd_C'}, {value: 'T', label: 'T'}, {value: 'F', label: 'F'}, {value: 'DisQ', label: 'DisQ'}, {value: 'Drpd', label: 'Drpd'}, {value: 'Not Build', label: 'Not Build'}],
+             //權限flag
+             visible: false,
+             settable:false,
+             historyRecord:[],
+             tableContent: [],
+             searchalert:[],
+             showEdit:[], //显示编辑框
+             showBtn:[],
+             showBtnOrdinary: true,
+             //權限flag
+        canEdit:false,
+        showTips:false,
+        showCustomer:null,
+        showProject:null,
+        showPhase:null,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum: null,
+             selectItem:{},
+             selectedCustomer:null,
+             project:[],
+             material_group:[],
+             keyparts:[],
+             character:[],
+             pid:[],
+             vid:[],
+             hw:[],
+             fw:[],
+             supplier:[],
+             r1_pn:[],
+             compal_r1:[],
+             compal_r3:[],
+             r1s:[],
+             phase:[],
+             reliability:[],
+             compatibility:[],
+             testresult:[],
+             esd:[],
+             emi:[],
+             rf:[],
+             pmsummary:[],
+             controlrun:[],
+             comments:[],
+             comment:null,
+             statu:null,
+             flag:null,
+             dialogTableVisible:false,
+             changeindex:null,
+             customerError:false,
+
+            multiDeleteVisible:false,
+            multipleSelection: [],
+             COMPRJCODE:null,
+             PHASE:null,
+             elbuttonloading:false,
+            tableloading:false,
+            tableloading1:false,
+            tableloading2:false,
+
+
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            this.tableloading = true;
+            this.elbuttonloading = true;
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/CQM/CQM_edit/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.selectItem=res.data.select;
+                this.tableloading = false;
+                this.elbuttonloading = false;
+         });
+
+        },
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+                this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          this.currentPage = val;
+         },
+         //搜索customer弹出弹框
+         SEARCHALERT:function(){
+            if(this.$refs.Customer.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               }else {
+                this.tableloading1 = true;
+                this.customerError = false;
+                let Customer = this.$refs.Customer.value;
+                let data = {
+                    "isGetData": "SEARCHALERT",
+                    "Customer": Customer,
+                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                }
+                axios.post("/CQM/CQM_edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.searchalert = res.data.sear;
+                    this.tableloading1 = false;
+                })
+                this.settable=true;
+            }
+             },
+          //上传搜索项：以此选项搜索符合条件的内容
+         selectMsg :function(row){
+            this.tableloading=true;
+           let Customer = this.$refs.Customer.value;
+           let data ={"isGetData":"SEARCH","Customer":Customer,"COMPRJCODE":row.COMPRJCODE,"Phase":row.Phase,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+           axios.post("/CQM/CQM_edit/",Qs.stringify(data), {
+           headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+               this.tableContent = res.data.content;
+               this.totalNum=this.tableContent.length;
+               this.statu=res.data.orr.statu;
+               this.canEdit=res.data['canEdit'];
+               console.log(this.canEdit)
+                if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{this.showTip()},1);
+                    }
+               for(let i=0;i<this.tableContent.length;i++) {
+                        this.project[i] = this.tableContent[i].Project;
+                        this.material_group[i] = this.tableContent[i].Material_Group;
+                        this.keyparts[i] = this.tableContent[i].Keyparts;
+                        this.character[i] = this.tableContent[i].Character;
+                        this.pid[i] = this.tableContent[i].PID;
+                        this.vid[i] = this.tableContent[i].VID;
+                        this.hw[i] = this.tableContent[i].HW;
+                        this.fw[i] = this.tableContent[i].FW;
+                        this.supplier[i] = this.tableContent[i].Supplier;
+                        this.r1_pn[i] = this.tableContent[i].R1_PN_Description;
+                        this.compal_r1[i] = this.tableContent[i].Compal_R1_PN;
+                        this.compal_r3[i] = this.tableContent[i].Compal_R3_PN;
+                        this.r1s[i] = this.tableContent[i].R1S;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.reliability[i] = this.tableContent[i].Reliability;
+                        this.compatibility[i] = this.tableContent[i].Compatibility;
+                        this.testresult[i] = this.tableContent[i].Testresult;
+                        this.esd[i] = this.tableContent[i].ESD;
+                        this.emi[i] = this.tableContent[i].EMI;
+                        this.rf[i] = this.tableContent[i].RF;
+                        this.pmsummary[i] = this.tableContent[i].PMsummary;
+                        this.controlrun[i] = this.tableContent[i].Controlrun;
+                        this.comments[i] = this.tableContent[i].Comments;
+               }
+               this.tableloading=false;
+           })
+               this.showCustomer=Customer;
+               this.showProject=row.COMPRJCODE;
+               this.showPhase=row.Phase;
+               this.settable=false;
+            console.log(Customer)
+             this.COMPRJCODE=row.COMPRJCODE;
+             this.PHASE=row.Phase;
+        },
+         showTip(){
+          if( this.showCustomer&&this.showProject){
+             if(!this.canEdit){
+                this.showTips = true ;
+             }else{
+                 this.showTips = false ;
+             }
+          }else{
+              this.showTips = false ;
+          }
+      },
+          //编辑
+         editRow(index,row) {
+           this.$set(this.showEdit,index,true);
+           this.$set(this.showBtn,index,true);
+        },
+         //保存
+         saveRow(index,rows) {
+                let Customer = this.showCustomer;
+                let Project = this.showProject;
+                let Phase = this.showPhase;
+                let data = {"isGetData": "SAVE", "rows": rows,"Customer":Customer,"Project":Project,"Phase":Phase, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                };
+                axios.post("/CQM/CQM_edit/", data, {
+                    //headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                     this.tableContent = res.data.content;
+                     this.flag=res.data.orn.flag;
+                    console.log(this.flag);
+                     for(let i=0;i<this.tableContent.length;i++) {
+                        this.project[i] = this.tableContent[i].Project;
+                        this.material_group[i] = this.tableContent[i].Material_Group;
+                        this.keyparts[i] = this.tableContent[i].Keyparts;
+                        this.character[i] = this.tableContent[i].Character;
+                        this.pid[i] = this.tableContent[i].PID;
+                        this.vid[i] = this.tableContent[i].VID;
+                        this.hw[i] = this.tableContent[i].HW;
+                        this.fw[i] = this.tableContent[i].FW;
+                        this.supplier[i] = this.tableContent[i].Supplier;
+                        this.r1_pn[i] = this.tableContent[i].R1_PN_Description;
+                        this.compal_r1[i] = this.tableContent[i].Compal_R1_PN;
+                        this.compal_r3[i] = this.tableContent[i].Compal_R3_PN;
+                        this.r1s[i] = this.tableContent[i].R1S;
+                        this.reliability[i] = this.tableContent[i].Reliability;
+                        this.compatibility[i] = this.tableContent[i].Compatibility;
+                        this.testresult[i] = this.tableContent[i].Testresult;
+                        this.esd[i] = this.tableContent[i].ESD;
+                        this.emi[i] = this.tableContent[i].EMI;
+                        this.rf[i] = this.tableContent[i].RF;
+                        this.pmsummary[i] = this.tableContent[i].PMsummary;
+                        this.controlrun[i] = this.tableContent[i].Controlrun;
+                        this.comments[i] = this.tableContent[i].Comments;
+
+                    }
+
+                    if(this.flag==0) {
+                this.$set(this.showEdit, index, false);
+                this.$set(this.showBtn, index, false);//关闭页面
+            }else{
+                alert(this.flag);
+            }
+                });
+
+
+       },
+        //取消编辑
+        cancelRow(index, row) {
+            this.tableContent[index].Project=this.project[index];
+            this.tableContent[index].Material_Group=this.material_group[index];
+            this.tableContent[index].Keyparts=this.keyparts[index];
+            this.tableContent[index].Character=this.character[index];
+            this.tableContent[index].PID=this.pid[index];
+            this.tableContent[index].VID=this.vid[index];
+            this.tableContent[index].HW=this.hw[index];
+            this.tableContent[index].FW=this.fw[index];
+            this.tableContent[index].Supplier=this.supplier[index];
+            this.tableContent[index].R1_PN_Description=this.r1_pn[index];
+            this.tableContent[index].Compal_R1_PN=this.compal_r1[index];
+            this.tableContent[index].Compal_R3_PN=this.compal_r3[index];
+            this.tableContent[index].R1S=this.r1s[index];
+            this.tableContent[index].Phase=this.phase[index];
+            this.tableContent[index].Reliability=this.reliability[index];
+            this.tableContent[index].Compatibility=this.compatibility[index];
+            this.tableContent[index].Testresult=this.testresult[index];
+            this.tableContent[index].ESD=this.esd[index];
+            this.tableContent[index].EMI=this.emi[index];
+            this.tableContent[index].RF=this.rf[index];
+            this.tableContent[index].PMsummary=this.pmsummary[index];
+            this.tableContent[index].Controlrun=this.controlrun[index];
+            this.tableContent[index].Comments=this.comments[index];
+            this.$set(this.showEdit,index,false);
+            this.$set(this.showBtn,index,false) ;
+       },
+        historyRow(index,row){
+            this.tableloading2 = true;
+             let data = {"isGetData": "history", "id":this.tableContent[index]['id'],"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                };
+                axios.post("/CQM/CQM_edit/", data, {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                     this.historyRecord = res.data.history;
+                      this.changeindex=index+1;
+                      this.tableloading2 = false;
+                });
+        },
+         //监听变化，生成结果
+         changeresult:function(rows,index){
+                if(rows.Reliability=='No Build'|| rows.Compatibility=='No Build'){
+                    rows.Testresult='No Build';
+                    console.log(rows.Testresult)
+                }
+                else if(rows.Reliability=='Qd'&& rows.Compatibility=='Qd'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='Drop'&& rows.Compatibility!=='No Build'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='DisQ'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='F'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'&& rows.Compatibility!=='DisQ'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='T'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'&& rows.Compatibility!=='DisQ'&& rows.Compatibility!=='F'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='Qd_C'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'&& rows.Compatibility!=='DisQ'&& rows.Compatibility!=='F'&& rows.Compatibility!=='T'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='Qd_L'&& rows.Compatibility!=='No Build'&& rows.Compatibility=='Qd'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else{
+                    rows.Testresult=rows.Compatibility;
+                }
+
+                if(rows.Testresult == 'Qd_L' || rows.Testresult == 'Qd_C'){
+                    rows.Testresult = 'Qd'
+                }
+
+
+            },
+         //颜色变化
+          addClass({row, column, rowIndex, columnIndex}) {
+              {% comment %}console.log('addcolor',rowIndex, columnIndex){% endcomment %}
+              {% comment %}if (columnIndex === 8 && (row.Reliability === 'Qd' || row.Reliability === 'Qd_C' || row.Reliability === 'Qd_L'|| row.Reliability === 'Qd-C' || row.Reliability === 'Qd-L')) {
+                  console.log("lie",row)
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+              if (columnIndex === 9 && (row.Compatibility === 'Qd' || row.Compatibility === 'Qd_C' || row.Compatibility === 'Qd_L'|| row.Compatibility === 'Qd-C' || row.Compatibility === 'Qd-L')) {
+                  return {
+                      background: '#00FF00'
+                  }
+              }{% endcomment %}
+              if (columnIndex === 9 && (row.Testresult === 'Qd' || row.Testresult === 'Qd_C' || row.Testresult === 'Qd_L'|| row.Testresult === 'Qd-C' || row.Testresult === 'Qd-L')) {
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+
+              {% comment %}if (columnIndex === 8 && (row.Reliability === 'F' || row.Reliability === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+              if (columnIndex === 9 && (row.Compatibility === 'F' || row.Compatibility === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }{% endcomment %}
+              if (columnIndex === 9 && (row.Testresult === 'F' || row.Testresult === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+
+
+             {% comment %} if (columnIndex === 8 && row.Reliability === 'Drpd') {
+                  return {
+                      background: '#696969'
+                  }
+              }
+              if (columnIndex === 9 && row.Compatibility === 'Drpd' ) {
+                  return {
+                      background: '#696969'
+                  }
+              }{% endcomment %}
+              if (columnIndex === 9 && row.Testresult === 'Drpd' ) {
+                  return {
+                      background: '#696969'
+                  }
+              }
+          },
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        },
+         handleSelectionChange(rows) {
+                this.multipleSelection = rows;
+
+            },
+         getRowKeys (row) {
+              return row.id
+            },
+          multiDelete() {
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+         if(warning) {
+             this.tableloading = true;
+                this.elbuttonloading = true;
+             this.multiDeleteVisible = false;
+             let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+             let params = [];
+             let self = this;
+             checkArr.forEach(function (item) {
+                 console.log(item);
+                 params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+             });
+             console.log(params);
+              let Customer = this.$refs.Customer.value;
+             let data = {
+                 "isGetData": "MUTIDELETE",
+                 "params": params,
+                 "Customer":Customer,"COMPRJCODE":this.COMPRJCODE,"Phase":this.PHASE,
+                 "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+             };
+             axios.post('/CQM/CQM_edit/', data).then((res) =>{
+
+                     this.tableContent = res.data.content;
+                     console.log(this.tableContent,'mul')
+                      for(let i=0;i<this.tableContent.length;i++) {
+                        this.project[i] = this.tableContent[i].Project;
+                        this.material_group[i] = this.tableContent[i].Material_Group;
+                        this.keyparts[i] = this.tableContent[i].Keyparts;
+                        this.character[i] = this.tableContent[i].Character;
+                        this.pid[i] = this.tableContent[i].PID;
+                        this.vid[i] = this.tableContent[i].VID;
+                        this.hw[i] = this.tableContent[i].HW;
+                        this.fw[i] = this.tableContent[i].FW;
+                        this.supplier[i] = this.tableContent[i].Supplier;
+                        this.r1_pn[i] = this.tableContent[i].R1_PN_Description;
+                        this.compal_r1[i] = this.tableContent[i].Compal_R1_PN;
+                        this.compal_r3[i] = this.tableContent[i].Compal_R3_PN;
+                        this.r1s[i] = this.tableContent[i].R1S;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.reliability[i] = this.tableContent[i].Reliability;
+                        this.compatibility[i] = this.tableContent[i].Compatibility;
+                        this.testresult[i] = this.tableContent[i].Testresult;
+                        this.esd[i] = this.tableContent[i].ESD;
+                        this.emi[i] = this.tableContent[i].EMI;
+                        this.rf[i] = this.tableContent[i].RF;
+                        this.pmsummary[i] = this.tableContent[i].PMsummary;
+                        this.controlrun[i] = this.tableContent[i].Controlrun;
+                        this.comments[i] = this.tableContent[i].Comments;
+               }
+                     self.$message({
+                         message: '删除成功',
+                         type: 'success'
+                     });
+                 this.tableContent = res.data.content;
+                 this.tableloading = false;
+                this.elbuttonloading = false;
+             })
+         }else{
+             return false;
+         }
+            },
+     }
+ })
+</script>
+{% endblock %}

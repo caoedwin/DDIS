@@ -1,0 +1,415 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}CQM_search{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+<style>
+.content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+.el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .el-table td.is-right, .el-table th.is-right {
+    white-space: pre-line;
+    text-align: left;
+}
+    .el-table .cell{
+        white-space: pre-line;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+
+.form-search{
+    outline-style: none ;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 0px;
+    width: 620px;
+    font-size: 20px;
+    font-family: "Microsoft soft";
+}
+input:focus{
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+.labe,.form-search{
+    display: inline-block;
+}
+.labe{
+    width:120px ;
+    font-size: 20px;
+    padding: 5px 0px;
+    color:black;
+    text-align: center;
+}
+.el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+.oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+.el-table .my-cell {
+    vertical-align: top
+  }
+ #sh {
+        font-size:18px;
+        font-family:微软雅黑;
+        border: 2px solid #9f9ca1;
+    }
+    #sh::-webkit-input-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+    }
+    #sh::-moz-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+    }
+    #sh:-ms-input-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    {% comment %}<div class="content" id="yincang">spec</div>
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/cqmspec.png">
+    </div>{% endcomment %}
+  <div id="app">
+  <div class="row" style="white-space: nowrap;">
+                    <div class="col-md-4">
+                    <label style="color: #FFF" for="Customer">Customer</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value=""> </option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+                        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT()">Search</el-button>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" @click="exportExcel" type="info" >Export</el-button>
+                    </div>
+      </div>
+        <el-dialog :visible.sync="settable" >
+  <el-table border stripe :default-sort="{prop:'SS',order:'descending'}" height="500" :data="searchalert" @row-click="selectMsg">
+    {% comment %}<el-table-column type="selection"></el-table-column>{% endcomment %}
+    <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>
+    <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+    {% comment %}<el-table-column property="PHASE" label="PHASE" width="140" sortable></el-table-column>{% endcomment %}
+    <el-table-column property="PrjEngCode1" label="PRJENGCODE1" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode2" label="PRJENGCODE2" width="140" sortable></el-table-column>
+    <el-table-column property="PROJECT" label="MKT CODE" width="200"></el-table-column>
+    <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+    <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+    <el-table-column property="PLATFORM" label="PLATFORM" width="150"></el-table-column>
+    <el-table-column property="VGA" label="VGA" width="220"></el-table-column>
+    <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+    <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+    <el-table-column property="LD" label="LD" width="110"></el-table-column>
+    <el-table-column property="DQA PL" label="DQA PL" width="110"></el-table-column>
+    <el-table-column property="TYPE" label="TYPE" width="110"></el-table-column>
+    <el-table-column property="PPA" label="PPA" width="110"></el-table-column>
+    <el-table-column property="PQE" label="PQE" width="110"></el-table-column>
+  </el-table>
+</el-dialog>
+          <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject }</span>
+     <hr/>
+  <template >
+      <el-input type="text" v-model="search" id="sh" placeholder="关键字搜索......"></el-input>
+      <el-table  id="out-table" border stripe height="700" @sort-change='sortChange' :default-sort = "{prop: 'Customer', order: 'ascending'}" :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)"  style="width: 100%">
+
+          <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+          <el-table-column prop="Customer" label="Customer" align="center" width="140" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Project_Code" label="Project_Code" align="center" width="140" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Platform" label="Platform" align="center" width="120" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="TDMS_NO" label="TDMS_NO" align="center" width="140" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Issue_Title" label="Issue_Title" align="center" width="140" sortable='custom'></el-table-column>
+          <el-table-column prop="Root_Cause" label="Root_Cause" align="center" width="160" sortable='custom'></el-table-column>
+          <el-table-column prop="Solution" label="Solution" align="center" width="140" sortable='custom'></el-table-column>
+          <el-table-column prop="PL" label="PL" align="center" sortable='custom'></el-table-column>
+
+      </el-table>
+      <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+    </el-pagination>
+  </div>
+      </template>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+    new Vue({
+    el:'#app',
+    delimiters: ['${', '}'],
+    data: function () {
+            return {
+                visible: false,
+                settable:false,
+                tableContent: [],
+                searchalert:[],
+                showCustomer:null,
+                selectedCustomer:null,
+                selectItem:[],
+                selectId:null,
+                result:{},
+                choose:false,
+                currentPage: 1,//默认显示第一页
+                pageSize:100,//默认每页显示100条
+                totalNum: null,
+                tableData: [], // 数据列表
+                currpage: 1, //当前页码
+                proptype: "" ,//存放column.prop的字符串值
+                dialogTableVisible: false,
+                search:'',
+                customerError:false,
+                changeindex:null
+            }
+        },
+    mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            sortChange: function(column){
+                console.log(column.prop,column.order,column,"order")
+            this.currentPage = 1 // return to the first page after sorting
+                if (column.prop === 'Customer') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Project_Code') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Platform') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'TDMS_NO') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Issue_Title') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Root_Cause') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Solution') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }
+
+                    this.showed_data = this.tableContent.slice(0, this.pageSize) // 排序完显示到第一页
+                    console.log('Finished');
+                    console.log(this.showed_data);
+
+        },
+
+         //搜索customer弹出弹框
+         SEARCHALERT:function(){
+            if(this.$refs.Customer.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               }else {
+                this.customerError = false;
+                let Customer = this.$refs.Customer.value;
+                let data = {
+                    "isGetData": "SEARCHALERT",
+                    "Customer": Customer,
+                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                }
+                axios.post("/Issue_Notes/Issue_Notes-search/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.searchalert = res.data.sear;
+                })
+                this.settable=true;
+            }
+             },
+
+
+            //排序方法
+           sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+           handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+      },
+           handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+          this.currentPage = val;
+          console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+      },
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/Issue_Notes/Issue_Notes-search/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent = res.data.content;
+                    this.selectItem = res.data.select;
+                    this.totalNum=this.tableContent.length;
+
+                });
+            },
+            indexMethod(index) {
+                    return index +1;
+            },
+            //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(row) {
+               let Customer = this.$refs.Customer.value;
+               let data ={"isGetData":"SEARCH","Customer":Customer,"COMPRJCODE":row.COMPRJCODE,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/Issue_Notes/Issue_Notes-search/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.tableContent = res.data.content;
+                  this.selectItem=res.data.select;
+                  this.totalNum=this.tableContent.length;
+
+                })
+
+                  this.showCustomer=Customer;
+                  this.showProject=row.COMPRJCODE;
+                  this.settable=false;
+             },
+
+            //導出表格
+      exportExcel:function (){
+           /* 从表生成工作簿对象 */
+         let table = document.querySelector("#out-table").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"))
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+        },
+      test:function (row) {
+          console.log("trt");
+      },
+
+        ToBreak (val) {
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        }
+        },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    console.log(111);
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                    console.log("watch",this.showed_data)
+                }
+            },
+})
+</script>
+{% endblock %}

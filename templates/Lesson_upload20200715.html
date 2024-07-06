@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_update{% endblock %}
+{% block css %}
+<style>
+	.menu { padding:0; margin:0; list-style-type:none;}
+	.menu li {background:#343957; margin-right:1px; float:left; color:#fff; }
+	.menu li a { display:block; width:80px; text-align:center; height:32px; line-height:32px; color:#fff; font-size:13px; text-decoration:none;}
+
+	.cur{ background:#D96C00; font-weight:bold;}
+</style>
+{% endblock %}
+{% block content %}
+
+   {% comment %} <div class="row">
+        <div class="col-lg-12">
+          <ul class="menu" id="menu">
+            <li><a href="/Lesson_upload/">Add</a></li>
+            <li><a href="/Lesson_edit/">Edit</a></li>
+            <li><a href="/Lesson_search/">Search</a></li>
+          </ul>
+        </div>
+    </div>{% endcomment %}
+
+
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+
+        <!-- Breadcrumbs-->
+        <form class='form-Test' action="." method="POST" οnsubmit="return submitCheck();" id="index" enctype="multipart/form-data">
+               <!-- <div class="container-fluid"> -->
+            <div style="color:#FFF;font-weight: bolder;">{{ message }}</div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Category.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Category}}
+                      </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Object.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Object}}
+                      </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Symptom.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                      <div class="form-group">
+                        {{ lesson_form.Symptom }}
+                      </div>
+
+
+
+                    {% comment %}<div class="col-md-3">
+
+                        <div class="input"style="padding-top: 15px;">
+                        <center>
+                            <span ><span style="color: red;">*</span>Solution/Action</span> <Br> <input type="text" style="background-color:rgba(255,255,255,0.5);" class="form-control" name="Comments" id="comments">
+                        </center>
+                        </div>
+                    </div>{% endcomment %}
+                        {% comment %}{{ form.content.label_tag }}
+                        {{ form.content }}{% endcomment %}
+
+
+
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Reproduce_Steps.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                  <div class="form-group">
+                    {{ lesson_form.Reproduce_Steps}}
+                  </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Root_Cause.label_tag }}</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        {{ lesson_form.Root_Cause}}
+                      </div>
+            </div>
+            {% comment %}<div class="form-group">{% endcomment %}
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Solution.label_tag }}</span>
+            {% comment %}</div>{% endcomment %}
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                  <div class="form-group">
+                    {{ lesson_form.Solution}}
+                  </div>
+            </div>
+            <span style="color:#FFF"><span style="color: red;">*</span>{{ lesson_form.Action.label_tag }}</span>
+            {% comment %}</div>{% endcomment %}
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+                  <div class="form-group">
+                    {{ lesson_form.Action}}
+                  </div>
+            </div>
+            {% comment %}<span style="color:#FFF">test</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                      <div class="form-group">
+                        <input type="text" name="test" value={{ test }}>
+                      </div>
+            </div>{% endcomment %}
+            <span style="color:#FFF">Photo</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                             <div class="col-sm-8">
+                                 <input style="color: #FFF" type="file" id="upload-file" name="myfiles" multiple="">
+                             </div>
+            </div>
+            <span style="color:#FFF">video</span>
+            <div style="background-color:rgba(255,255,255,0.2)" class="breadcrumb">
+
+                             <div class="col-sm-8">
+                                 <input style="color: #FFF" type="file" id="upload-file" name="myvideos" multiple="">
+                             </div>
+                <button type="submit" name="Upload" style="font-weight: bolder;color: #0c0c0c">Upload{% comment %}<img src="/static/src/upload.jpg" height="25" width="40">{% endcomment %}</button>
+{#                <input type="submit"  class="rounded-circle" style="background: #79ace9;color: #FFF" value="Upload" />#}
+                  {% csrf_token %}
+            </div>
+
+        </form>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+   $(document).ready(function(){
+
+   try{
+    var object = {{ message_err }}
+    }
+    catch(e){
+    var object = "0";
+    console.log(e);
+    }
+
+     switch(object){
+       case 1: alert("Object already exists");break;
+       case 2: alert("symptom already exists");break;
+       default:console.log("upload success");
+     }
+   })
+</script>
+<script type="text/javascript">
+  var urlstr = location.href;
+  //alert(urlstr);
+  var urlstatus=false;
+  $("#menu a").each(function () {
+    if ((urlstr + '/').indexOf($(this).attr('href')) > -1&&$(this).attr('href')!='') {
+      $(this).addClass('cur'); urlstatus = true;
+    } else {
+      $(this).removeClass('cur');
+    }
+  });
+  if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); }
+</script>
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <script src="/static/js/ImgUpload.js"></script>
+
+
+{% endblock %}

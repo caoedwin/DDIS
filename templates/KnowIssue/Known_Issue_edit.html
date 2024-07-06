@@ -1,0 +1,431 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Known_Issue_edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    </style>
+{% endblock %}
+{% block content %}
+    {% comment %}<div class="content" id="yincang">spec</div>
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/cqmspec.png">
+    </div>{% endcomment %}
+    <div id="app">
+<div class="row" style="white-space: nowrap;">
+          <div class="col-md-4">
+              <label style="color: #FFF" for="Customer">Customer</label>
+                 <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+                      <option value=""> </option>
+                      <option v-for="(item,key,index) in selectItem" >${ item }</option>
+                 </select>
+          <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+          </div>
+                    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT()">Search</el-button>
+                    </div>
+</div>
+        <el-dialog :visible.sync="settable" >
+  <el-table border stripe :default-sort="{prop:'SS',order:'descending'}" height="500" :data="searchalert" @row-click="selectMsg">
+    {% comment %}<el-table-column type="selection"></el-table-column>{% endcomment %}
+    <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>
+    <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+    {% comment %}<el-table-column property="PHASE" label="PHASE" width="140" sortable></el-table-column>{% endcomment %}
+    <el-table-column property="PrjEngCode1" label="PRJENGCODE1" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode2" label="PRJENGCODE2" width="140" sortable></el-table-column>
+    <el-table-column property="PROJECT" label="MKT CODE" width="200"></el-table-column>
+    <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+    <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+    <el-table-column property="PLATFORM" label="PLATFORM" width="150"></el-table-column>
+    <el-table-column property="VGA" label="VGA" width="220"></el-table-column>
+    <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+    <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+    <el-table-column property="LD" label="LD" width="110"></el-table-column>
+    <el-table-column property="DQA PL" label="DQA PL" width="110"></el-table-column>
+    <el-table-column property="TYPE" label="TYPE" width="110"></el-table-column>
+    <el-table-column property="PPA" label="PPA" width="110"></el-table-column>
+    <el-table-column property="PQE" label="PQE" width="110"></el-table-column>
+  </el-table>
+</el-dialog>
+          <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject }<span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+    <template>
+    <el-table border stripe height="750" :data="tableContent.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+        <el-table-column label="Customer" align="center" width="110" fixed>
+            <template slot-scope="scope">
+              <el-select class="edit-cell" filterable allow-create v-if="showEdit[scope.$index]"  v-model="scope.row.Customer">
+                    <el-option value="C38(NB)"></el-option>
+                    <el-option value="C38(AIO)"></el-option>
+                    <el-option value="T88(AIO)"></el-option>
+                    <el-option value="A39"></el-option>
+                </el-select>
+                <span v-else="showEdit[scope.$index]">${ customer[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Project_Code" align="center" width="160" fixed>
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Project_Code"></el-input>
+                <span v-else="showEdit[scope.$index]">${ project_code[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Platform" align="center" width="110" fixed>
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Platform"></el-input>
+                <span v-else="showEdit[scope.$index]">${ platform[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Issue_NO" align="center" width="140" fixed>
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Issue_NO"></el-input>
+                <span v-else="showEdit[scope.$index]">${ issue_no[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Issue_Title" align="center" width="160">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] "    v-model="scope.row.Issue_Title"></el-input>
+                <span v-else="showEdit[scope.$index] ">${ issue_title[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Issue_Component" align="center" width="138">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] "    v-model="scope.row.Issue_Component"></el-input>
+                <span v-else="showEdit[scope.$index] ">${ issue_component[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Detect_By_Which_Case" width="168" align="center">
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index] "    v-model="scope.row.Detect_By_Case"></el-input>
+                <span v-else="showEdit[scope.$index] ">${ detect_by_case[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Root_Cause" width="160" align="center">
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index] "    v-model="scope.row.Root_Cause"></el-input>
+                <span v-else="showEdit[scope.$index] ">${ root_cause[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Issue_Status" width="160" align="center">
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index] "    v-model="scope.row.Issue_Status"></el-input>
+                <span v-else="showEdit[scope.$index] ">${ issue_status[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="PL"  align="center">
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index] "    v-model="scope.row.PL"></el-input>
+                <span v-else="showEdit[scope.$index] ">${ pl[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+            <template slot-scope="scope">
+                <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">保存</el-button>
+                <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">取消</el-button>
+
+                <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>
+
+            </template>
+     </el-table-column>
+
+    </el-table>
+    <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalNum">
+    </el-pagination>
+  </div>
+    </template>
+    <el-dialog :title="'ChangeId:'+changeindex" :visible.sync="dialogTableVisible">
+  <el-table border height="500" :data="historyRecord" :default-sort="{prop:'changeTime', order:'descending'}">
+    <el-table-column property="oldContent" label="oldContent"  style="white-space: pre-line" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="newContent" label="newContent"  style="white-space: pre-line" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="changeOwner" label="changeOwner" min-width="150" sortable></el-table-column>
+    <el-table-column property="changeTime" label="changeTime" left min-width="150" sortable></el-table-column>
+  </el-table>
+</el-dialog>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+
+             //權限flag
+             visible: false,
+             settable:false,
+             historyRecord:[],
+             tableContent: [],
+             searchalert:[],
+             showEdit:[], //显示编辑框
+             showBtn:[],
+             showBtnOrdinary: true,
+             //權限flag
+             canEdit:false,
+             showTips:false,
+             showCustomer:null,
+             showProject:null,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum: null,
+             selectItem:{},
+             selectedCustomer:null,
+             customer:[],
+             project_code:[],
+             platform:[],
+             issue_no:[],
+             issue_title:[],
+             issue_component:[],
+             detect_by_case:[],
+             pl:[],
+             root_cause: [],
+             issue_status: [],
+             flag:null,
+             dialogTableVisible:false,
+             changeindex:null,
+             customerError:false,
+         }
+     },
+     mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/KnowIssue/KnowIssue-edit/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.selectItem=res.data.select;
+         });
+
+        },
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+                this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          this.currentPage = val;
+         },
+         //搜索customer弹出弹框
+         SEARCHALERT:function(){
+            if(this.$refs.Customer.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               }else {
+                this.customerError = false;
+                let Customer = this.$refs.Customer.value;
+                let data = {
+                    "isGetData": "SEARCHALERT",
+                    "Customer": Customer,
+                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                }
+                axios.post("/KnowIssue/KnowIssue-edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.searchalert = res.data.sear;
+                })
+                this.settable=true;
+            }
+             },
+          //上传搜索项：以此选项搜索符合条件的内容
+         selectMsg :function(row){
+           let Customer = this.$refs.Customer.value;
+           let data ={"isGetData":"SEARCH","Customer":Customer,"COMPRJCODE":row.COMPRJCODE,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+           axios.post("/KnowIssue/KnowIssue-edit/",Qs.stringify(data), {
+           headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+               this.tableContent = res.data.content;
+               this.totalNum=this.tableContent.length;
+               this.canEdit=res.data['canEdit'];
+               console.log(this.canEdit)
+                if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{this.showTip()},1);
+                    }
+                   for(let i=0;i<this.tableContent.length;i++) {
+                            this.customer[i] = this.tableContent[i].Customer;
+                            this.project_code[i] = this.tableContent[i].Project_Code;
+                            this.platform[i] = this.tableContent[i].Platform;
+                            this.issue_no[i] = this.tableContent[i].Issue_NO;
+                            this.issue_title[i] = this.tableContent[i].Issue_Title;
+                            this.issue_component[i] = this.tableContent[i].Issue_Component;
+                            this.detect_by_case[i] = this.tableContent[i].Detect_By_Case;
+                            this.root_cause[i] = this.tableContent[i].Root_Cause;
+                            this.issue_status[i] = this.tableContent[i].Issue_Status;
+                            this.pl[i] = this.tableContent[i].PL;
+                   }
+           })
+               this.showCustomer=Customer;
+               this.showProject=row.COMPRJCODE;
+               this.settable=false;
+            console.log(Customer)
+        },
+
+         showTip(){
+          if( this.showCustomer&&this.showProject){
+             if(!this.canEdit){
+                this.showTips = true ;
+             }else{
+                 this.showTips = false ;
+             }
+          }else{
+              this.showTips = false ;
+          }
+      },
+          //编辑
+         editRow(index,row) {
+           this.$set(this.showEdit,index,true);
+           this.$set(this.showBtn,index,true);
+        },
+         //保存
+         saveRow(index,rows) {
+                let Customer = this.showCustomer;
+                let Project = this.showProject;
+                let data = {"isGetData": "SAVE", "rows": rows,"Customer":Customer,"Project":Project, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/KnowIssue/KnowIssue-edit/", data, {
+                    //headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                     this.tableContent = res.data.content;
+                     for(let i=0;i<this.tableContent.length;i++) {
+                        this.customer[i] = this.tableContent[i].Customer;
+                        this.project_code[i] = this.tableContent[i].Project_Code;
+                        this.platform[i] = this.tableContent[i].Platform;
+                        this.issue_no[i] = this.tableContent[i].Issue_NO;
+                        this.issue_title[i] = this.tableContent[i].Issue_Title;
+                        this.issue_component[i] = this.tableContent[i].Issue_Component;
+                        this.detect_by_case[i] = this.tableContent[i].Detect_By_Case;
+                        this.root_cause[i] = this.tableContent[i].Root_Cause;
+                        this.issue_status[i] = this.tableContent[i].Issue_Status;
+                        this.pl[i] = this.tableContent[i].PL;
+                        this.$set(this.showEdit,index,false);
+                        this.$set(this.showBtn,index,false);
+                    }
+        });
+
+       },
+        //取消编辑
+        cancelRow(index, row) {
+            this.tableContent[index].Customer=this.customer[index];
+            this.tableContent[index].Project_Code=this.project_code[index];
+            this.tableContent[index].Platform=this.platform[index];
+            this.tableContent[index].Issue_NO=this.issue_no[index];
+            this.tableContent[index].Issue_Title=this.issue_title[index];
+            this.tableContent[index].Issue_Component=this.issue_component[index];
+            this.tableContent[index].Detect_By_Case=this.detect_by_case[index];
+            this.tableContent[index].Root_Cause=this.root_cause[index];
+            this.tableContent[index].Issue_Status=this.issue_status[index];
+            this.tableContent[index].PL=this.pl[index];
+            this.$set(this.showEdit,index,false);
+            this.$set(this.showBtn,index,false);
+            //this.$message('取消編輯');
+       },
+
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        }
+     }
+ })
+</script>
+{% endblock %}

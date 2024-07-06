@@ -1,0 +1,513 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ManPower_search{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+<style>
+.content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 160px;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+.el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .el-table td.is-right, .el-table th.is-right {
+    white-space: pre-line;
+    text-align: left;
+}
+    .el-table .cell{
+        white-space: pre-line;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+.form-search{
+    outline-style: none ;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 0px;
+    width: 620px;
+    font-size: 20px;
+    font-family: "Microsoft soft";
+}
+input:focus{
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+.labe,.form-search{
+    display: inline-block;
+}
+.labe{
+    width:120px ;
+    font-size: 20px;
+    padding: 5px 0px;
+    color:black;
+    text-align: center;
+}
+.el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+.oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+.el-table .my-cell {
+    vertical-align: top
+  }
+#sh {
+    font-size:18px;
+       font-family:微软雅黑;
+    border: 2px solid #9f9ca1;
+}
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-9">
+        <label style="color: #FFF" for="Customer">客戶別</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key) in selectCustomer" >${ item }</option>
+           </select>
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Year1">年份</label>
+            <el-date-picker
+              id="Year1"
+              v-model="Year1"
+              size="small"
+              type="year"
+              ref="Year1"
+              value-format="yyyy"
+              placeholder="选择年"
+              @change="changeYear">
+            </el-date-picker>
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Chu">處</label>
+           <select id="Chu" ref="Chu" @change="changeChu" v-model="selectedChu" style="height:30px;border-radius:5px 5px 5px 5px;width:90px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectChu">${ item.Chu }</option>
+           </select>
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Ministry">部</label>
+           <select id="Ministry" ref="Ministry"  @change="changeMinistry" v-model="selectedMinistry" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectSection" >${ key }</option>
+           </select>
+        &nbsp;&nbsp;
+        <label style="color: #FFF" for="Section">課別</label>
+           <select id="Section" ref="Section"   v-model="selectedSection" style="height:30px;width:120px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectCategory" >${ item.Section }</option>
+           </select>
+
+    </div>
+    <div class="col-md-1" style="margin: 2px;">
+        <el-button :loading="elbuttonloading" size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="selectMsg">Search</el-button>
+    </div>
+    <div class="col-md-1" style="margin: 2px;">
+        <el-button size="small" @click="exportExcel" type="info" v-if="canEdit === 1">Export</el-button>
+    </div>
+</div>
+{#     {% comment %}<div class="labe" style="border-radius: 3px;background-color:grey">模糊搜索</div> {% endcomment %}<input type="text" v-model="search" class="form-search" placeholder="Search...">#}
+     <hr/>
+  <template >
+      <el-input type="text" v-model="search"  id="sh" placeholder="請輸入關鍵字搜索..."></el-input>
+      <el-table  id="out-table" border stripe height="700" @sort-change='sortChange' :default-sort = "{prop: 'Customer', order: 'ascending'}" :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)" :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900}" style="width: 100%"
+      v-loading="tableloading"
+            element-loading-text="數據更新中，請稍後"
+            border>
+          <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+          <el-table-column prop="Customer" label="客戶別"  align="center"  width="100" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Department_Code" label="部門代碼"  align="center"  width="140" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Chu" label="處" align="center" width="90" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Ministry" label="部" align="center" width="90" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Section" label="課" align="center" width="90" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Item" label="項次" align="center" width="100" sortable='custom' fixed></el-table-column>
+          <el-table-column prop="Title" label="職稱" align="center" width="100" sortable='custom'></el-table-column>
+          {% comment %}<el-table-column prop="CodeNoH01" label="CodeNoH01" align="center" width="140" sortable='custom'></el-table-column>
+          <el-table-column prop="CodeNoH02" label="CodeNoH02" align="center" width="140" sortable='custom'></el-table-column>{% endcomment %}
+          <el-table-column prop="Year" label="年份" align="center" width="100" sortable='custom'></el-table-column>
+          <el-table-column prop="Current_Workforce" label="目前在職人力" align="center" width="160" sortable='custom'></el-table-column>
+          <el-table-column prop="Jan" label="一月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Feb" label="二月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Mar" label="三月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Apr" label="四月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="May" label="五月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Jun" label="六月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Jul" label="七月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Aug" label="八月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Sep" label="九月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Oct" label="十月" align="center" width="80" sortable='custom'></el-table-column>
+          <el-table-column prop="Nov" label="十一月" align="center" width="100" sortable='custom'></el-table-column >
+          <el-table-column prop="Dec" label="十二月" align="center" sortable='custom'></el-table-column>
+      </el-table>
+      <div class="block">
+            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+            </el-pagination>
+      </div>
+</template>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+    new Vue({
+    el:'#app',
+    delimiters: ['${', '}'],
+    data: function () {
+            return {
+                visible: false,
+                tableContent: [],
+                selectedMinistry:null,
+                selectedCustomer:null,
+                selectedCategory:null,
+                selectedSection:null,
+                selectedChu:null,
+                selectSection:'',
+                selectCustomer:[],
+                selectKe:[],
+                selectChu:[],
+                selectCategory:[],
+                currentPage: 1,//默认显示第一页
+                pageSize:100,//默认每页显示100条
+                totalNum: null,
+                tableData: [], // 数据列表
+                currpage: 1, //当前页码
+                proptype: "" ,//存放column.prop的字符串值
+                dialogTableVisible: false,
+                search:'',
+                Totalsize:null,
+                Year1: '',
+                canEdit:null,
+                date: '',
+                elbuttonloading: false,
+                tableloading: false,
+            }
+        },
+    mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            sortChange: function(column){
+            console.log(column.prop,column.order,column,"order");
+            this.currentPage = 1; // return to the first page after sorting
+               if (column.prop === 'Customer') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Department_Code') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Chu') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Ministry') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Section') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Item') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Title') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'CodeNoH01') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'CodeNoH02') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Year') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Current_Workforce') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Jan') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Feb') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Mar') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Apr') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'May') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Jun') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Jul') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Aug') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Sep') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Oct') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Nov') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Dec') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }
+                    this.showed_data = this.tableContent.slice(0, this.pageSize);// 排序完显示到第一页
+                    console.log('Finished');
+                    console.log(this.showed_data);
+
+        },
+            //排序方法
+           sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+           handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+      },
+           handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+          this.currentPage = val;
+          console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+      },
+            //获取数据
+            getdata: function (e) {
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/ManPower-search/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.canEdit = res.data.canEdit;
+                    this.tableContent = res.data.content;
+                    this.totalNum=this.tableContent.length;
+                    this.selectCustomer = res.data.selectCustomer;
+                    this.selectYear = res.data.selectYear;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                });
+            },
+            indexMethod(index) {
+                    return index +1;
+            },
+            //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+                this.elbuttonloading = true;
+                this.tableloading = true;
+               let Customer = this.$refs.Customer.value;
+               let Year1 = this.$refs.Year1.value;
+               let Chu = this.$refs.Chu.value;
+               let Ministry = this.$refs.Ministry.value;
+               let Section = this.$refs.Section.value;
+               let data ={"isGetData":"SEARCH","Customer":Customer,"Year1":Year1,"Chu":Chu,"Ministry":Ministry,"Section":Section,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/PersonalInfo/ManPower-search/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.tableContent=res.data.content.sort(this.sortFun("Customer",  'ascending'));//用sort-change方法对分页后台排序时，默认排序列
+                  this.selectYear = res.data.selectYear;
+                  {#this.selectSection = res.data.selectSection;#}
+                  this.totalNum=this.tableContent.length;
+                  this.elbuttonloading = false;
+                this.tableloading = false;
+                })
+             },
+            changeYear:function () {
+                 if(this.$refs.Year1.value ==''){
+                      this.selectChu=[""];
+                      return false;
+                 }
+                 let date = this.$refs.Year1.value;
+                 this.selectChu=this.selectYear[this.$refs.Year1.value];
+                 this.selectedChu="";
+             },
+            changeChu:function () {
+                let date = this.$refs.Year1.value;
+                let Chu = this.$refs.Chu.value;
+                 if(Chu == ""){
+                      this.selectKe=[""];
+                      return false;
+                 }
+                let data = {"isGetData": "changeChu", "Year":date,"chu":Chu,"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/ManPower-search/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                   this.selectSection = res.data.selectSection;
+                });
+             },
+            //级联
+            changeMinistry:function () {
+                let Chu = this.$refs.Chu.value;
+                let Ministry = this.$refs.Ministry.value;
+                if(Ministry == ""){
+                      this.selectCategory=[""];
+                      return false;
+                }
+                this.selectCategory=this.selectSection[this.$refs.Ministry.value];
+                this.selectedCategory="";
+             },
+            //導出表格
+      exportExcel:function (){
+      /* 从表生成工作簿对象 */
+        console.log(document.querySelector("#out-table"));
+         let temp=[];
+         temp.push(Number(this.currentPage));
+         temp.push(Number(this.pageSize));
+         console.log(temp);
+         this.currentPage=1;
+         this.pageSize=this.tableContent.length;
+         console.log(temp,this.defaultPage1,this.pageSize);
+         setTimeout(() => { let table = document.querySelector("#out-table").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"));
+         table.removeChild(table.querySelector(".el-table__fixed-right"));//左右都有固定列
+         //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        console.log("wb",wb);
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        console.log("wbout",wbout);
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        this.currentPage=temp[0];
+            this.pageSize=temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+            temp=[];
+            return wbout;},1000);
+        },
+      test:function (row) {
+          console.log("trt");
+      },
+        ToBreak (val) {
+
+          if(val){
+              return val.replace('\n', '<br />')
+          }
+        }
+        },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    console.log(this.Totalsize);
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                    console.log("watch",this.showed_data);
+                }
+            },
+})
+</script>
+{% endblock %}

@@ -1,0 +1,477 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}公共環節負責人錄入及編輯{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+.showNum{
+font-size: 20px;
+font-weight: bold;
+color: white;
+}
+.el-tabs__item{
+color:white;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="111" style="margin-bottom:20px;">
+      <span class="showNum" style="margin-left: 30px">本頁已選 <span id="selectNum">0</span> 條</span> <el-button @click="Add()" size="medium" style="margin-left: 50px" v-if="permission===0"><i class="el-icon-circle-plus"></i>新增</el-button> <el-button @click="Delete()" size="medium" style="margin-left: 50px" v-if="permission===0"><i class="el-icon-remove"></i>刪除</el-button>
+</div>
+<el-dialog :visible.sync="appendss">
+           <template>
+             <el-form ref="form"  :model="form" :rules="rules"  :label-position="labelPosition" label-width="130px">
+                 <el-form-item label="大項" prop="DX">
+                          <el-select v-model="form.DX" placeholder="請選擇" >
+                              <el-option label="房間" value="房間"></el-option>
+                              <el-option label="設備" value="設備"></el-option>
+                              <el-option label="機台材料" value="機台材料"></el-option>
+                              <el-option label="賬號" value="賬號"></el-option>
+                              <el-option label="網絡環境" value="網絡環境"></el-option>
+                              <el-option label="其他" value="其他"></el-option>
+                           </el-select>
+                  </el-form-item>
+                  <el-form-item label="細項" prop="XX">
+                          <el-input  v-model="form.XX"></el-input>
+                  </el-form-item>
+                  <el-form-item label="負責人">
+                          <el-input  v-model="form.FZR"></el-input>
+                  </el-form-item>
+                 {#                  <el-form-item label="處別">#}
+{#                          <el-input  v-model="form.CHU"></el-input>#}
+{#                  </el-form-item>#}
+                 <el-form-item label="部別">
+                          <el-input  v-model="form.DEPARTMENT"></el-input>
+                  </el-form-item>
+                 <el-form-item label="郵件地址">
+                          <el-input  v-model="form.MAIL"></el-input>
+                  </el-form-item>
+                  <el-form-item label="聯繫方式">
+                          <el-input  v-model="form.LXFS"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                        <el-button type="primary" @click="addSubmit(form)">確定</el-button>
+                  </el-form-item>
+             </el-form>
+        </template>
+     </el-dialog>
+<template>
+  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tab-pane name="first">
+           <span slot="label"><i class="el-icon-s-home"></i>房間</span>
+          <el-table height="700" ref="multipleTable" border stripe :data="FJtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
+                    :header-cell-style="{
+                                       'background-color':'#fafafa',
+                                       'font-weight':'800',
+                                       'border-bottom':'1px solid rgb(103, 194, 58)'
+                                    }">
+              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+              <el-table-column  label="Edit" width="80">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
+              <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
+              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
+              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
+              {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
+               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
+               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
+              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
+          </el-table>
+    </el-tab-pane>
+    <el-tab-pane name="second">
+        <span slot="label"><i class="el-icon-s-tools"></i>設備</span>
+          <el-table height="700" ref="multipleTable1" border stripe :data="SBtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
+                    :header-cell-style="{
+                                       'background-color':'#fafafa',
+                                       'font-weight':'800',
+                                       'border-bottom':'1px solid rgb(103, 194, 58)'
+                                    }">
+              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+              <el-table-column  label="Edit" width="80">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod"></el-table-column>
+               <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
+              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
+              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
+              {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
+               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
+               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
+              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
+          </el-table>
+    </el-tab-pane>
+    <el-tab-pane name="third">
+        <span slot="label"><i class="el-icon-s-platform"></i>機台材料</span>
+          <el-table height="700" ref="multipleTable2" border stripe :data="JTtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
+                    :header-cell-style="{
+                                       'background-color':'#fafafa',
+                                       'font-weight':'800',
+                                       'border-bottom':'1px solid rgb(103, 194, 58)'
+                                    }">
+              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+              <el-table-column  label="Edit" width="80">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod"></el-table-column>
+               <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
+              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
+              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
+              {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
+               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
+               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
+              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
+          </el-table>
+    </el-tab-pane>
+    <el-tab-pane name="fourth">
+        <span slot="label"><i class="el-icon-user-solid"></i>賬號</span>
+           <el-table height="700" ref="multipleTable3" border stripe :data="ZHtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
+                    :header-cell-style="{
+                                       'background-color':'#fafafa',
+                                       'font-weight':'800',
+                                       'border-bottom':'1px solid rgb(103, 194, 58)'
+                                    }">
+              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+               <el-table-column  label="Edit" width="80">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod"></el-table-column>
+                <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
+              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
+              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
+               {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
+               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
+               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
+              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
+          </el-table>
+    </el-tab-pane>
+    <el-tab-pane name="fifth">
+        <span slot="label"><i class="el-icon-eleme"></i>網絡環境</span>
+           <el-table height="700" ref="multipleTable4" border stripe :data="WLtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
+                    :header-cell-style="{
+                                       'background-color':'#fafafa',
+                                       'font-weight':'800',
+                                       'border-bottom':'1px solid rgb(103, 194, 58)'
+                                    }">
+              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+               <el-table-column  label="Edit" width="80">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod"></el-table-column>
+                <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
+              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
+              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
+               {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
+               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
+               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
+              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
+          </el-table>
+    </el-tab-pane>
+      <el-tab-pane name="sixth">
+        <span slot="label"><i class="el-icon-more"></i>其他</span>
+           <el-table height="700" ref="multipleTable5" border stripe :data="Others" @selection-change="handleSelectionChange" :row-key="getRowKeys"
+                    :header-cell-style="{
+                                       'background-color':'#fafafa',
+                                       'font-weight':'800',
+                                       'border-bottom':'1px solid rgb(103, 194, 58)'
+                                    }">
+              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
+               <el-table-column  label="Edit" width="80">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod"></el-table-column>
+                <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
+              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
+              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
+{#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
+               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
+               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
+              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
+          </el-table>
+    </el-tab-pane>
+  </el-tabs>
+</template>
+
+<el-dialog :visible.sync="update">
+        <template>
+             <el-form ref="form"  :model="form"  :label-position="labelPosition" label-width="130px">
+                 <el-form-item label="大項" prop="DX">
+                          <el-select v-model="form.DX" placeholder="請選擇" >
+                              <el-option label="房間" value="房間"></el-option>
+                              <el-option label="設備" value="設備"></el-option>
+                              <el-option label="機台材料" value="機台材料"></el-option>
+                              <el-option label="賬號" value="賬號"></el-option>
+                              <el-option label="網絡環境" value="網絡環境"></el-option>
+                              <el-option label="其他" value="其他"></el-option>
+                           </el-select>
+                  </el-form-item>
+                  <el-form-item label="細項">
+                          <el-input  v-model="form.XX"></el-input>
+                  </el-form-item>
+                  <el-form-item label="負責人">
+                          <el-input  v-model="form.FZR"></el-input>
+                  </el-form-item>
+{#                  <el-form-item label="處別">#}
+{#                          <el-input  v-model="form.CHU"></el-input>#}
+{#                  </el-form-item>#}
+                 <el-form-item label="部別">
+                          <el-input  v-model="form.DEPARTMENT"></el-input>
+                  </el-form-item>
+                 <el-form-item label="郵件地址">
+                          <el-input  v-model="form.MAIL"></el-input>
+                  </el-form-item>
+                  <el-form-item label="聯繫方式">
+                          <el-input  v-model="form.LXFS"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                        <el-button type="primary" @click="editSubmit">更新</el-button>
+                  </el-form-item>
+             </el-form>
+        </template>
+    </el-dialog>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+            activeName: 'first',
+            FJtable:[],
+            SBtable:[],
+            JTtable:[],
+            ZHtable:[],
+            WLtable:[],
+            Others:[],
+            update:false,
+            labelPosition:'right',
+            editID:'',
+            form: {
+                DX:'',
+                XX:'',
+                FZR:'',
+{#                CHU:'',#}
+                DEPARTMENT:'',
+                MAIL:'',
+                LXFS:'',
+                CHU:'',
+                DEPARTMENT:'',
+                MAIL:'',
+            },
+            formData:[],
+            permission:null,//编辑权限
+            appendss:false,
+            rules: {
+              XX: [
+                 { required: true, message: "不可為空", trigger:['blur','change'] }
+              ]
+            }
+
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/PublicArea/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.FJtable=res.data.FJtable;
+                    this.SBtable=res.data.SBtable;
+                    this.JTtable=res.data.JTtable;
+                    this.ZHtable=res.data.ZHtable;
+                    this.WLtable=res.data.WLtable;
+                    this.Others=res.data.Others;
+                    this.permission=res.data.permission;
+                });
+            },
+            handleClick(tab, event) {
+                console.log(tab, event);
+                this.$refs.multipleTable.clearSelection()
+                this.$refs.multipleTable1.clearSelection()
+                this.$refs.multipleTable2.clearSelection()
+                this.$refs.multipleTable3.clearSelection()
+                this.$refs.multipleTable4.clearSelection()
+                this.$refs.multipleTable5.clearSelection()
+            },
+            indexMethod(index) {
+                return index + 1;
+            },
+            handleSelectionChange(rows) {
+                this.multipleSelection = rows;
+                console.log(rows,'111')
+                var len=document.getElementById("selectNum")
+                len.innerHTML=this.multipleSelection.length;
+            },
+            getRowKeys (row) {
+              return row.id;
+            },
+            Delete(){
+                 if(this.multipleSelection.length==0){
+                alert('未勾选数据！')
+                  }else{
+                  this.$confirm('您正在刪除材料, 是否繼續?', '提示', {
+                          confirmButtonText: '確定',
+                          cancelButtonText: '取消',
+                          type: 'warning'
+                  }).then(() => {
+                         let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                         let params = [];
+                         let self = this;
+                         checkArr.forEach(function (item) {
+                             console.log(item);
+                             params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                         });
+                         console.log(params);
+                         let data ={"isGetData":"Delete","DeleteId":params,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                         axios.post("/PersonalInfo/PublicArea/",data).then((res) => {
+                                  this.FJtable=res.data.FJtable;
+                                  this.SBtable=res.data.SBtable;
+                                  this.JTtable=res.data.JTtable;
+                                  this.ZHtable=res.data.ZHtable;
+                                  this.WLtable=res.data.WLtable;
+                                  this.Others=res.data.Others;
+                                })
+                                this.$refs.multipleTable.clearSelection()
+                                this.$refs.multipleTable1.clearSelection()
+                                this.$refs.multipleTable2.clearSelection()
+                                this.$refs.multipleTable3.clearSelection()
+                                this.$refs.multipleTable4.clearSelection()
+                                this.$refs.multipleTable5.clearSelection()
+                         this.$message({
+                         type: 'success',
+                         message: '刪除成功!'
+                         });
+                  }).catch(() => {
+                        this.$message({
+                        type: 'info',
+                        message: '已取消刪除'
+                        });
+                  });
+               }
+            },
+            Add(){
+                 this.form={
+                     DX:'',
+                    XX:'',
+                    FZR:'',
+{#                    CHU:'',#}
+                    DEPARTMENT:'',
+                    MAIL:'',
+                    LXFS:'',
+                 };
+                 this.appendss=true;
+            },
+            addSubmit(){
+                this.$refs.form.validate((valid) => {
+                   if (valid) {
+                        if (this.formData.length==0){this.formData = new FormData();}
+                        this.formData.append("action",'addSubmit');
+                        this.formData.append('DX', this.$refs.form.model.DX)
+                        this.formData.append('XX', this.$refs.form.model.XX)
+                        this.formData.append('FZR', this.$refs.form.model.FZR)
+                        {#                this.formData.append('CHU', this.$refs.form.model.CHU)#}
+                        this.formData.append('DEPARTMENT', this.$refs.form.model.DEPARTMENT)
+                        this.formData.append('MAIL', this.$refs.form.model.MAIL)
+                        this.formData.append('LXFS', this.$refs.form.model.LXFS)
+                        console.log(this.formData)
+                        axios.post("/PersonalInfo/PublicArea/", this.formData,{
+                                    headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                                }).then((res)=>{
+                                this.FJtable=res.data.FJtable;
+                                this.SBtable=res.data.SBtable;
+                                this.JTtable=res.data.JTtable;
+                                this.ZHtable=res.data.ZHtable;
+                                this.WLtable=res.data.WLtable;
+                                this.Others=res.data.Others;
+                                this.appendss=false;
+                                this.formData = new FormData();
+
+                        })
+                   } else {
+                        console.log('error submit!');
+                        return false;
+                   }
+                });
+            },
+            alertID:function(id,row){
+                  if(this.permission===0){
+                    this.update=true;
+                    this.form.DX=row.DX;
+                    this.form.XX=row.XX;
+                    this.form.FZR=row.FZR;
+{#                    this.form.CHU=row.CHU;#}
+                    this.form.DEPARTMENT=row.DEPARTMENT;
+                    this.form.MAIL=row.MAIL;
+                    this.form.LXFS=row.LXFS;
+                    this.editID = id;
+                  }else{
+                           this.update=false;
+                           this.$message({
+                              showClose: true,
+                              message: '您無此權限',
+                              type: 'warning'
+                           });
+                  }
+            },
+            editSubmit() {
+                console.log('submit!',this.$refs.form.model,typeof (this.$refs.form.model),this.formData);
+                if (this.formData.length==0){this.formData = new FormData();}
+                this.formData.append("isGetData",'editSubmit');
+                this.formData.append('id', this.editID)
+                this.formData.append('DX', this.$refs.form.model.DX)
+                this.formData.append('XX', this.$refs.form.model.XX)
+                this.formData.append('FZR', this.$refs.form.model.FZR)
+{#                this.formData.append('CHU', this.$refs.form.model.CHU)#}
+                this.formData.append('DEPARTMENT', this.$refs.form.model.DEPARTMENT)
+                this.formData.append('MAIL', this.$refs.form.model.MAIL)
+                this.formData.append('LXFS', this.$refs.form.model.LXFS)
+                console.log(this.formData)
+                axios.post("/PersonalInfo/PublicArea/", this.formData,{
+                            headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                        }).then((res)=>{
+                            this.FJtable=res.data.FJtable;
+                            this.SBtable=res.data.SBtable;
+                            this.JTtable=res.data.JTtable;
+                            this.ZHtable=res.data.ZHtable;
+                            this.WLtable=res.data.WLtable;
+                            this.Others=res.data.Others;
+                            this.update=false;
+                            this.formData = new FormData();
+
+                })
+            },
+        },
+    })
+    </script>
+
+{% endblock %}
+
+
+
+
+

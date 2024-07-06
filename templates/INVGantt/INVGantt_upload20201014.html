@@ -1,0 +1,432 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}CQM_upload{% endblock %}
+{% block css %}
+<link href="/static/css/b_upload.css" rel="stylesheet">
+<link href="/static/css/uploadbutton.css" rel="stylesheet">
+    <style>
+    .first-part textarea{
+        font-size: 1.2rem;
+        line-height: 1.5;
+        color: #FFF;
+        background-clip: padding-box;
+        height: 100px;
+        resize: none;
+    }
+    .second-part{
+        margin: 20px 0;
+    }
+    option{
+        background-color: white;
+        color: black;
+    }
+    #showResult{
+        position: absolute;
+        top:40px;
+        right:50px;
+    }
+    .modal.fade.in{
+        opacity: 1;
+    }
+    .modal-header .close{
+        margin-bottom:  0 ;
+         font-size: 22px;
+         padding: 0;
+         font-weight: bold;
+    }
+    #returnTitle{
+        margin-bottom: auto;
+        margin-top:auto;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card" style="background-color:rgba(255,255,255,0.3)">
+          <div class="card-body">
+           <div class="b-fileUpload">
+                   <p style="color: #FFF">Excel 文件上傳:</p>
+                   <input type="file" style="color: #FFF" id="xlsxUpload"  accept=".xlsx"/>
+                   <input type="button" id="xlsxSubmit" onclick="Upload(this)" VALUE="Submit">
+           </div>
+          </div>
+  </div>
+     <form method="POST" action="/INVGantt/INVGantt-upload/" id="fm">
+      <div class="card" style="background: rgba(255,255,255,0.2);">
+        <div class="card-header title" style="color: #FFF">INVGantt Data Upload</div>
+          <div id="showResult" class="err_msg">上传结果：<span id="showErrResult"></span></div>
+          <div class="card-body" >
+        <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">Customer</span>
+                     </div>
+                      {{ INVGantt_F_list.Customer }}
+{#            <div class="input-group-prepend">#}
+{#                       <span class="input-group-text">Project</span>#}
+{#                     </div>#}
+{#                      {{ INVGantt_F_list.Project }}#}
+{#            <div class="input-group-prepend">#}
+{#                       <span class="input-group-text">Phase</span>#}
+{#                     </div>#}
+{#                      {{ INVGantt_F_list.Phase }}#}
+{#            <input type="text" class="form-control-new" name="Phase" list="Phase" maxlength="20">#}
+{#             <datalist id="Phase" style="display:none;">#}
+{#                 <option value="FVT">FVT</option>#}
+{#                <option value="SIT">SIT</option>#}
+{#                <option value="OOC">OOC</option>#}
+{#                <option value="INV">INV</option>#}
+{#                 </datalist>#}
+           <div class="input-group-prepend">
+                       <span class="input-group-text  Label">INV_Number</span>
+                     </div>
+                      {{ INVGantt_F_list.INV_Number }}
+            <div class="input-group-prepend">
+                       <span class="input-group-text  Label">INV_Model</span>
+                     </div>
+                      {{ INVGantt_F_list.INV_Model }}
+
+        </div>
+         </div>
+{#          <div class="card-body" >#}
+{#        <div class="first-part">#}
+{#           <div class="input-group-prepend">#}
+{#                       <span class="input-group-text  Label">INV_Number</span>#}
+{#                     </div>#}
+{#                      {{ INVGantt_F_list.INV_Number }}#}
+{#            <div class="input-group-prepend">#}
+{#                       <span class="input-group-text  Label">INV_Model</span>#}
+{#                     </div>#}
+{#                      {{ INVGantt_F_list.INV_Model }}#}
+{#        </div>#}
+{#         </div>#}
+          <div class="card-body" >
+           <div class="first-part">
+           <div class="input-group-prepend ">
+                       <span class="input-group-text  Label">Project_Name</span>
+                     </div>
+                      {{ INVGantt_F_list.Project_Name }}
+            <div class="input-group-prepend">
+                       <span class="input-group-text  Label">Year</span>
+                     </div>
+                      {{ INVGantt_F_list.Year }}
+
+            <div class="input-group-prepend">
+                       <span class="input-group-text  Label">Unit_Origin</span>
+                     </div>
+                      {{ INVGantt_F_list.Unit_Origin }}
+
+               </div>
+           </div>
+          <div class="card-body" >
+        <div class="first-part">
+           <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Unit_Qty</span>
+                     </div>
+                      {{ INVGantt_F_list.Unit_Qty }}
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">TP_Kinds</span>
+                     </div>
+                      {{ INVGantt_F_list.TP_Kinds }}
+            </div>
+              </div>
+          <div class="card-body" >
+        <div class="first-part">
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Qualify_Cycles</span>
+                     </div>
+                      {{ INVGantt_F_list.Qualify_Cycles }}
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Status</span>
+                     </div>
+                      {{ INVGantt_F_list.Status }}
+        </div>
+         </div>
+          <div class="card-body" >
+        <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">TP_Cat</span>
+                     </div>
+{#                      {{ INVGantt_F_list.TP_Cat }}#}
+            <input type="text" class="form-control-new" name="TP_Cat" list="TP_Cat" maxlength="20">
+             <datalist id="TP_Cat" style="display:none;">
+                <option value="adapter">adapter</option>
+                <option value="Battery">Battery</option>
+                <option value="BIOS ROM">BIOS ROM</option>
+                <option value="Camera">Camera</option>
+                <option value="Connector">Connector</option>
+                <option value="CPU">CPU</option>
+                <option value="EE">EE</option>
+                <option value="FAN">FAN</option>
+                <option value="Finger Print">Finger Print</option>
+                <option value="HDD">HDD</option>
+                <option value="KB/Mouse">KB/Mouse</option>
+                <option value="Keyborad">Keyborad</option>
+                <option value="ME">ME</option>
+                <option value="package">package</option>
+                <option value="Panel">Panel</option>
+                <option value="RAM">RAM</option>
+                <option value="SSD">SSD</option>
+                <option value="SSD+Opante">SSD+Opante</option>
+                <option value="Thermal Module">Thermal Module</option>
+                <option value="Touch Panel">Touch Panel</option>
+                <option value="TPM">TPM</option>
+                <option value="VRAM">VRAM</option>
+                <option value="WLAN">WLAN</option>
+             </datalist>
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Trial_Run_Type</span>
+                     </div>
+                      {{ INVGantt_F_list.Trial_Run_Type }}
+        </div>
+         </div>
+          <div class="card-body" >
+           <div class="first-part">
+           <div class="input-group-prepend  Label">
+                       <span class="input-group-text">TP_Key_Parameter</span>
+                     </div>
+                      {{ INVGantt_F_list.TP_Key_Parameter }}
+               </div>
+           </div>
+          <div class="card-body" >
+           <div class="first-part">
+           <div class="input-group-prepend  Label">
+                       <span class="input-group-text">TP_Vendor</span>
+                     </div>
+                      {{ INVGantt_F_list.TP_Vendor }}
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Lenovo_TP_PN</span>
+                     </div>
+                      {{ INVGantt_F_list.Lenovo_TP_PN }}
+               </div>
+           </div>
+{#        <p style="color: #F2F8FE">DQA test result:</p>#}
+        <div class="second-part">
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Compal_TP_PN</span>
+                     </div>
+                      {{ INVGantt_F_list.Compal_TP_PN }}
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Issue_Link</span>
+                     </div>
+                      {{ INVGantt_F_list.Issue_Link }}
+        </div>
+{#          <p style="color: #F2F8FE">RD test result:</p>#}
+        <div class="second-part">
+            <div class="input-group-prepend">
+                       <span class="input-group-text"> Remark</span>
+                     </div>
+                      {{ INVGantt_F_list.Remark }}
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Attend_Time</span>
+                     </div>
+                      {{ INVGantt_F_list.Attend_Time }}
+        </div>
+{#<hr/>#}
+        <div class="first-part">
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text">Get_INV</span>
+                     </div>
+                      {{ INVGantt_F_list.Get_INV }}
+           <div class="input-group-prepend  Label">
+                       <span class="input-group-text"> Month</span>
+                     </div>
+                      {{ INVGantt_F_list.Month }}
+        </div>
+{#          <p style="color: #F2F8FE">JQE test result:</p>#}
+          <div class="first-part">
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text"> Test_Start</span>
+                     </div>
+                      {{ INVGantt_F_list.Test_Start }}
+            <div class="input-group-prepend  Label">
+                       <span class="input-group-text"> Test_End</span>
+                     </div>
+                      {{ INVGantt_F_list.Test_End }}
+               </div>
+          <div class="card-body" >
+       <div class="forth-part">
+            <div class="center">
+             <button type="submit" onclick="" class="btn btn-info" name="Upload" id="btn">Upload</button>
+             <button class="btn btn-default">Cancel</button>
+            </div>
+       </div>
+     </div>
+     {% csrf_token %}
+      </div>
+    </form>
+ </div>
+    <!-- 彈出信息提示，用來顯示內容上傳成功和失敗 -->
+<div class="modal fade" id="returnMsg" tabindex="-1" role="dialog" aria-labelledby="returnTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" >
+              <h5 class="modal-title" id="returnTitle">数据已存在</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="msgContent"  style="max-height: 500px;overflow: auto;"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+            </div>
+          </div>
+        </div>
+        </div>
+</div>
+{% endblock %}
+{#{% block scripts_inbase %}#}
+{#{% endblock %}#}
+{% block scripts1 %}
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/xlsx/xlsx.core.min.js"></script>
+<script src="/static/js/xlsx/xlsx_pop.js"></script>
+{#<script src="/static/js/Element/index.js"></script>#}
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+{#<script src="My97DatePicker/WdatePicker.js"></script>#}
+ <script>
+    $(function(){
+        {#console.log( Reliability)#}
+       $('#btn').click(function () {
+           console.log("begin");
+            $.ajax({
+                url: '/DriverTool/DriverList_upload/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: $('#fm').serialize(),
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg) {
+                        //window.location.href = 'http://www.baidu.com';
+                        console.log("success");
+                    }else{
+                        console.log(arg.message);
+                    }
+                }
+            })
+
+        })
+
+        $('#Compatibility').change(function () {
+            console.log(Reliability.value,Compatibility.value)
+            if (Reliability.value == 'No Build' || Compatibility.value == 'No Build') {
+                Testresult.value = 'No Build';
+                console.log(Testresult.value)
+            }
+            else if (Reliability.value == 'Qd' && Compatibility.value == 'Qd') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'Drpd' && Compatibility.value !== 'No Build') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'DisQ' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'F' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd' && Compatibility.value !== 'DisQ') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'T' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd' && Compatibility.value !== 'DisQ' && Compatibility.value !== 'F') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'Qd_C' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd' && Compatibility.value !== 'DisQ' && Compatibility.value !== 'F' && Compatibility.value !== 'T') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'Qd_L' && Compatibility.value !== 'No Build' && Compatibility.value == 'Qd') {
+                Testresult.value = Reliability.value;
+            }
+            else {
+                Testresult.value = Compatibility.value;
+            }
+        });
+        $('#Reliability').change(function () {
+            if (Reliability.value == 'No Build' || Compatibility.value == 'No Build') {
+                Testresult.value = 'No Build';
+            }
+            else if (Reliability.value == 'Qd' && Compatibility.value == 'Qd') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'Drop' && Compatibility.value !== 'No Build') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'DisQ' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'F' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd' && Compatibility.value !== 'DisQ') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'T' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd' && Compatibility.value !== 'DisQ' && Compatibility.value !== 'F') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'Qd_C' && Compatibility.value !== 'No Build' && Compatibility.value !== 'Drpd' && Compatibility.value !== 'DisQ' && Compatibility.value !== 'F' && Compatibility.value !== 'T') {
+                Testresult.value = Reliability.value;
+            }
+            else if (Reliability.value == 'Qd_L' && Compatibility.value !== 'No Build' && Compatibility.value == 'Qd') {
+                Testresult.value = Reliability.value;
+            }
+            else {
+                Testresult.value = Compatibility.value;
+            }
+        });
+    })
+ </script>
+    <script>
+var backResult=['Pass','Fail','上传数据成功','上传数据重复'];
+window.onload=function(){
+    var el =document.getElementById("showErrResult");
+
+    var result={{ result  }};
+    var canEdit={{ canEdit  }};
+    console.log(backResult[result]);
+    if(result==0&&canEdit==1){
+
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"green"});
+        $("#showResult").css({"display":"block"});
+        //alert(backResult[result+2]);
+        setTimeout(function () {
+            $("#showResult").css({"display":"none"});
+        },3000);
+    }
+    else if(result==1&&canEdit==1){
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"red"});
+        $("#showResult").css({"display":"block"});
+        alert(backResult[result+2]);
+    }
+    else {
+        //alert("您没有上传此表单的权限。");
+    }
+    var isNum = function (value) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(value)) {
+        return true;
+        }
+        return false;
+    }
+    //关闭滚轮事件
+    var inputMouseScroll = document.getElementsByClassName("form-control-new");
+    //console.log(inputMouseScroll[0]);
+    for(var formNum in inputMouseScroll){
+          //console.log(typeof(formNum));
+        if(isNum(formNum)){
+           //console.log(inputMouseScroll[formNum]);
+           inputMouseScroll[formNum].addEventListener("mousewheel",function(evt){
+           evt = evt || window.event;
+           if(evt.preventDefault) {
+           // Firefox
+          evt.preventDefault();
+          evt.stopPropagation();
+        } else {
+          // IE
+          evt.cancelBubble=true;
+          evt.returnValue = false;
+        }
+      });
+        }
+    }
+
+}
+</script>
+{% endblock %}
+

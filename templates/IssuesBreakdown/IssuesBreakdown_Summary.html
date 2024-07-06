@@ -1,0 +1,473 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}perIn_search{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+
+        /* 解决el-table 表线不齐 */
+        body .el-table th.gutter {
+            display: table-cell !important;
+        }
+
+        body .el-table colgroup.gutter {
+            display: table-cell !important;
+        }
+
+        label {
+            color: white;
+        }
+
+        .selectMsg {
+            font-size: 16px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .selectMsg label {
+            font-weight: 800;
+            color: aliceblue;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-fit {
+            display: inline-block;
+            vertical-align: top;
+            width: 123px;
+            height: 186px;
+            border: 1px solid black;
+
+        }
+
+        .cardInformation {
+            display: inline-block;
+        !important margin-left: 20 px;
+        }
+
+        .cardInformation label {
+            margin-bottom: -25px;
+        }
+
+        .cardInformation tr td {
+            width: 300px;
+        }
+
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        .el-pagination__total, .el-pagination__jump {
+            color: white;
+        }
+
+        .el-table .my-cell {
+            vertical-align: top
+        }
+
+        #sh {
+            font-size: 18px;
+            font-family: 微软雅黑;
+            border: 2px solid #9f9ca1;
+        }
+
+        #sh::-webkit-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh::-moz-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh:-ms-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        .showDataArea {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 20px 0 20px 0;
+            width: 100%;
+
+        }
+
+        .inputError {
+            text-align: center;
+            color: crimson;
+            background-color: beige;
+            width: 50%;
+            margin-left: 100px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .inputError:before {
+            display: block;
+            content: '';
+            border-width: 8px 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent beige transparent;
+
+            /* 定位 */
+            position: absolute;
+            left: 50%;
+            top: -16px;
+        }
+
+        .Quatity {
+            height: 500px;
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .customerContent, .departmentContent {
+            margin-left: 20px;
+        }
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div id="app">
+        <!--搜索框-->
+        <div class="selectMsg">
+            <div class="customerContent">
+                <label for="customer">Customer</label>
+                <select ref="Customer" @change="changeCustomer" v-model="customer"
+                        style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option value="C38(NB)">C38(NB)</option>
+                    <option value="C38(AIO)">C38(AIO)</option>
+                    <option value="C85">C85</option>
+                    <option value="T88(AIO)">T88(AIO)</option>
+                </select>
+                <div class="inputError" v-cloak v-show="customerError">不能為空</div>
+            </div>
+            <div class="departmentContent">
+                <label for="department">ProjectCode</label>
+                <el-select ref="ProjectcodeCompal" v-model="ProjectcodeCompal" filterable clearable>
+                    <el-option
+                            v-for="item in SectionProjectcode"
+                            :key="item.Projectcode"
+                            :label="item.Projectcode"
+                            :value="item.Projectcode">
+                    </el-option>
+                </el-select>
+                <div class="inputError" v-cloak v-show="departmentError">不能為空</div>
+            </div>
+            <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary"
+                       style="height:40px;margin-left: 20px">搜索
+            </el-button>
+            <br/>
+
+        </div>
+
+        <div class="showDataArea" style="white-space: nowrap;">
+            <div style="width: 22%;">
+                <template v-cloak>
+                    <el-table border :data="tableContent1" style="width: 100%;float: left" id="out-table1"
+                              v-loading="tableloading"
+                              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                              element-loading-text="數據更新中，請稍後"
+                    >
+                        <el-table-column prop="Project" label="Project" align="center" width="120"></el-table-column>
+                        <el-table-column :prop="propName" :label="labelname" align="center"></el-table-column>
+                    </el-table>
+                </template>
+            </div>
+            <div style="width: 78%;">
+                <template v-cloak>
+                    <el-table border :data="tableContent2" style="width: 100%;float: left" id="out-table1"
+                              v-loading="tableloading"
+                              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                              element-loading-text="數據更新中，請稍後"
+                              :span-method="arraySpanMethod"
+                              :row-style="changeRowColor"
+                    >
+                        <el-table-column prop="FFRT" label="FFRT" align="center" width="70"></el-table-column>
+                        <el-table-column prop="Category" label="Category" align="center">
+                            <el-table-column prop="Date" label="Date" align="center" width="120"></el-table-column>
+                        </el-table-column>
+                        <el-table-column prop="New_found" label="New found" align="center">
+                            <el-table-column prop="New_Implement" label="New Implement" align="center"
+                                             width="150"></el-table-column>
+                            <el-table-column prop="Stress" label="Stress" align="center" width="100"></el-table-column>
+                            <el-table-column prop="Unidentified" label="Unidentified" align="center"
+                                             width="120"></el-table-column>
+                            <el-table-column prop="MWD" label="MWD" align="center" width="100"></el-table-column>
+                        </el-table-column>
+                        <el-table-column prop="Regression_Fail" label="Regression Fail" align="center"
+                                         width="150"></el-table-column>
+                        <el-table-column prop="UE" label="UE" align="center" width="100"></el-table-column>
+                        <el-table-column prop="Adhoc" label="Adhoc" align="center" width="100"></el-table-column>
+                        <el-table-column prop="Late_found" label="Late found" align="center"></el-table-column>
+                    </el-table>
+                </template>
+            </div>
+
+        </div>
+        <div class="showDataArea" style="white-space: nowrap;background-color: white">
+            <div class="Quatity" id="main3" style="height:450px;"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/echart/echart.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script type="text/babel">
+        new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: function () {
+                return {
+                    // 搜索条件
+                    labelname: "",
+                    propName: "",
+                    customer: '',
+                    customerError: false,
+                    departmentError: false,
+                    ProjectcodeCompal: "",
+                    SectionProjectcode: [],
+                    ProjectCodeOption: [],
+                    elbuttonloading: false,
+                    tableloading: false,
+                    dialogloading: false,
+                    selectedProject: "",
+                    selectedCustomer: "",
+                    project: "",
+                    tableContent1: [],
+                    tableContent2: [],
+                    Top10: [],
+                }
+            },
+            mounted() {        // 页面渲染后触发该区域内容 即页面初始化
+                this.getdata("first");
+            },
+            methods: {
+                indexMethod(index) {
+                    return index + 1;
+                },
+                //获取数据
+                getdata: function (e) {
+                    this.elbuttonloading = true;
+                    let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_Summary/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.ProjectCodeOption = res.data.ProjectCodeOption;
+                        this.elbuttonloading = false;
+                    });
+                },
+
+
+                changeCustomer: function () {
+                    if (this.$refs.Customer.value === "") {
+                        this.departmentOptions = [""];
+                        return false;
+                    }
+                    this.SectionProjectcode = this.ProjectCodeOption[this.$refs.Customer.value];
+                    this.ProjectcodeCompal = "";
+                },
+
+                find: function () {
+                    if (this.$refs.Customer.value === "") {
+                        this.customerError = true;
+                        return false;
+                    } else {
+                        this.customerError = false;
+                    }
+
+                    if (this.$refs.ProjectcodeCompal.value === "") {
+                        this.departmentError = true;
+                        return false;
+                    }
+
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
+                    var myChart4 = echarts.init(document.getElementById('main3'));
+                    myChart4.showLoading()
+                    let Customer = this.$refs.Customer.value;
+                    let Projectcode = this.$refs.ProjectcodeCompal.value;
+                    let data = {
+                        "isGetData": "SEARCH", "Customer": Customer, "Projectcode": Projectcode,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/IssuesBreakdown/IssuesBreakdown_Summary/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.tableContent1 = res.data.content1;
+                        this.tableContent2 = res.data.content2;
+                        this.labelname = res.data.labelname;
+                        this.propName = res.data.propName;
+                        this.ProjectCodeOption = res.data.ProjectCodeOption;
+                        this.Keyparts_key = res.data.Keyparts_key;
+                        this.Category_Option = res.data.Category_Option;
+                        this.NewF_Option = res.data.NewF_Option;
+                        var option4 = {
+                            title: {
+                                text: this.labelname + ' FFRT Issue Category',
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: '{a} <br/>{b} : {c} ({d}%)'
+                            },
+                            toolbox: {//保存圖片
+                                feature: {
+                                    saveAsImage: {}
+                                }
+                            },
+                            legend: {
+
+                                left: 'center',
+                                top: 'bottom',
+                                data: this.Keyparts_key
+                            },
+                            series: [
+                                {
+
+                                    type: 'pie',
+                                    radius: '60%',
+                                    center: ['50%', '50%'],
+                                    data: this.Category_Option,
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    },
+                                    left: 0,
+                                    right: '40%',
+                                },
+                                {
+
+                                    type: 'pie',
+                                    radius: '50%',
+                                    center: ['50%', '50%'],
+                                    data: this.NewF_Option,
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    },
+                                    left: '30%',
+                                    right: 0,
+                                }
+                            ]
+                        };
+                        myChart4.setOption(option4, true);
+                        window.addEventListener('resize', function () {
+                            myChart4.resize();
+                        })
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
+                        this.customerError = false;
+                        this.departmentError = false;
+                        myChart4.hideLoading()
+                    })
+
+                },
+
+                handleSizeChange(val) {
+                    console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+                },
+
+                handleCurrentChange(val) {
+                    console.log(`当前页: ${val}`);
+                    this.currentPage = val;
+                    console.log(this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize));
+                },
+
+                arraySpanMethod({row, column, rowIndex, columnIndex}) {
+                    if (columnIndex === 0 || columnIndex === 1 || columnIndex === 6 || columnIndex === 7 || columnIndex === 8 || columnIndex === 9) {
+                        if (rowIndex === this.tableContent2.length - 2) {
+                            return {
+                                rowspan: 2,
+                                colspan: 1
+                            };
+                        } else if (rowIndex === this.tableContent2.length - 1) {
+                            return {
+                                rowspan: 0,
+                                colspan: 0
+                            };
+                        } else {
+                            return {
+                                rowspan: 1,
+                                colspan: 1
+                            };
+                        }
+                    }
+
+                    if (rowIndex === this.tableContent2.length - 1) {
+                        if (columnIndex === 2) {
+                            return [1, 4];
+                        } else {
+                            return [0, 0];
+                        }
+                    }
+
+                },
+
+                changeRowColor({row, column, rowIndex, columnIndex}) {
+                    if (rowIndex === this.tableContent2.length - 1 || rowIndex === this.tableContent2.length - 2) {
+                        return {
+                            background: '#FFF0F5'
+                        }
+                    } else {
+                        return {
+                            background: 'white'
+                            {#background: '#FFFAF0'#}
+                        }
+                    }
+                },
+
+
+            },
+            computed: {
+                datas() {//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search = this.search;
+                    if (search) {
+                        return this.tableContent.filter(data => {//axios返回时接受数据的变量
+                            return Object.keys(data).some(key => {
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed() {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        })
+    </script>
+{% endblock %}

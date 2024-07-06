@@ -1,0 +1,722 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Auto_Edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+
+
+.el-table__fixed-right {
+height: 100% !important; //设置高优先，以覆盖内联样式
+}
+/deep/ .el-table__fixed {
+    height: 100% !important;
+
+}
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+
+.el-table--border th.gutter:last-of-type {
+  display: block!important;
+}
+
+.el-table th.gutter{
+    display: table-cell!important;
+  }
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+    {#transform: scale(0.8,0.8);#}
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:black;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 60%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+.inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    body .el-table th.gutter{
+      display: table-cell!important;
+    }
+    body .el-table colgroup.gutter{
+      display: table-cell!important;
+    }
+
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #c0c0c0;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,255);
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 35px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: white;
+   }
+
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 15px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+
+#sh {
+    font-size:18px;
+    font-family:微软雅黑;
+    border: 2px solid #9f9ca1;
+}
+
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+
+  .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-3">
+         <label style="color: white;font-weight: 800;font-size:18px;" for="Customer" v-cloak>Customer</label>
+         <el-select v-model="selectedCustomer" ref="Customer" @change="changeProject" style="margin-right: 20px;width:160px" clearable v-cloak>
+              <el-option v-for="(item,key) in selectCustomer" :label="key" :value="key"></el-option>
+         </el-select>
+        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+    </div>
+    <div class="col-md-4">
+         <label style="color: white;font-weight: 800;font-size:18px;" for="Project" v-cloak>Project</label>
+{#         <el-select v-model="selectedProject" ref="Project" style="margin-right: 20px;width:160px" clearable v-cloak>#}
+{#              <el-option v-for="(item,key,index) in selectProject" :key="item.Project" :label="item.Project" :value="item.Project"></el-option>#}
+{#         </el-select>#}
+         <el-autocomplete
+                  clearable
+                  class="inline-input"
+                  v-model="selectedProject"
+                  ref="Project"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入Project"
+                  @select="handleSelect">
+         </el-autocomplete>
+         <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+    </div>
+    <div class="col-md-4">
+    <el-button size="small" style="background:#428bca;color:#fff;margin-top: 4px;" value="Search" name="Search" @click="selectMsg()">Search</el-button>
+
+    </div>
+</div>
+<div class="row" style="white-space: nowrap;" v-if="canEdit">
+    <div v-cloak class="fileUploadContent">
+        <div class="inputPackage" v-cloak>
+              <span v-cloak>請選擇文件</span>
+              <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+        </div>
+        <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+        <span class="showFileName" v-cloak >${ fileName }</span>
+        <div class="col-md-4">
+            <el-button size="small" style="border-color:white;color:#fff;" @click="exportExcel" type="info" v-if="canEdit">Export模板</el-button>
+        </div>
+    </div>
+
+</div>
+<br>
+<div class="tableAround" v-cloak >
+{#    <div class="col-md-5" style="float: left;">#}
+        <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject } <span v-if="canEdit==0" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+{#    </div>#}
+    {% csrf_token %}
+    <template>
+{#    <el-input type="text" v-model="search"  id="sh" placeholder="請輸入關鍵字搜索..."></el-input>#}
+    <el-table id="out-table" border stripe height="600" ref="multipleTable"  :data="tableContent.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+              :header-cell-style="{background:'white',fontWeight:900,'border-bottom':'1px solid rgb(103, 194, 58)'}"
+              style="border-radius: 10px;word-break: keep-all">
+{#        <el-table-column type="selection" :reserve-selection="true" width="50" fixed></el-table-column>#}
+{#        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>#}
+        <el-table-column prop="Number" label="No." align="center" width="50" fixed>
+        </el-table-column>
+        <el-table-column prop="CG" label="CG" align="center" width="80" fixed>
+        </el-table-column>
+        <el-table-column prop="VA_NVA" label="VA/N-VA" align="center" width="60" fixed>
+        </el-table-column>
+        <el-table-column prop="BaseBenfit" label="Base效益" align="center" width="80" fixed>
+        </el-table-column>
+        <el-table-column prop="CaseID" label="Case ID" align="center" width="100" fixed>
+        </el-table-column>
+        <el-table-column prop="CaseName" label="Case Name" align="center" width="260" fixed>
+        </el-table-column>
+        <el-table-column prop="Item" label="Item" width="260" align="center" fixed>
+        </el-table-column>
+
+        <el-table-column prop="Status" label="Status" width="80" align="center">
+        </el-table-column>
+        <el-table-column prop="FunctionInt" label="功能簡介" width="180" align="center">
+        </el-table-column>
+        <el-table-column prop="Comments" label="備註" align="center"  fixed="right">
+            <template slot-scope="scope">
+                <textarea class="edit-cell" cols="6" rows="4" v-if="showEdit[scope.$index]"  v-model="scope.row.Comments"></textarea>
+                <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ comments[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column v-if="showName" :key="Math.random()" prop="ProjectData" label="Cycles"{% comment %}:label="this.tableProject"{% endcomment %} width="140" align="center" fixed="right">
+            <template slot-scope="scope">
+{#                <el-input-number size="small" v-if="showEdit[scope.$index]" v-model="table_content[scope.$index+(currentPage-1)*pageSize]" @change="handleChange" :min="0" :max="100" label="描述文字"></el-input-number>#}
+                <el-input-number size="small" v-if="showEdit[scope.$index]" v-model="scope.row.ProjectData" @change="handleChange" :min="0" :max="100" label="描述文字"></el-input-number>
+                <span v-else="showEdit[scope.$index]">${ projects[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column v-if="canEdit" label="操作" width="120" align="center" fixed="right">
+            <template slot-scope="scope">
+                <el-button type="text" size="small" @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">保存</el-button>
+                <el-button type="text" size="small" @click.native="cancelRow(scope.$index, scope.row)"   v-if="showBtn[scope.$index]">取消</el-button>
+                <el-button type="text" size="big"   @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">編輯</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+    <div class="block">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[2, 50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="totalNum">
+        </el-pagination>
+    </div>
+    </template>
+</div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script type="text/babel">
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+             showCustomer:'',
+             showProject:'',
+             showEdit: [], //显示编辑框
+             showBtn: [],
+             showName: false,
+             projects:[],
+             visible: false,
+             projectError:false,
+             customerError:false,
+             tableContent: [],
+             {#table_content: [],#}
+             comments:[],
+             canEdit:false,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum: null,
+             selectedCustomer:'',
+             selectCustomer: {},
+             selectedProject:'',
+             tableProject:'',
+             selectProject: [],
+             selectProjectName:[],
+             selectedProjectName:'',
+             NPIBenfit:[],
+             editid: '',
+             excelFile:null,
+             fileName:"未選擇文件",
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/AutoResult/AutoResult_edit/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.selectCustomer = res.data.selectCustomer;
+                {#this.selectItem=res.data.select;#}
+                {#this.tableContent = res.data.content;#}
+                {#this.totalNum=this.tableContent.length;#}
+                {#this.canEdit = res.data.canEdit;#}
+         });
+
+        },
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+         },
+
+          querySearch(queryString, cb) {
+            var project = this.selectProject;
+            var results = queryString ? project.filter(this.createFilter(queryString)) : project;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+          },
+
+          createFilter(queryString) {
+            return (restaurant) => {
+              return (
+                  restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+
+          handleSelect(item) {
+
+          },
+
+            changeProject:function () {
+                 this.selectProject=this.selectCustomer[this.selectedCustomer];
+                 this.selectedProject="";
+            },
+
+         exportExcel: function () {
+             /* 从表生成工作簿对象 */
+             let temp = [];
+             temp.push(Number(this.currentPage));
+             temp.push(Number(this.pageSize));
+             this.currentPage = 1;
+             this.pageSize = this.tableContent.length;
+             setTimeout(() => {
+                 let table = document.querySelector("#out-table").cloneNode(true);
+                 let fix = table.querySelector(".el-table__fixed");
+                 let wb;
+                 if(fix){
+                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
+                    table.appendChild(fix);
+                 }else{
+                    wb = XLSX.utils.table_to_book(table,{raw: true});
+                 }
+                 console.log("wb", wb);
+                 /* 获取二进制字符串作为输出 */
+                 var wbout = XLSX.write(wb, {
+                     bookType: "xlsx",
+                     bookSST: true,
+                     type: "array"
+                 });
+                 console.log("wbout", wbout);
+                 try {
+                     saveAs(
+                         //Blob 对象表示一个不可变、原始数据的类文件对象。
+                         //Blob 表示的不一定是JavaScript原生格式的数据。
+                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                         new Blob([wbout], {type: "application/octet-stream"}),
+                         //设置导出文件名称
+                         "sheetjs.xlsx"
+                     );
+
+                 } catch (e) {
+                     if (typeof console !== "undefined") console.log(e, wbout);
+                 }
+                 this.currentPage = temp[0];
+                 this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                 temp = [];
+                 return wbout;
+             }, 100);
+         },
+
+          updateFile:function(e){
+                const first="未選擇文件";
+                let newValue= e.target.files;
+                if(newValue){
+                 let file=document.getElementById('upload');
+                 let filename= file.files[0].name;
+                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
+                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                      //console.log(this.excelFile);
+                     this.fileName=filename;
+                     this.uploadFile=file.files[0];
+                 }else{
+                     alert("上傳類型不為'xlsx'或'xls'");
+                       try{
+                       }catch(e){
+                          console.log(e);
+                       }
+                 }
+             }else{
+                 this.uploadFile=null;
+                 this.fileName=first;
+             }
+          },
+         //批量上傳
+          fileUpload:function(){
+                    const first="未選擇文件";
+                    let customer = this.$refs.Customer.value;
+                    let project = this.$refs.Project.value;
+                    if(this.uploadFile){
+                       //1.解析Excel
+                       let outputResult;
+                       let _this= this;
+                       let files = this.uploadFile;
+                       let undefined_to_null=function(value){
+                           if(value == undefined){
+                               value=null;
+                           }
+                           return value;
+                       };
+                       var fileReader = new FileReader ();
+                       const loading = this.$loading({
+                              lock: true,
+                              text: 'Loading',
+                              spinner: 'el-icon-loading',
+                              background: 'rgba(0, 0, 0, 0.7)'
+                       });
+                       fileReader.onload = function (ev) {
+                         try {
+                         var data = ev.target.result,
+                          workbook = XLSX.read(data, {
+                            type: 'binary'
+                         }), //以二进制流方式读取得到整份excel表格对象
+                          persons = []; //存储获取到的数据
+                       } catch (e) {
+                             loading.close();
+                         return;
+                      }
+                      for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        var fromTo = workbook.Sheets[sheet]['!ref'];
+                        var datas = workbook.Sheets[sheet];
+                        //如果有不规范数据可以在这里进行处理datas
+                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                    }
+                }
+                     //数据保存在result
+                      let result=JSON.stringify(persons);
+                       //2.上傳數據
+                        axios.post("/AutoResult/AutoResult_edit/" ,{"customer":customer,"project":project,"ExcelData":result},{
+                        headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    }).then((res) => {
+                        _this.tableContent = res.data.content;
+                        _this.totalNum = _this.tableContent.length;
+                        _this.errMsg=res.data.errMsg;
+                        _this.uploadFile=null;
+                        _this.fileName=first;
+                        for (let i = 0; i < _this.tableContent.length; i++) {
+                            {#this.projects[i] = this.table_content[i];#}
+                            {#console.log(_this.tableContent);#}
+                            _this.projects[i] = _this.tableContent[i].ProjectData;
+                            _this.comments[i] = _this.tableContent[i].Comments;
+                       }
+                        loading.close();
+                        //上传成功的操作
+                        if(_this.errMsg){
+                            _this.$alert(_this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+                            _this.$message({
+                                message: '上傳成功',
+                                type: 'success',
+                            })
+                        }
+                        //接受数据的初始化
+                        try{
+                        }catch(e)
+                        {
+                           console.log("错误异常"+e);
+                        }
+                    }).catch(function (e) {
+                            {#_this.loading=false;#}
+                            loading.close();
+                            _this.uploadFile=null;
+                            var warning =confirm("上傳異常");
+                            console.log("上傳錯誤信息"+e);
+                        });
+               };
+                       try{
+                       fileReader.readAsBinaryString(files);
+                       }
+                       catch(e){
+                             loading.close();
+                             console.log(e);
+                             alert("文件上傳異常") ;
+                             return;
+                        }
+                 }else{
+                   loading.close();
+                  alert("未選擇文件");
+                  return false;
+              }
+                    this.excelFile='';
+          },
+
+              //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+               let customer = this.$refs.Customer.value;
+               let project = this.$refs.Project.value;
+               if(customer==''){
+                     this.customerError = true;
+                     return false;
+               }else if(project==''){
+                     this.projectError = true;
+                     return false;
+               }else {
+                   this.projectError = false;
+                   this.customerError = false;
+                   this.tableProject = this.$refs.Project.value;
+                   let data = {
+                       "isGetData": "SEARCH",
+                       "Customer": customer,
+                       "Project": project,
+                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                   };
+                   axios.post("/AutoResult/AutoResult_edit/", Qs.stringify(data), {
+                       headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                   }).then((res) => {
+                       this.canEdit = res.data.canEdit;
+                       this.tableContent = res.data.content;
+                       {#this.table_content = res.data.table_content;#}
+                       this.totalNum = this.tableContent.length;
+                       this.$nextTick(()=>{
+                           this.$refs.multipleTable.doLayout()
+                       })
+                       {#console.log(project)#}
+                       for (let i = 0; i < this.tableContent.length; i++) {
+                            {#this.projects[i] = this.table_content[i];#}
+                            this.projects[i] = this.tableContent[i].ProjectData;
+                            this.comments[i] = this.tableContent[i].Comments;
+                            this.$set(this.showEdit,i,false);
+                            this.$set(this.showBtn,i,false) ;
+                       }
+
+                   });
+                    this.showCustomer = customer;
+                    this.showProject = project;
+                    this.showName = true;
+               }
+            },
+
+            //编辑
+            editRow(index, row,cell) {
+                this.$set(this.showEdit,index,true);
+                this.$set(this.showBtn,index,true);
+                {#console.log(this.tableContent, 'qqq')#}
+            },
+
+            handleChange(val) {
+                {#console.log(val)#}
+                {% comment %}
+                this.tableContent.map(v => {
+                    console.log(v.id, '222')
+                    if(row.id == v.id){
+                        this.$set(v,'this.selectedProject',val)
+                    }
+                }
+             )
+             {% endcomment %}
+            },
+            //保存
+            saveRow(index,rows) {
+                    let Customer = this.$refs.Customer.value;
+                    let Project = this.$refs.Project.value;
+                    let Comments = rows.Comments;
+                    let ProjectData = rows.ProjectData;
+                    {#console.log(rows.Comments,'aaa');#}
+                   let data = {
+                       "isGetData": "SAVE",
+                       "rowIndex": rows.Number,
+                       "Customer": Customer,
+                       "Project": Project,
+                       "Comments": Comments,
+                       "ProjectData": ProjectData,
+                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                   };
+                   axios.post("/AutoResult/AutoResult_edit/", Qs.stringify(data), {
+                       headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                   }).then((res) => {
+                         this.tableContent = res.data.content;
+                         {#this.table_content = res.data.table_content;#}
+                         this.totalNum = this.tableContent.length;
+                         for (let i = 0; i < this.tableContent.length; i++) {
+                             this.projects[i] =this.tableContent[i].ProjectData;
+                             this.comments[i] =this.tableContent[i].Comments;
+                         }
+                    });
+                    this.$set(this.showEdit,index,false);
+                    this.$set(this.showBtn,index,false) ;
+           },
+            //取消编辑
+            cancelRow(index, row) {
+                this.tableContent[index].Comments=this.comments[index];
+                this.tableContent[index].ProjectData=this.projects[index];
+                {#this.table_content[index]=this.projects[index];#}
+                this.$set(this.showEdit,index,false);
+                this.$set(this.showBtn,index,false) ;
+                {#console.log(this.tableContent, 'ttt')#}
+           },
+
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        },
+
+     },
+
+ {% comment %}
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    {#console.log(111);#}
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    {#console.log(this.Totalsize);#}
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                datas() {
+                        this.currentPage = 1;
+                }
+            },
+{% endcomment %}
+ })
+</script>
+{% endblock %}

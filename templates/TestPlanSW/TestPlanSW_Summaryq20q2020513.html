@@ -1,0 +1,706 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}summary{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 70%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+     .showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
+
+}
+.showDataArea .container-echart{
+   text-align: center;
+   width: 50%;
+   background-color: #F5F7FA;
+   padding: 5px;
+   border: 1px solid #fff5d4;
+}
+.showDataArea #main {
+
+}
+.showDataArea .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
+     .dashboard{
+    height: 400px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+     flex-wrap: nowrap;
+}
+.dashboard #myChart1 {
+    height: 100%;
+    width: 50%;
+}
+.dashboard #myChart2 {
+    height: 100%;
+    width: 50%;
+}
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="app">
+    <div class="row" style="white-space: nowrap;">
+                    <div class="col-md-2">
+                    <label style="color: #FFF" for="Customer1">客戶別:</label>
+           <select id="Customer1" ref="Customer1"   v-model="selectedCustomer1" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+                        <div class="inputError" v-cloak v-show="customerError1">客戶別未選擇</div>
+                    </div>
+    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;"  @click="searchalert1">Search</el-button>
+                    </div>
+    <el-button size="small" style="background:#428bca;color:#fff;position:absolute;right:10px;top:140px;" v-if="showCustomer1 && canEdit==1" @click="openRDchange">RD Change</el-button>
+    </div>
+{% csrf_token %}
+ <el-dialog title="導致FFRT多次測試的Function Team" width="30%!important" :visible.sync="setrdchange">
+     <template>
+    <el-table stripe border :data="rdchangelist">
+    <el-table-column  label="Function team" width="150">
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Functionteam"></el-input>
+            <span v-else>${ functionteam[scope.$index] }</span>
+       </template>
+    </el-table-column>
+    <el-table-column  label="Quantity" width="100">
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Quantity"></el-input>
+            <span v-else>${ quantity[scope.$index] }</span>
+       </template>
+    </el-table-column>
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <template slot-scope="scope">
+            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">保存</el-button>
+            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">取消</el-button>
+
+            <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>
+        </template>
+    </el-table-column>
+  </el-table>
+         </template>
+</el-dialog>
+
+    <el-dialog title="机种列表" :visible.sync="setproject">
+        <el-table stripe border :default-sort = "{prop: 'SS', order: 'descending'}" height="500" :data="proinfomation" @row-click="selectpro">
+            <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>
+            <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+            <el-table-column property="CUSPRJCODE" label="CUSPRJCODE" width="140" sortable></el-table-column>
+            <el-table-column property="PROJECT" label="PROJECT" width="200"></el-table-column>
+            <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+            <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+            <el-table-column property="PLATFORM" label="PLATFORM" width="200"></el-table-column>
+            <el-table-column property="VGA" label="VGA" width="110"></el-table-column>
+            <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+            <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+            <el-table-column property="LD" label="LD"></el-table-column>
+            <el-table-column property="DQA PL" label="DQA PL"></el-table-column>
+            </el-table>
+        </el-dialog>
+        <span class="selectItem" v-cloak v-if="showCustomer1&&showProject1">當前信息：${ showCustomer1 }/${ showProject1 }</span>
+        <div class="showDataArea" v-if="Sum" v-cloak>
+      <!--柱状图-->
+      <div class="container-echart"v-cloak>
+          <div class="Quatity" id="main" style="height:400px;"></div>
+      </div>
+      <!--regression cycle  and Dashboard-->
+      <div class="container-echart"v-cloak>
+          <div class="Quatity" id="main1" style="height:400px;"></div>
+          </div>
+      </div>
+
+        <hr/>
+    <div class="row" style="white-space: nowrap;">
+                    <div class="col-md-2">
+                    <label style="color: #FFF" for="Customer">客戶別:</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option value=""> </option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+                        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+                    </div>
+    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT">Search</el-button>
+                    </div>
+    </div>
+        {% csrf_token %}
+<el-dialog title="選擇查詢信息" :visible.sync="settable">
+  <el-table stripe border ref="projectTable"  style="min-width: 100%;border-radius: 10px"
+       :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'}"
+            :default-sort = "{prop: 'SS', order: 'descending'}" height="500" :data="searchalert" >
+    <el-table-column type="selection"></el-table-column>
+    <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>
+    <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+    <el-table-column property="PHASE" label="PHASE" width="140" sortable></el-table-column>
+    <el-table-column property="CUSPRJCODE" label="CUSPRJCODE" width="140" sortable></el-table-column>
+    <el-table-column property="PROJECT" label="PROJECT" width="200"></el-table-column>
+    <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+    <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+    <el-table-column property="PLATFORM" label="PLATFORM" width="200"></el-table-column>
+    <el-table-column property="VGA" label="VGA" width="110"></el-table-column>
+    <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+    <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+    <el-table-column property="LD" label="LD"></el-table-column>
+    <el-table-column property="DQA PL" label="DQA PL"></el-table-column>
+  </el-table>
+    <span slot="footer" class="dialog-footer" >
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="getMsg">确 定</el-button>
+      </span>
+</el-dialog>
+              <span class="selectItem" v-cloak  v-if="showCustomer" style="color: white">當前表格信息：${ showCustomer }</span>
+<template>
+<el-table stripe border  :data="tableData">
+    <el-table-column prop="Summary" label="Summary" align="center" width="160" align="center"></el-table-column>
+    <el-table-column v-if="tableData[0]" v-for="(item,index) in title" :label="item" :prop="'Project.'+index+'.Code'" min-width="150" align="center"></el-table-column>
+    </el-table>
+    </template>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+        <script src="/static/js/echart/echart.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                Sum:{},
+                tableData: [],
+                proinfomation:[],
+                searchalert: [],
+               selectItem: [],
+                projectArray: [],
+                phaseArray:[],
+                combineArray:[],
+                selectedCustomer: null,
+                selectedCustomer1: null,
+                canEdit:null,
+                title: [],
+                showCustomer: '',
+                showCustomer1:'',
+                showProject1:'',
+                settable:false,
+                setproject:false,
+                customerError:false,
+                customerError1:false,
+                setrdchange:false,
+                rdchangelist:[],
+                showEdit:[], //显示编辑框
+                showBtn:[],
+                showBtnOrdinary: true,
+                functionteam:[],
+                quantity:[]
+            }
+        },
+        mounted() {        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            getdata: function (e) {
+                let data = {"isGetData": e,};
+                axios.post("/TestPlanSW/TestPlanSW-summary/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()}
+                }).then((res) => {
+                    this.selectItem = res.data.select;
+
+                });
+            },
+             openRDchange(){
+                this.setrdchange=true;
+                let Customer = this.showCustomer1;
+                let Project = this.showProject1;
+                let data = {
+                        "isGetData": "getRdChange",
+                        "Customer": Customer,
+                        "Project":Project,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/TestPlanSW/TestPlanSW-summary/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                    this.rdchangelist = res.data.rdchangelist;
+                     for(let i=0;i<this.rdchangelist.length;i++) {
+                         this.functionteam[i] = this.rdchangelist[i].Functionteam;
+                         this.quantity[i] = this.rdchangelist[i].Quantity;
+                     }
+                })
+            },
+            editRow(index,row) {
+           this.$set(this.showEdit,index,true);
+           this.$set(this.showBtn,index,true);
+        },
+            //保存
+         saveRow(index,rows) {
+             let Customer = this.showCustomer1;
+             let Project = this.showProject1;
+              let data = {
+                        "isGetData": "SAVE",
+                        "rows":rows,
+                        "Customer": Customer,
+                        "Project":Project,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/TestPlanSW/TestPlanSW-summary/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                    this.rdchangelist = res.data.rdchangelist;
+                     for(let i=0;i<this.rdchangelist.length;i++) {
+                         this.functionteam[i] = this.rdchangelist[i].Functionteam;
+                         this.quantity[i] = this.rdchangelist[i].Quantity;
+                     }
+                     var myChart1 = echarts.init(document.getElementById('main'));
+                var myChart2 = echarts.init(document.getElementById('main1'));
+                // 指定图表的配置项和数据
+                var option1 = {
+                    title: {
+                        text: 'Project Test attend time',
+                    },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    },
+                    textAlign:'left',
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                    xAxis:[
+                    {
+                    type: 'value'
+                      }
+                    ],
+                yAxis: [
+                    {
+                   type: 'category',
+                   data: this.Sum.Time_key,
+                    axisTick: {
+                    alignWithLabel: true
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Config-Retest time',
+                        type: 'bar',
+                        stack: '总量',
+                        data:this.Sum.Time_value[0],
+                        itemStyle: {
+                            normal: {
+                                color: '#0099FF',
+                                label: {
+                                    show: true,		//开启显示
+                                    position: 'insideRight',	//在右方显示
+                                    textStyle: {	    //数值样式
+                                        color: 'black',
+                                        fontSize: 16
+                                    }
+                                }
+                            }
+                        }
+                    },
+                        {
+                        name: 'Attend Time',
+                        type: 'bar',
+                        stack: '总量',
+                        data:this.Sum.Time_value[1],
+                        itemStyle: {
+                            normal: {
+                               color:'#db8449',
+                                label: {
+                                    show: true,		//开启显示
+                                    position: 'insideLeft',	//在右方显示
+                                    textStyle: {	    //数值样式
+                                        color: 'black',
+                                        fontSize: 16
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ]
+                };
+                var option2 = {
+                    title: {
+                        text: 'Quantity Top 6',
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    legend: {
+                            data: this.Sum.Quantity_top6_key,
+                        },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                type: 'value'
+                  }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'category',
+                            data: this.Sum.Quantity_top6_key,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            type: 'bar',
+                            barWidth: '60%',
+                            data:this.Sum.Quantity_top6_value,
+                              itemStyle: {
+                               normal: {
+                                   color: function(params) {
+                            // build a color map as your need.
+                            var colorList = [
+                              '#7CFC00','#7CFC00','#7CFC00','#FF7F24','#EE3B3B',
+                               '#CD2626'
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                                   label: {
+                                       show: true,		//开启显示
+                                       position: 'right',	//在右方显示
+                                       textStyle: {	    //数值样式
+                                           color: 'black',
+                                           fontSize: 16
+                                       }
+                                   }
+                               }
+                           }
+                        }
+                    ]
+                };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart1.setOption(option1);
+                    myChart2.setOption(option2);
+               window.addEventListener('resize', ()=>{
+               myChart1.resize();
+               myChart2.resize();
+        })
+                })
+                this.$set(this.showEdit, index, false);
+                this.$set(this.showBtn, index, false);//关闭页面
+         },
+            //取消编辑
+        cancelRow(index, row) {
+            this.rdchangelist[index].Functionteam=this.functionteam[index];
+            this.rdchangelist[index].Quantity=this.quantity[index];
+            this.$set(this.showEdit,index,false);
+            this.$set(this.showBtn,index,false) ;
+        },
+            searchalert1:function(){
+                if(this.$refs.Customer1.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError1 = true;
+                   return false;
+               }else {
+                     this.customerError1 = false;
+                     let Customer = this.$refs.Customer1.value;
+                     let data = {
+                         "isGetData": "searchalert",
+                         "Customer": Customer,
+                         "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                     }
+                     axios.post("/TestPlanSW/TestPlanSW-summary/", Qs.stringify(data), {
+                         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                     }).then((res) => {
+                         this.proinfomation = res.data.proinfomation;
+                     })
+                     this.setproject=true;
+                 }
+            },
+            selectpro:function(row){
+                let Customer = this.$refs.Customer1.value;
+           let data ={"isGetData":"SELECTPRO","Customer":Customer,"COMPRJCODE":row.COMPRJCODE,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+           axios.post("/TestPlanSW/TestPlanSW-summary/",Qs.stringify(data), {
+           headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                        this.Sum =res.data['Sum'];
+            console.log(this.Sum);
+                this.canEdit = res.data.canEdit;
+                this.showCustomer1=Customer;
+                this.showProject1=row.COMPRJCODE;
+                this.setproject=false;
+                var myChart1 = echarts.init(document.getElementById('main'));
+                var myChart2 = echarts.init(document.getElementById('main1'));
+                // 指定图表的配置项和数据
+                var option1 = {
+                    title: {
+                        text: 'Project Test attend time',
+                    },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    },
+                    textAlign:'left',
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                    xAxis:[
+                    {
+                    type: 'value'
+                      }
+                    ],
+                yAxis: [
+                    {
+                   type: 'category',
+                   data: this.Sum.Time_key,
+                    axisTick: {
+                    alignWithLabel: true
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Config-Retest time',
+                        type: 'bar',
+                        stack: '总量',
+                        data:this.Sum.Time_value[0],
+                        itemStyle: {
+                            normal: {
+                                color: '#0099FF',
+                                label: {
+                                    show: true,		//开启显示
+                                    position: 'insideRight',	//在右方显示
+                                    textStyle: {	    //数值样式
+                                        color: 'black',
+                                        fontSize: 16
+                                    }
+                                }
+                            }
+                        }
+                    },
+                        {
+                        name: 'Attend Time',
+                        type: 'bar',
+                        stack: '总量',
+                        data:this.Sum.Time_value[1],
+                        itemStyle: {
+                            normal: {
+                               color:'#db8449',
+                                label: {
+                                    show: true,		//开启显示
+                                    position: 'insideLeft',	//在右方显示
+                                    textStyle: {	    //数值样式
+                                        color: 'black',
+                                        fontSize: 16
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ]
+                };
+                var option2 = {
+                    title: {
+                        text: 'Quantity Top 6',
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    legend: {
+                            data: this.Sum.Quantity_top6_key,
+                        },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                type: 'value'
+                  }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'category',
+                            data: this.Sum.Quantity_top6_key,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            type: 'bar',
+                            barWidth: '60%',
+                            data:this.Sum.Quantity_top6_value,
+                              itemStyle: {
+                               normal: {
+                                   color: function(params) {
+                            // build a color map as your need.
+                            var colorList = [
+                              '#7CFC00','#7CFC00','#7CFC00','#FF7F24','#EE3B3B',
+                               '#CD2626'
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                                   label: {
+                                       show: true,		//开启显示
+                                       position: 'right',	//在右方显示
+                                       textStyle: {	    //数值样式
+                                           color: 'black',
+                                           fontSize: 16
+                                       }
+                                   }
+                               }
+                           }
+                        }
+                    ]
+                };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart1.setOption(option1);
+                    myChart2.setOption(option2);
+               window.addEventListener('resize', ()=>{
+               myChart1.resize();
+               myChart2.resize();
+        })
+})
+            },
+            SEARCHALERT: function () {
+                console.log(this.$refs.Customer.value == '')
+                if (this.$refs.Customer.value == '') {
+                    //alert("客戶別未選擇");
+                    this.customerError = true;
+                    return false;
+                } else {
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer.value;
+                    let data = {
+                        "isGetData": "SEARCHALERT",
+                        "Customer": Customer,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/TestPlanSW/TestPlanSW-summary/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.searchalert = res.data.sear;
+                        this.showCustomer = this.selectedCustomer;
+                    })
+                    this.settable = true;
+                }
+            },
+            //二次选择
+            getMsg: function () {
+                //是否選中信息
+                let data = this.$refs.projectTable.store.states.selection;
+                this.title = this.$refs.projectTable.store.states.selection.map((res) => {
+                    return res.COMPRJCODE+"-"+res.PHASE
+                })
+                console.log(this.title)
+                //未選中
+                if (!data.length) {
+                    this.$message({
+                        message: "未選中數據",
+                        type: "info"
+                    });
+                    this.settable = false;
+                    return
+                }
+
+                //選中上傳數據
+                {% comment %}this.projectArray = data.map((res) => res.COMPRJCODE+":"+res.Phase);{% endcomment %}
+                this.projectArray = data.map((res) => res.COMPRJCODE );
+                this.phaseArray = data.map((res) => res.PHASE );
+                  console.log("this.projectArray",data,this.projectArray);
+                  for (var i = 0; i < this.projectArray.length; i++) {
+                   var combineArrayObject = {};
+                     for (var j = 0; j < this.phaseArray.length; j++) {
+                        if (i == j) {
+                                combineArrayObject.name = this.projectArray[i];
+                                combineArrayObject.value = this.phaseArray[j];
+                                this.combineArray.push(combineArrayObject);
+                            }
+                        }
+                    }
+             {% comment %}   this.projectArray = data.map((res) => {
+                    let jason = {};
+                    jason.Project = res.COMPRJCODE;
+                    jason.Phase = res.Phase;
+                    return jason;
+                });{% endcomment %}
+                console.log("this.projectArray",typeof(data), data, typeof(this.projectArray), this.combineArray, );
+                let msg = {
+                    "action": "getMsg", "customer": this.showCustomer, "searchalert": this.combineArray
+                }
+                axios.post("/TestPlanSW/TestPlanSW-summary/", msg, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    } //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.tableData = res.data['content'];
+                    this.settable = false;
+
+                })
+                this.combineArray = [];
+            },
+            //取消查找
+            cancel: function (id, row) {
+                this.searchalert = [];
+                this.choose = false;
+                console.log(this.choose)
+                this.settable = false;
+            },
+        },
+    })
+
+    </script>
+{% endblock %}
+

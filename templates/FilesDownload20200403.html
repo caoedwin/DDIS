@@ -1,0 +1,299 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Index{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="/static/css/ElementUI.css">
+{% endblock %}
+{% block content %}
+<div id="app01">
+
+    <el-button type="success" :plain="true" @click="Import">同步DCT专案信息</el-button>
+
+
+    <div style="background-color: rgba(255,255,255,0.8)">
+
+    <div {% comment %}class="card"{% endcomment %} style="background-color:rgba(255,255,255,0);color: #FFF">
+{#    <li style="text-align: center;font-size: 16px;color: #495057">批量上传模板下载:</li><br>#}
+    <div class="row">
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/Bouncing/Bouncing-upload/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/Bouncing.xlsx" style="color: #495057">Bouncing模板</a><br>
+                        <a href="/static/src/modelfiles/Bouncing.xlsx" style="color: #495057"><img src="/static/src/back/edit_copy_3_48px_539689_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/Bouncing/Bouncing-upload/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/CDM/CDM-upload/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/CDM.xlsx" style="color: #495057">CDM模板</a><br>
+                        <a href="/static/src/modelfiles/CDM.xlsx" style="color: #495057"><img src="/static/src/back/edit_copy_4_48px_539690_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/CDM/CDM-upload/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/Package/Package-upload/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/Package_G_Value.xlsx" style="color: #495057">Package模板</a><br>
+                        <a href="/static/src/modelfiles/Package_G_Value.xlsx" style="color: #495057"><img src="/static/src/back/edit_copy_6_48px_539691_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/Package/Package-upload/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/TestPlanME/TestPlanME-edit/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/TestPlanME.xlsx" style="color: #495057">TestPlanME</a><br>
+                        <a href="/static/src/modelfiles/TestPlanME.xlsx" style="color: #495057"><img src="/static/src/back/edit_copy_2_48px_539688_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/TestPlanME/TestPlanME-edit/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+0                    <a href="/DriverTool/DriverList_edit/" style="font-size: large">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/DriverList.xlsx" style="color: #495057">DriverList</a><br>
+                        <a href="/static/src/modelfiles/DriverList.xlsx" style="color: #495057"><img src="/static/src/back/document_properties_3_48px_539646_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/DriverTool/DriverList_edit/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/DriverTool/ToolList_edit/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/ToolList.xlsx" style="color: #495057">ToolList</a><br>
+                        <a href="/static/src/modelfiles/ToolList.xlsx" style="color: #495057"><img src="/static/src/back/document_new_3_48px_539619_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/DriverTool/ToolList_edit/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/MQM/MQM_upload/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/MQM.xlsx" style="color: #495057">MQM模板</a><br>
+                        <a href="/static/src/modelfiles/MQM.xlsx" style="color: #495057"><img src="/static/src/back/edit_copy_3_48px_539689_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/MQM/MQM_upload/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                    <a href="/TestPlanSW/TestPlanSW-edit/">
+                      <div class="stat-icon dib">
+                        <i class="ti-link color-danger border-danger"></i>
+                      </div>
+                    </a>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="/static/src/modelfiles/TestPlanSW.xlsx" style="color: #495057">SWPlan模板</a><br>
+                        <a href="/static/src/modelfiles/TestPlanSW.xlsx" style="color: #495057"><img src="/static/src/back/edit_copy_4_48px_539690_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="/TestPlanSW/TestPlanSW-edit/" style="font-size: large">Go to upload</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <div class="col-lg-4">
+              <div class="card">
+                <div class="stat-widget-one">
+                  <div class="stat-icon dib">
+                    <i class="ti-link color-danger border-danger"></i>
+                  </div>
+                  <div class="stat-content dib">
+                    <div class="stat-text">
+                        <a href="" style="color: #495057">努力更新中...</a><br>
+                        <a href="" style="color: #495057"><img src="/static/src/back/document_open_5_48px_539625_easyicon.net.png"></a>
+                    </div>
+                    <div class="stat-digit">
+                        <a href="" style="font-size: large">敬请期待...</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+    </div>
+    </div>
+{% comment %}
+<section id="main-content" style="background-color:rgba(255,255,255,0);color: #FFF">
+                    <div class="row" style="background-color:rgba(255,255,255,0);color: #FFF">
+                        <div class="col-lg-12" style="background-color:rgba(255,255,255,0);color: #FFF">
+                            <div class="card" style="background-color:rgba(255,255,255,0.2);color: #FFF">
+                                <div class="card-title">
+                                    <h4 style="color:#FFF">Calendar</h4>
+
+                                </div>
+                                <div class="card-body" style="background-color:rgba(255,255,255,0.2);color: #FFF">
+                                    <div class="year-calendar" style="background-color:rgba(255,255,255,0.6);color: #FFF"></div>
+                                </div>
+                            </div>
+                            <!-- /# card -->
+                        </div>
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+
+
+                </section>
+{% endcomment %}
+
+    </div>
+
+
+
+
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/bootstrap.min.js"></script>
+    <script src="../static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script  src="/static/js/Element/table.js"></script>
+    <script  src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script  src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/date-picker.js"></script>
+    <script src="/static/js/Element/dialog.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script src="/static/js/Element/tooltip.js"></script>
+    <script src="/static/js/Element/pagination.js"></script>
+    <script type="text/babel">
+      new Vue ({
+          el: "#app01",
+          delimiters: ['${', '}'],
+
+          methods: {
+              Import() {
+                  const h = this.$createElement;
+                  axios.get("/FilesDownload/?action=first" ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                        }).then((res) => {
+                            console.log(res.data)
+                            if (res.data.result === 1){
+                                this.$message({
+                                      message: h('p', null, [
+                                          h('span', null, '同步成功 '),
+                                          h('i', {style: 'color: teal'}, '如还没有专案信息，请检查DCT是否有录入该专案或录入DDIS的专案名是否与DCT的同名')
+                                      ]),
+                                      type: 'success'
+                                  })
+                            }
+                            else{
+                                this.$message({
+                                      message: h('p', null, [
+                                          h('span', null, '同步失败 '),
+                                          h('i', {style: 'color: teal'}, '可能是无法连接到DCT服务器')
+                                      ]),
+                                      type: 'warning'
+                                  })
+                                }
+                        })
+              }
+          }
+
+      })
+    </script>
+{% endblock %}

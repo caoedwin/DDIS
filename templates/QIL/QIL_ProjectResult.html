@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}QIL_Projectedit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+.inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+     .el-table .el-table__row.warning-row {
+    background: oldlace!important;
+  }
+  .el-table .el-table__row.warning-row:hover{
+   background: oldlace!important;
+  }
+   .el-table .info-row {
+    background: #8b968d!important;
+  }
+   .el-table .info-row:hover{
+     background: #8b968d!important;
+   }
+    .el-table .danger-row {
+    background: #F56C6C!important;
+  }
+   .el-table .danger-row:hover{
+    background: #F56C6C!important;
+   }
+  .el-table .success-row {
+    background: #a8c97f!important;
+  }
+  .el-table .success-row:hover{
+    background-color: #a8c97f!important;
+  }
+         .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-2">
+            <label style="color: #FFF" for="Customer">Customer</label>
+            <select id="Customer" ref="Customer" @change="changeCustomer"  v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option v-for="(item,key,index) in selectItem" >${ key }</option>
+            </select><br>
+      <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+    </div>
+    <div class="col-md-2">
+                        　<label style="color: #FFF" for="Project">Project</label>
+           <select id="Project" ref="Project"   v-model="selectedProject" style="height:30px;border-radius:5px 5px 5px 5px;width:100px;">
+               <option v-for="(item,key,index) in selectProject">${ item }</option>
+           </select><br>
+      <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+                    </div>
+    <div class="col-md-1">
+            <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="selectMsg">Search</el-button>
+    </div>
+</div>
+<template>
+        <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject } <span v-if="canEdit==0" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+    <el-table border height="750" :row-class-name="tableRowClassName" :data="tableContent.slice((currentPage-1)*pageSize,currentPage*pageSize)" @sort-change='sortChange'>
+        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+       <el-table-column prop="Product" label="Product" align="center" width="120" sortable='custom' ></el-table-column>
+       <el-table-column prop="Customer" label="Customer" align="center" width="156" sortable='custom' ></el-table-column>
+       <el-table-column prop="QIL_No" label="QIL No." align="center" width="156" sortable='custom' ></el-table-column>
+       <el-table-column prop="Issue_Description" label="Issue Description" align="center" width="256" sortable='custom' ></el-table-column>
+       <el-table-column prop="Root_Cause" label="Root Cause" align="center" width="156" sortable='custom' ></el-table-column>
+       <el-table-column prop="Status" label="Status" align="center" width="156" sortable='custom' ></el-table-column>
+        <el-table-column prop="Creator" label="Creator" style="white-space: pre-line;" width="95" sortable ></el-table-column>
+        <el-table-column prop="Created_On" label="Created On" style="white-space: pre-line;" width="115" sortable ></el-table-column>
+        <el-table-column prop="file" label="Attachment" width="100">
+          <template scope="scope">
+              <div v-if="scope.row.file[0]">
+                   <a v-for="(item) in scope.row.file" v-bind:href="item"><img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+              </div>
+          </template>
+        </el-table-column>
+{% comment %}        <el-table-column prop="Editor" label="Editor" style="white-space: pre-line;"  sortable ></el-table-column>
+       <el-table-column prop="Edit_Time" label="Edit Time" style="white-space: pre-line;"  sortable ></el-table-column>{% endcomment %}
+        <el-table-column  label="Result" align="center" width="156" fixed="right">
+            <template slot-scope="scope">
+                <el-select class="edit-cell" v-if="showEdit[scope.$index]" v-model="scope.row.Result"  >
+                    <el-option v-for="item in options" :label="item.label" :value="item.value" ></el-option>
+                 </el-select>
+                <span v-else="showEdit[scope.$index]">${ result[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+
+        <el-table-column  label="Comments" align="center" width="156" fixed="right">
+            <template slot-scope="scope">
+                <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index]"   v-model="scope.row.Comments"></textarea>
+                <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ comments[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+
+
+        <el-table-column v-if="canEdit==1" label="操作" width="120" align="center" fixed="right">
+        <template slot-scope="scope">
+            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">保存</el-button>
+            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">取消</el-button>
+
+            <el-button type="text" size="big"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>
+        </template>
+        </el-table-column>
+
+    </el-table>
+    <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalNum">
+    </el-pagination>
+  </div>
+</template>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                projectError:false,
+                customerError:false,
+                visible: false,
+                tableContent: [],
+                showEdit: [], //显示编辑框
+                showBtn: [],
+                showBtnOrdinary: true,
+                selectedCustomer:null,
+                selectItem:{},
+                selectId:null,
+                currentPage: 1,//默认显示第一页
+                pageSize:100,//默认每页显示100条
+                totalNum: null,
+                search: '',
+                selectProject:[],
+                selectedProject:null,
+                result:[],
+                comments:[],
+                options:[{
+                label:"",
+                value:""
+            },{
+                label:"Pass",
+                value:"Pass"
+            },{
+                label:"Fail",
+                value:"Fail"
+            },{
+                label:"Not Support",
+                value:"NS"
+            },{
+                label:"N/A",
+                value:"NA"
+            },
+            ],
+            canEdit:null,
+            showCustomer:'',
+            showProject:'',
+
+
+
+            }
+        },
+         computed: {
+                // 前端过滤
+                tables () {
+                  const search = this.search
+                  if (search) {
+                    return this.tableData.filter(dataNews => {
+                      return Object.keys(dataNews).some(key => {
+                        return String(dataNews[key]).toLowerCase().indexOf(search) > -1
+                      })
+                    })
+                  }
+                  return this.tableData
+                },
+                // 总条数
+                total () {
+                  return this.tables.length
+                }
+              },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            // 前端过滤
+            indexMethod(index) {
+                    return index +1;
+            },
+            changeCustomer:function () {
+                 if(this.$refs.Customer.value ==""){
+                      this.selectProject=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.Customer.value];
+                 this.selectedProject="";
+                 console.log(this.selectProject);
+             },
+            sortChange: function(column){
+            this.currentPage = 1 // return to the first page after sorting
+                if (column.prop === 'Product') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Customer') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'QIL_No') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Issue_Description') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Root_Cause') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Status') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Status') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Creator') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Created_On') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }
+                    this.showed_data = this.tableContent.slice(0, this.pageSize) // 排序完显示到第一页
+                    console.log('Finished');
+                    console.log(this.showed_data);
+
+        },
+            //排序方法
+            sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+            watch: {
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                }
+            },
+            handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+          },
+            handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+              this.currentPage = val;
+              console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+          },
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/QIL/QIL_projectresult/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectItem=res.data.select;
+                });
+            },
+            tableRowClassName({row, rowIndex}) {
+                console.log(row.Result)
+                switch (row.Result) {
+                    case "Pass": return  'success-row';
+                    case "Fail": return  'danger-row';
+                    case "NS": return  'info-row';
+                    case "NA": return 'warning-row';
+                    default: return "";
+                }
+              },
+            //编辑
+            editRow(index, row,cell) {
+            this.$set(this.showEdit,index,true);
+            this.$set(this.showBtn,index,true);
+            },
+            //保存
+            saveRow(index,rows) {
+                    let Customer = this.$refs.Customer.value;
+                    let Project = this.$refs.Project.value;
+                    let data = {"isGetData": "SAVE", "rows": rows,"Customer":Customer, "Project":Project, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };
+                    axios.post("/QIL/QIL_projectresult/", data, {
+                        //headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                         this.tableContent = res.data.content;
+                         for(let i=0;i<this.tableContent.length;i++) {
+                             this.result[i] =this.tableContent[i].Result;
+                             this.comments[i] =this.tableContent[i].Comments;
+                    }
+                    });
+                    this.$set(this.showEdit,index,false);
+                    this.$set(this.showBtn,index,false) ;
+           },
+            //取消编辑
+            cancelRow(index, row) {
+                this.tableContent[index].Result=this.result[index];
+                this.tableContent[index].Comments=this.comments[index];
+
+                    this.$set(this.showEdit,index,false);
+                    this.$set(this.showBtn,index,false) ;
+           },
+            //上传搜索项：以此选项搜索符合条件的内容
+            selectMsg :function(){
+                if(this.$refs.Customer.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               } else if(this.$refs.Project.value==''){
+                       //alert("專案號未填寫");
+                     this.projectError = true;
+                      return false;
+                   }
+                else {
+
+                    //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+                    this.projectError = false;
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer.value;
+                    let Project = this.$refs.Project.value;
+                    let data = {
+                        "isGetData": "SEARCH",
+                        "Customer": Customer,
+                        "Project": Project,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/QIL/QIL_projectresult/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.canEdit = res.data.canEdit;
+                        this.selectItem = res.data.select;
+                        this.totalNum = this.tableContent.length;
+                        for (let i = 0; i < this.tableContent.length; i++) {
+                            this.result[i] = this.tableContent[i].Result;
+                            this.comments[i] = this.tableContent[i].Comments;
+                        }
+                    })
+                    this.showCustomer = Customer;
+                    this.showProject = Project;
+                }
+             }
+
+        }
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ToolList_edit{% endblock %}
+{% block css %}
+{#<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">#}
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/ElementUI.css">
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="row" style="white-space: nowrap;">
+                    <div class="col-md-3">
+                    <label for="Customer" style="color: #fff;">Customer</label>
+           <select id="Customer" ref="Customer"  @change="changeCustomer" v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value=""> </option>
+               <option v-for="(item,key,index) in selectItem" >${ key }</option>
+           </select>
+                    </div>
+                    <div class="col-md-3">
+                        　<label for="Project" style="color: #fff;">Project</label>
+           <select id="Project" ref="Project"  @change="changeProject" v-model="selectedProject" style="height:30px;border-radius:5px 5px 5px 5px;width:100px;">
+               <option></option>
+               <option v-for="(item,key,index) in selectProject">${ item.Project }</option>
+           </select>
+                    </div>
+          <div class="col-md-3">
+                        　　<label for="Phase0 " style="color: #fff;">Phase</label>
+             <select id="Phase0" ref="Phase0"  v-model="selectedPhase0" style="height:30px;border-radius:5px 5px 5px 5px;width:100px;">
+               <option></option>
+               <option v-for="(item,key,index) in selectPhase0">${ item }</option>
+           </select>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button :loading="elbuttonloading" size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="selectMsg">Search</el-button>
+                    </div>
+     </div>
+
+<template>
+   <el-table stripe border height="700" id="Tab" ref="multipleTable" :data="tableContent" tooltip-effect="dark" style="width: 1050px ;heighrt:200;" @selection-change="handleSelectionChange"
+   v-loading="tableloading"
+  element-loading-text="數據更新中，請稍後"
+  border>
+    <el-table-column type="selection" width="50"></el-table-column>
+    <el-table-column type="index" :index="indexMethod"></el-table-column>
+      <el-table-column prop="Project" label="Project" width="200" show-overflow-tooltip>
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Project"></el-input>
+            <span v-if="!showEdit[scope.$index]">${ project[scope.$index] }</span>
+        </template>
+    </el-table-column>
+       <el-table-column prop="Phase" label="Phase" width="100" show-overflow-tooltip>
+        <template slot-scope="scope">
+            <el-select class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Phase">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+            <span v-if="!showEdit[scope.$index]">${ phase[scope.$index] }</span>
+        </template>
+    </el-table-column>
+    <el-table-column prop="ToolName" label="Tool Name" width="240" >
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.ToolName"></el-input>
+            <span v-if="!showEdit[scope.$index]">${ toolname[scope.$index] }</span>
+        </template>
+    </el-table-column>
+    <el-table-column prop="TestCase" label="Test Case" width="120">
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.TestCase"></el-input>
+            <span v-if="!showEdit[scope.$index]">${ testcase[scope.$index] }</span>
+        </template>
+    </el-table-column>
+    <el-table-column prop="Vendor" label="Vendor" width="120" show-overflow-tooltip>
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Vendor"></el-input>
+            <span v-if="!showEdit[scope.$index]">${ vendor[scope.$index] }</span>
+        </template>
+    </el-table-column>
+
+    <el-table-column prop="Version" label="Version" width="120" show-overflow-tooltip>
+        <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Version"></el-input>
+            <span v-if="!showEdit[scope.$index]">${ version[scope.$index] }</span>
+        </template>
+    </el-table-column>
+    <el-table-column label="操作" width="120" align="center" fixed="right">
+        <template slot-scope="scope">
+            <el-button type="text" size="small"     @click.native="saveRow(scope.$index,scope.row)"     v-if="showBtn[scope.$index]&&canEdit">保存</el-button>
+            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, row)"     v-if="showBtn[scope.$index]&&canEdit">取消</el-button>
+
+            <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"     v-if="!showBtn[scope.$index]&&canEdit">编辑</el-button>
+            <el-button type="text" size="small"     @click.native="open(scope.$index, scope.row)"     v-if="!showBtn[scope.$index]&&canEdit">删除</el-button>
+        </template>
+    </el-table-column>
+   </el-table>
+    <div style="margin-top: 20px">
+    <el-button type="danger" v-if="multipleSelectionFlag&&canEdit" @click="multiDelete">批量删除</el-button>
+  </div>
+</template>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+    <script src="/static/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+               options: [{value: 'NPI', label: 'NPI'}, {value: '19H1', label: '19H1'}, {value: '19H2', label: '19H2'},{value: 'Others', label: 'Others'}],
+
+                visible: false,
+                tableContent: [],
+                multipleSelectionFlag:false,
+                multiDeleteVisible:false,
+                multipleSelection: [],
+                selectedCustomer:null,
+                selectedProject:null,
+                selectedPhase0:null,
+                selectPhase0:null,
+                selectProject:[],
+                selectItem:{},
+                selectId:null,
+                toolname:[],
+                testcase:[],
+                vendor:[],
+                project:[],
+                phase:[],
+                version:[],
+                customer:[],
+                {#phase:[],#}
+                showEdit: [], //显示编辑框
+                showBtn: [],
+                canEdit: '',
+                showBtnOrdinary: true,
+                tableloading:false,
+                elbuttonloading:false,
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/ABODriverTool/ABOToolList_edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent = res.data.content;
+                    this.selectItem=res.data.select;
+                    for(let i=0;i<this.tableContent.length;i++) {
+                        this.toolname[i] = this.tableContent[i].ToolName;
+                        this.testcase[i] = this.tableContent[i].TestCase;
+                        this.vendor[i] = this.tableContent[i].Vendor;
+                        this.project[i] = this.tableContent[i].Project;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.version[i] = this.tableContent[i].Version;
+                        this.customer[i]= this.tableContent[i].Customer;
+                        {#this.phase[i] = this.tableContent[i].Phase;#}
+                    }
+                });
+            },
+            toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+          }
+          },
+            indexMethod(index) {
+            return index +1;
+            },
+            changeCustomer:function () {
+                 if(this.$refs.Customer.value ==""){
+                      this.selectProject=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.Customer.value];
+                 this.selectedProject="";
+                 console.log(this.selectProject);
+             },
+            changeProject:function(index){
+                if(this.$refs.Project.value ==""){
+                      this.selectPhase0=[""];
+                      return false;
+                 }
+                for(let index=0;index<this.selectItem[this.selectedCustomer].length;index++){
+                     if(this.selectItem[this.selectedCustomer][index]["Project"]==this.selectedProject){
+                        this.selectPhase0=this.selectItem[this.selectedCustomer][index]["Phase0"];
+                    }
+                }
+            },
+            //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+                this.tableloading=true;
+                this.elbuttonloading=true;
+               let Customer = this.$refs.Customer.value;
+               let Project = this.$refs.Project.value;
+               let Phase0 = this.$refs.Phase0.value;
+               let data ={"isGetData":"SEARCH","Customer":Customer,"Project":Project,"Phase":Phase0,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/ABODriverTool/ABOToolList_edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.tableContent=res.data.content;
+                  this.selectItem=res.data.select;
+                  this.canEdit=res.data.canEdit;
+                  for(let i=0;i<this.tableContent.length;i++) {
+                        this.toolname[i] = this.tableContent[i].ToolName;
+                        this.testcase[i] = this.tableContent[i].TestCase;
+                        this.vendor[i] = this.tableContent[i].Vendor;
+                        this.project[i] = this.tableContent[i].Project;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.version[i] = this.tableContent[i].Version;
+                        this.customer[i]= this.tableContent[i].Customer;
+                        {#this.phase[i] = this.tableContent[i].Phase;#}
+                    }
+                    this.tableloading=false;
+                   this.elbuttonloading=false;
+                })
+             },
+            //点击编辑
+            editRow(index, row,e) {
+            this.$set(this.showEdit,index,true);
+            this.$set(this.showBtn,index,true);
+            },
+           //取消编辑
+           cancelRow(index, row,e) {
+                this.tableContent[index].ToolName=this.toolname[index];
+               this.tableContent[index].TestCase=this.testcase[index];
+               this.tableContent[index].Project=this.project[index];
+               this.tableContent[index].Phase=this.phase[index];
+               this.tableContent[index].Vendor=this.vendor[index];
+               this.tableContent[index].Version=this.version[index];
+           this.$set(this.showEdit,index,false);
+           this.$set(this.showBtn,index,false) ;
+           },
+
+
+            multiDelete() {
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+         if(warning) {
+             this.multiDeleteVisible = false;
+             let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+             let params = [];
+             let self = this;
+             let Customer = this.$refs.Customer.value;
+               let Project = this.$refs.Project.value;
+               let Phase0 = this.$refs.Phase0.value;
+             checkArr.forEach(function (item) {
+                 console.log(item);
+                 params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+             });
+             console.log(params);
+             let data = {
+                 "isGetData": "MUTICANCEL",
+                 "params": params,
+                 "Customer":Customer,"Project":Project,"Phase":Phase0,
+                 "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+             };
+             axios.post('/ABODriverTool/ABOToolList_edit/', data).then((res) => {
+                 self.$message({
+                     message: '删除成功',
+                     type: 'success'
+                 });
+                 this.tableContent = res.data.content;
+                 for(let i=0;i<this.tableContent.length;i++) {
+                        this.toolname[i] = this.tableContent[i].ToolName;
+                        this.testcase[i] = this.tableContent[i].TestCase;
+                        this.vendor[i] = this.tableContent[i].Vendor;
+                        this.project[i] = this.tableContent[i].Project;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.version[i] = this.tableContent[i].Version;
+                        this.customer[i]= this.tableContent[i].Customer;
+                        {#this.phase[i] = this.tableContent[i].Phase;#}
+                    }
+
+
+             })
+         }else{
+             return false;
+         }
+ },
+         open(index,rows) {
+        var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+         if(warning){
+              console.log(this.tableContent[index]['id']);
+               let Customer = this.$refs.Customer.value;
+               let Project = this.$refs.Project.value;
+               let Phase0 = this.$refs.Phase0.value;
+               let data = {"isGetData": "DELETE", "id":this.tableContent[index]['id'],"Customer":Customer,"Project":Project,"Phase":Phase0,"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/ABODriverTool/ABOToolList_edit/", Qs.stringify(data),{
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent = res.data.content;
+                    //rows.splice(index, 1);
+                    for(let i=0;i<this.tableContent.length;i++) {
+                        this.toolname[i] = this.tableContent[i].ToolName;
+                        this.testcase[i] = this.tableContent[i].TestCase;
+                        this.vendor[i] = this.tableContent[i].Vendor;
+                        this.project[i] = this.tableContent[i].Project;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.version[i] = this.tableContent[i].Version;
+                        this.customer[i]= this.tableContent[i].Customer;
+                        {#this.phase[i] = this.tableContent[i].Phase;#}
+                    }
+                    console.log("del");
+                });
+                       console.log(index, rows);
+         }
+               else {
+             return false;
+         }
+      },
+            handleSelectionChange(val) {
+                 this.multipleSelection = val;
+                 this.multipleSelectionFlag = true;
+                 if (this.multipleSelection.length == 0) {
+                             // 如不进行判断则勾选完毕后批量删除按钮还是会在
+                 this.multipleSelectionFlag = false;
+    }
+           },
+              //点击保存
+           saveRow(index,rows) {
+               console.log(rows);
+               let Customer = this.$refs.Customer.value;
+               let Project = this.$refs.Project.value;
+               let Phase0 = this.$refs.Phase0.value;
+               let data = {"isGetData": "SAVE","rows":rows,"Customer":Customer,"Project":Project,"Phase":Phase0,"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+               axios.post("/ABODriverTool/ABOToolList_edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent = res.data.content;
+                    for(let i=0;i<this.tableContent.length;i++) {
+                        this.toolname[i] = this.tableContent[i].ToolName;
+                        this.testcase[i] = this.tableContent[i].TestCase;
+                        this.vendor[i] = this.tableContent[i].Vendor;
+                        this.project[i] = this.tableContent[i].Project;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.version[i] = this.tableContent[i].Version;
+                        this.customer[i]= this.tableContent[i].Customer;
+                        {#this.phase[i] = this.tableContent[i].Phase;#}
+                    }
+                   console.log("del");
+                });
+               this.$set(this.showEdit,index,false);
+               this.$set(this.showBtn,index,false) ;//关闭页面
+           }
+        }
+    })
+  </script>
+{% endblock %}

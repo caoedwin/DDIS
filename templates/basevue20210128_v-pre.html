@@ -1,0 +1,273 @@
+{% load custom_tag %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Data{% endblock %}</title>
+        {{ lesson_form.media }}
+        {% block css1 %}
+        <link rel="stylesheet" href="/static/download_UPK/element-ui@2.12.0/lib/theme-chalk/index.css">
+        <link href="/static/css/lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
+        <link href="/static/css/lib/chartist/chartist.min.css" rel="stylesheet">
+        <link href="/static/css/lib/font-awesome.min.css" rel="stylesheet">
+        <link href="/static/css/lib/themify-icons.css" rel="stylesheet">
+        <link href="/static/css/lib/owl.carousel.min.css" rel="stylesheet" />
+        <link href="/static/css/lib/owl.theme.default.min.css" rel="stylesheet" />
+        <link href="/static/css/lib/weather-icons.css" rel="stylesheet" />
+        <link href="/static/css/lib/menubar/sidebar.css" rel="stylesheet">
+{#        <link href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">#}
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/static/css/lib/helper.css" rel="stylesheet">
+        <link href="/static/css/style.css" rel="stylesheet">
+        <link href="/static/css/uploadbutton.css" rel="stylesheet">
+{#        <link href="/static/css/docs.464d6cc.css" rel="stylesheet">#}
+        {% endblock %}
+        {% comment %}<style>
+        {% rbac_css %}
+        </style>{% endcomment %}
+        <script src="{% static 'jquery-3.2.1.js' %}"></script>
+        {% comment %}<script>
+            $(function () {
+                {% rbac_js %}
+            })
+        </script>{% endcomment %}
+        {% block css %}{% endblock %}
+
+    </head>
+
+    {# 通过调用自定义标签中的函数，导入rbac中的css和js #}
+
+    {% block style %}{% endblock %}
+    <style type="text/css">
+        .el-header {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+          }
+
+          .el-aside {
+            color: #333;
+          }
+        .el-header {
+          background-color: #b3c0d1;
+          color: #333;
+          line-height: 60px;
+          height: 100%;
+          padding: 0 !important;
+        }
+
+        .el-aside {
+          background-color: #393e42;
+          color: #333;
+          height: 100vh;
+        }
+        .el-menu {
+          border-right-width: 0;
+        }
+        .el-main {
+          color: #333;
+        }
+        .el-menu-vertical:not(.el-menu--collapse) {
+          width: 240px;
+        }
+        .box_bgd {
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          width: 54px;
+        }
+        .box_bgd i {
+          font-size: 20px;
+        }
+        .box_bgd:hover {
+          background-color: rgb(203, 215, 230);
+        }
+    </style>
+    <body{% comment %} oncopy="return false" onselectstart="return false"{% endcomment %}>{% comment %}禁止复制禁止粘贴{% endcomment %}
+
+
+        <div id="appbase">
+{#            <el-container :style="{height: screenHeight + 'px' }">#}
+            <el-container style="height: 500px; border: 1px solid #eee">
+{#                  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">#}
+                <div>
+                    {% comment %}<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+                          <el-radio-button :label="false">展开</el-radio-button>
+                          <el-radio-button :label="true">收起</el-radio-button>
+                        </el-radio-group>{% endcomment %}
+                    <el-menu default-active="1-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+                          <el-submenu index="1">
+                              <template slot="title">
+                                  <i class="el-icon-location"></i>
+                                  <span slot="title">Main</span>
+                              </template>
+                              <a href="/index/"><el-menu-item index="1-1">Dashboard</el-menu-item></a>
+                              <a href="/FilesDownload/"><el-menu-item index="1-2" disabled>FilesDownload</el-menu-item></a>
+                          </el-submenu>
+
+                          <el-submenu index="2">
+                              <template slot="title">
+                                <i class="el-icon-menu"></i>
+                                <span slot="title">Feature</span>
+                              </template>
+{#                              <el-menu-item-group title="分组1">#}
+                                  {% comment %}<el-menu-item index="2-1">选项2-1</el-menu-item>
+                                  <el-submenu index="2-2">
+                                      <span slot="title">选项2-2</span>
+                                      <el-menu-item index="2-2-1">选项2-2-1</el-menu-item>
+                                      <el-menu-item index="2-2-2">选项2-2-2</el-menu-item>
+                                    </el-submenu>{% endcomment %}
+                                    {% rbac_menu request %}
+{#                                </el-menu-item-group>#}
+
+                          </el-submenu>
+                          <el-menu-item index="3" disabled>
+                            <i class="el-icon-document"></i>
+                              <a href="/admin/"><span slot="title">Admin</span></a>
+                          </el-menu-item>
+                        </el-menu>
+                    </div>
+{#                  </el-aside>#}
+
+                  <el-container>
+                    <el-header style="text-align: right; font-size: 12px">
+                        <el-row>
+                            <el-col :span="12">
+                                <div class="box_bgd" @click="isC">
+                                    <!-- 点击展开收起导航和切换对应图标 -->
+                                    <i class="el-icon-s-fold" v-show="block"></i>
+                                    <i class="el-icon-s-unfold" v-show="toggle"></i>
+                                  </div>
+                            </el-col>
+                            <el-col :span="12">
+                                  <el-dropdown>
+                                    <i class="el-icon-setting" style="margin-right: 15px"></i>
+                                    <el-dropdown-menu slot="dropdown">
+                                      <a href="/Change_Password/"><el-dropdown-item>Change Password</el-dropdown-item></a>
+                                      <a href="/logout/"><el-dropdown-item>logout</el-dropdown-item></a>
+                                      <a href="/Change_Skin/"><el-dropdown-item>删除</el-dropdown-item></a>
+                                    </el-dropdown-menu>
+                                  </el-dropdown>
+                                  <span>{{ request.session.user_name }}, Welcome Here</span>
+                            </el-col>
+                            </el-row>
+                    </el-header>
+
+                    <el-main>
+                      <el-table :data="tableData">
+                        <el-table-column prop="date" label="日期" width="140">
+                        </el-table-column>
+                        <el-table-column prop="name" label="姓名" width="120">
+                        </el-table-column>
+                        <el-table-column prop="address" label="地址">
+                        </el-table-column>
+                      </el-table>
+                    </el-main>
+                  </el-container>
+                </el-container>
+
+        </div>
+{#        <script src="/static/download_UPK/element-ui@2.12.0/lib/index.js"></script>#}
+        <!-- jquery vendor -->
+        <script src="/static/js/lib/jquery.min.js"></script>
+        {% comment %}<script src="/static/Magnific-Popup-master/libs/jquery/jquery.js"></script>{% endcomment %}
+        <script src="/static/js/lib/jquery.nanoscroller.min.js"></script>
+        <!-- nano scroller -->
+        <script src="/static/js/lib/menubar/sidebar.js"></script>
+        <script src="/static/js/lib/preloader/pace.min.js"></script>
+        <!-- sidebar -->
+
+        <script src="/static/js/lib/bootstrap.min.js"></script>
+        <script src="/static/js/scripts.js"></script>
+        <!-- bootstrap -->
+
+        <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
+        <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+        <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
+
+
+{#        <script src="/static/js/lib/weather/jquery.simpleWeather.min.js"></script>#}
+{#        <script src="/static/js/lib/weather/weather-init.js"></script>#}
+        <script src="/static/js/lib/circle-progress/circle-progress.min.js"></script>
+        <script src="/static/js/lib/circle-progress/circle-progress-init.js"></script>
+    {#        <script src="/static/js/lib/chartist/chartist.min.js"></script>#}
+        <script src="/static/js/lib/sparklinechart/jquery.sparkline.min.js"></script>
+        <script src="/static/js/lib/sparklinechart/sparkline.init.js"></script>
+        <script src="/static/js/lib/owl-carousel/owl.carousel.min.js"></script>
+        <script src="/static/js/lib/owl-carousel/owl.carousel-init.js"></script>
+        <!-- scripit init-->
+    {#        <script src="/static/js/dashboard2.js"></script>#}
+        <script src="/static/vendor/datatables/jquery.dataTables.js"></script>
+        <script src="/static/js/vue.min.js"></script>
+
+        <script src="/static/js/datapicker.js"></script>
+{#        <script src="/static/download_UPK/element-ui@2.12.0/lib/index.js"></script>#}
+{#        <script src="/static/download_UPK/vue@2.6.10/dist/vue.runtime.min.js"></script>#}
+{#        <script src="/static/download_UPK/vue-router@3.1.3/dist/vue-router.min.js"></script>#}
+{#        <script src="/static/js/docs.89ed192.js"></script>#}
+{#        <script src="/static/js/element-ui.89ed192.js"></script>#}
+{#        {% block scripts_inbase %}#}
+            <script src="/static/js/xlsx/xlsx.core.min.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script type="text/babel">
+        new Vue ({
+            el:"#appbase",
+            data() {
+                const item = {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                  };
+                return {
+                    isCollapse: true,
+                    tableData: Array(20).fill(item),
+                    {#screenHeight: window.innerHeight,#}
+                    {#isCollapse: false, //导航栏默认为展开#}
+                      toggle: false, //第二个图标默认隐藏
+                      block: true, //默认显示第一个图标
+
+                };
+            },
+            methods: {
+                toggleCollapse() {
+                    this.isCollapse = !this.isCollapse
+                },
+                handleOpen(key, keyPath) {
+                    console.log(key, keyPath);
+                  },
+                  handleClose(key, keyPath) {
+                    console.log(key, keyPath);
+                  },
+                isC() {
+              this.isCollapse = !this.isCollapse;
+              this.toggle = !this.toggle;
+              this.block = !this.block;
+            },
+            },
+            mounted() {
+
+            },
+          })
+        </script>
+
+{#        {% endblock %}#}
+        {% block scripts %}
+
+        {% endblock %}
+        {% block scripts1 %}
+            <script src="/static/js/xlsx/xlsx.js"></script>
+        {% endblock %}
+    </body>
+
+</html>

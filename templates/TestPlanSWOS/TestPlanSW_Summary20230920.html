@@ -1,0 +1,872 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}summary{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 70%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+     .showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
+
+}
+.showDataArea .container-echart{
+   text-align: center;
+   width: 50%;
+   background-color: #F5F7FA;
+   padding: 5px;
+   border: 1px solid #fff5d4;
+}
+.showDataArea #main {
+
+}
+.showDataArea .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
+     .dashboard{
+    height: 400px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+     flex-wrap: nowrap;
+}
+.dashboard #myChart1 {
+    height: 100%;
+    width: 50%;
+}
+.dashboard #myChart2 {
+    height: 100%;
+    width: 50%;
+}
+    .el-button--mini, .el-button--mini.is-round {
+    padding: 1px 5px;
+}
+    .el-icon-question:before {
+    color:yellowgreen;
+    font-size: xx-large;
+}
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="app">
+{#    <div class="row" style="white-space: nowrap;">#}
+{#                    <div class="col-md-2">#}
+{#                    <label style="color: #FFF" for="Customer1">客戶別:</label>#}
+{#           <select id="Customer1" ref="Customer1"   v-model="selectedCustomer1" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">#}
+{#               <option v-for="(item,key,index) in selectItem" >${ item }</option>#}
+{#           </select>#}
+{#                        <div class="inputError" v-cloak v-show="customerError1">客戶別未選擇</div>#}
+{#                    </div>#}
+{#    <div class="col-md-1">#}
+{#                        <el-button size="small" style="background:#428bca;color:#fff;"  @click="searchalert1">Search</el-button>#}
+{#                    </div>#}
+{#    <el-button size="small" style="background:#428bca;color:#fff;position:absolute;right:10px;top:140px;" v-if="showCustomer1 && canEdit==1" @click="openRDchange">RD Change</el-button>#}
+{#    </div>#}
+{#{% csrf_token %}#}
+{# <el-dialog title="導致FFRT多次測試的Function Team" width="27%!important" :visible.sync="setrdchange">#}
+{#     <template>#}
+{#    <el-table stripe border :data="rdchangelist">#}
+{#    <el-table-column  label="Function team" >#}
+{#        <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Functionteam"></el-input>#}
+{#            <span v-else>${ functionteam[scope.$index] }</span>#}
+{#       </template>#}
+{#    </el-table-column>#}
+{#    <el-table-column  label="Quantity" >#}
+{#        <template slot-scope="scope">#}
+{#            <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Quantity"></el-input>#}
+{#            <span v-else>${ quantity[scope.$index] }</span>#}
+{#       </template>#}
+{#    </el-table-column>#}
+{#        <el-table-column label="操作"  align="center" fixed="right">#}
+{#        <template slot-scope="scope">#}
+{#            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">保存</el-button>#}
+{#            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">取消</el-button>#}
+{##}
+{#            <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>#}
+{#        </template>#}
+{#    </el-table-column>#}
+{#  </el-table>#}
+{#         </template>#}
+{#</el-dialog>#}
+{##}
+{#    <el-dialog title="机种列表" :visible.sync="setproject">#}
+{#        <el-table stripe border :default-sort = "{prop: 'SS', order: 'descending'}" height="500" :data="proinfomation" @row-click="selectpro">#}
+{#            <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>#}
+{#            <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>#}
+{#            <el-table-column property="CUSPRJCODE" label="CUSPRJCODE" width="140" sortable></el-table-column>#}
+{#            <el-table-column property="PROJECT" label="PROJECT" width="200"></el-table-column>#}
+{#            <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>#}
+{#            <el-table-column property="CPU" label="CPU" width="70"></el-table-column>#}
+{#            <el-table-column property="PLATFORM" label="PLATFORM" width="150"></el-table-column>#}
+{#            <el-table-column property="VGA" label="VGA" width="220"></el-table-column>#}
+{#            <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>#}
+{#            <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>#}
+{#            <el-table-column property="LD" label="LD"></el-table-column>#}
+{#            <el-table-column property="DQA PL" label="DQA PL"></el-table-column>#}
+{#            </el-table>#}
+{#        </el-dialog>#}
+{#        <span class="selectItem" v-cloak v-if="showCustomer1&&showProject1" style="color: white">當前信息：${ showCustomer1 }/${ showProject1 }</span>#}
+{#        <div class="showDataArea" v-if="Sum" v-cloak>#}
+{#      <!--柱状图-->#}
+{#      <div class="container-echart"v-cloak>#}
+{#          <div class="Quatity" id="main" style="height:400px;"></div>#}
+{#      </div>#}
+{#      <!--regression cycle  and Dashboard-->#}
+{#      <div class="container-echart"v-cloak>#}
+{#          <div class="Quatity" id="main1" style="height:400px;"></div>#}
+{#          </div>#}
+{#      </div>#}
+{##}
+{#        <hr/>#}
+    <div class="row" style="white-space: nowrap;">
+                    <div class="col-md-2">
+                    <label style="color: #FFF" for="Customer">客戶別:</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+               <option value=""> </option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+                        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+                    </div>
+         <div class="col-md-4">
+            <template>
+            <div class="block">
+    <el-date-picker
+      v-model="datePicker" id="datePicker" ref="datePicker" type="daterange" size="small"
+      value-format="yyyy-MM-dd"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      unlink-panels
+    :picker-options="pickerOptions">
+    </el-date-picker>
+  </div>
+                </template>
+            </div>
+    <div class="col-md-1">
+
+                        <el-button size="small" :loading="elbuttonloading" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT">Search</el-button>
+                    </div>
+        <div class="col-md-1">
+           <el-tooltip class="item" effect="dark" content="搜索一段時期内所有機種Top10的執行時間及復測時間(默認是按照ScheduleBegin排序的最近的10個機種)" placement="right"><i class="el-icon-question"></i></el-tooltip>
+       </div>
+
+        <div class="col-md-1">
+                        <el-button size="small" @click="exportExcel" type="info" >Export</el-button>
+                    </div>
+    </div>
+        {% csrf_token %}
+<el-dialog title="選擇查詢信息" :visible.sync="settable">
+  <el-table stripe border ref="projectTable"  style="min-width: 100%;border-radius: 10px"
+       :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'}"
+            :default-sort = "{prop: 'SS', order: 'descending'}" height="500" :data="searchalert"
+  v-loading="tableloading1"
+        element-loading-text="數據更新中，請稍後"
+        border>
+    <el-table-column type="selection"></el-table-column>
+    <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>
+    <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+    <el-table-column property="PHASE" label="PHASE" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode1" label="PRJENGCODE1" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode2" label="PRJENGCODE2" width="140" sortable></el-table-column>
+    <el-table-column property="PROJECT" label="MKT CODE" width="200"></el-table-column>
+    <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+    <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+    <el-table-column property="PLATFORM" label="PLATFORM" width="150"></el-table-column>
+    <el-table-column property="VGA" label="VGA" width="220"></el-table-column>
+    <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+    <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+    <el-table-column property="LD" label="LD" width="110"></el-table-column>
+    <el-table-column property="DQA PL" label="DQA PL" width="110"></el-table-column>
+    <el-table-column property="TYPE" label="TYPE" width="110"></el-table-column>
+    <el-table-column property="PPA" label="PPA" width="110"></el-table-column>
+    <el-table-column property="PQE" label="PQE" width="110"></el-table-column>
+  </el-table>
+    <span slot="footer" class="dialog-footer" >
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="getMsg">确 定</el-button>
+      </span>
+</el-dialog>
+              <span class="selectItem" v-cloak  v-if="showCustomer" style="color: white">當前表格信息：${ showCustomer }</span>
+        <div class="showDataArea" v-if="Top10" v-cloak>
+      <!--柱状图-->
+      <div class="container-echart"v-cloak>
+          <div class="Quatity" id="main2" style="height:400px;"></div>
+          <el-button :loading="tableloading" type="primary" size="mini" id="selectall2" flag="1">All</el-button>
+      </div>
+      <!--regression cycle  and Dashboard-->
+      <div class="container-echart"v-cloak>
+          <div class="Quatity" id="main3" style="height:400px;"></div>
+          <el-button :loading="tableloading" type="primary" size="mini" id="selectall3" flag="1">All</el-button>
+          </div>
+      </div>
+<template v-cloak>
+<el-table stripe border  :data="tableData" id="out-table" :default-sort = "{prop: 'Project', order: 'descending'}"
+v-loading="tableloading"
+        element-loading-text="數據更新中，請稍後"
+        border>
+    <el-table-column prop="Project" label="Project" align="center" width="160" align="center" fixed sortable></el-table-column>
+    <el-table-column prop="Phase" label="Phase" align="center" width="160" align="center" fixed sortable ></el-table-column>
+    <el-table-column prop="CaseLibrarytime" label="Case Library time" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="ProjectBasetime" label="Project Base time" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="Timew/Comfig" label="Time w/Comfig-follow matrix" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="SKUQ" label="SKU Q'ty" align="center" width="120" align="center"></el-table-column>
+    <el-table-column prop="Config-Automationtime" label="Config-Automation time" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="Config-Leveragetime" label="Config-Leverage time" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="Config-Smarttime" label="Config-Smart time" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="Attendtime-Optimize" label="Attend time-Optimize" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="Config-Retesttime" label="Config-Retest time" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>
+    <el-table-column prop="H/C" label="H/C" align="center" width="80" align="center" :formatter="stateFormat"></el-table-column>
+    {% comment %}<el-table-column prop="H/C+OT" label="H/C+OT" align="center" width="160" align="center" :formatter="stateFormat"></el-table-column>{% endcomment %}
+    <el-table-column prop="ATO/TCM" label="Attendtime-Optimize/TimeComfig-followMatrix" align="center" width="200" align="center" :formatter="stateFormat"></el-table-column>
+    </el-table>
+    </template>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                Sum:{},
+                tableData: [],
+                searchalert: [],
+               selectItem: [],
+                projectArray: [],
+                phaseArray:[],
+                combineArray:[],
+                selectedCustomer: null,
+                title: [],
+                showCustomer: '',
+                settable:false,
+                customerError:false,
+                datePicker:'',
+                elbuttonloading:false,
+                tableloading:false,
+                tableloading1:false,
+                Top10:[],
+                coloroder:{'B(FVT)': "#FFC000", 'B(SDV)': "#FFC000", 'C(SIT)': "#00FFFF", 'SIT2': "#589800", 'GSKU':"#06fa24", 'Downgrade':"#06fa46",'FFRT': "#00B0F0", 'FFRT2': "#00B0F0", 'FFRT3': "#00B0F0",
+                            'FFRT4': "#00B0F0", 'FFRT5': "#00B0F0", 'FFRT6': "#00B0F0", 'Wave': "#FE2E64", 'Wave2': "#FE2E64", 'Wave3': "#FE2E64",
+                            'Wave4': "#FE2E64", 'Wave5': "#FE2E64", 'OOC': "#9F81F7", 'OOC2': "#9F81F7", 'OOC3': "#9F81F7", 'OOC4': "#9F81F7",
+                            'OOC5': "#9F81F7", 'OOC6': "#9F81F7", "EELP+": "#9F81F7", 'Others': "#272727"},
+                pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          },{
+            text: '最近一年',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+            }
+        },
+        mounted() {        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            stateFormat(row, column, cellValue) {
+                cellValue += '';
+                if (!cellValue.includes('.')) cellValue += '.';
+                return cellValue.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+                   return $1 + ',';
+                }).replace(/\.$/, '');
+                 },
+            getdata: function (e) {
+                    this.tableloading = true;
+                    this.elbuttonloading = true;
+                var myChart3 = echarts.init(document.getElementById('main2'));
+                    myChart3.showLoading() // 在获取数据之前, 显示加载动画
+                var myChart4 = echarts.init(document.getElementById('main3'));
+                    myChart4.showLoading() // 在获取数据之前, 显示加载动画
+                let data = {"isGetData": e,};
+                axios.post("/TestPlanSWOS/TestPlanSWOS-summary/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()}
+                }).then((res) => {
+                    this.selectItem = res.data.select;
+                    this.tableData = res.data['content'];
+                    this.Top10 = res.data['Top10'];
+                    this.Execution_Top10 = res.data['Execution_Top10'];
+                    this.Regression_Top10 = res.data['Regression_Top10'];
+                    this.settable = false;
+                    var Execution_Top10_label=[];
+                    for(var i=0;i<this.Execution_Top10.length;i++){
+                        var getExecution_Top10_label=this.Execution_Top10[i].name;
+                        Execution_Top10_label.push(getExecution_Top10_label);
+                    }
+                    //console.log(Execution_Top10_label,"Execution_Top10_label");
+                    var Regression_Top10_label=[];
+                    for(var i=0;i<this.Regression_Top10.length;i++){
+                        var getRegression_Top10_label=this.Regression_Top10[i].name;
+                        Regression_Top10_label.push(getRegression_Top10_label);
+                    }
+
+                    var colorcode = [];
+                    for(var i=0;i<Regression_Top10_label.length;i++){
+                            colorcode.push(this.coloroder[Regression_Top10_label[i]]);
+                    }
+                    //console.log(colorcode)
+
+
+                // 指定图表的配置项和数据
+                var option3 = {
+                    color:colorcode,//['#A2CD5A','#66CD00','#FFFF93',"#FFEC8B","#FFD306",'#FF9D6F','#FF8F59','#FF8040','#FF5809','#F75000','#D94600','#BB3D00','#A23400','#FF8000',
+                        //'#EA7500','#D26900','#BB5E00','#9F5000','#844200','#642100'],
+                    title: {
+                        text: 'Execution Top 10',
+                        textStyle: {
+                        fontSize:30
+                }
+                    },
+                    toolbox:{//保存圖片
+                        feature:{
+                            saveAsImage:{}
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    legend: {
+                            left: 'center',
+                             top: 'bottom',
+                            data: Execution_Top10_label,
+                        },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                            {
+                            type: 'category',
+                            data: this.Top10.Execution_key,
+                                axisLabel : {//坐标轴刻度标签的相关设置。
+                                interval:0,
+                                rotate:"45"
+                            },
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+
+                    ],
+                    yAxis: [
+                        {
+                type: 'value'
+                  }
+                    ],
+                    series:this.Execution_Top10
+                };
+                var option4 = {
+                    color:colorcode,//['#A2CD5A','#66CD00','#FFFF93',"#FFEC8B","#FFD306",'#FF9D6F','#FF8F59','#FF8040','#FF5809','#F75000','#D94600','#BB3D00','#A23400','#FF8000',
+                        //'#EA7500','#D26900','#BB5E00','#9F5000','#844200','#642100'],
+
+                    title: {
+                        text: 'Regression Top 10',
+                        textStyle: {
+                        fontSize:30
+                }
+
+                    },
+                    toolbox:{//保存圖片
+                        feature:{
+                            saveAsImage:{}
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    legend: {
+                        left: 'center',
+                         top: 'bottom',
+                        data: Regression_Top10_label,
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                            {
+                            type: 'category',
+                            data: this.Top10.Regression_key,
+                                axisLabel : {//坐标轴刻度标签的相关设置。
+                                interval:0,
+                                rotate:"45"
+                            },
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                type: 'value'
+                  }
+                    ],
+                    series:this.Regression_Top10
+
+                };
+                    // 使用刚指定的配置项和数据显示图表。
+                    //myChart3.clear();
+                    //myChart4.clear();
+                    //myChart3.setOption(option3,true);
+                    myChart3.setOption(option3,true);
+                    var selectArr = myChart3.getOption().legend[0].data;
+                    //console.log(selectArr,myChart3.getOption().legend,myChart3.getOption().legend[0],"selectArr")
+
+                    $('#selectall2').unbind('click').bind("click",function(){
+                        //console.log($(this).attr('class'))
+                        console.log($(this).attr('flag'))
+                        var flag = $(this).attr('flag');
+                        if(flag == 1){
+                            console.log('111')
+                            var val = false;
+                            $(this).attr('flag',0);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--info el-button--mini");
+                        }else{
+                            console.log('222')
+                            var val = true;
+                            $(this).attr('flag',1);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--primary el-button--mini");
+                        }
+                        console.log(val)
+                        var obj = {};
+                        for(var key in selectArr){
+                            obj[selectArr[key]] = val;
+                        }
+                        option3.legend.selected = obj;
+                        myChart3.setOption(option3,true);
+                    });
+                    //myChart4.setOption(option4,true);
+                    myChart4.setOption(option4,true);
+                    var selectArr = myChart4.getOption().legend[0].data;
+
+                    $('#selectall3').unbind('click').bind("click",function(){
+                        //console.log($(this).attr('class'))
+                        var flag = $(this).attr('flag');
+                        if(flag == 1){
+                            var val = false;
+                            $(this).attr('flag',0);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--info el-button--mini");
+                        }else{
+                            var val = true;
+                            $(this).attr('flag',1);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--primary el-button--mini");
+                        }
+                        var obj = {};
+                        for(var key in selectArr){
+                            obj[selectArr[key]] = val;
+                        }
+                        option4.legend.selected = obj;
+                        myChart4.setOption(option4,true);
+                    });
+               window.addEventListener('resize', ()=>{
+               myChart3.resize();
+               myChart4.resize();
+
+        })
+                    myChart3.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    myChart4.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    this.tableloading = false;
+                    this.elbuttonloading = false;
+                });
+            },
+            SEARCHALERT: function () {
+                //console.log(this.$refs.Customer.value == '')
+                if (this.$refs.Customer.value == '') {
+                    //alert("客戶別未選擇");
+                    this.customerError = true;
+                    return false;
+                } else {
+                    this.tableloading1 = true;
+                    this.customerError = false;
+                    let Customer = this.$refs.Customer.value;
+                    let Date = this.$refs.datePicker.value;
+                    let data = {
+                        "isGetData": "SEARCHALERT",
+                        "Customer": Customer,
+                        "Date":Date,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    }
+                    axios.post("/TestPlanSWOS/TestPlanSWOS-summary/",  Qs.stringify(data,{indices:false}), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.searchalert = res.data.sear;
+                        this.showCustomer = this.selectedCustomer;
+                        this.tableloading1 = false;
+                    })
+                    this.settable = true;
+                }
+            },
+            //二次选择
+            getMsg: function () {
+
+                //是否選中信息
+                let data = this.$refs.projectTable.store.states.selection;
+                this.title = this.$refs.projectTable.store.states.selection.map((res) => {
+                    return res.COMPRJCODE+"-"+res.PHASE
+                })
+                //console.log(this.title)
+                //未選中
+                if (!data.length) {
+                    this.$message({
+                        message: "未選中數據",
+                        type: "info"
+                    });
+                    this.settable = false;
+                    return
+                }
+
+                this.tableloading=true;
+                var myChart3 = echarts.init(document.getElementById('main2'));
+                    myChart3.showLoading() // 在获取数据之前, 显示加载动画
+                var myChart4 = echarts.init(document.getElementById('main3'));
+                    myChart4.showLoading() // 在获取数据之前, 显示加载动画
+                //選中上傳數據
+                {% comment %}this.projectArray = data.map((res) => res.COMPRJCODE+":"+res.Phase);{% endcomment %}
+                this.projectArray = data.map((res) => res.COMPRJCODE );
+                this.phaseArray = data.map((res) => res.PHASE );
+                  //console.log("this.projectArray",data,this.projectArray);
+                  for (var i = 0; i < this.projectArray.length; i++) {
+                   var combineArrayObject = {};
+                     for (var j = 0; j < this.phaseArray.length; j++) {
+                        if (i == j) {
+                                combineArrayObject.name = this.projectArray[i];
+                                combineArrayObject.value = this.phaseArray[j];
+                                this.combineArray.push(combineArrayObject);
+                            }
+                        }
+                    }
+             {% comment %}   this.projectArray = data.map((res) => {
+                    let jason = {};
+                    jason.Project = res.COMPRJCODE;
+                    jason.Phase = res.Phase;
+                    return jason;
+                });{% endcomment %}
+                //console.log("this.projectArray",typeof(data), data, typeof(this.projectArray), this.combineArray, );
+                let msg = {
+                    "action": "getMsg", "customer": this.showCustomer, "searchalert": this.combineArray
+                }
+                axios.post("/TestPlanSWOS/TestPlanSWOS-summary/", msg, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    } //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.tableData = res.data['content'];
+                    this.Top10 = res.data['Top10'];
+                    this.Execution_Top10 = res.data['Execution_Top10'];
+                    this.Regression_Top10 = res.data['Regression_Top10'];
+                    this.settable = false;
+                    var Execution_Top10_label=[];
+                    for(var i=0;i<this.Execution_Top10.length;i++){
+                        var getExecution_Top10_label=this.Execution_Top10[i].name;
+                        Execution_Top10_label.push(getExecution_Top10_label);
+                    }
+                    //console.log(Execution_Top10_label,"Execution_Top10_label");
+                    var Regression_Top10_label=[];
+                    for(var i=0;i<this.Regression_Top10.length;i++){
+                        var getRegression_Top10_label=this.Regression_Top10[i].name;
+                        Regression_Top10_label.push(getRegression_Top10_label);
+                    }
+
+                    var colorcode = [];
+                    for(var i=0;i<Regression_Top10_label.length;i++){
+                            colorcode.push(this.coloroder[Regression_Top10_label[i]]);
+                    }
+                    //console.log(colorcode)
+
+                // 指定图表的配置项和数据
+                var option3 = {
+                    color:colorcode,//['#A2CD5A','#66CD00','#FFFF93',"#FFEC8B","#FFD306",'#FF9D6F','#FF8F59','#FF8040','#FF5809','#F75000','#D94600','#BB3D00','#A23400','#FF8000',
+                        //'#EA7500','#D26900','#BB5E00','#9F5000','#844200','#642100'],
+                    title: {
+                        text: 'Execution Top 10',
+                        textStyle: {
+                        fontSize:30
+                }
+                    },
+                    toolbox:{//保存圖片
+                        feature:{
+                            saveAsImage:{}
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    legend: {
+                            left: 'center',
+                             top: 'bottom',
+                            data: Execution_Top10_label,
+                        },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                            {
+                            type: 'category',
+                            data: this.Top10.Execution_key,
+                                axisLabel : {//坐标轴刻度标签的相关设置。
+                                interval:0,
+                                rotate:"45"
+                            },
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+
+                    ],
+                    yAxis: [
+                        {
+                type: 'value'
+                  }
+                    ],
+                    series:this.Execution_Top10
+                };
+                var option4 = {
+                    color:colorcode,//['#A2CD5A','#66CD00','#FFFF93',"#FFEC8B","#FFD306",'#FF9D6F','#FF8F59','#FF8040','#FF5809','#F75000','#D94600','#BB3D00','#A23400','#FF8000',
+                        //'#EA7500','#D26900','#BB5E00','#9F5000','#844200','#642100'],
+
+                    title: {
+                        text: 'Regression Top 10',
+                        textStyle: {
+                        fontSize:30
+                }
+
+                    },
+                    toolbox:{//保存圖片
+                        feature:{
+                            saveAsImage:{}
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    legend: {
+                        left: 'center',
+                         top: 'bottom',
+                        data: Regression_Top10_label,
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                            {
+                            type: 'category',
+                            data: this.Top10.Regression_key,
+                                axisLabel : {//坐标轴刻度标签的相关设置。
+                                interval:0,
+                                rotate:"45"
+                            },
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                type: 'value'
+                  }
+                    ],
+                    series:this.Regression_Top10
+
+                };
+                    // 使用刚指定的配置项和数据显示图表。
+                    //myChart3.clear();
+                    //myChart4.clear();
+                    //myChart3.setOption(option3,true);
+                    myChart3.setOption(option3,true);
+                    var selectArr = myChart3.getOption().legend[0].data;
+
+                    $('#selectall2').unbind('click').bind("click",function(){
+                        //console.log($(this).attr('class'))
+                        console.log($(this).attr('flag'))
+                        var flag = $(this).attr('flag');
+                        if(flag == 1){
+                            console.log('111')
+                            var val = false;
+                            $(this).attr('flag',0);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--info el-button--mini");
+                        }else{
+                            console.log('222')
+                            var val = true;
+                            $(this).attr('flag',1);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--primary el-button--mini");
+                        }
+                        console.log(val)
+                        var obj = {};
+                        for(var key in selectArr){
+                            obj[selectArr[key]] = val;
+                        }
+                        option3.legend.selected = obj;
+                        myChart3.setOption(option3,true);
+                    });
+                    //myChart4.setOption(option4,true);
+                    myChart4.setOption(option4,true);
+                    var selectArr = myChart4.getOption().legend[0].data;
+
+                    $('#selectall3').unbind('click').bind("click",function(){
+                        //console.log($(this).attr('class'))
+                        var flag = $(this).attr('flag');
+                        if(flag == 1){
+                            var val = false;
+                            $(this).attr('flag',0);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--info el-button--mini");
+                        }else{
+                            var val = true;
+                            $(this).attr('flag',1);
+                            $(this).val('All');
+                            $(this).attr('class',"el-button el-button--primary el-button--mini");
+                        }
+                        var obj = {};
+                        for(var key in selectArr){
+                            obj[selectArr[key]] = val;
+                        }
+                        option4.legend.selected = obj;
+                        myChart4.setOption(option4,true);
+                    });
+               window.addEventListener('resize', ()=>{
+               myChart3.resize();
+               myChart4.resize();
+               // 使用刚指定的配置项和数据显示图表。
+        })
+                    myChart3.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    myChart4.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    this.tableloading=false;
+
+                })
+                this.combineArray = [];
+            },
+            //取消查找
+            cancel: function (id, row) {
+                this.searchalert = [];
+                this.choose = false;
+                //console.log(this.choose)
+                this.settable = false;
+            },
+            //導出表格
+             exportExcel:function (){
+           /* 从表生成工作簿对象 */
+         let table = document.querySelector("#out-table").cloneNode(true);
+         console.log(document.querySelector("#out-table"));
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"))
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+        },
+        },
+    })
+
+    </script>
+{% endblock %}
+

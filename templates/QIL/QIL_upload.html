@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}QIL Upload{% endblock %}
+{% block css %}
+    <style>
+    .Label{
+        margin: auto;
+        width: 120px;
+    }
+    </style>
+<link href="/static/css/b_upload.css" rel="stylesheet">
+<link href="/static/css/uploadbutton.css" rel="stylesheet">
+    <style>
+    .first-part textarea{
+        font-size: 1.2rem;
+        line-height: 1.5;
+        color: #FFF;
+       {% comment %} background-color: rgba(0,0,0,0);{% endcomment %}
+        background-clip: padding-box;
+        height: 100px;
+        resize: none;
+    }
+    .second-part{
+        margin: 20px 0;
+    }
+    option{
+        background-color: white;
+        color: black;
+    }
+    #id_Customer,#id_Project{
+        height:40px;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+ <div class="container">
+{% comment %}  <div class="card" style="background-color:rgba(255,255,255,0.2)">
+          <!--<div class="card-header">Execl</div>-->
+          <div class="card-body">
+           <div class="b-fileUpload">
+                   <p style="color: #FFF">Excel 文件上傳:</p>
+                   <input type="file" style="color: #FFF" id="xlsxUpload"  accept=".xlsx"/>
+                   <input type="button" id="xlsxSubmit" onclick="Upload(this)" VALUE="Submit">
+           </div>
+          </div>
+  </div>{% endcomment %}
+  <form method="POST" action="/QIL/QIL_add/" id="fm" enctype="multipart/form-data">
+   <div class="card" style="background: rgba(255,255,255,0.2);">
+    <div class="card-header title" style="color: #FFF">QIL Data Upload</div>
+       <div id="showResult" class="card-header title">上传结果：<span id="showErrResult"></span></div>
+       <div class="card-body" >
+        <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">Product</span>
+                     </div>
+                      {{ QIL_upload.Product }}
+        </div>
+         </div>
+    <div class="card-body" >
+        <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">Customer</span>
+                     </div>
+                      {{ QIL_upload.Customer }}
+        </div>
+         </div>
+    <div class="card-body" >
+         <div class="second-part">
+          <div class="input-group-prepend">
+             <span class="input-group-text">QIL No.</span>
+          </div>
+
+           {{ QIL_upload.QIL_No }}
+
+       </div>
+    </div>
+       <div class="card-body" >
+           <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">Issue Description</span>
+                     </div>
+                      {{ QIL_upload.Issue_Description }}
+               </div>
+           </div>
+       <div class="card-body" >
+           <div class="second-part">
+           <div class="input-group-prepend">
+                       <span class="input-group-text">Root Cause</span>
+                     </div>
+                      {{ QIL_upload.Root_Cause }}
+               </div>
+           </div>
+    <div class="card-body" >
+        <div class="second-part">
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Status</span>
+                     </div>
+                      {{ QIL_upload.Status }}
+        </div>
+         </div>
+       <div class="card-body" >
+        <div class="second-part">
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Creator</span>
+                     </div>
+                      {{ QIL_upload.Creator }}
+            <div class="input-group-prepend">
+                       <span class="input-group-text">Created On</span>
+                     </div>
+                      {{ QIL_upload.Created_On }}
+        </div>
+         </div>
+        <div class="card-body" >
+            <div class="second-part">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">附件</span>
+                    </div>
+                            <div class="col-sm-8">
+                                 <input style="color: #FFF" type="file" id="upload-file" name="myfiles" multiple="">
+                             </div>
+                </div>
+            </div>
+    <div class="card-body" >
+       <div class="forth-part">
+            <div class="center">
+             <button type="submit" onclick="" class="btn btn-info" name="Upload" id="btn">Upload</button>
+             <button class="btn btn-default">Cancel</button>
+            </div>
+       </div>
+     </div>
+     {% csrf_token %}
+   </div>
+
+  </form>
+
+</div>
+
+<!-- 彈出信息提示，用來顯示內容上傳成功和失敗 -->
+<div class="modal fade" id="returnMsg" tabindex="-1" role="dialog" aria-labelledby="returnTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="returnTitle">Upload Result</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="msgContent"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+            </div>
+          </div>
+        </div>
+        </div>
+</div>
+{% endblock %}
+{% block scripts %}
+     <script>
+var backResult=['Pass','Fail','上传数据成功','上传数据重复'];
+window.onload=function(){
+    var el =document.getElementById("showErrResult");
+
+    var result={{ result  }};
+    console.log(backResult[result]);
+    if(result==0){
+
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"green"});
+        $("#showResult").css({"display":"block"});
+        //alert(backResult[result+2]);
+        setTimeout(function () {
+            $("#showResult").css({"display":"none"});
+        },3000);
+    }
+    else if(result==1){
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"red"});
+        $("#showResult").css({"display":"block"});
+        alert(backResult[result+2]);
+    }
+    else {
+
+    }
+    var isNum = function (value) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(value)) {
+        return true;
+        }
+        return false;
+    }
+    //关闭滚轮事件
+    var inputMouseScroll = document.getElementsByClassName("form-control-new");
+    //console.log(inputMouseScroll[0]);
+    for(var formNum in inputMouseScroll){
+          //console.log(typeof(formNum));
+        if(isNum(formNum)){
+           //console.log(inputMouseScroll[formNum]);
+           inputMouseScroll[formNum].addEventListener("mousewheel",function(evt){
+           evt = evt || window.event;
+           if(evt.preventDefault) {
+           // Firefox
+          evt.preventDefault();
+          evt.stopPropagation();
+        } else {
+          // IE
+          evt.cancelBubble=true;
+          evt.returnValue = false;
+        }
+      });
+        }
+    }
+
+}
+</script>
+
+{% endblock %}

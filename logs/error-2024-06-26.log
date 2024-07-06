@@ -1,0 +1,146 @@
+[2024-06-26 10:29:04,332] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 149, in CapitalExpenditure_Summary
+    C38CustomerT88AIODepartmentCode.objects.create(**addDepartCode_dic)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\query.py", line 411, in create
+    obj = self.model(**kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 485, in __init__
+    raise TypeError("'%s' is an invalid keyword argument for this function" % kwarg)
+TypeError: 'DepartmentCode' is an invalid keyword argument for this function
+[2024-06-26 10:29:04,373] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [1.13, 127.0.0.1:61788]
+[2024-06-26 10:30:21,205] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 233, in CapitalExpenditure_Summary
+    AIOT88_DeparmentCode=AIOT88_DeparmentCode).aggregate(total=Sum('Budget_Quantity'))[
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\query.py", line 851, in exclude
+    return self._filter_or_exclude(True, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\query.py", line 860, in _filter_or_exclude
+    clone.query.add_q(~Q(*args, **kwargs))
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1263, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1287, in _add_q
+    split_subq=split_subq,
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1164, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1028, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1389, in names_to_path
+    "Choices are: %s" % (name, ", ".join(available)))
+django.core.exceptions.FieldError: Cannot resolve keyword 'AIOT88_DeparmentCode' into field. Choices are: Acceptance_Month, Accounting_Subjects, Annual_Increase_PerYear, Applicable_Scope, Application_Department, Attribute_Code, Automated_Or_Not, BudgetCode, Budget_Quantity, Cash_Inflows_PerYear, Current_Situation, Customer, Depreciation_Months, Device_Name, Entry_Amount, Equivalent_To_RMB, Estimated_Original_Currency, Estimated_Original_Price, Investment_Benefits_PerYear, Investment_Nature, Investment_Purpose, Investment_Purpose_Des, Payback_Period, Payment_Terms, PlanYear, Potential_Issues, Potential_Issues_Des, Project_Code, Specifications, Subscription_Amount, Subscription_Quantity, Subscription_Status, Tighten_Expenses, Usage_Description, id
+[2024-06-26 10:30:21,218] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.81, 127.0.0.1:59420]
+[2024-06-26 13:15:39,988] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 486, in CapitalExpenditure_Summary
+    for key, value in i["data"]:
+ValueError: too many values to unpack (expected 2)
+[2024-06-26 13:15:40,017] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.89, 127.0.0.1:57967]
+[2024-06-26 13:17:42,613] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 487, in CapitalExpenditure_Summary
+    for key, value in j:
+ValueError: too many values to unpack (expected 2)
+[2024-06-26 13:17:42,629] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [1.12, 127.0.0.1:49707]
+[2024-06-26 13:18:22,223] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 489, in CapitalExpenditure_Summary
+    for key, value in j:
+ValueError: too many values to unpack (expected 2)
+[2024-06-26 13:18:22,231] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.80, 127.0.0.1:49772]
+[2024-06-26 13:19:39,654] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 490, in CapitalExpenditure_Summary
+    j["data"][key] = round(value)
+TypeError: type str doesn't define __round__ method
+[2024-06-26 13:19:39,664] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.93, 127.0.0.1:60565]
+[2024-06-26 13:20:08,766] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 490, in CapitalExpenditure_Summary
+    j[key] = round(value)
+TypeError: type str doesn't define __round__ method
+[2024-06-26 13:20:08,778] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.84, 127.0.0.1:60615]
+[2024-06-26 13:21:06,800] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 491, in CapitalExpenditure_Summary
+    j[key] = round(value)
+TypeError: type str doesn't define __round__ method
+[2024-06-26 13:21:06,811] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.93, 127.0.0.1:60690]
+[2024-06-26 13:24:34,454] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 491, in CapitalExpenditure_Summary
+    if value.isnumeric():
+AttributeError: 'int' object has no attribute 'isnumeric'
+[2024-06-26 13:24:34,471] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [1.19, 127.0.0.1:53424]

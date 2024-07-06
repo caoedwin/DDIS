@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ToolList_upload{% endblock %}
+{% block css %}
+<style>
+.toolnamediv{
+    width:950px;
+    height: 30px;
+    border-radius:4px;
+}
+.projectStyle,.customerdiv,.phasediv,.testcasediv,.vendordiv,.versiondiv{
+    width:120px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.fade{
+    opacity: 1;
+}
+#msgContent{
+    overflow: auto;
+}
+
+
+</style>
+{% endblock %}
+{% block content %}
+<div  style="color:white;">文件上传:</div>
+    <br/>
+<div style="background-color: rgba(255,255,255,0.2);height:50px;width:auto;margin:0 auto;border-radius:10px 10px 10px 10px;" >
+     <div class="upload">
+     <input type="file" name="files"   id="xlsxUpload" accept=".xlsx" style="color:#FFF;position:relative;top:10px;left:30px;"/>
+     <input type="button" name="button1" id="xlsxSubmit" onclick="Upload(this)" style=" background:#428bca;position:relative;left:50px;top:10px;color:#fff;width:80px;text-align:center;height:32px;line-height:32px;font-size:13px;" value="上传"/>
+     </div>
+</div>
+    <hr/>
+    <div  style="color:white;">单条录入:</div>
+    <div id="showResult" class="err_msg">上传结果：<span id="showErrResult"></span></div>
+    <br/>
+    <form method="post" action="/mongotest/mongotest-upload/">
+<div id="form_container" style="background-color: rgba(255,255,255,0.2);width:auto;height:360px;margin:0 auto;border-radius:10px 10px 10px 10px;" >
+            <div class="row">
+                        <div class="col-md-4" style="color:white;"><label for="Customer" style="color: #FFF;width:90px;font-size:large;" >Customer:</label></div>
+                        <div class="col-md-4" style="color:white;"><label for="Project" style="color: #FFF;width:90px;font-size: large;" >Project:</label></div>
+                        <div class="col-md-4" style="color:white;"><label for="Phase0"  style="color: #FFF;width:90px;font-size: large;" >Phase:</label></div>
+                    </div>
+            <div class="row">
+                <div class="col-md-4" >{{ ToolList_upload.Customer }}</div>
+                <div class="col-md-4" >{{ ToolList_upload.Project }}</div>
+                <div class="col-md-4" >{{ ToolList_upload.Phase0 }}</div>
+            </div>
+            <div class="row" style="position: relative;top:10px;left:18px;">
+                <label for="ToolName" style="color:#fff;width:90px;font-size: large;">ToolName: </label>
+            </div>
+            <div class="row" style="position: relative;top:20px;left:18px;">
+                {{ ToolList_upload.ToolName }}
+            </div>
+            <div class="row" style="position: relative;top:30px;">
+                <div class="col-md-4" style="color:white;"><label for="TestCase" style="color:#fff;width:90px;font-size: large;">TestCase: </label></div>
+                <div class="col-md-4" style="color:white;"><label for="Version"  style="color: #FFF;width:90px;font-size: large;" >Version:</label></div>
+                <div class="col-md-4" style="color:white;"><label for="Vendor" style="color:#fff;width:90px;font-size: large;" name="Version">Vendor: </label></div>
+            </div>
+            <div class="row" style="position: relative;top:30px;">
+                <div class="col-md-4" >{{ ToolList_upload.TestCase }}</div>
+                <div class="col-md-4" >{{ ToolList_upload.Version }}</div>
+                <div class="col-md-4" >{{ ToolList_upload.Vendor }}</div>
+            </div>
+    <div class="row">
+        <button type="submit" id="upload1" style="background:#428bca;color: #FFF;position:relative;top:60px;left:880px;width:80px;text-align:center;height:32px;line-height:32px;font-size:13px;" value="上传" name="Upload">Upload</button>
+    </div>
+    {% csrf_token %}
+    </div>
+
+</form>
+ <!-- 彈出信息提示，用來顯示內容上傳成功和失敗 -->
+<div class="modal fade" id="returnMsg"  role="dialog" aria-labelledby="returnTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="returnTitle">Upload Result</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="msgContent"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+            </div>
+          </div>
+        </div>
+        </div>
+{% endblock %}
+{% block scripts %}
+ <script>
+var backResult=['Pass','Fail','上传数据成功','上传数据重复'];
+window.onload=function(){
+    var el =document.getElementById("showErrResult");
+
+    var result={{ result  }};
+    console.log(backResult[result]);
+    if(result==0){
+
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"green"});
+        $("#showResult").css({"display":"block"});
+        //alert(backResult[result+2]);
+        setTimeout(function () {
+            $("#showResult").css({"display":"none"});
+        },3000);
+    }
+    else if(result==1){
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"red"});
+        $("#showResult").css({"display":"block"});
+        alert(backResult[result+2]);
+    }
+    else {
+
+    }
+
+
+}
+</script>
+<script src="/static/js/xlsx/xlsx.core.min.js"></script>
+<script src="/static/js/xlsx/xlsx.js"></script>
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
+{% endblock %}

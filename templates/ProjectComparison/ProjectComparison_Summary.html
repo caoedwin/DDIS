@@ -1,0 +1,767 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ProjectComparison_Summary{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+.tableAround{
+padding: 20px;
+-moz-box-shadow: 0px 0px 10px #333333;
+-webkit-box-shadow: 0px 0px 10px #333333;
+box-shadow: 0px 0px 10px #333333;
+border-radius: 10px;
+background-color: rgba(255,255,255,0.1);
+}
+
+.el-collapse-item__header{
+    background-image: linear-gradient(to right, rgba(0,139,139,0), rgba(0,139,139,1));
+}
+
+/* 解决el-table 表线不齐 */
+body .el-table th.gutter {
+    display: table-cell !important;
+}
+
+body .el-table colgroup.gutter {
+    display: table-cell !important;
+}
+
+label{
+    color:white;
+}
+ .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      color:aliceblue;
+  }
+
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+.demo-fit{
+   display:inline-block;
+   vertical-align: top;
+   width:123px;
+   height:186px;
+   border:1px solid black;
+
+}
+.cardInformation{
+   display:inline-block;!important
+   margin-left:20px;
+}
+.cardInformation label{
+   margin-bottom: -25px;
+}
+.cardInformation tr td{
+   width: 300px;
+}
+tbody tr td:last-child {
+   text-align:left;
+}
+
+.el-table .my-cell {
+    vertical-align: top
+  }
+#sh {
+        font-size:18px;
+        font-family:微软雅黑;
+        border: 2px solid #9f9ca1;
+}
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family: 微软雅黑;
+}
+
+.showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
+
+}
+
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin-left: 60px;
+    margin-top: 20px;
+    position: relative;
+}
+
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+
+
+ .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+  .customerContent,.departmentContent{
+     margin-left: 20px;
+  }
+
+
+
+</style>
+
+{% endblock %}
+{% block content %}
+<div id="app">
+    <!--搜索框-->
+    <div class="selectMsg" >
+           <div class="customerContent">
+                 <label for="year">Year</label>
+                 <select  ref="Year"  v-model="year" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                       <option v-for="(item,key,index) in yearOptions" >${ item }</option>
+                 </select>
+                 <div class="inputError" v-cloak v-show="customerError">不能為空</div>
+           </div>
+           <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px;margin-left: 20px">搜索</el-button>
+        <br/>
+
+    </div>
+
+    <div class="showDataArea" style="white-space: nowrap;">
+        <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">實際專案數量 減去 預算專案數量</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent1" style="width: 100%;" id="out-table1"
+              v-loading="tableloading" fit
+              :header-cell-style="{color:'#333',{% comment %}fontFamily:'MicrosoftYaHeiUI',{% endcomment %}fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+          </template>
+
+    </div>
+{#    <div class="showDataArea" style="white-space: nowrap;">#}
+    <div class="tableAround" v-cloak>
+          <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">${ this.YearTitle } 實際專案數量</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent2" style="width: 100%;" id="out-table2"
+              v-loading="tableloading"
+              :header-cell-style="{color:'#333',{% comment %}fontFamily:'MicrosoftYaHeiUI',{% endcomment %}fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+
+              <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item name="1">
+                      <template slot="title">
+                          實際專案清單
+                          <div style="margin-left: 30px;" @click.stop="showCollapse">
+                              <el-button @click="exportExcel" type="primary" v-cloak size="small">導出</el-button>
+                          </div>
+                      </template>
+{#                  <el-collapse-item title="實際專案清單" name="1">#}
+{#                      <div style="margin-top: 10px;"><el-button @click="exportExcel" type="primary" v-cloak style="height:40px">導出</el-button></div>#}
+                      <el-table {% comment %}height="1500px" {% endcomment %} id="out-table3" border stripe :data="tableContent3.slice((currentPage1-1)*pageSize1,currentPage1*pageSize1)"
+                        style="width: 100%;border-radius: 10px;margin-top: 20px;font-size: 12px"
+                        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        v-loading="tableloading" @sort-change='sortChange1'
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                          <el-table-column  prop="RD_Project_Plan" label="RD Project Plan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  type="index" :index="indexMethod" label="No." width="auto" min-width="2%" align="center"></el-table-column>
+                          <el-table-column  prop="CG" label="CG" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Compal_Model" label="Compal Model" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Customer_Model" label="Customer Model" width="auto" min-width="14%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Marketing_type" label="Marketing type(Commerical/Consumer)" align="center" width="auto" min-width="10%" sortable='custom'></el-table-column>
+        {#                  <el-table-column  prop="Status" label="Status: Planning=P Executing=E" align="center" width="140"></el-table-column>#}
+        {#                  <el-table-column  prop="Customer" label="Customer" align="center" width="120"></el-table-column>#}
+        {#                  <el-table-column  prop="Project_Type" label="Project Type(NB/PAD/AIO/IPC)" align="center" width="120"></el-table-column>#}
+                          <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="May" label="May" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="July" label="July" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+
+                      </el-table>
+                    <div class="block">
+                        <el-pagination  @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[15, 30, 50]" :page-size="30" layout="total, sizes, prev, pager, next, jumper" :total="totalNum1">
+                        </el-pagination>
+                    </div>
+              </el-collapse-item>
+               </el-collapse>
+          </template>
+
+    </div>
+{#    <div class="showDataArea" style="white-space: nowrap;">#}
+    <div class="tableAround" v-cloak >
+          <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">${ this.YearTitle } 預算專案數量(with OOC)</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent6" style="width: 100%;" id="out-table6"
+              v-loading="tableloading"
+              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"width="80"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+
+               <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item title="預算專案清單(with OOC)" name="3">
+                      <el-table {% comment %}height="1500px" {% endcomment %}id="out-table7" border stripe :data="tableContent7.slice((currentPage3-1)*pageSize3,currentPage3*pageSize3)"
+                        style="width: 100%;border-radius: 10px;margin-top: 20px;font-size: 12px"
+                        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        v-loading="tableloading" @sort-change='sortChange3'
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                          <el-table-column  type="index" :index="indexMethod" label="No." width="auto" min-width="2%" align="center"></el-table-column>
+                          <el-table-column  prop="CG" label="CG" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Compal_Model" label="Compal Model" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Customer_Model" label="Customer Model" width="auto" min-width="17%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Marketing_type" label="Marketing type(Commerical/Consumer)" align="center" width="auto" min-width="12%" sortable='custom'></el-table-column>
+        {#                  <el-table-column  prop="Status" label="Status: Planning=P Executing=E" align="center" width="140"></el-table-column>#}
+        {#                  <el-table-column  prop="Customer" label="Customer" align="center" width="120"></el-table-column>#}
+        {#                  <el-table-column  prop="Project_Type" label="Project Type(NB/PAD/AIO/IPC)" align="center" width="120"></el-table-column>#}
+                          <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="May" label="May" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="July" label="July" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                      </el-table>
+                    <div class="block">
+                        <el-pagination  @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage3" :page-sizes="[15, 30, 50]" :page-size="30" layout="total, sizes, prev, pager, next, jumper" :total="totalNum2">
+                        </el-pagination>
+                    </div>
+                  </el-collapse-item>
+                   </el-collapse>
+          </template>
+    </div>
+    <div class="tableAround" v-cloak >
+          <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">${ this.YearTitle } 預算專案數量(w/o OOC)</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent4" style="width: 100%;" id="out-table4"
+              v-loading="tableloading"
+              :header-cell-style="{color:'#333',{% comment %}fontFamily:'MicrosoftYaHeiUI',{% endcomment %}fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+
+              <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item title="預算專案清單(w/o OOC)" name="2">
+                      <el-table  {% comment %}height="1500px" {% endcomment %}id="out-table5" border stripe :data="tableContent5.slice((currentPage2-1)*pageSize2,currentPage2*pageSize2)"
+                        style="width: 100%;border-radius: 10px;margin-top: 20px;font-size: 12px"
+                        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        v-loading="tableloading" @sort-change='sortChange2'
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                          <el-table-column  type="index" :index="indexMethod" label="No." width="auto" min-width="2%" align="center"></el-table-column>
+                          <el-table-column  prop="CG" label="CG" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Compal_Model" label="Compal Model" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Customer_Model" label="Customer Model" width="auto" min-width="17%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Marketing_type" label="Marketing type(Commerical/Consumer)" align="center" width="auto" min-width="12%" sortable='custom'></el-table-column>
+        {#                  <el-table-column  prop="Status" label="Status: Planning=P Executing=E" align="center" width="140"></el-table-column>#}
+        {#                  <el-table-column  prop="Customer" label="Customer" align="center" width="120"></el-table-column>#}
+        {#                  <el-table-column  prop="Project_Type" label="Project Type(NB/PAD/AIO/IPC)" align="center" width="120"></el-table-column>#}
+                          <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="May" label="May" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="July" label="July" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+
+                      </el-table>
+                    <div class="block">
+                        <el-pagination  @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage2" :page-sizes="[15, 30, 50]" :page-size="30" layout="total, sizes, prev, pager, next, jumper" :total="totalNum2">
+                        </el-pagination>
+                    </div>
+              </el-collapse-item>
+               </el-collapse>
+          </template>
+    </div>
+{#    <div class="showDataArea" style="white-space: nowrap;">#}
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                // 搜索条件
+                activeNames:['1','2','3'],
+                year:'',
+                currentPage1: 1,
+                pageSize1:30,
+                currentPage2: 1,
+                pageSize2:30,
+                currentPage3: 1,
+                pageSize3:30,
+                totalNum1:null,
+                totalNum2:null,
+                totalNum3:null,
+                customerError:false,
+                departmentError:false,
+                ProjectcodeCompal:"",
+                YearTitle: "",
+                yearOptions:[],
+                elbuttonloading: false,
+                tableloading: false,
+                dialogloading: false,
+                tableContent1:[],
+                tableContent2:[],
+                tableContent3:[],
+                tableContent4:[],
+                tableContent5:[],
+                tableContent6:[],
+                tableContent7:[],
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            handleChange(val) {               //折疊面板變化
+                console.log(val);
+            },
+            indexMethod(index) {
+                  return index +1;
+            },
+             //分页
+             handleSizeChange1(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize1 = val;
+
+             },
+             handleCurrentChange1(val) {
+              console.log(`当前页: ${val}`);
+              this.currentPage1 = val;
+             },
+
+             handleSizeChange2(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize2 = val;
+
+             },
+             handleCurrentChange2(val) {
+              console.log(`当前页: ${val}`);
+              this.currentPage2 = val;
+             },
+
+
+             handleSizeChange3(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize3 = val;
+
+             },
+             handleCurrentChange3(val) {
+              console.log(`当前页: ${val}`);
+              this.currentPage3 = val;
+             },
+
+            //获取数据
+            getdata: function (e) {
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/ProjectComparison/ProjectComparison_Summary/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent1=res.data.content1;
+                    this.tableContent2=res.data.content2;
+                    this.tableContent3=res.data.content3;
+                    this.totalNum1=this.tableContent3.length;
+                    this.tableContent4=res.data.content4;
+                    this.tableContent5=res.data.content5;
+                    this.totalNum2=this.tableContent5.length;
+                    this.tableContent6=res.data.content6;
+                    this.tableContent7=res.data.content7;
+                    this.totalNum3=this.tableContent7.length;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.customerError= false;
+                    this.yearOptions=res.data.yearOptions;
+                });
+            },
+
+
+            find:function(){
+                if(this.$refs.Year.value ===""){
+                      this.customerError= true;
+                      return false;
+                }
+
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let Year=this.$refs.Year.value;
+                this.YearTitle = this.$refs.Year.value;
+                let data ={"isGetData":"SEARCH","Year":Year,
+                           "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/ProjectComparison/ProjectComparison_Summary/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent1=res.data.content1;
+                    this.tableContent2=res.data.content2;
+                    this.tableContent3=res.data.content3;
+                    this.tableContent4=res.data.content4;
+                    this.tableContent5=res.data.content5;
+                    this.tableContent6=res.data.content6;
+                    this.tableContent7=res.data.content7;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.customerError= false;
+                })
+
+            },
+
+
+            exportExcel: function () {
+             /* 从表生成工作簿对象 */
+             {#console.log(document.querySelector("#out-table"));#}
+             let temp = [];
+             temp.push(Number(this.currentPage1));
+             temp.push(Number(this.pageSize1));
+             {#console.log(temp);#}
+             this.currentPage1 = 1;
+             this.pageSize1 = this.tableContent3.length;
+             {#console.log(temp, this.defaultPage1, this.pageSize);#}
+             setTimeout(() => {
+                 let table = document.querySelector("#out-table3").cloneNode(true);
+                 let fix = table.querySelector(".el-table__fixed");
+                 let wb;
+                 if(fix){
+                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
+                    table.appendChild(fix);
+                 }else{
+                    wb = XLSX.utils.table_to_book(table,{raw: true});
+                 }
+                 console.log("wb", wb);
+                 /* 获取二进制字符串作为输出 */
+                 var wbout = XLSX.write(wb, {
+                     bookType: "xlsx",
+                     bookSST: true,
+                     type: "array"
+                 });
+                 console.log("wbout", wbout);
+                 try {
+                     saveAs(
+                         //Blob 对象表示一个不可变、原始数据的类文件对象。
+                         //Blob 表示的不一定是JavaScript原生格式的数据。
+                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                         new Blob([wbout], {type: "application/octet-stream"}),
+                         //设置导出文件名称
+                         "sheetjs.xlsx"
+                     );
+
+                 } catch (e) {
+                     if (typeof console !== "undefined") console.log(e, wbout);
+                 }
+                 this.currentPage1 = temp[0];
+                 this.pageSize1 = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                 temp = [];
+                 return wbout;
+             }, 100);
+         },
+
+
+
+            sortChange1: function(column){
+            this.currentPage1 = 1 // return to the first page after sorting
+                if (column.prop === 'RD_Project_Plan') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                } else if (column.prop === 'CG') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Compal_Model') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer_Model') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Marketing_type') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Status') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Project_Type') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jan') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Feb') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Mar') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Apr') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'May') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jun') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'July') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Aug') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Sep') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Oct') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Nov') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Dec') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else{
+                    this.dataList1 = this.tableContent3.sort(this.sortFun("CG", column.order === 'ascending'));
+                }
+
+                    this.showed_data1 = this.tableContent3.slice(0, this.pageSize1) // 排序完显示到第一页
+
+        },
+
+            sortChange2: function(column){
+            this.currentPage2 = 1 // return to the first page after sorting
+            if (column.prop === 'CG') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Compal_Model') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer_Model') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Marketing_type') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Status') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Project_Type') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jan') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Feb') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Mar') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Apr') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'May') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jun') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'July') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Aug') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Sep') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Oct') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Nov') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Dec') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else{
+                    this.dataList2 = this.tableContent5.sort(this.sortFun("CG", column.order === 'ascending'));
+                }
+
+                    this.showed_data2 = this.tableContent5.slice(0, this.pageSize2) // 排序完显示到第一页
+
+        },
+
+            sortChange3: function(column){
+            this.currentPage3 = 1 // return to the first page after sorting
+            if (column.prop === 'CG') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Compal_Model') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer_Model') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Marketing_type') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Status') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Project_Type') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jan') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Feb') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Mar') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Apr') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'May') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jun') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'July') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Aug') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Sep') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Oct') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Nov') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Dec') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else{
+                    this.dataList3 = this.tableContent7.sort(this.sortFun("CG", column.order === 'ascending'));
+                }
+
+                    this.showed_data3 = this.tableContent7.slice(0, this.pageSize3) // 排序完显示到第一页
+
+        },
+
+            //排序方法
+            sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+
+        },
+        watch: {
+                dataList1() {
+                    this.showed_data1 = this.tableContent3.slice((this.currentPage1 - 1) * this.pageSize1, this.currentPage1 * this.pageSize1);
+                    this.currentPage1 = 1;
+                },
+                dataList2() {
+                    this.showed_data2 = this.tableContent5.slice((this.currentPage2 - 1) * this.pageSize2, this.currentPage2 * this.pageSize2);
+                    this.currentPage2 = 1;
+                },
+                dataList3() {
+                    this.showed_data3 = this.tableContent7.slice((this.currentPage3 - 1) * this.pageSize3, this.currentPage3 * this.pageSize3);
+                    this.currentPage3 = 1;
+                },
+        },
+    })
+    </script>
+{% endblock %}

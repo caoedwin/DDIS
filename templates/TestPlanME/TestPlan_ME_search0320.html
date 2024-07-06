@@ -1,0 +1,1098 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}TestPlan_ME{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="/static/css/ElementUI.css">
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+<style>
+  .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+  }
+   .selectMsg label:last-child{
+     margin-left: 15px;
+   }
+  .selectMsg #project{
+      margin-left: 0;
+  }
+  .block .el-pagination{
+      margin: 10px 0;
+      text-align: right;
+  }
+  .el-pagination .el-pagination__total,.el-pagination__jump{
+      color:antiquewhite;
+  }
+  .el-table .warning-row {
+    background: oldlace;
+  }
+   .el-table .info-row {
+    background: #909399;
+  }
+    .el-table .danger-row {
+    background: #F56C6C;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .el-table  .cell{
+     text-align: center;
+ }
+.el-icon-circle-check,.el-icon-circle-close{
+    font-size:2.5rem;
+    color:cadetblue;
+}
+.tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+.validInput{
+}
+.invalidInput{
+}
+.invalidInput .el-input__inner{
+     border: 1px solid red;
+}
+.projectContent{
+     margin-left: 20px;
+}
+.phaseContent{
+    margin-right: 20px;
+}
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+.inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+.pass{
+    background-color: aquamarine;
+}
+.fail{
+    background-color: crimson;
+    color:antiquewhite;
+}
+.el-table__fixed-footer-wrapper td .cell{
+     word-break: break-word;
+ }
+ .el-table__footer{
+    font-weight: 800;
+}
+.showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 0 0;
+    width: 100%;
+
+}
+.showDataArea .container-echart{
+   text-align: center;
+   width: 50%;
+   background-color: rgba(14, 140, 140, 0.5);
+   padding: 5px;
+   border: 1px solid #fff5d4;
+}
+.showDataArea #myChart {
+
+}
+.showDataArea .regression{
+    height: 100px;
+    width: 100%;
+    vertical-align: middle;
+}
+.showDataArea .regression div{
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    border-bottom:1px solid #fff5d4;
+    margin: -5px;
+}
+.showDataArea .regression i{
+        font-weight: bold;
+        font-size: 26px;
+        line-height: 100px;
+}
+ .dashboard{
+    height: 400px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+     flex-wrap: nowrap;
+}
+.dashboard #myChart1 {
+    height: 100%;
+    width: 50%;
+}
+.dashboard #myChart2 {
+    height: 100%;
+    width: 50%;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="app"  >
+  <div class="selectMsg">
+    <div class="customerContent">
+    <label for="customer">客戶別 </label>
+     <el-select  v-model="customer"  >
+            <el-option v-for="item in customerOptions" :label="item.label" :value="item.value"  >${ item.value }</el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+    </div>
+    <div class="projectContent">
+   <label for="project">專案號</label>
+{#   <el-input placeholder="請輸入專案號"  id="project" ></el-input><br>#}
+        <el-select  v-model="project"  placeholder="請輸入專案號" style="margin-right: 20px;width:200px"  clearable >
+            <el-option v-for="item in projectvalue"  :label="item.customer" :value="item.customer" ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+    </div>
+    <div class="phaseContent">
+         <label for="phase">Phase</label>
+        <el-select v-model="phase" id="phase">
+            <el-option v-for="(item,index) in phasevalue" :key="index" :label="phaseName[item]" :value="phasevalue[index]"></el-option>
+        </el-select>
+        <div class="inputError" v-cloak  v-show="phaseError">phase號不能為空</div>
+    </div>
+    <el-button @click="Search" type="primary" style="height:40px">搜索</el-button>
+    <el-button @click="exportExcel" type="info" style="height:40px">導出</el-button>
+</div>
+  <div  class="tableAround"  v-cloak>
+
+  {% csrf_token %}
+ <!--數據表-->
+  <div class="block">
+
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="defaultPage1"
+      :page-sizes="[5, 10, 15, 20]"
+      :page-size="5"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length">
+    </el-pagination>
+  </div>
+  <el-table height="500" border
+     :data="tableData.slice((defaultPage1-1)*pagesize,defaultPage1*pagesize)"
+     id="out-table"
+     stripe
+     show-summary
+     :summary-method="getSummaries"
+     ref="multipleTable"
+    tooltip-effect="dark"
+{#    style="width: 100%"#}
+    @selection-change="handleSelectionChange"
+    style="border-radius: 10px"
+    :row-class-name="tableRowClassName" :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }">
+      <el-table-column prop="ItemNo" label="Item No" fixed ></el-table-column>
+      <el-table-column prop="Item" label="Item" ></el-table-column>
+      <el-table-column prop="Sample Size" label="Sample Size"  fixed ></el-table-column>
+      <el-table-column prop="Facility Name" label="Facility Name"  ></el-table-column>
+      <el-table-column prop="Voltage (our)" label="Voltage (our)" ></el-table-column>
+      <el-table-column  label="V3.9 (Test Time Per units)" >
+          <el-table-column label="Facility (Hrs)" prop="TTF" ></el-table-column>
+          <el-table-column label="Manual (Hrs)" prop="TTM" ></el-table-column>
+          <el-table-column label="Program (Hrs)" prop="TTP" ></el-table-column>
+      </el-table-column>
+      <el-table-column  label="Normal Test" >
+          <el-table-column label="測試機台" prop="NTU"  width="110" >
+              <template scope="scope" v-if="false">
+{#                  <el-input placeholder="请输入内容" type="text" v-model="NTU[scope.       c]" :class="{'invalidInput':(isNaN(NTU[scope.$index])||NTU[scope.$index] < 0)&&NTU[scope.$index] != null}"  clearable></el-input>#}
+                  ${ NTU[scope.$index] }
+                </template>
+          </el-table-column>
+          <el-table-column label="Facility Time"  >
+              <template scope="scope" ref="NTF">
+              ${ NewNTF[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+          <el-table-column label="Attend Time" >
+              <template scope="scope">
+              ${ NewNTA[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+          <el-table-column label="Program Time" >
+              <template scope="scope">
+              ${ NewNTP[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+      </el-table-column>
+      <el-table-column  label="Regression Test" >
+          <el-table-column label="Regression Cycle" prop="RTR" width="110">
+               <template scope="scope" v-if="false">
+{#                  <el-input placeholder="请输入内容" type="text" v-model="RTR[scope.$index]" :class="{'invalidInput':(isNaN(RTR[scope.$index])||RTR[scope.$index] < 0)&&RTR[scope.$index] != null}"  clearable></el-input>#}
+               ${ RTR[scope.$index] }
+               </template>
+          </el-table-column>
+          <el-table-column label="測試機台" prop="RTU"  width="110">
+              <template scope="scope"v-if="false">
+{#                  <el-input placeholder="请输入内容" type="text" v-model="RTU[scope.$index]" :class="{'invalidInput':(isNaN(RTU[scope.$index])||RTU[scope.$index] < 0)&&RTU[scope.$index] != null}"  clearable></el-input>#}
+              ${ RTU[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+          <el-table-column label="Facility Time">
+              <template scope="scope">
+              ${ NewRTF[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+          <el-table-column label="Attend Time" >
+              <template scope="scope" >
+              ${ NewRTA[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+          <el-table-column label="Program Time" >
+              <template scope="scope">
+              ${ NewRTP[scope.$index + (defaultPage1-1)*pagesize] }
+              </template>
+          </el-table-column>
+      </el-table-column>
+
+  </el-table>
+
+</div>
+
+  <div class="showDataArea" v-if="tableData.length" v-cloak>
+      <!--柱状图-->
+      <div class="container-echart"v-cloak>
+          <div id="myChart" style="height: 500px"></div>
+      </div>
+      <!--regression cycle  and Dashboard-->
+      <div class="container-echart"v-cloak>
+          <div class="regression" >
+              <div v-cloak><i class="el-icon-data-line"></i> Regression Cycle : ${ RegCycle } </div>
+          </div>
+          <div class="dashboard">
+              <div id="myChart1" ></div>
+              <div id="myChart2" ></div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+{#<script src="/static/js/element/index.js"></script>#}
+{#<script src="https://unpkg.com/element-ui/lib/index.js"></script>#}
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+{% comment %}<script src="https://unpkg.com/element-ui/lib/table.js"></script>{% endcomment %}
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+{% comment %}<script src="https://cdn.bootcss.com/echarts/4.6.0/echarts-en.common.js"></script>{% endcomment %}
+<script type="text/babel">
+  new Vue ({
+    el:"#app",
+    delimiters: ['${', '}'],
+    data() {
+      return {
+         //之前頁面用到的
+        comment:[],
+        result:[],
+        lesson_id:[],
+        options:[{
+            label:"",
+            value:""
+        },{
+            label:"Pass",
+            value:"Pass"
+        },{
+            label:"Fail",
+            value:"Fail"
+        },{
+            label:"Not Support",
+            value:"NS"
+        },{
+            label:"N/A",
+            value:"NA"
+        },
+          // "Pass","Fail","Not Support","N/A"
+        ],
+        search:'',
+        // customer選擇
+        customerOptions:[{
+            "label":"C38(NB)",
+            "value":"C38(NB)",
+        },{
+            "label":"C38(AIO)",
+            "value":"C38(AIO)",
+        },{
+            "label":"A39",
+            "value":"A39",
+        }
+        ],
+        phase:["FVT","SIT","INV","FFRT"],
+        //表格源數據
+        selectMsg:[],
+        tableData:[],
+        // error 提示
+        customer:'',
+        project:'',
+        projectvalue:[],
+        phase:'',
+        phasevalue:[],
+        projectError:false,
+        customerError:false,
+        phaseError:false,
+        phaseName:["FVT", "SIT", "FFRT", "INV",],
+        //需要用到輸入和變化值
+        NTU:[],
+        NTF:[],
+        NTA:[],
+        NTP:[],
+        RTR:[],
+        RTU:[],
+        RTA:[],
+        RTP:[],
+        RTF:[],
+        //用來與獲取的數據進行比較，尋找那些數據發生變化
+        NTU_temp:[],
+        RTU_temp:[],
+        RTR_temp:[],
+        //loading flag
+        loading:false,
+        //分頁
+        defaultPage1:1,
+        pagesize:5,
+        Sum:{},
+        changeNum:6,
+        RegCycle:6,
+      }
+    },
+    mounted(){
+        //input 初始化
+        this.getdata("get");
+    },
+    methods: {
+       //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+      getdata:function(e,fun){
+                //console.log("getdata begin");
+                //let data = {"isGetData":e,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+                axios.get("/TestPlan_ME_search/?action="+e ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    const temp = ['NTFSum','NTASum','RTFSum','RTASum','RTRSum'];
+                    console.log(res.data,"first");//上传成功的操作
+                    if(res.data['MockData']){
+                       this.tableData=res.data['MockData'];// 将返回的数据传递给data内的tableContent
+                    }
+                    this.selectMsg=res.data['selectMsg'];
+                    this.Sum = res.data['Sum'];
+                    console.log(!res.data['MockData'],!(!res.data['MockData']));
+                     //解決數據量少產生的錯位BUG！！！
+                    this.$nextTick(() => {
+                        //重新計算表格高度
+                        this.$refs.multipleTable.doLayout()
+                         if(!(!res.data['MockData'])){
+                        let arr = temp.map(item =>
+                            res.data['Sum'][item]
+                        )
+                        if(fun && typeof(fun) === 'function'){
+                            console.log(arr);
+                            fun.apply(this,arr);
+                        }
+                    }
+                    })
+                     for(let i=0;i<this.tableData.length;i++){
+                        this.NTU[i]=this.tableData[i].NTU;
+                        this.RTU[i]=this.tableData[i].RTU;
+                        this.RTR[i]=this.tableData[i].RTR;
+                        this.NTU_temp[i]=this.tableData[i].NTU;
+                        this.RTU_temp[i]=this.tableData[i].RTU;
+                        this.RTR_temp[i]=this.tableData[i].RTR;
+                    }
+                });
+            },
+      Search:function(){
+           let _this = this;
+           //customer和project和phase未填
+          if(this.customer==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+          if(this.project==''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+          if(this.phase==''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+          console.log("search");
+          let parameter = "search&customer="+this.customer+"&project="+this.project+"&phase="+this.phase;
+          //console.log(parameter);
+          this.getdata(parameter, _this.showData)
+          console.log("search success");
+      },
+      tableRowClassName({row, rowIndex}) {
+
+       // this.input[rowIndex]="";
+       // console.log(row['id'],rowIndex,this.result[row['id']]);
+       {% comment %} switch (this.result[row['id']]) {
+            case "Pass": return  'success-row';
+            case "Fail": return  'danger-row';
+            case "NS": return  'info-row';
+            case "NA": return 'warning-row';
+            default: return "";
+        }{% endcomment %}
+      },
+      setCurrent:function(row) {
+        //this.$refs.singleTable.setCurrentRow(row);
+      },
+      handleSizeChange(val) {
+        console.log(val);
+        this.pagesize=val;
+      },
+      handleCurrentChange(val) {
+        console.log(val);
+        this.defaultPage1=val;
+      },
+      now:function () {
+         console.log(this.RTR);
+           //console.log(this.tableData);
+      },
+      inputNum:function (object) {
+        //func();
+        object.comment.length =object.tableData.length;
+       // console.log(this.input.length);
+      },
+      submit:function (index,row) {
+
+          //console.log("submit:"+index,row);
+          //CONSOLE.LOG(this.result[index]);
+          console.log(this.result[index]);
+          if(this.result[index]==""){
+                alert("測試結果未填入");
+                return false;
+          }
+          if(this.customer == ""){
+              this.customerError= true;
+              console.log(document.getElementsByClassName('customerContent')[0].getElementsByClassName('el-input el-input--suffix')[0]);
+              document.getElementsByClassName('customerContent')[0].getElementsByClassName('el-input__inner')[0].style.border="2px solid crimson ";
+              return false;
+          }else{
+              //document.getElementsByClassName('customerContent el-input__inner')[0].style.border="0px solid crimson ";
+          }
+           if(this.project == ""){
+              this.projectError= true;
+             // document.getElementsByClassName('projectContent el-input__inner')[0].style.border="2px solid crimson ";
+              return false;
+          }else{
+               //document.getElementsByClassName('projectContent el-input__inner')[0].style.border="0px solid crimson ";
+           }
+          let data ={
+               "lesson_id":this.lesson_id[index],
+               "comment":this.comment[index],
+               "result":this.result[index],
+               "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()
+          }
+          console.log("before:"+data['comment']);
+           axios.post("/Lesson_result/",Qs.stringify(data), {
+                   // headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    //console.log(res.data,"first");//上传成功的操作
+                    console.log("上傳成功");
+                });
+      },
+      cancel:function (index,row) {
+         console.log("cancel:"+index,row);
+          //this.input[index]="";
+          Vue.set(this.comment,index,"");
+          Vue.set(this.result,index,"");
+         // this.result[index]="";
+      },
+      //導出表格
+      exportExcel:function (){
+           /* 从表生成工作簿对象 */
+        //console.log(document.querySelector("#out-table"));
+            //customer和project和phase未填
+         if(this.customer==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+         if(this.project==''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+         if(this.phase==''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+         let temp=[];
+         temp.push(this.defaultPage1);
+         temp.push(this.pagesize);
+         this.defaultPage1=1;
+         this.pagesize=this.tableData.length;
+         console.log(temp,this.defaultPage1,this.pagesize);
+         setTimeout(() => { let table = document.querySelector("#out-table").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"))
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        console.log("wb",wb);
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        console.log("wbout",wbout);
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+
+        }
+        this.defaultPage1=temp[0];
+        this.pagesize=temp[1];
+        return wbout;},1000) ;
+
+        },
+      //input method
+      test:function (row) {
+          console.log("trt");
+          //this.RTP[row]=this.RTR[row] * this.tableData[row].TTP;
+          //console.log(this.RTP[row]);
+      },
+      //index
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+            console.log("123");
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      //表格數據保存
+      saveData:function () {
+          //console.log(this.$refs.mult);
+           //獲取到改變的input的序列號
+          var upload = [];
+          let  self= this;
+          var isNum = function (value) {
+            var reg = /^[0-9]+.?[0-9]*$/;
+          //var reg = /^[0-9]\d*$/;
+            if (reg.test(value)) {
+             return true;
+            }
+          return false;
+         };
+          //customer和project未填
+          if(this.customer==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+          if(this.project==''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+          //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+          this.projectError = false;
+          this.customerError = false;
+          for(let i = 0;i<this.tableData.length;i++){
+
+               //驗證所填值是否為數字
+               //if((this.NTU[i]==null)||!isNaN((parseInt(self.NTU[i])/1) && ( this.RTU[i]==null)||!isNaN(parseInt(self.RTU[i])/1)&& ( this.RTR[i]==null)||!isNaN(parseInt(self.RTR[i])/1))){
+               if(((this.NTU[i]=='')||isNum(self.NTU[i]) )&& ( (this.RTU[i]=='')||isNum(self.RTU[i]))&& ( (this.RTR[i]=='')||isNum(self.RTR[i]))){
+                   console.log(isNum(self.NTU[i]),this.NTU[i]==null,this.NTU[i]);
+                   if(this.NTU[i] != this.NTU_temp[i] || this.RTU[i] != this.RTU_temp[i] || this.RTR[i] != this.RTR_temp[i]){
+                              upload.push({'itemNo':this.tableData[i].ItemNo,'customer':this.customer,'project':this.project,'NTU':this.NTU[i],
+                              'NTF':this.NTF[i],'NTA':this.NTA[i],'NTP':this.NTP[i],'RTR':this.RTR[i],'RTU':this.RTU[i],
+                              'RTF':this.RTF[i],'RTA':this.RTA[i],'RTP':this.RTP[i] });
+              };
+               }else{
+                    console.log(!isNaN(self.RTU[i]/1));
+                    console.log(self.NTU[i],self.RTU[i],self.RTR[i],isNum(self.NTU[i]),isNum(self.RTU[i]),isNum(self.RTR[i]));
+                    console.log((this.NTU[i]==null)||isNum(self.NTU[i]) && ( this.RTU[i]==null)||isNum(self.RTU[i])&& ( this.RTR[i]==null)||isNum(self.RTR[i]));
+                    alert("添入值不合法");
+                    return false;
+               }
+
+          };
+          if(upload.length == 0){
+              alert("數據未發生變化");
+              return false;
+          }
+          //上傳數據
+          this.loading=true;
+          //console.log(upload);//$("[name='csrfmiddlewaretoken']").val()
+           axios.post("/TestPlan_ME/" ,upload,{
+                    headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    //console.log(res.data,"first");//上传成功的操作
+                    this.tableData=res.data;// 将返回的数据传递给data内的tableContent
+                    //this.NTU.length=this.tableData.length;
+                    //this.NTF.length=this.tableData.length;
+                    //this.NTA.length=this.tableData.length;
+                    //this.NTP.length=this.tableData.length;
+                    //this.RTU.length=this.tableData.length;
+                    //this.RTR.length=this.tableData.length;
+                    //console.log(this.tableData,12);
+                    for(let i=0;i<this.tableData.length;i++){
+                        this.NTU[i]=this.tableData[i].NTU;
+                        this.RTU[i]=this.tableData[i].RTU;
+                        this.RTR[i]=this.tableData[i].RTR;
+                        this.NTU_temp[i]=this.tableData[i].NTU;
+                        this.RTU_temp[i]=this.tableData[i].RTU;
+                        this.RTR_temp[i]=this.tableData[i].RTR;
+                    }
+                    this.loading=false;
+                   // console.log(this.NTU,this.RTU,this.RTR,12);
+                    //this.RTA.length=this.tableData.length;
+                    //this.RTP.length=this.tableData.length;
+                    //console.log(this.RTP.length,this.RTR.length,this.RTU.length,);
+                   {% comment %} for(let num =0;num<this.comment.length;num++){
+                        Vue.set(this.result,num,res.data[num]['result']);
+                        Vue.set(this.comment,num,res.data[num]['comment']);
+                    }
+                   {% endcomment %}
+                });
+
+
+
+
+
+      },
+      //关闭滚轮事件，未用到
+      closeScroll:function () {
+        var isNum = function (value) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(value)) {
+        return true;
+        }
+        return false;
+    }
+        var inputMouseScroll =document.getElementsByClassName("el-table__body")[0].getElementsByClassName("el-input el-input--suffix");//
+          console.log(document.getElementsByClassName("el-input__inner").length);
+
+        for(var formNum in inputMouseScroll) {
+            //console.log(formNum,inputMouseScroll[formNum]);
+            if (isNum(formNum)) {
+                console.log(inputMouseScroll[formNum].getElementsByClassName("el-input__inner")[0]);
+                inputMouseScroll[formNum].getElementsByClassName("el-input__inner")[0].addEventListener("mousewheel", function (evt) {
+                    evt = evt || window.event;
+                    if (evt.preventDefault) {
+                        // Firefox
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    } else {
+                        // IE
+                        evt.cancelBubble = true;
+                        evt.returnValue = false;
+                    };
+
+                })
+            }
+
+            }
+
+        },
+      getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        let columnLength = columns.length;
+        let _this=this;
+        columns.forEach((column, index) => {
+            if(this.Sum){
+                 if (index === 0) {
+            sums[index] = '合計(Hrs)';
+            }else{
+                    switch(index){
+                      case columnLength - 9:  sums[index] = this.Sum['NTUSum'];break;
+                      case columnLength - 8:  sums[index] = this.Sum['NTFSum'];break;
+                      case columnLength - 7:  sums[index] = this.Sum['NTASum'];break;
+                      case columnLength - 6:  sums[index] = this.Sum['NTPSum'];break;
+                      case columnLength - 5:  sums[index] = this.Sum['RTRSum'];break;
+                      case columnLength - 4:  sums[index] = this.Sum['RTUSum'];break;
+                      case columnLength - 3:  sums[index] = this.Sum['RTFSum'];break;
+                      case columnLength - 2:  sums[index] = this.Sum['RTASum'];break;
+                      case columnLength - 1:  sums[index] = this.Sum['RTPSum'];break;
+                     }
+                 }
+            }
+        });
+         //解決數據量少產生的錯位BUG！！！
+        this.$nextTick(() => {
+                        //重新計算表格高度
+                        this.$refs.multipleTable.doLayout()
+                    })
+        return sums;
+      },
+      showData(arr1,arr2,arr3,arr4,arr5){
+        this.RegCycle = arr5;
+        let myChart1 = echarts.init(document.getElementById('myChart'));
+        let myChart2 = echarts.init(document.getElementById('myChart1'));
+        let myChart3 = echarts.init(document.getElementById('myChart2'));
+        var option1 = {
+		    title: [{
+		        text: 'Project可靠性測試工時狀況',
+		    },{
+		        text:'標準工時為：Normal test time \n實際工時為：Normal + Regression test time',
+                bottom:0,
+                left:'center',
+                textAlign:'left',
+            }],
+            legend: {
+                data: ['Non-Attend Time', 'Attend Time'],
+                align: 'right',
+                right:'50',
+                orient:'vertical',
+            },
+		    tooltip : {
+		        trigger: 'axis',
+		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		        },
+                textAlign:'left',
+	        formatter: function (params) {
+	            var tar = params;
+	            return tar[0].name + '<br/>'+ tar[0].seriesName + ' : ' + tar[0].value+ '<br/>'+ tar[1].seriesName + ' : ' + tar[1].value;
+	        }
+	    },
+	        grid: {
+	        left: '3%',
+	        right: '4%',
+	        bottom: '10%',
+	        containLabel: true
+	    },
+	        xAxis: {
+	        type : 'category',
+	        //splitLine: {show:false},
+            axisTick: {show: true},
+            axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#000',
+                            fontSize:'16'
+                        }
+                    },
+	        data : ['Normal test Time','Regression test Time']
+	    },
+	        yAxis: {
+		    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#000',
+                            fontSize:'16'
+                        }
+                    },
+	        type : 'value'
+	    },
+	        series: [
+	        {
+	            name: 'Non-Attend Time',
+	            type: 'bar',
+	            stack: '总量',
+	            label: {
+	                normal: {
+	                    show: true,
+	                    //position: 'inside'
+	                }
+	            },
+	            data:[arr1,arr2]
+	        },
+	        {
+	            name: 'Attend Time',
+	            type: 'bar',
+	            label: {
+	                normal: {
+	                    show: true,
+	                    //position: 'inside'
+	                }
+	            },
+	            data:[arr3,arr4]
+	        }
+	    ]
+	}
+	    var option2 = {
+            title: [{
+		        text: '超時功率(Non-Attend Time)',
+		    },{
+                text:'Non-Attend Time',
+                bottom:3,
+                left:'center',
+            }],
+            tooltip: {
+                formatter: '{a} <br/>{b} : {c}%'
+            },
+            grid: {
+	        left: '3%',
+	        right: '3%',
+	        bottom: '3%',
+	        containLabel: true
+	    },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '超工時率',
+                    type: 'gauge',
+                    detail: {formatter: '{value}%'},
+                    data: [{value: parseFloat(arr3/arr1*100).toFixed(2), name: '超時工率'}]
+                }
+            ]
+};
+        var option3 = {
+            title: [{
+		        text: '超時功率(Attend Time)',
+		    },{
+                text:'Attend Time',
+                bottom:3,
+                left:'center',
+            }],
+            tooltip: {
+                formatter: '{a} <br/>{b} : {c}%'
+            },
+            grid: {
+	        left: '3%',
+	        right: '3%',
+	        bottom: '3%',
+	        containLabel: true
+	    },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '超工時率',
+                    type: 'gauge',
+                    detail: {formatter: '{value}%'},
+                    data: [{value: parseFloat(arr4/arr2*100).toFixed(2), name: '超時工率'}]
+                }
+            ]
+};
+        //繪製圖形
+        myChart1.setOption(option1);
+        myChart2.setOption(option2);
+        myChart3.setOption(option3);
+        //頁面尺寸放大縮小，圖形重繪
+        window.addEventListener('resize', ()=>{
+               myChart1.resize();
+               myChart2.resize();
+               myChart3.resize();
+        })
+       {% comment %} $(window).resize(function() {
+
+           });{% endcomment %}
+      },
+    },
+
+    //计算公式：根据所填选项，显示数据
+    computed:{
+       //公式数量：1
+       NewRTP(){
+         let value = [];
+         for(let i= 0;i<this.tableData.length;i++){
+              value[i] = this.RTR[i] * this.tableData[i].TTP;
+              value[i]= isNaN(value[i])?0:value[i];
+         }
+        this.RTP = value;
+        return value;
+      },
+       NewNTP(){
+         let value = [];
+         for(let i= 0;i<this.tableData.length;i++){
+              value[i] = this.NTU[i] * this.tableData[i].TTP;
+              value[i]= isNaN(value[i])?0:value[i];
+         }
+        this.NTP = value;
+        return value;
+      },
+        //公式数量：3
+       NewNTF(){
+         let value = [];
+         for(let i= 0;i<this.tableData.length;i++){
+             /* value[i] = this.RTR[i] * this.tableData[i].TTP;
+              value[i]= isNaN(value[i])?0:value[i];*/
+             switch (this.tableData[i].ItemNo) {
+                 case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTF)/20)?0:((this.NTU[i] * this.tableData[i].TTF)/20); break;
+                 case "H1-3" :
+                 case "H1-4" :
+                 case "H1-5 #1-1" :
+                 case "H1-5 #2-1" :
+                 case "H1-27" :
+                 case "H1-30" :
+                 case "H1-31" :
+                 case "H3-12" : value[i]=(this.NTU[i] == 0||isNaN(this.NTU[i]/1))?0:this.tableData[i].TTF; break;
+                 default : value[i] =isNaN(this.NTU[i] * this.tableData[i].TTF)?0:this.NTU[i] * this.tableData[i].TTF;
+             }
+             
+         }
+         this.NTF = value;
+         //console.log(value);
+         return value;
+      },
+        //公式数量：3
+       NewNTA(){
+         let value = [];
+         for(let i= 0;i<this.tableData.length;i++){
+              {#value[i] = this.RTR[i] * this.tableData[i].TTP;#}
+              {#value[i]= isNaN(value[i])?0:value[i];#}
+              switch (this.tableData[i].ItemNo) {
+                 case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTM)/20)?0:(this.NTU[i] * this.tableData[i].TTM)/20; break;
+                 case "H1-5 #1-1" :
+                 case "H1-5 #2-1" :
+                     value[i]=(this.NTU[i] == 0||this.NTU[i] == null)?0:this.tableData[i].TTM; break;
+                 default : value[i] =isNaN(this.NTU[i] * this.tableData[i].TTM)?0:(this.NTU[i] * this.tableData[i].TTM);
+             }
+
+         }
+        this.NTA = value;
+        return value;
+      },
+        //公式数量：4
+       NewRTF(){
+         let value = [];
+         for(let i= 0;i<this.tableData.length;i++){
+          {% comment %}    value[i] = this.RTR[i] * this.tableData[i].TTP;
+              value[i]= isNaN(value[i])?0:value[i];{% endcomment %}
+           switch (this.tableData[i].ItemNo) {
+                 case "H1-33" : value[i]=isNaN((this.RTU[i] * this.tableData[i].TTF)/20)?0:((this.RTU[i] * this.tableData[i].TTF)/20); break;
+                 case "H1-34" : value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:this.tableData[i].TTF; break;
+                 case "H1-3" :
+                 case "H1-4" :
+                 case "H1-5 #1-1" :
+                 case "H1-5 #2-1" :
+                 case "H1-27" :
+                 case "H1-30" :
+                 case "H1-31" :
+                 case "H3-12" : value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:(isNaN(this.tableData[i].TTF *this.RTR[i])?0:(this.tableData[i].TTF *this.RTR[i])); break;
+                 default : value[i] =isNaN(this.RTU[i] * this.tableData[i].TTF)?0:this.RTU[i] * this.tableData[i].TTF;
+             }
+         }
+         this.RTF = value;
+        return value;
+      },
+        //公式数量：3
+       NewRTA(){
+         let value = [];
+         for(let i= 0;i<this.tableData.length;i++){
+              {% comment %}value[i] = this.RTR[i] * this.tableData[i].TTP;
+              value[i]= isNaN(value[i])?0:value[i];{% endcomment %}
+              switch (this.tableData[i].ItemNo) {
+                 case "H1-33" : value[i]=isNaN((this.RTU[i] * this.tableData[i].TTM)/20)?0:(this.RTU[i] * this.tableData[i].TTM)/20; break;
+                 case "H1-5 #2-1" :
+                 case "H1-5 #1-1" :value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:this.tableData[i].TTM; break;
+                 default : value[i] =isNaN(this.RTU[i] * this.tableData[i].TTM)?0:(this.RTU[i] * this.tableData[i].TTM);
+             }
+         }
+        this.RTA = value;
+        return value;
+      },
+},
+
+    watch: {
+       //關閉customer和project 未輸入提示 以及依據選項產生聯動
+       customer(newValue,oldValue){
+           //關閉錯誤提示
+           this.customerError = false;
+           //清除上次搜索過的記錄
+           this.project='';
+           this.phase='';
+           console.log(this.selectMsg);
+           this.projectvalue=this.selectMsg['0'][newValue];
+           //Vue.$set(this.projectvalue,this.selectMsg['0'][newValue]);
+          // console.log(this.selectMsg,newValue,this.projectvalue);
+       },
+       project(newValue,oldValue){
+           //關閉錯誤提示
+           this.projectError = false;
+           //清除上次搜索過的記錄
+           this.phase='';
+           if(this.customer == ''){
+               return false;
+           }
+           //console.log(this.selectMsg['0'][this.customer]);
+           //遍歷所有數據進行查找
+           for(let index =0; index < this.selectMsg['0'][this.customer].length;index++){
+               //console.log(this.selectMsg['0'][this.customer][index]['customer'], newValue);
+               //查找當前選項
+                if(this.selectMsg['0'][this.customer][index]['customer'] == newValue){
+                    this.phasevalue = this.selectMsg['0'][this.customer][index]['phase'];
+                    //Vue.set()
+                    //console.log(this.phasevalue);
+                    return ;
+                }
+           }
+       },
+       phase(newValue,oldValue){
+           this.phaseError = false;
+           //console.log(newValue);
+       },
+},
+  })
+</script>
+{% endblock %}

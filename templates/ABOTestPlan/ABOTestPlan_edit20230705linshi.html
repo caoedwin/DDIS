@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ABOTestPlan_edit{% endblock %}
+{% block css %}
+{#<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">#}
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/ElementUI.css">
+    <style>
+    .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+    .el-table .cell {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    {% comment %}white-space: normal;{% endcomment %}
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 23px;
+    text-align: left;
+}
+      .selectItem{
+    font-size: 15px;
+    font-weight: bold;
+    color: aliceblue;
+    white-space: nowrap;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<template>
+
+    <div class="col-md-2">
+        <span  class="selectItem" v-cloak  v-if="showinfo">當前表格信息：${ showinfo }<span v-if=!"canEdit" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+                        <el-button size="small"  v-if="canExport==1" @click="exportExcel" type="info" >Export</el-button>
+                        <el-button @click="saveData"v-if="canEdit==1" v-cloak type="success" style="height:40px">保存</el-button>
+        </div>
+    <el-table id="out-exceltable"  stripe border {% comment %}height="700"{% endcomment %} ref="multipleTable" :data="excel_dic" tooltip-effect="dark" style="width: 95% ;heighrt:200;"
+   {% comment %}:default-sort = "{prop: 'Project', order: 'descending'}"{% endcomment %}
+            :cell-style="cellStyle"
+   v-loading="tableloading"
+  element-loading-text="數據更新中，請稍後"
+  border>
+    <el-table-column v-if="key_list[0]" v-for="(item,index) in key_list" :label="{% comment %}'Project: '+{% endcomment %}item" :prop="item" :min-width="widths(index)">
+            <template slot-scope="scope">
+                <el-input v-if="canEdit && index >= 2 && scope.$index <= 51" placeholder="请输入内容" type="text" v-model="scope.row[item]" ></el-input>
+                <el-select v-else-if="canEdit && index >= 2 && scope.$index > 51" class="edit-cell" filterable allow-create v-model="scope.row[item]">
+                        <el-option value="P"></el-option>
+                        <el-option value="F"></el-option>
+                        <el-option value="B"></el-option>
+                        <el-option value="NS"></el-option>
+                        <el-option value="NonCheck"></el-option>
+                  </el-select>
+                  <span v-else-if="canEdit && index < 2" >${ scope.row[item]  }</span>
+{#                <span v-if="canEdit && index <2" >${ scope.row[item]  }</span>#}
+{#                <div v-else>#}
+{#                  <el-input {% comment %}v-else-if="canEdit && index >= 2 && scope.row.$index <= 51"{% endcomment %} placeholder="请输入内容" type="text" v-model="scope.row.item" ></el-input>#}
+
+{#                </div>#}
+                {% comment %}<el-button @click="update(scope,item,index)" type="text" size="small">编辑</el-button>{% endcomment %}
+              </template>
+      </el-table-column>
+   </el-table>
+</template>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+
+                visible: false,
+                excel_dic: [],
+                excel_dic_origin: [],
+                key_list: [],
+                comments: [],
+                showcomments: '',
+                tipsdisable:'',
+                showinfo:"",
+                errMsg:'',
+                canExport:null,
+                canEdit:null,
+
+                showEdit: [], //显示编辑框
+                showBtn: [],
+                showBtnOrdinary: true,
+                tableloading:false,
+                elbuttonloading:false,
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            //获取数据
+            getdata: function (e) {
+                this.tableloading=true;
+                this.elbuttonloading=true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/ABOTestPlan/ABOTestPlan_edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.excel_dic=JSON.parse(JSON.stringify(res.data.excel_dic))
+                   {#就是在赋值的时候转一下json格式，这样指的就不是地址了。#}
+                   this.excel_dic_origin=JSON.parse(JSON.stringify(res.data.excel_dic))
+                  this.key_list=res.data.key_list;
+                   this.comments=res.data.comments;
+                   this.showinfo=res.data.showinfo;
+                  this.canExport = res.data.canExport;
+                  this.canEdit = res.data.canEdit;
+                  this.errMsg = res.data.errMsg;
+                  this.tableloading=false;
+                   this.elbuttonloading=false;
+                   if(this.errMsg){
+                            this.$alert(this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+
+                        }
+                });
+            },
+
+            widths(num){
+                if(num == 1){
+                    return 500
+                }
+                else{
+                    return 100
+                }
+            },
+            cellStyle({row,column,rowIndex,columnIndex}){
+                {#console.log(columnIndex);#}
+                {#console.log(columnIndex,row[this.key_list[columnIndex]]);#}
+                {#console.log(column);#}
+                if (row[this.key_list[columnIndex]] === 'P' ) {
+                  return {
+                      background: '#a8c97f'
+                  }
+              }
+              if (row[this.key_list[columnIndex]] === 'F' ) {
+                  return {
+                      background: '#F56C6C'
+                  }
+              }
+              if (row[this.key_list[columnIndex]] === 'NS' ) {
+                  return {
+                      background: '#8b968d'
+                  }
+              }
+              if (row[this.key_list[columnIndex]] === 'B' ) {
+                  return {
+                      background: 'oldlace'
+                  }
+              }
+
+      },
+            exportExcel:function (){
+/* 从表生成工作簿对象 */
+        {#console.log(document.querySelector("#out-table"));#}
+{% comment %}            //customer和project和phase未填
+         if(this.showCustomer === ''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+         if(this.showProject === ''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+         if(this.showPhase === ''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };{% endcomment %}
+         let temp=[];
+         temp.push(Number(this.currentPage));
+         temp.push(Number(this.pageSize));
+         console.log(temp)
+         this.currentPage=1;
+         this.pageSize=this.excel_dic_origin.length;
+         console.log(temp,this.defaultPage1,this.pageSize);
+         {% comment %}document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[0].colSpan = 1;
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[1].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[2].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[1].getElementsByTagName('tr')[0].getElementsByTagName('td')[1].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[1].getElementsByTagName('tr')[0].getElementsByTagName('td')[2].display ="table-row";{% endcomment %}
+         setTimeout(() => { let table = document.querySelector("#out-exceltable").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         {#table.removeChild(table.querySelector(".el-table__fixed"))#}
+         {#table.removeChild(table.querySelector(".el-table__fixed-right"))//左右都有固定列#}
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        console.log("wb",wb);
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        console.log("wbout",wbout);
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        this.currentPage=temp[0];
+            this.pageSize=temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+            //console.log(this.currentPage,this.pageSize)
+            temp=[];
+        return wbout;},1000) ;
+        },
+            saveData:function () {
+          //console.log(this.$refs.mult);
+           //獲取到改變的input的序列號
+          var upload = [];
+          {#let  self= this;#}
+            for(let i = 0;i<this.excel_dic.length;i++) {
+                {#console.log(this.excel_dic[i],1);#}
+                {#console.log(this.excel_dic_origin[i],2);#}
+                console.log(JSON.stringify(this.excel_dic[i])!=JSON.stringify(this.excel_dic_origin[i]))
+                if (JSON.stringify(this.excel_dic[i])!=JSON.stringify(this.excel_dic_origin[i])) {
+                    for(let j=0;j<this.key_list.length;j++){
+                        if (JSON.stringify(this.excel_dic[i][this.key_list[j]])!=JSON.stringify(this.excel_dic_origin[i][this.key_list[j]])) {
+                            upload.push(
+                                {"row":i, "lie":this.key_list[j], "value":this.excel_dic[i][this.key_list[j]]}
+                            )
+                        }
+                    }
+                };
+            }
+
+          //數據無變化
+          if(upload.length == 0){
+              alert("數據未發生變化");
+              return false;
+          }
+          //上傳數據
+          {#console.log(upload,"tes");#}
+          {#let uploadData={#}
+          {#    "DataContent":upload,#}
+          {#    "customer":this.customer,#}
+          {#    "project":this.project,#}
+          {#    "phase":this.phase#}
+
+          this.loading=true;
+          //console.log(uploadData);//$("[name='csrfmiddlewaretoken']").val()
+          {#axios.post("/ABOTestPlan/ABOTestPlan_edit/" ,{"uploadData":upload},{#}
+          axios.post("/ABOTestPlan/ABOTestPlan_edit/" ,{"uploadData":upload,"isGetData":"save","showinfo":this.showinfo,},{
+                    headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    {#console.log(res.data,"first");//上传成功的操作#}
+
+                     this.excel_dic=JSON.parse(JSON.stringify(res.data.excel_dic))
+                     {#就是在赋值的时候转一下json格式，这样指的就不是地址了。#}
+                   this.excel_dic_origin=JSON.parse(JSON.stringify(res.data.excel_dic))
+                  this.key_list=res.data.key_list;
+                   this.comments=res.data.comments;
+                   this.showinfo=res.data.showinfo;
+                  this.canExport = res.data.canExport;
+                  this.canEdit = res.data.canEdit;
+                  this.errMsg = res.data.errMsg;
+                  this.tableloading=false;
+                   this.elbuttonloading=false;
+                   if(this.errMsg){
+                            this.$alert(this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+
+                        }
+                }).catch(function (e) {
+                        this.loading=false;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+
+
+
+
+
+      },
+            update:function(scopse,item,index){
+                console.log(item, index, scopse);
+                console.log(scopse.row);
+                console.log(scopse.row[item]);
+            },
+        }
+    })
+</script>
+{% endblock %}

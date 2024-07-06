@@ -1,0 +1,863 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Auto_Eidt{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+    {#transform: scale(0.8,0.8);#}
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:black;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    body .el-table th.gutter{
+      display: table-cell!important;
+    }
+    body .el-table colgroup.gutter{
+      display: table-cell!important;
+    }
+
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #c0c0c0;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,255);
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 35px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: white;
+   }
+
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 15px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+
+#sh {
+    font-size:18px;
+    font-family:微软雅黑;
+    border: 2px solid #9f9ca1;
+}
+
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-4">
+         <label style="color: white;font-weight: 800;font-size:18px;" for="Customer" v-cloak>Customer</label>
+         <el-select v-model="selectedCustomer" ref="Customer" style="margin-right: 20px;width:160px" clearable v-cloak>
+              <el-option v-for="item in selectCustomer" :label="item" :value="item"></el-option>
+         </el-select>
+         <label style="color: white;font-weight: 800;font-size:18px;" for="VA" v-cloak>VA/N-VA</label>
+         <el-select v-model="selectedVA" ref="VA" style="margin-right: 20px;width:160px" clearable v-cloak>
+              <el-option label="VA" value="VA"></el-option>
+              <el-option label="N-VA" value="N-VA"></el-option>
+         </el-select>
+    <el-button size="small" style="background:#428bca;color:#fff;margin-left: 50px;" value="Search" name="Search" @click="selectMsg()">Search</el-button>
+    <el-button size="small" style="border-color:white;" @click="exportExcel" type="info" v-if="canEdit==1">Export</el-button>
+    <a style="margin-top: 10px;margin-left: 40px;color: white" href="/static/src/modelfiles/DQA3AutoResult.xlsx">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>
+    </div>
+</div>
+<div class="row" style="white-space: nowrap;margin-bottom: 20px;">
+    <div v-cloak class="fileUploadContent" v-if="canEdit==1">
+        <div class="inputPackage" v-cloak>
+              <span v-cloak>請選擇文件</span>
+              <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+        </div>
+        <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+        <span class="showFileName" v-cloak >${ fileName }</span>
+    </div>
+</div>
+<div class="tableAround" v-cloak >
+    <div class="col-md-5" style="float: left;margin-top: -5px;">
+        <span style="font-weight: bold;color: black;font-size: 16px;">已選</span><span id="SelectNum" style="font-weight: bold;color: black;font-size: 16px;margin-left: 14px;">0</span><span class="col-md-4" style="font-weight: bold;color: black;font-size: 16px;">條</span>
+            <el-button v-if="canEdit==1" size="medium" style="background-color:#69ec57;border-color:black;color:black;margin: 2px;margin-left: 50px;" name="新增" @click="addData()" v-cloak>新增</el-button>
+            <el-button v-if="canEdit==1" size="medium" style="background-color:#00CCFF;border-color:black;color:black;margin: 2px;margin-left: 10px;" name="修改" @click="updateData()" v-cloak>修改</el-button>
+            <el-button v-if="canEdit==1" size="medium" style="background-color: #FF6666;border-color:black;color:black;margin: 2px;margin-left: 10px;" name="刪除" @click="deleteData()" v-cloak>刪除</el-button>
+    </div>
+    {% csrf_token %}
+    <template>
+    <el-input type="text" v-model="search"  id="sh" placeholder="請輸入關鍵字搜索..."></el-input>
+    <el-table border stripe height="600"  id="out-table" ref="multipleTable" @selection-change="handleSelectionChange" :row-key="getRowKeys" :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+              :header-cell-style="{background:'white',fontWeight:900,'border-bottom':'1px solid rgb(103, 194, 58)'}"
+              style="border-radius: 10px;word-break: keep-all">
+        <el-table-column type="selection" :reserve-selection="true" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod"></el-table-column>
+        <el-table-column prop="Number" label="No." align="center" width="100">
+        </el-table-column>
+        <el-table-column prop="CG" label="CG" align="center" width="90">
+        </el-table-column>
+        <el-table-column prop="VA_NVA" label="VA/N-VA" align="center" width="80">
+        </el-table-column>
+        <el-table-column prop="BaseBenfit" label="Base效益" align="center" width="85">
+        </el-table-column>
+        <el-table-column prop="CaseID" label="Case ID" align="center" width="120">
+        </el-table-column>
+        <el-table-column prop="CaseName" label="Case Name" align="center" width="220">
+        </el-table-column>
+        <el-table-column prop="Item" label="Item" width="220" align="center">
+        </el-table-column>
+        <el-table-column prop="Status" label="Status" width="80" align="center">
+        </el-table-column>
+        <el-table-column prop="FunctionInt" label="功能簡介" align="center">
+        </el-table-column>
+    </el-table>
+    <div class="block">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[2, 50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+        </el-pagination>
+    </div>
+    </template>
+</div>
+
+<el-dialog
+    title="數據新增"
+    width="50%"
+    center
+    :visible.sync="insert">
+    <template>
+<el-form ref="form" :model="form"  :rules="rules" label-width="120px" size="medium">
+  <el-form-item label="CG" prop="CG">
+        <el-select v-model="form.CG" placeholder="请选择">
+                  <el-option
+                      v-for="item in selectCustomer"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                  </el-option>
+        </el-select>
+  </el-form-item>
+  <el-form-item label="VA/N-VA" prop="VA_NVA">
+        <el-select v-model="form.VA_NVA" placeholder="请选择">
+                  <el-option value="VA"></el-option>
+                  <el-option value="N-VA"></el-option>
+        </el-select>
+  </el-form-item>
+  <el-form-item label="No." prop="Number">
+    <el-input v-model="form.Number"></el-input>
+  </el-form-item>
+  <el-form-item label="Base效益" prop="BaseBenfit">
+    <el-input v-model="form.BaseBenfit"></el-input>
+  </el-form-item>
+  <el-form-item label="Case ID" prop="CaseID">
+    <el-input v-model="form.CaseID"></el-input>
+  </el-form-item>
+  <el-form-item label="Case Name" prop="CaseName">
+    <el-input v-model="form.CaseName"></el-input>
+  </el-form-item>
+  <el-form-item label="Item" prop="Item">
+    <el-input v-model="form.Item"></el-input>
+  </el-form-item>
+  <el-form-item label="Status" prop="Status">
+        <el-select v-model="form.Status" placeholder="请选择">
+                  <el-option
+                      v-for="item in selectStatus"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                  </el-option>
+        </el-select>
+  </el-form-item>
+  <el-form-item label="功能簡介" prop="FunctionInt">
+    <el-input v-model="form.FunctionInt" type="textarea"></el-input>
+  </el-form-item>
+<div class="el-form-item__content" style="margin-left: 200px;">
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit('form')">新增</el-button>
+  </el-form-item>
+ </div>
+</el-form>
+</template>
+</el-dialog>
+
+<el-dialog
+    title="數據修改"
+    width="50%"
+    center
+    :visible.sync="update">
+    <template>
+<el-form ref="form1" :model="form1"  label-width="120px" size="medium">
+  <el-form-item label="CG" prop="CG">
+        <el-select v-model="form1.CG" placeholder="请选择">
+                  <el-option
+                      v-for="item in selectCustomer"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                  </el-option>
+        </el-select>
+  </el-form-item>
+  <el-form-item label="VA/N-VA" prop="VA_NVA">
+        <el-select v-model="form1.VA_NVA" placeholder="请选择">
+                  <el-option value="VA"></el-option>
+                  <el-option value="N-VA"></el-option>
+        </el-select>
+  </el-form-item>
+  <el-form-item label="No." prop="Number">
+    <el-input v-model="form1.Number"></el-input>
+  </el-form-item>
+  <el-form-item label="Base效益" prop="BaseBenfit">
+    <el-input v-model="form1.BaseBenfit"></el-input>
+  </el-form-item>
+  <el-form-item label="Case ID" prop="CaseID">
+    <el-input v-model="form1.CaseID"></el-input>
+  </el-form-item>
+  <el-form-item label="Case Name" prop="CaseName">
+    <el-input v-model="form1.CaseName"></el-input>
+  </el-form-item>
+  <el-form-item label="Item" prop="Item">
+    <el-input v-model="form1.Item"></el-input>
+  </el-form-item>
+  <el-form-item label="Status" prop="Status">
+        <el-select v-model="form1.Status" placeholder="请选择">
+                  <el-option
+                      v-for="item in selectStatus"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                  </el-option>
+        </el-select>
+  </el-form-item>
+  <el-form-item label="功能簡介" prop="FunctionInt">
+    <el-input v-model="form1.FunctionInt" type="textarea"></el-input>
+  </el-form-item>
+<div class="el-form-item__content" style="margin-left: 200px;">
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit1('form1')">修改</el-button>
+  </el-form-item>
+ </div>
+</el-form>
+</template>
+</el-dialog>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+             visible: false,
+             insert:false,
+             update:false,
+             search:'',
+             tableContent: [],
+             canEdit:false,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum: null,
+             selectedCustomer:'',
+             selectCustomer:[],
+             selectStatus:[],
+             selectedVA:'',
+             selectItem:[],
+             selectProjectName:[],
+             selectPN:[],
+             sectionPlatform:[],
+             sectionSeries:[],
+             sectionCategory:[],
+             selectedProjectName:'',
+             selectedPlatform:null,
+             selectedPN:'',
+             excelFile:null,
+             fileName:"未選擇文件",
+             multipleSelection: [],
+             formData:[],
+             formData1:[],
+             form: {
+                  Number: '',
+                  CG: '',
+                  VA_NVA: '',
+                  BaseBenfit: '',
+                  CaseID: '',
+                  CaseName: '',
+                  Item: '',
+                  Status: '',
+                  FunctionInt: '',
+             },
+             rules: {
+              CG: [
+                { required: true, message: '请選擇Customer', trigger: 'change' },
+              ],
+              VA_NVA: [
+                { required: true, message: '请選擇內容', trigger: 'change' },
+              ],
+              Number: [
+                { required: true, message: '请輸入No', trigger: 'blur' },
+              ],
+              BaseBenfit: [
+                { required: true, message: '请輸入Base效益', trigger: 'blur' },
+              ],
+              Item: [
+                { required: true, message: '请輸入Item', trigger: 'blur' },
+              ],
+              Status: [
+                { required: true, message: '请選擇Status', trigger: 'change' },
+              ],
+            },
+             editid: '',
+             form1: {
+                  id: '',
+                  Number: '',
+                  CG: '',
+                  VA_NVA: '',
+                  BaseBenfit: '',
+                  CaseID: '',
+                  CaseName: '',
+                  Item: '',
+                  Status: '',
+                  FunctionInt: '',
+             },
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/AutoResult/AutoItem_edit/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.selectCustomer = res.data.selectCustomer;
+                this.selectStatus = res.data.selectStatus;
+                this.selectItem=res.data.select;
+                this.tableContent = res.data.content;
+                this.totalNum=this.tableContent.length;
+                this.canEdit = res.data.canEdit;
+         });
+
+        },
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
+         },
+
+          handleSelect(item) {
+            {#this.number = item.number;#}
+            console.log(item);
+          },
+           handleSelectionChange(val) {
+                this.multipleSelection = val;
+                var len=document.getElementById("SelectNum");
+                len.innerHTML=this.multipleSelection.length;
+           },
+
+          //上传搜索项：以此选项搜索符合条件的内容
+         selectMsg :function(){
+           let customer = this.$refs.Customer.value;
+           let VA = this.$refs.VA.value;
+           let data ={"isGetData":"SEARCH","Customer":customer,"VA_NVA":VA,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+           axios.post("/AutoResult/AutoItem_edit/",Qs.stringify(data), {
+           headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+               this.canEdit = res.data.canEdit;
+               this.tableContent = res.data.content;
+               this.totalNum=this.tableContent.length;
+               this.$refs.multipleTable.clearSelection();
+           });
+        },
+
+          updateFile:function(e){
+                const first="未選擇文件";
+                let newValue= e.target.files;
+                if(newValue){
+                 let file=document.getElementById('upload');
+                 let filename= file.files[0].name;
+                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
+                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                     this.fileName=filename;
+                     this.uploadFile=file.files[0];
+                 }else{
+                     alert("上傳類型不為'xlsx'或'xls'");
+                       try{
+                       }catch(e){
+                          console.log(e);
+                       }
+                 }
+             }else{
+                 this.uploadFile=null;
+                 this.fileName=first;
+             }
+          },
+
+         //批量上傳
+          fileUpload:function(){
+                    const first="未選擇文件";
+                    let Customer = this.$refs.Customer.value;
+                    let VA = this.$refs.VA.value;
+                    if(this.uploadFile){
+                       //1.解析Excel
+                       let outputResult;
+                       let _this= this;
+                       let files = this.uploadFile;
+                       let undefined_to_null=function(value){
+                           if(value == undefined){
+                               value=null;
+                           }
+                           return value;
+                       };
+                       var fileReader = new FileReader ();
+                       const loading = this.$loading({
+                              lock: true,
+                              text: 'Loading',
+                              spinner: 'el-icon-loading',
+                              background: 'rgba(0, 0, 0, 0.7)'
+                       });
+                       fileReader.onload = function (ev) {
+                         try {
+                         {#_this.loading=true;#}
+                         var data = ev.target.result,
+                          workbook = XLSX.read(data, {
+                            type: 'binary'
+                         }), //以二进制流方式读取得到整份excel表格对象
+                          persons = []; //存储获取到的数据
+                       } catch (e) {
+                             loading.close();
+                         return;
+                      }
+                      for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        var fromTo = workbook.Sheets[sheet]['!ref'];
+                        var datas = workbook.Sheets[sheet];
+                        //如果有不规范数据可以在这里进行处理datas
+                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                    }
+                }
+                     //数据保存在result
+                      let result=JSON.stringify(persons);
+                       //将之前张开的树形结构收起
+                          //_this.reset();
+                       //2.上傳數據
+                        axios.post("/AutoResult/AutoItem_edit/" ,{"Customer":Customer,"VA_NVA":VA,"ExcelData":result},{
+                        headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    }).then((res) => {
+                        //console.log(res.data,"first");//上传成功的操作
+                        _this.tableContent = res.data.content;
+                        _this.totalNum = _this.tableContent.length;
+                        _this.errMsg=res.data.errMsg;
+                        _this.uploadFile=null;
+                        _this.fileName=first;
+                        loading.close();
+                        //上传成功的操作
+                        if(_this.errMsg){
+                            _this.$alert(_this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+                            _this.$message({
+                                message: '上傳成功',
+                                type: 'success',
+                            })
+                        }
+                        //接受数据的初始化
+                        try{
+                        }catch(e)
+                        {
+                           console.log("错误异常"+e);
+                        }
+                    }).catch(function (e) {
+                            loading.close();
+                            _this.uploadFile=null;
+                            var warning =confirm("上傳異常");
+                            console.log("上傳錯誤信息"+e);
+                        });
+               };
+                       try{
+                       fileReader.readAsBinaryString(files);
+                       }
+                       catch(e){
+                             loading.close();
+                             console.log(e);
+                             alert("文件上傳異常") ;
+                             return;
+                        }
+                 }else{
+                   loading.close();
+                  alert("未選擇文件");
+                  return false;
+              }
+                    this.excelFile='';
+          },
+
+         exportExcel: function () {
+             /* 从表生成工作簿对象 */
+             {#console.log(document.querySelector("#out-table"));#}
+             let temp = [];
+             temp.push(Number(this.currentPage));
+             temp.push(Number(this.pageSize));
+             {#console.log(temp);#}
+             this.currentPage = 1;
+             this.pageSize = this.tableContent.length;
+             {#console.log(temp, this.defaultPage1, this.pageSize);#}
+             setTimeout(() => {
+                 let table = document.querySelector("#out-table").cloneNode(true);
+                 let fix = table.querySelector(".el-table__fixed");
+                 let wb;
+                 if(fix){
+                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
+                    table.appendChild(fix);
+                 }else{
+                    wb = XLSX.utils.table_to_book(table,{raw: true});
+                 }
+                 {#console.log("wb", wb);#}
+                 /* 获取二进制字符串作为输出 */
+                 var wbout = XLSX.write(wb, {
+                     bookType: "xlsx",
+                     bookSST: true,
+                     type: "array"
+                 });
+                 {#console.log("wbout", wbout);#}
+                 try {
+                     saveAs(
+                         //Blob 对象表示一个不可变、原始数据的类文件对象。
+                         //Blob 表示的不一定是JavaScript原生格式的数据。
+                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                         new Blob([wbout], {type: "application/octet-stream"}),
+                         //设置导出文件名称
+                         "sheetjs.xlsx"
+                     );
+
+                 } catch (e) {
+                     if (typeof console !== "undefined") console.log(e, wbout);
+                 }
+                 this.currentPage = temp[0];
+                 this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                 temp = [];
+                 return wbout;
+             }, 100);
+         },
+
+         addData() {
+            this.insert = true;
+         },
+
+         updateData() {
+            let datas = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+             {#console.log(datas[0]);#}
+            if(datas.length == 0){
+                 this.$alert('請勾選一條數據', '提示', {
+                    type: 'warning',
+                 })
+            }else if(datas.length == 1){
+                this.update = true;
+                this.editid = datas[0].id;
+                this.form1.Number = datas[0].Number;
+                this.form1.CG = datas[0].CG;
+                this.form1.VA_NVA = datas[0].VA_NVA;
+                this.form1.BaseBenfit = datas[0].BaseBenfit;
+                this.form1.CaseID = datas[0].CaseID;
+                this.form1.CaseName = datas[0].CaseName;
+                this.form1.Item = datas[0].Item;
+                this.form1.Status = datas[0].Status;
+                this.form1.FunctionInt = datas[0].FunctionInt;
+            }else{
+                 this.$alert('只能勾選一條數據', '提示', {
+                    type: 'warning',
+                 });
+            }
+            this.$refs.multipleTable.clearSelection();
+         },
+
+         deleteData(){
+            if(this.multipleSelection.length == 0){
+                 this.$alert('請至少選中一條數據', '提示', {
+                    type: 'warning',
+                 })
+            }else{
+                    var warning=confirm('此操作将永久删除该条数据, 是否继续?');
+                    if(warning) {
+                         let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+                         let params = [];
+                         let self = this;
+                         checkArr.forEach(function (item) {
+                             {#console.log(item);#}
+                             params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+                    });
+                     {#console.log(params);#}
+                       let Customer = this.$refs.Customer.value;
+                       let VA = this.$refs.VA.value;
+                       let data ={"isGetData":"MUTICANCEL","params": params,"Customer":Customer,"VA_NVA":VA,
+                            "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+                       axios.post("/AutoResult/AutoItem_edit/",data).then((res) => {
+                             this.tableContent = res.data.content;
+                             this.totalNum=this.tableContent.length;
+                             self.$message({
+                                 message: '删除成功',
+                                 type: 'success'
+                         });
+                        this.$refs.multipleTable.clearSelection();
+                 })
+             }else{
+                 return false;
+             }
+            }
+      },
+
+         onSubmit(formName) {
+           this.$refs[formName].validate((valid) => {
+            if (valid) {
+                if (this.formData.length==0){this.formData = new FormData();}
+                  this.formData.append('CustomerSearch', this.$refs.Customer.value);
+                  this.formData.append('VA_NVASearch', this.$refs.VA.value);
+                  this.formData.append('Number', this.$refs.form.model.Number);
+                  this.formData.append('Customer', this.$refs.form.model.CG);
+                  this.formData.append('VA_NVA', this.$refs.form.model.VA_NVA);
+                  this.formData.append('BaseBenfit', this.$refs.form.model.BaseBenfit);
+                  this.formData.append('CaseID', this.$refs.form.model.CaseID);
+                  this.formData.append('CaseName', this.$refs.form.model.CaseName);
+                  this.formData.append('Item', this.$refs.form.model.Item);
+                  this.formData.append('Status', this.$refs.form.model.Status);
+                  this.formData.append('FunctionInt', this.$refs.form.model.FunctionInt);
+                  this.formData.append("action",'addsubmit');
+                  axios.post("/AutoResult/AutoItem_edit/", this.formData,{
+                              headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                          }).then((res)=>{
+                              this.tableContent = res.data.content;
+                              this.totalNum=this.tableContent.length;
+                              this.errMsgNumber=res.data.errMsgNumber;
+                              this.formData = new FormData();
+                              if(this.errMsgNumber){
+                                  this.$alert(this.errMsgNumber, '提示', {
+                                        type: 'warning',
+                                  });
+                                  this.insert = true;
+                              }else{
+                                  try {
+                                          this.$refs.form.resetFields();
+                                  } catch (e) {
+
+                                  }
+                                  this.insert = false;
+                              }
+                  })
+                }else {
+                  console.log('error submit!!');
+                  return false;
+                }
+            });
+          },
+
+         onSubmit1() {
+                if (this.formData1.length==0){this.formData1 = new FormData();}
+                  this.formData1.append('CustomerSearch', this.$refs.Customer.value);
+                  this.formData1.append('VA_NVASearch', this.$refs.VA.value);
+                  this.formData1.append('id', this.editid);
+                  this.formData1.append('Number', this.$refs.form1.model.Number);
+                  this.formData1.append('Customer', this.$refs.form1.model.CG);
+                  this.formData1.append('VA_NVA', this.$refs.form1.model.VA_NVA);
+                  this.formData1.append('BaseBenfit', this.$refs.form1.model.BaseBenfit);
+                  this.formData1.append('CaseID', this.$refs.form1.model.CaseID);
+                  this.formData1.append('CaseName', this.$refs.form1.model.CaseName);
+                  this.formData1.append('Item', this.$refs.form1.model.Item);
+                  this.formData1.append('Status', this.$refs.form1.model.Status);
+                  this.formData1.append('FunctionInt', this.$refs.form1.model.FunctionInt);
+                  this.formData1.append("action",'updateSubmit');
+                  axios.post("/AutoResult/AutoItem_edit/", this.formData1,{
+                              headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                          }).then((res)=>{
+                              this.tableContent = res.data.content;
+                              this.totalNum=this.tableContent.length;
+                              this.errMsgNumber=res.data.errMsgNumber;
+                              this.formData1 = new FormData();
+                              if(this.errMsgNumber){
+                                  this.$alert(this.errMsgNumber, '提示', {
+                                        type: 'warning',
+                                  });
+                              }else{
+                                  try {
+                                          this.$refs.form1.resetFields();
+                                  } catch (e) {
+
+                                  }
+                                  this.update = false;
+                              }
+                  })
+          },
+
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        },
+
+         getRowKeys (row) {
+              return row.id
+            },
+
+     },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    {#console.log(111);#}
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    {#console.log(this.Totalsize);#}
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                datas() {
+                        this.currentPage = 1;
+                }
+            },
+ })
+</script>
+{% endblock %}

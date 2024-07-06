@@ -1,0 +1,728 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Package_edit{% endblock %}
+
+{% block css %}
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+ <link href="/static/css/lib/data-table/dataTables.bootstrap.min.css" rel="stylesheet">
+ <link href="/static/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet" />
+　<link rel="stylesheet" href="/static/js/photo/css/lightbox.min.css">
+<style>
+tbody tr td:last-child {
+    text-align: left;
+}
+.con_td{
+    display:flex;
+    justify-content: space-between;
+    border: none !important;
+
+}
+.con_td .ti-zoom-in,.ti-zoom-out{
+    line-height: 32px;
+    font-size:12px;
+    margin-left: 1%;
+}
+.default{
+background-color:rgba(0,255,0,0.9);
+        color:#000;
+}
+.pass{
+background-color:rgba(255,255,0,0.9);
+color:black;
+}
+.fail{
+background-color:rgba(255,0,0,0.9);
+        color:#FFF;
+}
+.bootstrap-data-table-panel{
+overflow:auto;
+}
+.content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    -ms-writing-mode:tb-rl;
+    writing-mode:vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+    box-shadow:2px 2px 8px #000;
+}
+#container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    width:400px;
+    height: 120px;
+    background-image:url("/static/images/spec/blackboardback.jpg") ;
+    border: 2px solid  #deb887;
+}
+</style>
+
+{% endblock %}
+{% block content %}
+<div class="content" id="yincang">spec</div>
+<div id="container-yansebiaoshi">
+   <div class="row">
+      <div class="col-md-6"><div class="reddiv" style="text-align: center;background-color:#ff4500;width:180px;height:40px;"><h4 style="color:white;">&gt;200</h4></div><div style="text-align: center;background-color:#FFD700;width:180px;height:30px;"><h4 style="color:white;">150~200</h4></div><div style="text-align: center;background-color:#00CD66;width:180px;height:30px;"><h4 style="color:white;">&lt150</h4></div></div>
+      <div class="col-md-6"><div style="background:darkcyan;padding:7px 10px;"><h6 style="color:white;">Sensor貼附在D cover上，相對來説正反面的測試G值會更大一些。</h6></div></div>
+    </div>
+</div>
+<div id="app">
+      <div class="row">
+               <div class="col-md-3">
+                    <label for="Customer" style="color:#FFF">客户:</label>
+                    <select id="Customer" ref="customer" @change="changeCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+                         <option value=""> </option>
+                         <option v-for="(item,key,index) in selectItem" v-model="selectedCustomer">${ key }</option>
+                    </select>
+               </div>
+               <div class="col-md-3">
+                    <label for="Project" style="color:#FFF">专案:</label>
+                    <select id="Project" ref="project" v-model="projectdefault" style="height:30px;border-radius:5px 5px 5px 5px;width:100px;">
+                         <option></option>
+                         <option v-for="(item,index) in selectProject">${ item }</option>
+                    </select>
+               </div>
+               <div class="col-md-3">
+                    <label for="p_pattern" style="color: #FFF">包装方式:</label>
+                   <select style="height: 30px;border-radius: 5px;width: 100px;" id="p_pattern" ref="pattern">
+                       <option value=""></option>
+                       <option v-for="(item,index) in others.Pattern">${ item }</option>
+                   </select>
+               </div>
+               <div class="col-md-2">
+                    <input type="button" style="background: #428bca;color:#fff;height:30px;width:100px;border:0;border-radius: 5px;" value="Search" name="Search" @click="selectMsg"/>
+               </div>
+     </div>
+     <div  class="row">
+     {% csrf_token %}
+             {% comment %}<section id="main-content">{% endcomment %}
+                       <div class="card" style="background-color:rgba(255,255,255,0.9);overflow:auto;width:calc(100% - 30px);">
+                                  <div id="bootstrap-data-table-panel" >
+                                        <div class="table-responsive" style="max-height: 1000px;color:#FFF;">
+                                                  <table id="bootstrap-data-table-export" class="table table-striped table-bordered" width="100%" cellspacing="0" style="color:#FFF">
+                                                        <thead>
+                                                              <tr>
+                                                                     <th>编辑</th>
+                                                                     <th>客户</th>
+                                                                     <th>专案</th>
+                                                                     <th >方式</th>
+                                                                     <th >角</th>
+                                                                     <th >短</th>
+                                                                     <th >中</th>
+                                                                     <th >长</th>
+                                                                     <th >左</th>
+                                                                     <th >右</th>
+                                                                     <th >上</th>
+                                                                     <th >底</th>
+                                                                     <th >正</th>
+                                                                     <th >反</th>
+                                                                     <th >备注</th>
+                                                                     <th >附件</th>
+                                                                     {% comment %}<th style="color:#FFF">Editor</th>
+                                                                     <th style="color:#FFF">Edit Time</th>{% endcomment %}
+                                                              </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr v-for="(items,index) in tableContent" :id="editNo(index)">
+
+                                                               <td ref="index"  @click="edit($event,items.id)" :id="makeNo(index)" ><i class="ti-pencil-alt" style="color: #D9B300"></i></td>
+                                                               <td >${ items.Customer }</td>
+                                                               <td >${ items.Project }</td>
+                                                               <td >${ items.Pattern }</td>
+                                                               <td :class="[(items.angle<150)?'default':(items.angle>200)?'fail':'pass']">${ items.angle }</td>
+                                                               <td :class="[(items.short<150)?'default':(items.short>200)?'fail':'pass']">${ items.short}</td>
+                                                               <td :class="[(items.middle<150)?'default':(items.middle>200)?'fail':'pass']">${ items.middle }</td>
+                                                               <td :class="[(items.long<150)?'default':(items.long>200)?'fail':'pass']">${ items.long }</td>
+                                                               <td :class="[(items.left<150)?'default':(items.left>200)?'fail':'pass']">${ items.left }</td>
+                                                               <td :class="[(items.right<150)?'default':(items.right>200)?'fail':'pass']">${ items.right }</td>
+                                                               <td :class="[(items.top<150)?'default':(items.top>200)?'fail':'pass']">${ items.top } </td>
+                                                               <td :class="[(items.bottom<150)?'default':(items.bottom>200)?'fail':'pass']">${ items.bottom }</td>
+                                                               <td :class="[(items.front<150)?'default':(items.front<200)?'pass':'fail']">${ items.front }</td>
+                                                               <td :class="[(items.behind<150)?'default':(items.behind<200)?'pass':'fail']">${ items.behind }</td>
+                                                               <td   :id="'on'+index" class="con_td" {% comment %}@mouseover="showDes($event)" @mouseleave="hiddenDes($event)"{% endcomment %} ><div :id="'con'+index" class="con">${ items.Remark }</div><i :id="'n'+index" class="ti-zoom-in"  @click="showAll($event)"></i></td>
+                                                               {% comment %}<td >${ items.Remark }</td>{% endcomment %}
+                                                               {% comment %}<td style="color:#FFF">${ items.Editor }</td>
+                                                               <td style="color:#FFF">${ items.Edit_Time }</td>{% endcomment %}
+                                                               <td  >
+
+{#                                                                                <img src="../media/{{ i.img }}" height="100" width="200" alt="" />#}
+                                                                 {% comment %} ${ items.Photo_P }{% endcomment %}
+                                                                   <li v-for="index in  items.file_P ">
+                                                                       {% comment %}${ index }{% endcomment %}
+                                                                    <a v-bind:href="'/media/'+index"{% comment %} class="example-image-link" data-lightbox="example-set" data-title="Click the right half of the image to move forward."{% endcomment %}>{% comment %}<img v-bind:src="'/media/'+index" class="example-image" height="50" width="100" alt="" />{% endcomment %}<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+                                                                    {% comment %}<a v-bind:href="'/media/'+index" class="test-popup-link"><img v-bind:src="'/media/'+index" height="50" width="100" alt="" /></a>{% endcomment %}
+                                                                   </li>
+
+                                                                </td>
+                                                          </tr>
+                                                        </tbody>
+                                                  </table>
+                                        </div>
+                                  </div>
+                       </div>
+
+             {% comment %}</section>{% endcomment %}
+     </div>
+      <div class="fullScreen" v-if="choose" v-cloak>
+          <div v-if="choose" v-cloak class="editWindow" id="editWindow" >
+             <div class="close" @mousedown="moveWindow($event)"  id="moveWindowButton">
+                 <button class="close" type="button" data-dismiss="modal" aria-label="Close" @click="close">
+                        <span aria-hidden="true">×</span>
+                 </button>
+             </div>
+            <div class="editContent">
+                 <div class="inline_content" >
+                        <div class="inline-child"><div>角：</div><input  v-cloak type="text" v-model="tempdataName.angle" id="angle" :class="[verify['input_angle']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_angle']" id="angle_error" style="position: absolute"></div></div>
+                        <div class="inline-child"><div>短棱：</div><input v-cloak type="text" v-model="tempdataName.short" id="short" :class="[verify['input_short']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_short']" id="short_error" style="position: absolute"></div></div>
+                 </div>
+                 <div class="inline_content" >
+                        <div class="inline-child"><div>中棱：</div><input v-cloak type="text" v-model="tempdataName.middle" id="middle" :class="[verify['input_middle']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_middle']" id="middle_error" style="position: absolute"></div></div>
+                        <div class="inline-child"><div>长棱：</div><input v-cloak type="text" v-model="tempdataName.long" id="long" :class="[verify['input_long']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_long']" id="long_error" style="position: absolute"></div></div>
+                 </div>
+                 <div class="inline_content" >
+                        <div class="inline-child"><div>左面：</div><input v-cloak type="text" v-model="tempdataName.left" id="left" :class="[verify['input_left']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_left']" id="left_error" style="position: absolute"></div></div>
+                        <div class="inline-child"><div>右面：</div><input v-cloak type="text" v-model="tempdataName.right" id="right" :class="[verify['input_right']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_right']" id="right_error" style="position: absolute"></div></div>
+                 </div>
+                 <div class="inline_content" >
+                        <div class="inline-child"><div>上面：</div><input v-cloak type="text" v-model="tempdataName.top" id="top" :class="[verify['input_top']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_top']" id="top_error" style="position: absolute"></div></div>
+                        <div class="inline-child"><div>底面：</div><input v-cloak type="text" v-model="tempdataName.bottom" id="bottom" :class="[verify['input_bottom']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_bottom']" id="bottom_error" style="position: absolute"></div></div>
+                 </div>
+                 <div class="inline_content" >
+                        <div class="inline-child"><div>正面：</div><input v-cloak type="text" v-model="tempdataName.front" id="front" :class="[verify['input_front']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_front']" id="front_error" style="position: absolute"></div></div>
+                        <div class="inline-child"><div>反面：</div><input v-cloak type="text" v-model="tempdataName.behind" id="behind" :class="[verify['input_behind']?'errorStyle':'commonStyle']" @blur="write($event)"><br><div v-show="verify['input_behind']" id="behind_error" style="position: absolute"></div></div>
+                 </div>
+                 <div class="inline_content">
+                        <div>包装:</div><textarea rows="5" cols="75" type="text" v-model="tempdataName.Pattern"></textarea>
+                 </div>
+                 <div class="inline_content">
+
+                      <div style="margin-top: 10px">备注:</div><textarea rows="5" cols="75" type="text" v-model="tempdataName.Remark"></textarea></div><br>
+                       <div class="fileUploadButton" >選擇文件
+                           <input type="file" id="file" @change="selectImg($event)" multiple="multiple" title="">
+                       </div>
+
+                       <ul  class="showContent">
+                       <li style="font-weight: 500;font-size: 17px;">已選擇內容：</li>
+                       <li v-for="(item,key,index) in saveFile">
+                          <i class="ti-trash" :value="index" @click="delFile(key)" style="margin-right: 10px;font-size:12px"></i><span>${ index + 1 }. ${ item.name }</span>
+                      </li>
+                       </ul>
+                 <div class="inline_content">
+                        <div class="inline-child">
+                                <button id="editSubmit" @click="edit_submit">Submit</button>
+                                <button id="editCancel" @click="close">Cancel</button>
+                        </div>
+                 </div>
+            </div>
+        </div>
+     </div>
+        <div v-if="loading" v-cloak class="fullScreen">
+            <section v-if="loading" v-cloak>
+                      <div class='sk-fading-circle'>
+                        <div class='sk-circle sk-circle-1'></div>
+                        <div class='sk-circle sk-circle-2'></div>
+                        <div class='sk-circle sk-circle-3'></div>
+                        <div class='sk-circle sk-circle-4'></div>
+                        <div class='sk-circle sk-circle-5'></div>
+                        <div class='sk-circle sk-circle-6'></div>
+                        <div class='sk-circle sk-circle-7'></div>
+                        <div class='sk-circle sk-circle-8'></div>
+                        <div class='sk-circle sk-circle-9'></div>
+                        <div class='sk-circle sk-circle-10'></div>
+                        <div class='sk-circle sk-circle-11'></div>
+                        <div class='sk-circle sk-circle-12'></div>
+                      </div>
+                        <span>正在上傳，請稍等</span>
+                    </section>
+         </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/lib/data-table/dataTables.buttons.min.js"></script>
+<script src="/static/js/lib/data-table/buttons.flash.min.js"></script>
+<script src="/static/js/lib/data-table/jszip.min.js"></script>
+<script src="/static/js/lib/data-table/pdfmake.min.js"></script>
+<script src="/static/js/lib/data-table/vfs_fonts.js"></script>
+<script src="/static/js/lib/data-table/buttons.html5.min.js"></script>
+<script src="/static/js/lib/data-table/buttons.print.min.js"></script>
+<script src="/static/js/photo/js/lightbox.js"></script>
+<script src="/static/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script>
+ // 查看图片
+        $('.test-popup-link').magnificPopup({
+                     type: 'image',
+            closeOnContentClick: true,
+            mainClass: 'mfp-no-margins mfp-with-zoom',
+            image: {
+              verticalFit: true
+            },
+            //  这里是让图片的放大缩小有动画效果。
+            zoom: {
+              enabled: true,
+              duration: 300 // don't foget to change the duration also in CSS
+            }
+        });
+    </script>
+<<script type="text/babel">
+
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle("slide");
+        console.log("ggg");
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+
+
+
+    new Vue({
+
+       el:"#app",
+       delimiters: ['${', '}'],
+       data() {
+         return{
+                //error:false,
+                others:{},
+                selectedCustomer:null,
+
+                selectProject:[],
+                selectItem:{},
+                projectdefault:null,
+                result:{},
+                choose:false,//关闭页面的值
+                tableContent:null,//搜索页面表格中显示的数据来源
+                tempdata:[],
+                titleName:[],
+                tempdataName:{},//编辑页面表格中显示的数据来源
+                selectId:null,
+                test:"",
+                isDown:false,
+                saveFile:{},
+                maxSize:5242880,
+                loading:false,
+                //验证的style的标志:用于判断哪个输入框出现验证错误
+                verify:{
+                    input_a_cover:false,
+                    input_c_cover:false,
+                    input_d_cover:false,
+                    input_hinge_s:false,
+                    input_P_F:false,
+                    input_P_L:false,
+                    input_P_R:false,
+                    input_D_L:false,
+                    input_D_R:false,
+                },
+               //这个对象是为输入框划分等级，1：代表不能为空 2：代表必须为小数或正整数 3：未来会增加日期格式
+                inputId:{
+                    a_cover:1,
+                    c_cover:1,
+                    d_cover:1,
+                    input_hinge_s:1,
+                    P_F:2,
+                    P_L:2,
+                    P_R:2,
+                    D_L:2,
+                    D_R:2,
+                }
+
+            }
+
+
+       },
+       mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");//此时会上传一个"first"的字符串，用来区分接下来的edit操作
+              },
+       methods:{
+             //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+             getdata:function(e){
+                let data = {"isGetData":e,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/Package/Package-edit/",Qs.stringify(data), {
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    console.log(res.data.content);//上传成功的操作
+                    this.dataTableDestroy();
+                    this.tableContent=res.data.content;// 将返回的数据传递给data内的tableContent
+                    this.selectItem=res.data.select;
+                    this.others=res.data.others;
+                    this.dataTableInit();
+                });
+
+            },
+             //为编辑按钮设置ID
+             makeNo:function(e){
+             return "td" + e ;
+            },
+             //点击出现全部内容
+             showAll:function(e){
+                 let con = e.currentTarget.id;
+                 //$('#'+con).css({"display":"none"});
+                 if($('#'+con).attr('class')=="ti-zoom-in"){
+                     $('#co'+con).css({"white-space":"inherit","text-overflow":"inherit","overflow":"inherit","word-wrap":"break-word"});
+                     let conHeight=$('#co'+con).height()+"px";
+                     $('#'+con).css({"line-height":conHeight});
+                     $('#'+con).removeClass().addClass("ti-zoom-out");
+                 }else{
+                     $('#co'+con).css({"white-space":"nowrap","text-overflow":"ellipsis","overflow":"hidden"});
+                     let conHeight=$('#co'+con).height()+"px";
+                     $('#'+con).css({"line-height":"32px"});
+                     $('#'+con).removeClass().addClass("ti-zoom-in");
+                 }
+
+                 //console.log($('#'+con).attr('class'),123);
+             },
+             //移动edit Window
+             moveWindow:function(e){
+                let moveWindowButton = document.getElementById("editWindow");
+                //获取鼠标位置
+                var x= e.clientX;
+                var y= e.clientY;
+                 //获取左部和顶部的偏移量
+                var l = moveWindowButton.offsetLeft;
+                var t = moveWindowButton.offsetTop;
+                document.getElementById("moveWindowButton").style.cursor = 'move';
+                //鼠标按下的flag
+                this.isDown=true;
+                //console.log("mouseevent",this.isDown)
+                 //视图区域的鼠标移动函数
+                document.onmousemove = function(e) {
+                    //console.log("todo")
+                if (this.isDown == false) {
+                    //若flag显示为false，则须跳出函数
+                      return false;
+                }
+                //获取x和y
+                var nx = e.clientX;
+                var ny = e.clientY;
+                //计算移动后的左偏移量和顶部的偏移量
+                var nl = nx - (x - l);
+                var nt = ny - (y - t);
+                //console.log(nl,nt);
+                //console.log(document.getElementById("editWindow"),"381");
+                //编辑区域位置更新
+                moveWindowButton.style.left = nl + 'px';
+                moveWindowButton.style.top = nt + 'px';
+                moveWindowButton.onmouseup = function (e) {
+                    this.isDown =false;
+                    document.getElementById("moveWindowButton").style.cursor = 'default';
+                    //中断鼠标移动函数
+                    document.onmousemove = null;
+                }
+}
+             },
+             //点击编辑按钮，弹出修改界面
+             edit:function(e,id){
+              //console.log(e.currentTarget.id);
+              var hasTabId = e.currentTarget.id;  //获取触发点击事件的元素ID(这里指页面表格显示的临时ID，并非获取数据的真实ID)
+              var chooseTr= document.getElementById(hasTabId).parentNode.id ; //获取触发点击事件的父级元素的ID(此ID同上)
+              var tr = document.getElementById(chooseTr);
+              //生成title数组:
+              //由于无法获取对象的key,所以动态生成一个title的数组
+              for(var key in this.tableContent[0]){
+                 if(key!="id"){
+                     this.titleName.push(key);
+                 }
+              }
+             //生成一个临时数组用于存放节点内容，即表格中的每一项数据；
+              var tab=[];
+              for(var i= 1;i<=tr.childNodes.length-1;i++ ) {
+               // 遍历子节点会出现空节点，为此需要删除无效节点
+               if(tr.childNodes[i].nodeType==1){
+                //console.log(tr.childNodes[i].childNodes.length,"368");
+                //若出现一个td中有两个子节点，则取第一个节点内容--->针对conclusion
+                if(tr.childNodes[i].childNodes.length > 1){
+                    tab.push(tr.childNodes[i].childNodes[0].innerHTML);
+                }else{
+                     tab.push(tr.childNodes[i].innerHTML); //生成修改选项的所有值的数组
+                }
+
+                }
+              }
+              for(var i = 0; i< tab.length;i++){
+                this.tempdataName[this.titleName[i]]=tab[i];
+                console.log(tab[i]);
+               }
+              tab.push(chooseTr.slice(4));
+
+              this.tempdataName['index']=chooseTr.slice(4);
+              this.tempdataName['id']=id;
+              this.tempdata=tab;
+              this.selectId=id;
+              //console.log(this.tempdata);
+              this.choose= true; //最后打开修改界面
+            },
+             //上传搜索项：以此选项搜索符合条件的内容
+             selectMsg :function(){
+               let customer = this.$refs.customer.value;
+               let project = this.$refs.project.value;
+               let data ={"customer":customer,"project":project,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/Package/Package-edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  console.log(res.data.content);
+                  this.dataTableDestroy();
+                  this.tableContent=res.data.content;//更改tableContent的值，由于双向绑定，页面表格显示的值也会随之更新
+                  this.dataTableInit();
+                })
+             },
+             //生成tr的ID
+             editNo:function(index){
+               return "row_" + index ;
+              },
+              //关闭修改界面
+             close:function(){
+                this.choose = false; //关闭修改窗口
+                for (let item in this.verify){
+                   this.$set(this.verify,item,false); //将判断输入框的是否发生验证错误的值恢复为默认false
+                }
+                this.saveFile={};
+
+             },
+             //修改界面的提交按钮事件：
+             //1. 首先上传提交修改内容 ；
+             edit_submit:function(){
+
+               //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+               //console.log(this.tempdataName);
+                //检查是否出现重复
+                 let num=0;
+                 //console.log(this.selectId);
+                 //判断是否有输入框发生验证错误，有则返回false，没有则继续验证
+                 for(var items in this.verify ){
+                     //console.log(items);
+                     if (this.verify[items]){
+                         return false;
+                     }
+                 }
+
+
+
+                 //验证编辑内容是否发生改变，没有则停止上传，否则将编辑内容上传
+                for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ) {
+                    //console.log(Object.values(this.tableContent)[this.tempdataName['index']]);
+                    //console.log(this.tempdataName[item]);
+                     if(this.tempdataName.hasOwnProperty(item) && Object.values(this.tableContent)[this.tempdataName['index']].hasOwnProperty(item)){
+                         if(Object.values(this.tableContent)[this.tempdataName['index']][item]!=this.tempdataName[item]){
+                            num=1;
+                            break;
+                     }else{
+                        //console.log((Object.keys(this.tempdataName)).length);
+                    }
+                     }
+                 }
+                console.log("507",JSON.stringify(this.saveFile) );
+                 if(num == 0&&JSON.stringify(this.saveFile) == "{}"){
+                            alert("内容未更新");
+                            return false;
+                        }
+                 for(var item in this.saveFile){
+
+                 }
+                 this.tempdataName["isGetData"]='edit0';
+                 console.log("508");
+                 var FD = new FormData() ;
+                 console.log("510");
+                 for(var i in this.tempdataName){
+                     console.log(i,this.tempdataName[i],"temp");
+                     FD.append(i,this.tempdataName[i]);
+
+                     //console.log(document.getElementById('file').files);
+                 }
+                  console.log("517");
+                 //var fileList = this.saveFile;
+                 //Object.setProptypeOf(this.saveFile,FileList);
+                 //var temp ;
+                 //Object.getProptypeOf(temp);
+                 //console.log(temp);
+                 //console.log(this.saveFile.length);
+                 //console.log(document.getElementById('file').files);
+                  let Len = (Object.keys(this.saveFile)).length;
+                  let sum =0;
+                 //console.log(this.saveFile,"501",Len);
+                  for(let num in this.saveFile){
+                     let idx = this.saveFile[num].name.lastIndexOf(".");
+                     if(idx != -1){
+                         let ext = this.saveFile[num].name.substr(idx+1).toUpperCase();
+                         ext = ext.toLowerCase( );
+                         console.log(ext , sum);
+                         if (ext === 'zip' || ext === '7z' || ext==='rar'){
+                             if (sum < this.maxSize && (sum + this.saveFile[num].size) < this.maxSize ){
+                                 sum += this.saveFile[num].size;
+                                  FD.append("file", this.saveFile[num]);
+                             }else{
+                                 alert("上傳文件大小應小於5M");
+                                 this.saveFile={};
+                                 return false;
+                             }
+                         }else{
+                             alert("請上傳正確格式的壓縮文件（例如 rar , zip ,7z）")
+                             this.saveFile={};
+                             return false;
+                         }
+                     }else{
+
+                     }
+
+                     //console.log("file", this.saveFile[num],document.getElementById('file').files[num]);
+                 }
+                  //FD.append("file",document.getElementById('file').files)
+
+                 this.choose= false;//关闭页面
+                 this.loading= true;
+                 axios.post("/Package/Package-edit/",{% comment %}Qs.stringify(FD){% endcomment %}FD, {
+                  headers:{ 'Content-Type': 'multipart/form-data' },
+
+                  // headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                   }).then((res) => {
+                    this.loading= false;
+                    console.log("已修改");
+                    this.getdata("edit");
+                    this.saveFile={};
+                    //2.再将修改后的内容在表格上显示出来
+                    // for(var item in Object.values(this.tableContent)[this.tempdataName['index']] ){
+                    //    // Object.values(this.tableContent)[this.tempdataName['index']][item]=this.tempdataName[item];
+                    // }
+
+                })
+
+             },
+
+               //选择图片
+             selectImg:function(e){
+                 //console.log(e.target.result,e.files,"482");
+
+                     var self =this;
+                    // console.log(this.saveFile,"554");
+                     var Len = (Object.keys(this.saveFile)).length;
+                     //console.log(len);
+                     //var reads = new FileReader();
+                     var f = document.getElementById('file').files;
+                     var repeat =function(obj,Object){
+                         for(var i in Object){
+                             if (obj.name ==Object[i].name){
+                                // console.log("repeat");
+                                 return true;
+                             }
+                         }
+                     };
+                     for(let n=0;n<f.length;n++){
+                         if(repeat(f[n],this.saveFile)){
+                             continue;
+                         }
+                        //this.saveFile[Len + n] = f[n];
+                         Vue.set(this.saveFile,Len+n,f[n]);
+
+                     }
+                     document.getElementById("file").value="";
+                     //console.log(document.getElementById("file").value,"602");
+
+
+
+             },
+               //刪除選中的文件
+             delFile:function(e){
+
+                 Vue.delete(this.saveFile,e);
+               //  console.log(e,this.saveFile,"594");
+             },
+
+             //表单验证函数
+             write:function (event) {
+                //console.log(event.currentTarget.id);
+                let err_msg=document.getElementById(event.currentTarget.id+"_error"); //获取输入框后的error提示框的ID
+                err_msg.innerHTML="";//将error提示框的初始值设置为空，否则会不断添加内容，不会清除
+                var num =/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;//验证输入是否为小数或正整数的正则表达式规则
+                //console.log(event.currentTarget.value);
+                //console.log(num.test(event.currentTarget.value));
+                //验证一：是否为空（因为所有输入值都不能为空，所以判断放在第一位，即所有验证值都要经历此项判断）
+                if(event.currentTarget.value.length ==0){
+                    //console.log(event);
+                    //var temp = 'input_' + event.currentTarget.id ;
+                    //console.log(event.currentTarget.id);
+                   // console.log("11",this.verify["input_"+event.currentTarget.id]);
+                    //let err_msg=document.getElementById(event.currentTarget.id);
+                    err_msg.innerHTML="輸入不可為空";
+                    this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                    return false;
+                }
+                //验证一：是否为空（在data的inputId中定义为2）
+                if(this.inputId[event.currentTarget.id] ==2 ){
+                    if(!num.test(event.currentTarget.value)){
+                     err_msg.innerHTML="請輸入小數或正整數";
+                     this.$set(this.verify,"input_"+event.currentTarget.id,true);
+                     return false;
+                 }
+                }
+                //若判断都符合要求，verify的相应值应该为false
+                this.$set(this.verify,"input_"+event.currentTarget.id,false);
+             },
+             changeCustomer:function () {
+                 if(this.$refs.customer.value ==""){
+                      this.selectProject=[""];
+                      return false;
+                 }
+                 this.selectProject=this.selectItem[this.$refs.customer.value];
+                 this.projectDefault="";
+                 console.log(this.selectProject);
+             },
+             dataTableInit:function(){
+               Vue.nextTick(() => {
+                $('#bootstrap-data-table-export').DataTable({
+                    dom: 'lBfrtip',
+                    //retrieve: true,
+                    bAutoWidth: false,
+                    lengthMenu: [[100, 25, 50, -1], [100, 25, 50, "All"]],
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                });
+                console.log("dom");
+            })
+             },
+             dataTableDestroy:function () {
+                 $('#bootstrap-data-table-export').DataTable().destroy();
+             }
+
+          }
+
+})
+</script>
+
+    <script type="text/javascript">
+      var urlstr = location.href;
+      //alert(urlstr);
+      var urlstatus=false;
+      $("#menu a").each(function () {
+        if ((urlstr + '/').indexOf($(this).attr('href')) > -1&&$(this).attr('href')!='') {
+          $(this).addClass('cur'); urlstatus = true;
+        } else {
+          $(this).removeClass('cur');
+        }
+      });
+      if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); }
+    </script>
+    <script src="/static/js/ImgUpload.js"></script>
+
+{% endblock %}

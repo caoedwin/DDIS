@@ -1,0 +1,86 @@
+[2024-06-28 15:25:59,062] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /A31LessonLProject/Lesson_ProjectResult/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\A31LessonLProject\views.py", line 796, in A31Lesson_project
+    for i in Projectinfos.A31lessonlearn_project_set.all():
+AttributeError: 'A31TestProjectLL' object has no attribute 'A31lessonlearn_project_set'
+[2024-06-28 15:25:59,070] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /A31LessonLProject/Lesson_ProjectResult/?action=search&customer=A31&project=Test1&Category=&csrfmiddlewaretoken=ACNlY8PBjYI7XE7NbZT9yfaMKmBuuTQ2TMLZNC4kmi883bJLFtDofFXrNYeVNzn2 500 [0.10, 127.0.0.1:51302]
+[2024-06-28 15:26:01,432] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /A31LessonLProject/Lesson_ProjectResult/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\A31LessonLProject\views.py", line 796, in A31Lesson_project
+    for i in Projectinfos.A31lessonlearn_project_set.all():
+AttributeError: 'A31TestProjectLL' object has no attribute 'A31lessonlearn_project_set'
+[2024-06-28 15:26:01,438] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /A31LessonLProject/Lesson_ProjectResult/?action=search&customer=A31&project=Test1&Category=Compatibility&csrfmiddlewaretoken=ACNlY8PBjYI7XE7NbZT9yfaMKmBuuTQ2TMLZNC4kmi883bJLFtDofFXrNYeVNzn2 500 [0.09, 127.0.0.1:51302]
+[2024-06-28 15:26:39,966] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /A31LessonLProject/Lesson_ProjectResult/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\A31LessonLProject\views.py", line 808, in A31Lesson_project
+    if Projectinfos.A31lessonlearn_project_set.filter(lesson__Category=Category):
+AttributeError: 'A31TestProjectLL' object has no attribute 'A31lessonlearn_project_set'
+[2024-06-28 15:26:39,975] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /A31LessonLProject/Lesson_ProjectResult/?action=search&customer=A31&project=Test1&Category=Compatibility&csrfmiddlewaretoken=ACNlY8PBjYI7XE7NbZT9yfaMKmBuuTQ2TMLZNC4kmi883bJLFtDofFXrNYeVNzn2 500 [0.29, 127.0.0.1:51372]
+[2024-06-28 15:27:02,885] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /A31LessonLProject/Lesson_ProjectResult/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\A31LessonLProject\views.py", line 809, in A31Lesson_project
+    for i in Projectinfos.A31lessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
+AttributeError: 'A31TestProjectLL' object has no attribute 'A31lessonlearn_project_set'
+[2024-06-28 15:27:02,894] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /A31LessonLProject/Lesson_ProjectResult/?action=search&customer=A31&project=Test1&Category=Compatibility&csrfmiddlewaretoken=ACNlY8PBjYI7XE7NbZT9yfaMKmBuuTQ2TMLZNC4kmi883bJLFtDofFXrNYeVNzn2 500 [0.31, 127.0.0.1:51390]
+[2024-06-28 15:43:09,395] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /A32LessonLProject/Lesson_ProjectResult/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\A32LessonLProject\views.py", line 796, in A32Lesson_project
+    for i in Projectinfos.A32lessonlearn_project_set.all():
+AttributeError: 'A32TestProjectLL' object has no attribute 'A32lessonlearn_project_set'
+[2024-06-28 15:43:09,407] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /A32LessonLProject/Lesson_ProjectResult/?action=search&customer=A32&project=Test1&Category=&csrfmiddlewaretoken=A8YJARJ9g9PUlNf4brisRrjQxSPVIgN7TiWnplYSjtfVrkR2FV2HyR6vAusm1Wk7 500 [1.06, 127.0.0.1:64365]
+[2024-06-28 15:43:14,795] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /A32LessonLProject/Lesson_ProjectResult/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\A32LessonLProject\views.py", line 796, in A32Lesson_project
+    for i in Projectinfos.A32lessonlearn_project_set.all():
+AttributeError: 'A32TestProjectLL' object has no attribute 'A32lessonlearn_project_set'
+[2024-06-28 15:43:14,802] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /A32LessonLProject/Lesson_ProjectResult/?action=search&customer=A32&project=Test1&Category=Compatibility&csrfmiddlewaretoken=A8YJARJ9g9PUlNf4brisRrjQxSPVIgN7TiWnplYSjtfVrkR2FV2HyR6vAusm1Wk7 500 [0.11, 127.0.0.1:64365]
+[2024-07-06 13:34:11,581] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/Summary1/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\views.py", line 4751, in Summary1
+    overtimePdic[j] = round(overtimedic[j] / zaizhidic[j], 1)
+ZeroDivisionError: float division by zero
+[2024-07-06 13:34:11,647] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/Summary1/ 500 [0.25, 127.0.0.1:60728]

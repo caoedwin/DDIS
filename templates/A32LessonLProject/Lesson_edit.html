@@ -1,0 +1,554 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_upload{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/ElementUI.css">
+    <link href="/static/css/bouncing.css" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .selectMsg {
+            font-size: 16px;
+            padding: 15px;
+            display: flex;
+        }
+
+        .selectMsg label {
+            font-weight: 800;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .selectMsg label:last-child {
+            margin-left: 15px;
+        }
+
+        .el-table .el-table__row.warning-row {
+            background: oldlace !important;
+        }
+
+        .el-table .el-table__row.warning-row:hover {
+            background: oldlace !important;
+        }
+
+        .el-table .info-row {
+            background: #8b968d !important;
+        }
+
+        .el-table .info-row:hover {
+            background: #8b968d !important;
+        }
+
+        .el-table .danger-row {
+            background: #F56C6C !important;
+        }
+
+        .el-table .danger-row:hover {
+            background: #F56C6C !important;
+        }
+
+        .el-table .success-row {
+            background: #a8c97f !important;
+        }
+
+        .el-table .success-row:hover {
+            background-color: #a8c97f !important;
+        }
+
+        .el-table .cell {
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .selectItem {
+            font-size: 20px;
+            font-weight: bold;
+            color: aliceblue;
+        }
+
+        .tips {
+            font-size: 20px;
+            font-weight: bold;
+            color: coral;
+            margin-left: 15px;
+        }
+
+        .el-icon-circle-check, .el-icon-circle-close {
+            font-size: 2.5rem;
+            color: cadetblue;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .inputError {
+            text-align: center;
+            color: crimson;
+            background-color: beige;
+            width: 50%;
+            margin: 10px auto 5px;
+            position: relative;
+        }
+
+        .inputError:before {
+            display: block;
+            content: '';
+            border-width: 8px 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent beige transparent;
+            /* 定位 */
+            position: absolute;
+            left: 50%;
+            top: -16px;
+        }
+
+        {% comment %}解决hover事件的高亮{% endcomment %}
+        .el-table--enable-row-hover .el-table__body tr:hover > td {
+            background-color: transparent !important;
+        }
+
+        {% comment %}解决点击事件出现 current_row class对上面的样式的影响{% endcomment %}
+        .el-table__body tr.current-row > td {
+            background-color: transparent !important;
+        }
+
+        .el-table .el-select .el-input__inner {
+            height: 50px;
+        }
+
+        .eltable-photo {
+            white-space: nowrap;
+            overflow-x: auto;
+            text-overflow: clip
+        }
+
+        .eltable-photo::-webkit-scrollbar { /*滚动条整体样式*/
+            width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+            height: 10px;
+        }
+
+        .eltable-photo::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .eltable-photo::-webkit-scrollbar-track { /*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .eltable-photo .el-image {
+            margin-left: 6px;
+
+        }
+
+        .eltable-photo .el-image:first-child {
+            margin-left: 0px;
+        }
+
+        .el-pagination.is-background {
+            text-align: right;
+            margin: 10px 0 0 0;
+        }
+
+        .el-pagination__total, .el-pagination__jump {
+            color: white;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+
+    <div id="app">
+        <div class="selectMsg" v-cloak>
+            <div class="categoryContent">
+                <label for="Category" v-cloak>Category</label>
+                <el-select v-model="selectedCategory" ref="Category" style="margin-right: 20px;width:200px" clearable
+                           v-cloak>
+                    <el-option v-for="item in selectCategory" :label="item.Category" :value="item.Category"></el-option>
+                </el-select>
+            </div>
+            <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
+        </div>
+        <el-dialog :visible.sync="update">
+            <template>
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="Category">
+                        <el-select v-model="form.Category" placeholder="请选择">
+                            <el-option label="Reliability" value="Reliability"></el-option>
+                            <el-option label="Compatibility" value="Compatibility"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="Object">
+                        <el-input v-model="form.Object"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Symptom">
+                        <el-input v-model="form.Symptom"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Reproduce_Steps">
+                        <el-input type="textarea" v-model="form.Reproduce_Steps"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Root_Cause">
+                        <el-input type="textarea" v-model="form.Root_Cause"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Solution">
+                        <el-input type="textarea" v-model="form.Solution"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Action">
+                        <el-input type="textarea" v-model="form.Action"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Status">
+                        <el-select v-model="form.Status" placeholder="请选择">
+                            <el-option label="active" value="active"></el-option>
+                            <el-option label="inactive" value="inactive"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="Photo">
+                        <el-upload
+                                action="#"
+                                list-type="picture-card"
+                                :on-success="handleImageSuccess"
+                                :before-upload="beforeImageUpload"
+                                :auto-upload="true"
+                                :file-list="fileListO"
+                        >
+                            <!-- 十字图标 -->
+                            <i slot="default" class="el-icon-plus"></i>
+                            <!-- 文件 -->
+                            <div slot="file" slot-scope="{file}">
+                                <img class="el-upload-list__item-thumbnail" :src="file.url" alt/>
+                                <video class="el-upload-list__item-thumbnail" :src="file.url" alt/>
+                                <span class="el-upload-list__item-actions">
+          <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+            <i class="el-icon-zoom-in"></i>
+          </span>
+        </span>
+                            </div>
+                        </el-upload>
+                        <el-dialog :visible.sync="dialogVisible">
+                            <img width="100%" :src="dialogImageUrl" alt/>
+                        </el-dialog>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">更新</el-button>
+                    </el-form-item>
+                </el-form>
+            </template>
+        </el-dialog>
+        <div class="tableAround" v-cloak>
+            {% csrf_token %}
+            <!--數據表-->
+            <el-table height="700" border :data="tableData" style="min-width: 100%;border-radius: 10px"
+                    {#        :row-class-name="tableRowClassName"#}
+                    {#        row-click="rowClick"#}
+                      :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }">
+                <el-table-column label="Edit">
+                    <template slot-scope="scope">
+                        <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"
+                                   @click="alertID(scope.row.id);update=true"></el-button>
+                    </template>
+                </el-table-column>
+                {% comment %}    <el-table-column prop="id" label="ID" sortable ></el-table-column>{% endcomment %}
+                <el-table-column type="index" :index="indexMethod"></el-table-column>
+                <el-table-column prop="Category" label="Category" width="104" sortable></el-table-column>
+                <el-table-column prop="Object" label="Object" width="97" sortable></el-table-column>
+                <el-table-column prop="Symptom" label="Symptom" width="121" sortable></el-table-column>
+                <el-table-column prop="Reproduce_Steps" label="Reproduce Steps" style="white-space: pre-line;"
+                                 width="220" sortable></el-table-column>
+                <el-table-column prop="Root_Cause" label="Root Cause" style="white-space: pre-line;" width="220"
+                                 sortable></el-table-column>
+                <el-table-column prop="Solution" label="Solution" style="white-space: pre-line;" width="220"
+                                 sortable></el-table-column>
+                <el-table-column prop="Action" label="Action" style="white-space: pre-line;" width="220"
+                                 sortable></el-table-column>
+                <el-table-column prop="Status" label="Status" style="white-space: pre-line;" width="220"
+                                 sortable></el-table-column>
+                <el-table-column prop="Photo" label="Photo" width="100" sortable class="eltable-photo">
+                    <template scope="scope">
+                        <div class="eltable-photo">
+                            <el-image v-for="(item) in scope.row.Photo" :src="item" style="width: 100px; height: 100px;"
+                                      :preview-src-list="scope.row.Photo" lazy="true"></el-image>
+                        </div>
+                        <div v-if="scope.row.file[0]">
+                            <a v-for="(item) in scope.row.file" v-bind:href="item"><img
+                                    src="/static/src/back/document_save_2_24px_539656_easyicon.net.png"></a>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="Video" label="Video" width="100" sortable class="eltable-video">
+                    <template scope="scope">
+                        <div class="eltable-video">
+                            {% comment %} <el-video v-for="(item) in scope.row.Video" :src="item" style="width: 200px; height: 100px;" :preview-src-list="scope.row.Video" lazy="true"><source src="item" type="video/mp4">  </el-video>{% endcomment %}
+
+
+                            {#                                                                                <img src="../media/{{ i.img }}" height="100" width="200" alt="" />#}
+                            <video v-for="(item) in scope.row.Video" width="200" height="100" controls>
+                                <source :src="item" type="video/mp4">
+                                # 播放器形式
+                                您的浏览器不支持 video 标签。
+                            </video>
+
+
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="editor" label="Latest editor" style="white-space: pre-line;" width="220"
+                                 sortable></el-table-column>
+                <el-table-column prop="edit_time" label="Latest edit_time" style="white-space: pre-line;" width="220"
+                                 sortable></el-table-column>
+            </el-table>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                return {
+                    tableData: [],
+                    selectCategory: [],
+                    selectedCategory: '',
+                    serchCategory: '',
+                    update: false,
+                    dialogImageUrl: '',
+                    dialogVisible: false,
+                    disabled: false,
+                    PhotoList: [],
+                    fileListO: [],
+                    editID: '',
+                    form: {
+                        Category: '',
+                        Object: '',
+                        Symptom: '',
+                        Reproduce_Steps: '',
+                        Root_Cause: '',
+                        Solution: '',
+                        Action: '',
+                        Status: '',
+                    },
+                    formData: []
+
+
+                }
+            },
+            mounted() {
+                this.getdata("first");
+            },
+            methods: {
+                indexMethod(index) {
+                    return index + 1;
+                },
+                handleRemove(file) {
+                    // 删除文件
+                    console.log(file.response.data);
+                    let fileNames = file.response.data.split("/");
+                    fileDelete(fileNames[fileNames.length - 1]).then(res => {
+                        if (res.data.code == "0000") {
+                            this.fileList.splice(file, 1);
+                        }
+                    });
+                },
+                handlePictureCardPreview(file) {
+                    // 预览文件
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                },
+                handleDownload(file) {
+                    console.log("下载成功");
+                    let fileNames = file.response.data.split("/");
+                    let fileName = fileNames[fileNames.length - 1];
+                    fileDownload(fileName).then(res => {
+                        if (res.data.code == "0000") {
+                            this.downloadFile(fileName, res.data.data);
+                        }
+                    });
+                },
+                handleImageSuccess(res, files, fileList) {
+                    // 上传成功
+                    this.formData = new FormData();
+
+                    this.fileList = fileList;
+                    console.log("上传成功" + fileList.length, files, "tt", fileList);
+
+                    for (var i = 0; i < this.fileList.length; i++) {
+                        if (i != "undefined") {
+                            this.formData.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样
+                        }
+                        {#this.formData.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样#}
+                    }
+
+
+                    console.log(this.formData, typeof (this.formData))
+                },
+                beforeImageUpload(file) {
+                    // 上传前格式与大小校验
+                    console.log(file, file.type)
+                    const isJPG = file.type === "image/jpeg" || file.type == 'image/png' || file.type == 'video/mp4' || file.type == 'application/pdf' || file.type == 'application/x-zip-compressed' || file.type == '' || file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                    const isLt2M = file.size / 1024 / 1024 < 5;
+
+                    if (!isJPG) {
+                        this.$message.error("上传头像图片只能是 JPG/PNG 格式，视频为mp4格式!");
+                    }
+                    if (!isLt2M) {
+                        this.$message.error("上传头像图片大小不能超过 5MB!");
+                    }
+                    return isJPG && isLt2M;
+                    console.log("before")
+                    //也是成功的
+                },
+                // 下载
+                downloadFile(fileName, content) {
+                    let aLink = document.createElement("a");
+                    let blob = this.base64ToBlob(content); //new Blob([content]);
+
+                    let evt = document.createEvent("HTMLEvents");
+                    evt.initEvent("click", true, true); // initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+                    aLink.download = fileName;
+                    aLink.href = URL.createObjectURL(blob);
+
+                    // aLink.dispatchEvent(evt);
+                    aLink.click();
+                },
+                // base64转blob
+                base64ToBlob(code) {
+                    let parts = code.split(";base64,");
+                    let contentType = parts[0].split(":")[1];
+                    let raw = window.atob(parts[1]);
+                    let rawLength = raw.length;
+
+                    let uInt8Array = new Uint8Array(rawLength);
+
+                    for (let i = 0; i < rawLength; ++i) {
+                        uInt8Array[i] = raw.charCodeAt(i);
+                    }
+                    return new Blob([uInt8Array], {type: contentType});
+                },
+                onSubmit() {
+                    console.log('submit!', this.$refs.form.model, typeof (this.$refs.form.model), this.formData);
+                    {#var submitData = new FormData();#}
+                    if (this.formData.length == 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('serchCategory', this.serchCategory)
+                    this.formData.append('id', this.editID)
+                    this.formData.append('Category', this.$refs.form.model.Category)
+                    this.formData.append('Object', this.$refs.form.model.Object)
+                    this.formData.append('Symptom', this.$refs.form.model.Symptom)
+                    this.formData.append('Reproduce_Steps', this.$refs.form.model.Reproduce_Steps)
+                    this.formData.append('Root_Cause', this.$refs.form.model.Root_Cause)
+                    this.formData.append('Solution', this.$refs.form.model.Solution)
+                    this.formData.append('Action', this.$refs.form.model.Action)
+                    this.formData.append('Status', this.$refs.form.model.Status)
+                    {#submitData['Photolist'] = this.formData;#}
+                    this.formData.append("action", 'submit');
+                    console.log(this.formData)
+                    axios.post("/A32LessonLProject/Lesson_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableData = res.data.content;
+                        this.update = false;
+                        this.formData = new FormData();
+
+                    })
+                },
+                getdata: function (e) {
+                    let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                    axios.post("/A32LessonLProject/Lesson_edit/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.selectCategory = res.data.addselect;
+                    });
+
+                },
+                Search: function () {
+                    let Category = this.$refs.Category.value;
+                    this.serchCategory = this.$refs.Category.value;
+                    let msg = {
+                        "isGetData": "Search", "Category": Category
+                    }
+                    axios.post("/A32LessonLProject/Lesson_edit/", Qs.stringify(msg, {indices: false}), {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableData = res.data.content;
+
+
+                    })
+                },
+                alertID: function (id) {
+                    let Category = this.$refs.Category.value;
+                    let msg = {
+                        "isGetData": "alertID", "Category": Category, "ID": id
+                    }
+                    axios.post("/A32LessonLProject/Lesson_edit/", Qs.stringify(msg, {indices: false}), {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.form = res.data.form;
+                        this.editID = id;
+                        this.fileListO = res.data.fileListO;
+
+                    })
+                },
+                //保存
+                submitForm(formdata, id) {
+                    let Category = this.$refs.Category.value;
+                    console.log(this.$refs.formdata, "ffff")
+                    let submitForm_data = this.$refs.formdata.model;
+                    let data = {"isGetData": "SAVE", "Category": Category, "submitForm_data": submitForm_data, "ID": id}
+                    axios.post("/A32LessonLProject/Lesson_edit/", Qs.stringify(data), {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableData = res.data.content;
+                        this.form = res.data.form;
+                        this.fileListO = res.data.fileListO;
+                        this.update = false;
+
+                    });
+                },
+            }
+        })
+    </script>
+
+
+{% endblock %}

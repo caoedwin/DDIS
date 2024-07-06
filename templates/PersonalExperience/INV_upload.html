@@ -1,0 +1,381 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}INV_upload{% endblock %}
+{% block css %}
+<link href="/static/css/b_upload.css" rel="stylesheet">
+<link href="/static/css/uploadbutton.css" rel="stylesheet">
+<style>
+
+    .el-icon-question:before {
+        color:yellowgreen;
+        font-size: xx-large;
+    }
+
+
+    .change .el-form-item label{
+        color: white;
+        font-size: 18px;
+    }
+
+    .changeColor .el-form-item label{
+        color: black;
+    }
+
+
+    .el-form-item {
+        margin: 14px;
+    }
+
+
+    .first-part textarea{
+        font-size: 1.2rem;
+        line-height: 1.5;
+        color: #FFF;
+        background-clip: padding-box;
+        height: 100px;
+        resize: none;
+    }
+
+    .second-part{
+        margin: 20px 0;
+    }
+
+    option{
+        background-color: white;
+        color: black;
+    }
+
+    #showResult{
+        position: absolute;
+        top:40px;
+        right:50px;
+    }
+
+    .modal.fade.in{
+        opacity: 1;
+    }
+
+    .modal-header .close{
+        margin-bottom:  0 ;
+         font-size: 22px;
+         padding: 0;
+         font-weight: bold;
+    }
+
+    #returnTitle{
+        margin-bottom: auto;
+        margin-top:auto;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="container">
+      <div class="card" style="background: rgba(255,255,255,0.2);">
+        <div class="card-header title" style="color: #FFF;margin-bottom: 40px;">INV Data Upload</div>
+          <div class="card-body" >
+
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" size="medium" class="change">
+
+            <el-row>
+              <el-col span="12">
+              <el-form-item label="Project" prop="Project">
+
+                <el-select v-model="ruleForm.Project" filterable clearable placeholder="请选择" @change="changeDate">
+                    <el-option
+                        v-for="item in sectionProject"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+
+{#                    <el-autocomplete#}
+{#                      clearable#}
+{#                      class="inline-input"#}
+{#                      v-model="ruleForm.Project"#}
+{#                      :fetch-suggestions="querySearch"#}
+{#                      placeholder="请输入内容"#}
+{#                      @select="handleSelect"#}
+{#                    ></el-autocomplete>#}
+              </el-form-item>
+              </el-col>
+              <el-col span="12">
+                  <el-form-item label="Year" prop="Year">
+                    <el-select v-model="ruleForm.Year"  placeholder="请选择">
+                        <el-option
+                            v-for="item in sectionYear"
+                            :key="item"
+                            :label="item"
+                            :value="item">
+                        </el-option>
+                    </el-select>
+{#                    <el-select v-model="ruleForm.Year" placeholder="请选择">#}
+{#                      <el-option label="2023" value="2023"></el-option>#}
+{#                      <el-option label="2022" value="2022"></el-option>#}
+{#                    </el-select>#}
+                  </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col span="12">
+                  <el-form-item label="SS Date" prop="SS_Date">
+                     <el-input v-model="ruleForm.SS_Date" style="width: 210px;" disabled="true"></el-input>
+                  </el-form-item>
+              </el-col>
+              <el-col span="12">
+                  <el-form-item label="Month" prop="Month">
+                    <el-select v-model="ruleForm.Month" placeholder="请选择">
+                      <el-option label="上半年" value="上半年"></el-option>
+                      <el-option label="下半年" value="下半年"></el-option>
+                    </el-select>
+                  </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col span="12">
+                  <el-form-item label="Fun." prop="Func">
+                    <el-select v-model="ruleForm.Func" placeholder="请选择">
+                      <el-option label="Compatibility" value="Compatibility"></el-option>
+                      <el-option label="Reliability" value="Reliability"></el-option>
+                    </el-select>
+                  </el-form-item>
+              </el-col>
+              <el-col span="12">
+                  <el-form-item label="K/P No." prop="KPNum">
+                      <el-input v-model.number="ruleForm.KPNum" style="width: 210px;"></el-input>
+                  </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col span="12">
+                  <el-form-item label="Role" prop="Role">
+                    <el-select v-model="ruleForm.Role" placeholder="请选择">
+                      <el-option label="QM" value="QM"></el-option>
+                      <el-option label="TL" value="TL"></el-option>
+                      <el-option label="TE" value="TE"></el-option>
+                    </el-select>
+                  </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-form-item label="Comments" prop="Comments">
+                <el-input type="textarea" v-model="ruleForm.Comments" :rows="5" style="width: 760px;"></el-input>
+              </el-form-item>
+            </el-row>
+            <div class="el-form-item__content" style="margin-left: 300px;">
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit('ruleForm')">送出</el-button>
+              </el-form-item>
+             </div>
+
+        </el-form>
+
+
+      </div>
+
+     </div>
+
+         {% csrf_token %}
+</div>
+</div>
+{% endblock %}
+{% block scripts1 %}
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/xlsx/xlsx.core.min.js"></script>
+<script src="/static/js/xlsx/xlsx_pop.js"></script>
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/babel">
+
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                sectionProject: [],
+                sectionSubFun: [],
+                sectionPhase: [],
+                sectionYear: [],
+                errMsgNumber: '',
+                flag: 0,
+                ssdate: '',
+                ruleForm: {
+                      Project: '',
+                      Role: '',
+                      SS_Date: '',
+                      Func: '',
+                      KPNum: '',
+                      Year: '',
+                      Month: '',
+                      Comments: '',
+
+                },
+                form:{
+                    OSR: ''
+                },
+                formData:[],
+                rules: {
+                          Project: [
+                            { required: true, message: '请填写Project', trigger: 'change' }
+                          ],
+                          Role: [
+                            { required: true, message: '请填写Role', trigger: 'change' }
+                          ],
+                          SS_Date: [
+                            { required: true, message: '请填写SS Date', trigger: 'blur' }
+                          ],
+                          Func: [
+                            { required: true, message: '请填写Fun.', trigger: 'change' }
+                          ],
+                          KPNum: [
+                              { required: true, message: '请填写K/P No.'},
+                              { type: 'number', message: '请输入数字值'}
+                          ],
+                          Month: [
+                            { required: true, message: '请填写Month', trigger: 'change' }
+                          ],
+                          Year: [
+                            { required: true, message: '请填写Year', trigger: 'blur' }
+                          ],
+                },
+
+
+            };
+        },
+
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalExperience/INV-upload/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.sectionProject=res.data.sectionProject;
+                    var date = new Date();
+                    this.sectionYear.push(date.getFullYear() - 1);
+                    this.sectionYear.push(date.getFullYear());
+                 });
+            },
+
+
+            changeSubFun:function(item){
+                this.ruleForm.SubFunc = '';
+                this.sectionSubFun = this.sessionCategory[item];
+
+            },
+
+
+            changeDate(item){
+                {#console.log(item)#}
+                for(let i=0; i < this.sectionProject.length; i++){
+                    if( this.sectionProject[i].value== item ){
+                        this.ruleForm.SS_Date = this.sectionProject[i].SS_Date
+                    }
+                }
+                {#console.log(this.sectionProject)#}
+                {#this.ssdate=this.sectionProject[item][0].SS_Date;#}
+                {#this.ruleForm.SS_Date = this.ssdate;#}
+            },
+
+
+          querySearch(queryString, cb) {
+            var project = this.sectionProject;
+            var results = queryString ? project.filter(this.createFilter(queryString)) : project;
+            // 调用 callback 返回建议列表的数据
+                {#console.log(this.selectItem,'111');#}
+            cb(results);
+            if(this.ruleForm.Project == ""){
+                  this.ruleForm.SS_Date = "";
+            }else{
+                  this.ruleForm.SS_Date = results[0].SS_Date;
+            }
+          },
+
+          createFilter(queryString) {
+            return (restaurant) => {
+              return (
+                  restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+
+          handleSelect(item) {
+              this.ssdate = item.SS_Date;
+              this.ruleForm.SS_Date = this.ssdate;
+              {#this.number = item.number;#}
+          },
+
+
+            onSubmit(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.formData.length == 0) {
+                            this.formData = new FormData();
+                        }
+                        this.formData.append('Project', this.$refs[formName].model.Project);
+                        this.formData.append('Role', this.$refs[formName].model.Role);
+                        this.formData.append('SS_Date', this.$refs[formName].model.SS_Date);
+                        this.formData.append('Function', this.$refs[formName].model.Func);
+                        this.formData.append('Month', this.$refs[formName].model.Month);
+                        this.formData.append('Year', this.$refs[formName].model.Year);
+                        this.formData.append('KeypartNum', this.$refs[formName].model.KPNum);
+                        this.formData.append('Comments', this.$refs[formName].model.Comments);
+                        this.formData.append("action", 'addSubmit');
+                        {#console.log(this.formData);#}
+                        axios.post("/PersonalExperience/INV-upload/", this.formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                            } //改变头格式，原生默认上传json格式
+                        }).then((res) => {
+                            this.formData = new FormData();
+                            this.errMsgNumber = res.data.errMsgNumber;
+                            if (this.errMsgNumber) {
+                                this.$alert(this.errMsgNumber, '提示', {
+                                    type: 'warning',
+                                });
+                            } else {
+                                try {
+                                    this.$refs[formName].resetFields();
+                                } catch (e) {
+
+                                }
+                            }
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+
+            },
+
+
+        }
+    })
+
+
+
+
+ </script>
+
+{% endblock %}

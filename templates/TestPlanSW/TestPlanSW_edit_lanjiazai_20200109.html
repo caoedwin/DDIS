@@ -1,0 +1,1614 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}TestPlan_SW{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="/static/css/ElementUI.css">
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+<style>
+[v-cloak]{
+  display: none;
+}
+@media screen and (min-width: 1416px ){
+    .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+}
+@media screen and (min-width: 970px ) and ( max-width: 1415px) {
+   .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+   .selectMsg .el-select{
+       width: 150px;
+   }
+   .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+}
+@media screen and (min-width:769px ) and (max-width: 969px){
+      .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+     .selectMsg .el-select{
+       width: 150px;
+     }
+}
+@media screen and (min-width:600px ) and (max-width: 768px){
+    .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 0 0 0 ;
+    }
+}
+  .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+      color:aliceblue;
+  }
+  .selectMsg label:last-child{
+     margin-left: 15px;
+   }
+  .selectMsg #project{
+      margin-left: 0;
+  }
+  .selectMsg .Button{
+      height:40px;
+  }
+  .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+      width: auto;
+  }
+  el-table__header .is-group.has-gutter .cell{
+      word-break: break-word;
+  }
+  el-table__header .is-group.has-gutter tr th{
+      min-width: 120px;
+  }
+  .el-table .warning-row {
+    background: oldlace;
+  }
+  .el-table .info-row {
+    background: #909399;
+  }
+  .el-table .title-row {
+    background: #08d9d6;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped.title-row td{
+    background: #08d9d6
+  }
+  .el-table .danger-row {
+    background: #F56C6C;
+  }
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .el-table  .cell{
+     text-align: center;
+ }
+   /* NO.1 */
+   .el-table--striped .el-table__body tr.el-table__row--striped.title-row td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+  }
+   .el-table__row--level-0 td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+   }
+  /* NO.1 */
+  .headerStyle{
+       background-color:#fafafa;
+       font-weight:800;
+       {% comment %}border-bottom:1px solid rgb(103, 194, 58);{% endcomment %}
+  }
+  .headerStyle .el-icon-info{
+       color: cornflowerblue;
+  }
+  .headerStyle i{
+      padding:6px;
+  }
+  .tooltipsFont {
+      font-weight: bold;
+      color:black;
+      font-size: 12px;
+  }
+
+ .el-table__fixed,
+.el-table__fixed-right {
+  height: 100% !important;
+}
+  .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+  .invalidInput .el-input__inner{
+     border: 1px solid red;
+     color:red ;
+}
+  .invalidNum{
+      color:red;
+  }
+  .projectContent{
+     margin-left: 20px;
+}
+  .phaseContent{
+    margin-right: 20px;
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 40px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+  .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+  /* NO.2 */
+  /* input clear */
+  .el-input.el-input--suffix:hover .inputClear{
+      visibility: visible;
+  }
+  .inputClear{
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      visibility:hidden;
+  }
+  .clearShow{
+      visibility: visible;
+  }
+  /* NO.2 */
+  .pass{
+    background-color: aquamarine;
+}
+  .fail{
+    background-color: crimson;
+    color:antiquewhite;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+  <div class="selectMsg" >
+    <div class="customerContent">
+    <label for="customer" v-cloak>客戶別 </label>
+     <el-select  v-model="customer" width="80%" >
+            <el-option v-for="item in customerOptions" :label="item.label" :value="item.value"  ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+    </div>
+    <div class="projectContent" >
+   <label for="project" v-cloak>專案號</label>
+        <el-select  v-model="project"  placeholder="請輸入專案號" style="margin-right: 20px" width="80%" clearable >
+            <el-option v-for="item in projectvalue"  :label="item.project" :value="item.project" ></el-option>
+      </el-select><br>
+      <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+    </div>
+    <div class="phaseContent" >
+         <label for="phase" v-cloak>Phase</label>
+        <el-select v-model="phase" width="80%" id="phase" >
+            <el-option v-for="(item,index) in phasevalue" :key="index" :label="phaseName[item]" :value="phasevalue[index]"></el-option>
+        </el-select><br>
+        <div class="inputError" v-cloak  v-show="phaseError">phase號不能為空</div>
+    </div>
+    <el-button @click="find" v-cloak type="primary" class="Button">查找</el-button>
+    <el-button @click="newSaveData" v-cloak class="Button" type="success" >保存</el-button>
+  </div>
+  <div v-cloak class="fileUploadContent"    v-if="canEdit">
+            <div class="inputPackage" v-cloak>
+                 <span v-cloak>請選擇文件</span>
+                 <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+            </div>
+         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+        <span class="showFileName" v-cloak >${ fileName }</span>
+     </div>
+  <div class="tableAround" v-cloak >
+  {% csrf_token %}
+ <!--數據表-->
+ <!--提示信息-->
+  <span class="selectItem" v-cloak  v-if="showCustomer&&showProject&&phaseName[showPhase]">當前表格信息：${ showCustomer }/${ showProject }/${ phaseName[showPhase] }<span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+  <el-table  height="700" border :data="tableData"
+    ref="multipleTable"
+    tooltip-effect="dark"
+    stripe
+    :span-method="arraySpanMethod"
+    row-key="caseid"
+    :load="load"
+    lazy
+    :tree-props="{ 'hasChildren':'hasChildren' }"
+    id="out-table"
+    @selection-change="handleSelectionChange"
+    style="border-radius: 10px;
+    word-break: keep-all"
+    :row-class-name="tableRowClassName"
+    :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }"
+      element-loading-text="拼命加载中"
+	  element-loading-spinner="el-icon-loading"
+	  element-loading-background="rgba(0, 0, 0, 0.8)">
+      <!--無需編輯-->
+      <el-table-column width="120" label="Case ID"  prop="caseid" align="left" fixed></el-table-column>
+      <el-table-column width="120" label="Case Name" prop="casename" fixed></el-table-column>
+      <!--:key="Math.random()" => 为了解决数据错位 即前一列覆盖掉后一列 -->
+      <el-table-column width="120" label="Test Items" prop="testitem" fixed  v-if="showPhase === 2" :key="Math.random()" v-cloak></el-table-column>
+      <el-table-column width="120" label="Version" prop="version" ></el-table-column>
+      <el-table-column width="120" label="Release Date"prop="releasedate" ></el-table-column>
+      <el-table-column width="120" label="Owner" prop="owner"></el-table-column>
+      <el-table-column width="120" label="priority" prop="priority"></el-table-column>
+      <!--:key="1" => 为了解决数据错位 （即前一列覆盖掉后一列）且使用Math.random()会产生抖动 ，换成固定值则正常 -->
+      <el-table-column width="120"  v-if="showPhase !== 2"  label="TDMS Total Time"  :key="1" >
+          <template slot-scope="scope">
+              <span v-if="scope.row.id " v-cloak >${ scope.row.basetime + scope.row.unattendedtime }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120"  label="Base Time" prop="basetime"></el-table-column>
+      <el-table-column width="120"  label="(TDMS)Attended Time" prop="unattendedtime"></el-table-column>
+      <el-table-column width="120"  label="Base Automation Time(1SKU)" prop="basetimeA"></el-table-column>
+      <el-table-column width="120"  label="Chramshell" prop="chramshell"></el-table-column>
+
+      <el-table-column width="120"  label="Convertible">
+          <el-table-column label="NB Mode" prop="conver_NB"></el-table-column>
+          <el-table-column label="Yoga Pad Mode/Flex 300°" prop="conver_Yoga"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Detachable">
+          <el-table-column label="Pad Mode" prop="detach_Pad"></el-table-column>
+          <el-table-column label="W Dock Mode" prop="detach_W"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Phase">
+          <el-table-column v-if="showPhase !== 2" label="FVT" prop="PhaseF"></el-table-column>
+          <el-table-column v-if="showPhase !== 2" label="SIT" prop="PhaseS"></el-table-column>
+          <el-table-column v-if="showPhase === 2" v-cloak label="FFRT" prop="PhaseFFRT"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Coverage" prop="coverage"></el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120"  label="Feature Support">
+          <template slot-scope="scope">
+                  <el-select placeholder="" v-if="showinput(scope.row,scope.$index) && canEdit" v-model.lazy="FS[scope.row.id]" @change="initData(scope.row.id,{'id':1})"  clearable>
+                     <el-option label=" " value=""></el-option>
+                     <el-option label="Y" :value=0></el-option>
+                    <el-option label="N" :value="1"></el-option>
+                  </el-select>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ FS[scope.row.id] }</span>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Base Time-Support">
+           <template slot-scope="scope">
+                  <span  v-if="showinput(scope.row,scope.$index)"  v-model="BTS[scope.row.id]">
+                      ${ BTS[scope.row.id] }
+                  </span>
+                </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫工程師名" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>TE</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+                 <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="TE[scope.row.id]"  class="el-input__inner"><span @click="clear(TE, scope.row.id)" :class="{'clearShow':TE[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ TE[scope.row.id] }</span>
+                  </div>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫該項測試的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Schedule</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+               <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="schedule[scope.row.id]"  class="el-input__inner"><span @click="clear(schedule, scope.row.id)" :class="{'clearShow':schedule[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ schedule[scope.row.id] }</span>
+                  </div>
+                </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120"  >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填入根據LNV SW Test martrix 安排的 Test Plan所需測試的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Project Test SKU Follow Matrix</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope">
+                  <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="starttime[scope.row.id]"  class="el-input__inner" @change="initData(scope.row.id,{'id':2})" >
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ starttime[scope.row.id] }</span>
+                  </div>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="添加total SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Time w/ Config follow Matrix(?SKU)</span>
+              </el-tooltip>
+          </template>
+          <template slot-scope="scope" >
+              ${ TFC[scope.row.id] }
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="Automation Mark: Y;Automation Can't Mark:N" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Automation item</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                  <el-select placeholder="" v-if="showinput(scope.row,scope.$index) && canEdit" v-model.lazy="conAitem[scope.row.id]" @change="initData(scope.row.id,{'id':3})" >
+                     <el-option label=" " value=""></el-option>
+                     <el-option label="Y" :value=0></el-option>
+                     <el-option label="N" :value=1></el-option>
+                  </el-select>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ conAitem[scope.row.id] }</span>
+           </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Config-Automation time">
+          <template slot-scope="scope">
+              ${ CAT[scope.row.id] }
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120"  >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage Mark: Y;Leverage Can't Mark:N" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Leverage item</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                  <el-select placeholder="" v-if="showinput(scope.row,scope.$index) && canEdit " v-model.lazy="conLitem[scope.row.id]">
+                     <el-option label=" " value=""></el-option>
+                     <el-option label="Y" :value=0></el-option>
+                    <el-option label="N" :value=1></el-option>
+                  </el-select>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ conLitem[scope.row.id] }</span>
+           </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Config-Leverage time">
+           <template slot-scope="scope">
+               <span  :class="{'invalidNum': CLT[scope.row.id] <0}">${ CLT[scope.row.id] }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="180" >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Comments</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                {% comment %}<el-input placeholder="请输入内容" type="text" v-if="showinput(scope.row,scope.$index)" ></el-input>{% endcomment %}
+                  <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="comments1[scope.row.id]"  class="el-input__inner"><span @click="clear(comments1, scope.row.id)" :class="{'clearShow':comments1[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ comments1[scope.row.id] }</span>
+                  </div>
+                </template>
+      </el-table-column>
+      <el-table-column width="120" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="Smart Mark: Y;Smart Can't Mark:N" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart item</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                  <el-select placeholder="" v-if="showinput(scope.row,scope.$index) && canEdit" v-model="conSitem[scope.row.id]">
+                     <el-option label=" " value=""></el-option>
+                     <el-option label="Y" :value=0></el-option>
+                    <el-option label="N" :value=1></el-option>
+                  </el-select>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ conSitem[scope.row.id] }</span>
+           </template>
+      </el-table-column>
+      <el-table-column width="120"  >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Smart 的百分比" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart item占總case比例</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+              ${ conSitemInAll[scope.row.id] }
+          </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Config-Smart item">
+           <template scope="scope">
+             <span  :class="{'invalidNum': CST[scope.row.id] <0}">${ CST[scope.row.id] }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="180"  label="Comments">
+          <template slot="header" slot-scope="scope" >
+              <el-tooltip content="Smart 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Comments</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+                 <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="comments2[scope.row.id]"  class="el-input__inner"><span @click="clear(comments2, scope.row.id)" :class="{'clearShow':comments2[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ comments2[scope.row.id] }</span>
+                  </div>
+                </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Project test SKU-optimize">
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Stress,Mobile phone nearing(CPI test)機台特殊性，需手動輸入" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Project test SKU-optimize</span>
+              </el-tooltip>
+          </template>
+           <template scope="scope">
+              ${ proTS[scope.row.id] }
+          </template>
+      </el-table-column>
+      <el-table-column width="120"  label="Attend time-optimize" >
+           <template scope="scope" >
+               <span :class="{'invalidNum': ATO[scope.row.id] <0}">${ ATO[scope.row.id] }</span>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+
+      <el-table-column min-width="220">
+       <template slot="header" slot-scope="scope">
+              <el-tooltip  placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <div slot="content">通過左側Leverage,Reduction,Automation之後合理挑選TestSKU並生成的Test plan<br/>V means: need test;X means:no need test<br/>A means: Automation;L means:Leverage;S means:Smart</div>
+                  <span><i class="el-icon-info"></i>Planning after optimize</span>
+              </el-tooltip>
+          </template>
+
+       <el-table-column  v-for="(item,key,index) in SKUNum" v-bind:key="item.skuNo" :label="item.skuNo" >
+           <el-table-column  :label="item.VGA">
+                <el-table-column  :label="item.CPU" width="120">
+               <template slot-scope="scope">
+                  <el-select placeholder="" v-if="showinput(scope.row,scope.$index,key) && canEdit" v-model.lazy="planOptimize[scope.row.id][key]" @change="initData(scope.row.id,{'id':4})" >
+                    <el-option label="未选择" :value=0></el-option>
+                    <el-option label="V" value="V"></el-option>
+                    <el-option label="X" value="X"></el-option>
+                    <el-option label="A" value="A"></el-option>
+                    <el-option label="L" value="L"></el-option>
+                    <el-option label="S" value="S"></el-option>
+                  </el-select>
+                   <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ planOptimize[scope.row.id][key] }</span>
+                </template>
+                </el-table-column>
+           </el-table-column>
+
+       </el-table-column>
+
+      </el-table-column>
+
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 Retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest cycle</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+                 <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="CRC[scope.row.id]"  class="el-input__inner"><span @click="clear(CRC, scope.row.id)" :class="{'clearShow':CRC[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+              <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ CRC[scope.row.id] }</span>
+              </div>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest SKU</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+                {% comment %}<el-input placeholder="请输入内容" type="text" v-if="showinput(scope.row,scope.$index)" ></el-input>{% endcomment %}
+                  <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="CRC[scope.row.id]"  class="el-input__inner"><span @click="clear(CRC, scope.row.id)" :class="{'clearShow':CRC[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                 {% comment %}<el-date-picker size="small" v-if="showinput(scope.row,scope.$index) && canEdit" v-model="CRT[scope.row.id]" type="date" placeholder="选择日期" clearable></el-date-picker>{% endcomment %}
+                      <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ CRC[scope.row.id] }</span></div>
+                </template>
+      </el-table-column>
+      <el-table-column width="160" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的s時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest Time</span>
+              </el-tooltip>
+          </template>
+          <template scope="scope">
+                 <div class="el-input el-input--suffix" v-if="showinput(scope.row,scope.$index) && canEdit"><input placeholder="请输入内容" type="text"  v-model.lazy="CRT[scope.row.id]"  class="el-input__inner"><span @click="clear(CRT, scope.row.id)" :class="{'clearShow':CRT[scope.row.id] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span> {% comment %}:class="{'invalidInput':isNaN(CRT[scope.row.id]/1) && CRT[scope.row.id]!==undefined}"{% endcomment %}
+                  <span v-if="showinput(scope.row,scope.$index) && (!canEdit)">${ CRT[scope.row.id] }</span>
+              </div>
+                </template>
+      </el-table-column>
+  </el-table>
+</div>
+    <!--loading-->
+  <div v-if="loading" v-cloak class="fullScreen">
+    <section v-cloak v-if="loading">
+      <div class='sk-fading-circle'>
+        <div class='sk-circle sk-circle-1'></div>
+        <div class='sk-circle sk-circle-2'></div>
+        <div class='sk-circle sk-circle-3'></div>
+        <div class='sk-circle sk-circle-4'></div>
+        <div class='sk-circle sk-circle-5'></div>
+        <div class='sk-circle sk-circle-6'></div>
+        <div class='sk-circle sk-circle-7'></div>
+        <div class='sk-circle sk-circle-8'></div>
+        <div class='sk-circle sk-circle-9'></div>
+        <div class='sk-circle sk-circle-10'></div>
+        <div class='sk-circle sk-circle-11'></div>
+        <div class='sk-circle sk-circle-12'></div>
+      </div>
+        <span>正在上傳，請稍等</span>
+    </section>
+ </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+{#<script src="/static/js/Element/message-box.js"></script>#}
+<script src="/static/js/Element/tooltip.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+  new Vue ({
+    el:"#app",
+    delimiters: ['${', '}'],
+    data() {
+      return {
+        // customer選擇
+        customerOptions:[{
+            "label":"C38(NB)",
+            "value":"C38(NB)",
+        },{
+            "label":"C38(AIO)",
+            "value":"C38(AIO)",
+        },{
+            "label":"A39",
+            "value":"A39",
+        }
+        ],
+        //表格源數據
+        tableData:[],
+        selectMsg:[],
+        // error 提示
+        customer:'',
+        project:'',
+        phase:'',
+        showCustomer:'',
+        showProject:'',
+        showPhase:'',
+        projectvalue:[],
+        phasevalue:[],
+        projectError:false,
+        customerError:false,
+        phaseError:false,
+        phaseName:["B(FVT)", "C(SIT)", "FFRT", "Others",],
+        columnName:[],
+        fileName:"未選擇文件",
+        //用來與獲取的數據進行比較，尋找那些數據發生變化
+        //updateFlag:false,
+         /* ME END */
+        //loading flag
+        loading:false,
+        //權限flag
+        canEdit:false,
+        showTips:false,
+        //文件上傳
+        excelFile:null,
+        uploadFile:null,
+        /* SW 需要用的值 */
+        //按类别计算
+        allData:{},
+        // SKU No
+        SKUNum:null,
+        //计算返回的值
+        //totalTime:{},
+        FS:{},
+        TE:{},
+        schedule:{},
+        TFC:{},
+        TS:{},
+        timeConF:{},
+        starttime:{},
+        conAitem:{},
+        conAtime:{},
+        conLitem:{},
+        conSitem:{},
+        CAT:{},
+        CLT:{},
+        CST:{},
+        CSA:{},
+        ATP:{},
+        conSitemInAll:{},
+        comments1:{},
+        comments2:{},
+        planOptimize:{},
+        flagSum:{},
+        BTS:{},
+        CRC:{},
+        CRS:{},
+        CRT:{},
+        proTS:{},
+        ATO:{},
+        //保存数据
+        saveDataFlag:[],
+        reflash:{},
+      }
+    },
+    //首先获取customer ，project ，phase 搜索信息
+    created(){
+        axios.get("/TestPlanSW/TestPlanSW-edit/?action=first" ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.selectMsg=res.data;
+                    console.log(this.selectMsg);
+        })
+    },
+    mounted(){
+         //未保存提示窗
+         let _this = this;
+         window.onbeforeunload =function () {
+            let result= _this.checkChangedData();
+            if (result.length !== 0){
+                return false;
+            }
+          }
+     },
+    methods: {
+       //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+      getdata:function(e){
+                axios.get("/TestPlanSW/TestPlanSW-edit/?action="+e ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    let _this=this;
+                    this.loading=false;
+                    //上传成功的操作
+                    this.SKUNum=res.data['SKU'];
+                    this.tableData=res.data['MockData'];// 将返回的数据传递给data内的tableContent
+                    this.canEdit=res.data['canEdit'];
+                    this.columnName=['Planning after optimize'];
+                    if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{this.showTip()},1);
+                    }
+                    //接受数据的初始化
+                    try{
+                    }catch(e)
+                    {
+                       console.log("错误异常"+e);
+                    }
+
+                }).catch(function (e) {
+                       _this.loading=false;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+                //顯示當前表格的信息
+               //console.log(this.selectMsg);
+               this.showCustomer=this.customer;
+               this.showProject=this.project;
+               this.showPhase=this.phase;
+            },
+      clearContents(){
+        this.$refs.multipleTable.store.states.lazyTreeNodeMap ={};
+        this.planOptimize ={};
+        this.allData={};
+        this.FS ={};
+        this.schedule={};
+        this.starttime={};
+        this.conAitem={};
+        this.TE={};
+        this.conLitem={};
+        this.comments1={};
+        this.comments2={};
+        this.TFC={};
+        this.TS={};
+        this.timeConF={};
+        this.conAtime={};
+        this.conSitem={};
+        this.CAT={};
+        this.CLT={};
+        this.CST={};
+        this.CSA={};
+        this.ATP={};
+        this.conSitemInAll={};
+        this.flagSum={};
+        this.BTS={};
+        this.CRC={};
+        this.CRS={};
+        this.CRT={};
+        this.proTS={};
+        this.ATO={};
+        this.reflash={};
+
+      },
+      //重置树形加载
+      reset(){
+           let data =this.$refs.multipleTable.store.states.treeData;
+           if(data){
+               for(let num in data){
+                   data[num].expanded = false;
+                   data[num].loaded = false;
+               }
+           }
+      },
+     /* NO.3 */
+      clear(num, val){
+          if(!num[val] && num[val] !== 0){
+              return false;
+          }else{
+            console.log("begain",new date());
+            Vue.set(num, val, "");
+            //num[val] = '';
+            console.log("end",new date());
+            console.log("826",num[val]);
+          }
+      },
+     /* NO.3 */
+      handleSelectionChange(){},
+      Search:function(){
+
+          let parameter = "search&customer="+this.customer+"&project="+this.project;
+          //console.log(parameter);
+          this.getdata(parameter);
+      },
+      tableRowClassName({row, rowIndex}) {
+          if(!row.id){
+            return 'title-row'
+          }
+
+      },
+      setCurrent:function(row) {
+      },
+      //導出表格
+      exportExcel:function (){
+           /* 从表生成工作簿对象 */
+        var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+            );
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+        },
+      //文件更改
+      updateFile:function(e){
+            const first="未選擇文件";
+            let newValue= e.target.files;
+            if(newValue){
+             let file=document.getElementById('upload');
+             let filename= file.files[0].name;
+             let fileType=filename.substr(filename.lastIndexOf(".")+1);
+             console.log(fileType.toLowerCase());
+             if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                  //console.log(this.excelFile);
+                 this.fileName=filename;
+                 this.uploadFile=file.files[0];
+             }else{
+                 alert("上傳類型不為'xlsx'或'xls'");
+                   try{
+                     }catch(e){
+                         console.log(e);
+                     }
+             }
+         }else{
+             this.uploadFile=null;
+             this.fileName=first;
+         }
+      },
+      //批量上傳
+      fileUpload:function(){
+              const first="未選擇文件";
+              if(this.uploadFile){
+                if(this.showCustomer==''||this.showProject==''||this.showPhase===''){
+                   alert("請選擇要修改的表單");
+                   return false;
+               }else{
+                  //1.解析Excel
+                   let outputResult;
+                   let _this= this;
+                   let files = this.uploadFile;
+                   let undefined_to_null=function(value){
+                       if(value == undefined){
+                           value=null;
+                       }
+                       //console.log(value,value === undefined,value == undefined);
+                       return value;
+                   }
+                   var fileReader = new FileReader ();
+                   fileReader.onload = function (ev) {
+                     try {
+                     _this.loading=true;
+                     var data = ev.target.result,
+                      workbook = XLSX.read(data, {
+                        type: 'binary'
+                     }), // 以二进制流方式读取得到整份excel表格对象
+                      persons = []; // 存储获取到的数据
+                   } catch (e) {
+                     _this.loading=false;
+                     return;
+                  }
+                  for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    var fromTo = workbook.Sheets[sheet]['!ref'];
+                    // console.log(fromTo);
+                    var datas = workbook.Sheets[sheet];
+                    // 如果有不规范数据可以在这里进行处理datas
+                    persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                    //break; // 只读了第一张表
+                }
+            }
+                 // 数据保存在result
+                  let result=JSON.stringify(persons);
+                   //将之前张开的树形结构收起
+                      _this.reset();
+                   //2.上傳數據
+                    console.log(_this.showCustomer,_this.showProject,_this.showPhase,'yyy');
+                    axios.post("/TestPlanSW/TestPlanSW-edit/" ,{"customer":_this.showCustomer,"project":_this.showProject,"phase":_this.showPhase,"ExcelData":result},{
+                    headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    //console.log(res.data,"first");//上传成功的操作
+
+                    _this.uploadFile=null;
+                    _this.fileName=first;
+                   _this.loading=false;
+                    //上传成功的操作
+                    _this.SKUNum=res.data['SKU'];
+                    _this.tableData=res.data['MockData'];// 将返回的数据传递给data内的tableContent
+                    _this.canEdit=res.data['canEdit'];
+                    _this.columnName=['Planning after optimize'];
+                    if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{_this.showTip()},1);
+                    }
+                    //接受数据的初始化
+                    try{
+                    }catch(e)
+                    {
+                       console.log("错误异常"+e);
+                    }
+
+
+                }).catch(function (e) {
+                        _this.loading=false;
+                        _this.uploadFile=null;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+           };
+                   try{
+                   //console.log(fileReader.onload());
+                   fileReader.readAsBinaryString(files);
+                   //console.log(fileReader.readAsBinaryString(files));
+                   }
+                   catch(e){
+                         this.loading=false;
+                         console.log(e);
+                         alert("文件上傳異常") ;
+                         return;
+                    }
+                  //console.log(outputResult);
+               }
+             }else{
+              this.loading=false;
+              alert("未選擇文件");
+              return false;
+          }
+      },
+      //查找表格
+      find:function(){
+          //customer和project和phase未填
+          let _this = this;
+          if(this.customer==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+          this.customerError = false;
+          if(this.project==''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+          this.projectError = false;
+          if(this.phase===''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+          this.phaseError=false;
+          //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+          //判断是否是第一次查询
+          let parameter = "search&customer="+this.customer+"&project="+this.project+"&phase="+this.phase;
+          if(this.showCustomer ||this.showProject || this.showPhase){
+              //判断是否有未更改的值
+              let result= this.checkChangedData();
+              if(result.length ===0){
+                  try{
+                      this.reset();
+                      this.clearContents();
+                      this.getdata(parameter);
+
+                  }catch(e){ console.log(e);}
+                  {% comment %}this.getdata(parameter);{% endcomment %}
+                  //this.reset();
+              }else{
+                  console.log("未更新");
+                  var warning =confirm("檢測到當前填寫的部分數據未保存，請及時點擊保存，以免數據丟失 是否繼續搜索?");
+                  if(warning){
+                    //console.log(parameter);
+                    this.reset();
+                    this.clearContents();
+                    this.getdata(parameter);
+                    return false;
+                    }else{
+                        return false;
+                    }
+              }
+          }else{
+             // 判断为第一次查询
+             this.getdata(parameter);
+          }
+      },
+      //表格數據保存
+      newSaveData:function(){
+          //是否选择搜素信息
+          if(this.showCustomer==''||this.showProject==''||this.showPhase===''){
+              alert("請選擇要修改的表單");
+              return false;
+          }
+          //上传内容的数组
+          let upload=[];
+          this.loading = true;
+          //检查是否发生改变的result
+          let result =this.checkChangedData();
+          if(!result){
+              console.log("保存失败");
+              return false;
+          }
+          //未发生改变
+          if(result.length === 0 ){
+              this.loading= false;
+              alert("输入值未发生改变");
+              return false;
+          }else{
+              for(let val = 0,ll=result.length;val<ll;val++){
+                  let resultName= result[val];
+                  upload[val]={"id":parseInt(resultName),"FS":this.FS[resultName],"TE":this.TE[resultName],
+                  "BTS":this.BTS[resultName],"TFC":this.TFC[resultName],"CAT":this.CAT[resultName],
+                  "CLT":this.CLT[resultName],"conSitemInAll":this.conSitemInAll[resultName],
+                  "CST":this.CST[resultName],"proTS":this.proTS[resultName],"ATO":this.ATO[resultName],
+                  "schedule":this.schedule[resultName],"starttime":this.starttime[resultName],
+                  "conAitem":this.conAitem[resultName],"conLitem":this.conLitem[resultName],
+                  "conSitem":this.conSitem[resultName],"comments1":this.comments1[resultName],
+                  "comments2":this.comments2[resultName],"planOptimize":this.planOptimize[resultName],
+                  "CRC":this.CRC[resultName],"CRS":this.CRS[resultName],
+                  "CRT":this.CRT[resultName]
+                  }
+              }
+              //获取所有节点
+              let data =this.$refs.multipleTable.store.states.treeData;
+              //通过遍历找出已展开的节点
+              let expandFlag =[]
+             // console.log("data:",data);
+              if(data){
+               for(let num in data){
+                   if(data[num].expanded === true){
+                       expandFlag.push(num);
+                   }
+               }
+           }
+              axios.post("/TestPlanSW/TestPlanSW-edit/" ,{"customer":this.showCustomer,"project":this.showProject,"phase":this.showPhase,"uploadData":upload},{
+                    headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    //清除保存之前的判断是否改变的数据
+                    this.allData ={};
+                    this.TE={};
+                    //依据判断的展开的节点数，产生不同的动作
+                    //超过三个即全部折叠，小于三个找到之前展开的节点，在自动展开
+                    if(expandFlag.length > 5){
+                         this.reset();
+                     }else{
+                         for(let i =0,ll=expandFlag.length;i<ll;i++){
+                             this.load(...this.reflash[expandFlag[i]]);
+                         }
+                     }
+                    this.loading=false;
+              }).catch((e) => {
+                  this.loading =false;
+                  console.log("错误信息："+e);
+                  return false;
+              })
+          }
+      },
+       //检查是否发生数据改变
+      checkChangedData(){
+          //已经获取到的数据的 key值 即节点加载出来的所有数据
+          let change = Object.keys(this.TE);
+          let result =[];
+          for (let num =0, l=change.length;num < l;num++){
+              let changeItem =change[num];
+              if(this.FS[changeItem] !== this.allData[changeItem].FS && !(this.FS[changeItem] ===''&& this.allData[changeItem].FS ===undefined)){
+                  result.push(changeItem);
+                  continue;
+              }
+               else if(this.TE[changeItem] !== this.allData[changeItem].TE && !(this.TE[changeItem] ===''&& this.allData[changeItem].TE ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(this.schedule[changeItem] !== this.allData[changeItem].schedule && !(this.schedule[changeItem] ===''&& this.allData[changeItem].schedule ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(this.starttime[changeItem] !== this.allData[changeItem].starttime && !(this.starttime[changeItem] ===''&& this.allData[changeItem].starttime ===undefined)){
+                  if(!isNaN(this.starttime[changeItem]/1)){
+                      result.push(changeItem);
+                      continue;
+                  }else {
+                      alert('输入值不合法');
+                      return false;
+                  }
+              }
+               else if(this.conAitem[changeItem] !== this.allData[changeItem].conAitem && !(this.conAitem[changeItem] ===''&& this.allData[changeItem].conAitem ===undefined)){
+                  result.push(changeItem);
+                  continue;
+              }
+               else if(this.conLitem[changeItem] !== this.allData[changeItem].conLitem && !(this.conLitem[changeItem] ===''&& this.allData[changeItem].conLitem ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(this.conSitem[changeItem] !== this.allData[changeItem].conSitem && !(this.conSitem[changeItem] ===''&& this.allData[changeItem].conSitem ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(this.comments1[changeItem] !== this.allData[changeItem].comments1 && !(this.comments1[changeItem] ===''&& this.allData[changeItem].comments1 ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(this.comments2[changeItem] !== this.allData[changeItem].comments2 && !(this.comments2[changeItem] ===''&& this.allData[changeItem].comments2 ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(JSON.stringify(this.planOptimize[changeItem]) !== JSON.stringify(this.allData[changeItem].planOptimize) && !(this.planOptimize[changeItem] ===''&& this.allData[changeItem].planOptimize ===undefined)){
+                   result.push(changeItem);
+                  continue;
+              }
+               else if(this.CRC[changeItem] !== this.allData[changeItem].CRC && !(this.CRC[changeItem] ===''&& this.allData[changeItem].CRC ===undefined)){
+                 if(!isNaN(this.CRC[changeItem]/1)){
+                     result.push(changeItem);
+                      continue;
+                  }else {
+                      alert('输入值不合法');
+                      return false;
+                  }
+              }
+               else if(this.CRS[changeItem] !== this.allData[changeItem].CRS && !(this.CRS[changeItem] ===''&& this.allData[changeItem].CRS ===undefined)){
+                  if(!isNaN(this.CRS[changeItem]/1)){
+                      result.push(changeItem);
+                      continue;
+                  }else {
+                      alert('输入值不合法');
+                      return false;
+                  }
+              }
+               else if(this.CRT[changeItem] !== this.allData[changeItem].CRT && !(this.CRT[changeItem] ===''&& this.allData[changeItem].CRT ===undefined)){
+                    if(!isNaN(this.CRT[changeItem]/1)){
+                        result.push(changeItem);
+                      continue;
+                  }else {
+                      alert('输入值不合法');
+                      return false;
+                  }
+              }
+          }
+          return result;
+      },
+      //合併方法
+      arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+             if(columnIndex === 0){
+                 if(!row.id){
+                     return [1, 3];
+                 }else{
+                     return [1, 1];
+                 }
+
+           }else if(columnIndex === 1||columnIndex === 2){
+                 if(!row.id){
+                     return [0, 0];
+                 }
+             }
+      },
+      //显示title
+      showinput:function (row,index,no) {
+          if(!row.id ){
+              return false;
+          }else{
+              return true;
+          }
+      },
+      //数组去重
+      distinct:function(a, b) {
+            let arr = a.concat(b)
+            let result = []
+            let obj = {}
+            for (let i of arr) {
+                if (!obj[i]) {
+                    result.push(i)
+                    obj[i] = 1
+                }
+            }
+            return result
+        },
+      //数据按需加载
+
+      load:function(tree, treeNode, resolve){
+          //console.log(this.showCustomer,this.showPhase,this.showProject,'yyy');
+          //console.log(tree,treeNode,resolve);
+          //this.reflash[tree.caseid]=treeNode;
+          axios.get("/TestPlanSW/TestPlanSW-edit/?action=getContent&contents="+tree.caseid+"&customer="+this.showCustomer+"&phase="+this.showPhase+"&project="+this.showProject)
+              .then((res) => {
+              for(let i= 0,l=res.data.length;i<l;i++){
+                  let id= res.data[i].id;
+                  this.allData[id] = JSON.parse(JSON.stringify(res.data[i]));
+                     Vue.set(this.TE,id,((res.data[i].TE || res.data[i].TE === 0 )?res.data[i].TE:''));
+                     Vue.set(this.schedule,id,((res.data[i].schedule || res.data[i].schedule === 0 )?res.data[i].schedule:''));
+                     //Vue.set(this.conAitem,id,((res.data[i].conAitem || res.data[i].conAitem === 0 )?res.data[i].conAitem:''));
+                     Vue.set(this.conLitem,id,((res.data[i].conLitem || res.data[i].conLitem === 0 )?res.data[i].conLitem:''));
+                     Vue.set(this.conSitem,id,((res.data[i].conSitem || res.data[i].conSitem === 0 )?res.data[i].conSitem:''));
+                     Vue.set(this.comments1,id,((res.data[i].comments1 || res.data[i].comments1 === 0 )?res.data[i].comments1:''));
+                     Vue.set(this.comments2,id,((res.data[i].comments2 || res.data[i].comments2 === 0 )?res.data[i].comments2:''));
+                     Vue.set(this.CRC,id,((res.data[i].CRC || res.data[i].CRC === 0 )?res.data[i].CRC:''));
+                     Vue.set(this.CRS,id,((res.data[i].CRS || res.data[i].CRS === 0 )?res.data[i].CRS:''));
+                     Vue.set(this.CRT,id,((res.data[i].CRT || res.data[i].CRT === 0 )?res.data[i].CRT:''));
+                     Vue.set(this.FS,id,((res.data[i].FS || res.data[i].FS === 0 )?parseInt(res.data[i].FS):''));
+                     Vue.set(this.conAitem,id,((res.data[i].conAitem || res.data[i].conAitem === 0 )?parseInt(res.data[i].conAitem):''));
+                     Vue.set(this.starttime,id,((res.data[i].starttime || res.data[i].starttime === 0 )?parseInt(res.data[i].starttime):''));
+                     Vue.set(this.BTS,id,((res.data[i].BTS || res.data[i].BTS === 0 )?parseInt(res.data[i].BTS):''));
+                     Vue.set(this.starttime,id,((res.data[i].starttime || res.data[i].starttime === 0 )?parseInt(res.data[i].starttime):''));
+                     Vue.set(this.CAT,id,((res.data[i].CAT || res.data[i].CAT === 0 )?parseInt(res.data[i].CAT):''));
+                     Vue.set(this.CLT,id,((res.data[i].CLT || res.data[i].CLT === 0 )?parseInt(res.data[i].CLT):''));
+                     Vue.set(this.CST,id,((res.data[i].CST || res.data[i].CST === 0 )?parseInt(res.data[i].CST):''));
+                     Vue.set(this.conSitemInAll,id,((res.data[i].conSitemInAll || res.data[i].conSitemInAll === 0 )?parseInt(res.data[i].conSitemInAll):''));
+                     Vue.set(this.proTS,id,((res.data[i].proTS || res.data[i].proTS === 0 )?parseInt(res.data[i].proTS):''));
+                     Vue.set(this.ATO,id,((res.data[i].ATO || res.data[i].ATO === 0 )?parseInt(res.data[i].ATO):''));
+                     Vue.set(this.TFC,id,((res.data[i].TFC || res.data[i].TFC === 0 )?parseInt(res.data[i].TFC):''));
+                     try {
+                      Vue.set(this.planOptimize,id,res.data[i].planOptimize);
+                  }catch (e) {
+                      console.log("error:"+e);
+                  }
+              }
+              resolve(res.data);
+              this.reflash[tree.caseid]=([tree,treeNode,resolve]);
+          })
+              .catch((e) => {
+                  console.log("异常信息："+e);
+                  alert("获取失败");
+              })
+      },
+      showTip(){
+          if( this.showCustomer&&this.showProject&&this.phaseName[this.showPhase]  ){
+             if(!this.canEdit){
+                this.showTips = true ;
+             }else{
+                 this.showTips = false ;
+             }
+          }else{
+              this.showTips = false ;
+          }
+      },
+      //局部初始化公式
+      initData:function(key,change){
+          if(!key){
+              return false;
+          }
+           let caseid_temp =this.allData[key].caseid;
+           let sum =[0,0,0,0,0];
+           //计算数量
+           //[0:未选择,1:V, 2:X, 3:A, 4:L, 5:X]
+           let pl = this.planOptimize[key].length;
+             for(let num=0;num<pl;num++){
+                   switch(this.planOptimize[key][num]){
+                       case "V": sum[0]++;break;
+                       case "X": sum[1]++;break;
+                       case "A": sum[2]++;break;
+                       case "L": sum[3]++;break;
+                       case "S": sum[4]++;break;
+                   }
+               }
+           //AJ
+           this.proTS[key]=sum[0];
+           // U
+           if(change.id === 1){
+               //console.log("U");
+               if (this.FS[key] === 0  && caseid_temp !== 'PSA005_15') {
+                         this.BTS[key]= this.allData[key].basetime;
+                      } else {
+                          this.BTS[key] = 0;
+                      }
+           }
+           // Y
+           if(change.id ===1 || change.id ===2){
+               //console.log("Y");
+               if(caseid_temp.slice(0,3) ==='STA'){
+                   if(caseid_temp === 'STA017'){
+                       this.TFC[key]=this.BTS[key]*5;
+                   }else{
+                       //console.log('sta017');
+                       this.TFC[key]=isNaN(this.BTS[key]*this.starttime[key])?0:(this.BTS[key]*this.starttime[key])/2;
+                   }
+               }else if(caseid_temp.slice(0,3) ==='GMA'){
+                   //console.log('gma');
+                   this.TFC[key]=0;
+               }
+               else if(caseid_temp.toLowerCase() ==='compal_2'){
+                    //console.log('compal2');
+                    this.TFC[key]=this.BTS[key]*5;
+               }
+               else{
+                    //console.log('other');
+                    this.TFC[key]=isNaN(this.BTS[key]*this.starttime[key])?0:this.BTS[key]*this.starttime[key];
+               }
+           }
+           //AB
+           if(change.id ===2 || change.id ===3){
+               //console.log("AB");
+              if(caseid_temp.toLowerCase() ==='uth001_07'||this.conAitem[key] !== 0 ){
+               this.CAT[key]=0;
+           }
+              else if(caseid_temp.toLowerCase() === 'compal_2'||caseid_temp ==='STA017') {
+               this.CAT[key]=this.allData[key].basetimeA*5;
+           }
+              else{
+               this.CAT[key]=isNaN(this.allData[key].basetimeA*this.conAitem[key])?0:this.allData[key].basetimeA*this.conAitem[key];
+           }
+           }
+           //AD
+           if(change.id ===2 || change.id ===3 || change.id ===4){
+             //console.log("AD");
+             this.CLT[key]=(this.allData[key].basetime - this.CAT[key])*sum[3];
+             }
+           //AG
+          if(change.id ===4 || change.id ===1){
+              //console.log("AG");
+              this.conSitemInAll[key]=(isNaN(sum[4]/(sum[0]+sum[4]))?0:sum[4]/(sum[0]+sum[4]))>0.5?1:0;
+          }
+           //AH
+          //console.log("AH");
+          this.CST[key]=(this.TFC[key] - this.CAT[key] - this.CLT[key])*this.conSitemInAll[key];
+          //AK
+          //console.log("AK");
+          this.ATO[key]=((this.TFC[key] - this.CAT[key] - this.CLT[key])-this.CST[key]);
+      },
+     {% comment %} checkUpdateDeep:function (newValue,oldValue) {
+          if( newValue && oldValue){
+              let key  = Object.keys(oldValue);
+              let value =Object.values(oldValue);
+              let newkey = Object.keys(newValue);
+              let newvalue =Object.values(newValue);
+           if(newkey.length===0 && key.length !== 0){
+               return false;
+           }else{
+                //遍历外部
+                for(let val =0,ll=key.length;val<ll;val++){
+                   //遍历内部
+                   for(let num=0 ,l=value[val].length;num<l;num++){
+                       if(value[val][num] !== newvalue[val][num]){
+                           console.log("deep:",key[val]);
+                           return key[val];
+                       }
+                   }
+               }
+           }
+
+          }
+
+      },
+      checkUpdate:function(newValue,oldValue){
+         //console.log("record:",newValue,oldValue);
+         if(oldValue){
+           let key  = Object.keys(oldValue);
+           let value = Object.values(oldValue);
+           let newKey  = Object.keys(newValue);
+           let newvalue = Object.values(newValue);
+           if(key.length === newKey.length){
+             for(let val=0,l=newKey.length;val<l;val++){
+               if(value[val] !== newvalue[val]){
+                   return key[val]
+               }
+           }
+           }else{
+             for(let num = 0,ll = newKey.length;num<ll;num++){
+                 if(key.indexOf(newKey[num])<0){
+                     return newKey[num];
+                 }
+             }
+           }
+         }
+      }{% endcomment %}
+    },
+    //计算公式：根据所填选项，显示数据
+    {% comment %}computed:{
+       //改变新旧值相同的方法，通过计算改变监听的值
+        FS_computed(){
+          return JSON.parse(JSON.stringify(this.FS))
+       },
+        starttime_computed(){
+          return JSON.parse(JSON.stringify(this.starttime))
+       },
+        conAitem_computed(){
+          return JSON.parse(JSON.stringify(this.conAitem))
+       },
+        planOptimize_computed(){
+          return JSON.parse(JSON.stringify(this.planOptimize))
+       },
+        TE_computed(){
+          return JSON.parse(JSON.stringify(this.TE))
+       },
+        schedule_computed(){
+          return JSON.parse(JSON.stringify(this.schedule))
+       },
+        conLitem_computed(){
+          return JSON.parse(JSON.stringify(this.conLitem))
+       },
+        conSitem_computed(){
+          return JSON.parse(JSON.stringify(this.conSitem))
+       },
+        comments1_computed(){
+          return JSON.parse(JSON.stringify(this.comments1))
+       },
+        comments2_computed(){
+          return JSON.parse(JSON.stringify(this.comments2))
+       },
+        CRC_computed(){
+          return JSON.parse(JSON.stringify(this.CRC))
+       },
+        CRS_computed(){
+          return JSON.parse(JSON.stringify(this.CRS))
+       },
+        CRT_computed(){
+          return JSON.parse(JSON.stringify(this.CRT))
+       },
+
+},{% endcomment %}
+    watch: {
+       //關閉customer和project 未輸入提示 以及依據選項產生聯動
+       customer(newValue,oldValue){
+           //關閉錯誤提示
+           this.customerError = false;
+           //清除上次搜索過的記錄
+           this.project='';
+           this.phase='';
+           this.projectvalue=this.selectMsg[newValue];
+           immediate:true
+       },
+       project(newValue,oldValue){
+           //關閉錯誤提示
+           this.projectError = false;
+           //清除上次搜索過的記錄
+           this.phase='';
+           if(this.customer == ''){
+               return false;
+           }
+           //console.log(this.selectMsg['0'][this.customer]);
+           //遍歷所有數據進行查找
+           for(let index =0; index < this.selectMsg[this.customer].length;index++){
+               //查找當前選項
+                if(this.selectMsg[this.customer][index]['project'] == newValue){
+                    this.phasevalue = this.selectMsg[this.customer][index]['phase'];
+                    //Vue.set()
+                    return ;
+                }
+           }
+       },
+       phase(newValue,oldValue){
+           this.phaseError = false;
+       },
+       //监听数组产生出已修改的ID，根据这些ID再判断是否发生更改
+       {% comment %}FS_computed:{
+           handler:function(newValue,oldValue){
+               if(Object.keys(newValue).length ===0 && Object.keys(oldValue).length !==0){
+               }else{
+                 this.initData(this.checkUpdate(newValue,oldValue),{"id":1});
+               }
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       TE_computed:{
+           handler:function(newValue,oldValue){
+
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       schedule_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       starttime_computed:{
+           handler:function(newValue,oldValue){
+                if(Object.keys(newValue).length ===0 && Object.keys(oldValue).length !==0){
+               }else{
+                 this.initData(this.checkUpdate(newValue,oldValue),{"id":2});
+               }
+           },
+           //immediate:true,
+       },
+       conAitem_computed:{
+           handler:function(newValue,oldValue){
+                   if(Object.keys(newValue).length ===0 && Object.keys(oldValue).length !==0){
+               }else{
+                 this.initData(this.checkUpdate(newValue,oldValue),{"id":3});
+               }
+           },
+           //immediate:true,
+       },
+       conLitem_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       comments1_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       conSitem_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       comments2_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       planOptimize_computed:{
+           handler:function(newValue,oldValue){
+                if(Object.keys(newValue).length === 0 && Object.keys(oldValue).length !== 0){
+                 }else{
+                     this.initData(this.checkUpdateDeep(newValue,oldValue),{"id":4});
+                 }
+           },
+           deep:true,
+           //immediate:true,
+       },
+       CRC_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       CRS_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+       CRT_computed:{
+           handler:function(newValue,oldValue){
+         },
+            //Deep:true,
+            //immediate:true,
+        },
+{% endcomment %}
+},
+  })
+</script>
+{% endblock %}

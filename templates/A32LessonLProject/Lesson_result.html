@@ -1,0 +1,731 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_upload{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/ElementUI.css">
+    <link href="/static/css/bouncing.css" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .selectMsg {
+            font-size: 16px;
+            padding: 15px;
+            display: flex;
+        }
+
+        .selectMsg label {
+            font-weight: 800;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .selectMsg label:last-child {
+            margin-left: 15px;
+        }
+
+        .selectMsg #project {
+            margin-left: 0;
+        }
+
+        .el-table .el-table__row.warning-row {
+            background: oldlace !important;
+        }
+
+        .el-table .el-table__row.warning-row:hover {
+            background: oldlace !important;
+        }
+
+        .el-table .info-row {
+            background: #8b968d !important;
+        }
+
+        .el-table .info-row:hover {
+            background: #8b968d !important;
+        }
+
+        .el-table .danger-row {
+            background: #F56C6C !important;
+        }
+
+        .el-table .danger-row:hover {
+            background: #F56C6C !important;
+        }
+
+        .el-table .success-row {
+            background: #a8c97f !important;
+        }
+
+        .el-table .success-row:hover {
+            background-color: #a8c97f !important;
+        }
+
+        .el-table .cell {
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .selectItem {
+            font-size: 20px;
+            font-weight: bold;
+            color: aliceblue;
+        }
+
+        .tips {
+            font-size: 20px;
+            font-weight: bold;
+            color: coral;
+            margin-left: 15px;
+        }
+
+        .el-icon-circle-check, .el-icon-circle-close {
+            font-size: 2.5rem;
+            color: cadetblue;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .inputError {
+            text-align: center;
+            color: crimson;
+            background-color: beige;
+            width: 50%;
+            margin: 10px auto 5px;
+            position: relative;
+        }
+
+        .inputError:before {
+            display: block;
+            content: '';
+            border-width: 8px 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent beige transparent;
+            /* 定位 */
+            position: absolute;
+            left: 50%;
+            top: -16px;
+        }
+
+        {% comment %}解决hover事件的高亮{% endcomment %}
+        .el-table--enable-row-hover .el-table__body tr:hover > td {
+            background-color: transparent !important;
+        }
+
+        {% comment %}解决点击事件出现 current_row class对上面的样式的影响{% endcomment %}
+        .el-table__body tr.current-row > td {
+            background-color: transparent !important;
+        }
+
+        .el-table .el-select .el-input__inner {
+            height: 50px;
+        }
+
+        .eltable-photo {
+            white-space: nowrap;
+            overflow-x: auto;
+            text-overflow: clip
+        }
+
+        .eltable-photo::-webkit-scrollbar { /*滚动条整体样式*/
+            width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+            height: 10px;
+        }
+
+        .eltable-photo::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .eltable-photo::-webkit-scrollbar-track { /*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .eltable-photo .el-image {
+            margin-left: 6px;
+
+        }
+
+        .eltable-photo .el-image:first-child {
+            margin-left: 0px;
+        }
+
+        .el-pagination.is-background {
+            text-align: right;
+            margin: 10px 0 0 0;
+        }
+
+        .el-pagination__total, .el-pagination__jump {
+            color: white;
+        }
+
+        .el-table__fixed {
+            height: 100% !important;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="app">
+        <div class="selectMsg" v-cloak>
+            <div class="customerContent" style="margin-right: 20px" v-cloak>
+                <label style="color: #FFF" for="customer">Customer</label>
+                <el-select v-model="customer" v-cloak>
+                    <el-option v-for="(item,key,index) in selectMsg" :label="key" :value="key">${ key }</el-option>
+                </el-select>
+                <br>
+                <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+            </div>
+            <div class="projectContent" style="margin-right: 10px" v-cloak>
+                <label for="project" v-cloak>專案號</label>
+                <el-select v-model="project" placeholder="請輸入專案號" style="margin-right: 20px;width:200px" clearable
+                           v-cloak>
+                    <el-option v-for="item in projectvalue" :label="item.project" :value="item.project"></el-option>
+                </el-select>
+                <br>
+                <div class="inputError" v-cloak v-show="projectError">專案號不能為空</div>
+            </div>
+            <div class="categoryContent">
+                <label for="Category" v-cloak>Category</label>
+                <el-select v-model="Category" style="margin-right: 20px;width:200px" clearable v-cloak>
+                    <el-option v-for="item in selectCategory" :label="item.Category" :value="item.Category"></el-option>
+                </el-select>
+            </div>
+            <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
+        </div>
+        <div class="tableAround" v-cloak>
+            {% csrf_token %}
+            <!--數據表-->
+            <span class="selectItem" v-cloak v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject }/${ showCategory } <span
+                    v-if="!canEdit^tableData" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+            <el-table height="700" border :data="tableData.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
+                      id="out-table" ref="tableRef" style="min-width: 100%;border-radius: 10px"
+                      :cell-style="cellStyle"
+                      row-click="rowClick"
+                      @sort-change='sortChange'
+                      :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }">
+                <el-table-column prop="Category" label="Category" max-width="220" sortable='custom'
+                                 fixed></el-table-column>
+                <el-table-column prop="object" label="Object" sortable='custom' fixed></el-table-column>
+                <el-table-column prop="symptom" label="Symptom" sortable='custom' fixed></el-table-column>
+                <el-table-column prop="Reproduce_Steps" label="Reproduce Steps" style="white-space: pre-line;"
+                                 width="220" sortable='custom'></el-table-column>
+                <el-table-column prop="root_cause" label="Root_Cause" style="white-space: pre-line;" width="220"
+                                 sortable='custom'></el-table-column>
+                <el-table-column prop="solution" label="Solution" style="white-space: pre-line;" width="220"
+                                 sortable='custom' label="LessonLearn ID"></el-table-column>
+                <el-table-column prop="action" label="Action" style="white-space: pre-line;" width="220"
+                                 sortable='custom' label="LessonLearn ID"></el-table-column>
+                <el-table-column prop="photo" label="Photo" class="eltable-photo">
+                    <template scope="scope">
+                        <div class="eltable-photo">
+                            <el-image v-for="(item) in scope.row.photo" :src="item" style="width: 100px; height: 100px;"
+                                      :preview-src-list="scope.row.photo" lazy="true"></el-image>
+                        </div>
+                        <div v-if="scope.row.file[0]">
+                            <a v-for="(item) in scope.row.file" v-bind:href="item"><img
+                                    src="/static/src/back/document_save_2_24px_539656_easyicon.net.png"></a>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="結果" prop="id" sortable='custom' fixed="right">
+                    <template slot-scope="scope">
+                        <span v-if="!scope.row.isSet">${ scope.row.result }</span>
+                        <el-select v-if="scope.row.isSet" v-model="result[scope.row['id']]">
+                            <el-option v-for="item in options" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="備註" sortable='custom' fixed="right">
+                    <template slot-scope="scope">
+                        <span v-if="!scope.row.isSet">${ scope.row.comment }</span>
+                        <el-input v-if="scope.row.isSet" placeholder="请输入内容" type="textarea"
+                                  v-model="comment[scope.row['id']]" clearable></el-input>
+                    </template>
+                </el-table-column>
+                <!--結果上傳 -->
+                <el-table-column label="提交修改結果" v-if="canEdit" v-cloak fixed="right">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="primary" v-if="!scope.row.isSet"
+                                   @click="edit(scope.row,scope.row['id'])">编辑
+                        </el-button>
+                        <el-button size="mini" type="success" v-if="scope.row.isSet"
+                                   @click="submit(scope.row['id'],scope.row)">提交
+                        </el-button>
+                        <br/>
+                        <el-button size="mini" type="primary" v-if="scope.row.isSet"
+                                   @click="cancel(scope.row['id'],scope.row)">取消
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[20, 50, 100, 150]"
+                :page-size="50"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="tableData.length"
+                :hide-on-single-page="!tableData.length">
+
+        </el-pagination>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                return {
+                    comment: [],
+                    result: [],
+                    lesson_id: [],
+                    options: [{
+                        label: "",
+                        value: ""
+                    }, {
+                        label: "Pass",
+                        value: "Pass"
+                    }, {
+                        label: "Fail",
+                        value: "Fail"
+                    }, {
+                        label: "N/S",
+                        value: "N/S"
+                    }, {
+                        label: "N/A",
+                        value: "N/A"
+                    },
+                        {
+                            label: "N/P",
+                            value: "N/P"
+                        },
+                        // "Pass","Fail","Not Support","N/A"
+                    ],
+                    title: ["object", "symptom", "root_cause", "solution", "action"],
+                    tableData: [],
+                    search: '',
+                    customer: '',
+                    project: '',
+                    selectCategory: [],
+                    Category: '',
+                    selectMsg: [],
+                    projectvalue: [],
+                    phasevalue: [],
+                    projectError: false,
+                    customerError: false,
+                    showCustomer: '',
+                    showProject: '',
+                    showCategory: '',
+                    currentPage: "1",
+                    pageSize: 50,
+                    //权限管理
+                    canEdit: false,
+
+                }
+            },
+            mounted() {
+                //input 初始化
+                this.getdata("get");
+                let _this = this;
+                window.onbeforeunload = function () {
+                    let result = _this.checkChangedData();
+                    if (result) {
+                        return false;
+                    }
+                }
+                //this.inputNum();
+
+            },
+            methods: {
+                /*
+                *  获取数据的封装函数 ：引用了axios 和 qs 的js文件
+                *  接收数据的规则：
+                *  selectMsg : 客户别、机种名、phase
+                *  Content :{
+                *   result   ：测试结果 ,
+                *   comment  : 备注信息 ，
+                *  }
+                * */
+                {% comment %}changeCustomer:function () {
+                  if(this.$refs.Customer.value ==""){
+                       this.selectProject=[""];
+                       return false;
+                  }
+                  this.selectProject=this.selectMsg[this.$refs.Customer.value];
+                  this.selectedProject="";
+                  console.log(this.selectProject,'yyyy');
+              },{% endcomment %}
+                sortChange: function (column) {
+                    console.log(column.prop, column.order, column, "order")
+                    this.currentPage = 1 // return to the first page after sorting
+                    if (column.prop === 'Category') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'object') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'symptom') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'Reproduce_Steps') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'root_cause') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'solution') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'action') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'id') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    }
+                    else {
+                        this.dataList = this.tableData.sort(this.sortFun("Category", column.order === 'ascending'));
+                        console.log(this.dataList, "Category");
+                    }
+
+                    this.showed_data = this.tableData.slice(0, this.pageSize) // 排序完显示到第一页
+                    console.log('Finished');
+                    console.log(this.showed_data);
+
+                },
+                //排序方法
+                sortFun: function (attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+                    if (rev == undefined) {
+                        rev = 1;
+                    } else {
+                        rev = (rev) ? 1 : -1;
+                    }
+                    return function (a, b) {
+                        a = a[attr];
+                        b = b[attr];
+                        if (a < b) {
+                            return rev * -1;
+                        }
+                        if (a > b) {
+                            return rev * 1;
+                        }
+                        return 0;
+                    }
+                },
+                getdata: function (e) {
+                    console.log("getdata begin");
+                    axios.get("/A32LessonLProject/Lesson_ProjectResult/?action=" + e + "&csrfmiddlewaretoken=" + $("[name='csrfmiddlewaretoken']").val() + "", {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        if (res.data['selectMsg']) {
+                            this.selectMsg = res.data['selectMsg'];
+                        }
+                        this.selectCategory = res.data.addselect;
+                        this.tableData = res.data['content'] ? res.data['content'] : [];
+                        this.$nextTick(() => {
+                            this.$refs.tableRef.doLayout()
+                        })
+                        this.tableData = this.tableData.sort(this.sortFun("Category", 'ascending'));//用sort-change方法对分页后台排序时，默认排序列;
+                        this.canEdit = res.data['canEdit'] ? true : false;
+                        this.comment.length = this.tableData.length;
+                        this.result.length = this.tableData.length;
+                        for (let num = 0; num < this.tableData.length; num++) {
+                            //生成表格中的序列号
+                            this.lesson_id[num] = this.tableData[num]["len_id"];
+                            this.tableData[num]["id"] = num;
+                            //编辑按钮的flag
+                            Vue.set(this.tableData[num], 'isSet', 0);
+                        }
+                        this.showCustomer = this.customer;
+                        this.showProject = this.project;
+                        this.showCategory = this.Category;
+
+
+                    });
+
+                },
+                Search: function () {
+                    let _this = this;
+                    //customer和project和phase未填
+                    if (this.customer === '') {
+                        //alert("客戶別未選擇");
+                        this.customerError = true;
+                        return false;
+                    }
+                    ;
+                    if (this.project === '') {
+                        //alert("專案號未填寫");
+                        this.projectError = true;
+                        return false;
+                    }
+                    ;
+                    let parameter = "search&customer=" + this.customer + "&project=" + this.project + "&Category=" + this.Category;
+                    // 上传流程
+                    // 先检查是否为第一次查询
+                    if (this.showCustomer || this.showProject) {
+                        // 判断不为第一次查询
+                        // 然后判断是否有未更改的值
+                        let result = this.checkChangedData();
+                        if (!result) {
+                            //都已更新完毕，没有未处理的值
+                            try {
+                                this.getdata(parameter);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        } else {
+                            //当前页面存在未保存的值，需向用户确认
+                            var warning = confirm("檢測到當前填寫的部分數據未保存，請及時點擊保存，以免數據丟失 是否繼續搜索?");
+                            if (warning) {
+                                this.getdata(parameter);
+                            } else {
+                                //取消動作
+                                return false;
+                            }
+                        }
+                    } else {
+                        // 判断为第一次查询
+                        this.getdata(parameter);
+                    }
+
+                    {% comment %}this.getdata(parameter){% endcomment %}
+                },
+                cellStyle({row, column, rowIndex, columnIndex}) {
+                    if (columnIndex === 8 && row.result === 'Pass') {
+                        return {
+                            background: '#a8c97f'
+                        }
+                    }
+                    if (columnIndex === 8 && row.result === 'Fail') {
+                        return {
+                            background: '#F56C6C'
+                        }
+                    }
+                    if (columnIndex === 8 && (row.result === 'N/S' || row.result === 'NS')) {
+                        return {
+                            background: '#8b968d'
+                        }
+                    }
+                    if (columnIndex === 8 && (row.result === 'N/A' || row.result === 'NA')) {
+                        return {
+                            background: 'oldlace'
+                        }
+                    }
+
+                },
+                setCurrent: function (row) {
+                    //this.$refs.singleTable.setCurrentRow(row);
+                },
+                handleCurrentChange: function (val) {
+                    //this.currentRow = val;
+                    console.log(val);
+                },
+                /*  提交功能
+                 *  上传信息：
+                 *          "lesson_id":this.lesson_id[index], --- 该项数据在数据库的序列号
+                             "comment":this.comment[index],    ---  结果备注信息
+                             "result":this.result[index],      ---  测试结果
+                             "customer":this.showCustomer,     ---  客户别
+                             "project":this.showProject,       ---  机种名
+                             "phase":this.showPhase            ---   phase
+                     返回信息：
+                             {"msg"：400 ,"content" :"修改成功"}--- 成功返回
+                             {"msg"：401 ,"content" :"修改失败"}--- 返回失败
+                 */
+                submit: function (id, row) {
+                    if (this.result[id] == "") {
+                        alert("測試結果未填入");
+                        return false;
+                    }
+                    if (this.customer == "") {
+                        this.customerError = true;
+                        return false;
+                    }
+                    if (this.project == "") {
+                        this.projectError = true;
+                        return false;
+                    }
+                    //结果未发生改变
+                    if (this.result[id] === row.result && this.comment[id] === row.comment) {
+                        this.$message({
+                            type: "info",
+                            message: "结果未发生变化"
+                        });
+                        this.cancel(id, row);
+                        return false;
+                    }
+
+                    let data = {
+                        "PostKey": "Edit",
+                        "lesson_id": this.lesson_id[id],
+                        "comment": this.comment[id],
+                        "result": this.result[id],
+                        "customer": this.showCustomer,
+                        "project": this.showProject,
+                        "Category": this.showCategory,
+                    }
+                    axios.post("/A32LessonLProject/Lesson_ProjectResult/", Qs.stringify(data), {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        if (res.data.msg === 400) {
+                            row.result = this.result[id];
+                            row.comment = this.comment[id];
+                            row.isSet = 0;
+                            this.$message({
+                                message: res.data['content'],
+                                type: 'success'
+                            })
+                        } else {
+                            this.$message({
+                                message: res.data['content'],
+                                showClose: true,
+                                type: 'error',
+                                duration: 5000,
+                            })
+                        }
+                    }).catch((err) => {
+                        this.$message({
+                            message: err,
+                            type: 'error',
+                            duration: 5000,
+                        })
+                    });
+                },
+                //取消修改
+                cancel: function (id, row) {
+                    this.result[id] = '';
+                    this.comment[id] = '';
+                    row.isSet = 0;
+                },
+                //打开编辑功能
+                edit: function (row, index) {
+                    //打开改行的编辑按钮
+                    this.result[index] = row.result;
+                    this.comment[index] = row.comment;
+                    row.isSet = 1;
+                },
+                filters: function () {
+                    if (this.search) {
+                        return this.tableData.filter(this.tableData['object'].toLowerCase().includes(this.search.toLowerCase()) ||
+                            this.tableData['symptom'].toLowerCase().includes(this.search.toLowerCase()) ||
+                            this.tableData['root_cause'].toLowerCase().includes(this.search.toLowerCase()) ||
+                            this.tableData['solution'].toLowerCase().includes(this.search.toLowerCase()) ||
+                            this.tableData['action'].toLowerCase().includes(this.search.toLowerCase()));
+                    }
+                    else {
+                        return this.tableData
+                    }
+
+                },
+                //導出表格
+                exportExcel: function () {
+                    /* 从表生成工作簿对象 */
+                    var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+                    /* 获取二进制字符串作为输出 */
+                    var wbout = XLSX.write(wb, {
+                        bookType: "xlsx",
+                        bookSST: true,
+                        type: "array"
+                    });
+                    try {
+                        saveAs(
+                            //Blob 对象表示一个不可变、原始数据的类文件对象。
+                            //Blob 表示的不一定是JavaScript原生格式的数据。
+                            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                            new Blob([wbout], {type: "application/octet-stream"}),
+                            //设置导出文件名称
+                            "sheetjs.xlsx"
+                        );
+                    } catch (e) {
+                        if (typeof console !== "undefined") console.log(e, wbout);
+                    }
+                    return wbout;
+                },
+                //检查是否发生数据改变
+                checkChangedData() {
+                    for (let i = 0, length = this.tableData.length; i < length; i++) {
+                        //如果有存在正在修改的數據，返回true
+                        if (this.tableData[i].isSet === 1) {
+                            return true;
+                        }
+                    }
+                    //否則返回false
+                    return false;
+                },
+                //分页
+                handleSizeChange(val) {
+                    this.pageSize = val;
+                },
+                handleCurrentChange(val) {
+                    this.currentPage = val;
+                }
+
+            },
+            watch: {
+                //關閉customer和project 未輸入提示 以及依據選項產生聯動
+                customer(newValue, oldValue) {
+                    //關閉錯誤提示
+                    this.customerError = false;
+                    //清除上次搜索過的記錄
+                    this.project = '';
+                    this.phase = '';
+                    console.log(this.selectMsg);
+                    this.projectvalue = this.selectMsg[newValue];
+                    //Vue.$set(this.projectvalue,this.selectMsg['0'][newValue]);
+                    // console.log(this.selectMsg,newValue,this.projectvalue);
+                },
+                project(newValue, oldValue) {
+                    //關閉錯誤提示
+                    this.projectError = false;
+                    //清除上次搜索過的記錄
+                    if (this.customer == '') {
+                        return false;
+                    }
+                    //遍歷所有數據進行查找
+                    for (let index = 0; index < this.selectMsg[this.customer].length; index++) {
+                        //查找當前選項
+                        if (this.selectMsg[this.customer][index]['project'] == newValue) {
+                            return;
+                        }
+                    }
+                },
+            },
+        })
+    </script>
+{% endblock %}

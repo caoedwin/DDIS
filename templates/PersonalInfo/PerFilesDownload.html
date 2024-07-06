@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Index{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="/static/css/ElementUI.css">
+ <link rel="stylesheet" href="/static/css/down_base.css">
+ <link rel="stylesheet" href="/static/css/down_index.css">
+{% endblock %}
+{% block content1 %}
+{% endblock %}
+{% block content %}
+<div id="app01">
+
+    <el-button type="success" :plain="true" @click="Import">同步DCT专案信息</el-button>
+    <div class="container-fluid ">
+	<div class="container case">
+		<div class="row">
+		  <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/Bouncing.xlsx">
+		  	<div class="case_position">
+		  		 <img src="/static/src/gallery_01.jpg" alt="...">
+			      <div class="caption">
+			        <p class="name" >Bouncing</p>
+			        <p class="time" >点击下载模板</p>
+{#                    <a chref="/Bouncing/Bouncing-upload/">上传</a>#}
+			      </div>
+		  	</div>
+		    </a>
+		  </div>
+		  <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/CDM.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_02.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >Cover Deformation Meaure</p>
+                <p class="time" >点击下载模板</p>
+
+		      </div>
+		    </div>
+		    </a>
+		  </div>
+		  <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/CQM.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_03.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >CQM</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+          <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/DriverList.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_04.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >DriverList</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+          <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/MQM.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_05.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >MQM</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+          <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/Package_G_Value.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_06.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >Package G Value</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+          <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/ToolList.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_07.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >ToolList</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+        <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/TestPlanME.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_08.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" >TestPlanME</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+        <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/TestPlanSW.xlsm">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_09.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" style="color: #D6D6D6; font-size: 20px">TestPlanSW</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+          <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/TestPlanAIO.xlsm">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_09.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" style="color: #D6D6D6; font-size: 20px">TestPlanSW-AIO</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+          <div class="col-sm-6 col-md-3 case_img">
+		  	<a href="/static/src/modelfiles/INVGanttChart.xlsx">
+		  	<div class="case_position">
+		      <img src="/static/src/gallery_10.jpg" alt="...">
+		      <div class="caption">
+		        <p class="name" style="color: #D6D6D6; font-size: 20px">INV Gantt</p>
+                <p class="time" >点击下载模板</p>
+		      </div>
+		     </div>
+		    </a>
+		  </div>
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script  src="/static/js/Element/table.js"></script>
+    <script  src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script  src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/date-picker.js"></script>
+    <script src="/static/js/Element/dialog.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script src="/static/js/Element/tooltip.js"></script>
+    <script src="/static/js/Element/pagination.js"></script>
+    <script type="text/babel">
+      new Vue ({
+          el: "#app01",
+          delimiters: ['${', '}'],
+
+          methods: {
+              Import() {
+                  const h = this.$createElement;
+                  axios.get("/FilesDownload/?action=first" ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                        }).then((res) => {
+                            console.log(res.data)
+                            if (res.data.result === 1){
+                                this.$message({
+                                      message: h('p', null, [
+                                          h('span', null, '同步成功 '),
+                                          h('i', {style: 'color: teal'}, '如还没有专案信息，请检查DCT是否有录入该专案或录入DDIS的专案名是否与DCT的同名')
+                                      ]),
+                                      type: 'success'
+                                  })
+                            }
+                            else{
+                                this.$message({
+                                      message: h('p', null, [
+                                          h('span', null, '同步失败 '),
+                                          h('i', {style: 'color: teal'}, '可能是无法连接到DCT服务器')
+                                      ]),
+                                      type: 'warning'
+                                  })
+                                }
+                        })
+              }
+          }
+
+      })
+    </script>
+{% endblock %}

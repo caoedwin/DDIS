@@ -1,0 +1,1707 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}TestPlan_AIO_Search{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+ <link href="/static/css/bouncing.css" rel="stylesheet">
+ <link href="/static/css/bouncing_edit.css" rel="stylesheet">
+<style>
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 70%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
+
+}
+.showDataArea .container-echart{
+   text-align: center;
+   width: 50%;
+   background-color: #F5F7FA;
+   padding: 5px;
+   border: 1px solid #fff5d4;
+}
+.showDataArea #main {
+
+}
+.showDataArea .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
+     .dashboard{
+    height: 400px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+     flex-wrap: nowrap;
+}
+.dashboard #myChart1 {
+    height: 100%;
+    width: 50%;
+}
+.dashboard #myChart2 {
+    height: 100%;
+    width: 50%;
+}
+[v-cloak]{
+  display: none;
+}
+@media screen and (min-width: 1403px )and ( max-width: 1666px){
+    .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+     .selectMsg .el-select{
+       width: 150px;
+   }
+}
+@media screen and (min-width: 1283px ) and ( max-width: 1402px) {
+   .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+   .selectMsg .el-select{
+       width: 120px;
+   }
+   .selectMsg .fileUploadContent{
+       {#margin: 15px 0 0 0 ;#}
+       display: inline-flex;
+       display: -webkit-inline-flex
+   }
+}
+@media screen and (min-width:1020px ) and (max-width: 1282px){
+      .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .selectMsg{
+        flex-wrap: nowrap;
+    }
+   {% comment %}  .selectMsg .el-select{
+       width: 120px;
+     }{% endcomment %}
+     .customerContent,.projectContent,.phaseContent{
+        width: 120px;
+        text-align: center
+    }
+      .selectMsg .Button{
+        margin: 34px 15px 0 0 ;
+    }
+}
+@media screen and (min-width:709px ) and (max-width: 1019px){
+    .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 120px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 10px 0 0 ;
+    }
+    #app .selectMsg{
+        flex-wrap: nowrap;
+    }
+}
+@media screen  and (max-width: 708px){
+    .customerContent .el-select{
+        display: flex;
+    }
+    .projectContent {
+        margin-left: 0;
+    }
+    #app .selectMsg .el-select {
+        padding-right: 0;
+    }
+     .container-fluid .row{
+          flex-wrap: nowrap;
+      }
+    .customerContent,.projectContent,.phaseContent{
+        width: 140px;
+        text-align: center
+    }
+    .selectMsg .Button{
+        margin: 34px 8px 0 0 ;
+    }
+    #app .selectMsg{
+        flex-wrap: nowrap;
+    }
+}
+  .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+      color:aliceblue;
+  }
+  .selectMsg label:last-child{
+     margin-left: 15px;
+   }
+  .selectMsg #project{
+      margin-left: 0;
+  }
+  .selectMsg .Button{
+      height:40px;
+  }
+  .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+      width: auto;
+  }
+  el-table__header .is-group.has-gutter .cell{
+      word-break: break-word;
+  }
+  el-table__header .is-group.has-gutter tr th{
+      min-width: 120px;
+  }
+  .el-table .warning-row {
+    background: oldlace;
+  }
+  .el-table .info-row {
+    background: #909399;
+  }
+  .el-table .title-row {
+    background: #08d9d6;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped.title-row td{
+    background: #08d9d6
+  }
+  /* NO.1 */
+   .el-table--striped .el-table__body tr.el-table__row--striped.title-row td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+  }
+   .el-table__row--level-0 td:first-child .cell{
+      text-align: left;
+      padding-left: 30px;
+   }
+   .el-table__indent, .el-table__placeholder{
+       display: none;
+   }
+   .select_inner {
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #DCDFE6;
+    {% comment %}-webkit-box-sizing: border-box;{% endcomment %}
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 12px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+   }
+  .el-table .danger-row {
+    background: #F56C6C;
+  }
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .el-table  .cell{
+     text-align: center;
+ }
+  .headerStyle{
+       background-color:#fafafa;
+       font-weight:800;
+       {% comment %}border-bottom:1px solid rgb(103, 194, 58);{% endcomment %}
+  }
+  .headerStyle .el-icon-info{
+       color: cornflowerblue;
+  }
+  .headerStyle i{
+      padding:6px;
+  }
+  .tooltipsFont {
+      font-weight: bold;
+      color:black;
+      font-size: 12px;
+  }
+
+ .el-table__fixed,
+.el-table__fixed-right {
+  height: 100% !important;
+}
+  .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+   .selecttem{
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+}
+  .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+  .invalidInput .el-input__inner{
+     border: 1px solid red;
+     color:red ;
+}
+  .invalidNum{
+      color:red;
+  }
+  .projectContent{
+     margin-left: 20px;
+}
+  .phaseContent{
+    margin-right: 20px;
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 40px;
+}
+  .fileUploadContent input{
+    line-height: 40px;
+    height: 40px;
+    border-radius: 10px;
+    width: 210px;
+    color: antiquewhite;
+}
+  .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}  /* NO.2 */
+  /* input clear */
+  .el-input.el-input--suffix:hover .inputClear{
+      visibility: visible;
+  }
+  .inputClear{
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      visibility:hidden;
+  }
+  .el-pagination.is-background{
+      text-align: right;
+      margin: 10px 0 0 0;
+  }
+
+  .clearShow{
+      visibility: visible;
+  }
+  .pass{
+    background-color: aquamarine;
+}
+  .fail{
+    background-color: crimson;
+    color:antiquewhite;
+}
+ .el-table__fixed-footer-wrapper td .cell{
+     word-break: break-word;
+ }
+ .el-table__footer{
+     font-weight: 800;
+ }
+.el-table__fixed-footer-wrapper tbody td {
+    border-top: 1px solid #EBEEF5;
+    background-color: #F5F7FA;
+    color: #606266;
+    top: 17px;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  {#text-align: center;#}
+  color: #2c3e50;
+  margin-top: 60px;
+}
+.talbody{
+  position: relative;
+}
+.side{
+  position: fixed;
+  top: 0px;
+  width:200px;
+  height:130vh;
+  background: #545c64;
+}
+.content{
+  position: absolute;
+  top: 0px;
+  left: 200px;
+  bottom: 0px;
+  right: 0px;
+}
+.table{
+  overflow: auto;
+}
+p a{
+  color: #3fa1e8;
+  cursor: pointer;
+}
+.out_box{
+    height:15px;
+    width: calc(100% - 280px);
+    background:#dfdfdf;
+    z-index: 9;
+    position: fixed;
+    left: 225px;
+    bottom: 0px;
+}
+.in_box{
+    position: absolute;
+    z-index: 9;
+    left:0px;
+    height:15px;
+    background:#bebdbd;
+    cursor: pointer
+}
+.in_box:hover{
+    background:#959595;
+}
+.el-icon-question:before {
+    color:yellowgreen;
+    font-size: xx-large;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+   <div class="row" style="white-space: nowrap;">
+                    <div class="col-md-2">
+                        <label style="color: #FFF" for="Customer1">客戶別:</label>
+                       <select id="Customer1" ref="Customer1"   v-model="selectedCustomer1" style="height:30px;width:90px;border-radius:5px 5px 5px 5px;">
+                           <option v-for="(item,key,index) in selectItem1" >${ item }</option>
+                       </select>
+                        <div class="inputError" v-cloak v-show="customerError1">客戶別未選擇</div>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;"  @click="searchalert1">Search</el-button>
+                    </div>
+       <div class="col-md-1">
+           <el-tooltip class="item" effect="dark" content="搜索單一機種測試總工時及節省工時" placement="right"><i class="el-icon-question"></i></el-tooltip>
+       </div>
+   </div>
+   <el-dialog title="机种列表" :visible.sync="setproject">
+        <el-table stripe border :default-sort = "{prop: 'SS', order: 'descending'}" height="500" :data="proinfomation" @row-click="selectpro"
+        v-loading="tableloading"
+        element-loading-text="數據更新中，請稍後"
+        border>
+            <el-table-column property="YEAR" label="YEAR" width="90"sortable></el-table-column>
+            <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+            <el-table-column property="PrjEngCode1" label="PRJENGCODE1" width="140" sortable></el-table-column>
+            <el-table-column property="PrjEngCode2" label="PRJENGCODE2" width="140" sortable></el-table-column>
+            <el-table-column property="PROJECT" label="PROJECT" width="200"></el-table-column>
+            <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+            <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+            <el-table-column property="PLATFORM" label="PLATFORM" width="200"></el-table-column>
+            <el-table-column property="VGA" label="VGA" width="110"></el-table-column>
+            <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+            <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+            <el-table-column property="LD" label="LD" width="110"></el-table-column>
+            <el-table-column property="DQA PL" label="DQA PL" width="110"></el-table-column>
+            <el-table-column property="TYPE" label="TYPE" width="110"></el-table-column>
+            <el-table-column property="PPA" label="PPA" width="110"></el-table-column>
+            <el-table-column property="PQE" label="PQE" width="110"></el-table-column>
+        </el-table>
+   </el-dialog>
+        <span class="selectItem" v-cloak v-if="showCustomer1&&showProject1">當前信息：${ showCustomer1 }/${ showProject1 }</span>
+        <div class="showDataArea" v-if="Sum" v-cloak>
+      <!--柱状图-->
+      <div class="container-echart"v-cloak>
+          <div class="Quatity" id="main" style="height:400px;"></div>
+      </div>
+      <!--regression cycle  and Dashboard-->
+      <div class="container-echart"v-cloak>
+          <div class="Quatity" id="main1" style="height:400px;"></div>
+          </div>
+      </div>
+    <hr/>
+
+   <div class="selectMsg" >
+        <div class="customerContent">
+        <label for="customer" v-cloak>客戶別 </label>
+         <el-select  v-model="customer" ref="customer" width="80%" >
+                <el-option v-for="item in customerOptions" :label="item.label" :value="item.value"  ></el-option>
+          </el-select><br>
+          <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+        </div>
+        <div class="projectContent" >
+       <label for="project" v-cloak>專案號</label>
+            <el-select  v-model="project" ref="project" placeholder="請輸入專案號" style="margin-right: 20px" width="80%" clearable >
+                <el-option v-for="item in projectvalue"  :label="item.project" :value="item.project" ></el-option>
+          </el-select><br>
+          <div class="inputError" v-cloak  v-show="projectError">專案號不能為空</div>
+        </div>
+        <div class="phaseContent" >
+             <label for="phase" v-cloak>Phase</label>
+            <el-select v-model="phase" ref="phase" width="80%" id="phase" >
+                <el-option v-for="(item,index) in phasevalue" :key="index" :label="phaseName[item]" :value="phasevalue[index]"></el-option>
+            </el-select><br>
+            <div class="inputError" v-cloak  v-show="phaseError">phase號不能為空</div>
+        </div>
+        <el-button :loading="elbuttonloading1" @click="find" v-cloak type="primary" class="Button">查找</el-button>
+        <el-button @click="exportExcel" v-cloak type="success" class="Button">導出</el-button>
+   </div>
+
+    <div class="tableAround" v-cloak >
+  {% csrf_token %}
+ <!--數據表-->
+      <el-dialog :visible.sync="settable" width="70%">
+ <!--提示信息-->
+  <span class="selecttem" v-cloak  v-if="showCustomer&&showProject&&phaseName[showPhase]">當前表格信息：${ showCustomer }/${ showProject }/${ phaseName[showPhase]}/${ showCategory } <span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span><el-button type="primary" @click="exportExcelsub" style="float: right" v-cloak>導出</el-button></span>
+  <el-table  height="700" border :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
+    ref="multipleTable"
+    tooltip-effect="dark"
+    stripe
+    id="out-table"
+    style="border-radius: 10px;
+    word-break: keep-all"
+    :row-class-name="tableRowClassName"
+    :header-cell-style="{
+       'background-color':'#fafafa',
+       'font-weight':'800',
+       'border-bottom':'1px solid rgb(103, 194, 58)'
+    }"
+      element-loading-text="拼命加载中"
+	  element-loading-spinner="el-icon-loading"
+	  element-loading-background="rgba(0, 0, 0, 0.8)"
+  v-loading="tableloading2"
+        element-loading-text="數據更新中，請稍後"
+        border>
+      <!--無需編輯-->
+      <el-table-column width="45" label="No."  prop="index"  fixed></el-table-column>
+      <el-table-column width="120" label="Category" prop="Category" fixed></el-table-column>
+      <!--:key="Math.random()" => 为了解决数据错位 即前一列覆盖掉后一列 -->
+      <el-table-column width="120" label="Test Title" prop="Test_Title" fixed   :key="Math.random()" v-cloak></el-table-column>
+      <el-table-column width="120" label="Sub Test Title" prop="Sub_Test_Title"></el-table-column>
+            <el-table-column width="160" label="Test Item" prop="Test_Item"   v-cloak></el-table-column>
+      <el-table-column width="120" label="Priority" prop="Priority"></el-table-column>
+      <el-table-column width="120" label="Release Date"prop="Release_Date"></el-table-column>
+      <el-table-column width="120" label="Owner" prop="Owner"></el-table-column>
+      <!--:key="1" => 为了解决数据错位 （即前一列覆盖掉后一列）且使用Math.random()会产生抖动 ，换成固定值则正常 -->
+      <el-table-column label="Actual Time">
+          <el-table-column width="130"   label="Total Time(A+U)"  :key="1" >
+              <template slot-scope="scope">
+                  <span  v-cloak >${ scope.row.Attend_Time + scope.row.Unattend_Time }</span>
+              </template>
+          </el-table-column>
+          <el-table-column width="120"  label="Attend Time" prop="Attend_Time"></el-table-column>
+          <el-table-column width="120"  label="Unattend Time" prop="Unattend_Time"></el-table-column>
+          <el-table-column width="120"  label="Automation" prop="Automation"></el-table-column>
+      </el-table-column>
+      <el-table-column label="DQMS Test Plan">
+          <el-table-column width="130"  label="Attend Time(hrs)" prop="Attend_Time_hrs"></el-table-column>
+          <el-table-column width="130"  label="Unattend Time(hrs)" prop="Unattend_Time_hrs"></el-table-column>
+      </el-table-column>
+      <el-table-column width="110"  label="Test Units/Config" prop="TUC"></el-table-column>
+      <el-table-column width="120"  label="Smart Item" prop="Smart_Item"></el-table-column>
+      <el-table-column label="AIO SW Test Plan Matrix for Planning">
+          <el-table-column width="90"  label="Cusumer" prop="Cusumer"></el-table-column>
+          <el-table-column width="110"  label="Commercial" prop="Commercial"></el-table-column>
+          <el-table-column   label="SDV" prop="SDV"></el-table-column>
+          <el-table-column   label="SIT" prop="SIT"></el-table-column>
+          <el-table-column width="90"  label="Coverage" prop="Coverage"></el-table-column>
+      </el-table-column>
+      <el-table-column width="120"  label="Feature Support" prop="FS"></el-table-column>
+      <el-table-column width="120"  label="Base Time-Support" prop="BTS"></el-table-column>
+      <el-table-column width="120" prop="TE">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫工程師名" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>TE</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="schedule">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="填寫該項測試的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Schedule</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" prop="NUMX" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="打X以外的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-all test units</span>
+              </el-tooltip>
+          </template>
+
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120" prop="NUMX_TIME" >
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="總測試時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-all test time</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="NUMA">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="打A的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Automation Item</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="CAT">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="乘以自動化取代的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Automation time</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="NUML">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="打L的SKU數量" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Leverage Item</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="CLT">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage測項的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Leverage time</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+     <el-table-column width="120"  prop="conSitemInAll">
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Smart 的百分比" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart item占總case比例</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="CST">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="如果此项测试可以smart test，则打V 的SKU数量*测试机台数/ 2" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Smart time</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="180" prop="comments">
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage/Smart 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Comments</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <!--無需編輯-->
+      <el-table-column width="120"  label="Project test SKU-optimize" prop="proTS">
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Stress,Mobile phone nearing(CPI test)機台特殊性，需手動輸入" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Project test SKU-optimize</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="120"  label="Attend time-optimize" prop="ATO">
+      </el-table-column>
+      <!--需編輯-->
+      <el-table-column min-width="220" >
+       <template slot="header" slot-scope="scope">
+              <el-tooltip  placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <div slot="content">通過左側Leverage,Reduction,Automation之後合理挑選TestSKU並生成的Test plan<br/>V means: need test;X means:no need test<br/>A means: Automation;L means:Leverage;S means:Smart</div>
+                  <span><i class="el-icon-info"></i>Planning after optimize</span>
+              </el-tooltip>
+          </template>
+       <el-table-column  v-for="(item,key,index) in SKUNum" v-bind:key="item.skuNo" :label="item.skuNo" >
+           <el-table-column  :label="item.VGA">
+                <el-table-column  :label="item.CPU" width="120" >
+                  <template slot-scope="scope">
+
+                   <span>${ scope.row.planOptimize[key] }</span>
+                </template>
+                </el-table-column>
+           </el-table-column>
+       </el-table-column>
+      </el-table-column>
+      <el-table-column width="160"  prop="CRC">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 Retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest cycle</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="CRS">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的次數" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest SKU</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+      <el-table-column width="160" prop="CRT">
+          <template slot="header" slot-scope="scope">
+              <el-tooltip content="更新專案過程中 retest的s時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Config-Retest Time</span>
+              </el-tooltip>
+          </template>
+      </el-table-column>
+  </el-table>
+
+  <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[20, 50, 100, 150]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length"
+      :hide-on-single-page="!tableData.length">
+
+    </el-pagination>
+      </el-dialog>
+</div>
+   <div class="tableAround" v-cloak style="margin-top: 10px" v-if="showCustomer&&showProject&&phaseName[showPhase]">
+       <span class="selectItem" > Summary(${ showCustomer }/${ showProject }/${ phaseName[showPhase]})</span>
+      <el-table :data="Summary"  border  @row-click="selectDetail"
+        stripe
+        highlight-current-row
+        ref="summaryTable"
+        style="border-radius: 10px;
+        word-break: keep-all"
+        :header-cell-style="{
+           'background-color':'#fafafa',
+           'font-weight':'800',
+           'border-bottom':'1px solid rgb(103, 194, 58)'
+        }"
+      v-loading="tableloading1"
+        element-loading-text="數據更新中，請稍後"
+        border>
+          <el-table-column width='170' label="Category" prop="category"></el-table-column>
+          <el-table-column label="Base Time" prop="basetime" :formatter="stateFormat"></el-table-column>
+          <el-table-column label="Feature Support" prop="BTS" :formatter="stateFormat"></el-table-column>
+          <el-table-column :label="'Time w/ Config-follow matrix('+skuSHU+'SKU)'" prop="TFC" :formatter="stateFormat"></el-table-column>
+          <el-table-column label="config-Automation time" prop="CAT" :formatter="stateFormat"></el-table-column>
+          <el-table-column label="config-Leverage time" prop="CLT" :formatter="stateFormat"></el-table-column>
+          <el-table-column label="Config-Smart Time" prop="CST" :formatter="stateFormat"></el-table-column>
+          <el-table-column label="Attend time Optimize" prop="ATO" :formatter="stateFormat"></el-table-column>
+          <el-table-column label="Config-Retest time" prop="CRT" :formatter="stateFormat"></el-table-column>
+      </el-table>
+   </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/date-picker.js"></script>
+<script src="/static/js/Element/dialog.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script src="/static/js/Element/tooltip.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/pagination.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+    <script type="text/babel">
+    new Vue ({
+        el:"#app",
+        delimiters: ['${', '}'],
+        data() {
+          return {
+            Summary:[],
+              customerOptions:[
+                  {
+            "label":"C38(AIO)",
+            "value":"C38(AIO)",
+        },
+                  {
+             "label":"AIO(T88)",
+            "value":"AIO(T88)",
+              }
+        ],
+        //表格源數據
+        tableData:[],
+        selectMsg:[],
+      selectItem1: [],
+      showCustomer1:'',
+      showProject1:'',
+       proinfomation:[],
+       searchalert: [],
+       customerError1:false,
+       setproject:false,
+       selectedCustomer1: null,
+       showEdit:[], //显示编辑框
+        showBtn:[],
+        showBtnOrdinary: true,
+        functionteam:[],
+        quantity:[],
+        // error 提示
+        customer:'',
+        project:'',
+        phase:'',
+        category:'',
+        showCustomer:'',
+        showProject:'',
+        showPhase:'',
+        showCategory:'',
+        projectvalue:[],
+        phasevalue:[],
+        //category
+        categoryItem:[],
+        projectError:false,
+        customerError:false,
+        phaseError:false,
+        categoryError:'',
+              tableloading:false,
+          tableloading1:false,
+          tableloading2:false,
+          elbuttonloading:false,
+          elbuttonloading1:false,
+        phaseName:["B(SDV)", "C(SIT)", "Wave2", "Wave3", "EELP+", "OOC", "OOC2", "OOC3"],
+        columnName:[],
+        fileName:"未選擇文件",
+        //權限flag
+        canEdit:false,
+        showTips:false,
+        //文件上傳
+        excelFile:null,
+        uploadFile:null,
+        /* SW 需要用的值 */
+        // SKU No
+        SKUNum:null,
+        //Sum
+        Sum:{},
+       currentPage:1,
+        pagesize:100,
+        settable:false,
+        skuSHU:null
+          }
+        },
+        created(){
+        axios.get("/TestPlanSW/TestPlanSW-search-AIO/?action=first" ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.selectMsg=res.data;
+
+        })
+        },
+        mounted() {
+           this.getdata1("first");
+        },
+        methods: {
+            //获取数据的封装函数 ：引用了axios 和 qs 的js文件
+      stateFormat(row, column, cellValue) {
+                cellValue += '';
+                if (!cellValue.includes('.')) cellValue += '.';
+                return cellValue.replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+                   return $1 + ',';
+                }).replace(/\.$/, '');
+                 },
+            tableRowClassName({row, rowIndex}) {
+                  if(!row.id){
+                    return 'title-row'
+                  }
+
+              },
+            getdata1: function (e) {
+                let data = {"isGetData": e,};
+                axios.post("/TestPlanSW/TestPlanSW-search-AIO/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()}
+                }).then((res) => {
+                    this.selectItem1 = res.data.select1;
+                });
+            },
+             searchalert1:function(){
+                if(this.$refs.Customer1.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError1 = true;
+                   return false;
+               }else {
+                    this.tableloading=true;
+                     this.customerError1 = false;
+                     let Customer = this.$refs.Customer1.value;
+                     let data = {
+                         "isGetData": "searchalert",
+                         "Customer": Customer,
+                         "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                     }
+                     axios.post("/TestPlanSW/TestPlanSW-search-AIO/", Qs.stringify(data), {
+                         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                     }).then((res) => {
+                         this.proinfomation = res.data.proinfomation;
+                         if(this.$refs.Customer1.value!==''||this.$refs.customer.value==''){
+                           this.customer=Customer;
+
+
+                       }
+                       this.tableloading=false;
+                     })
+                     this.setproject=true;
+                 }
+            },
+             selectpro:function(row){
+                this.setproject=false;
+                var myChart1 = echarts.init(document.getElementById('main'));
+                myChart1.showLoading(); // 在获取数据之前, 显示加载动画
+                var myChart2 = echarts.init(document.getElementById('main1'));
+                myChart2.showLoading(); // 在获取数据之前, 显示加载动画
+                 let Customer = this.$refs.Customer1.value;
+                this.showProject1=row.COMPRJCODE;
+               let data ={"isGetData":"SELECTPRO","Customer":Customer,"COMPRJCODE":row.COMPRJCODE,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/TestPlanSW/TestPlanSW-search-AIO/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                            this.Sum1 =res.data['Sum1'];
+                    this.showCustomer1=Customer;
+                    this.showProject1=row.COMPRJCODE;
+                    console.log(this.showCustomer1,this.showProject1)
+                    this.setproject=false;
+
+                    // 指定图表的配置项和数据
+                    var option1 = {
+                        title: {
+                            text: 'Test Hour Summary',
+                            textStyle: {
+                        fontSize:30
+                    }
+                        },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        textAlign:'left',
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                        xAxis:[
+                        {
+                        type: 'value'
+                          }
+                        ],
+                    yAxis: [
+                        {
+                       type: 'category',
+                       data: this.Sum1.Testahour_key,
+                        axisTick: {
+                        alignWithLabel: true
+                            },
+                         axisLabel: {
+                             show: true,
+                             textStyle: {
+                                 color: function (value) {
+                                     var regNumber = /\d+/;
+                                     return regNumber.test(value) ? 'red' : 'black';
+                                 }
+                             }
+                         }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Regression test time',
+                            type: 'bar',
+                            stack: '总量',
+                            barMaxWidth:50,
+                            data:this.Sum1.Testahour_value[0],
+                            itemStyle: {
+                                normal: {
+                                    color: 'red',
+                                }
+                            }
+                        },
+                            {
+                            name: 'Standard Test Time',
+                            type: 'bar',
+                            stack: '总量',
+                            barMaxWidth:50,
+                            data:this.Sum1.Testahour_value[1],
+                            itemStyle: {
+                                normal: {
+                                   color:'#0099FF',
+                                }
+                            }
+                        }
+                        ]
+                    };
+                    var option2 = {
+                        title: {
+                            text: 'Save Time',
+                            textStyle: {
+                            fontSize:30
+                    }
+
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            },
+                            textAlign:'left',
+                        },
+                        legend: {
+                                data: this.Sum1.SaveTime_key,
+                            },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                    type: 'value'
+                      }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'category',
+                                data: this.Sum1.SaveTime_key,
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        series: [
+                                {
+                            name: 'config-Automation time',
+                            type: 'bar',
+                            stack: '总量',
+                            barMaxWidth:50,
+                            data:this.Sum1.SaveTime_value[0],
+                            itemStyle: {
+                                normal: {
+                                    color: '#8DEEEE',
+                                }
+                            }
+                        },
+                            {
+                            name: 'config-Leverage Time',
+                            type: 'bar',
+                            stack: '总量',
+                            barMaxWidth:50,
+                            data:this.Sum1.SaveTime_value[1],
+                            itemStyle: {
+                                normal: {
+                                   color:'#528B8B',
+                                }
+                            }
+                        },
+                           {
+                            name: 'config-Smart Time',
+                            type: 'bar',
+                            stack: '总量',
+                            barMaxWidth:50,
+                            data:this.Sum1.SaveTime_value[2],
+                            itemStyle: {
+                                normal: {
+                                   color:'#8B8B7A',
+                                }
+                            }
+                        },
+                        ]
+                    };
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart1.setOption(option1,true);
+                        myChart2.setOption(option2,true);
+                   window.addEventListener('resize', ()=>{
+                   myChart1.resize();
+                   myChart2.resize();
+            })
+                   if(this.showProject1!==''){
+                        this.project=this.showProject1;
+                        console.log(this.project)
+                   }
+                   myChart1.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+                    myChart2.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+    })
+             },
+            getdata: function (e) {
+                this.tableloading1=true;
+                this.elbuttonloading1=true;
+                let _this = this;
+                axios.get("/TestPlanSW/TestPlanSW-search-AIO/?action="+e , {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    } //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.loading = false;
+                    //上传成功的操作
+                    this.SKUNum = res.data['SKU'];
+                    this.tableData = res.data['content'];
+{#                    this.Sum = res.data['Sum']#}
+                    this.Summary = res.data['allSum'];
+                    console.log(this.Summary);
+                    this.skuSHU = res.data['skuSHU'];
+                    //判斷是否存在總計數據，根據當前選擇的phase在總計表中高亮該行
+                    if (res.data['allSum']) {
+                        for (let i = 0; i < res.data['allSum'].length; i++) {
+                            //找到当前选中的phase所在行
+                            if (res.data['allSum'][i].category === this.showCategory) {
+                                //设置选中行高亮
+                                this.$refs.summaryTable.setCurrentRow(this.Summary[i]);
+                                break;
+                            }
+                        }
+                    }
+                    this.tableloading1=false;
+                    this.elbuttonloading1=false;
+                })
+                //顯示當前表格的信息
+                this.showCustomer = this.customer;
+                this.showProject = this.project;
+                this.showPhase = this.phase;
+            },
+             selectDetail:function(row){
+                    this.settable=true;
+                    this.tableloading2=true;
+                    let _this=this;
+                    let Customer = this.$refs.customer.value;
+                    let Project = this.$refs.project.value;
+                    let Phase = this.$refs.phase.value;
+                   let data ={"isGetData":"SEARCH","Customer":Customer,"Project":Project,"Phase":Phase,"category":row.category,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                   axios.post("/TestPlanSW/TestPlanSW-search-AIO/",Qs.stringify(data), {
+                   headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                       this.tableData=res.data['content'];
+                       //console.log(res.data['content'])
+                        this.currentPage=1;
+                           //解決數據量少產生的錯位BUG！！！
+                            this.$nextTick(() => {
+                                //重新計算表格高度
+                                this.$refs.multipleTable.doLayout()
+                            })
+                       console.log(this.tableData,'wwwww')
+                             for(let i=0;i<this.tableData.length;i++){
+                                Vue.set(this.tableData[i],'index',i+1);
+                            }
+                            this.columnName=['Planning after optimize'];
+                   try{
+                            }catch(e)
+                            {
+                               //console.log("错误异常"+e);
+                            }
+                            this.tableloading2=false;
+
+                        }).catch(function (e) {
+                               _this.loading=false;
+                                var warning =confirm("上傳異常");
+                                //console.log("上傳錯誤信息"+e);
+                            });
+                       this.showCustomer=Customer;
+                       this.showProject=Project;
+                       this.showPhase=Phase;
+                       this.showCategory=row.category;
+                },
+             //查找表格
+              find:function(){
+                  //customer和project和phase未填
+                  let _this = this;
+                  if(this.customer==''){
+                           //alert("客戶別未選擇");
+                            this.customerError = true;
+                           return false;
+                       };
+                  this.customerError = false;
+                  if(this.project==''){
+                           //alert("專案號未填寫");
+                         this.projectError = true;
+                          return false;
+                       };
+                  this.projectError = false;
+                  if(this.phase===''){
+                           //alert("專案號未填寫");
+                         this.phaseError = true;
+                          return false;
+                       };
+                  this.phaseError=false;
+
+                  //至此，前兩項檢查已完成，將之前可能遺留的提示框隱藏起來
+                  //判断是否是第一次查询
+                  let parameter = "getContent&customer="+this.customer+"&project="+this.project+"&phase="+this.phase+"&category="+this.category;
+                  this.getdata(parameter);
+              },
+      //检查是否发生数据改变
+      showTip(){
+          if( this.showCustomer&&this.showProject&&this.phaseName[this.showPhase]&&this.showCategory){
+             if(!this.canEdit){
+                this.showTips = true ;
+             }else{
+                 this.showTips = false ;
+             }
+          }else{
+              this.showTips = false ;
+          }
+      },
+             //導出表格
+      exportExcel:function (){
+           /* 从表生成工作簿对象 */
+        //console.log(document.querySelector("#out-table"));
+            //customer和project和phase未填
+         if(this.showCustomer === ''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+         if(this.showProject === ''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+         if(this.showPhase === ''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+         let temp=[];
+         temp.push(Number(this.currentPage));
+         temp.push(Number(this.pagesize));
+         this.currentPage=1;
+         this.pagesize=this.tableData.length;
+         setTimeout(() => { let table = document.querySelector("#out-table").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"))
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        console.log("wb",wb);
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        console.log("wbout",wbout);
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            this.showCustomer+"_"+this.showProject+"_"+this.phaseName[this.showPhase]+"_"+new Date()+"_sheet.xlsx"
+            );
+            this.currentPage=temp[0];
+            this.pagesize=temp[1];
+            temp=[];
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;},1000) ;
+
+        },
+      exportExcelsub:function (){
+           /* 从表生成工作簿对象 */
+        console.log(document.querySelector("#out-table"));
+            //customer和project和phase未填
+         if(this.showCustomer === ''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               };
+         if(this.showProject === ''){
+                   //alert("專案號未填寫");
+                 this.projectError = true;
+                  return false;
+               };
+         if(this.showPhase === ''){
+                   //alert("專案號未填寫");
+                 this.phaseError = true;
+                  return false;
+               };
+         let temp=[];
+         temp.push(Number(this.currentPage));
+         temp.push(Number(this.pagesize));
+         this.currentPage=1;
+         this.pagesize=this.tableData.length;
+         //console.log(temp,this.defaultPage1,this.pagesize);
+         {% comment %}document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[0].colSpan = 1;
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[1].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[0].getElementsByTagName('tr')[0].getElementsByTagName('td')[2].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[1].getElementsByTagName('tr')[0].getElementsByTagName('td')[1].display ="table-row";
+         document.getElementsByClassName("el-table__footer")[1].getElementsByTagName('tr')[0].getElementsByTagName('td')[2].display ="table-row";{% endcomment %}
+         setTimeout(() => { let table = document.querySelector("#out-table").cloneNode(true);
+         // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+         table.removeChild(table.querySelector(".el-table__fixed"))
+            //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+        var wb = XLSX.utils.table_to_book(table,{raw:true});
+        console.log("wb",wb);
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+        });
+        console.log("wbout",wbout);
+        try {
+            saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            this.showCustomer+"_"+this.showProject+"_"+this.phaseName[this.showPhase]+"_"+new Date()+"_sheet.xlsx"
+            );
+            this.currentPage=temp[0];
+            this.pagesize=temp[1];
+            temp=[];
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;},1000) ;
+
+        },
+      //分頁方法
+      handleSizeChange(val) {
+        //console.log(val);
+        this.pagesize=val;
+      },
+      handleCurrentChange(val) {
+        //console.log(val);
+        this.currentPage=val;
+      },
+      format(row,column,cellValue,index){
+          {#console.log(cellValue,typeof(cellValue))#}
+          return cellValue?cellValue.toFixed(2):0.00;
+      },
+
+        },
+        //计算公式：根据所填选项，显示数据
+    watch: {
+       //關閉customer和project 未輸入提示 以及依據選項產生聯動
+       customer(newValue,oldValue){
+           //關閉錯誤提示
+           this.customerError = false;
+           //清除上次搜索過的記錄
+           this.project='';
+           this.phase='';
+           this.category='';
+           this.projectvalue=this.selectMsg[newValue];
+           immediate:true
+       },
+       project(newValue,oldValue){
+           //關閉錯誤提示
+           this.projectError = false;
+           //清除上次搜索過的記錄
+           this.phase='';
+           this.category='';
+           if(this.customer == ''){
+               return false;
+           }
+           //console.log(this.selectMsg['0'][this.customer]);
+           //遍歷所有數據進行查找
+           //console.log(this.selectMsg[this.customer])
+           if(this.project == ''){
+               return false;
+           }
+           console.log(this.selectMsg)
+           console.log(this.selectMsg[this.customer])
+          console.log(this.selectMsg[this.customer].length)
+           for(let index =0; index < this.selectMsg[this.customer].length;index++){
+               //查找當前選項
+
+                if(this.selectMsg[this.customer][index]['project'] == newValue){
+                    this.phasevalue = this.selectMsg[this.customer][index]['phase'];
+                    return ;
+                }
+           }
+       },
+       phase(newValue,oldValue){
+           this.phaseError = false;
+           this.categoryError= false;
+           this.category='';
+           if(newValue !== ''){
+               if(this.customer !== '' && this.project !== ''  && this.phase !== ''  ){
+                 let parameter = ""+this.customer+"&project="+this.project+"&phase="+this.phase;
+                 axios.post("/TestPlanSW/TestPlanSW-search-AIO/?action=getCategory&customer="+this.customer+"&project="+this.project+"&phase="+this.phase ,{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.categoryItem = res.data['MockData'];
+               })
+               }
+               else{
+                   alert("請選擇完整信息");
+                   return false;
+               }
+
+           }else{
+               return false
+           }
+       },
+       category(newValue, oldValue){
+         this.categoryError= false;
+       },
+       //监听数组产生出已修改的ID，根据这些ID再判断是否发生更改
+},
+    })
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+{% comment %}
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}lesson_form_upload{% endblock %}
+{% block css %}
+ <link href="/static/css/b_upload.css" rel="stylesheet">
+<link href="/static/css/uploadbutton.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card" style="background-color:rgba(255,255,255,0.2)">
+          <!--<div class="card-header">Execl</div>-->
+          <div class="card-body">
+           <div class="b-fileUpload">
+                   <p style="color: #FFF">Execl 文件上傳:</p>
+                   <input type="file" style="color: #FFF" id="xlsxUpload"  accept=".xlsx"/>
+                   <input type="button" id="xlsxSubmit" onclick="Upload(this)" VALUE="Submit">
+           </div>
+          </div>
+  </div>
+  <form method="POST" action="/Bouncing/Bouncing-upload/" enctype="multipart/form-data">
+  <div class="card" style="background: rgba(255,255,255,0.2);">
+    <div class="card-header title" style="color: #FFF">Bouncing Data Upload</div>
+       <div class="card-body" id="publicMsg">
+           <label for="Customer" style="color: #FFF">客户:</label>
+           <select id="Customer">
+               <option>C38(NB)</option>
+               <option>C38(AIO)</option>
+               <option>A39</option>
+               <option>Other</option>
+           </select>
+           {{ buncing_upload.Customer }}
+           <label for="Project" style="color: #FFF">专案:</label>
+           <select id="Project">
+               <option>EL543</option>
+               <option>EL4C2</option>
+           </select>
+           {{ buncing_upload.Project }}
+           <div id="showResult" class="err_msg">上传结果：<span id="showErrResult"></span></div>
+       </div>
+  </div>
+   <div class="card" style="background: rgba(255,255,255,0.2);">
+    <div class="card-body" >
+         <div class="first-part">
+          <div class="input-group-prepend">
+             <span class="input-group-text">A件</span>
+           </div>
+
+             {{ buncing_upload.A_cover }}
+          <div class="input-group-prepend">
+             <span class="input-group-text">C件</span>
+          </div>
+             <select class="form-control-new"  id="c-cover" name="c-cover" data-toggle="dropdown">
+                 <option></option>
+                 <option>Mg_AL</option>
+                 <option>Plasttic</option>
+                 <option>metral</option>
+             </select>
+           {{ buncing_upload.C_cover }}
+           <div class="input-group-prepend">
+             <span class="input-group-text">D件</span>
+           </div>
+
+             {{ buncing_upload.D_cover }}
+          <div class="input-group-prepend">
+             <span class="input-group-text">转轴</span>
+          </div>
+          <!--<input type="text" class="form-control-new" id="hinge-s" >-->
+            {{ buncing_upload.HS }}
+        </div>
+       </div>
+    <div class="card-body" >
+        <div class="second-part">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">扭力</span>
+                     </div>
+                      <input type="text" class="form-control-new" style="color: #FFF" name="Torque_min" value="Min" readonly="readonly">
+
+                    </div>
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">推力</span>
+                     </div>
+                     <!-- <input type="text" class="form-control-new" id="push_f-min" name="username">-->
+                        {{ buncing_upload.Push_min }}
+                     </div>
+                     <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">峰值-左</span>
+                     </div>
+                      <!--<input type="text" class="form-control-new" id="Peak_Value_Left-min" name="username">-->
+                         {{ buncing_upload.PV_L_min }}
+                     </div>
+                     <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">峰值-右</span>
+                     </div>
+                      <!--<input type="text" class="form-control-new" id="Peak_Value_right-min" name="username">-->
+                         {{ buncing_upload.PV_R_min }}
+                     </div>
+                     <div class="row_1">
+                      <div class="input-group-prepend">
+                      <span class="input-group-text">Distance-左</span>
+                      </div>
+                      <!--<input type="text" class="form-control-new" id="Distance_Left-min" name="username">-->
+                         {{ buncing_upload.D_L_min }}
+                    </div>
+                    <div class="row_1">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text">Distance-右</span>
+                    </div>
+                    <!--<input type="text" class="form-control-new" id="Distance_ight-min" name="username">-->
+                        {{ buncing_upload.D_R_min }}
+                    </div>
+             </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">扭力</span>
+                     </div>
+                      <input type="text" class="form-control-new" style="color: #FFF" name="Torque_max" value="Max" readonly="readonly">
+
+                    </div>
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">推力</span>
+                     </div>
+                      <!--<input type="text" class="form-control-new" id="push_f-max" name="username">-->
+                        {{ buncing_upload.Push_max }}
+                     </div>
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">峰值-左</span>
+                     </div>
+                      <!--<input type="text" class="form-control-new" id="Peak_Value_Left-max" name="username">-->
+                        {{ buncing_upload.PV_L_max }}
+                     </div>
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                       <span class="input-group-text">峰值-右</span>
+                     </div>
+                      <!--<input type="text" class="form-control-new" id="Peak_Value_right-max" name="username">-->
+                         {{ buncing_upload.PV_R_max }}
+                     </div>
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                      <span class="input-group-text">Distance-左</span>
+                      </div>
+                      <!--<input type="text" class="form-control-new" id="Distance_Left-max" name="username">-->
+                        {{ buncing_upload.D_L_max }}
+                    </div>
+                    <div class="row_1">
+                      <div class="input-group-prepend">
+                      <span class="input-group-text">Distance-右</span>
+                    </div>
+                      {{ buncing_upload.D_R_max }}
+                    </div>
+                </div>
+            </div>
+        </div>
+         </div>
+    <div class="card-body" >
+        <div class="third-part">
+            <div class="content">
+                <label for="Conclusion" class="input-group-text">结论 </label>
+                <textarea id="Conclusion" rows="3" cols="79" class="textarea-style" id="conclusion" name="Conclusion"></textarea>
+            </div>
+        </div>
+        </div>
+   <div style="background-color: rgba(255,255,255,0);height:80px;width:1150px;margin:0 auto;border-radius:0px 0px 10px 10px;" class="breadcrumb">
+
+                        <span style="color:#FFF">附件</span>
+                         <div class="col-sm-8">
+                             <input style="color: #FFF" type="file" id="upload-file" name="myfiles" multiple="">
+                         </div>
+        </div>
+    <div class="card-body" >
+       <div class="forth-part">
+            <div class="center">
+             <button type="submit" onclick="" class="btn btn-info" name="Upload" id="upload1">Upload</button>
+             <button class="btn btn-default">Cancel</button>
+            </div>
+       </div>
+     </div>
+     {% csrf_token %}
+   </div>
+  </form>
+
+</div>
+
+<!-- 彈出信息提示，用來顯示內容上傳成功和失敗 -->
+<div class="modal fade" id="returnMsg" tabindex="-1" role="dialog" aria-labelledby="returnTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="returnTitle">Upload Result</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="msgContent"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+
+            </div>
+          </div>
+        </div>
+        </div>
+
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/xlsx/xlsx.js"></script>
+<script>
+var backResult=['Pass','Fail','上传数据成功','上传数据重复'];
+window.onload=function(){
+    var el =document.getElementById("showErrResult");
+
+    var result={{ result  }};
+    console.log(backResult[result]);
+    if(result==0){
+
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"green"});
+        $("#showResult").css({"display":"block"});
+        //alert(backResult[result+2]);
+        setTimeout(function () {
+            $("#showResult").css({"display":"none"});
+        },3000);
+    }
+    else if(result==1){
+        el.innerHTML=backResult[result+2];
+        $("#showErrResult").css({"color":"red"});
+        $("#showResult").css({"display":"block"});
+        alert(backResult[result+2]);
+    }
+    else {
+
+    }
+    var isNum = function (value) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(value)) {
+        return true;
+        }
+        return false;
+    }
+    //关闭滚轮事件
+    var inputMouseScroll = document.getElementsByClassName("form-control-new");
+    //console.log(inputMouseScroll[0]);
+    for(var formNum in inputMouseScroll){
+          //console.log(typeof(formNum));
+        if(isNum(formNum)){
+           //console.log(inputMouseScroll[formNum]);
+           inputMouseScroll[formNum].addEventListener("mousewheel",function(evt){
+           evt = evt || window.event;
+           if(evt.preventDefault) {
+           // Firefox
+          evt.preventDefault();
+          evt.stopPropagation();
+        } else {
+          // IE
+          evt.cancelBubble=true;
+          evt.returnValue = false;
+        }
+      });
+        }
+    }
+
+}
+</script>
+    <script src="/static/js/ImgUpload.js"></script>
+{% endblock %}
+
+{% endcomment %}

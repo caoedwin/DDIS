@@ -1,0 +1,456 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}QIL_edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div id="app">
+<div class="row" style="white-space: nowrap;">
+    <div class="col-md-3">
+            <label style="color: #FFF" for="Customer">Customer</label>
+            <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value="">All</option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+            </select>
+    </div>
+    <div class="col-md-1">
+            <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="selectMsg">Search</el-button>
+    </div>
+</div>
+<template>
+    <el-input type="text" v-model="search"  placeholder="关键字搜索..."></el-input>
+    <el-table border height="750" :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)" @sort-change='sortChange'>
+        <el-table-column type="index" :index="indexMethod" ></el-table-column>
+        <el-table-column label="Product" align="center"  >
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Product"></el-input>
+                <span v-else="showEdit[scope.$index]">${ product[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Customer" align="center" width="90">
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Customer"></el-input>
+                <span v-else="showEdit[scope.$index]">${ customer[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="QIL No" align="center"  >
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.QIL_No"></el-input>
+                <span v-else="showEdit[scope.$index]">${ qil_no[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Issue Description" align="center" width="300" >
+            <template slot-scope="scope">
+                {% comment %}<el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Issue_Description"></el-input>{% endcomment %}
+                <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index]"   v-model="scope.row.Issue_Description"></textarea>
+                <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ issue_description[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Root Cause" align="center" width="300" >
+            <template slot-scope="scope">
+                {% comment %}<el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Root_Cause"></el-input>{% endcomment %}
+                <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index]"   v-model="scope.row.Root_Cause"></textarea>
+                <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ root_cause[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Status" align="center"  >
+            <template slot-scope="scope">
+                <el-select class="edit-cell" v-if="showEdit[scope.$index]" v-model="scope.row.Status"  >
+                    <el-option v-for="item in options" :label="item.label" :value="item.value" ></el-option>
+                 </el-select>
+                <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ status[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+       <el-table-column  label="Creator" style="white-space: pre-line;" width="95" sortable >
+            <template slot-scope="scope">
+                <el-input class="edit-cell" v-if="showEdit[scope.$index]"    v-model="scope.row.Creator"></el-input>
+                <span v-else="showEdit[scope.$index]">${ creator[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Created On" style="white-space: pre-line;" width="115" sortable >
+            <template slot-scope="scope">
+
+                 <el-date-picker class="edit-cell" v-if="showEdit[scope.$index]"
+                      value-format="yyyy-MM-dd"
+                      v-model="scope.row.Created_On"
+                      type="date"
+                      placeholder="选择日期">
+                    </el-date-picker>
+                <span v-else="showEdit[scope.$index]">${ created_on[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column prop="file" label="Attachment" width="100">
+          <template scope="scope">
+
+              <div class="col-sm-8" v-if="showEdit[scope.$index]" v-model="scope.row.file">
+                  <el-upload {% comment %}ref="upload" :data="uploadData"{% endcomment %}
+                          multiple {% comment %}:show-file-list="false"{% endcomment %}
+                          action="#"
+                          :before-remove="beforeRemove"
+                          :on-remove="handleRemove"
+                          :on-success="handleSucess"
+                          {% comment %}:on-error="handleError"{% endcomment %}
+
+                          :auto-upload="true">
+                  <el-button size="small" type="primary" @click="curRowIndex=scope.$index">点击上传</el-button>
+                    {% comment %}主要特别注意这里新增的@click方法将当前的index值赋值一个变量，否则无法获取到对应的行信息  {% endcomment %}
+                  </el-upload>
+                 </div>
+              <div v-else="showEdit[scope.$index]">
+                   <a v-for="(item) in scope.row.file" v-bind:href="item"><img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+              </div>
+          </template>
+      </el-table-column>
+{% comment %}        <el-table-column prop="Editor" label="Editor" style="white-space: pre-line;"  sortable ></el-table-column>
+       <el-table-column prop="Edit_Time" label="Edit Time" style="white-space: pre-line;"  sortable ></el-table-column>{% endcomment %}
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <template slot-scope="scope">
+            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">保存</el-button>
+            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]">取消</el-button>
+
+            <el-button type="text" size="big"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>
+        </template>
+        </el-table-column>
+        {% csrf_token %}
+
+    </el-table>
+    <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+    </el-pagination>
+  </div>
+</template>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                visible: false,
+                tableContent: [],
+                serchCategory:'',
+                filetertableContent: [],
+                product:[],
+                customer:[],
+                qil_no:[],
+                issue_description:[],
+                root_cause:[],
+                status:[],
+                creator:[],
+                created_on:[],
+                showEdit: [], //显示编辑框
+                showBtn: [],
+                showBtnOrdinary: true,
+                selectedCustomer:null,
+                selectItem:[],
+                selectId:null,
+                currentPage: 1,//默认显示第一页
+                pageSize:100,//默认每页显示100条
+                totalNum: null,
+                search: '',
+                uploadData: {
+					file_key: 'file',
+					business_id: '',
+				},
+                formData:[],
+
+                 options:[{
+                    label:"",
+                    value:""
+                },{
+                    label:"Closed",
+                    value:"Closed"
+                },{
+                    label:"Deleted",
+                    value:"Deleted"
+                },{
+                    label:"In Process",
+                    value:"In Process"
+                },{
+                    label:"Lesson Learn",
+                    value:"Lesson Learn"
+                },{
+                    label:"Open",
+                    value:"Open"
+                }
+                ],
+
+            }
+        },
+         computed: {
+                // 前端过滤
+               datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    console.log(111)
+                    const search=this.search;
+                    if(search){
+                        {% comment %}console.log(this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })){% endcomment %}
+                        this.filetertableContent = this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                        this.product = [];
+                        this.customer = [];
+                        this.qil_no = [];
+                        this.issue_description = [];
+                        this.root_cause = [];
+                        this.status = [];
+                        for(let i=0;i<this.filetertableContent.length;i++) {
+                            this.product[i] = this.filetertableContent[i].Product;
+                            this.customer[i] = this.filetertableContent[i].Customer;
+                            this.qil_no[i] = this.filetertableContent[i].QIL_No;
+                            this.issue_description[i] = this.filetertableContent[i].Issue_Description;
+                            this.root_cause[i] = this.filetertableContent[i].Root_Cause;
+                            this.status[i] = this.filetertableContent[i].Status;
+                            this.creator[i] = this.tableContent[i].Creator;
+                            this.created_on[i] = this.tableContent[i].Created_On;
+                        }
+                    {% comment %}console.log(this.product){% endcomment %}
+                        return this.filetertableContent
+                    }
+                    this.product = [];
+                    this.customer = [];
+                    this.qil_no = [];
+                    this.issue_description = [];
+                    this.root_cause = [];
+                    this.status = [];
+                    {% comment %}console.log(this.tableContent){% endcomment %}
+                   for(let i=0;i<this.tableContent.length;i++) {
+                            this.product[i] = this.tableContent[i].Product;
+                            this.customer[i] = this.tableContent[i].Customer;
+                            this.qil_no[i] = this.tableContent[i].QIL_No;
+                            this.issue_description[i] = this.tableContent[i].Issue_Description;
+                            this.root_cause[i] = this.tableContent[i].Root_Cause;
+                            this.status[i] = this.tableContent[i].Status;
+                        }
+                   {% comment %}console.log(this.product){% endcomment %}
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                   {% comment %}console.log(this.datas){% endcomment %}
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        watch: {
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                        }
+                    },
+                methods: {
+                    handleSucess(response, files, fileList){
+                        // 上传成功
+                    this.formData = new FormData();
+
+                  this.fileList = fileList;
+                  console.log("上传成功" + fileList.length,files,"tt",fileList);
+
+                  for(var i=0; i<this.fileList.length; i++){
+                        this.formData.append('fileList', fileList[i].raw);//fileList里面raw才是文件对象，与files一样
+                  }
+                  {% comment %}console.log(this.formData,typeof (this.formData),this.fileListname){% endcomment %}
+
+                },
+            beforeRemove(file, fileList) {
+                        {% comment %}console.log(file){% endcomment %}
+                return this.$confirm(`确定移除 ${ file.name }？`);
+              },
+            handleRemove(file, fileList) {
+                        console.log(file,'delete')
+                        {% comment %}this.formData.delete(fileList){% endcomment %}
+                this.formData = new FormData();
+                this.fileList = fileList;
+                  for(var i=0; i<this.fileList.length; i++){
+                        this.formData.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样
+                  }
+                {% comment %}console.log(this.formData){% endcomment %}
+              },
+            // 前端过滤
+            indexMethod(index) {
+                    return index +1;
+            },
+            sortChange: function(column){
+            this.currentPage = 1 // return to the first page after sorting
+                if (column.prop === 'Product') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                } else if (column.prop === 'Customer') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'QIL_No') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Issue_Description') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Root_Cause') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Status') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Status') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Creator') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Created_On') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }
+                    this.showed_data = this.tableContent.slice(0, this.pageSize) // 排序完显示到第一页
+                    console.log('Finished');
+                    console.log(this.showed_data);
+
+        },
+            //排序方法
+            sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
+                }
+            },
+            handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+          },
+            handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+              this.currentPage = val;
+              console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+          },
+            //获取数据
+            getdata: function (e) {
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/ABOQIL/ABOQIL_edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectItem=res.data.select;
+                });
+            },
+            //编辑
+            editRow(index, row,cell) {
+            this.$set(this.showEdit,index,true);
+            this.$set(this.showBtn,index,true);
+            },
+            //保存
+            saveRow(index,rows) {
+                    let Customer = this.$refs.Customer.value;
+                   {% comment %} let data = {"isGetData": "SAVE", "rows": rows,"Customer":Customer, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };{% endcomment %}
+                    if (this.formData.length==0){this.formData = new FormData();}
+                    this.formData.append('serchCategory', this.serchCategory)
+                    this.formData.append('ID', rows.ID)
+                    this.formData.append('Customer', rows.Customer)
+                    this.formData.append('Product', rows.Product)
+                    this.formData.append('QIL_No', rows.QIL_No)
+                    this.formData.append('Issue_Description', rows.Issue_Description)
+                    this.formData.append('Root_Cause', rows.Root_Cause)
+                    this.formData.append('Status', rows.Status)
+                    this.formData.append('Creator', rows.Creator)
+                    this.formData.append('Created_On', rows.Created_On)
+                    {#submitData['Photolist'] = this.formData;#}
+                    this.formData.append("isGetData",'SAVE');
+                    console.log(this.formData)
+                    axios.post("/ABOQIL/ABOQIL_edit/", this.formData, {
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()}
+                    }).then((res) => {
+                         this.tableContent = res.data.content;
+                         for(let i=0;i<this.tableContent.length;i++) {
+                        this.product[i] =this.tableContent[i].Product;
+                        this.customer[i] = this.tableContent[i].Customer;
+                        this.qil_no[i] = this.tableContent[i].QIL_No;
+                        this.issue_description[i] = this.tableContent[i].Issue_Description;
+                        this.root_cause[i] = this.tableContent[i].Root_Cause;
+                        this.status[i] = this.tableContent[i].Status;
+                        this.creator[i] = this.tableContent[i].Creator;
+                        this.created_on[i] = this.tableContent[i].Created_On;
+
+
+                        this.$set(this.showEdit,index,false);
+                        this.$set(this.showBtn,index,false) ;
+                    }
+                    });
+           },
+            //取消编辑
+            cancelRow(index, row) {
+                    this.tableContent[index].Product=this.product[index];
+                    this.tableContent[index].Customer=this.customer[index];
+                    this.tableContent[index].QIL_No=this.qil_no[index];
+                    this.tableContent[index].Issue_Description=this.issue_description[index];
+                    this.tableContent[index].Root_Cause=this.root_cause[index];
+                    this.tableContent[index].Status=this.status[index];
+                    this.tableContent[index].Creator=this.creator[index];
+                    this.tableContent[index].Created_On=this.created_on[index];
+
+                    this.$set(this.showEdit,index,false);
+                    this.$set(this.showBtn,index,false) ;
+           },
+            //上传搜索项：以此选项搜索符合条件的内容
+            selectMsg :function(){
+               let Customer = this.$refs.Customer.value;
+               this.serchCategory = this.$refs.Customer.value;
+               let data ={"isGetData":"SEARCH","Customer":Customer,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/ABOQIL/ABOQIL_edit/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.tableContent=res.data.content.sort(this.sortFun('Created_On', 'ascending'));
+                  this.selectItem=res.data.select;
+                  this.totalNum=this.tableContent.length;
+                   for(let i=0;i<this.tableContent.length;i++) {
+                        this.product[i] =this.tableContent[i].Product;
+                        this.customer[i] = this.tableContent[i].Customer;
+                        this.qil_no[i] = this.tableContent[i].QIL_No;
+                        this.issue_description[i] = this.tableContent[i].Issue_Description;
+                        this.root_cause[i] = this.tableContent[i].Root_Cause;
+                        this.status[i] = this.tableContent[i].Status;
+                        this.creator[i] = this.tableContent[i].Creator;
+                       this.created_on[i] = this.tableContent[i].Created_On;
+                    }
+                })
+             }
+
+        }
+    })
+</script>
+{% endblock %}

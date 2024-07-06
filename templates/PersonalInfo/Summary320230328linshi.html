@@ -1,0 +1,2408 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}IncumbencyPerIn_summary{% endblock %}
+{% block css %}
+<style>
+.selectMsg{
+     font-size:16px;
+     padding: 15px;
+     display: flex;
+     flex-wrap: wrap;
+}
+.selectMsg label{
+  font-weight: 800;
+  margin-right: 10px;
+  color:aliceblue;
+}
+.selectMsg1{
+     font-size:16px;
+     padding: 15px;
+     display: flex;
+     flex-wrap: wrap;
+}
+.selectMsg1 label{
+  font-weight: 800;
+  margin-right: 10px;
+  color:black;
+}
+.selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+.tableAround{
+padding: 20px;
+-moz-box-shadow: 0px 0px 10px #333333;
+-webkit-box-shadow: 0px 0px 10px #333333;
+box-shadow: 0px 0px 10px #333333;
+border-radius: 10px;
+background-color: rgba(255,255,255,0.1);
+}
+.el-collapse-item__header{
+    background-image: linear-gradient(to right, rgba(0,139,139,0), rgba(0,139,139,1));
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+      <div class="selectMsg" >
+           <div class="yearContent">
+                 <label for="year">年份: </label>
+                 <el-date-picker ref="Year" value-format="yyyy" v-model="year" type="year" placeholder="選擇年份" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;"></el-date-picker>
+           </div>
+
+            <div style="margin-left: 50px;">
+              <label class="demonstration">日期範圍: </label>
+              <el-date-picker
+                ref="value1"
+                v-model="value1"
+                type="daterange"
+                value-format="yyyy-MM-dd"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+              </el-date-picker>
+            </div>
+                 <el-button @click="search" :loading="elbuttonloading" v-cloak type="primary" style="height:40px;margin-left: 20px">搜索</el-button>
+      </div>
+    <div class="tableAround" v-cloak >
+    <span  class="selectItem" v-cloak  v-if="searchYear">當前信息年份：${ searchYear } </span>
+        <el-collapse v-model="activeNames" @change="handleChange">
+              <el-collapse-item title="離職人員信息" name="1">
+                  <div class="perinTablecontent">
+                       <el-input type="text" v-model="search000"  placeholder="Search..."></el-input>
+                      <el-button @click="exportExcel" type="success" v-if="canExport==0" style="height:40px;margin-left: 2px;float: right">導出</el-button>
+                       <el-table border height="500px" id="out-table" @sort-change='sortChange' :default-sort = "{prop: 'DepartureDate', order: 'ascending'}" :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                       :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor"
+                         v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                           <el-table-column type="index" :index="indexMethod"></el-table-column>
+                           <el-table-column prop="RegistrationDate" label="報到日期" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="Seniority" label="年資" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="Customer" label="客戶" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="Department" label="部門" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="Lesson" label="課別" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="GroupEmployees" label="工號" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="ChineseName" label="姓名（中）" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="EnglishName" label="姓名（英）" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="Gender" label="性別" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="CurrentTitle" label="現職稱" align="center" sortable='custom'></el-table-column>
+                           <el-table-column prop="DepartureDate" label="離職日期" align="center" sortable='custom'></el-table-column>
+                           {% comment %}<el-table-column prop="LastPerformance" label="最近一次績效" align="center" sortable='custom'></el-table-column>{% endcomment %}
+                           <el-table-column prop="DepartureReasons" label="離職去向" align="center" sortable='custom'></el-table-column>
+                       </el-table>
+                      <div class="block">
+                        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1, 2, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+                        </el-pagination>
+                      </div>
+                   </div>
+              </el-collapse-item>
+{#              <el-collapse-item title="離職去向分析" name="2">#}
+{#                    <div class="reasonsTablecontent">#}
+{#                        <el-table border :data="reasonsTable" show-summary>#}
+{#                            <el-table-column :label="searchYear+'年離職去向調查'"align="center">#}
+{#                                <el-table-column prop="Reasons" label="離職去向" align="center"></el-table-column>#}
+{#                                <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">#}
+{#                                </el-table-column>#}
+{#                                <el-table-column prop="reasonsSummary" label="合計" align="center"></el-table-column>#}
+{#                                <el-table-column prop="zhanReasons" label="去向占總%" align="center"></el-table-column>#}
+{#                            </el-table-column>#}
+{#                        </el-table>#}
+{#                    </div>#}
+{#                    <div class="container-echart"v-cloak>#}
+{#                      <div  id="reasonsDiagramDIV" style="height:400px;"></div>#}
+{#                    </div>#}
+{#              </el-collapse-item>#}
+              <el-collapse-item title="職稱" name="3">
+                  <div class="selectMsg1" >
+                       <div class="yearContent">
+                             <label for="year">年份: </label>
+                             <el-date-picker ref="startYear" value-format="yyyy" v-model="startYear" type="year" placeholder="選擇开始年份" style="height:40px;border-radius:5px 5px 5px 5px;"></el-date-picker>
+                             <label>至</label>
+                             <el-date-picker ref="endYear" value-format="yyyy" v-model="endYear" type="year" placeholder="選擇结束年份" style="height:40px;border-radius:5px 5px 5px 5px;"></el-date-picker>
+                       </div>
+                             <el-button :loading="elbuttonloading1" @click="search2" v-cloak type="primary" style="height:40px;margin-left: 20px">搜索</el-button>
+                  </div>
+                    <div class="titleTablecontent">
+                          <el-table border :data="titleTable" show-summary
+                                    :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor"
+                          v-loading="tableloading1"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+{#                               <el-table-column :label="searchYear1+'年離職職稱'"align="center">#}
+                                   <el-table-column prop="Title" label="職稱" align="center"></el-table-column>
+                                   <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">
+                                   </el-table-column>
+                                   <el-table-column prop="titleSummary" label="合計離職" align="center"></el-table-column>
+                                   <el-table-column prop="titleDeparture" label="離職占%" align="center"></el-table-column>
+                               </el-table-column>
+                          </el-table>
+                    </div>
+                    <div class="container-echart"v-cloak>
+                      <div  id="titleDiagram1DQADIV" style="height:500px;"></div>
+                    </div>
+{#                    <div class="titleTablecontent">#}
+{#                        <el-table border :data="titleTable1" @row-click="selectDetail" show-summary>#}
+{#                               <el-table-column prop="Title" label="職稱" align="center"></el-table-column>#}
+{#                               <el-table-column  v-for="(item,key,index) in titleSeniorityData" :label="item" :prop="item" align="center">#}
+{#                               </el-table-column>#}
+{#                               <el-table-column prop="titleSummary" label="合計" align="center"></el-table-column>#}
+{#                       </el-table>#}
+{#                    </div>#}
+{#                    <div class="container-echart"v-cloak>#}
+{#                      <div  id="titleDiagram2DQADIV" style="height:400px;"></div>#}
+{#                    </div>#}
+              </el-collapse-item>
+              <el-collapse-item title="年資" name="4">
+                    <div class="seniorityTablecontent">
+                           <el-table border :data="seniorityTable" show-summary
+                                     :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor"
+                           v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                                   <el-table-column prop="seniority" label="年資" align="center"></el-table-column>
+                                   <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">
+                                   </el-table-column>
+                                   <el-table-column prop="senioritySummary" label="合計離職" align="center"></el-table-column>
+                                   <el-table-column prop="seniorityDeparture" label="離職占%" align="center"></el-table-column>
+                          </el-table>
+                    </div>
+                    <div class="container-echart"v-cloak>
+                      <div  id="seniorityDiagramDIV1" style="height:500px;"></div>
+                    </div>
+{#                    <div class="seniorityTablecontent">#}
+{#                        <el-table border :data="seniorityTable1" @row-click="selectseniorityDetail" show-summary>#}
+{#                               <el-table-column prop="seniority" label="年資" align="center"></el-table-column>#}
+{#                               <el-table-column  v-for="(item,key,index) in seniorityTitleData" :label="item" :prop="item" align="center">#}
+{#                               </el-table-column>#}
+{#                       </el-table>#}
+{#                    </div>#}
+{#                    <div class="container-echart"v-cloak>#}
+{#                      <div  id="seniorityDiagramDIV2" style="height:400px;"></div>#}
+{#                    </div>#}
+              </el-collapse-item>
+              <el-collapse-item title="離職原因" name="8">
+                    <div class="reasonTablecontent">
+                           <el-table border :data="reasonTable" show-summary
+                                     :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor2"
+                           v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                                   <el-table-column prop="reason" label="離職原因" align="center"></el-table-column>
+                                   <el-table-column prop="reasonSummary" label="人數" align="center"></el-table-column>
+                                   <el-table-column prop="reasonDeparture" label="占總%" align="center"></el-table-column>
+                          </el-table>
+                    </div>
+                    <div class="container-echart"v-cloak>
+                      <div  id="reasonDiagramDIV1" style="height:500px;"></div>
+                    </div>
+              </el-collapse-item>
+{#              <el-collapse-item title="學歷" name="5">#}
+{#                    <div class="educationTablecontent">#}
+{#                         <el-table border :data="educationTable" show-summary>#}
+{#                           <el-table-column prop="Education" label="學歷" align="center"></el-table-column>#}
+{#                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">#}
+{#                           </el-table-column>#}
+{#                           <el-table-column prop="educationSummary" label="合計" align="center"></el-table-column>#}
+{#                           <el-table-column prop="accountFor" label="占%" align="center"></el-table-column>#}
+{#                       </el-table>#}
+{#                    </div>#}
+{#                    <div class="container-echart"v-cloak>#}
+{#                      <div  id="educationDiagram1" style="height:400px;"></div>#}
+{#                    </div>#}
+{#              </el-collapse-item>#}
+              <el-collapse-item title="專業" name="6">
+                    <div class="professionTablecontent">
+                           <el-table border :data="professionTable" :span-method="daLeiSpanMethod" show-summary
+                                     :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        style="border-radius: 10px;word-break: keep-all"
+                                 {% comment %}stripe{% endcomment %}
+                                 :row-style="changeRowColor" :cell-style="addColor3"
+                           v-loading="tableloading"
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                               <el-table-column :label="searchYear+'年離職'"align="center">
+                               <el-table-column prop="daLei" label="" align="center"></el-table-column>
+                               <el-table-column prop="Profession" label="專業" align="center"></el-table-column>
+                               <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">
+                               </el-table-column>
+                               <el-table-column prop="professionSummary" label="合計" align="center"></el-table-column>
+                               </el-table-column>
+                           </el-table>
+                    </div>
+              </el-collapse-item>
+{#              <el-collapse-item title="地區" name="7">#}
+{#                    <div class="regionsTablecontent">#}
+{#                       <el-table border :data="regionsTable" show-summary>#}
+{#                           <el-table-column :label="searchYear+'年1-10月離職'"align="center">#}
+{#                           <el-table-column prop="Regions" label="" align="center"></el-table-column>#}
+{#                           <el-table-column  v-for="(item,key,index) in selectItem" :label="item" :prop="item" align="center">#}
+{#                           </el-table-column>#}
+{#                           <el-table-column prop="regionsSummary" label="合計" align="center"></el-table-column>#}
+{#                           </el-table-column>#}
+{#                       </el-table>#}
+{#                    </div>#}
+{#              </el-collapse-item>#}
+        </el-collapse>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+    <script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+               year:'',
+               value1:'',
+                startYear:'',
+               endYear:'',
+               searchYear:null,
+                searchYear1:null,
+               activeNames:['1','2','3','4','5','6','7','8'],
+               perinTable:[],
+               selectItem:[],
+               {#reasonsTable:[],#}
+               titleTable:[],
+               titleSeniorityData:[],   //職稱中年資劃分
+               {#titleTable1:[],#}
+               titleDiagram2Data:{},
+               reasonsDiagramData:{},
+               seniorityTable:[],
+               reasonTable:[],
+               {#seniorityTable1:[],#}
+               seniorityTitleData:[],
+               professionTable:[],
+               {#regionsTable:[],#}
+               heBingNum:[],
+               seniorityDiagramData1:{},
+               reasonDiagramData:{},
+               {#educationTable:[],#}
+               educationDiagram:{},
+               seniorityText:null,
+               SeniorityTitleDiagram0:[],
+               {#TitleText:null,#}
+               {#titleSeniorityDiagram2:[],#}
+                currentPage: 1,//默认显示第一页
+                pageSize:100,//默认每页显示100条
+                totalNum: null,
+                proptype: "" ,//存放column.prop的字符串值
+                search000:'',
+                Totalsize:null,
+                canExport:null,//導出權限
+                elbuttonloading: false,
+                tableloading: false,
+                elbuttonloading1: false,
+                tableloading1: false,
+                myChart8:{},
+                myChart2:{},
+                myChart4:{},
+
+               }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            handleChange(val) {               //折疊面板變化
+                console.log(val);
+            },
+            //索引
+            indexMethod(index) {
+                    return index +1;
+            },
+            handleSizeChange(val) {
+               console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+            },
+            handleCurrentChange(val) {
+               console.log(`当前页: ${val}`);
+              this.currentPage = val;
+              console.log(this.perinTable.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+            },
+             sortChange: function(column){
+                    console.log(column.prop,column.order,column,"order")
+                this.currentPage = 1 // return to the first page after sorting
+                    if (column.prop === 'RegistrationDate') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'Seniority') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'Customer') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'Department') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'Lesson') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'GroupEmployees') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'ChineseName') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'EnglishName') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'Gender') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'CurrentTitle') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'DepartureDate') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'LastPerformance') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    }else if (column.prop === 'DepartureReasons') {
+                        this.dataList = this.perinTable.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    }
+                    else{
+                        this.dataList = this.perinTable.sort(this.sortFun("DepartureDate", column.order === 'ascending'));
+                        console.log(this.dataList,"DepartureDate");
+                    }
+
+                        this.showed_data = this.perinTable.slice(0, this.pageSize) // 排序完显示到第一页
+                        console.log('Finished');
+                        console.log(this.showed_data);
+
+            },
+            //排序方法
+           sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+               if (rev == undefined) {
+                   rev = 1;
+               } else {
+                   rev = (rev) ? 1 : -1;
+               }
+                    return function (a, b) {
+                        a = a[attr];
+                        b = b[attr];
+                        if (a < b) {
+                            return rev * -1;
+                        }
+                        if (a > b) {
+                            return rev * 1;
+                        }
+                        return 0;
+                    }
+            },
+            getdata: function (e) {          //获取数据
+                this.myChart4 = echarts.init(document.getElementById('seniorityDiagramDIV1'));
+                this.myChart4.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart8 = echarts.init(document.getElementById('reasonDiagramDIV1'));
+                this.myChart8.showLoading() // 在获取数据之前, 显示加载动画
+                {#var myChart2 = echarts.init(document.getElementById('titleDiagram1DQADIV'));#}
+                this.myChart2 = echarts.init(document.getElementById('titleDiagram1DQADIV'));
+                this.myChart2.showLoading() // 在获取数据之前, 显示加载动画
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                this.tableloading1 = true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/Summary3/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.searchYear=res.data.searchYear;
+                    this.searchYear1=res.data.searchYear;
+                    this.selectItem=res.data.selectItem;
+                    this.perinTable=res.data.perinTable;
+                    {#this.reasonsTable=res.data.reasonsTable;#}
+                    this.titleTable=res.data.titleTable;
+                    this.titleSeniorityData=res.data.titleSeniorityData;
+                    {#this.titleTable1=res.data.titleTable1;#}
+                    this.seniorityTable=res.data.seniorityTable;
+                    this.reasonTable=res.data.reasonTable;
+                    {#this.seniorityTable1=res.data.seniorityTable1;#}
+                    this.seniorityTitleData=res.data.seniorityTitleData;
+                    {#this.educationTable=res.data.educationTable;#}
+                    this.professionTable=res.data.professionTable;
+                    {#this.regionsTable=res.data.regionsTable;#}
+
+                    this.heBingNum=res.data.heBingNum;
+
+                    this.titleDiagram2Data=res.data.titleDiagram2Data;
+                    this.titleDiagramss();
+                    {#this.reasonsDiagramData=res.data.reasonsDiagramData;#}
+                    {#this.reasonsDiagramss();#}
+                    this.seniorityDiagramData1=res.data.seniorityDiagramData1;
+                    this.seniorityDiagramss();
+                    {#this.educationDiagram=res.data.educationDiagram;#}
+                    {#this.educationDiagramss();#}
+                    this.SeniorityTitleDiagram0=res.data.SeniorityTitleDiagram0;
+                    {#this.seniorityText=res.data.seniorityText;#}
+                    {#this.xuanrantubiao();#}
+                    {#this.titleSeniorityDiagram2=res.data.titleSeniorityDiagram2;#}
+                    {#this.TitleText=res.data.TitleText;#}
+                    {#this.xuanrantubiao1();#}
+                    this.reasonDiagramData=res.data.reasonDiagramData;
+                    this.reasonDiagramss();
+                    this.canExport=res.data.canExport;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.tableloading1 = false;
+                 });
+            },
+            search2 :function(){
+                this.myChart2 = echarts.init(document.getElementById('titleDiagram1DQADIV'));
+                this.myChart2.showLoading() // 在获取数据之前, 显示加载动画
+                this.elbuttonloading1=true;
+                this.tableloading1=true;
+               let Year=this.$refs.Year.value;
+               let startYear=this.$refs.startYear.value;
+               let endYear=this.$refs.endYear.value;
+               let data ={"isGetData":"SEARCH2","Year":Year,"startYear":startYear,"endYear":endYear,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/PersonalInfo/Summary3/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectItem=res.data.selectItem;
+                    this.titleTable=res.data.titleTable;
+                    this.titleSeniorityData=res.data.titleSeniorityData;
+                    {#this.titleTable1=res.data.titleTable1;#}
+                    this.titleDiagram2Data=res.data.titleDiagram2Data;
+                    this.titleDiagramss();
+                    {#this.titleSeniorityDiagram2=res.data.titleSeniorityDiagram2;#}
+                    {#this.TitleText=res.data.TitleText;#}
+                    {#this.xuanrantubiao1();#}
+                   this.elbuttonloading1=false;
+                this.tableloading1=false;
+                })
+                this.searchYear1=startYear+'~'+endYear;
+            },
+            search :function(){            //上传搜索项：以此选项搜索符合条件的内容
+                this.myChart4 = echarts.init(document.getElementById('seniorityDiagramDIV1'));
+                this.myChart4.showLoading() // 在获取数据之前, 显示加载动画
+                this.myChart8 = echarts.init(document.getElementById('reasonDiagramDIV1'));
+                this.myChart8.showLoading() // 在获取数据之前, 显示加载动画
+                {#var myChart2 = echarts.init(document.getElementById('titleDiagram1DQADIV'));#}
+                this.myChart2 = echarts.init(document.getElementById('titleDiagram1DQADIV'));
+                this.myChart2.showLoading() // 在获取数据之前, 显示加载动画
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                this.tableloading1 = true;
+                {#console.log(this.elbuttonloading);#}
+               let Year=this.$refs.Year.value;
+               let YearRange=this.$refs.value1.value;
+               let data ={"isGetData":"SEARCH","Year":Year,"YearRange":YearRange,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/PersonalInfo/Summary3/",Qs.stringify(data, {indices:false}), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.selectItem=res.data.selectItem;
+                    this.perinTable=res.data.perinTable;
+                    {#this.reasonsTable=res.data.reasonsTable;#}
+                    this.titleTable=res.data.titleTable;
+                    this.titleSeniorityData=res.data.titleSeniorityData;
+                    {#this.titleTable1=res.data.titleTable1;#}
+                    this.seniorityTable=res.data.seniorityTable;
+                    this.reasonTable=res.data.reasonTable;
+                    {#this.seniorityTable1=res.data.seniorityTable1;#}
+                    this.seniorityTitleData=res.data.seniorityTitleData;
+                    {#this.educationTable=res.data.educationTable;#}
+                    this.professionTable=res.data.professionTable;
+                    {#this.regionsTable=res.data.regionsTable;#}
+
+                    this.heBingNum=res.data.heBingNum;
+
+                    this.titleDiagram2Data=res.data.titleDiagram2Data;
+                    this.titleDiagramss();
+                    {#this.reasonsDiagramData=res.data.reasonsDiagramData;#}
+                    {#this.reasonsDiagramss();#}
+                    this.seniorityDiagramData1=res.data.seniorityDiagramData1;
+                    this.seniorityDiagramss();
+                    {#this.educationDiagram=res.data.educationDiagram;#}
+                    {#this.educationDiagramss();#}
+                    this.SeniorityTitleDiagram0=res.data.SeniorityTitleDiagram0;
+                    {#this.seniorityText=res.data.seniorityText;#}
+                    {#this.xuanrantubiao();#}
+                    {#this.titleSeniorityDiagram2=res.data.titleSeniorityDiagram2;#}
+                    {#this.TitleText=res.data.TitleText;#}
+                    {#this.xuanrantubiao1();#}
+                   this.reasonDiagramData=res.data.reasonDiagramData;
+                   this.reasonDiagramss();
+                   this.canExport=res.data.canExport;
+                   this.elbuttonloading = false;
+                   this.tableloading = false;
+                   this.tableloading1 = false;
+                       {#console.log(this.elbuttonloading);#}
+                })
+                       this.searchYear=Year;
+                       this.searchYear1=Year;
+
+            },
+            daLeiSpanMethod({ row, column, rowIndex, columnIndex }) {
+                if (columnIndex === 0) {    //用于设置要合并的列
+                      if (rowIndex===0) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[0],　　　　　//合并的行数
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[1],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[2],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[3],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                        }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]+this.heBingNum[3]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[4],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]+this.heBingNum[3]+this.heBingNum[4]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[5],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }else if (rowIndex===this.heBingNum[0]+this.heBingNum[1]+this.heBingNum[2]+this.heBingNum[3]+this.heBingNum[4]+this.heBingNum[5]) {   //用于设置合并开始的行号
+                        return {
+                          rowspan:this.heBingNum[6],　　　　　//合并的行
+                          colspan: 1          //合并的列数，设为０则直接不显示
+                        };
+                      }
+                      else {
+                        return {
+                          rowspan: 0,
+                          colspan: 0
+                        };
+                      }
+                }
+            },
+    {% comment %}
+            educationDiagramss(){
+                var myChart6 = echarts.init(document.getElementById('educationDiagram1'));
+                var option6 = {
+                    title: {
+                        text:this.searchYear+'年1-10月離職人力學歷分佈',
+                        textStyle: {
+                        fontSize:30
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['合計', '占%']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data:this.educationDiagram.LABEL,
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '合計',
+                            min: 0,
+                            max: 200,
+                            interval: 20,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '占%',
+                            min: 0,
+                            max: 1,
+                            interval: 0.1,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series:[
+                        {
+                            name: '合計',
+                            type: 'bar',
+                            barWidth: '50',
+                            data: this.educationDiagram.educationDiagramHE
+                        },
+                        {
+                            name: '占%',
+                            type: 'line',
+                            barWidth: '50',
+                            yAxisIndex: 1,
+                            data: this.educationDiagram.educationDiagramZH
+                        }
+                    ]
+                };
+                    myChart6.clear();
+                    myChart6.setOption(option6);
+                    window.addEventListener('resize', ()=>{
+                       myChart6.resize();
+                     // 使用刚指定的配置项和数据显示图表。
+                    })
+            },
+    {% endcomment %}
+            seniorityDiagramss(){
+
+              let _this = this
+              const list = []
+              const bottom = 80 // 控制线的位置
+              const height = 26
+              for (var i = 0; i < 3; i++) {
+                list.push({
+                  type: 'line',
+                  bottom: bottom - i * height,
+                  right: 50,
+                  {#left: 50,#}
+                  style: {
+                    fill: '#000000',
+                    stroke: '#000000'
+                  },
+                  shape: { // 几条线
+                    x1: 11,
+                    y1: 0,
+                    x2: 2000,
+                    y2: 0
+                  }
+                })
+              }
+
+
+                 var option4 = {
+                    color: ['#778899',],
+                    title: [{
+                        text:this.searchYear+'年各年資離職分佈圖',
+                        textStyle: {
+                        fontSize:30
+                        }
+                    },
+                      {
+                        text: '\n合計離職\n離職占比%',
+                        bottom: 24, // 控制表格Y轴方向
+                        left: 0,
+                        textStyle: {
+                          color: '#000000',
+                          lineHeight: 26,
+                          fontSize: 16,
+                          fontWeight:'normal',
+                      }
+
+                    }
+
+                    ],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+
+                    grid: {
+                      bottom: 120,
+                      left: '80px',
+                      right: '50px'
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['合計離職', '離職占%']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data:this.seniorityDiagramData1.LABEL,
+                            axisTick: {
+                                length: 94 // 竖线的长度
+                            },
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    {#rotate: "45"#}
+
+                              formatter(value, index) {
+                                var data1 = _this.seniorityDiagramData1.LABEL
+                                {#var data1 = ["助技員", "技術員", "助工師", "工程師", "資工師", "副課長", "襄理"]#}
+                                var data2 = _this.seniorityDiagramData1.HEJILIZHI
+                                var data3 = _this.seniorityDiagramData1.LIZHIBI
+                                {#var data2 = [32, 30, 63, 23, 48, 4, 4]#}
+                                var indexNum = 0
+                                for (var i = 0; i < data1.length; i++) {
+                                  if (value === data1[i]) {
+                                    indexNum = i
+                                  }
+                                }
+                                return (
+                                  '{table|' +
+                                  value +
+                                  '}\n{table|' +
+                                  data2[indexNum] +
+                                  '}\n{table|'+
+                                  data3[indexNum] +
+                                  '}\n{table|' +
+                                  '}'
+                                )
+                              },
+                              rich: {
+                                table: {
+                                  lineHeight: 30,
+                                  align: 'center',
+                                  fontSize:16
+
+                                }
+                              }
+
+                            },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '合計離職',
+                            min: 0,
+                            {#max: 200,#}
+                            {#interval: 20,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                             axisTick: {
+                              show: false // 刻度线
+                            },
+                        },
+                        {
+                            type: 'value',
+                            name: '離職占%',
+                            min: 0,
+                            {#max:1,#}
+                            {#interval: 0.1,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                             axisTick: {
+                              show: false // 刻度线
+                            },
+                        }
+                    ],
+                    series:[
+                        {
+                            'name': '合計離職',
+                            'type': 'bar',
+                            'data':this.seniorityDiagramData1.HEJILIZHI
+                        },
+                        {
+                            'name': '離職占%',
+                            'type': 'line',
+                            'yAxisIndex': 1,
+                            'data':this.seniorityDiagramData1.LIZHIBI
+                        }
+                    ],
+                    graphic: list
+                };
+                _this.myChart4.clear();
+                 _this.myChart4.setOption(option4);
+                window.addEventListener('resize', ()=>{
+                   _this.myChart4.resize();
+                 // 使用刚指定的配置项和数据显示图表。
+                })
+                _this.myChart4.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+            },
+
+            reasonDiagramss(){
+
+              let _this = this
+              const list = []
+              const bottom = 80 // 控制线的位置
+              const height = 26
+              for (var i = 0; i < 3; i++) {
+                list.push({
+                  type: 'line',
+                  bottom: bottom - i * height,
+                  right: 50,
+                  {#left: 50,#}
+                  style: {
+                    fill: '#000000',
+                    stroke: '#000000'
+                  },
+                  shape: { // 几条线
+                    x1: 11,
+                    y1: 0,
+                    x2: 2000,
+                    y2: 0
+                  }
+                })
+              }
+
+
+                 var option8 = {
+                    color: ['#778899',],
+                    title: [{
+                        text:this.searchYear+'離職原因',
+                        textStyle: {
+                        fontSize:30
+                        }
+                    },
+                      {
+                        text: '\n人數\n占總%',
+                        bottom: 24, // 控制表格Y轴方向
+                        left: 0,
+                        textStyle: {
+                          color: '#000000',
+                          lineHeight: 26,
+                          fontSize: 16,
+                          fontWeight:'normal',
+                      }
+
+                    }
+
+                    ],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+
+                    grid: {
+                      bottom: 120,
+                      left: '80px',
+                      right: '50px'
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['人數', '占總%']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data:this.reasonDiagramData.LABEL,
+                            axisTick: {
+                                length: 94 // 竖线的长度
+                            },
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    {#rotate: "45"#}
+
+                              formatter(value, index) {
+                                var data1 = _this.reasonDiagramData.LABEL
+                                {#var data1 = ["助技員", "技術員", "助工師", "工程師", "資工師", "副課長", "襄理"]#}
+                                var data2 = _this.reasonDiagramData.HEJIRENSHU
+                                var data3 = _this.reasonDiagramData.YUANYINBI
+                                {#var data2 = [32, 30, 63, 23, 48, 4, 4]#}
+                                var indexNum = 0
+                                for (var i = 0; i < data1.length; i++) {
+                                  if (value === data1[i]) {
+                                    indexNum = i
+                                  }
+                                }
+                                return (
+                                  '{table|' +
+                                  value +
+                                  '}\n{table|' +
+                                  data2[indexNum] +
+                                  '}\n{table|'+
+                                  data3[indexNum] +
+                                  '}\n{table|' +
+                                  '}'
+                                )
+                              },
+                              rich: {
+                                table: {
+                                  lineHeight: 30,
+                                  align: 'center',
+                                  fontSize:16
+
+                                }
+                              }
+
+                            },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '人數',
+                            min: 0,
+                            {#max: 200,#}
+                            {#interval: 20,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                             axisTick: {
+                              show: false // 刻度线
+                            },
+                        },
+                        {
+                            type: 'value',
+                            name: '占總%',
+                            min: 0,
+                            {#max:1,#}
+                            {#interval: 0.1,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                             axisTick: {
+                              show: false // 刻度线
+                            },
+                        }
+                    ],
+                    series:[
+                        {
+                            'name': '人數',
+                            'type': 'bar',
+                            'data':this.reasonDiagramData.HEJIRENSHU
+                        },
+                        {
+                            'name': '離職占%',
+                            'type': 'line',
+                            'yAxisIndex': 1,
+                            'data':this.reasonDiagramData.YUANYINBI
+                        }
+                    ],
+                    graphic: list
+                };
+                _this.myChart8.clear();
+                 _this.myChart8.setOption(option8);
+                window.addEventListener('resize', ()=>{
+                   _this.myChart8.resize();
+                 // 使用刚指定的配置项和数据显示图表。
+                });
+                _this.myChart8.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+            },
+    {% comment %}
+            reasonsDiagramss(){
+                 var myChart1 = echarts.init(document.getElementById('reasonsDiagramDIV'));
+                 var option1 = {
+                    title: {
+                        text:this.searchYear+'年離職去向調查',
+                        textStyle: {
+                        fontSize:30
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['合計', '去向占總']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data:this.reasonsDiagramData.LABEL,
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                    interval: 0,
+                                    rotate: "45"
+                                },
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '合計',
+                            min: 0,
+                            max: 200,
+                            interval: 20,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '去向占總',
+                            min: 0,
+                            max: 1,
+                            interval: 0.1,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series:[
+                        {
+                            'name': '合計',
+                            'type': 'bar',
+                            'data':this.reasonsDiagramData.HEJI
+                        },
+                        {
+                            'name': '去向占總',
+                            'type': 'line',
+                            'yAxisIndex': 1,
+                            'data':this.reasonsDiagramData.ZHANZONG
+                        }
+                    ]
+                };
+                myChart1.clear();
+                 myChart1.setOption(option1);
+                window.addEventListener('resize', ()=>{
+                   myChart1.resize();
+                 // 使用刚指定的配置项和数据显示图表。
+                })
+
+            },
+    {% endcomment %}
+    {% comment %}
+            selectDetail:function(row){                                 //表格中点击事件
+                    var titleSeniorityValue=[];
+                    this.titleSeniorityValue=row;
+                    for(var key in this.titleSeniorityValue){
+                        var getTitleSeniorityValue=this.titleSeniorityValue[key]
+                        titleSeniorityValue.push(getTitleSeniorityValue);
+                    }
+                   // console.log(titleSeniorityValue)    //图表二数据
+                    this.titleSeniorityDiagram2=[];
+                    for(var i=1;i<titleSeniorityValue.length-1;i++){
+                         //console.log(this.titleSeniorityData[i-1],titleSeniorityValue[i])
+                         this.titleSeniorityDiagram2.push({
+                               name:this.titleSeniorityData[i-1],
+                               value:titleSeniorityValue[i]
+                         })
+
+                    }
+                       //console.log(titleSeniorityDiagram2)
+                       {#this.TitleText=row.Title;#}
+                       {#this.xuanrantubiao1();#}
+            },
+    {% endcomment %}
+    {% comment %}
+            xuanrantubiao1(){
+                    var myChart3 = echarts.init(document.getElementById('titleDiagram2DQADIV'));
+
+                    var option3 = {
+                        title: {
+                            text:this.TitleText,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data:this.titleSeniorityData
+                        },
+                        series: [
+                            {
+                                name:this.TitleText,
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '60%'],
+                                data:this.titleSeniorityDiagram2,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myChart3.clear();
+                    myChart3.setOption(option3);
+                    window.addEventListener('resize', ()=>{
+                       myChart3.resize();
+                     // 使用刚指定的配置项和数据显示图表。
+                    })
+            },
+    {% endcomment %}
+    {% comment %}
+            selectseniorityDetail:function(row){
+                  var SeniorityTitleValue=[];
+                    this.SeniorityTitleValue=row;
+                    for(var key in this.SeniorityTitleValue){
+                        var getSeniorityTitleValue=this.SeniorityTitleValue[key]
+                        SeniorityTitleValue.push(getSeniorityTitleValue);
+                    }
+                    //console.log(SeniorityTitleValue,'1')    //图表五数据
+                    this.SeniorityTitleDiagram0=[];
+                    for(var i=1;i<SeniorityTitleValue.length;i++){
+                        // console.log(this.seniorityTitleData[i],SeniorityTitleValue[i],'2')
+                         this.SeniorityTitleDiagram0.push({
+                               name:this.seniorityTitleData[i],
+                               value:SeniorityTitleValue[i]
+                         })
+
+                    }
+                       //console.log(SeniorityTitleDiagram0,'3')
+                       {#this.seniorityText=row.seniority;#}
+                       {#this.xuanrantubiao();#}
+                  },
+    {% endcomment %}
+    {% comment %}
+            xuanrantubiao(){
+                     var myChart5 = echarts.init(document.getElementById('seniorityDiagramDIV2'));
+                     var option5 = {
+                        title: {
+                            text: this.seniorityText,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data:this.seniorityTitleData
+                        },
+                        series: [
+                            {
+                                name:this.seniorityText,
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '60%'],
+                                data:this.SeniorityTitleDiagram0,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myChart5.clear();
+                    myChart5.setOption(option5);
+                    window.addEventListener('resize', ()=>{
+                       myChart5.resize();
+                     // 使用刚指定的配置项和数据显示图表。
+                    })
+            },
+    {% endcomment %}
+
+
+            titleDiagramss(){
+                //第二张图
+              let _this = this
+              const list = []
+              const bottom = 80 // 控制线的位置
+              const height = 26
+              for (var i = 0; i < 3; i++) {
+                list.push({
+                  type: 'line',
+                  bottom: bottom - i * height,
+                  right: 50,
+                  {#left: 50,#}
+                  style: {
+                    fill: '#000000',
+                    stroke: '#000000'
+                  },
+                  shape: { // 几条线
+                    x1: 10,
+                    y1: 0,
+                    x2: 2000,
+                    y2: 0
+                  }
+                })
+              }
+
+
+                var option2 = {
+                    color: ['#778899',],
+                    title: [{
+                        text:this.searchYear1+'年各職稱離職分佈圖',
+                        textStyle: {
+                        fontSize:30
+                        }},
+                      {
+                        text: '\n合計離職\n離職占比%',
+                        bottom: 24, // 控制表格Y轴方向
+                        left: 0,
+                        textStyle: {
+                          color: '#000000',
+                          lineHeight: 26,
+                          fontSize: 16,
+                          fontWeight:'normal',
+                      }
+
+                    }],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            crossStyle: {
+                                color: '#000000'
+                            },
+                        }
+                    },
+
+                    grid: {
+                      bottom: 120,
+                      left: '80px',
+                      right: '50px'
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['合計離職', '離職占%']
+                    },
+                    xAxis:[
+                        {
+                            type: 'category',
+                            boundaryGap: true,
+                            data:this.titleDiagram2Data.LABEL,
+                            axisTick: {
+                                length: 94 // 竖线的长度
+                            },
+                            axisLabel: {//坐标轴刻度标签的相关设置。
+                                interval: 0,
+                                {#rotate: "45"#}
+                                axisPointer: {
+                                    type: 'shadow'
+                                },
+                              formatter(value, index) {
+                                var data1 = _this.titleDiagram2Data.LABEL
+                                {#var data1 = ["助技員", "技術員", "助工師", "工程師", "資工師", "副課長", "襄理"]#}
+                                var data2 = _this.titleDiagram2Data.HEJILIZHI
+                                var data3 = _this.titleDiagram2Data.LIZHIBI
+                                {#var data2 = [32, 30, 63, 23, 48, 4, 4]#}
+                                var indexNum = 0
+                                for (var i = 0; i < data1.length; i++) {
+                                  if (value === data1[i]) {
+                                    indexNum = i
+                                  }
+                                }
+                                return (
+                                  '{table|' +
+                                  value +
+                                  '}\n{table|' +
+                                  data2[indexNum] +
+                                  '}\n{table|'+
+                                  data3[indexNum] +
+                                  '}\n{table|' +
+                                  '}'
+                                )
+                              },
+                              rich: {
+                                table: {
+                                  lineHeight: 30,
+                                  align: 'center',
+                                  fontSize:16
+
+                                }
+                              }
+                         },
+                    }
+                   ],
+
+                    yAxis: [
+                        {
+                            type: 'value',
+                            scale: false,
+                            name: '合計離職',
+                            min: 0,
+                            {#max: 200,#}
+                            {#interval: 20,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                            axisTick: {
+                              show: false // 刻度线
+                            },
+                        },
+                        {
+                            type: 'value',
+                            name: '離職占%',
+                            min: 0,
+                            {#max: 1,#}
+                            {#interval: 0.1,#}
+                            axisLabel: {
+                                formatter: '{value}'
+                            },
+                            axisTick: {
+                              show: false // 刻度线
+                            },
+                        }
+                    ],
+                    series:[
+                        {
+                            'name': '合計離職',
+                            'type': 'bar',
+                            'data':this.titleDiagram2Data.HEJILIZHI
+                        },
+                        {
+                            'name': '離職占%',
+                            'type': 'line',
+                            'yAxisIndex': 1,
+                            'data':this.titleDiagram2Data.LIZHIBI
+                        }
+                    ],
+                    graphic: list
+                };
+                 _this.myChart2.clear();
+                 _this.myChart2.setOption(option2);
+                window.addEventListener('resize', ()=>{
+                   _this.myChart2.resize();
+                 // 使用刚指定的配置项和数据显示图表。
+                })
+                _this.myChart2.hideLoading() // 当服务器数据获取成功之后, 隐藏加载动画
+
+            },
+
+            addColor({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 4) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFEEDD'
+                                   }
+                   }
+                if (columnIndex === 5) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFF8D7'
+                                   }
+                   }
+
+        },
+            addColor2({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 2) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFEEDD'
+                                   }
+                   }
+
+        },
+            addColor3({row, column, rowIndex, columnIndex}) {
+                   if (columnIndex === 5) {
+                           return {
+                                     {% comment %}color: 'white',{% endcomment %}
+                                     background: '#FFEEDD'
+                                   }
+                   }
+
+        },
+
+            changeRowColor({row, column, rowIndex, columnIndex}) {
+            if( rowIndex % 2 == 0){
+               return {
+                         background: 'white'
+               }
+            }else{
+               return {
+                         background: '#FFF0F5'
+                         {#background: '#FFFAF0'#}
+               }
+            }
+        },
+            exportExcel:function (){
+           /* 从表生成工作簿对象 */
+
+        {% comment %}
+         if(this.$refs.Customer.value ==""){
+                      this.customerError= true;
+                      return false;
+                 }
+                if(this.$refs.Department.value ==""){
+                      this.departmentError= true;
+                      return false;
+                 }
+                if(this.$refs.Lesson.value ==""){
+                      this.lessonError= true;
+                      return false;
+                 }
+                if(this.$refs.GroupEmployees.value ==""){
+                      this.groupemployeesError= true;
+                      return false;
+                 }
+             {% endcomment %}
+                let temp=[];
+                 temp.push(Number(this.currentPage));
+                 temp.push(Number(this.pageSize));
+                 console.log(temp)
+                 this.currentPage=1;
+                 this.pageSize=this.perinTable.length;
+                 console.log(temp,this.defaultPage1,this.pageSize);
+                 setTimeout(() => { let table = document.querySelector("#out-table").cloneNode(true);
+                 // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+                 //table.removeChild(table.querySelector(".el-table__fixed"))
+                 //table.removeChild(table.querySelector(".el-table__fixed-right"))//左右都有固定列
+                    //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+
+                var wb = XLSX.utils.table_to_book(table,{raw:true});
+                console.log("wb",wb);
+                /* 获取二进制字符串作为输出 */
+                var wbout = XLSX.write(wb, {
+                    bookType: "xlsx",
+                    bookSST: true,
+                    type: "array"
+                });
+                console.log("wbout",wbout);
+                try {
+                    saveAs(
+                    //Blob 对象表示一个不可变、原始数据的类文件对象。
+                    //Blob 表示的不一定是JavaScript原生格式的数据。
+                    //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                    //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                    new Blob([wbout], { type: "application/octet-stream" }),
+                    //设置导出文件名称
+                    "sheetjs.xlsx"
+                    );
+
+                } catch (e) {
+                    if (typeof console !== "undefined") console.log(e, wbout);
+                }
+                this.currentPage=temp[0];
+                    this.pageSize=temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                    //console.log(this.currentPage,this.pageSize)
+                    temp=[];
+                return wbout;},1000) ;
+                },
+        },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search1=this.search000;
+                    if(search1){
+                        return this.perinTable.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search1.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.perinTable//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    console.log(this.Totalsize);
+                  return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+        watch: {
+                dataList() {
+                    this.showed_data = this.perinTable.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                    console.log("watch",this.showed_data)
+                }
+            },
+})
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}CQM_edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+    <style>
+    .content{
+    width:25px;
+    height: 70px;
+    position: fixed;
+    right: 10px;
+    top:60px;
+    background-color:#343957;
+    color:white;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: break-word;
+    line-height: 24px;
+    writing-mode: vertical-lr;
+    z-index: 99;
+    opacity: 0.9;
+}
+    #container-yansebiaoshi{
+    display:none;
+    position: fixed;
+    right: 35px;
+    top:60px;
+    z-index: 99;
+    border: 2px solid  #deb887;
+}
+     .el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+    .gutter{
+        display:block!important;
+        width:17px!important;
+    }
+    .cell-green{
+    background: greenyellow;
+}
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+    .tips{
+    font-size: 20px;
+    font-weight: bold;
+    color: coral;
+    margin-left: 15px;
+}
+    .el-table .cell {
+    box-sizing: border-box;
+    white-space: pre-line;
+    word-break: break-all;
+    line-height: 23px;
+    }
+    tbody tr td:last-child {
+    text-align: left;
+    }
+     .inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin: 10px auto 5px;
+    position: relative;
+}
+    .inputError,#Customer{
+        display:inline-block;
+    }
+    .el-tooltip__popper{
+    max-width: 400px;
+    white-space: pre-line;
+    }
+    .oneLine {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .el-table .my-cell {
+    vertical-align: top
+  }
+    body .el-table th.gutter{
+      display: table-cell!important;
+    }
+    body .el-table colgroup.gutter{
+      display: table-cell!important;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="content" id="yincang">spec</div>
+    <div id="container-yansebiaoshi">
+    <img src="/static/src/cqmspec.png">
+    </div>
+    <div id="app">
+<div class="row" style="white-space: nowrap;">
+                    <div class="col-md-4">
+                    <label style="color: #FFF" for="Customer">Customer</label>
+           <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
+               <option value=""> </option>
+               <option v-for="(item,key,index) in selectItem" >${ item }</option>
+           </select>
+                        <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
+                    </div>
+                    <div class="col-md-1">
+                        <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT()">Search</el-button>
+                    </div>
+                      <div class="col-md-1">
+                    <el-button size="small" type="danger" v-if="statu === 4 || statu === 5" @click="multiDelete">批量删除</el-button>
+                  </div>
+</div>
+        <el-dialog :visible.sync="settable" >
+  <el-table border stripe :default-sort="{prop:'SS',order:'descending'}" height="500" :data="searchalert" @row-click="selectMsg">
+    <el-table-column property="YEAR" label="YEAR" width="90" sortable></el-table-column>
+    <el-table-column property="COMPRJCODE" label="COMPRJCODE" width="140" sortable></el-table-column>
+    <el-table-column property="Phase" label="Phase" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode1" label="PRJENGCODE1" width="140" sortable></el-table-column>
+    <el-table-column property="PrjEngCode2" label="PRJENGCODE2" width="140" sortable></el-table-column>
+    <el-table-column property="PROJECT" label="MKT CODE" width="200"></el-table-column>
+    <el-table-column property="SIZE" label="SIZE" width="70"></el-table-column>
+    <el-table-column property="CPU" label="CPU" width="70"></el-table-column>
+    <el-table-column property="PLATFORM" label="PLATFORM" width="200"></el-table-column>
+    <el-table-column property="VGA" label="VGA" width="110"></el-table-column>
+    <el-table-column property="OS SUPPORT" label="OS SUPPORT" width="110"></el-table-column>
+    <el-table-column property="SS" label="SS" width="110" sortable></el-table-column>
+    <el-table-column property="LD" label="LD"></el-table-column>
+    <el-table-column property="DQA PL" label="DQA PL"></el-table-column>
+  </el-table>
+</el-dialog>
+          <span class="selectItem" v-cloak  v-if="showCustomer&&showProject">當前表格信息：${ showCustomer }/${ showProject }/${ showPhase }<span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
+    <template>
+    <el-table border stripe height="750" ref="multipleTable" @selection-change="handleSelectionChange" :row-key="getRowKeys" :data="tableContent.slice((currentPage-1)*pageSize,currentPage*pageSize)" :cell-style="addClass">
+        <el-table-column type="selection" width="50" fixed></el-table-column>
+        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+        <el-table-column label="Project" align="center" width="90" fixed>
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.Project"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit">${ project[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="Category" align="center" width="110" fixed>
+            <template slot-scope="scope">
+            <el-select class="edit-cell"  v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit&&showCustomer='C38(NB)'"  v-model="scope.row.Material_Group">
+                <el-option v-if="showCustomer==='C38(NB)'" value="Active_Pen"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Adapter"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'"  value="Battery"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Camera"></el-option>
+                <el-option  v-if="showCustomer==='C38(NB)'" value="Card_Reader"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="CPU"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="EMMC"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Finger_Print"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="HDD"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Keyboard"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="LAN"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Memory"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="ODD"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Panel"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Power_Cord"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Speaker"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="SSD"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Touch_Pad"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="TPM"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="TCM"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="UFS"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="VRAM"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="VGA"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="WLAN"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="WWAN"></el-option>
+                <el-option v-if="showCustomer==='C38(NB)'" value="Others"></el-option>
+
+                <el-option  v-if="showCustomer==='C38(AIO)'" value="Adapter"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Camera"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="CPU"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Fan"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="HDD"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Keyboard"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Panel"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="MIC"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Mouse"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="ODD"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Power_Cord"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Memory"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Speaker"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="SSD"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Stand"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Thermal module"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="VGA"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="VRAM"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Wireless KB/MS"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="WLAN+BT combo"></el-option>
+                <el-option v-if="showCustomer==='C38(AIO)'" value="Others"></el-option>
+            </el-select>
+{#            <el-select class="edit-cell"  v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit&&showCustomer='C38(AIO)'"  v-model="scope.row.Material_Group1">#}
+{#                <el-option value="Adapter"></el-option>#}
+{#                <el-option value="Camera"></el-option>#}
+{#                <el-option value="CPU"></el-option>#}
+{#                <el-option value="Fan"></el-option>#}
+{#                <el-option value="HDD"></el-option>#}
+{#                <el-option value="Keyboard"></el-option>#}
+{#                <el-option value="Panel"></el-option>#}
+{#                <el-option value="MIC"></el-option>#}
+{#                <el-option value="Mouse"></el-option>#}
+{#                <el-option value="ODD"></el-option>#}
+{#                <el-option value="Power_Cord"></el-option>#}
+{#                <el-option value="Memory"></el-option>#}
+{#                <el-option value="Speaker"></el-option>#}
+{#                <el-option value="SSD"></el-option>#}
+{#                <el-option value="Stand"></el-option>#}
+{#                <el-option value="Thermal module"></el-option>#}
+{#                <el-option value="VGA"></el-option>#}
+{#                <el-option value="VRAM"></el-option>#}
+{#                <el-option value="Wireless KB/MS"></el-option>#}
+{#                <el-option value="WLAN+BT combo"></el-option>#}
+{#                <el-option value="Others"></el-option>#}
+{#            </el-select>#}
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ material_group[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*Keyparts (Option items)" align="center" width="194" fixed>
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Keyparts"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ keyparts[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Parameter (Option items)" align="center" width="194">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Character"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ character[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Phase" align="center" width="83">
+            <template slot-scope="scope">
+          <el-select class="edit-cell" filterable allow-create v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"  v-model="scope.row.Phase">
+                <el-option value="FVT"></el-option>
+                <el-option value="SIT"></el-option>
+                <el-option value="OOC"></el-option>
+                <el-option value="INV"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ phase[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Supplier" align="center" width="91">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Supplier"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ supplier[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Compal_R1_PN" align="center" width="132">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Compal_R1_PN"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r1[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column  label="DQA test result" align="center">
+            <el-table-column label="Test result" align="center" width="100">
+            <template slot-scope="scope">
+                <span class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 6)&&canEdit">${ scope.row.Testresult }</span>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 6)">${ testresult[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+              <el-table-column label="Reliability" align="center" width="110">
+            <template slot-scope="scope">
+            <el-select class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 6)&&canEdit"  @change="changeresult(scope.row,scope.$index)"  v-model="scope.row.Reliability">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 6)">${ reliability[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+              <el-table-column label="Compatibility" align="center" width="110">
+            <template slot-scope="scope">
+            <el-select class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"  @change="changeresult(scope.row,scope.$index)"  v-model="scope.row.Compatibility">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compatibility[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+             </el-table-column>
+                <el-table-column  label="RD test result" align="center">
+            <el-table-column label="ESD" width="50" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 2 || statu === 4)&&canEdit"    v-model="scope.row.ESD"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 2 || statu === 4)">${ esd[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="EMI" width="50" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 2 || statu === 4)&&canEdit"    v-model="scope.row.EMI"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 2 || statu === 4)">${ emi[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="RF" width="50" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 2 || statu === 4)&&canEdit"    v-model="scope.row.RF"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 2 || statu === 4)">${ rf[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+        </el-table-column>
+        <el-table-column label="*PM summary RD test result" width="200" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 1 || statu === 4)&&canEdit"    v-model="scope.row.PMsummary"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 1 || statu === 4)">${ pmsummary[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+        <el-table-column  label="JQE test result" align="center">
+            <el-table-column label="Control run" width="115" align="center">
+                <template slot-scope="scope">
+                      <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 3 || statu === 4)&&canEdit"    v-model="scope.row.Controlrun"></el-input>
+                      <span v-else="showEdit[scope.$index] && (statu === 3 || statu === 4)">${ controlrun[scope.$index+(currentPage-1)*pageSize] }</span>
+                </template>
+            </el-table-column>
+            </el-table-column>
+        <el-table-column label="*PID (Option items)" align="center" width="186">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5) &&canEdit"    v-model="scope.row.PID"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ pid[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*VID (Option items)" align="center" width="182">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.VID"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ vid[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*HW (Option items)" align="center" width="183">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit"    v-model="scope.row.HW"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ hw[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="*FW (Option items)" align="center" width="178">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.FW"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ fw[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+
+        <el-table-column label="Model Name" align="center" width="300">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.R1_PN_Description"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ r1_pn[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Compal_R3_PN" align="center" width="116">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Compal_R3_PN"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r3[scope.$index+(currentPage-1)*pageSize] }</span>
+       </template>
+        </el-table-column>
+        <el-table-column label="Comments" width="400" align="left">
+                <template slot-scope="scope">
+                      <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index] && (statu === 1 || statu === 2 || statu === 3)&&canEdit"    v-model="scope.row.Comment"></textarea>
+                      <textarea class="edit-cell" cols="50" rows="4" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5 || statu === 6)&&canEdit"    v-model="scope.row.Comments"></textarea>
+{#                      <span v-else="showEdit[scope.$index] && (statu === 1 || statu === 2 || statu === 3|| statu === 4|| statu === 5|| statu === 6)">${ comments[scope.$index+(currentPage-1)*pageSize] }</span>#}
+                      <el-tooltip v-else="showEdit[scope.$index] && (statu === 1 || statu === 2 || statu === 3|| statu === 4|| statu === 5|| statu === 6)" class="item" effect="dark" placement="top">
+                            <div v-html="ToBreak(comments[scope.$index+(currentPage-1)*pageSize])" slot="content"></div>
+                            <div class="oneLine">${ comments[scope.$index+(currentPage-1)*pageSize] }</div>
+                        </el-tooltip>
+                </template>
+            </el-table-column>
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+        <template slot-scope="scope">
+            <el-button type="text" size="small"     @click.native="saveRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">保存</el-button>
+            <el-button type="text" size="small"     @click.native="cancelRow(scope.$index, scope.row)"     v-if="showBtn[scope.$index]&&canEdit">取消</el-button>
+
+            <el-button type="text" size="small"     @click.native="editRow(scope.$index, scope.row)"    v-if="!showBtn[scope.$index]">编辑</el-button>
+            <el-button type="text" size="small"     @click.native="historyRow(scope.$index, scope.row);dialogTableVisible = true"    v-if="!showBtn[scope.$index]">历史</el-button>
+        </template>
+    </el-table-column>
+    </el-table>
+    <div class="block">
+    <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalNum">
+    </el-pagination>
+  </div>
+    </template>
+    <el-dialog :title="'ChangeId:'+changeindex" :visible.sync="dialogTableVisible">
+  <el-table border height="500" :data="historyRecord" :default-sort="{prop:'changeTime', order:'descending'}">
+    <el-table-column property="oldContent" label="oldContent"  style="white-space: pre-line" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="newContent" label="newContent"  style="white-space: pre-line" min-width="450" class-name="my-cell"></el-table-column>
+    <el-table-column property="changeOwner" label="changeOwner" min-width="150" sortable></el-table-column>
+    <el-table-column property="changeTime" label="changeTime" left min-width="150" sortable></el-table-column>
+  </el-table>
+</el-dialog>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script type="text/babel">
+$(document).ready(function() {
+    $("#yincang").click(function () {
+        $("#container-yansebiaoshi").toggle();
+    });
+    $("body").click(function (e) {
+    if (!$(e.target).closest("#yincang").length) {
+        $("#container-yansebiaoshi").hide();
+    }
+    });
+})
+ new Vue({
+     el: '#app',
+     delimiters: ['${', '}'],
+     data: function () {
+         return {
+              options: [{value: 'Qd', label: 'Qd'}, {value: 'Qd_L', label: 'Qd_L'}, {value: 'Qd_C', label: 'Qd_C'}, {value: 'T', label: 'T'}, {value: 'F', label: 'F'}, {value: 'DisQ', label: 'DisQ'}, {value: 'Drpd', label: 'Drpd'}, {value: 'Not Build', label: 'Not Build'}],
+             //權限flag
+             visible: false,
+             settable:false,
+             historyRecord:[],
+             tableContent: [],
+             searchalert:[],
+             showEdit:[], //显示编辑框
+             showBtn:[],
+             showBtnOrdinary: true,
+             //權限flag
+        canEdit:false,
+        showTips:false,
+        showCustomer:null,
+        showProject:null,
+        showPhase:null,
+             currentPage: 1,//默认显示第一页
+             pageSize:100,//默认每页显示100条
+             totalNum: null,
+             selectItem:{},
+             selectedCustomer:null,
+             project:[],
+             material_group:[],
+             keyparts:[],
+             character:[],
+             pid:[],
+             vid:[],
+             hw:[],
+             fw:[],
+             supplier:[],
+             r1_pn:[],
+             compal_r1:[],
+             compal_r3:[],
+             phase:[],
+             reliability:[],
+             compatibility:[],
+             testresult:[],
+             esd:[],
+             emi:[],
+             rf:[],
+             pmsummary:[],
+             controlrun:[],
+             comments:[],
+             comment:null,
+             statu:null,
+             flag:null,
+             dialogTableVisible:false,
+             changeindex:null,
+             customerError:false,
+
+            multiDeleteVisible:false,
+            multipleSelection: [],
+             COMPRJCODE:null,
+             PHASE:null,
+
+
+
+
+         }
+     },
+     mounted: function (){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+     methods: {
+        //获取数据
+        getdata: function (e) {
+            let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+            axios.post("/CQM/CQM_edit/", Qs.stringify(data), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+                this.selectItem=res.data.select;
+         });
+
+        },
+         //索引
+         indexMethod(index) {
+                    return index +1;
+            },
+         //分页
+         handleSizeChange(val) {
+                this.pageSize = val;
+         },
+         handleCurrentChange(val) {
+          this.currentPage = val;
+         },
+         //搜索customer弹出弹框
+         SEARCHALERT:function(){
+            if(this.$refs.Customer.value==''){
+                   //alert("客戶別未選擇");
+                    this.customerError = true;
+                   return false;
+               }else {
+                this.customerError = false;
+                let Customer = this.$refs.Customer.value;
+                let data = {
+                    "isGetData": "SEARCHALERT",
+                    "Customer": Customer,
+                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                }
+                axios.post("/CQM/CQM_edit/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.searchalert = res.data.sear;
+                })
+                this.settable=true;
+            }
+             },
+          //上传搜索项：以此选项搜索符合条件的内容
+         selectMsg :function(row){
+           let Customer = this.$refs.Customer.value;
+           let data ={"isGetData":"SEARCH","Customer":Customer,"COMPRJCODE":row.COMPRJCODE,"Phase":row.Phase,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+           axios.post("/CQM/CQM_edit/",Qs.stringify(data), {
+           headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+            }).then((res) => {
+               this.tableContent = res.data.content;
+               this.totalNum=this.tableContent.length;
+               this.statu=res.data.orr.statu;
+               this.canEdit=res.data['canEdit'];
+               console.log(this.canEdit)
+                if(res.data['canEdit'] ||res.data['canEdit'] === 0){
+                      setTimeout(() =>{this.showTip()},1);
+                    }
+               for(let i=0;i<this.tableContent.length;i++) {
+                        this.project[i] = this.tableContent[i].Project;
+                        this.material_group[i] = this.tableContent[i].Material_Group;
+                        this.keyparts[i] = this.tableContent[i].Keyparts;
+                        this.character[i] = this.tableContent[i].Character;
+                        this.pid[i] = this.tableContent[i].PID;
+                        this.vid[i] = this.tableContent[i].VID;
+                        this.hw[i] = this.tableContent[i].HW;
+                        this.fw[i] = this.tableContent[i].FW;
+                        this.supplier[i] = this.tableContent[i].Supplier;
+                        this.r1_pn[i] = this.tableContent[i].R1_PN_Description;
+                        this.compal_r1[i] = this.tableContent[i].Compal_R1_PN;
+                        this.compal_r3[i] = this.tableContent[i].Compal_R3_PN;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.reliability[i] = this.tableContent[i].Reliability;
+                        this.compatibility[i] = this.tableContent[i].Compatibility;
+                        this.testresult[i] = this.tableContent[i].Testresult;
+                        this.esd[i] = this.tableContent[i].ESD;
+                        this.emi[i] = this.tableContent[i].EMI;
+                        this.rf[i] = this.tableContent[i].RF;
+                        this.pmsummary[i] = this.tableContent[i].PMsummary;
+                        this.controlrun[i] = this.tableContent[i].Controlrun;
+                        this.comments[i] = this.tableContent[i].Comments;
+               }
+           })
+               this.showCustomer=Customer;
+               this.showProject=row.COMPRJCODE;
+               this.showPhase=row.Phase;
+               this.settable=false;
+            console.log(Customer)
+             this.COMPRJCODE=row.COMPRJCODE;
+             this.PHASE=row.Phase;
+        },
+         showTip(){
+          if( this.showCustomer&&this.showProject){
+             if(!this.canEdit){
+                this.showTips = true ;
+             }else{
+                 this.showTips = false ;
+             }
+          }else{
+              this.showTips = false ;
+          }
+      },
+          //编辑
+         editRow(index,row) {
+           this.$set(this.showEdit,index,true);
+           this.$set(this.showBtn,index,true);
+        },
+         //保存
+         saveRow(index,rows) {
+                let Customer = this.showCustomer;
+                let Project = this.showProject;
+                let Phase = this.showPhase;
+                let data = {"isGetData": "SAVE", "rows": rows,"Customer":Customer,"Project":Project,"Phase":Phase, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                };
+                axios.post("/CQM/CQM_edit/", data, {
+                    //headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                     this.tableContent = res.data.content;
+                     this.flag=res.data.orn.flag;
+                    console.log(this.flag);
+                     for(let i=0;i<this.tableContent.length;i++) {
+                        this.project[i] = this.tableContent[i].Project;
+                        this.material_group[i] = this.tableContent[i].Material_Group;
+                        this.keyparts[i] = this.tableContent[i].Keyparts;
+                        this.character[i] = this.tableContent[i].Character;
+                        this.pid[i] = this.tableContent[i].PID;
+                        this.vid[i] = this.tableContent[i].VID;
+                        this.hw[i] = this.tableContent[i].HW;
+                        this.fw[i] = this.tableContent[i].FW;
+                        this.supplier[i] = this.tableContent[i].Supplier;
+                        this.r1_pn[i] = this.tableContent[i].R1_PN_Description;
+                        this.compal_r1[i] = this.tableContent[i].Compal_R1_PN;
+                        this.compal_r3[i] = this.tableContent[i].Compal_R3_PN;
+                        this.reliability[i] = this.tableContent[i].Reliability;
+                        this.compatibility[i] = this.tableContent[i].Compatibility;
+                        this.testresult[i] = this.tableContent[i].Testresult;
+                        this.esd[i] = this.tableContent[i].ESD;
+                        this.emi[i] = this.tableContent[i].EMI;
+                        this.rf[i] = this.tableContent[i].RF;
+                        this.pmsummary[i] = this.tableContent[i].PMsummary;
+                        this.controlrun[i] = this.tableContent[i].Controlrun;
+                        this.comments[i] = this.tableContent[i].Comments;
+
+                    }
+
+                    if(this.flag==0) {
+                this.$set(this.showEdit, index, false);
+                this.$set(this.showBtn, index, false);//关闭页面
+            }else{
+                alert(this.flag);
+            }
+                });
+
+
+       },
+        //取消编辑
+        cancelRow(index, row) {
+            this.tableContent[index].Project=this.project[index];
+            this.tableContent[index].Material_Group=this.material_group[index];
+            this.tableContent[index].Keyparts=this.keyparts[index];
+            this.tableContent[index].Character=this.character[index];
+            this.tableContent[index].PID=this.pid[index];
+            this.tableContent[index].VID=this.vid[index];
+            this.tableContent[index].HW=this.hw[index];
+            this.tableContent[index].FW=this.fw[index];
+            this.tableContent[index].Supplier=this.supplier[index];
+            this.tableContent[index].R1_PN_Description=this.r1_pn[index];
+            this.tableContent[index].Compal_R1_PN=this.compal_r1[index];
+            this.tableContent[index].Compal_R3_PN=this.compal_r3[index];
+            this.tableContent[index].Phase=this.phase[index];
+            this.tableContent[index].Reliability=this.reliability[index];
+            this.tableContent[index].Compatibility=this.compatibility[index];
+            this.tableContent[index].Testresult=this.testresult[index];
+            this.tableContent[index].ESD=this.esd[index];
+            this.tableContent[index].EMI=this.emi[index];
+            this.tableContent[index].RF=this.rf[index];
+            this.tableContent[index].PMsummary=this.pmsummary[index];
+            this.tableContent[index].Controlrun=this.controlrun[index];
+            this.tableContent[index].Comments=this.comments[index];
+            this.$set(this.showEdit,index,false);
+            this.$set(this.showBtn,index,false) ;
+       },
+        historyRow(index,row){
+             let data = {"isGetData": "history", "id":this.tableContent[index]['id'],"csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                };
+                axios.post("/CQM/CQM_edit/", data, {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                     this.historyRecord = res.data.history;
+                      this.changeindex=index+1;
+                });
+        },
+         //监听变化，生成结果
+         changeresult:function(rows,index){
+                if(rows.Reliability=='No Build'|| rows.Compatibility=='No Build'){
+                    rows.Testresult='No Build';
+                    console.log(rows.Testresult)
+                }
+                else if(rows.Reliability=='Qd'&& rows.Compatibility=='Qd'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='Drop'&& rows.Compatibility!=='No Build'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='DisQ'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='F'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'&& rows.Compatibility!=='DisQ'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='T'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'&& rows.Compatibility!=='DisQ'&& rows.Compatibility!=='F'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='Qd_C'&& rows.Compatibility!=='No Build'&& rows.Compatibility!=='Drop'&& rows.Compatibility!=='DisQ'&& rows.Compatibility!=='F'&& rows.Compatibility!=='T'){
+                    rows.Testresult=rows.Reliability;
+                }
+                else if(rows.Reliability=='Qd_L'&& rows.Compatibility!=='No Build'&& rows.Compatibility=='Qd'){
+                    rows.Testresult=rows.Reliability;
+                }日期範圍
+                else{
+                    rows.Testresult=rows.Compatibility;
+                }
+            },
+         //颜色变化
+          addClass({row, column, rowIndex, columnIndex}) {
+              console.log('addcolor',rowIndex, columnIndex)
+              if (columnIndex === 8 && (row.Reliability === 'Qd' || row.Reliability === 'Qd_C' || row.Reliability === 'Qd_L'|| row.Reliability === 'Qd-C' || row.Reliability === 'Qd-L')) {
+                  console.log("lie",row)
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+              if (columnIndex === 9 && (row.Compatibility === 'Qd' || row.Compatibility === 'Qd_C' || row.Compatibility === 'Qd_L'|| row.Compatibility === 'Qd-C' || row.Compatibility === 'Qd-L')) {
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+              if (columnIndex === 8 && (row.Testresult === 'Qd' || row.Testresult === 'Qd_C' || row.Testresult === 'Qd_L'|| row.Testresult === 'Qd-C' || row.Testresult === 'Qd-L')) {
+                  return {
+                      background: '#00FF00'
+                  }
+              }
+
+              if (columnIndex === 8 && (row.Reliability === 'F' || row.Reliability === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+              if (columnIndex === 9 && (row.Compatibility === 'F' || row.Compatibility === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+              if (columnIndex === 8 && (row.Testresult === 'F' || row.Testresult === 'DisQ')) {
+                  return {
+                      color: '#FF0000'
+                  }
+              }
+
+
+              if (columnIndex === 8 && row.Reliability === 'Drpd') {
+                  return {
+                      background: '#696969'
+                  }
+              }
+              if (columnIndex === 9 && row.Compatibility === 'Drpd' ) {
+                  return {
+                      background: '#696969'
+                  }
+              }
+              if (columnIndex === 8 && row.Testresult === 'Drpd' ) {
+                  return {
+                      background: '#696969'
+                  }
+              }
+          },
+         ToBreak (val) {
+            //console.log(val,"val")
+          if(val){
+              //console.log(val.replace('\n', '<br />'),"val")
+              return val.replace('\n', '<br />')
+          }
+        },
+         handleSelectionChange(rows) {
+                this.multipleSelection = rows;
+
+            },
+         getRowKeys (row) {
+              return row.id
+            },
+          multiDelete() {
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+         if(warning) {
+             this.multiDeleteVisible = false;
+             let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
+             let params = [];
+             let self = this;
+             checkArr.forEach(function (item) {
+                 console.log(item);
+                 params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
+             });
+             console.log(params);
+              let Customer = this.$refs.Customer.value;
+             let data = {
+                 "isGetData": "MUTIDELETE",
+                 "params": params,
+                 "Customer":Customer,"COMPRJCODE":this.COMPRJCODE,"Phase":this.PHASE,
+                 "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+             };
+             axios.post('/CQM/CQM_edit/', data).then((res) =>{
+
+                     this.tableContent = res.data.content;
+                     console.log(this.tableContent,'mul')
+                      for(let i=0;i<this.tableContent.length;i++) {
+                        this.project[i] = this.tableContent[i].Project;
+                        this.material_group[i] = this.tableContent[i].Material_Group;
+                        this.keyparts[i] = this.tableContent[i].Keyparts;
+                        this.character[i] = this.tableContent[i].Character;
+                        this.pid[i] = this.tableContent[i].PID;
+                        this.vid[i] = this.tableContent[i].VID;
+                        this.hw[i] = this.tableContent[i].HW;
+                        this.fw[i] = this.tableContent[i].FW;
+                        this.supplier[i] = this.tableContent[i].Supplier;
+                        this.r1_pn[i] = this.tableContent[i].R1_PN_Description;
+                        this.compal_r1[i] = this.tableContent[i].Compal_R1_PN;
+                        this.compal_r3[i] = this.tableContent[i].Compal_R3_PN;
+                        this.phase[i] = this.tableContent[i].Phase;
+                        this.reliability[i] = this.tableContent[i].Reliability;
+                        this.compatibility[i] = this.tableContent[i].Compatibility;
+                        this.testresult[i] = this.tableContent[i].Testresult;
+                        this.esd[i] = this.tableContent[i].ESD;
+                        this.emi[i] = this.tableContent[i].EMI;
+                        this.rf[i] = this.tableContent[i].RF;
+                        this.pmsummary[i] = this.tableContent[i].PMsummary;
+                        this.controlrun[i] = this.tableContent[i].Controlrun;
+                        this.comments[i] = this.tableContent[i].Comments;
+               }
+                     self.$message({
+                         message: '删除成功',
+                         type: 'success'
+                     });
+                 this.tableContent = res.data.content;
+             })
+         }else{
+             return false;
+         }
+            },
+     }
+ })
+</script>
+{% endblock %}
+{% endcomment %}
