@@ -1,16 +1,15 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-import datetime,os
+import datetime, os
 from django.http import HttpResponse
-import datetime,json,simplejson
+import datetime, json, simplejson
 from .models import AutoItems, AutoResult, AutoProject
 from CQM.models import CQM, CQMProject, CQM_history
 from CQM.models import CQM as CQMtest
 from app01.models import UserInfo, ProjectinfoinDCT
 from django.db import transaction
 from django.forms.models import model_to_dict
-from django.db.models import Max,Min,Sum,Count,Q, Value, CharField
-
+from django.db.models import Max, Min, Sum, Count, Q, Value, CharField
 
 # Create your views here.
 
@@ -32,6 +31,8 @@ headermodel_ProResult = {
     # 'Owner': 'Owner', 'Comment': 'Comment',
     '備註': 'Comments', 'Cycles': 'Cycles',
 }
+
+
 @csrf_exempt
 def AutoItem_edit(request):
     if not request.session.get('is_login', None):
@@ -70,8 +71,6 @@ def AutoItem_edit(request):
         "Ready", "Cancel", "Ongoing"
     ]
 
-
-
     for i in AutoItems.objects.all().values("Customer").distinct().order_by("Customer"):
         selectCustomer.append(i["Customer"])
 
@@ -84,13 +83,13 @@ def AutoItem_edit(request):
     errMsgNumber = ''
     canEdit = 1  # 增、刪、改、上傳
 
-
-    if request.method=="POST":
+    if request.method == "POST":
         if request.POST:
             if request.POST.get('isGetData') == 'first':
                 # mock_datalist = AutoItems.objects.all().annotate(type=Value('p', output_field=CharField(max_length=1)))
-                #附加SQL查询，先以Customer，在一Number最后2位排序
-                mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by("Customer","Lennum")
+                # 附加SQL查询，先以Customer，在一Number最后2位排序
+                mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by("Customer",
+                                                                                                             "Lennum")
                 for i in mock_datalist:
                     mock_data.append(
                         {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
@@ -117,7 +116,8 @@ def AutoItem_edit(request):
                     mock_datalist = AutoItems.objects.all()
                 for i in mock_datalist:
                     mock_data.append(
-                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf, "BaseBenfit": i.BaseIncome,
+                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
+                         "BaseBenfit": i.BaseIncome,
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
                          "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
@@ -143,7 +143,6 @@ def AutoItem_edit(request):
                     # print("create")
                     AutoItems.objects.create(**add_dic)
 
-
                 # mock_data
                 ckeck_dic = {}
                 Customer = request.POST.get('CustomerSearch')
@@ -160,7 +159,8 @@ def AutoItem_edit(request):
                     mock_datalist = AutoItems.objects.all()
                 for i in mock_datalist:
                     mock_data.append(
-                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf, "BaseBenfit": i.BaseIncome,
+                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
+                         "BaseBenfit": i.BaseIncome,
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
                          "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
@@ -181,7 +181,8 @@ def AutoItem_edit(request):
                 }
                 # print(add_dic)
                 # print(AutoItems.objects.filter(Number=request.POST.get('Number')).first().id,request.POST.get('id'),AutoItems.objects.filter(Number=request.POST.get('Number')).first().id != request.POST.get('id'))
-                if AutoItems.objects.filter(Number=request.POST.get('Number')).first() and AutoItems.objects.filter(Number=request.POST.get('Number')).first().id != int(request.POST.get('id')):
+                if AutoItems.objects.filter(Number=request.POST.get('Number')).first() and AutoItems.objects.filter(
+                        Number=request.POST.get('Number')).first().id != int(request.POST.get('id')):
                     errMsgNumber = "No.已经存在"
                 else:
                     # print("create")
@@ -430,6 +431,7 @@ def AutoItem_edit(request):
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'AutoResult/AutoItem_edit.html', locals())
 
+
 @csrf_exempt
 def AutoResult_edit(request):
     if not request.session.get('is_login', None):
@@ -439,8 +441,6 @@ def AutoResult_edit(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "Automation效益/AutoResult_edit"
-
-
 
     # roles = []
     # onlineuser = request.session.get('account')
@@ -496,10 +496,9 @@ def AutoResult_edit(request):
         for j in AutoProject.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
             Projectinfo = {}
             Projectinfo['value'] = j['Project']
-            Projectinfo['Year'] = AutoProject.objects.filter(Customer=i['Customer'],Project=j['Project']).first().Year
+            Projectinfo['Year'] = AutoProject.objects.filter(Customer=i['Customer'], Project=j['Project']).first().Year
             Customerlist.append(Projectinfo)
         selectCustomer[i['Customer']] = Customerlist
-
 
     mock_data = [
         # {"id": "1", "Number": "110", "CG": "C38(NB)", "VA_NVA": "VA", "BaseBenfit": 0.5, "ProjectData": 2,
@@ -569,10 +568,10 @@ def AutoResult_edit(request):
                     # check_dic = {"Number": i.Number, "ProjectName": Project}
                     if "INV" in Project.upper():
                         check_dic = {"AutoItem": AutoItems.objects.filter(Number=i.Number).first(),
-                                            "Projectinfo": AutoProject.objects.filter(Project=Project).first()}
+                                     "Projectinfo": AutoProject.objects.filter(Project=Project).first()}
                     else:
                         check_dic = {"AutoItem": AutoItems.objects.filter(Number=i.Number).first(),
-                                            "ProjectinfoCQM": CQMProject.objects.filter(Project=Project).first()}
+                                     "ProjectinfoCQM": CQMProject.objects.filter(Project=Project).first()}
                     if AutoResult.objects.filter(**check_dic):
                         if AutoResult.objects.filter(**check_dic).first().Cycles:
                             ProjectData = int(AutoResult.objects.filter(**check_dic).first().Cycles)
@@ -583,7 +582,7 @@ def AutoResult_edit(request):
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
                          "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData,"Comments": Comments
+                         "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
                          }
                     )
             if request.POST.get('isGetData') == 'SAVE':
@@ -607,7 +606,7 @@ def AutoResult_edit(request):
                 # print(check_dic_Result)
                 if AutoResult.objects.filter(**check_dic_Result):
                     update_dic = {"ValueIf": AutoItems.objects.filter(Number=Number).first().ValueIf,
-                                "Cycles": ProjectData, "Year": SSYear, "Comments": Comments,
+                                  "Cycles": ProjectData, "Year": SSYear, "Comments": Comments,
                                   "editor": request.session.get('user_name'),
                                   "edit_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                   }
@@ -615,10 +614,10 @@ def AutoResult_edit(request):
                 else:
                     creat_dic = {
                         "Number": Number, "ValueIf": AutoItems.objects.filter(Number=Number).first().ValueIf,
-                                 "ProjectName": Project, "Year": SSYear, "Cycles": ProjectData, "Comments": Comments,
-                                 "editor": request.session.get('user_name'),
-                                 "edit_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                 }
+                        "ProjectName": Project, "Year": SSYear, "Cycles": ProjectData, "Comments": Comments,
+                        "editor": request.session.get('user_name'),
+                        "edit_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    }
                     creat_dic.update(check_dic_Result)
                     # print(creat_dic)
                     AutoResult.objects.create(**creat_dic)
@@ -659,7 +658,7 @@ def AutoResult_edit(request):
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
                          "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData,"Comments": Comments
+                         "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
                          }
                     )
         else:
@@ -686,11 +685,11 @@ def AutoResult_edit(request):
                     if "INV" in Project.upper():
                         check_dic_Result = {
                             # "AutoItem": AutoItems.objects.filter(Number=Number).first(),
-                                            "Projectinfo": AutoProject.objects.filter(Project=Project).first()}
+                            "Projectinfo": AutoProject.objects.filter(Project=Project).first()}
                     else:
                         check_dic_Result = {
                             # "AutoItem": AutoItems.objects.filter(Number=Number).first(),
-                                            "ProjectinfoCQM": CQMProject.objects.filter(Project=Project).first()}
+                            "ProjectinfoCQM": CQMProject.objects.filter(Project=Project).first()}
                     SSYear = ''
                     for i in selectCustomer:
                         for j in selectCustomer[i]:
@@ -765,7 +764,7 @@ def AutoResult_edit(request):
                     num1 = 0
                     if startupload:
                         for i in uploadxlsxlist:
-                            if i["Cycles"] and i["Cycles"]!='0' or i["Comments"]:
+                            if i["Cycles"] and i["Cycles"] != '0' or i["Comments"]:
                                 num1 += 1
                                 # print(num1)
                                 # print(i)
@@ -785,12 +784,13 @@ def AutoResult_edit(request):
                                 # print(i)
                                 # Check_dic_Gantt['Test_Start'] = None  # 日期格式为空NULL不能用空字符
                                 if AutoResult.objects.filter(**check_dic_Result):  # 已经存在覆盖
-                                    update_dic = {"ValueIf": AutoItems.objects.filter(Number=i["Number"]).first().ValueIf,
-                                                  "Year": SSYear,
-                                                  "Cycles": i["Cycles"], "Comments": i["Comments"],
-                                                  "editor": request.session.get('user_name'),
-                                                  "edit_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                                  }
+                                    update_dic = {
+                                        "ValueIf": AutoItems.objects.filter(Number=i["Number"]).first().ValueIf,
+                                        "Year": SSYear,
+                                        "Cycles": i["Cycles"], "Comments": i["Comments"],
+                                        "editor": request.session.get('user_name'),
+                                        "edit_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                        }
                                     # print(update_dic)
                                     AutoResult.objects.filter(
                                         **check_dic_Result).update(**update_dic)
@@ -798,7 +798,8 @@ def AutoResult_edit(request):
                                     creat_dic = {
                                         "Number": i["Number"],
                                         "ValueIf": AutoItems.objects.filter(Number=i["Number"]).first().ValueIf,
-                                        "ProjectName": Project, "Year": SSYear, "Cycles": i["Cycles"], "Comments": i["Comments"],
+                                        "ProjectName": Project, "Year": SSYear, "Cycles": i["Cycles"],
+                                        "Comments": i["Comments"],
                                         "editor": request.session.get('user_name'),
                                         "edit_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                     }
@@ -844,6 +845,7 @@ def AutoResult_edit(request):
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'AutoResult/AutoResult_edit.html', locals())
+
 
 @csrf_exempt
 def AutoResult_search(request):
@@ -937,7 +939,7 @@ def AutoResult_search(request):
             Customer = request.POST.get('Customer')
             Year = request.POST.get('Year')
             Prolist = []
-            if Customer != "All":#前端加了为空的判断,所以Customer不可能为空，并且el-option的value不能设为空
+            if Customer != "All":  # 前端加了为空的判断,所以Customer不可能为空，并且el-option的value不能设为空
                 if not Year:
                     for i in CQMProject.objects.filter(Customer=Customer).values("Project").distinct().order_by(
                             "Project"):
@@ -1048,10 +1050,10 @@ def AutoResult_search(request):
                     # AutoResult_Projectinfo = AutoResult.objects.filter(**check_dic).first()
                     if "INV" in j.upper():
                         check_dic = {"AutoItem": AutoItems.objects.filter(Number=i.Number).first(),
-                                            "Projectinfo": AutoProject.objects.filter(Project=j).first()}
+                                     "Projectinfo": AutoProject.objects.filter(Project=j).first()}
                     else:
                         check_dic = {"AutoItem": AutoItems.objects.filter(Number=i.Number).first(),
-                                            "ProjectinfoCQM": CQMProject.objects.filter(Project=j).first()}
+                                     "ProjectinfoCQM": CQMProject.objects.filter(Project=j).first()}
                     AutoResult_Projectinfo = AutoResult.objects.filter(**check_dic).first()
                     # print(AutoResult_Projectinfo)
                     if AutoResult_Projectinfo:
@@ -1079,7 +1081,8 @@ def AutoResult_search(request):
                 # print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
                 mock_data.append(
-                    {"id": i.id, "ProjectResult": ProjectResult, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
+                    {"id": i.id, "ProjectResult": ProjectResult, "Number": i.Number, "CG": i.Customer,
+                     "VA_NVA": i.ValueIf,
                      "BaseBenfit": i.BaseIncome,
                      "SummaryBenfit": SummaryBenfit, "NPIBenfit": NPIBenfit,
                      "CaseID": i.CaseID, "CaseName": i.CaseName,
@@ -1195,20 +1198,24 @@ def AutoResult_summary(request):
                             # print(i)
                             if j["ValueIf"] == "VA":
                                 VAData_NPI += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles) * float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
                             if j["ValueIf"] == "N-VA":
                                 NVAData_NPI += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles) * float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
                         else:
                             if j["ValueIf"] == "VA":
                                 VAData_INV += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles) * float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
                             if j["ValueIf"] == "N-VA":
                                 NVAData_INV += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles) * float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
             # print(VAData_NPI,VAData_INV, NVAData_NPI,NVAData_INV)
             VAData = [VAData_NPI, VAData_NPI + VAData_INV]
@@ -1239,7 +1246,7 @@ def AutoResult_summary(request):
             for i in selectCustomerYear:
                 for j in selectCustomerYear[i]:
                     if j["Year"] == Year:
-                        Projectlist_Total.append((j["Project"], j["Phase"] ))
+                        Projectlist_Total.append((j["Project"], j["Phase"]))
 
             VAData_NPI = 0
             NVAData_NPI = 0
@@ -1259,20 +1266,24 @@ def AutoResult_summary(request):
                             # print(i)
                             if j["ValueIf"] == "VA":
                                 VAData_NPI += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles)*float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
                             if j["ValueIf"] == "N-VA":
                                 NVAData_NPI += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles)*float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
                         else:
                             if j["ValueIf"] == "VA":
                                 VAData_INV += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles)*float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
                             if j["ValueIf"] == "N-VA":
                                 NVAData_INV += float(
-                                    AutoResult.objects.filter(**check_dic).first().Cycles)*float(
+                                    AutoResult.objects.filter(**check_dic).first().Cycles if AutoResult.objects.filter(
+                                        **check_dic).first().Cycles else 0) * float(
                                     AutoItems.objects.filter(Number=j["Number"]).first().BaseIncome)
             # print(VAData_NPI,VAData_INV, NVAData_NPI,NVAData_INV)
             VAData = [VAData_NPI, VAData_NPI + VAData_INV]
@@ -1293,7 +1304,6 @@ def AutoResult_summary(request):
                     "data": NVAData
                 },
             ]
-
 
         data = {
             'ItemSummary': ItemSummary,
