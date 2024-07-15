@@ -339,11 +339,30 @@ label{
         </template>
     </el-dialog>
 
+    <div class="tableAround" v-cloak>
+    <el-table
+      :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+      style="min-width: 100%;border-radius: 10px;margin-bottom: 20px;"
+      border
+      v-for="(table, index) in tables"
+      :key="index"
+      :data="table.data"
+      style="width: 100%">
+      <el-table-column
+        align="center"
+        v-for="(column, cIndex) in table.columns"
+        :key="cIndex"
+        :prop="column.prop"
+        :label="column.label">
+      </el-table-column>
+    </el-table>
+
+  </div>
   <div class="tableAround">
 
     <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input><br>
 {#    <span  class="selectItem" v-cloak  v-if="showCustomer&&showDepartment&&showLesson">當前表格信息：${ showYear }/${ showCustomer }/${ showDepartment }/${ showLesson }/${ showGroupEmployees } </span>#}
-    <el-table id="out-table"  ref="tableRef" height="700" border stripe :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
+    <el-table id="out-table"  ref="tableRef" border stripe :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
         style="min-width: 100%;border-radius: 10px;;font-size: 10px"  @selection-change="handleSelectionChange" :row-key="getRowKeys" @sort-change='sortChange'
         :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
         v-loading="tableloading"
@@ -418,25 +437,7 @@ label{
         </el-pagination>
       </div>
   </div>
-  <div class="tableAround" v-cloak>
-    <el-table
-      :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
-      style="min-width: 100%;border-radius: 10px;margin-bottom: 20px;"
-      border
-      v-for="(table, index) in tables"
-      :key="index"
-      :data="table.data"
-      style="width: 100%">
-      <el-table-column
-        align="center"
-        v-for="(column, cIndex) in table.columns"
-        :key="cIndex"
-        :prop="column.prop"
-        :label="column.label">
-      </el-table-column>
-    </el-table>
 
-  </div>
   </div>
 {% endblock %}
 {% block scripts %}

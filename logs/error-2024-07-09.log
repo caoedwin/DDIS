@@ -1,0 +1,14 @@
+[2024-07-15 08:11:56,867] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 339, in TestPlanSW_summary
+    Phaselist_top.sort(key=lambda x: Phasesortorder[x])
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 339, in <lambda>
+    Phaselist_top.sort(key=lambda x: Phasesortorder[x])
+NameError: free variable 'Phasesortorder' referenced before assignment in enclosing scope
+[2024-07-15 08:11:56,891] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-summary/ 500 [254.36, 127.0.0.1:57475]
