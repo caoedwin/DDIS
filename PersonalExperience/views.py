@@ -736,11 +736,11 @@ def Summary(request):
                 account_Now_list = list(UserInfo.objects.all().values("account").distinct())
                 # print(account_Now_list)
                 # LNV注册
-                for i in PersonalInfo.objects.exclude(status="離職").filter(Status="在職", Customer='C38').values("GroupNum",
+                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer='C38').values("GroupNum",
                                                                                          "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role).first(), )
+                            Role.objects.filter(name=name_role).first(), )#移除用remove
                     else:
                         createdic = {"account": i["GroupNum"], "password": '12345678',
                                      "username": i["EngName"],
@@ -753,13 +753,13 @@ def Summary(request):
                         # print(createdic)
                         UserInfo.objects.create(**createdic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role).first(), )
+                            Role.objects.filter(name=name_role).first(), )#移除用remove
                 # CQ 注册
-                for i in PersonalInfo.objects.exclude(status="離職").filter(Status="在職", Customer__in=['CQABO']).values("GroupNum",
+                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer__in=['CQABO']).values("GroupNum",
                                                                                                  "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role_CQABO).first(), )
+                            Role.objects.filter(name=name_role_CQABO).first(), )#移除用remove
                     else:
                         createdic = {"account": i["GroupNum"], "password": '12345678',
                                      "username": i["EngName"],
@@ -772,13 +772,13 @@ def Summary(request):
                         # print(createdic)
                         UserInfo.objects.create(**createdic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role_CQABO).first(), )
+                            Role.objects.filter(name=name_role_CQABO).first(), )#移除用remove
                 # A31 注册
-                for i in PersonalInfo.objects.exclude(status="離職").filter(Status="在職", Customer__in=['A31']).values("GroupNum",
+                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer__in=['A31']).values("GroupNum",
                                                                                                  "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role_CQABO).first(), )
+                            Role.objects.filter(name=name_role_A31).first(), )#移除用remove
                     else:
                         createdic = {"account": i["GroupNum"], "password": '12345678',
                                      "username": i["EngName"],
@@ -791,13 +791,13 @@ def Summary(request):
                         # print(createdic)
                         UserInfo.objects.create(**createdic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role_A31).first(), )
-                # A31 注册
-                for i in PersonalInfo.objects.exclude(status="離職").filter(Status="在職", Customer__in=['A32']).values("GroupNum",
+                            Role.objects.filter(name=name_role_A31).first(), )#移除用remove
+                # A32 注册
+                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer__in=['A32']).values("GroupNum",
                                                                                                "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role_CQABO).first(), )
+                            Role.objects.filter(name=name_role_A32).first(), )#移除用remove
                     else:
                         createdic = {"account": i["GroupNum"], "password": '12345678',
                                      "username": i["EngName"],
@@ -810,7 +810,7 @@ def Summary(request):
                         # print(createdic)
                         UserInfo.objects.create(**createdic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
-                            Role.objects.filter(name=name_role_A32).first(), )
+                            Role.objects.filter(name=name_role_A32).first(), )#移除用remove
                         
                 for i in PerExperience.objects.filter(Proposer_Num=account_login):
                     mock_data.append(
