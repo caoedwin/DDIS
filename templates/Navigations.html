@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Navigations{% endblock %}
+{% block css %}
+{#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+{#	<link rel="stylesheet" href="/static/css/home_style.css">#}
+{#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
+<style>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
+</style>
+{% endblock %}
+{% block content1 %}
+{% endblock %}
+{% block content %}
+
+<div id="app" {% comment %}v-pre{% endcomment %}>
+  <el-container>
+        <el-main>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                  <div class="grid-content bg-purple">
+                    <el-table :data="tableData">
+                        <el-table-column prop="date" label="日期" width="140">
+                        </el-table-column>
+                        <el-table-column prop="name" label="姓名" width="120">
+                        </el-table-column>
+                        <el-table-column prop="address" label="地址">
+                        </el-table-column>
+                      </el-table>
+                  </div>
+              </el-col>
+              <el-col :span="12" {% comment %}:offset="6"{% endcomment %}><div class="grid-content bg-purple"></div></el-col>
+            </el-row>
+        </el-main>
+  </el-container>
+</div>
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/bootstrap.min.js"></script>
+    <script src="../static/js/scripts.js"></script>
+    {% comment %}<script type="text/javascript">
+        //设置Cookie
+        function setCookie(name, value) {
+            var Days = 1;
+            var exp = new Date();
+            console.log(name,value,"TTT")
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path:/";
+        }
+        /*
+         获取Cookie中的值
+         */
+        function getCookie(objName) {//获取指定名称的cookie的值
+            var arrStr = document.cookie.split("; ");
+            for (var i = 0; i < arrStr.length; i++) {
+                var temp = arrStr[i].split("=");
+                if (temp[0] == objName) {
+                    return decodeURI(temp[1]);
+                }
+            }
+        }
+        </script>{% endcomment %}
+    <script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+    <script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+{#<script src="/static/js/vue-router.min.js"></script>#}
+{% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+<script type="text/babel">
+  new Vue ({
+    el:"#app",
+    delimiters: ['${', '}'],
+    data() {
+        const item = {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      };
+      return {
+        selectCategory:[],
+        selectedCategory:'',
+          tableData: Array(20).fill(item)
+      }
+    },
+    mounted(){
+
+    },
+    methods: {
+
+      CookieME:function(){
+
+          let msg = {
+              "isGetData" : "Reliability" ,
+          }
+           axios.post("/index/",Qs.stringify(msg,{indices:false}),{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                } ).then((res) => {
+                    console.log(this,"ttt",this.$router)
+               {% comment %} this.$router.push({path:'/Lesson_search/'});{% endcomment %}//需要定义router实例化
+               window.location.href="/Lesson_search/";
+
+           });
+
+      },
+
+      CookieSW:function(){
+
+          let msg = {
+              "isGetData" : "Compatibility" ,
+          }
+           axios.post("/index/",Qs.stringify(msg,{indices:false}),{
+                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                } ).then((res) => {
+                {% comment %}this.$router.push({path:'/Lesson_search/'});{% endcomment %}
+               window.location.href="/Lesson_search/";
+
+           })
+      },
+
+
+    }
+  })
+</script>
+{% endblock %}

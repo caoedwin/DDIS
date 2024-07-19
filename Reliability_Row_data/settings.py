@@ -487,6 +487,7 @@ SAFE_URL = [
     r'/index/',
     r'/FilesDownload/',
     r'/Navigation/',
+    r'/Navigations/',
     r'/ueditor/',
     r'/logout/',
     r'/ttt/',

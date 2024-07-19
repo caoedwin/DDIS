@@ -67,6 +67,7 @@ urlpatterns = [
     path(r'ProjectInfoSearch/', views.ProjectInfoSearch),
     path(r'FilesDownload/', views.FilesDownload),
     path(r'Navigation/', views.Navigation),
+    path(r'Navigations/', views.Navigations),
     path(r'Lesson_upload/', views.Lesson_upload),
     path(r'Lesson_edit/', views.Lesson_edit),
     path(r'Lesson_search/', views.Lesson_search),

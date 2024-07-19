@@ -84,6 +84,7 @@ p {
 {% endblock %}
 {% block content %}
 <div id="app">
+<el-backtop ></el-backtop>
         {% csrf_token %}
 <el-collapse v-model="activeName" ref="activeName" @change="handleChange">
   <el-collapse-item name="3">

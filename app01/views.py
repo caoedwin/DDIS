@@ -127,11 +127,11 @@ def login(request):
 def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
-    # Skin = request.COOKIES.get('Skin_raw')
-    # # print(Skin)
-    # if not Skin:
-    #     Skin = "/static/src/blue.jpg"
-    # weizhi="Home/Dashboard"
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi="Home/Dashboard"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     # print (permission_url)
     # L_R_data_object=lesson_learn.objects.all().order_by('edit_time')
@@ -565,6 +565,28 @@ def Navigation(request):
             return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Navigation.html', locals())
 
+def Navigations(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi="Navigation/Navigations"
+    permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+    data = {}
+    if request.method == "GET":
+        # print(request.GET)
+        if request.GET.get("action") == "first":
+            # importPrjResult = ImportProjectinfoFromDCT()
+            # if importPrjResult:
+            #     data['result'] = 1
+            # else:
+            #     data['result'] = 0
+            # # print(data)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+    return render(request, 'Navigations.html', locals())
+
 @csrf_exempt
 def logout(request):
     # print('t')
@@ -621,12 +643,13 @@ def Change_Skin(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    # print(Skin)
+    print(Skin)
+    print(request.method, request.POST)
     weizhi = "Change Skin"
     Render = render(request, 'ChangeSkin.html', locals())
     Redirect=redirect('/Change_Skin/')
     if request.method == "POST":
-
+        print(2)
         if 'blue' in request.POST:
             Skinv = request.POST.get('Skin')
             Redirect.set_cookie('Skin_raw', "/static/src/blue.jpg", 3600 * 24 * 30 * 12)

@@ -108,6 +108,7 @@
 {% endblock %}
 {% block content %}
 <div id="app">
+<el-backtop ></el-backtop>
          <div class="selectMsg" v-cloak>
        <div class="categoryContent">
              <label for="Category" v-cloak>Category</label>
@@ -133,6 +134,7 @@
        'border-bottom':'1px solid rgb(103, 194, 58)'
     }">
       {% comment %}<el-table-column prop="id" label="ID" sortable ></el-table-column>{% endcomment %}
+      <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
       <el-table-column  prop="Category" label="Category" sortable width="104"></el-table-column>
       <el-table-column  prop="Object" label="Object" sortable width="97"></el-table-column>
       <el-table-column  prop="Symptom" label="Symptom" sortable width="121"></el-table-column>
@@ -206,6 +208,9 @@
          this.getdata("first");
     },
     methods: {
+      indexMethod(index) {
+                    return index +1;
+            },
       getdata:function(e){
                 let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
                 axios.post("/A31LessonLProject/Lesson_export/", Qs.stringify(data), {
@@ -232,7 +237,8 @@
            /* 从表生成工作簿对象 */
          let table = document.querySelector("#out-table").cloneNode(true);
          // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
-         //table.removeChild(table.querySelector(".el-table__fixed"))
+         table.removeChild(table.querySelector(".el-table__fixed"))
+         {#table.removeChild(table.querySelector(".el-table__fixed-right"))//左右都有固定列#}
             //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
 
         var wb = XLSX.utils.table_to_book(table,{raw:true});
