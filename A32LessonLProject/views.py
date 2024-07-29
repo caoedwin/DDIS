@@ -141,6 +141,9 @@ def A32Lesson_edit(request):
     fileListO = [
         # {'name': 'Screenshot_15.png', 'url': '/media/img/test/Screenshot_15.png'}
     ]
+    fileList1 = [
+        # {'name': 'Screenshot_15.png', 'url': '/media/img/test/Screenshot_15.png'}
+    ]
     # print(request.POST)
     Categorylist = A32lesson_learn.objects.all().values("Category").distinct().order_by("-Category")
     for i in Categorylist:
@@ -217,10 +220,11 @@ def A32Lesson_edit(request):
                     fileListO.append({'name': '', 'url': '/media/' + i.img.name})
 
                 for i in editlesson.video.all():
-                    fileListO.append({'name': '', 'url': '/media/' + i.files.name})
+                    fileList1.append({'name': '', 'url': '/media/'+i.files.name})
             data = {
                 'form': form,
-                'fileListO': fileListO
+                'fileListO': fileListO,
+                'fileList1': fileList1,
             }
             # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -228,7 +232,8 @@ def A32Lesson_edit(request):
             serchCategory = request.POST.get("serchCategory")
             editID = request.POST.get('id')
             # print(serchCategory, request.POST.get('Category'))
-            Photolist = request.FILES.getlist("fileList", "")
+            Photolist = request.FILES.getlist("fileListPic", "")
+            videolist = request.FILES.getlist("fileListVideo", "")
             # print(Photolist,editID)
             if editID:
                 # print("1")
@@ -250,12 +255,13 @@ def A32Lesson_edit(request):
                         # print(f)
                         if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
                             1] == "mov" or f.name.split(".")[1] == "rmvb":
-                            empt = A32files()
-                            # 增加其他字段应分别对应填写
-                            empt.single = f
-                            empt.files = f
-                            empt.save()
-                            editlesson.video.add(empt)
+                            # empt = A32files()
+                            # # 增加其他字段应分别对应填写
+                            # empt.single = f
+                            # empt.files = f
+                            # empt.save()
+                            # editlesson.video.add(empt)
+                            pass
                         else:
                             empt = A32Imgs()
                             # 增加其他字段应分别对应填写
@@ -263,6 +269,15 @@ def A32Lesson_edit(request):
                             empt.img = f
                             empt.save()
                             editlesson.Photo.add(empt)
+                if videolist:
+                    for f in videolist:
+                        # print(f)
+                        empt = A32files()
+                        # 增加其他字段应分别对应填写
+                        empt.single = f
+                        empt.files = f
+                        empt.save()
+                        editlesson.video.add(empt)
             if serchCategory:
                 # print(Category)
                 Check_dic = {"Category": serchCategory}
