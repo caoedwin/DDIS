@@ -55,6 +55,8 @@
       text-align: right;
       color: #595d60;
   }
+
+
   .ColorSetXQM1{
       background-image: linear-gradient(to left, rgba(69,187,137,0.46), rgba(69,187,137, 0.15));
       text-align: right;
@@ -71,13 +73,19 @@
       line-height: 10px!important;
   }
 
+  .ColorSetIssue1{
+      background-image: linear-gradient(to left, rgba(0,170,85,0.2), rgba(0,170,85,0.2));
+      text-align: left;
+      line-height: 10px!important;
+  }
+
   .ColorSetIssue{
-      background-image: linear-gradient(to left, rgba(132, 187, 220,0.58), rgba(132, 187, 220, 1));
-      text-align: left!important;
+      background-image: linear-gradient(to left, rgba(0,170,85,0.8), rgba(0,170,85,1));
+      text-align: right!important;
       color: #595d60;
   }
 
-  .ColorSetIssue1{
+  .ColorSetProjectComparison{
       background-image: linear-gradient(to right, rgba(132, 187, 220,0.58), rgba(132, 187, 220,0.1));
       text-align: left!important;
       line-height: 10px!important;
@@ -120,9 +128,9 @@
       background-image: url("/static/src/test20.jpg"),url("/static/src/test12.jpg");
       background-repeat: no-repeat,no-repeat;
       /*图片从左往右移动的百分比大小，从上往下百分比大小，重复方式 换成数值同样如此，在这里没有调整大小的方法*!*/
-      background-position: 0% 18%, 50% 18%;
+      background-position: 0% 26%, 50% 18%;
       /*从左到右，从上到下的缩放比例，单位px则为px缩放*/
-      background-size: 45% 95%,100% 95%;
+      background-size: 46% 94.8%,100% 95%;
   }
 
 
@@ -142,7 +150,7 @@
 {% block content1 %}
 {% endblock %}
 {% block content %}
-<div id="app" class="backgroundStyle" style="height: 642px">
+<div id="app" class="backgroundStyle" style="height: 693px">
 {#<div class="container-fluid">#}
 <div class="container-fluid">
 {#   <section class="content-box box-5 boxstyle-1" style="background-position: center;background-size:cover">#}
@@ -498,6 +506,75 @@
                     </td></tr>
                 </table>
             </div>
+            <div id="testIN" style="margin-left: 60px;display: none">
+                <table id="tableIN" class="table table-bordered" style="margin-left: 29px;margin-top: 555px;">
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/Issue_Notes/Issue_Notes-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/Issue_Notes/Issue_Notes-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/Issue_Notes/Issue_Notes-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testKI" style="margin-left: 60px;display: none;">
+                <table id="tableKI" class="table table-bordered" style="margin-left: 29px;margin-top: 574px;">
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/KnowIssue/KnowIssue-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/KnowIssue/KnowIssue-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/KnowIssue/KnowIssue-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+
+            <div id="testLow" style="margin-left: 60px;display: none">
+                <table id="tableLow" class="table table-bordered" style="margin-left: 29px;margin-top: 530px;">
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">LowLight編輯</div>
+                        <div>
+                        <a href="/LowLight/LowLight_edit" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
         </div>
         <div class="col-md-6">
             <div style="margin: 0 auto;height: 524px;">
@@ -507,7 +584,7 @@
                     <td class="ColorSet">
                         <a style="color: #595d60;font-size: 16px;" href="/SpecDownload/SpecDownload-summary/" target="_blank">SpecDownload</a>
                     </td>
-                    <td style="text-align: center;background-color: #91D4C2;vertical-align:middle;width: 120px;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="6">
+                    <td style="text-align: center;background-color: #91D4C2;vertical-align:middle;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="6">
                         Test Plan
                     </td>
 {#                    <td style="text-align: center;vertical-align:middle;background: url('/static/src/3.jpg') no-repeat top;background-size:100% 100%" rowspan="6">Test Plan</td>#}
@@ -533,18 +610,23 @@
                 </tr>
                 <tr>
                     <td id="SWStyle" class="ColorSet" onclick="alertSW()">SW</td>
-                    <td style="text-align: center;vertical-align:middle;background-color: #84bbdc;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="2">Issue List</td>
-                    <td id="INStyle" class="ColorSetIssue" onclick="alertIN()">Issue Notes</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #3D82AB;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="5">Department</td>
+{#                    <td style="text-align: center;vertical-align:middle;background-color: #84bbdc;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="2">Issue List</td>#}
+                    <td id="ProjectComparisonStyle" class="ColorSetDep" onclick="alertProjectComparison()">ProjectComparison</td>
                 </tr>
                 <tr>
                     <td id="SWORStyle" class="ColorSet" onclick="alertSWOR()">SW-OR</td>
 
-                    <td id="KIStyle" class="ColorSetIssue" onclick="alertKI()">Known Issue</td>
+{#                    <td id="KIStyle" class="ColorSetIssue" onclick="alertKI()">Known Issue</td>#}
+{#                    <td id="KIStyle" class="ColorSetDep" onclick="alertKI()">Capital Expenditure</td>#}
+                    <td class="ColorSetDep">
+                        <a style="color: #595d60;font-size: 16px;" href="/CapitalExpenditure/CapitalExpenditure_Summary/" target="_blank">CapitalExpenditure</a>
+                    </td>
 
                 </tr>
                 <tr>
                     <td id="INVStyle" class="ColorSet" onclick="alertINV()">INV</td>
-                    <td style="text-align: center;vertical-align:middle;background-color: #3D82AB;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="3">Department</td>
+{#                    <td style="text-align: center;vertical-align:middle;background-color: #3D82AB;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="3">Department</td>#}
                     <td class="ColorSetDep">
                         <a style="color: #595d60;font-size: 16px;" href="/PersonalInfo/PublicArea/" target="_blank">Public Area</a>
                     </td>
@@ -552,7 +634,7 @@
                 </tr>
                 <tr>
                     <td id="MQMStyle" class="ColorSetXQM" onclick="alertMQM()">MQM</td>
-                    <td style="text-align: center;vertical-align:middle;background-color: #45BB89;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="6">XQM</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #45BB89;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="5">XQM</td>
 
                     <td id="InfoStyle" class="ColorSetDep" onclick="alertInfo()">PersonalInfo</td>
 
@@ -576,22 +658,30 @@
 
                 </tr>
                 <tr>
-                    <td class="ColorSetXQM"></td>
+                    <td class="ColorSetXQM">
+                        <a style="color: #595d60;font-size: 16px;" href="/LowLightList/LowLightList_edit/" target="_blank">LowLight</a>
+                    </td>
                     <td id="BougStyle" class="ColorSetRea" onclick="alertBoug()">Bouncing</td>
 
                 </tr>
 
                 <tr>
-                    <td class="ColorSetXQM"></td>
+                    <td id="INStyle" class="ColorSetIssue" onclick="alertIN()">Issue Notes</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #00AA55;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="2">Issue List</td>
                     <td style="text-align: center;background-color: #3f7799;">
                         <a style="color: black;font-size: 24px;color: #FFFFFF!important;font-family: Calibri;text-shadow:3px 3px 3px #080808;" {% comment %}href="/ProjectInfoSearch/"{% endcomment %} target="_blank">ProjectInfo</a>
                     </td>
                     <td class="ColorSetPro">
                         <a style="color: #465158;font-size: 17px;" href="/ProjectInfoSearch/" target="_blank">Search</a>
                     </td>
-
                 </tr>
-
+                <tr>
+                    <td id="KIStyle" class="ColorSetIssue" onclick="alertKI()">Known Issue</td>
+                    <td class="ColorSetPro">
+                    </td>
+                    <td class="ColorSetPro">
+                    </td>
+                </tr>
 
             </table>
             </div>
@@ -696,57 +786,21 @@
                     </td></tr>
                 </table>
             </div>
-            <div id="testIN" style="margin-right: 70px;display: none">
-                <table id="tableIN" class="table table-bordered" style="margin-left: -29px;margin-top: 152px;">
-                    <tr><td class="ColorSetIssue1" style="text-align: left">
+            <div id="testProjectComparison" style="margin-right: 70px;display: none">
+                <table id="tableProjectComparison" class="table table-bordered" style="margin-left: -29px;margin-top: 152px;">
+                    <tr><td class="ColorSetProjectComparison" style="text-align: left">
                       <el-tooltip placement="right" effect="light">
-                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div slot="content">Project<br>Comparison<br>Summary</div>
                         <div>
-                        <a href="/Issue_Notes/Issue_Notes-upload/" target="_blank">Add</a>
+                        <a href="/ProjectComparison/ProjectComparison_Summary/" target="_blank">Summary</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
-                    <tr><td class="ColorSetIssue1" style="text-align: left">
+                    <tr><td class="ColorSetProjectComparison" style="text-align: left">
                       <el-tooltip placement="right" effect="light">
-                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div slot="content">Project<br>Comparison<br>的編輯</div>
                         <div>
-                        <a href="/Issue_Notes/Issue_Notes-edit/" target="_blank">Edit</a>
-                        </div>
-                      </el-tooltip>
-                    </td></tr>
-                    <tr><td class="ColorSetIssue1" style="text-align: left">
-                      <el-tooltip placement="right" effect="light">
-                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
-                        <div>
-                        <a href="/Issue_Notes/Issue_Notes-search/" target="_blank">Search</a>
-                        </div>
-                      </el-tooltip>
-                    </td></tr>
-                </table>
-            </div>
-            <div id="testKI" style="margin-right: 70px;display: none;">
-                <table id="tableKI" class="table table-bordered" style="margin-left: -29px;margin-top: 201px;">
-                    <tr><td class="ColorSetIssue1" style="text-align: left">
-                      <el-tooltip placement="right" effect="light">
-                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
-                        <div>
-                        <a href="/KnowIssue/KnowIssue-upload/" target="_blank">Add</a>
-                        </div>
-                      </el-tooltip>
-                    </td></tr>
-                    <tr><td class="ColorSetIssue1" style="text-align: left">
-                      <el-tooltip placement="right" effect="light">
-                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
-                        <div>
-                        <a href="/KnowIssue/KnowIssue-edit/" target="_blank">Edit</a>
-                        </div>
-                      </el-tooltip>
-                    </td></tr>
-                    <tr><td class="ColorSetIssue1" style="text-align: left">
-                      <el-tooltip placement="right" effect="light">
-                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
-                        <div>
-                        <a href="/KnowIssue/KnowIssue-search/" target="_blank">Search</a>
+                        <a href="/ProjectComparison/ProjectComparison_Edit/" target="_blank">Edit</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -826,7 +880,7 @@
                       <el-tooltip placement="right" effect="light">
                         <div slot="content">人員測試履<br />歷Summary</div>
                         <div>
-                        <a href="/PersonalInfo/Infos-upload/" target="_blank">Summary</a>
+                        <a href="/PersonalExperience/Summary/" target="_blank">Summary</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -834,7 +888,7 @@
                       <el-tooltip placement="right" effect="light">
                         <div slot="content">我的簽核</div>
                         <div>
-                        <a href="/PersonalInfo/PersonalInfo-edit/" target="_blank">我的簽核</a>
+                        <a href="/PersonalExperience/My-approve/" target="_blank">我的簽核</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -842,7 +896,7 @@
                       <el-tooltip placement="right" effect="light">
                         <div slot="content">我的申請</div>
                         <div>
-                        <a href="/PersonalInfo/ManPower-edit/" target="_blank">我的申請</a>
+                        <a href="/PersonalExperience/My-application/" target="_blank">我的申請</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -850,7 +904,7 @@
                       <el-tooltip placement="right" effect="light">
                         <div slot="content">OS Refresh<br />錄入</div>
                         <div>
-                        <a href="/PersonalInfo/PersonalInfo-search/" target="_blank">OSR-Input</a>
+                        <a href="/PersonalExperience/OSR-upload/" target="_blank">OSR-Input</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -858,7 +912,7 @@
                       <el-tooltip placement="right" effect="light">
                         <div slot="content">NPI錄入</div>
                         <div>
-                        <a href="/PersonalInfo/ManPower-search/" target="_blank">NPI-Input</a>
+                        <a href="/PersonalExperience/NPI-upload/" target="_blank">NPI-Input</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -866,7 +920,7 @@
                       <el-tooltip placement="right" effect="light">
                         <div slot="content">INV錄入</div>
                         <div>
-                        <a href="/PersonalInfo/Summary1/" target="_blank">INV-Input</a>
+                        <a href="/PersonalExperience/INV-upload/" target="_blank">INV-Input</a>
                         </div>
                       </el-tooltip>
                     </td></tr>
@@ -1052,10 +1106,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1066,6 +1122,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*Automation*/
         function alertAuto() {
@@ -1098,10 +1158,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1112,6 +1174,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*INV*/
         function alertINV() {
@@ -1144,10 +1210,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1158,6 +1226,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*SW-OR*/
         function alertSWOR() {
@@ -1190,10 +1262,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1204,6 +1278,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*SW*/
         function alertSW() {
@@ -1236,10 +1314,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1250,6 +1330,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*MQM*/
         function alertMQM() {
@@ -1282,10 +1366,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1296,6 +1382,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*CQM*/
         function alertCQM() {
@@ -1328,10 +1418,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1342,6 +1434,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*OBIDevice*/
         function alertOBI() {
@@ -1374,10 +1470,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1388,6 +1486,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*DriverTool*/
         function alertDriver() {
@@ -1420,10 +1522,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1434,6 +1538,62 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*LowLight*/
+        function alertLow() {
+            var showState = document.getElementById("testLow").style.display;
+            if(showState == 'none'){
+                $("#testLow").css('display','block');
+                $("#LowStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableLow").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testLow").css('display','none');
+                document.getElementById("LowStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*QIL*/
         function alertQIL() {
@@ -1466,10 +1626,12 @@
             document.getElementById("DriverStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1480,6 +1642,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*SW&ME*/
         function alertSM() {
@@ -1512,10 +1678,12 @@
             document.getElementById("DriverStyle").style.cssText = "";
             $("#testQIL").css('display','none');
             document.getElementById("QILStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1526,8 +1694,61 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
-
+        /*Project Comparison*/
+        function alertProjectComparison() {
+            var showState = document.getElementById("testProjectComparison").style.display;
+            if(showState == 'none'){
+                $("#testProjectComparison").css('display','block');
+                $("#ProjectComparisonStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableProjectComparison").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testProjectComparison").css('display','none');
+                document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
         /*Issue Notes*/
         function alertIN() {
             var showState = document.getElementById("testIN").style.display;
@@ -1573,6 +1794,8 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*Know Issue*/
         function alertKI() {
@@ -1607,6 +1830,8 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testIN").css('display','none');
             document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
@@ -1619,8 +1844,11 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
-
         /*PersonalInfo*/
         function alertInfo() {
             var showState = document.getElementById("testInfo").style.display;
@@ -1654,10 +1882,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testPGV").css('display','none');
             document.getElementById("PGVStyle").style.cssText = "";
             $("#testCDM").css('display','none');
@@ -1666,6 +1896,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*PersonalTestExperience*/
         function alertExp() {
@@ -1700,10 +1934,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testPGV").css('display','none');
             document.getElementById("PGVStyle").style.cssText = "";
             $("#testCDM").css('display','none');
@@ -1712,6 +1948,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*Package G Value*/
         function alertPGV() {
@@ -1746,10 +1986,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testCDM").css('display','none');
@@ -1758,6 +2000,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*CDM*/
         function alertCDM() {
@@ -1792,10 +2038,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1804,6 +2052,10 @@
             document.getElementById("BougStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
         /*Bouncing*/
         function alertBoug() {
@@ -1838,10 +2090,12 @@
             document.getElementById("QILStyle").style.cssText = "";
             $("#testSM").css('display','none');
             document.getElementById("SMStyle").style.cssText = "";
-            $("#testIN").css('display','none');
-            document.getElementById("INStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
             $("#testKI").css('display','none');
             document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
             $("#testInfo").css('display','none');
             document.getElementById("InfoStyle").style.cssText = "";
             $("#testPGV").css('display','none');
@@ -1850,6 +2104,10 @@
             document.getElementById("CDMStyle").style.cssText = "";
             $("#testExp").css('display','none');
             document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
         };
       new Vue ({
           el: "#app",

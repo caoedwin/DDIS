@@ -8,7 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from requests_ntlm import HttpNtlmAuth
 import datetime,json,requests,time,simplejson
-from app01.models import UserInfo,lesson_learn,Imgs,files,ProjectinfoinDCT,Role,Permission,Menu
+from app01.models import UserInfo,lesson_learn,Imgs,ProjectinfoinDCT,Role,Permission,Menu
 
 # 自定义要执行的task任务
 #在项目manage.py统计目录下cmd或pycharmTerminal运行celery worker -A mydjango -l info -P eventlet，celery -A mydjango beat -l info

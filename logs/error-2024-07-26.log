@@ -1,0 +1,260 @@
+[2024-07-26 14:01:16,178] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 882, in Lesson_edit
+    fileList1.append({'name': '', 'url': '/media/'+i.files.name})
+NameError: name 'fileList1' is not defined
+[2024-07-26 14:01:16,335] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [0.74, 127.0.0.1:52428]
+[2024-07-26 14:08:34,674] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\mysql\base.py", line 71, in execute
+    return self.cursor.execute(query, args)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1366, "Incorrect string value: '\\xF0\\x9F\\x8D\\x92\\xE5\\x93...' for column 'single' at row 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 942, in Lesson_edit
+    empt.save()
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1289, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 100, in execute
+    return super().execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 68, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 77, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\mysql\base.py", line 71, in execute
+    return self.cursor.execute(query, args)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.InternalError: (1366, "Incorrect string value: '\\xF0\\x9F\\x8D\\x92\\xE5\\x93...' for column 'single' at row 1")
+[2024-07-26 14:08:34,742] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [1.62, 127.0.0.1:51570]
+[2024-07-26 14:23:17,580] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\mysql\base.py", line 71, in execute
+    return self.cursor.execute(query, args)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1366, "Incorrect string value: '\\xF0\\x9F\\x8D\\x92\\xE5\\x93...' for column 'single' at row 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 942, in Lesson_edit
+    empt.save()
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1289, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 100, in execute
+    return super().execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 68, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 77, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\backends\mysql\base.py", line 71, in execute
+    return self.cursor.execute(query, args)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Python372\mecheck\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.InternalError: (1366, "Incorrect string value: '\\xF0\\x9F\\x8D\\x92\\xE5\\x93...' for column 'single' at row 1")
+[2024-07-26 14:23:17,689] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [0.87, 127.0.0.1:63091]
+[2024-07-29 14:50:49,795] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 992, in Lesson_edit
+    return render(request, 'Lesson_edit.html', locals())
+  File "C:\Python372\mecheck\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: Lesson_edit.html
+[2024-07-29 14:50:49,823] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [1.42, 127.0.0.1:49738]
+[2024-07-29 14:51:17,022] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 992, in Lesson_edit
+    return render(request, 'Lesson_edit.html', locals())
+  File "C:\Python372\mecheck\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: Lesson_edit.html
+[2024-07-29 14:51:17,038] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [0.15, 127.0.0.1:49742]
+[2024-07-29 14:51:22,901] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 992, in Lesson_edit
+    return render(request, 'Lesson_edit.html', locals())
+  File "C:\Python372\mecheck\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: Lesson_edit.html
+[2024-07-29 14:51:22,913] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [0.42, 127.0.0.1:49742]
+[2024-07-29 14:51:30,444] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 992, in Lesson_edit
+    return render(request, 'Lesson_edit.html', locals())
+  File "C:\Python372\mecheck\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: Lesson_edit.html
+[2024-07-29 14:51:30,452] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /Lesson_edit/ 500 [0.13, 127.0.0.1:49742]

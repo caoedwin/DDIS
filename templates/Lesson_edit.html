@@ -228,17 +228,22 @@
                             <!-- 文件 -->
                             <div slot="file" slot-scope="{file}">
                                 <img class="el-upload-list__item-thumbnail" :src="file.url" alt/>
-                                <video class="el-upload-list__item-thumbnail" :src="file.url" alt/>
-                                <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-            <i class="el-icon-zoom-in"></i>
-          </span>
-        </span>
                             </div>
                         </el-upload>
-                        <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt/>
-                        </el-dialog>
+                    </el-form-item>
+                    <el-form-item label="Video">
+                        <el-upload
+                          action="#"
+                          :accept="'.mp4, .avi, .flv, .mov, .wmv, .rmvb, .ogg'"
+                          :on-success="handleVideoUploadSuccess"
+                          :file-list="fileList1"
+                        >
+                          <el-button type="primary">点击上传视频</el-button>
+                            <!-- 文件 -->
+                            <div slot="file" slot-scope="{file}">
+                                <video controls width="320" height="240" :src="file.url"></video>
+                            </div>
+                        </el-upload>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">更新</el-button>
@@ -343,9 +348,15 @@
                     update: false,
                     dialogImageUrl: '',
                     dialogVisible: false,
+                    videoFile: null, // 用于保存用户上传的视频文件
+                    videoUrl: '',// 用于保存视频文件的URL
+                    videoShow: false,
                     disabled: false,
                     PhotoList: [],
                     fileListO: [],
+                    fileList1: [],
+                    fileListPic: [],
+                    fileListVideo: [],
                     editID: '',
                     form: {
                         Category: '',
@@ -366,6 +377,19 @@
                 this.getdata("first");
             },
             methods: {
+
+                handleFileUpload(event) {
+                   this.videoFile =  event.target.files[0];
+                },
+
+                handleVideoPlay() {
+                    // 检查是否有视频文件可播放
+                    if (this.videoUrl !== '') {
+                    let videoPlayer = document.querySelector('video');
+                    videoPlayer.play();
+                    }
+                },
+
                 indexMethod(index) {
                     return index + 1;
                 },
@@ -396,21 +420,23 @@
                 },
                 handleImageSuccess(res, files, fileList) {
                     // 上传成功
-                    this.formData = new FormData();
-
-                    this.fileList = fileList;
-                    console.log("上传成功" + fileList.length, files, "tt", fileList);
-
-                    for (var i = 0; i < this.fileList.length; i++) {
-                        if (i != "undefined") {
-                            this.formData.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样
-                        }
-                        {#this.formData.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样#}
-                    }
-
-
-                    console.log(this.formData, typeof (this.formData))
+                   this.fileListPic = fileList;
                 },
+
+                handleVideoUploadSuccess(res, files, fileList){
+
+                    this.fileListVideo = fileList;
+
+                },
+
+                handlePictureCardPreview(file) {
+                    // 预览文件
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                },
+
+
+
                 beforeImageUpload(file) {
                     // 上传前格式与大小校验
                     console.log(file, file.type)
@@ -460,6 +486,16 @@
                     if (this.formData.length == 0) {
                         this.formData = new FormData();
                     }
+                    if(this.fileListPic.length !== 0){
+                        for (var i = 0; i < this.fileListPic.length; i++) {
+                          this.formData.append('fileListPic', this.fileListPic[i].raw)//fileList里面raw才是文件对象，与files一样
+                       }
+                    }
+                    if(this.fileListVideo.length !== 0){
+                        for (var i = 0; i < this.fileListVideo.length; i++) {
+                          this.formData.append('fileListVideo', this.fileListVideo[i].raw)//fileList里面raw才是文件对象，与files一样
+                       }
+                    }
                     this.formData.append('serchCategory', this.serchCategory)
                     this.formData.append('id', this.editID)
                     this.formData.append('Category', this.$refs.form.model.Category)
@@ -482,6 +518,8 @@
                         this.tableData = res.data.content;
                         this.update = false;
                         this.formData = new FormData();
+                        this.fileListPic = [];
+                        this.fileListVideo=[];
 
                     })
                 },
@@ -525,6 +563,7 @@
                         this.form = res.data.form;
                         this.editID = id;
                         this.fileListO = res.data.fileListO;
+                        this.fileList1 = res.data.fileList1;
 
                     })
                 },
@@ -543,6 +582,7 @@
                         this.tableData = res.data.content;
                         this.form = res.data.form;
                         this.fileListO = res.data.fileListO;
+                        this.fileList1 = res.data.fileList1;
                         this.update = false;
 
                     });

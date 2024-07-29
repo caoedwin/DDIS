@@ -281,7 +281,8 @@ mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-
+FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400  #上传文件大小，改成25M
+DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400	#上传数据大小，也改成了25M
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,HttpResponse
-from app01.models import UserInfo,lesson_learn,Imgs,files,ProjectinfoinDCT,Role,Permission,Menu
+from app01.models import UserInfo,lesson_learn,Imgs,Files,ProjectinfoinDCT,Role,Permission,Menu
 from django.views.decorators.csrf import csrf_exempt
 from Bouncing.models import Bouncing_M
 from Package.models import Package_M
@@ -643,8 +643,8 @@ def Change_Skin(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    print(Skin)
-    print(request.method, request.POST)
+    # print(Skin)
+    # print(request.method, request.POST)
     weizhi = "Change Skin"
     Render = render(request, 'ChangeSkin.html', locals())
     Redirect=redirect('/Change_Skin/')
@@ -750,10 +750,10 @@ def Lesson_upload(request):
                     lesson.Photo.add(empt)
                 for f in request.FILES.getlist('myvideos'):
                     # print(f)
-                    empt = files()
+                    empt = Files()
                     # 增加其他字段应分别对应填写
                     empt.single = f
-                    empt.files = f
+                    empt.Files = f
                     empt.save()
                     lesson.video.add(empt)
                 message="Upload '%s' Successfully" %(Object)
@@ -801,6 +801,9 @@ def Lesson_edit(request):
         # #           {name: 'food2.jpeg', url: '/static/images/spec.png'}]
     }
     fileListO = [
+        # {'name': 'Screenshot_15.png', 'url': '/media/img/test/Screenshot_15.png'}
+    ]
+    fileList1 = [
         # {'name': 'Screenshot_15.png', 'url': '/media/img/test/Screenshot_15.png'}
     ]
     # print(request.POST)
@@ -879,10 +882,11 @@ def Lesson_edit(request):
                     fileListO.append({'name': '', 'url': '/media/'+i.img.name})
 
                 for i in editlesson.video.all():
-                    fileListO.append({'name': '', 'url': '/media/'+i.files.name})
+                    fileList1.append({'name': '', 'url': '/media/'+i.files.name})
             data = {
                     'form': form,
-                    'fileListO': fileListO
+                    'fileListO': fileListO,
+                    'fileList1': fileList1,
                 }
             # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -890,7 +894,8 @@ def Lesson_edit(request):
             serchCategory = request.POST.get("serchCategory")
             editID = request.POST.get('id')
             # print(serchCategory, request.POST.get('Category'))
-            Photolist = request.FILES.getlist("fileList", "")
+            Photolist = request.FILES.getlist("fileListPic", "")
+            videolist = request.FILES.getlist("fileListVideo", "")
             # print(Photolist,editID)
             if editID:
                 # print("1")
@@ -906,17 +911,20 @@ def Lesson_edit(request):
                 # lesson.Photo=Photos
                 editlesson.editor = request.session.get('user_name')
                 editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                # editlesson.Photo.clear()
+                # editlesson.video.clear()
                 editlesson.save()
                 if Photolist:
                     for f in Photolist:
                         # print(f)
                         if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[1] == "mov" or f.name.split(".")[1] == "rmvb":
-                            empt = files()
-                            # 增加其他字段应分别对应填写
-                            empt.single = f
-                            empt.files = f
-                            empt.save()
-                            editlesson.video.add(empt)
+                            # empt = files()
+                            # # 增加其他字段应分别对应填写
+                            # empt.single = f
+                            # empt.files = f
+                            # empt.save()
+                            # editlesson.video.add(empt)
+                            pass
                         else:
                             empt = Imgs()
                             # 增加其他字段应分别对应填写
@@ -924,6 +932,15 @@ def Lesson_edit(request):
                             empt.img = f
                             empt.save()
                             editlesson.Photo.add(empt)
+                if videolist:
+                    for f in videolist:
+                        # print(f)
+                        empt = Files()
+                        # 增加其他字段应分别对应填写
+                        empt.single = f
+                        empt.files = f
+                        empt.save()
+                        editlesson.video.add(empt)
             if serchCategory:
                 # print(Category)
                 Check_dic = {"Category": serchCategory}
@@ -941,8 +958,9 @@ def Lesson_edit(request):
                         filelist.append("/media/" + str(h.img))
                 Videolist = []
                 for h in i.video.all():
+                    # print(h,"1",h.files,"2",h.single)
                     Videolist.append("/media/" + str(h.files))
-                # print(Photolist)
+                # print(Videolist)
                 mock_data.append(
                     {
                         "id": i.id,
@@ -1030,7 +1048,7 @@ def Lesson_update(request,id):
                 lesson_formdefault.video.clear()
             for f in request.FILES.getlist('myvideos'):
                 # print(f)
-                empt = files()
+                empt = Files()
                 # 增加其他字段应分别对应填写
                 empt.single = f
                 empt.files = f

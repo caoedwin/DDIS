@@ -1,0 +1,43 @@
+[2024-07-22 15:04:11,388] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 588, in Navigations
+    return render(request, 'Navigations.html', locals())
+  File "C:\Python372\mecheck\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python372\mecheck\lib\site-packages\django\template\library.py", line 192, in render
+    output = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\templatetags\custom_tag.py", line 258, in rbac_menu
+    menu_data = get_structure_data(request)
+  File "C:\djangoproject\Reliability_Row_data\app01\templatetags\custom_tag.py", line 11, in get_structure_data
+    menu = request.session[settings.SESSION_MENU_KEY]
+  File "C:\Python372\mecheck\lib\site-packages\django\contrib\sessions\backends\base.py", line 55, in __getitem__
+    return self._session[key]
+KeyError: 'awesome'
+[2024-07-22 15:04:11,415] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /Navigations/ 500 [1.32, 127.0.0.1:62220]
+[2024-07-23 08:28:00,201] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /static/js/lib/sparklinechart/sparkline.init.js 500 [1.05, 127.0.0.1:61363]

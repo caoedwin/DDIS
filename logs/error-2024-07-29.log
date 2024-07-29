@@ -1,0 +1,42 @@
+[2024-07-29 15:19:46,657] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 840, in Lesson_edit
+    Videolist.append("/media/" + str(h.Files))
+AttributeError: 'Files' object has no attribute 'Files'
+[2024-07-29 15:19:46,671] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [1.12, 127.0.0.1:65162]
+[2024-07-29 15:19:51,940] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 840, in Lesson_edit
+    Videolist.append("/media/" + str(h.Files))
+AttributeError: 'Files' object has no attribute 'Files'
+[2024-07-29 15:19:51,950] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [0.09, 127.0.0.1:65162]
+[2024-07-29 15:20:19,604] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Lesson_edit/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 840, in Lesson_edit
+    Videolist.append("/media/" + str(h.Files))
+AttributeError: 'Files' object has no attribute 'Files'
+[2024-07-29 15:20:19,610] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Lesson_edit/ 500 [0.07, 127.0.0.1:65162]

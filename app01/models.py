@@ -124,15 +124,16 @@ from django.dispatch.dispatcher import receiver
 def mymodel_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.img.delete(False)
-class files(models.Model):
+class Files(models.Model):
     files = models.FileField(upload_to="videos/", null=True, blank=True, verbose_name="视频内容")
     single = models.CharField(max_length=200, null=True, blank=True, verbose_name='视频名称')
     def __unicode__(self):  # __str__ on Python 3
         return (self.id,self.files)
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
-@receiver(pre_delete, sender=files)
-def mymodel_delete(sender, instance, **kwargs):
+@receiver(pre_delete, sender=Files)
+#Admin后台删除文件同时, 删除服务器上文件
+def myvideio_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.files.delete(False)
 
@@ -166,7 +167,7 @@ class lesson_learn(models.Model):
     Action = models.CharField('Action', max_length=2000,default='', blank=True)
     Status = models.CharField('Status', choices=choosestatus,max_length=20, default='active', blank=True)
     Photo = models.ManyToManyField(Imgs, related_name='imgs', blank=True, verbose_name='图片表')
-    video = models.ManyToManyField(files, related_name='video', blank=True, verbose_name='视频表')
+    video = models.ManyToManyField(Files, related_name='video', blank=True, verbose_name='视频表')
     editor = models.CharField(max_length=100)
     edit_time = models.CharField('edit_time', max_length=26, blank=True)
 		#upload_to参数为指定的文件服务器上保存路径，如果没有该目录django会自动创建

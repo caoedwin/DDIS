@@ -3,52 +3,191 @@
 {% load staticfiles %}
 {% block title %}Navigations{% endblock %}
 {% block css %}
-{#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
-{#	<link rel="stylesheet" href="/static/css/home_style.css">#}
-{#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
-<style>
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
+    {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
+    <style>
+        .el-carousel__item h3 {
+            color: #475669;
+            font-size: 14px;
+            opacity: 0.75;
+            line-height: 150px;
+            margin: 0;
+        }
 
-  .el-carousel__item:nth-child(2n) {
-     background-color: #99a9bf;
-  }
+        .el-carousel__item:nth-child(2n) {
+            background-color: #99a9bf;
+        }
 
-  .el-carousel__item:nth-child(2n+1) {
-     background-color: #d3dce6;
-  }
-</style>
+        .el-carousel__item:nth-child(2n+1) {
+            background-color: #d3dce6;
+        }
+
+        .home .num {
+            display: flex;
+        {% comment %}/ / 开启弹性元素换行{% endcomment %} flex-wrap: wrap;
+        {% comment %}/ / justify: 设置主轴上空白空间元素排列方式{% endcomment %} justify-content: space-between;
+
+        }
+
+        {% comment %} .home .num .el-card {
+             width: 32%;
+             margin-bottom: 20px;
+         }{% endcomment %}
+        button, html [type=button] {
+            -webkit-appearance: button;
+            width: 32%;
+            margin-bottom: 20px;
+        }
+
+        .home .graph {
+            display: flex;
+        {% comment %}justify: 设置主轴上空白空间元素排列方式{% endcomment %} justify-content: space-between;
+
+        }
+
+        .home .graph .el-card {
+            width: 48%;
+            margin-top: 20px;
+        }
+
+        .el-calendar-table .el-calendar-day {
+            width: 30px;
+            height: 30px;
+        }
+
+        *, ::after, ::before {
+            box-sizing: border-box;
+            font-size: 10px;
+        }
+
+        .el-button + .el-button {
+            margin-left: 0px;
+        }
+
+    </style>
 {% endblock %}
 {% block content1 %}
 {% endblock %}
 {% block content %}
 
-<div id="app" {% comment %}v-pre{% endcomment %}>
-  <el-container>
-        <el-main>
-            <el-row :gutter="20">
-              <el-col :span="12">
-                  <div class="grid-content bg-purple">
-                    <el-table :data="tableData">
-                        <el-table-column prop="date" label="日期" width="140">
-                        </el-table-column>
-                        <el-table-column prop="name" label="姓名" width="120">
-                        </el-table-column>
-                        <el-table-column prop="address" label="地址">
-                        </el-table-column>
-                      </el-table>
-                  </div>
-              </el-col>
-              <el-col :span="12" {% comment %}:offset="6"{% endcomment %}><div class="grid-content bg-purple"></div></el-col>
+    <div id="app" {% comment %}v-pre{% endcomment %}>
+        <template>
+            <el-row class="home" style="margin-top: 10px;" :gutter="20">
+                <!-- 两栏一共是24栏，左侧占用8栏，右侧占用16栏 -->
+                <!-- 首页左侧空间 -->
+
+                <el-col :span="16">
+                    <div class="num">
+                        <!-- 数据卡片card -->
+                        <el-button @click="drawer = true">
+                            <el-card shadow="hover">
+                                <!-- 数据卡片icon -->
+                                <i class="icon"></i>
+                                <!-- 数据卡片内容 -->
+                                <div class="detail">
+                                    <p class="num" style="font-size:24px">部門管理</p>
+                                    <p class="tet" style="text-align: center">系統清單</p>
+                                </div>
+                            </el-card>
+                        </el-button>
+                        <el-button @click="table = true">
+                            <el-card shadow="hover">
+                                <!-- 数据卡片icon -->
+                                <i class="icon"></i>
+                                <!-- 数据卡片内容 -->
+                                <div class="detail">
+                                    <p class="num" style="font-size:24px">測試管理</p>
+                                    <p class="tet">系統清單</p>
+                                </div>
+                            </el-card>
+                        </el-button>
+                        <el-button @click="table = true">
+                            <el-card shadow="hover">
+                                <!-- 数据卡片icon -->
+                                <i class="icon"></i>
+                                <!-- 数据卡片内容 -->
+                                <div class="detail">
+                                    <p class="num" style="font-size:24px">品質管控</p>
+                                    <p class="tet">系統清單</p>
+                                </div>
+                            </el-card>
+                        </el-button>
+                        <el-button @click="table = true">
+                            <el-card shadow="hover">
+                                <!-- 数据卡片icon -->
+                                <i class="icon"></i>
+                                <!-- 数据卡片内容 -->
+                                <div class="detail">
+                                    <p class="num" style="font-size:24px">資產管理</p>
+                                    <p class="tet">系統清單</p>
+                                </div>
+                            </el-card>
+                        </el-button>
+                        <el-button @click="table = true">
+                            <el-card shadow="hover">
+                                <!-- 数据卡片icon -->
+                                <i class="icon"></i>
+                                <!-- 数据卡片内容 -->
+                                <div class="detail">
+                                    <p class="num" style="font-size:24px">其他</p>
+                                    <p class="tet">系統清單</p>
+                                </div>
+                            </el-card>
+                        </el-button>
+                    </div>
+                    <!-- 折线图卡片card -->
+                    <el-card shadow="hover">
+                        <div style="height: 280px"></div>
+                    </el-card>
+                    {% comment %}<div class="graph">
+                        <!-- graph图卡片card -->
+                        <el-card shadow="hover">
+                            <div style="height: 260px"></div>
+                        </el-card>
+                        <el-card shadow="hover">
+                            <div style="height: 260px"></div>
+                        </el-card>
+                    </div>{% endcomment %}
+                </el-col>
+
+                <!-- 首页右侧空间 -->
+                <el-col :span="8">
+                    <el-card shadow="hover" style="height: 220px">
+                        鼠标悬浮时显示
+                    </el-card>
+                    <el-card shadow="hover" style="height: 360px; margin-top: 20px">
+                        <el-calendar>
+                        </el-calendar>
+                    </el-card>
+                </el-col>
             </el-row>
-        </el-main>
-  </el-container>
-</div>
+        </template>
+
+        <el-drawer
+          title="部門管理類"
+          :visible.sync="drawer"
+          :with-header="false">
+
+            <span>
+            <el-table :data="gridData_chan">
+                <el-table-column property="name" label="系統" width="200">
+                    <template scope="scope">
+                        <a :href="scope.row.address" target="_blank" style="text-decoration:underline;color:blue;">${
+                            scope.row.name }</a>
+                        {% comment %}<a href="http://127.0.0.1:8003/index/" target="_blank" style="text-decoration:underline;color:blue;">${
+                            scope.row.name }</a>{% endcomment %}
+                    </template>
+                </el-table-column>
+                {% comment %}<el-table-column width="120" label="修改" fixed="right">
+                  <template slot-scope="scope">
+                      <el-button type="text" size="small" @click="edit(scope.row+scrollArray[0])">編輯</el-button>
+                      </template>
+              </el-table-column>{% endcomment %}
+            </el-table>
+            </span>
+        </el-drawer>
+    </div>
 {% endblock %}
 {% block scripts %}
 
@@ -65,96 +204,56 @@
     <!-- scripit init-->
     <script src="../static/js/lib/bootstrap.min.js"></script>
     <script src="../static/js/scripts.js"></script>
-    {% comment %}<script type="text/javascript">
-        //设置Cookie
-        function setCookie(name, value) {
-            var Days = 1;
-            var exp = new Date();
-            console.log(name,value,"TTT")
-            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path:/";
-        }
-        /*
-         获取Cookie中的值
-         */
-        function getCookie(objName) {//获取指定名称的cookie的值
-            var arrStr = document.cookie.split("; ");
-            for (var i = 0; i < arrStr.length; i++) {
-                var temp = arrStr[i].split("=");
-                if (temp[0] == objName) {
-                    return decodeURI(temp[1]);
-                }
-            }
-        }
-        </script>{% endcomment %}
     <script src="/static/js/es6/polyfill.min.js"></script>
-<script src="/static/js/es6/babel.min.js"></script>
-<script src="/static/js/axios.min.js"></script>
-<script src="/static/js/vue.min.js"></script>
-<script src="/static/js/qs.js"></script>
-    <script  src="/static/js/Element/table.js"></script>
-<script  src="/static/js/Element/main.js"></script>
-<script src="/static/js/Element/input.js"></script>
-<script  src="/static/js/Element/table-column.js"></script>
-<script src="/static/js/Element/icon.js"></script>
-<script src="/static/js/Element/index.js"></script>
-<script src="/static/js/Element/image.js"></script>
-<script src="/static/js/Element/message.js"></script>
-{#<script src="/static/js/vue-router.min.js"></script>#}
-{% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
-<script type="text/babel">
-  new Vue ({
-    el:"#app",
-    delimiters: ['${', '}'],
-    data() {
-        const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
-      return {
-        selectCategory:[],
-        selectedCategory:'',
-          tableData: Array(20).fill(item)
-      }
-    },
-    mounted(){
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    {#<script src="/static/js/vue-router.min.js"></script>#}
+    {% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                const ipdadress = 'http://127.0.0.1:8003';
+                return {
+                    table: false,
+                    dialog: false,
+                    loading: false,
+                    drawer: false,
+                    gridData_chan: [{
+                        name: 'CQM',
+                        address: "/CQM/CQM_search/"
+                    }, {
+                        name: 'Device_LNV',
+                        address: ipdadress + '/Summary/'
+                    }, {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄'
+                    }, {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄'
+                    }],
+                }
+            },
+            mounted() {
 
-    },
-    methods: {
-
-      CookieME:function(){
-
-          let msg = {
-              "isGetData" : "Reliability" ,
-          }
-           axios.post("/index/",Qs.stringify(msg,{indices:false}),{
-                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
-                } ).then((res) => {
-                    console.log(this,"ttt",this.$router)
-               {% comment %} this.$router.push({path:'/Lesson_search/'});{% endcomment %}//需要定义router实例化
-               window.location.href="/Lesson_search/";
-
-           });
+            },
+            methods: {
+                edit(row, index){
+          console.log(row,row.address);
 
       },
-
-      CookieSW:function(){
-
-          let msg = {
-              "isGetData" : "Compatibility" ,
-          }
-           axios.post("/index/",Qs.stringify(msg,{indices:false}),{
-                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
-                } ).then((res) => {
-                {% comment %}this.$router.push({path:'/Lesson_search/'});{% endcomment %}
-               window.location.href="/Lesson_search/";
-
-           })
-      },
-
-
-    }
-  })
-</script>
+            }
+        })
+    </script>
 {% endblock %}

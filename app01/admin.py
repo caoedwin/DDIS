@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserInfo, Role, Permission, Menu, lesson_learn, Imgs, files,ProjectinfoinDCT
+from .models import UserInfo, Role, Permission, Menu, lesson_learn, Imgs, Files,ProjectinfoinDCT
 from LessonProjectME.models import lessonlearn_Project, TestProjectLL
 from CDM.models import CDM
 from Bouncing.models import Bouncing_M,files_BM
@@ -28,7 +28,7 @@ admin.site.site_url = '/index/'
 admin.site.register(files_PM)
 admin.site.register(files_BM)
 admin.site.register(Imgs)
-admin.site.register(files)
+admin.site.register(Files)
 admin.site.register(files_QIL)
 # admin.site.register(ProjectinfoinDCT)
 # admin.site.register(DriverList_M)
