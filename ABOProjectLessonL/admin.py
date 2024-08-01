@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import ABOlesson_learn, ABOlessonlearn_Project, ABOTestProjectLL
-
+from .models import ABOlesson_learn, ABOlessonlearn_Project, ABOTestProjectLL,ABOfiles, ABOImgs
+admin.site.register(ABOfiles)
+admin.site.register(ABOImgs)
 # Register your models here.
 @admin.register(ABOlesson_learn)
 class lesson_learnAdmin(admin.ModelAdmin):

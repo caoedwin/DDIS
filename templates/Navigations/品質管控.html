@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Navigations{% endblock %}
+{% block css %}
+    {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
+    <style>
+        /*style.css：2714中设置最后一列是right*/
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 设置行的背景色 */
+        .el-table .row-bg-color {
+        {#background-color: #f7e1b5;#}
+        }
+
+        /* 如果需要中空线，可以通过边框样式来实现 */
+        .el-table .cell {
+        }
+
+        .el-table__header {
+            table-layout: fixed;
+            border-collapse: separate;
+        }
+
+        .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+        {#border-right: 10px solid #EBEEF5;#}{#border-radius: 30px#}
+        }
+
+        .el-table td, .el-table th.is-leaf {
+            border-bottom: 10px solid #EBEEF5;
+        }
+
+        /* 最后一个单元格的右边界不显示 */
+        .el-table .cell:last-child {
+            border-right: none;
+        }
+
+        .el-button--warning.is-plain {
+            color: #E6A23C;
+            background: #fdf6ec;
+            border-color: #f5dab1;
+            font-size: 12px;
+        }
+
+        .wrap-text {
+            white-space: normal;
+            word-break: break-all;
+        }
+    </style>
+{% endblock %}
+{% block content1 %}
+{% endblock %}
+{% block content %}
+
+    <div id="app" {% comment %}v-pre{% endcomment %}>
+
+        <div class="tableAround" v-cloak>
+
+            <span>
+            <el-table :data="gridData_chan"
+                    {% comment %}border{% endcomment %}
+                      height="500" style="width: 100%"
+                      row-class-name="row-bg-color">
+                <el-table-column property="name" label="部門管理" min-width="16%">
+                    <template scope="scope">
+                        {% comment %}<el-popover trigger="hover" placement="top">
+                          <p>${ scope.row.Comment }</p>{% endcomment %}
+                          {% comment %}<p>住址: ${ scope.row.address }</p>{% endcomment %}
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                              {% comment %}<a :href="scope.row.address" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
+                                  {% comment %}<el-tag size="medium">${ scope.row.name2 }</el-tag>{% endcomment %}
+                                  <el-button
+                                          class="wrap-text"
+                                          v-if="scope.row.name"
+                                          type="warning"
+                                          plain
+                                          @click="fetchData(scope.row.name)"
+                                  >
+                                      ${ scope.row.name }</el-button>
+                              </a>
+                          </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                <el-table-column property="name2" label="" min-width="16%">
+                    <template scope="scope">
+                        {% comment %}<el-popover trigger="hover" placement="top">
+                          <p>${ scope.row.Comment2 }</p>{% endcomment %}
+                          {% comment %}<p>住址: ${ scope.row.address2 }</p>{% endcomment %}
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                              {% comment %}<a :href="scope.row.address" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
+                            {% comment %}<el-tag size="medium">${ scope.row.name2 }</el-tag>{% endcomment %}
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.name2"
+                                    type="warning"
+                                    plain
+                                    @click="fetchData(scope.row.name2)"
+                            >
+                                      ${ scope.row.name2 }</el-button>
+                              </a>
+                          </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                <el-table-column property="name3" label="" min-width="16%">
+                    <template scope="scope">
+                        {% comment %}<el-popover trigger="hover" placement="top">
+                          <p>${ scope.row.Comment3 }</p>{% endcomment %}
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                              {% comment %}<a :href="scope.row.address3" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.name3"
+                                    type="warning"
+                                    plain
+                                    @click="fetchData(scope.row.name3)"
+                            >
+                                      ${ scope.row.name3 }</el-button>
+                              </a>
+                          </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                <el-table-column property="name4" label="" min-width="16%">
+                    <template scope="scope">
+                        {% comment %}<el-popover trigger="hover" placement="top">
+                          <p>${ scope.row.Comment4 }</p>{% endcomment %}
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                              {% comment %}<a :href="scope.row.address4" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.name4"
+                                    type="warning"
+                                    plain
+                                    @click="fetchData(scope.row.name4)"
+                            >
+                                      ${ scope.row.name4 }</el-button>
+                              </a>
+                          </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                <el-table-column property="name5" label="" min-width="16%">
+                    <template scope="scope">
+                        {% comment %}<el-popover trigger="hover" placement="top">
+                          <p>${ scope.row.Comment5 }</p>{% endcomment %}
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                              {% comment %}<a :href="scope.row.address5" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.name5"
+                                    type="warning"
+                                    plain
+                                    @click="fetchData(scope.row.name5)"
+                            >
+                                      ${ scope.row.name5 }</el-button>
+                              </a>
+                          </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                {% comment %}<el-table-column width="120" label="修改" fixed="right">
+                  <template slot-scope="scope">
+                      <el-button type="text" size="small" @click="edit(scope.row+scrollArray[0])">編輯</el-button>
+                      </template>
+              </el-table-column>{% endcomment %}
+            </el-table>
+            </span>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/bootstrap.min.js"></script>
+    <script src="../static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    {#<script src="/static/js/vue-router.min.js"></script>#}
+    {% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                const ipdadress = 'http://127.0.0.1:8003';
+                return {
+                    table: false,
+                    dialog: false,
+                    loading: false,
+                    drawer: false,
+                    gridData_chan: [{
+                        name: 'ProjectComparison',
+                        address: "",
+                        Comment: "",
+                        name2: 'CapitalExpenditure',
+                        address2: "",
+                        Comment2: "",
+                        name3: 'Public Area',
+                        address3: "",
+                        Comment3: "",
+                        name4: 'PersonalInfo',
+                        address4: "",
+                        Comment4: "",
+                        name5: 'PersonalExperience',
+                        address5: "",
+                        Comment5: "",
+                    }, {
+                        name: 'ProjectInfo',
+                        address: ipdadress + '/DeviceLNV/BorrowedDeviceLNV/',
+                        name2: '',
+                        address2: "",
+                        name3: '',
+                        {#address3: "/MQM/MQM_search/",#}
+                        Comment3: "",
+                        name4: '',
+                        {#address4: "/MQM/MQM_search/",#}
+                        Comment4: "",
+                        name5: '',
+                        {#address5: "/MQM/MQM_search/",#}
+                        Comment5: "",
+                    },
+                    ],
+                }
+            },
+            mounted() {
+
+            },
+            methods: {
+                fetchData(param) {
+                    axios.get(`/Navigations_system/${param}/`)
+                        .then(response => {
+                            // 处理响应数据
+                            //window.location.href="/Navigations_system/" + param + '/';
+
+                            // 当前页面不会关闭，新页面会在新标签页中打开
+                            window.open("/Navigations_system/" + param + '/', '_blank');
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            // 处理错误情况
+                            console.error(error);
+                        });
+                }
+            },
+        })
+    </script>
+{% endblock %}

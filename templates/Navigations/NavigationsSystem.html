@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Navigations{% endblock %}
+{% block css %}
+    {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
+    <style>
+        /*style.css：2714中设置最后一列是right*/
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 设置行的背景色 */
+        .el-table .row-bg-color {
+            background-color: #f7e1b5;
+        }
+
+        /* 如果需要中空线，可以通过边框样式来实现 */
+        .el-table .cell {
+        }
+
+        .el-table__header {
+            table-layout: fixed;
+            border-collapse: separate;
+        }
+
+        .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+            border-right: 1px solid #EBEEF5;
+            border-radius: 20px;
+        }
+
+        .el-table td, .el-table th.is-leaf {
+            border-bottom: 10px solid #EBEEF5;
+        }
+
+        /* 最后一个单元格的右边界不显示 */
+        .el-table .cell:last-child {
+            border-right: none;
+        }
+
+        .table > thead > tr > th {
+            border-bottom: 1px solid #e7e7e7;
+            font-weight: 600;
+            border-top: 0;
+            color: #FFFFFF;
+        }
+
+        .el-button--warning.is-plain {
+            color: #E6A23C;
+            background: #fdf6ec;
+            border-color: #f5dab1;
+            font-size: 12px;
+        }
+
+        .wrap-text {
+            white-space: normal;
+            word-break: break-all;
+        }
+    </style>
+{% endblock %}
+{% block content1 %}
+{% endblock %}
+{% block content %}
+
+    <div id="app" {% comment %}v-pre{% endcomment %}>
+
+        <div class="tableAround" v-cloak style="height: 400px">
+
+            <span>
+            <el-table :data="gridData" border height="500" style="width: 100%"
+                      row-class-name="row-bg-color">
+                <el-table-column property="name" label="System" min-width="16%">
+                    <template scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                          <p>${ scope.row.Comment }</p>
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                                  <el-tag size="medium">${ scope.row.name }</el-tag>
+                          </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <el-table-column property="LNVname" label="LNV" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center;">
+                              <a :href="scope.row.LNVurl" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.LNVname"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.LNVname }</el-button>
+                                  </a>
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="A31name" label="A31" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                              <a :href="scope.row.A31url" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.A31name"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.A31name }</el-button>
+                                  </a>
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="A32name" label="A32" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                              <a :href="scope.row.A32url" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.A32name"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.A32name }</el-button>
+                                  </a>
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="ABOname" label="ABO" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                              <a :href="scope.row.ABOurl" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.ABOname"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.ABOname }</el-button>
+                                  </a>
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="CQT88name" label="CQT88" min-width="16%">
+                    <template scope="scope">
+                          <div slot="reference" class="name-wrapper" style="text-align: center">
+                              <a :href="scope.row.CQT88url" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    class="wrap-text"
+                                    v-if="scope.row.CQT88name"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.CQT88name }</el-button>
+                                  </a>
+                              </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+            </span>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/bootstrap.min.js"></script>
+    <script src="../static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    {#<script src="/static/js/vue-router.min.js"></script>#}
+    {% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                return {
+                    Sysname: '{{ name }}',
+                    gridData: [
+                        {
+                            name: '',
+                            Comment: "",
+                            LNVname: '',
+                            LNVurl: '',
+                            A31name: "",
+                            A31url: "",
+                            A32name: "",
+                            A32url: "",
+                            ABOname: '',
+                            ABOurl: '',
+                            CQT88name: "",
+                            CQT88url: "",
+                            A39name: "",
+                            A39url: "",
+                        },
+                    ],
+                }
+            },
+            mounted() {
+                console.log(this.Sysname);
+                this.getdata("first")
+            },
+            methods: {
+                getdata: function (e) {
+                    let data = {
+                        "isGetData": e,
+                        'Sysname': this.Sysname,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };
+                    axios.post("/Navigations_system/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.gridData = res.data.gridData;
+                    });
+                },
+            }
+        })
+    </script>
+{% endblock %}

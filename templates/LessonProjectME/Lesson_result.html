@@ -142,7 +142,6 @@
 {% endblock %}
 {% block content %}
 <div id="app"  >
-<el-backtop ></el-backtop>
   <div class="selectMsg" v-cloak>
     <div class="customerContent" style="margin-right: 20px" v-cloak>
     <label style="color: #FFF" for="customer">Customer</label>
@@ -196,6 +195,16 @@
               </div>
           </template>
       </el-table-column>
+    <el-table-column prop="Video" label="Video" class="eltable-video">
+        <template scope="scope">
+            <div class="eltable-video">
+                <video v-for="(item) in scope.row.Video" width="200" height="100" controls>
+                    <source :src="item" type="video/mp4">
+                    您的浏览器不支持 video 标签。
+                </video>
+            </div>
+        </template>
+    </el-table-column>
       <el-table-column label="結果" prop="id" sortable='custom' fixed="right">
        <template slot-scope="scope">
          <span v-if="!scope.row.isSet">${ scope.row.result }</span>
@@ -465,22 +474,22 @@
           {% comment %}this.getdata(parameter){% endcomment %}
       },
       cellStyle({row,column,rowIndex,columnIndex}){
-          if (columnIndex === 8 && row.result === 'Pass') {
+          if (columnIndex === 9 && row.result === 'Pass') {
                         return {
                                   background: '#a8c97f'
                                 }
                 }
-          if (columnIndex === 8 && row.result === 'Fail') {
+          if (columnIndex === 9 && row.result === 'Fail') {
                         return {
                                   background: '#F56C6C'
                                 }
                 }
-          if (columnIndex === 8 && (row.result === 'N/S'||row.result === 'NS')) {
+          if (columnIndex === 9 && (row.result === 'N/S'||row.result === 'NS')) {
                         return {
                                   background: '#8b968d'
                                 }
                 }
-          if (columnIndex === 8 && (row.result === 'N/A'||row.result === 'NA')) {
+          if (columnIndex === 9 && (row.result === 'N/A'||row.result === 'NA')) {
                         return {
                                   background: 'oldlace'
                                 }

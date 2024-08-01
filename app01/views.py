@@ -1,17 +1,17 @@
-from django.shortcuts import render,redirect,HttpResponse
-from app01.models import UserInfo,lesson_learn,Imgs,Files,ProjectinfoinDCT,Role,Permission,Menu
+from django.shortcuts import render, redirect, HttpResponse
+from app01.models import UserInfo, lesson_learn, Imgs, Files, ProjectinfoinDCT, Role, Permission, Menu
 from django.views.decorators.csrf import csrf_exempt
 from Bouncing.models import Bouncing_M
 from Package.models import Package_M
 from CDM.models import CDM
-from TestPlanME.models import TestProjectME,TestItemME,TestPlanME
+from TestPlanME.models import TestProjectME, TestItemME, TestPlanME
 from LessonProjectME.models import lessonlearn_Project
-from DriverTool.models import DriverList_M,ToolList_M
+from DriverTool.models import DriverList_M, ToolList_M
 from MQM.models import MQM
 from TestPlanSW.models import TestProjectSW, TestProjectSWAIO
 from CQM.models import CQMProject, CQM, CQM_history
 from QIL.models import QIL_M, QIL_Project
-import datetime,os
+import datetime, os
 from service.init_permission import init_permission
 from django.conf import settings
 # Create your views here.
@@ -19,12 +19,13 @@ from django.forms import forms
 from DjangoUeditor.forms import UEditorField
 from app01.forms import lessonlearn
 from django.conf import settings
-import datetime,json,requests,time,simplejson
+import datetime, json, requests, time, simplejson
 from requests_ntlm import HttpNtlmAuth
 from INVGantt.models import INVGantt
 from django.http import HttpResponseRedirect
 # from app01.templatetags.custom_tag import *
 from .tasks import ProjectSync, ImportProjectinfoFromDCT
+
 
 # class TestUEditorForm(forms.Form):
 #     content = UEditorField('Solution/Action', width=800, height=500,
@@ -40,9 +41,6 @@ from .tasks import ProjectSync, ImportProjectinfoFromDCT
 # logger.warning('Warning')
 # logger.error('Error')
 # logger.critical('Critical')
-
-
-
 
 
 @csrf_exempt
@@ -62,7 +60,6 @@ def login(request):
     # print(request.method)
     fbclid = request.GET.get('fbclid')
     # print(request.GET.get('next'), fbclid, '11', request.POST.get('next', '/'))
-
 
     if request.method == "POST":
         # login_form = UserForm(request.POST)
@@ -89,7 +86,7 @@ def login(request):
                 request.session['user_name'] = user.username
                 request.session['account'] = Account
                 # request.session['Skin'] = "/static/src/blue.jpg"
-                request.session.set_expiry(12*60*60)
+                request.session.set_expiry(12 * 60 * 60)
                 # print('11')
                 Skin = request.COOKIES.get('Skin_raw')
                 # print(Skin)
@@ -102,7 +99,7 @@ def login(request):
                 # print(settings.MEDIA_ROOT,settings.MEDIA_URL)
                 # return HttpResponseRedirect(request.session['login_from'])
                 Non_login_path = request.session.get('Non_login_path')
-                print(Non_login_path,'Non_login_path')
+                print(Non_login_path, 'Non_login_path')
                 if Non_login_path:
                     # 记住来源的url，如果没有则设置为首页('/')
                     return redirect(Non_login_path)
@@ -120,8 +117,8 @@ def login(request):
             message = "用户不存在！"
         return render(request, 'login.html', locals())
 
-
     return render(request, 'login.html', locals())
+
 
 @csrf_exempt
 def index(request):
@@ -131,7 +128,7 @@ def index(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Home/Dashboard"
+    weizhi = "Home/Dashboard"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     # print (permission_url)
     # L_R_data_object=lesson_learn.objects.all().order_by('edit_time')
@@ -162,25 +159,26 @@ def index(request):
     L_R_data = lesson_learn.objects.filter(Category="Reliability").values('Symptom').count()
     L_C_data = lesson_learn.objects.filter(Category="Compatibility").values('Symptom').count()
     L_Q_data = QIL_M.objects.all().values('QIL_No').count()
-    R_P_data=Package_M.objects.all().values('Project').distinct().count()
-    R_B_data=Bouncing_M.objects.all().values('Project').distinct().count()
-    R_C_data=CDM.objects.all().values('Project').distinct().count()
-    T_M_Project=TestProjectME.objects.all().values('Project').distinct().count()
-    X_D_DriverList=DriverList_M.objects.all().values('Project').distinct().count()
-    X_D_ToolList=ToolList_M.objects.all().values('Project').distinct().count()
-    X_M_Project=MQM.objects.all().values('Project').distinct().count()
-    T_S_Project=TestProjectSW.objects.all().values('Project').distinct().count()+TestProjectSWAIO.objects.all().values('Project').distinct().count()
+    R_P_data = Package_M.objects.all().values('Project').distinct().count()
+    R_B_data = Bouncing_M.objects.all().values('Project').distinct().count()
+    R_C_data = CDM.objects.all().values('Project').distinct().count()
+    T_M_Project = TestProjectME.objects.all().values('Project').distinct().count()
+    X_D_DriverList = DriverList_M.objects.all().values('Project').distinct().count()
+    X_D_ToolList = ToolList_M.objects.all().values('Project').distinct().count()
+    X_M_Project = MQM.objects.all().values('Project').distinct().count()
+    T_S_Project = TestProjectSW.objects.all().values(
+        'Project').distinct().count() + TestProjectSWAIO.objects.all().values('Project').distinct().count()
     X_C_data = CQMProject.objects.all().values('Project').distinct().count()
     ProI_data = ProjectinfoinDCT.objects.all().values('ComPrjCode').distinct().count()
     # for i in TestProjectME.objects.all().values('Customer', 'Project', 'Phase').distinct():
     #     print(i)
-    T_M_Items=TestItemME.objects.all().count()
+    T_M_Items = TestItemME.objects.all().count()
     T_I_Project = INVGantt.objects.all().values("Project_Name").distinct().count()
     # importPrjResult = ImportProjectinfoFromDCT()
     # print(request.POST)
     if request.method == "POST":
         if request.POST.get("isGetData") == "Reliability":
-            #cookie
+            # cookie
             # Redirect = redirect('/Lesson_search/')
             # Reliabilityv = request.POST.get('isGetData')
             # Redirect.set_cookie('cookieSWME', Reliabilityv, 3600 * 24 )
@@ -189,7 +187,7 @@ def index(request):
             request.session.set_expiry(12 * 60 * 60)
     if request.method == "POST":
         if request.POST.get("isGetData") == "Compatibility":
-            #cookie
+            # cookie
             # Redirect = redirect('/Lesson_search/')
             # Compatibilityv = request.POST.get('isGetData')
             # Redirect.set_cookie('cookieSWME', Compatibilityv, 3600 * 24 )
@@ -197,6 +195,7 @@ def index(request):
             request.session['sessionSWME'] = request.POST.get('isGetData')
             request.session.set_expiry(12 * 60 * 60)
     return render(request, 'index.html', locals())
+
 
 @csrf_exempt
 def ProjectInfoSearch(request):
@@ -206,7 +205,7 @@ def ProjectInfoSearch(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Home/ProjectInfoSearch"
+    weizhi = "Home/ProjectInfoSearch"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     mock_data = [
@@ -228,7 +227,7 @@ def ProjectInfoSearch(request):
     ]
     selectItem = [
         # 'C38(NB)', 'C38(AIO)', 'T88(AIO)'
-                  ]
+    ]
 
     selectYear = {
         # "Y2020": [{"ProjectCode": "FLAT4"}, {"ProjectCode": "FLMD0"}, {"ProjectCode": "FLV34"},
@@ -245,7 +244,9 @@ def ProjectInfoSearch(request):
         for j in ProjectinfoinDCT.objects.filter(Year=i["Year"]).values("ComPrjCode").distinct().order_by("ComPrjCode"):
             YearPro.append({"ProjectCode": j["ComPrjCode"]})
         selectYear[i["Year"]] = YearPro
-    print(ProjectinfoinDCT.objects.all().values("ComPrjCode").distinct().count(), ProjectinfoinDCT.objects.all().values("ComPrjCode").count(), ProjectinfoinDCT.objects.all().values("ComPrjCode", "Year").distinct().count())
+    print(ProjectinfoinDCT.objects.all().values("ComPrjCode").distinct().count(),
+          ProjectinfoinDCT.objects.all().values("ComPrjCode").count(),
+          ProjectinfoinDCT.objects.all().values("ComPrjCode", "Year").distinct().count())
     canExport = 0
     roles = []
     onlineuser = request.session.get('account')
@@ -266,10 +267,12 @@ def ProjectInfoSearch(request):
             # print(data)
             for i in ProjectinfoinDCT.objects.all():
                 mock_data.append(
-                    {"id": i.id, "Customer": i.Customer, "Year": i.Year, "Comprjcode": i.ComPrjCode, "Prjengcode1": i.PrjEngCode1,
+                    {"id": i.id, "Customer": i.Customer, "Year": i.Year, "Comprjcode": i.ComPrjCode,
+                     "Prjengcode1": i.PrjEngCode1,
                      "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
-                     "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport, "Type": i.Type,
-                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS,"LD": i.LD, "DQA_PL": i.DQAPL,
+                     "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport,
+                     "Type": i.Type,
+                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "DQA_PL": i.DQAPL,
                      "Modified_Date": i.ModifiedDate}
                 )
             data = {
@@ -294,7 +297,8 @@ def ProjectInfoSearch(request):
                      "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
                      "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport,
                      "Type": i.Type,
-                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LDNum": i.LDNum, "DQA_PL": i.DQAPL, "DQA_PLNum": i.DQAPLNum,
+                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LDNum": i.LDNum, "DQA_PL": i.DQAPL,
+                     "DQA_PLNum": i.DQAPLNum,
                      "Modified_Date": i.ModifiedDate}
                 )
             pass
@@ -316,7 +320,8 @@ def ProjectInfoSearch(request):
                      "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
                      "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport,
                      "Type": i.Type,
-                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LDNum": i.LDNum, "DQA_PL": i.DQAPL, "DQA_PLNum": i.DQAPLNum,
+                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LDNum": i.LDNum, "DQA_PL": i.DQAPL,
+                     "DQA_PLNum": i.DQAPLNum,
                      "Modified_Date": i.ModifiedDate}
                 )
             pass
@@ -331,9 +336,12 @@ def ProjectInfoSearch(request):
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'ProjectInfo_search.html', locals())
 
+
 from django.core.mail import EmailMultiAlternatives
-from TestPlanSW.models import TestProjectSW,TestPlanSW
-def Mailhtml():# settings Email设置1-外網qq
+from TestPlanSW.models import TestProjectSW, TestPlanSW
+
+
+def Mailhtml():  # settings Email设置1-外網qq
     print("Starthtmlmail")
     # subject 主题 content 内容 to_addr 是一个列表，发送给哪些人
     # msg = EmailMultiAlternatives('邮件标题', '邮件内容', '发送方', ['接收方'])
@@ -396,7 +404,7 @@ def Mailhtml():# settings Email设置1-外網qq
     # print(BR_perinfo,len(BR_perinfo))
     # print(Projectinfo_TestPlanSWMail)
 
-    #每个机种发一个邮件，过于频繁，可能会受邮箱限制，导致报错smtplib.SMTPDataError: (550, b'Mail content denied.
+    # 每个机种发一个邮件，过于频繁，可能会受邮箱限制，导致报错smtplib.SMTPDataError: (550, b'Mail content denied.
     # for key, value in Projectinfo_TestPlanSWMail.items():
     #     # print(value)
     #     messagecontend = """<p>Dear All:</p>
@@ -446,7 +454,7 @@ def Mailhtml():# settings Email设置1-外網qq
     #     # msg.attach_file('test.txt')
     #     # 发送
     #     msg.send()
-    #发一个总的邮件
+    # 发一个总的邮件
     messagecontend = """<p>Dear All:</p>
                 <p>您的如下机种已經超期， 請儘快上传到DDIS系统：</p>
                 <a href="http://10.129.83.21:8002/index/" style="font-size: 20px;background-color: yellow;font-weight: bolder;" target="_blank">点击此处，处理设备</a>
@@ -479,11 +487,11 @@ def Mailhtml():# settings Email设置1-外網qq
             </tr>
             """
         # to_email.append(value[0]["to_emails"])
-        to_email.extend(value[0]["to_emails"])#合并list
+        to_email.extend(value[0]["to_emails"])  # 合并list
         for j in value:
             # print(j)
             sub_td += sub_td_items.format(sub_item_Project=j["Project"], sub_item_Phase=j["Phase"],
-                                          sub_item_data=j["dataNotupdate"], sub_item_Exceedday=j["Exceed_days"],)
+                                          sub_item_data=j["dataNotupdate"], sub_item_Exceedday=j["Exceed_days"], )
     message = messagecontend.format(sub_td=sub_td)
     # print(message)
     subject = '【DDIS】数据上传提醒'
@@ -500,7 +508,8 @@ def Mailhtml():# settings Email设置1-外網qq
     # 发送
     msg.send()
 
-def MailOAtest():# settings Email设置2-内網OA
+
+def MailOAtest():  # settings Email设置2-内網OA
     message = 'ddistest'
     print(message)
     subject = '【DDIS】数据上传提醒'
@@ -517,6 +526,7 @@ def MailOAtest():# settings Email设置2-内網OA
     # 发送
     msg.send()
 
+
 @csrf_exempt
 def FilesDownload(request):
     if not request.session.get('is_login', None):
@@ -525,7 +535,7 @@ def FilesDownload(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Home/ProjectInfo"
+    weizhi = "Home/ProjectInfo"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     if request.method == "GET":
@@ -543,6 +553,7 @@ def FilesDownload(request):
             return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'FilesDownload.html', locals())
 
+
 def Navigation(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
@@ -550,7 +561,7 @@ def Navigation(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Home/ProjectInfo"
+    weizhi = "Home/ProjectInfo"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     if request.method == "GET":
@@ -565,6 +576,7 @@ def Navigation(request):
             return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Navigation.html', locals())
 
+@csrf_exempt
 def Navigations(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
@@ -572,7 +584,7 @@ def Navigations(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Navigation/Navigations"
+    weizhi = "Navigation/Navigations"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     if request.method == "GET":
@@ -588,6 +600,1260 @@ def Navigations(request):
     return render(request, 'Navigations.html', locals())
 
 @csrf_exempt
+def Navigations_quality(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi = "Navigation/Navigations"
+    permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+    data = {}
+    if request.method == "GET":
+        # print(request.GET)
+        if request.GET.get("action") == "first":
+            # importPrjResult = ImportProjectinfoFromDCT()
+            # if importPrjResult:
+            #     data['result'] = 1
+            # else:
+            #     data['result'] = 0
+            # # print(data)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+    return render(request, 'Navigations/品質管控.html', locals())
+
+@csrf_exempt
+def Navigations_system(request, name):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi = "Navigation/Navigations"
+    permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+    data = {}
+    name = name
+    # DDMS_add = 'http://10.129.83.21:8004'
+    # Discussing_add = 'http://10.129.83.21:8003'
+    # RTMS_add = 'http://10.129.83.21:8001'
+    # DCT_add = 'http://10.128.82.23'
+    # EQUIP_add = 'http://kspqiswww'
+    # All_system_dic = {
+    #     #部门管理
+    #     "ProjectComparison": [
+    #         {"name": "ProjectComparison",
+    #          "Comment": "",
+    #          "LNVname": "ProjectComparison",
+    #          "LNVurl": "/ProjectComparison/ProjectComparison_Summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "CapitalExpenditure": [
+    #         {"name": "CapitalExpenditure",
+    #          "Comment": "",
+    #          "LNVname": "CapitalExpenditure",
+    #          "LNVurl": "/CapitalExpenditure/CapitalExpenditure_Summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Public Area": [
+    #         {"name": "Public Area",
+    #          "Comment": "",
+    #          "LNVname": "Public Area",
+    #          "LNVurl": "/PersonalInfo/PublicArea/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "PersonalInfo": [
+    #         {"name": "PersonalInfo",
+    #          "Comment": "",
+    #          "LNVname": "PersonalInfo",
+    #          "LNVurl": "/PersonalInfo/PersonalInfo-search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "PersonalExperience": [
+    #         {"name": "PersonalExperience",
+    #          "Comment": "",
+    #          "LNVname": "PersonalExperience",
+    #          "LNVurl": "/PersonalExperience/Summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "ProjectInfo": [
+    #         {"name": "ProjectInfo",
+    #          "Comment": "",
+    #          "LNVname": "ProjectInfo",
+    #          "LNVurl": "/ProjectInfoSearch/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     #品质管控
+    #     "RD/PE/JQE-Lesson": [
+    #         {"name": "RD/PE/JQE-Lesson",
+    #          "Comment": "",
+    #          "LNVname": "RD/PE/JQE-Lesson",
+    #          "LNVurl": "/NonDQALesson/NonDQALesson-summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "QIL": [
+    #         {"name": "QIL",
+    #          "Comment": "",
+    #          "LNVname": "QIL",
+    #          "LNVurl": "/QIL/QIL_searchbyproject/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": 'QIL-ABO',
+    #          "ABOurl": "/ABOQIL/ABOQIL_searchbyproject/",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "LessonLearn": [
+    #         {"name": "LessonLearn",
+    #          "Comment": "",
+    #          "LNVname": "SW&ME",
+    #          "LNVurl": "/LessonProjectME/Lesson_SearchByProject/",
+    #          "A31name": "SW&ME-A31",
+    #          "A31url": "/A31LessonLProject/Lesson_SearchByProject/",
+    #          "A32name": "SW&ME-A32",
+    #          "A32url": "/A32LessonLProject/Lesson_SearchByProject/",
+    #          "ABOname": 'SW&ME-ABO',
+    #          "ABOurl": "/ABOProjectLessonL/Lesson_SearchByProject/",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "LowLight": [
+    #         {"name": "LowLight",
+    #          "Comment": "",
+    #          "LNVname": "LowLight",
+    #          "LNVurl": "/LowLightList/LowLightList_edit/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "IssueBreakdown": [
+    #         {"name": "IssueBreakdown",
+    #          "Comment": "",
+    #          "LNVname": "IssueBreakdown",
+    #          "LNVurl": "/IssuesBreakdown/IssuesBreakdown_Summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Issue Notes": [
+    #         {"name": "Issue Notes",
+    #          "Comment": "",
+    #          "LNVname": "Issue Notes",
+    #          "LNVurl": "/Issue_Notes/Issue_Notes-search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Known Issue": [
+    #         {"name": "Known Issue",
+    #          "Comment": "",
+    #          "LNVname": "Known Issue",
+    #          "LNVurl": "/KnowIssue/KnowIssue-search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     #測試管理
+    #     "PackageGValue": [
+    #         {"name": "PackageGValue",
+    #          "Comment": "",
+    #          "LNVname": "PackageGValue",
+    #          "LNVurl": "/Package/Package-search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "CDM": [
+    #         {"name": "CDM",
+    #          "Comment": "",
+    #          "LNVname": "CDM",
+    #          "LNVurl": "/CDM/CDM-search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Bouncing": [
+    #         {"name": "Bouncing",
+    #          "Comment": "",
+    #          "LNVname": "Bouncing",
+    #          "LNVurl": "/Bouncing/Bouncing-search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "SpecDownload": [
+    #         {"name": "SpecDownload",
+    #          "Comment": "",
+    #          "LNVname": "SpecDownload",
+    #          "LNVurl": "/SpecDownload/SpecDownload-summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "TestPlanME": [
+    #         {"name": "TestPlanME",
+    #          "Comment": "",
+    #          "LNVname": "TestPlanME",
+    #          "LNVurl": "/TestPlanME/TestPlanME-summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "TestPlanSW": [
+    #         {"name": "TestPlanSW",
+    #          "Comment": "",
+    #          "LNVname": "TestPlanSW",
+    #          "LNVurl": "/TestPlanSW/TestPlanSW-summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": 'TestPlanSW-ABO',
+    #          "ABOurl": "/ABOTestPlan/ABOTestPlan_summary/",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "TestPlanSW-OR": [
+    #         {"name": "TestPlanSW-OR",
+    #          "Comment": "",
+    #          "LNVname": "TestPlanSW-OR",
+    #          "LNVurl": "/TestPlanSWOS/TestPlanSWOS-summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "TestPlanINV": [
+    #         {"name": "TestPlanINV",
+    #          "Comment": "",
+    #          "LNVname": "TestPlanINV",
+    #          "LNVurl": "/INVGantt/INVGantt-summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "MQM": [
+    #         {"name": "MQM",
+    #          "Comment": "",
+    #          "LNVname": "MQM",
+    #          "LNVurl": "/MQM/MQM_search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "CQM": [
+    #         {"name": "CQM",
+    #          "Comment": "",
+    #          "LNVname": "CQM",
+    #          "LNVurl": "/CQM/CQM_search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "OBIResult": [
+    #         {"name": "OBIResult",
+    #          "Comment": "",
+    #          "LNVname": "OBIResult",
+    #          "LNVurl": "/OBIDeviceResult/OBIDeviceResult_search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     #測試工具
+    #     "Device": [
+    #         {"name": "Device",
+    #          "Comment": "",
+    #          "LNVname": "Device-C38-LNV",
+    #          "LNVurl": DDMS_add + "/DeviceLNV/BorrowedDeviceLNV/",
+    #          "A31name": "--",
+    #          "A31url": '',
+    #          "A32name": "--",
+    #          "A32url": '',
+    #          "ABOname": 'Device-ABO',
+    #          "ABOurl": DDMS_add + "/DeviceABO/BorrowedDeviceABO/",
+    #          "CQT88name": "Device-CQT88",
+    #          "CQT88url": DDMS_add + "/DeviceCQT88/BorrowedDeviceCQT88/",
+    #          "A39": "Device-A39-OBI",
+    #          "A39url": DDMS_add + "/DeviceA39/BorrowedDeviceA39/",
+    #          },
+    #     ],
+    #     "Driver": [
+    #         {"name": "Driver",
+    #          "Comment": "",
+    #          "LNVname": "Driver",
+    #          "LNVurl": "/DriverTool/DriverList_search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": 'Driver-ABO',
+    #          "ABOurl": "/ABODriverTool/ABODriverList_search/",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Tool": [
+    #         {"name": "Tool",
+    #          "Comment": "",
+    #          "LNVname": "Tool",
+    #          "LNVurl": "/DriverTool/ToolList_search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": 'Tool-ABO',
+    #          "ABOurl": "/ABODriverTool/ABOToolList_search/",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     #資產管理
+    #     "Adapter&PowerCode": [
+    #         {"name": "Adapter&PowerCode",
+    #          "Comment": "",
+    #          "LNVname": "Adapter&PowerCode-LNV",
+    #          "LNVurl": DDMS_add + "/AdapterPowerCode/BorrowedAdapter/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "櫃椅": [
+    #         {"name": "櫃椅",
+    #          "Comment": "",
+    #          "LNVname": "櫃椅",
+    #          "LNVurl": DDMS_add + "/ChairCabinetMS/BorrowedChairCabinet/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "工作機": [
+    #         {"name": "工作機",
+    #          "Comment": "",
+    #          "LNVname": "工作機",
+    #          "LNVurl": DDMS_add + "/ComputerMS/BorrowedComputer/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "個人設備": [
+    #         {"name": "個人設備",
+    #          "Comment": "",
+    #          "LNVname": "個人設備-LNV",
+    #          "LNVurl": DDMS_add + "/Summary/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '個人設備-ABO',
+    #          "ABOurl": DDMS_add + "/Summary_ABO/",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "TumHistory-Unit": [
+    #         {"name": "TumHistory-Unit",
+    #          "Comment": "",
+    #          "LNVname": "TumHistory-Unit",
+    #          "LNVurl": DDMS_add + "/TUMHistory/SummaryTUM/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "TumHistory-Materia": [
+    #         {"name": "TumHistory-Materia",
+    #          "Comment": "",
+    #          "LNVname": "TumHistory-Materia",
+    #          "LNVurl": DDMS_add + "/TUMHistory/SummaryMateria/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     #其他
+    #     "RTMS": [
+    #         {"name": "RTMS",
+    #          "Comment": "",
+    #          "LNVname": "RTMS",
+    #          "LNVurl": RTMS_add + "/index/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Discussing": [
+    #         {"name": "Discussing",
+    #          "Comment": "",
+    #          "LNVname": "Discussing",
+    #          "LNVurl": Discussing_add + "/index/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "DCT": [
+    #         {"name": "DCT",
+    #          "Comment": "",
+    #          "LNVname": "DCT",
+    #          "LNVurl": DCT_add + "/DCT/RealTime/Index",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "EQUIP": [
+    #         {"name": "EQUIP",
+    #          "Comment": "",
+    #          "LNVname": "EQUIP",
+    #          "LNVurl": EQUIP_add + "/DQA_ELR/index.html",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    #     "Automation": [
+    #         {"name": "Automation",
+    #          "Comment": "",
+    #          "LNVname": "Automation",
+    #          "LNVurl": "/AutoResult/AutoResult_search/",
+    #          "A31name": "--",
+    #          "A31url": "",
+    #          "A32name": "--",
+    #          "A32url": "",
+    #          "ABOname": '--',
+    #          "ABOurl": "",
+    #          "CQT88name": "--",
+    #          "CQT88url": "",
+    #          },
+    #     ],
+    # }
+    Customer_System_list = []
+    # Customer_System_list = All_system_dic[name]
+    # print(request.method, name)
+    # print(request.GET)
+    # print(request.POST)
+    if request.method == "GET":
+        # print(request.GET)
+
+        if request.GET.get("action") == "first":
+            # importPrjResult = ImportProjectinfoFromDCT()
+            # if importPrjResult:
+            #     data['result'] = 1
+            # else:
+            #     data['result'] = 0
+            # # print(data)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+    return render(request, 'Navigations/NavigationsSystem.html', locals())
+
+@csrf_exempt
+def Navigations_system_axios(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi = "Navigation/Navigations"
+    permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+    DDMS_add = 'http://10.129.83.21:8004'
+    Discussing_add = 'http://10.129.83.21:8003'
+    RTMS_add = 'http://10.129.83.21:8001'
+    DCT_add = 'http://10.128.82.23'
+    EQUIP_add = 'http://kspqiswww'
+    All_system_dic = {
+        # 部门管理
+        "ProjectComparison": [
+            {"name": "ProjectComparison",
+             "Comment": "",
+             "LNVname": "ProjectComparison",
+             "LNVurl": "/ProjectComparison/ProjectComparison_Summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "CapitalExpenditure": [
+            {"name": "CapitalExpenditure",
+             "Comment": "",
+             "LNVname": "CapitalExpenditure",
+             "LNVurl": "/CapitalExpenditure/CapitalExpenditure_Summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Public Area": [
+            {"name": "Public Area",
+             "Comment": "",
+             "LNVname": "Public Area",
+             "LNVurl": "/PersonalInfo/PublicArea/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "PersonalInfo": [
+            {"name": "PersonalInfo",
+             "Comment": "",
+             "LNVname": "PersonalInfo",
+             "LNVurl": "/PersonalInfo/PersonalInfo-search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "PersonalExperience": [
+            {"name": "PersonalExperience",
+             "Comment": "",
+             "LNVname": "PersonalExperience",
+             "LNVurl": "/PersonalExperience/Summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "ProjectInfo": [
+            {"name": "ProjectInfo",
+             "Comment": "",
+             "LNVname": "ProjectInfo",
+             "LNVurl": "/ProjectInfoSearch/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        # 品质管控
+        "RD/PE/JQE-Lesson": [
+            {"name": "RD/PE/JQE-Lesson",
+             "Comment": "",
+             "LNVname": "RD/PE/JQE-Lesson",
+             "LNVurl": "/NonDQALesson/NonDQALesson-summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "QIL": [
+            {"name": "QIL",
+             "Comment": "",
+             "LNVname": "QIL",
+             "LNVurl": "/QIL/QIL_searchbyproject/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": 'QIL-ABO',
+             "ABOurl": "/ABOQIL/ABOQIL_searchbyproject/",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "LessonLearn": [
+            {"name": "LessonLearn",
+             "Comment": "",
+             "LNVname": "SW&ME",
+             "LNVurl": "/LessonProjectME/Lesson_SearchByProject/",
+             "A31name": "SW&ME-A31",
+             "A31url": "/A31LessonLProject/Lesson_SearchByProject/",
+             "A32name": "SW&ME-A32",
+             "A32url": "/A32LessonLProject/Lesson_SearchByProject/",
+             "ABOname": 'SW&ME-ABO',
+             "ABOurl": "/ABOProjectLessonL/Lesson_SearchByProject/",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "LowLight": [
+            {"name": "LowLight",
+             "Comment": "",
+             "LNVname": "LowLight",
+             "LNVurl": "/LowLightList/LowLightList_edit/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "IssueBreakdown": [
+            {"name": "IssueBreakdown",
+             "Comment": "",
+             "LNVname": "IssueBreakdown",
+             "LNVurl": "/IssuesBreakdown/IssuesBreakdown_Summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Issue Notes": [
+            {"name": "Issue Notes",
+             "Comment": "",
+             "LNVname": "Issue Notes",
+             "LNVurl": "/Issue_Notes/Issue_Notes-search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Known Issue": [
+            {"name": "Known Issue",
+             "Comment": "",
+             "LNVname": "Known Issue",
+             "LNVurl": "/KnowIssue/KnowIssue-search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        # 測試管理
+        "PackageGValue": [
+            {"name": "PackageGValue",
+             "Comment": "",
+             "LNVname": "PackageGValue",
+             "LNVurl": "/Package/Package-search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "CDM": [
+            {"name": "CDM",
+             "Comment": "",
+             "LNVname": "CDM",
+             "LNVurl": "/CDM/CDM-search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Bouncing": [
+            {"name": "Bouncing",
+             "Comment": "",
+             "LNVname": "Bouncing",
+             "LNVurl": "/Bouncing/Bouncing-search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "SpecDownload": [
+            {"name": "SpecDownload",
+             "Comment": "",
+             "LNVname": "SpecDownload",
+             "LNVurl": "/SpecDownload/SpecDownload-summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "TestPlanME": [
+            {"name": "TestPlanME",
+             "Comment": "",
+             "LNVname": "TestPlanME",
+             "LNVurl": "/TestPlanME/TestPlanME-summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "TestPlanSW": [
+            {"name": "TestPlanSW",
+             "Comment": "",
+             "LNVname": "TestPlanSW",
+             "LNVurl": "/TestPlanSW/TestPlanSW-summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": 'TestPlanSW-ABO',
+             "ABOurl": "/ABOTestPlan/ABOTestPlan_summary/",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "TestPlanSW-OR": [
+            {"name": "TestPlanSW-OR",
+             "Comment": "",
+             "LNVname": "TestPlanSW-OR",
+             "LNVurl": "/TestPlanSWOS/TestPlanSWOS-summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "TestPlanINV": [
+            {"name": "TestPlanINV",
+             "Comment": "",
+             "LNVname": "TestPlanINV",
+             "LNVurl": "/INVGantt/INVGantt-summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "MQM": [
+            {"name": "MQM",
+             "Comment": "",
+             "LNVname": "MQM",
+             "LNVurl": "/MQM/MQM_search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "CQM": [
+            {"name": "CQM",
+             "Comment": "",
+             "LNVname": "CQM",
+             "LNVurl": "/CQM/CQM_search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "OBIResult": [
+            {"name": "OBIResult",
+             "Comment": "",
+             "LNVname": "OBIResult",
+             "LNVurl": "/OBIDeviceResult/OBIDeviceResult_search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        # 測試工具
+        "Device": [
+            {"name": "Device",
+             "Comment": "",
+             "LNVname": "Device-C38-LNV",
+             "LNVurl": DDMS_add + "/DeviceLNV/BorrowedDeviceLNV/",
+             "A31name": "--",
+             "A31url": '',
+             "A32name": "--",
+             "A32url": '',
+             "ABOname": 'Device-ABO',
+             "ABOurl": DDMS_add + "/DeviceABO/BorrowedDeviceABO/",
+             "CQT88name": "Device-CQT88",
+             "CQT88url": DDMS_add + "/DeviceCQT88/BorrowedDeviceCQT88/",
+             "A39": "Device-A39-OBI",
+             "A39url": DDMS_add + "/DeviceA39/BorrowedDeviceA39/",
+             },
+        ],
+        "Driver": [
+            {"name": "Driver",
+             "Comment": "",
+             "LNVname": "Driver",
+             "LNVurl": "/DriverTool/DriverList_search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": 'Driver-ABO',
+             "ABOurl": "/ABODriverTool/ABODriverList_search/",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Tool": [
+            {"name": "Tool",
+             "Comment": "",
+             "LNVname": "Tool",
+             "LNVurl": "/DriverTool/ToolList_search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": 'Tool-ABO',
+             "ABOurl": "/ABODriverTool/ABOToolList_search/",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        # 資產管理
+        "Adapter&PowerCode": [
+            {"name": "Adapter&PowerCode",
+             "Comment": "",
+             "LNVname": "Adapter&PowerCode-LNV",
+             "LNVurl": DDMS_add + "/AdapterPowerCode/BorrowedAdapter/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "櫃椅": [
+            {"name": "櫃椅",
+             "Comment": "",
+             "LNVname": "櫃椅",
+             "LNVurl": DDMS_add + "/ChairCabinetMS/BorrowedChairCabinet/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "工作機": [
+            {"name": "工作機",
+             "Comment": "",
+             "LNVname": "工作機",
+             "LNVurl": DDMS_add + "/ComputerMS/BorrowedComputer/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "個人設備": [
+            {"name": "個人設備",
+             "Comment": "",
+             "LNVname": "個人設備-LNV",
+             "LNVurl": DDMS_add + "/Summary/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '個人設備-ABO',
+             "ABOurl": DDMS_add + "/Summary_ABO/",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "TumHistory-Unit": [
+            {"name": "TumHistory-Unit",
+             "Comment": "",
+             "LNVname": "TumHistory-Unit",
+             "LNVurl": DDMS_add + "/TUMHistory/SummaryTUM/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "TumHistory-Materia": [
+            {"name": "TumHistory-Materia",
+             "Comment": "",
+             "LNVname": "TumHistory-Materia",
+             "LNVurl": DDMS_add + "/TUMHistory/SummaryMateria/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        # 其他
+        "RTMS": [
+            {"name": "RTMS",
+             "Comment": "",
+             "LNVname": "RTMS",
+             "LNVurl": RTMS_add + "/index/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Discussing": [
+            {"name": "Discussing",
+             "Comment": "",
+             "LNVname": "Discussing",
+             "LNVurl": Discussing_add + "/index/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "DCT": [
+            {"name": "DCT",
+             "Comment": "",
+             "LNVname": "DCT",
+             "LNVurl": DCT_add + "/DCT/RealTime/Index",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "EQUIP": [
+            {"name": "EQUIP",
+             "Comment": "",
+             "LNVname": "EQUIP",
+             "LNVurl": EQUIP_add + "/DQA_ELR/index.html",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+        "Automation": [
+            {"name": "Automation",
+             "Comment": "",
+             "LNVname": "Automation",
+             "LNVurl": "/AutoResult/AutoResult_search/",
+             "A31name": "--",
+             "A31url": "",
+             "A32name": "--",
+             "A32url": "",
+             "ABOname": '--',
+             "ABOurl": "",
+             "CQT88name": "--",
+             "CQT88url": "",
+             },
+        ],
+    }
+    data = {}
+    gridData = []
+    # print(request.method)
+    # print(request.GET)
+    # print(request.POST)
+    if request.method == "POST":
+        # print(request.GET)
+        if request.POST.get("isGetData") == "first":
+            # print(request.POST.get("Sysname"))
+            gridData = All_system_dic[request.POST.get("Sysname")]
+            # importPrjResult = ImportProjectinfoFromDCT()
+            # if importPrjResult:
+            #     data['result'] = 1
+            # else:
+            #     data['result'] = 0
+            # # print(data)
+        data = {
+            "gridData": gridData,
+        }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+@csrf_exempt
 def logout(request):
     # print('t')
     # print (request.session.get('is_login', None))
@@ -595,13 +1861,14 @@ def logout(request):
         # 如果本来就未登录，也就没有登出一说
         # print('logout')
         return redirect("/login/")
-    #flush()方法是比较安全的一种做法，而且一次性将session中的所有内容全部清空，确保不留后患。但也有不好的地方，那就是如果你在session中夹带了一点‘私货’，会被一并删除，这一点一定要注意
+    # flush()方法是比较安全的一种做法，而且一次性将session中的所有内容全部清空，确保不留后患。但也有不好的地方，那就是如果你在session中夹带了一点‘私货’，会被一并删除，这一点一定要注意
     request.session.flush()
     # 或者使用下面的方法
     # del request.session['is_login']
     # del request.session['user_id']
     # del request.session['user_name']
     return redirect("/login/")
+
 
 @csrf_exempt
 def Change_Password(request):
@@ -610,14 +1877,14 @@ def Change_Password(request):
         return redirect("/login/")
     # print (request.method)
     if request.method == "POST":
-        OldPassword=request.POST.get('OldPassword')
+        OldPassword = request.POST.get('OldPassword')
         Password = request.POST.get('Password')
         Passwordc = request.POST.get('Confirm')
-        user=request.session.get('user_name')
-        userpass=UserInfo.objects.get(username=user).password
+        user = request.session.get('user_name')
+        userpass = UserInfo.objects.get(username=user).password
         # print(OldPassword,userpass)
-        if OldPassword==userpass:
-            if Password==Passwordc:
+        if OldPassword == userpass:
+            if Password == Passwordc:
                 # print(request.session.get('user_name', None))
                 updatep = UserInfo.objects.filter(username=request.session.get('user_name', None))
                 # print (updatep)
@@ -627,12 +1894,13 @@ def Change_Password(request):
                 request.session.flush()
                 return redirect("/login/")
             else:
-                message="Password is not same"
+                message = "Password is not same"
                 return render(request, 'changepassword.html', locals())
         else:
             message = "Incorrect Password"
             return render(request, 'changepassword.html', locals())
     return render(request, 'changepassword.html', locals())
+
 
 @csrf_exempt
 def Change_Skin(request):
@@ -647,7 +1915,7 @@ def Change_Skin(request):
     # print(request.method, request.POST)
     weizhi = "Change Skin"
     Render = render(request, 'ChangeSkin.html', locals())
-    Redirect=redirect('/Change_Skin/')
+    Redirect = redirect('/Change_Skin/')
     if request.method == "POST":
         print(2)
         if 'blue' in request.POST:
@@ -658,18 +1926,18 @@ def Change_Skin(request):
             Redirect.set_cookie('Skin_raw', "/static/src/kiwi.jpg", 3600 * 24 * 30 * 12)
         if 'sunny' in request.POST:
             Skinv = request.POST.get('Skin')
-            Redirect.set_cookie('Skin_raw', "/static/src/sunny.jpg",3600*24*30*12)
+            Redirect.set_cookie('Skin_raw', "/static/src/sunny.jpg", 3600 * 24 * 30 * 12)
         if 'yellow' in request.POST:
             Skinv = request.POST.get('Skin')
-            Redirect.set_cookie('Skin_raw', "/static/src/yellow.jpg",3600*24*30*12)
+            Redirect.set_cookie('Skin_raw', "/static/src/yellow.jpg", 3600 * 24 * 30 * 12)
         if 'chrome' in request.POST:
             Skinv = request.POST.get('Skin')
-            Redirect.set_cookie('Skin_raw', "/static/src/chrome.jpg",3600*24*30*12)
+            Redirect.set_cookie('Skin_raw', "/static/src/chrome.jpg", 3600 * 24 * 30 * 12)
         if 'ocean' in request.POST:
             Skinv = request.POST.get('Skin')
-            Redirect.set_cookie('Skin_raw', "/static/src/ocean.jpg",3600*24*30*12)
+            Redirect.set_cookie('Skin_raw', "/static/src/ocean.jpg", 3600 * 24 * 30 * 12)
         return Redirect
-            # return redirect('/index/')
+        # return redirect('/index/')
     # return redirect('/index/')
     # print(Skin)
     return Render
@@ -683,13 +1951,13 @@ def Lesson_upload(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Lesson-Learn/Reliability/Upload"
-    message=''
-    message_err=0
+    weizhi = "Lesson-Learn/Reliability/Upload"
+    message = ''
+    message_err = 0
     # form=TestUEditorForm()
-    lesson_form=lessonlearn(request.POST)
+    lesson_form = lessonlearn(request.POST)
     if request.method == "POST":
-        lesson=lessonlearn(request.POST)
+        lesson = lessonlearn(request.POST)
         # test = request.POST.get('test')
         # print(test)
         if lesson.is_valid():  # 必须要先验证否则提示object错误没有attribute 'cleaned_data'
@@ -704,8 +1972,8 @@ def Lesson_upload(request):
             # print(Comments)
             Photo = request.FILES.getlist("myfiles", "")
             print(Photo)
-            Object_check =lesson_learn.objects.filter(Object=Object)
-            Symptom_check=lesson_learn.objects.filter(Symptom=Symptom)
+            Object_check = lesson_learn.objects.filter(Object=Object)
+            Symptom_check = lesson_learn.objects.filter(Symptom=Symptom)
             # print (Object_check,Symptom_check)
             # if Object_check:
             #     #message = "Object '%s' already exists" % (Object)
@@ -713,7 +1981,7 @@ def Lesson_upload(request):
             #     return render(request, 'Lesson_upload.html',locals())
             # else:
             if Symptom_check:
-                #message = "Symptom '%s' already exists" % (Symptom)
+                # message = "Symptom '%s' already exists" % (Symptom)
                 message_err = 2
                 return render(request, 'Lesson_upload.html', locals())
             else:
@@ -725,18 +1993,18 @@ def Lesson_upload(request):
                 #     else:
                 #         Photos=Photos+','+'img/test/'+image.name
                 # print (Photos)
-                lesson=lesson_learn()
+                lesson = lesson_learn()
                 lesson.Category = Category
-                lesson.Object=Object
-                lesson.Symptom=Symptom
+                lesson.Object = Object
+                lesson.Symptom = Symptom
                 lesson.Reproduce_Steps = Reproduce_Steps
                 lesson.Root_Cause = Root_Cause
-                lesson.Solution=Comments
+                lesson.Solution = Comments
                 lesson.Action = Action
                 lesson.Status = Status
                 # lesson.Photo=Photos
-                lesson.editor=request.session.get('user_name')
-                lesson.edit_time=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                lesson.editor = request.session.get('user_name')
+                lesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 lesson.save()
                 # print(request.FILES.getlist('myfiles'),request.POST.get('myfiles'))
                 # print(request.FILES)
@@ -756,7 +2024,7 @@ def Lesson_upload(request):
                     empt.Files = f
                     empt.save()
                     lesson.video.add(empt)
-                message="Upload '%s' Successfully" %(Object)
+                message = "Upload '%s' Successfully" % (Object)
 
                 # print (lessonlearn())
                 # print(lessonlearn(request.POST))
@@ -766,7 +2034,9 @@ def Lesson_upload(request):
             cleanData = lesson.errors
             # print(lesson.errors)
     # print (locals())
-    return render(request, 'Lesson_upload.html',locals())#{'weizhi':weizhi,'Skin':Skin,'lesson_form':lesson_form,'message':message})
+    return render(request, 'Lesson_upload.html',
+                  locals())  # {'weizhi':weizhi,'Skin':Skin,'lesson_form':lesson_form,'message':message})
+
 
 @csrf_exempt
 def Lesson_edit(request):
@@ -776,7 +2046,7 @@ def Lesson_edit(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Lesson-Learn/Reliability/Redit"
+    weizhi = "Lesson-Learn/Reliability/Redit"
     selectCategory = [
         # {"Category": "SW"},
         # {"Category": "ME"}
@@ -810,7 +2080,7 @@ def Lesson_edit(request):
     Categorylist = lesson_learn.objects.all().values("Category").distinct().order_by("-Category")
     for i in Categorylist:
         selectCategory.append({"Category": i["Category"]})
-    Lesson_list=lesson_learn.objects.all()
+    Lesson_list = lesson_learn.objects.all()
     if request.method == "POST":
         if request.POST.get("isGetData") == "first":
             data = {
@@ -879,15 +2149,15 @@ def Lesson_edit(request):
                 for i in editlesson.Photo.all():
                     # print(i.img,type(i.img),)
                     # print(i.img.name)
-                    fileListO.append({'name': '', 'url': '/media/'+i.img.name})
+                    fileListO.append({'name': '', 'url': '/media/' + i.img.name})
 
                 for i in editlesson.video.all():
-                    fileList1.append({'name': '', 'url': '/media/'+i.files.name})
+                    fileList1.append({'name': '', 'url': '/media/' + i.files.name})
             data = {
-                    'form': form,
-                    'fileListO': fileListO,
-                    'fileList1': fileList1,
-                }
+                'form': form,
+                'fileListO': fileListO,
+                'fileList1': fileList1,
+            }
             # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
         if request.POST.get("action") == "submit":
@@ -917,7 +2187,8 @@ def Lesson_edit(request):
                 if Photolist:
                     for f in Photolist:
                         # print(f)
-                        if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[1] == "mov" or f.name.split(".")[1] == "rmvb":
+                        if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
+                            1] == "mov" or f.name.split(".")[1] == "rmvb":
                             # empt = files()
                             # # 增加其他字段应分别对应填写
                             # empt.single = f
@@ -984,15 +2255,16 @@ def Lesson_edit(request):
             # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
             #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
             data = {
-            #     'fileList': fileList
+                #     'fileList': fileList
                 'addselect': selectCategory,
                 'content': mock_data,
-             }
+            }
             # print(updateData)
             return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Lesson_edit.html', locals())
 
-def Lesson_update(request,id):
+
+def Lesson_update(request, id):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -1033,7 +2305,7 @@ def Lesson_update(request,id):
             lesson_formdefault.editor = request.session.get('user_name')
             lesson_formdefault.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             lesson_formdefault.save()
-            if choose=="删除原图片":
+            if choose == "删除原图片":
                 lesson_formdefault.Photo.clear()
             for f in request.FILES.getlist('myfiles'):
                 # print(f)
@@ -1044,7 +2316,7 @@ def Lesson_update(request,id):
                 empt.save()
                 lesson_formdefault.Photo.add(empt)
                 # lesson_formdefault.Photo.remove()
-            if choosev=="删除原视频":
+            if choosev == "删除原视频":
                 lesson_formdefault.video.clear()
             for f in request.FILES.getlist('myvideos'):
                 # print(f)
@@ -1055,7 +2327,7 @@ def Lesson_update(request,id):
                 empt.save()
                 lesson_formdefault.video.add(empt)
                 # lesson_formdefault.video.remove()
-            id=id
+            id = id
             message_redit = "Redit '%s' Successfully" % (id)
             # print (lessonlearn())
             # print(lessonlearn(request.POST))
@@ -1065,13 +2337,16 @@ def Lesson_update(request,id):
             cleanData = lesson.errors
             # print(lesson.errors)
     else:
-        values = {'Object': lesson_formdefault.Object, 'Symptom': lesson_formdefault.Symptom, 'Root_Cause': lesson_formdefault.Root_Cause, 'Solution': lesson_formdefault.Solution, 'Action': lesson_formdefault.Action}
+        values = {'Object': lesson_formdefault.Object, 'Symptom': lesson_formdefault.Symptom,
+                  'Root_Cause': lesson_formdefault.Root_Cause, 'Solution': lesson_formdefault.Solution,
+                  'Action': lesson_formdefault.Action}
         lesson_form = lessonlearn(values)
     # print (locals())
     # print(settings.BASE_DIR,settings.STATICFILES_DIRS)
     return render(request, 'Lesson_update.html',
                   locals())  # {'weizhi':weizhi,'Skin':Skin,'lesson_form':lesson_form,'message':message})
     # return render(request, 'Lesson_update.html', locals())
+
 
 @csrf_exempt
 def Lesson_search(request):
@@ -1084,7 +2359,7 @@ def Lesson_search(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Lesson-Learn/Reliability/Search"
+    weizhi = "Lesson-Learn/Reliability/Search"
     # Lesson_list=lesson_learn.objects.all()
     Lesson_list = lesson_learn.objects.filter(Category=Categoryfromcookie)
     selectCategory = [
@@ -1182,7 +2457,6 @@ def Lesson_search(request):
                     )
                 request.session['sessionSWME'] = None
 
-
             data = {
                 'addselect': selectCategory,
                 'content': mock_data,
@@ -1250,10 +2524,11 @@ def Lesson_search(request):
         #                             "Root_Cause":i.Root_Cause, "Solution":i.Solution, "Action":i.Action, "Photo":Photolist, "video":videolist, "edit_time":i.edit_time,})
         #         # data = {
         #         #     'Lesson_list': Lesson_list_dic,
-                # }
-                # return HttpResponse(json.dumps(data), content_type="application/json")
+        # }
+        # return HttpResponse(json.dumps(data), content_type="application/json")
         # print(locals())
     return render(request, 'Lesson_search.html', locals())
+
 
 @csrf_exempt
 def Lesson_export(request):
@@ -1263,7 +2538,7 @@ def Lesson_export(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="Lesson-Learn/Reliability/Search"
+    weizhi = "Lesson-Learn/Reliability/Search"
     selectCategory = [
         # {"Category": "SW"},
         # {"Category": "ME"}
@@ -1351,6 +2626,7 @@ def Lesson_export(request):
 
     return render(request, 'Lesson_export.html', locals())
 
+
 @csrf_exempt
 def ttt(request):
     if not request.session.get('is_login', None):
@@ -1359,7 +2635,7 @@ def ttt(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi="/ttt"
+    weizhi = "/ttt"
 
     # for list in Lesson_list:
     #     img=list.Photo.all()
@@ -1371,8 +2647,10 @@ def ttt(request):
 
 from django.http import JsonResponse
 from app01 import tasks
+
+
 @csrf_exempt
-def ctest(request,*args,**kwargs):
-    res=tasks.print_test.delay()
-    #任务逻辑
-    return JsonResponse({'status':'successful','task_id':res.task_id})
+def ctest(request, *args, **kwargs):
+    res = tasks.print_test.delay()
+    # 任务逻辑
+    return JsonResponse({'status': 'successful', 'task_id': res.task_id})

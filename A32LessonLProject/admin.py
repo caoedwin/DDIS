@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import A32lesson_learn, A32lessonlearn_Project, A32TestProjectLL
-
+from .models import A32lesson_learn, A32lessonlearn_Project, A32TestProjectLL, A32files, A32Imgs
+admin.site.register(A32Imgs)
+admin.site.register(A32files)
 # Register your models here.
 @admin.register(A32lesson_learn)
 class lesson_learnAdmin(admin.ModelAdmin):
