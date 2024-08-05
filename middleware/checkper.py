@@ -44,7 +44,7 @@ class RbacMiddleware(MiddlewareMixin):
                     # print(path, 'path')
                     response.set_cookie('current_page_DDIS', value=request_url)
                     # request.session.set_expiry(
-                    #     7 * 12 * 60 * 60)  # None：会使用全局的session配置。在settings.py中可以设置SESSION_COOKIE_AGE来配置全局的过期时间。默认是1209600秒，也就是2周的时间。
+                    #     7 * 24 * 60 * 60)  # None：会使用全局的session配置。在settings.py中可以设置SESSION_COOKIE_AGE来配置全局的过期时间。默认是1209600秒，也就是2周的时间。
 
                 return response
 
@@ -64,7 +64,7 @@ class RbacMiddleware(MiddlewareMixin):
             # print(re.match(url, request_url))
             if re.match(url_pattern, request_url):
                 flag = True
-                if '/login/' not in request_url and '/logout/' not in request_url and '/index/' not in request_url and '/admin' not in request_url and '/notifications' not in request_url and request_url in str(
+                if '/login/' not in request_url and '/logout/' not in request_url and '/index/' not in request_url and '/admin' not in request_url and 'Navigations' not in request_url and '/notifications' not in request_url and request_url in str(
                         url):
                     # print(path, 'path')
                     response.set_cookie('current_page_DDIS', value=request_url)

@@ -62,7 +62,7 @@
             border-color: #f5dab1;
             font-size: 12px;
         }
-
+        /*butoon 内容转换*/
         .wrap-text {
             white-space: normal;
             word-break: break-all;
@@ -93,7 +93,7 @@
                 <el-table-column property="LNVname" label="LNV" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center;">
-                              <a :href="scope.row.LNVurl" target="_blank"
+                              <a :href="scope.row.LNVurl" {% comment %}target="_blank"{% endcomment %}
                                  style="text-decoration:underline;color:blue;">
                             <el-button
                                     class="wrap-text"
@@ -109,7 +109,7 @@
                 <el-table-column property="A31name" label="A31" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.A31url" target="_blank"
+                              <a :href="scope.row.A31url" {% comment %}target="_blank"{% endcomment %}
                                  style="text-decoration:underline;color:blue;">
                             <el-button
                                     class="wrap-text"
@@ -125,7 +125,7 @@
                 <el-table-column property="A32name" label="A32" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.A32url" target="_blank"
+                              <a :href="scope.row.A32url" {% comment %}target="_blank"{% endcomment %}
                                  style="text-decoration:underline;color:blue;">
                             <el-button
                                     class="wrap-text"
@@ -141,7 +141,7 @@
                 <el-table-column property="ABOname" label="ABO" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.ABOurl" target="_blank"
+                              <a :href="scope.row.ABOurl" {% comment %}target="_blank"{% endcomment %}
                                  style="text-decoration:underline;color:blue;">
                             <el-button
                                     class="wrap-text"
@@ -157,7 +157,7 @@
                 <el-table-column property="CQT88name" label="CQT88" min-width="16%">
                     <template scope="scope">
                           <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.CQT88url" target="_blank"
+                              <a :href="scope.row.CQT88url" {% comment %}target="_blank"{% endcomment %}
                                  style="text-decoration:underline;color:blue;">
                             <el-button
                                     class="wrap-text"

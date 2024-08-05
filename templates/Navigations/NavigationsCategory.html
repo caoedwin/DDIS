@@ -54,7 +54,7 @@
             border-color: #f5dab1;
             font-size: 12px;
         }
-
+    /*butoon 内容转换*/
         .wrap-text {
             white-space: normal;
             word-break: break-all;
@@ -70,7 +70,7 @@
         <div class="tableAround" v-cloak>
 
             <span>
-            <el-table :data="gridData_chan"
+            <el-table :data="gridData_Category"
                     {% comment %}border{% endcomment %}
                       height="500" style="width: 100%"
                       row-class-name="row-bg-color">
@@ -225,11 +225,12 @@
             data() {
                 const ipdadress = 'http://127.0.0.1:8003';
                 return {
+                    Categoryname: '{{ Category }}',
                     table: false,
                     dialog: false,
                     loading: false,
                     drawer: false,
-                    gridData_chan: [{
+                    gridData_Category: [{
                         name: 'ProjectComparison',
                         address: "",
                         Comment: "",
@@ -247,7 +248,7 @@
                         Comment5: "",
                     }, {
                         name: 'ProjectInfo',
-                        address: ipdadress + '/DeviceLNV/BorrowedDeviceLNV/',
+                        address: '',
                         name2: '',
                         address2: "",
                         name3: '',
@@ -264,17 +265,30 @@
                 }
             },
             mounted() {
-
+                this.getdata("first")
             },
             methods: {
+                getdata: function (e) {
+                    let data = {
+                        "isGetData": e,
+                        'Categoryname': this.Categoryname,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };
+                    axios.post("/Navigations_Category/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.gridData_Category = res.data.gridData_Category;
+                    });
+                },
                 fetchData(param) {
+                    console.log(param);
                     axios.get(`/Navigations_system/${param}/`)
                         .then(response => {
                             // 处理响应数据
-                            //window.location.href="/Navigations_system/" + param + '/';
+                            window.location.href="/Navigations_system/" + param + '/';
 
                             // 当前页面不会关闭，新页面会在新标签页中打开
-                            window.open("/Navigations_system/" + param + '/', '_blank');
+                            //window.open("/Navigations_system/" + param + '/', '_blank');
                             console.log(response.data);
                         })
                         .catch(error => {

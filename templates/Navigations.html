@@ -94,7 +94,8 @@
                     <div class="num">
                         <!-- 数据卡片card -->
                         <el-button @click="drawer = true">
-                            <a href="/Navigations_quality/" target="_blank">
+{#                            <a href="/Navigations_quality/" {% comment %}target="_blank"{% endcomment %}>#}
+                            <a @click="fetchData('DepartmentManage')">
                             <el-card shadow="hover">
                                 <!-- 数据卡片icon -->
                                 <i class="icon"></i>
@@ -249,35 +250,32 @@
             el: "#app",
             delimiters: ['${', '}'],
             data() {
-                const ipdadress = 'http://127.0.0.1:8003';
                 return {
-                    table: false,
-                    dialog: false,
-                    loading: false,
-                    drawer: false,
-                    gridData_chan: [{
-                        name: 'CQM',
-                        address: "/CQM/CQM_search/",
-                        Comment: "test",
-                        name2: 'MQM',
-                        address2: "/MQM/MQM_search/",
-                        Comment2: "",
-                    }, {
-                        name: 'Device_LNV',
-                        address: ipdadress + '/DeviceLNV/BorrowedDeviceLNV/',
-                        name2: 'Device_ABO',
-                        address2: "/DeviceABO/BorrowedDeviceABO/"
-                    },],
+                    grid_data_Category: [
+
+
+                    ],
                 }
             },
             mounted() {
 
             },
             methods: {
-                edit(row, index) {
-                    console.log(row, row.address);
+                fetchData(param) {
+                    axios.get(`/Navigations_Category/${param}/`)
+                        .then(response => {
+                            // 处理响应数据
+                            window.location.href="/Navigations_Category/" + param + '/';
 
-                },
+                            // 当前页面不会关闭，新页面会在新标签页中打开
+                            {#window.open("/Navigations_Category/" + param + '/', '_blank');#}
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            // 处理错误情况
+                            console.error(error);
+                        });
+                }
             }
         })
     </script>

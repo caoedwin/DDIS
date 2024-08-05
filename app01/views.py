@@ -600,7 +600,7 @@ def Navigations(request):
     return render(request, 'Navigations.html', locals())
 
 @csrf_exempt
-def Navigations_quality(request):
+def Navigations_Category(request, Category):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -610,6 +610,8 @@ def Navigations_quality(request):
     weizhi = "Navigation/Navigations"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
+    Category = Category
+    print(Category)
     if request.method == "GET":
         # print(request.GET)
         if request.GET.get("action") == "first":
@@ -620,7 +622,78 @@ def Navigations_quality(request):
             #     data['result'] = 0
             # # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
-    return render(request, 'Navigations/品質管控.html', locals())
+    return render(request, 'Navigations/NavigationsCategory.html', locals())
+
+@csrf_exempt
+def Navigations_Category_axios(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi = "Navigation/Navigations"
+    permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+    data = {}
+    All_system_dic = {"DepartmentManage": [
+                            {
+        'name': 'ProjectComparison',
+        'address': "",
+        'Comment': "",
+        'name2': 'CapitalExpenditure',
+        'address2': "",
+        'Comment2': "",
+        'name3': 'Public Area',
+        'address3': "",
+        'Comment3': "",
+        'name4': 'PersonalInfo',
+        'address4': "",
+        'Comment4': "",
+        'name5': 'PersonalExperience',
+        'address5': "",
+        'Comment5': "",
+    }, {
+        'name': 'ProjectInfo',
+        'address': "",
+        'Comment': "",
+        'name2': '',
+        'address2': "",
+        'Comment2': "",
+        'name3': '',
+        'address3': "",
+        'Comment3': "",
+        'name4': '',
+        'address4': "",
+        'Comment4': "",
+        'name5': '',
+        'address5': "",
+        'Comment5': "", }
+                        ],
+    }
+    gridData_Category = []
+    if request.method == "POST":
+        if request.POST.get("isGetData") == "first":
+            # print(request.POST.get("Categoryname"))
+            if request.POST.get("Categoryname"):
+                response = HttpResponse("Cookie Navigations_Category_name is set.")
+                response.set_cookie('Navigations_Category_name', request.POST.get("Categoryname"), max_age=3600 * 24 * 7)
+                gridData_Category = All_system_dic[request.POST.get("Categoryname")]
+            else:
+                Navigations_Category_name = request.COOKIES.get('Navigations_Category_name')
+                # print(Navigations_Category_name)
+                gridData_Category = All_system_dic[Navigations_Category_name]
+            # importPrjResult = ImportProjectinfoFromDCT()
+            # if importPrjResult:
+            #     data['result'] = 1
+            # else:
+            #     data['result'] = 0
+            # # print(data)
+        data = {
+            "gridData_Category": gridData_Category,
+        }
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    return render(request, 'Navigations/NavigationsCategory.html', locals())
+
 
 @csrf_exempt
 def Navigations_system(request, name):
@@ -1841,7 +1914,14 @@ def Navigations_system_axios(request):
         # print(request.GET)
         if request.POST.get("isGetData") == "first":
             # print(request.POST.get("Sysname"))
-            gridData = All_system_dic[request.POST.get("Sysname")]
+            if request.POST.get("Sysname"):
+                response = HttpResponse("Cookie Navigations_system_name is set.")
+                response.set_cookie('Navigations_system_name', request.POST.get("Sysname"), max_age=3600 * 24 * 7)
+                gridData = All_system_dic[request.POST.get("Sysname")]
+            else:
+                Navigations_system_name = request.COOKIES.get('Navigations_system_name')
+                # print(Navigations_system_name)
+                gridData = All_system_dic[Navigations_system_name]
             # importPrjResult = ImportProjectinfoFromDCT()
             # if importPrjResult:
             #     data['result'] = 1
@@ -1851,7 +1931,8 @@ def Navigations_system_axios(request):
         data = {
             "gridData": gridData,
         }
-    return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    return render(request, 'Navigations/NavigationsSystem.html', locals())
 
 @csrf_exempt
 def logout(request):
