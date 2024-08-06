@@ -32,7 +32,7 @@
             display: flex;
         {% comment %}/ / 开启弹性元素换行{% endcomment %} flex-wrap: wrap;
         {% comment %}/ / justify: 设置主轴上空白空间元素排列方式 justify-content: space-between;{% endcomment %}
-            min-height: 150px;
+            min-height: 120px;
             align-items: center; /* 垂直居中 */
             justify-content: center; /* 水平居中，如果也需要水平居中的话 */
             background-color: oldlace;
@@ -81,7 +81,27 @@
     </style>
 {% endblock %}
 {% block content1 %}
-{% endblock %}
+                <div class="row" style="height: 30px">
+                    <div class="col-lg-6 p-r-0 title-margin-right" style="height: 100%">
+                        <div class="page-header" style="height: 100%;margin: 0.2px">
+                            <div class="page-title" style="height: 100%">
+                                <h1 style="color: #FFF;height: 100%;padding: 1px">Hello {{ request.session.user_name }}, Welcome Here</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                    <div class="col-lg-5 p-l-0 title-margin-left" style="height: 100%">
+                        <div class="page-header" style="height: 100%;margin: 0.2px">
+                            <div class="page-title" style="height: 100%">
+                                <ol class="breadcrumb" style="height: 100%;padding: 1px">
+                                    <li class="breadcrumb-item"><a style="color: #FFF;height: 40px;padding: 1px" href="/Navigations/">{{ weizhi }}</a></li>
+                                    {% comment %}<li class="breadcrumb-item active" style="color: #FFF"></li>{% endcomment %}
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                </div>{% endblock %}
 {% block content %}
 
     <div id="app" {% comment %}v-pre{% endcomment %}>
@@ -108,59 +128,69 @@
                                 </a>
                         </el-button>
                         <el-button @click="table = true">
+                            <a @click="fetchData('TestManage')">
                             <el-card shadow="hover">
                                 <!-- 数据卡片icon -->
                                 <i class="icon"></i>
                                 <!-- 数据卡片内容 -->
                                 <div class="detail">
                                     <p class="num" style="font-size:24px">測試管理</p>
-                                    <p class="tet">系統清單</p>
+                                    <p class="tet" style="text-align: center">系統清單</p>
                                 </div>
                             </el-card>
+                                </a>
                         </el-button>
                         <el-button @click="table = true">
+                            <a @click="fetchData('TestTool')">
                             <el-card shadow="hover">
                                 <!-- 数据卡片icon -->
                                 <i class="icon"></i>
                                 <!-- 数据卡片内容 -->
                                 <div class="detail">
                                     <p class="num" style="font-size:24px">測試工具</p>
-                                    <p class="tet">系統清單</p>
+                                    <p class="tet" style="text-align: center">系統清單</p>
                                 </div>
                             </el-card>
+                            </a>
                         </el-button>
                         <el-button @click="table = true">
+                            <a @click="fetchData('QualityManage')">
                             <el-card shadow="hover">
                                 <!-- 数据卡片icon -->
                                 <i class="icon"></i>
                                 <!-- 数据卡片内容 -->
                                 <div class="detail">
                                     <p class="num" style="font-size:24px">品質管控</p>
-                                    <p class="tet">系統清單</p>
+                                    <p class="tet" style="text-align: center">系統清單</p>
                                 </div>
                             </el-card>
+                            </a>
                         </el-button>
                         <el-button @click="table = true">
+                            <a @click="fetchData('AssetsManage')">
                             <el-card shadow="hover">
                                 <!-- 数据卡片icon -->
                                 <i class="icon"></i>
                                 <!-- 数据卡片内容 -->
                                 <div class="detail">
                                     <p class="num" style="font-size:24px">資產管理</p>
-                                    <p class="tet">系統清單</p>
+                                    <p class="tet" style="text-align: center">系統清單</p>
                                 </div>
                             </el-card>
+                            </a>
                         </el-button>
                         <el-button @click="table = true">
+                            <a @click="fetchData('Others')">
                             <el-card shadow="hover">
                                 <!-- 数据卡片icon -->
                                 <i class="icon"></i>
                                 <!-- 数据卡片内容 -->
                                 <div class="detail">
                                     <p class="num" style="font-size:24px">其他</p>
-                                    <p class="tet">系統清單</p>
+                                    <p class="tet" style="text-align: center">系統清單</p>
                                 </div>
                             </el-card>
+                            </a>
                         </el-button>
                     </div>
 
@@ -218,18 +248,18 @@
 {% block scripts %}
 
 
-    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <script src="/static/js/lib/calendar-2/semantic.ui.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <script src="/static/js/lib/calendar-2/prism.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/bootstrap.min.js"></script>
-    <script src="../static/js/scripts.js"></script>
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
     <script src="/static/js/es6/polyfill.min.js"></script>
     <script src="/static/js/es6/babel.min.js"></script>
     <script src="/static/js/axios.min.js"></script>

@@ -62,14 +62,45 @@
             border-color: #f5dab1;
             font-size: 12px;
         }
+
         /*butoon 内容转换*/
         .wrap-text {
             white-space: normal;
             word-break: break-all;
+            height: 40px;
+            padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
+        }
+
+        .my-table .el-table__row {
+            height: 133px; /* 单元格的高度 */
         }
     </style>
 {% endblock %}
 {% block content1 %}
+    <div class="row" style="height: 30px">
+        <div class="col-lg-6 p-r-0 title-margin-right" style="height: 100%">
+            <div class="page-header" style="height: 100%;margin: 0.2px">
+                <div class="page-title" style="height: 100%">
+                    <h1 style="color: #FFF;height: 100%;padding: 1px">Hello {{ request.session.user_name }}, Welcome
+                        Here</h1>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+        <div class="col-lg-5 p-l-0 title-margin-left" style="height: 100%">
+            <div class="page-header" style="height: 100%;margin: 0.2px">
+                <div class="page-title" style="height: 100%">
+                    <ol class="breadcrumb" style="height: 100%;padding: 1px">
+                        <a style="color: #FFF;padding: 1px;display: inline" href="/Navigations/">Category</a>
+                        <a style="color: #FFF;padding: 1px;display: inline" href="/Navigations_Category/">/Systems</a>
+                        <a style="color: #FFF;padding: 1px;display: inline" href="#">{{ weizhi }}</a>
+                        {% comment %}<li class="breadcrumb-item active" style="color: #FFF"></li>{% endcomment %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+    </div>
 {% endblock %}
 {% block content %}
 
@@ -79,97 +110,93 @@
 
             <span>
             <el-table :data="gridData" border height="500" style="width: 100%"
+                      class="my-table"
                       row-class-name="row-bg-color">
-                <el-table-column property="name" label="System" min-width="16%">
+                <el-table-column property="name1" :label="this.Sysname" min-width="16%">
                     <template scope="scope">
-                        <el-popover trigger="hover" placement="top">
-                          <p>${ scope.row.Comment }</p>
-                          <div slot="reference" class="name-wrapper" style="text-align: center">
-                                  <el-tag size="medium">${ scope.row.name }</el-tag>
-                          </div>
-                        </el-popover>
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                              <a :href="scope.row.url1" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    :style="{width: '170px', height: '100px'}"
+                                    class="wrap-text"
+                                    v-if="scope.row.name1"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.name1 }</el-button>
+                                  </a>
+                              </div>
                     </template>
                 </el-table-column>
-                <el-table-column property="LNVname" label="LNV" min-width="16%">
+                <el-table-column property="name2" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center;">
-                              <a :href="scope.row.LNVurl" {% comment %}target="_blank"{% endcomment %}
+                              <a :href="scope.row.url2" target="_blank"
                                  style="text-decoration:underline;color:blue;">
                             <el-button
+                                    :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
-                                    v-if="scope.row.LNVname"
+                                    v-if="scope.row.name2"
                                     type="warning"
                                     plain
                             >
-                                      ${ scope.row.LNVname }</el-button>
+                                      ${ scope.row.name2 }</el-button>
                                   </a>
                               </div>
                     </template>
                 </el-table-column>
-                <el-table-column property="A31name" label="A31" min-width="16%">
+                <el-table-column property="name3" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.A31url" {% comment %}target="_blank"{% endcomment %}
+                              <a :href="scope.row.url3" target="_blank"
                                  style="text-decoration:underline;color:blue;">
                             <el-button
+                                    :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
-                                    v-if="scope.row.A31name"
+                                    v-if="scope.row.name3"
                                     type="warning"
                                     plain
                             >
-                                      ${ scope.row.A31name }</el-button>
+                                      ${ scope.row.name3 }</el-button>
                                   </a>
                               </div>
                     </template>
                 </el-table-column>
-                <el-table-column property="A32name" label="A32" min-width="16%">
+                <el-table-column property="name4" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.A32url" {% comment %}target="_blank"{% endcomment %}
+                              <a :href="scope.row.url4" target="_blank"
                                  style="text-decoration:underline;color:blue;">
                             <el-button
+                                    :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
-                                    v-if="scope.row.A32name"
+                                    v-if="scope.row.name4"
                                     type="warning"
                                     plain
                             >
-                                      ${ scope.row.A32name }</el-button>
+                                      ${ scope.row.name4 }</el-button>
                                   </a>
                               </div>
                     </template>
                 </el-table-column>
-                <el-table-column property="ABOname" label="ABO" min-width="16%">
+                {% comment %}<el-table-column property="name5" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.ABOurl" {% comment %}target="_blank"{% endcomment %}
+                              <a :href="scope.row.url5" target="_blank"
                                  style="text-decoration:underline;color:blue;">
                             <el-button
+                                    :style="{width: '170px', height: '150px'}"
                                     class="wrap-text"
-                                    v-if="scope.row.ABOname"
+                                    v-if="scope.row.name5"
                                     type="warning"
                                     plain
                             >
-                                      ${ scope.row.ABOname }</el-button>
+                                      ${ scope.row.name5 }</el-button>
                                   </a>
                               </div>
                     </template>
-                </el-table-column>
-                <el-table-column property="CQT88name" label="CQT88" min-width="16%">
-                    <template scope="scope">
-                          <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.CQT88url" {% comment %}target="_blank"{% endcomment %}
-                                 style="text-decoration:underline;color:blue;">
-                            <el-button
-                                    class="wrap-text"
-                                    v-if="scope.row.CQT88name"
-                                    type="warning"
-                                    plain
-                            >
-                                      ${ scope.row.CQT88name }</el-button>
-                                  </a>
-                              </div>
-                    </template>
-                </el-table-column>
+                </el-table-column>{% endcomment %}
             </el-table>
             </span>
         </div>
@@ -178,18 +205,18 @@
 {% block scripts %}
 
 
-    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <script src="/static/js/lib/calendar-2/semantic.ui.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <script src="/static/js/lib/calendar-2/prism.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
     <!-- scripit init-->
-    <script src="../static/js/lib/bootstrap.min.js"></script>
-    <script src="../static/js/scripts.js"></script>
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
     <script src="/static/js/es6/polyfill.min.js"></script>
     <script src="/static/js/es6/babel.min.js"></script>
     <script src="/static/js/axios.min.js"></script>
