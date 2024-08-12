@@ -583,7 +583,7 @@ def PersonalInfo_search(request):
     # editPpriority = 100
 
     for i in roles:
-        if 'admin' in i or 'DepartmentAdmin' in i:
+        if 'admin' in i or 'PersonalInfo_Admin' in i:
             canExport = 0
         elif 'Department' in i:
             canExport = 1
@@ -949,7 +949,7 @@ def PersonalInfo_edit(request):
     # print(roles)
     # editPpriority = 100
     for i in roles:
-        if 'admin' in i or 'DepartmentAdmin' in i:
+        if 'admin' in i or 'PersonalInfo_Admin' in i:
             permission = 1
         elif 'Department' in i:
             permission = 3
@@ -2554,7 +2554,7 @@ def ManPower_search(request):
     # editPpriority = 100
 
     for i in roles:
-        if 'admin' in i or 'DepartmentAdmin' in i:
+        if 'admin' in i or 'PersonalInfo_Admin' in i:
             canEdit = 1
         elif 'Department' in i:
             canEdit = 2
@@ -2738,7 +2738,7 @@ def ManPower_edit(request):
     # print(roles)
     # editPpriority = 100
     for i in roles:
-        if 'admin' in i or 'DepartmentAdmin' in i:
+        if 'admin' in i or 'PersonalInfo_Admin' in i:
             permission = 1
         elif 'Department' in i:
             permission = 3
@@ -7449,7 +7449,7 @@ def Summary3(request):
     # print(roles)
     # editPpriority = 100
     for i in roles:
-        if 'admin' in i or 'DepartmentAdmin' in i:
+        if 'admin' in i or 'PersonalInfo_Admin' in i:
             canExport = 0
         elif 'Department' in i:
             canExport = 1

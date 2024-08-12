@@ -31,7 +31,7 @@ class RbacMiddleware(MiddlewareMixin):
         # print(request)
         permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
         # print('访问url',request_url)
-        # print('权限--',permission_url)
+        # print('权限--', permission_url)
         # 如果请求url在白名单，放行
         # print (settings.SAFE_URL)
         for url in settings.SAFE_URL:
@@ -85,7 +85,8 @@ class RbacMiddleware(MiddlewareMixin):
                 if not Skin:
                     Skin = "/static/src/blue.jpg"
                 # weizhi = "Lesson-Learn/Reliability/Upload"
-                message = '您的账户无权限访问'
+                message = '无权访问,詳情如下：'
+                messageurl = permission_url
                 return render(request, 'NoPerm.html', locals())
             else:
                 # return HttpResponse('无权限访问')

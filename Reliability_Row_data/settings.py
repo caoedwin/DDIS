@@ -491,6 +491,7 @@ SAFE_URL = [
     r'/Navigations/',
     r'/Navigations_Category/.*',
     r'/Navigations_system/.*',
+    r'/PermInfo/',
     r'/ueditor/',
     r'/logout/',
     r'/ttt/',

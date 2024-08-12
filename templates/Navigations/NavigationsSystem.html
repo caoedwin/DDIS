@@ -112,7 +112,7 @@
             <el-table :data="gridData" border height="500" style="width: 100%"
                       class="my-table"
                       row-class-name="row-bg-color">
-                <el-table-column property="name1" :label="this.Sysname" min-width="16%">
+                <el-table-column property="name1" :label="judgeSysname()" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
                               <a :href="scope.row.url1" target="_blank"
@@ -238,7 +238,11 @@
             delimiters: ['${', '}'],
             data() {
                 return {
+                    {% comment %}view render 返回的local有包含特殊字符的变量，可以使用模板标签{% autoescape off %}来关闭自动转义功能。{% endcomment %}
+                    {% autoescape off %}
                     Sysname: '{{ name }}',
+                    {% endautoescape %}
+                    Navigations_system_name:'',
                     gridData: [
                         {
                             name: '',
@@ -270,11 +274,25 @@
                         'Sysname': this.Sysname,
                         "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
                     };
-                    axios.post("/Navigations_system/", Qs.stringify(data), {
+                    {% comment %}axios.post("/Navigations_system/", Qs.stringify(data), {
                         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                     }).then((res) => {
                         this.gridData = res.data.gridData;
+                    });{% endcomment %}
+                    // Sysname包含特殊字符
+                    axios.post("/Navigations_system/", data, {
+                                headers: {'Content-Type': 'application/json', 'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            }).then((res) => {
+                        this.gridData = res.data.gridData;
+                        this.Navigations_system_name = res.data.Navigations_system_name;
                     });
+                },
+                judgeSysname(){
+                    if (this.Sysname){
+                        return this.Sysname;
+                    }else {
+                        return this.Navigations_system_name;
+                    }
                 },
             }
         })

@@ -1,31 +1,281 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block title %}lesson_form_upload{% endblock %}
-{#{% block style %}#}
-{#    <style type="text/css">#}
-{#    body {#}
-{#        padding: 0;#}
-{#        margin: 0;#}
-        {#border: 0;#}
-{#        height: 100%;#}
-{#        width:100%;#}
-{#        background-image: url({% block img %}{{ Skin }}{% endblock %});#}
-        {#background-size:cover;#}
-{#        background-size:200% 200%;#}
-        {#background-size:auto auto;#}
-{#        background-repeat: no-repeat;#}
-        {#background-origin: padding-box;#}
-{#    }#}
-{#    </style>#}
-{#{% endblock %}#}
-{% block content %}
-    <div style="color: #0c0c0c">
-        <span style="color: red;font-size: 30px;white-space: pre-line">{{ message }}</span>
-        {% for i in messageurl %}
-            <div>
-            <a class="" href="{{ i }}" {% comment %}target="_blank"{% endcomment %}><span style="color: white;font-size: 20px;white-space: pre-line">{{ i }}</span></a>
-            </div>
-        {% endfor %}
+{% block css %}
+{#    <link rel="stylesheet" href="/static/css/index.css">#}
+    <style>
 
+        /* 解决el-table 表线不齐 */
+        body .el-table th.gutter {
+            display: table-cell !important;
+        }
+
+        body .el-table colgroup.gutter {
+            display: table-cell !important;
+        }
+
+        label {
+            color: white;
+        }
+
+        .selectMsg {
+            font-size: 12px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .selectMsg label {
+            font-weight: 800;
+            color: aliceblue;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-fit {
+            display: inline-block;
+            vertical-align: top;
+            width: 123px;
+            height: 186px;
+            border: 1px solid black;
+
+        }
+
+        .cardInformation {
+            display: inline-block;
+        !important margin-left: 20 px;
+        }
+
+        .cardInformation label {
+            margin-bottom: -25px;
+        }
+
+        .cardInformation tr td {
+            width: 300px;
+        }
+
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        .el-pagination__total, .el-pagination__jump {
+            color: white;
+        }
+
+        .el-table .my-cell {
+            vertical-align: top
+        }
+
+        #sh {
+            font-family: 微软雅黑;
+            border: 2px solid #9f9ca1;
+        }
+
+        #sh::-webkit-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh::-moz-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh:-ms-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        .showDataArea {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 20px 0 20px 0;
+            width: 100%;
+
+        }
+
+        .inputError {
+            /*text-align: center;*/
+            color: crimson;
+            background-color: beige;
+            width: 50%;
+            margin-left: 100px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .inputError:before {
+            display: block;
+            content: '';
+            border-width: 8px 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent beige transparent;
+
+            /* 定位 */
+            position: absolute;
+            left: 50%;
+            top: -16px;
+        }
+
+        .Quatity {
+            height: 500px;
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .customerContent, .departmentContent {
+            margin-left: 20px;
+        }
+
+    </style>
+
+{% endblock %}
+{% block content1 %}
+{% endblock %}
+{% block content %}
+    <div id="app" {% comment %}v-pre{% endcomment %}>
+        <div style="color: #0c0c0c">
+            <span style="color: red;font-size: 30px;white-space: pre-line">{{ message }}</span>
+            {#            {% for i in messageurl %}#}
+            {#                <div>#}
+            {#                <a class="" href="{{ i }}" {% comment %}target="_blank"{% endcomment %}><span style="color: white;font-size: 20px;white-space: pre-line">{{ i }}</span></a>#}
+            {#                </div>#}
+            {#            {% endfor %}#}
+
+        </div>
+        <el-backtop></el-backtop>
+
+        <div class="showDataArea" style="white-space: nowrap;">
+            <div style="width: 20%;">
+                <template v-cloak>
+                    <span style="color: #FFFFFF">有權限的地址（點擊可跳轉）：</span>
+                    <el-table border :data="tableContent1" id="out-table1"
+                              v-loading="tableloading"
+                              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                              style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                              element-loading-text="數據更新中，請稍後"
+                    >
+                        <el-table-column prop="url" label="可訪問地址" align="left" width="auto" min-width="100%">
+                            <template scope="scope">
+                                <div slot="reference" class="name-wrapper" style="text-align: left">
+                                    <a :href="scope.row.url" target="_blank"
+                                       style="text-decoration:underline;color:blue;">
+                                        ${ scope.row.url }
+                                    </a>
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </div>
+            <div style="width: 80%;">
+                <span style="color: #FFFFFF">權限信息：</span>
+                <template v-cloak>
+                    <el-table border :data="tableContent2" id="out-table1"
+                              v-loading="tableloading"
+                              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                              style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                              element-loading-text="數據更新中，請稍後"
+                    >
+                        <el-table-column prop="System" label="System" align="left" width="auto"
+                                         min-width="7%"></el-table-column>
+                        <el-table-column prop="Category" label="權限類別" align="left" width="auto" min-width="8%">
+                        </el-table-column>
+                        <el-table-column prop="Customer" label="客戶別" align="left" width="auto" min-width="8%">
+                        </el-table-column>
+                        <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
+
+                        </el-table-column>
+                        <el-table-column prop="Comment" label="Comment" align="left"
+                                         width="auto" min-width="40%"></el-table-column>
+                        <el-table-column prop="Contend" label="子系統" align="left" width="auto"
+                                         min-width="21%"></el-table-column>
+                    </el-table>
+                </template>
+            </div>
+
+        </div>
+        {% comment %}<div class="showDataArea" style="white-space: nowrap;background-color: white">
+            <div class="Quatity" id="main3" style="height:450px;"></div>
+        </div>{% endcomment %}
     </div>
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    {#<script src="/static/js/vue-router.min.js"></script>#}
+    {% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                return {
+                    tableloading: false,
+                    tableContent1: [],
+                    tableContent2: [],
+                }
+            },
+            mounted() {
+                console.log(this.Sysname);
+                this.getdata("first")
+            },
+            methods: {
+                getdata: function (e) {
+                    this.tableloading = true;
+                    let data = {
+                        "isGetData": e,
+                        'Sysname': this.Sysname,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };
+                    axios.post("/PermInfo/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.tableloading = false;
+                        this.tableContent1 = res.data.tableContent1;
+                        this.tableContent2 = res.data.tableContent2;
+                    });
+                },
+            }
+        })
+    </script>
 {% endblock %}

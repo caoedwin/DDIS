@@ -1,0 +1,286 @@
+[2024-08-12 09:46:37,165] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2329, in Navigations_system_axios
+    gridData = All_system_dic[request.POST.get("Sysname")]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 09:46:37,170] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.31, 127.0.0.1:61697]
+[2024-08-12 09:49:54,615] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2329, in Navigations_system_axios
+    gridData = All_system_dic[request.POST.get("Sysname")]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 09:49:54,632] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [1.08, 127.0.0.1:61951]
+[2024-08-12 09:54:38,929] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2329, in Navigations_system_axios
+    gridData = All_system_dic[request.POST.get("Sysname")]
+KeyError: 'Adapter%26amp%3BPowerCode'
+[2024-08-12 09:54:38,942] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.77, 127.0.0.1:53177]
+[2024-08-12 10:20:38,337] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2338, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter%26amp%3BPowerCode'
+[2024-08-12 10:20:38,341] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.30, 127.0.0.1:63234]
+[2024-08-12 10:21:19,345] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2338, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 10:21:19,351] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.10, 127.0.0.1:63234]
+[2024-08-12 10:24:59,094] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2338, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 10:24:59,099] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.05, 127.0.0.1:61741]
+[2024-08-12 10:31:57,947] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2338, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter%26amp%3BPowerCode'
+[2024-08-12 10:31:57,954] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.12, 127.0.0.1:52459]
+[2024-08-12 10:39:53,439] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2336, in Navigations_system_axios
+    Sysname = responseData["Sysname"]
+TypeError: string indices must be integers
+[2024-08-12 10:39:53,444] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.05, 127.0.0.1:53386]
+[2024-08-12 10:45:06,218] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2335, in Navigations_system_axios
+    responseData = json.loads(request.body)
+  File "C:\Python372\lib\json\__init__.py", line 348, in loads
+    return _default_decoder.decode(s)
+  File "C:\Python372\lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "C:\Python372\lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[2024-08-12 10:45:06,224] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.08, 127.0.0.1:50686]
+[2024-08-12 10:45:56,626] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2338, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 10:45:56,630] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.07, 127.0.0.1:50686]
+[2024-08-12 10:49:23,442] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2339, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 10:49:23,456] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.60, 127.0.0.1:50943]
+[2024-08-12 10:53:38,415] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2339, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 10:53:38,425] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.11, 127.0.0.1:51172]
+[2024-08-12 10:56:29,804] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2340, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 10:56:29,810] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.34, 127.0.0.1:54467]
+[2024-08-12 11:00:44,734] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2340, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 11:00:44,741] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.42, 127.0.0.1:58219]
+[2024-08-12 11:03:00,714] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2341, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 11:03:00,720] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.44, 127.0.0.1:57166]
+[2024-08-12 11:03:53,093] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2341, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 11:03:53,101] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.39, 127.0.0.1:57240]
+[2024-08-12 11:09:36,032] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2339, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: ''
+[2024-08-12 11:09:36,044] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.70, 127.0.0.1:54264]
+[2024-08-12 11:10:47,958] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2353, in Navigations_system_axios
+    gridData = All_system_dic[Navigations_system_name]
+KeyError: None
+[2024-08-12 11:10:47,965] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.35, 127.0.0.1:54382]
+[2024-08-12 11:10:51,389] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2353, in Navigations_system_axios
+    gridData = All_system_dic[Navigations_system_name]
+KeyError: None
+[2024-08-12 11:10:51,399] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.13, 127.0.0.1:54383]
+[2024-08-12 11:11:34,790] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2353, in Navigations_system_axios
+    gridData = All_system_dic[Navigations_system_name]
+KeyError: None
+[2024-08-12 11:11:34,797] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.12, 127.0.0.1:54383]

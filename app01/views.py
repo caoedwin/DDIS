@@ -888,6 +888,7 @@ def Navigations_Category_axios(request):
         ],
     }
     gridData_Category = []
+    Navigations_Category_name = ''
     if request.method == "POST":
         if request.POST.get("isGetData") == "first":
             # print(request.POST.get("Categoryname"))
@@ -913,11 +914,13 @@ def Navigations_Category_axios(request):
             # # print(data)
         data = {
             "gridData_Category": gridData_Category,
+            "Navigations_Category_name": Navigations_Category_name,
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Navigations/NavigationsCategory.html', locals())
 
 
+from django.utils.html import escape
 @csrf_exempt
 def Navigations_system(request, name):
     if not request.session.get('is_login', None):
@@ -2318,6 +2321,95 @@ def Navigations_system_axios(request):
     }
     data = {}
     gridData = []
+    Navigations_system_name =''
+    # print(request.method)
+    # print(request.GET)
+    # print(request.POST)
+    if request.method == "POST":
+        # print(request.GET)
+        if request.POST.get("isGetData") == "first":
+            pass
+        else:
+            try:
+                request.body
+            except:
+                pass
+            else:
+                if 'first' in str(request.body):
+                    responseData = json.loads(request.body)
+                    Sysname = responseData["Sysname"]
+                    print(Sysname)
+                    if Sysname:
+                        gridData = All_system_dic[Sysname]
+                        data = {
+                            "gridData": gridData,
+                        }
+                        response = HttpResponse(json.dumps(data), content_type="application/json")
+                        # 设置中文字符的cookie需要序列化和反序列化过程
+                        response.set_cookie('Navigations_system_name', json.dumps(Sysname), max_age=3600 * 24 * 7)
+
+                        return response
+                    else:
+                        # 设置中文字符的cookie需要序列化和反序列化过程
+                        Navigations_system_name = json.loads(request.COOKIES.get('Navigations_system_name'))
+                        print(Navigations_system_name)
+                        gridData = All_system_dic[Navigations_system_name]
+        data = {
+            "gridData": gridData,
+            "Navigations_system_name": Navigations_system_name
+        }
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    return render(request, 'Navigations/NavigationsSystem.html', locals())
+
+@csrf_exempt
+def PermInfo_axios(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
+    if not Skin:
+        Skin = "/static/src/blue.jpg"
+    weizhi = "/Customer"
+    permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+
+    data = {}
+    tableContent1 = []
+    tableContent2 = [
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "All", "RoleName": "PersonalInfo_User", "Comment": """有特定管理者，需要By系統設權限
+User：人員查看
+Admin：人員信息系統管理員""", "Contend": "PersonalInfo查看Summary信息",
+        },
+                {
+            "System": "DDIS", "Category": "DQA", "Customer": "All", "RoleName": "PersonalInfo_Admin", "Comment": """有特定管理者，需要By系統設權限
+        User：人員查看
+        Admin：人員信息系統管理員""", "Contend": "PersonalInfo",
+        },
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "A31", "RoleName": "DQA_A31_Admin", "Comment": """A31 LL可新增編輯LL issue""", "Contend": "A31 LL",
+        },
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "A31", "RoleName": "DQA_A31_User",
+            "Comment": """A31 LL只可查看並編輯自己機種的結果""", "Contend": "A31 LL只能編輯自己機種的結果",
+        },
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "A32", "RoleName": "DQA_A32_Admin",
+            "Comment": """A32 LL可新增編輯LL issue""", "Contend": "A32 LL",
+        },
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "A32", "RoleName": "DQA_A32_User",
+            "Comment": """A32 LL只可查看並編輯自己機種的結果""", "Contend": "A32 LL只能編輯自己機種的結果",
+        },
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "ABO", "RoleName": "DQA_ABO_Admin",
+            "Comment": """ABO LL可新增編輯LL，QIL issue，Driver,Tool, ABO TestPlan""", "Contend": "ABO TestPlan,Driver,Tool，LL,QIL",
+        },
+        {
+            "System": "DDIS", "Category": "DQA", "Customer": "ABO", "RoleName": "DQA_ABO_User",
+            "Comment": """ABO LL，QIL只可查看並編輯自己機種的結果，Driver,Tool, ABO TestPlan""", "Contend": "ABO TestPlan,Driver,Tool, LL,QIL只能編輯自己機種的結果",
+        },
+
+    ]
     # print(request.method)
     # print(request.GET)
     # print(request.POST)
@@ -2325,27 +2417,12 @@ def Navigations_system_axios(request):
         # print(request.GET)
         if request.POST.get("isGetData") == "first":
             # print(request.POST.get("Sysname"))
-            if request.POST.get("Sysname"):
-                gridData = All_system_dic[request.POST.get("Sysname")]
-                data = {
-                    "gridData": gridData,
-                }
-                response = HttpResponse(json.dumps(data), content_type="application/json")
-                response.set_cookie('Navigations_system_name', request.POST.get("Sysname"), max_age=3600 * 24 * 7)
-
-                return response
-            else:
-                Navigations_system_name = request.COOKIES.get('Navigations_system_name')
-                # print(Navigations_system_name)
-                gridData = All_system_dic[Navigations_system_name]
-            # importPrjResult = ImportProjectinfoFromDCT()
-            # if importPrjResult:
-            #     data['result'] = 1
-            # else:
-            #     data['result'] = 0
-            # # print(data)
+            permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
+            for i in permission_url:
+                tableContent1.append({"url": i})
         data = {
-            "gridData": gridData,
+            "tableContent1": tableContent1,
+            "tableContent2": tableContent2,
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Navigations/NavigationsSystem.html', locals())

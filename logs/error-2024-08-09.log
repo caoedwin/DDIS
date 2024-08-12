@@ -1,0 +1,35 @@
+[2024-08-12 09:33:46,233] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2329, in Navigations_system_axios
+    gridData = All_system_dic[request.POST.get("Sysname")]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 09:33:46,250] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.98, 127.0.0.1:65056]
+[2024-08-12 09:33:56,514] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2329, in Navigations_system_axios
+    gridData = All_system_dic[request.POST.get("Sysname")]
+KeyError: 'Adapter&amp;PowerCode'
+[2024-08-12 09:33:56,521] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.12, 127.0.0.1:65056]
+[2024-08-12 09:33:59,616] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.95, 127.0.0.1:65056]
+[2024-08-12 09:34:01,633] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.24, 127.0.0.1:65054]
+[2024-08-12 09:34:04,651] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.56, 127.0.0.1:65056]
+[2024-08-12 09:34:32,844] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.14, 127.0.0.1:65056]
+[2024-08-12 09:34:35,874] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.47, 127.0.0.1:65054]
+[2024-08-12 09:34:38,901] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.58, 127.0.0.1:65056]
+[2024-08-12 09:34:57,081] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.36, 127.0.0.1:65054]
