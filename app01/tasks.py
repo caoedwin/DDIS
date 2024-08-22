@@ -387,6 +387,7 @@ def MailhtmlSync():
     # print(message)
     subject = '【DDIS】数据上传提醒'
     from_email = '416434871@qq.com'
+    # from_email = 'Edwin_Cao@compal.com'
 
     # to_email.append('edwin_cao@compal.com')
 

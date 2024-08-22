@@ -509,23 +509,38 @@ def Mailhtml():  # settings Email设置1-外網qq
     # 发送
     msg.send()
 
+from exchangelib import Credentials, Account, Message, Mailbox, HTMLBody, Configuration, DELEGATE, NTLM
+from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
+import urllib3
+def MailOAtest():  # settings Email设置2-内網OA(Exchange)
+    # 此句用来消除ssl证书错误，exchange使用自签证书需加上
+    BaseProtocol.HTTP_ADAPTER_CLS = NoVerifyHTTPAdapter
+    urllib3.disable_warnings()  # 取消SSL安全连接警告
+    # 填入你的Exchange服务器地址、用户名和密码
+    server = 'webmail.compal.com'
+    # server = 'Edwin_Cao@compal.com'
+    primary_smtp_address = 'edwin_cao@compal.com'
+    username = 'gi\edwin_cao'
+    password = '~1234qwer'
 
-def MailOAtest():  # settings Email设置2-内網OA
-    message = 'ddistest'
-    print(message)
-    subject = '【DDIS】数据上传提醒'
-    from_email = 'DDIS@compal.com'
-    to_email = []
-    to_email.append('edwin_cao@compal.com')
+    # 用凭证连接到Exchange服务器
+    credentials = Credentials(username=username, password=password)
+    config = Configuration(server=server, credentials=credentials, auth_type=NTLM)
+    account = Account(primary_smtp_address=primary_smtp_address, credentials=credentials, config=config, autodiscover=False, access_type=DELEGATE)
 
-    # print(key)
-    # print(to_email)
-    msg = EmailMultiAlternatives(subject, message, from_email, to_email)
-    msg.content_subtype = "html"
-    # 添加附件（可选）
-    # msg.attach_file('test.txt')
-    # 发送
-    msg.send()
+
+    mail = Message(
+        account=account,
+        subject='邮件主题',
+        body=HTMLBody('<html><body><p>这是邮件正文測試</p ></body></html>'),
+        to_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+                       Mailbox(email_address='edwin_cao@compal.com')],
+        # cc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+        #                Mailbox(email_address='edwin_cao@compal.com')]
+    )
+
+    # 发送邮件
+    mail.send()
 
 
 @csrf_exempt
@@ -763,7 +778,7 @@ def Navigations_Category_axios(request):
         ],
         "QualityManage": [
             {
-                'name': "RD/PE/JQE-Lesson",
+                'name': "NonDQA-Lesson",
                 'address': "",
                 'Comment': "",
                 'name2': 'QIL',
@@ -1674,7 +1689,7 @@ def Navigations_system_axios(request):
              },
         ],
         # 品质管控
-        "RD/PE/JQE-Lesson": [
+        "NonDQA-Lesson": [
             {"Comment": "",
              "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31

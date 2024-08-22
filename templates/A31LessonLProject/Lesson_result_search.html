@@ -156,7 +156,7 @@
     <div class="customerContent" style="margin-right: 20px" v-cloak>
    <label style="color: #FFF" for="customer">Customer</label>
         <el-select  v-model="customer" v-cloak>
-           <el-option value="ALL">All</el-option>
+           {% comment %}<el-option value="ALL">All</el-option>{% endcomment %}
            <el-option v-for="(item,key,index) in selectMsg" :label="key" :value="key">${ key }</el-option>
         </el-select><br>
       <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
