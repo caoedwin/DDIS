@@ -399,3 +399,256 @@ def MailhtmlSync():
     # msg.attach_file('test.txt')
     # 发送
     msg.send()
+
+@task
+def Mailhtml():  # settings Email设置1-外網qq
+    print("Starthtmlmail")
+    # subject 主题 content 内容 to_addr 是一个列表，发送给哪些人
+    # msg = EmailMultiAlternatives('邮件标题', '邮件内容', '发送方', ['接收方'])
+    Projectinfo_TestPlanSWMail = {}
+    for i in TestProjectSW.objects.all().values("Project", "Phase").distinct().order_by("Project", "Phase"):
+        # print(i["BR_per_code"])
+        Projectinfo_TestPlanSW = []
+        eachProj = TestProjectSW.objects.filter(Project=i["Project"], Phase=i["Phase"]).first()
+        if eachProj.ScheduleEnd:
+            if datetime.datetime.now().date() > eachProj.ScheduleEnd:
+                Exceed_days = round(
+                    float(
+                        str((datetime.datetime.now().date() - eachProj.ScheduleEnd)).split(' ')[
+                            0]),
+                    0)
+            else:
+                Exceed_days = ''
+        else:
+            Exceed_days = ''
+        flagTestPlanSW = len(TestPlanSW.objects.filter(Projectinfo=eachProj)) == 0
+        flagCQM = len(CQM.objects.filter(Project=i["Project"], Phase=i["Phase"])) == 0
+        flagDriverList_M = len(DriverList_M.objects.filter(Project=i["Project"], Phase0=i["Phase"])) == 0
+        flagToolList_M = len(ToolList_M.objects.filter(Project=i["Project"], Phase0=i["Phase"])) == 0
+        if Exceed_days and (flagTestPlanSW or flagCQM
+                            or flagDriverList_M or flagToolList_M):
+            # print(list(eachProj.Owner.all()),1)
+            # print(flagCQM,flagDriverList_M,flagTestPlanSW,flagToolList_M)
+            dataNotupdate = []
+            if flagTestPlanSW:
+                dataNotupdate.append('TestPlanSW')
+            if flagCQM:
+                dataNotupdate.append('CQM')
+            if flagDriverList_M:
+                dataNotupdate.append('DriverList')
+            if flagToolList_M:
+                dataNotupdate.append('ToolList')
+            to_emails = []
+            ProjectOwners = []
+            for k in eachProj.Owner.all():
+                to_emails.append(k.email)
+                ProjectOwners.append(k.username)
+            Projectinfo_TestPlanSW.append(
+                {"id": eachProj.id, "Customer": eachProj.Customer, "Project": eachProj.Project,
+                 "Phase": eachProj.Phase,
+                 "ScheduleBegin": eachProj.ScheduleBegin,
+                 "ScheduleEnd": eachProj.ScheduleEnd, "Full_Function_Duration": eachProj.Full_Function_Duration,
+                 "Gerber": eachProj.Gerber,
+                 "Project_Code": eachProj.Project,
+                 # "Owner": list(eachProj.Owner.all()),
+                 "Owner": ProjectOwners,
+                 "to_emails": to_emails,
+                 "dataNotupdate": dataNotupdate,
+                 "Exceed_days": Exceed_days,
+                 },
+            )
+            # print(Projectinfo_TestPlanSW)
+        if Projectinfo_TestPlanSW:
+            Projectinfo_TestPlanSWMail[i["Project"]] = Projectinfo_TestPlanSW
+        message = ""
+    # print(BR_perinfo,len(BR_perinfo))
+    # print(Projectinfo_TestPlanSWMail)
+
+    # 每个机种发一个邮件，过于频繁，可能会受邮箱限制，导致报错smtplib.SMTPDataError: (550, b'Mail content denied.
+    # for key, value in Projectinfo_TestPlanSWMail.items():
+    #     # print(value)
+    #     messagecontend = """<p>Dear All:</p>
+    #         <p>您的如下机种已經超期， 請儘快上传到DDIS系统：</p>
+    #         <a href="http://10.129.83.21:8002/index/" style="font-size: 20px;background-color: yellow;font-weight: bolder;" target="_blank">点击此处，处理设备</a>
+    #         <p>未更新数据详情：</p>
+    #           <p></p>
+    #           <table border="1" cellpadding="0" cellspacing="0" width="1800" style="border-collapse: collapse;">
+    #            <tbody>
+    #             <tr>
+    #              <th style="background-color: #8c9eff">机种信息</th>
+    #              <th style="background-color: #8c9eff">Phase</th>
+    #              <th style="background-color: #8c9eff">数据类型</th>
+    #              <th style="background-color: #8c9eff">超期天数（天）</th>
+    #             </tr>
+    #             {sub_td}
+    #           </tbody>
+    #           </table>
+    #         <p style="color:red;">注：此郵件由系統自動發出，請勿直接回復,如特殊情况无需更新数据，请忽略。</p>
+    #                                 """ \
+    #                      # % value[0]["Owner"]
+    #     sub_td = ""
+    #     sub_td_items = """
+    #         <tr>
+    #          <td  style="text-align:center"> {sub_item_Project} </td>
+    #          <td  style="text-align:center"> {sub_item_Phase} </td>
+    #          <td  style="text-align:center"> {sub_item_data} </td>
+    #          <td  style="text-align:center;color:red;"> {sub_item_Exceedday} </td>
+    #         </tr>
+    #         """
+    #     for j in value:
+    #         # print(j)
+    #         sub_td += sub_td_items.format(sub_item_Project=j["Project"], sub_item_Phase=j["Phase"],
+    #                                       sub_item_data=j["dataNotupdate"], sub_item_Exceedday=j["Exceed_days"],)
+    #     message = messagecontend.format(sub_td=sub_td)
+    #     # print(message)
+    #     subject = '【DDIS】数据上传提醒'
+    #     from_email = '416434871@qq.com'
+    #     to_email = []
+    #     # to_email.append(value[0]["to_emails"])
+    #     to_email.append('edwin_cao@compal.com')
+    #     # print(key)
+    #     # print(to_email)
+    #     msg = EmailMultiAlternatives(subject, message, from_email, to_email)
+    #     msg.content_subtype = "html"
+    #     # 添加附件（可选）
+    #     # msg.attach_file('test.txt')
+    #     # 发送
+    #     msg.send()
+    # 发一个总的邮件
+    messagecontend = """<p>Dear All:</p>
+                <p>您的如下机种已經超期， 請儘快上传到DDIS系统：</p>
+                <a href="http://10.129.83.21:8002/index/" style="font-size: 20px;background-color: yellow;font-weight: bolder;" target="_blank">点击此处，处理设备</a>
+                <p>未更新数据详情：</p>
+                  <p></p>
+                  <table border="1" cellpadding="0" cellspacing="0" width="1800" style="border-collapse: collapse;">
+                   <tbody>
+                    <tr>
+                     <th style="background-color: #8c9eff">机种信息</th>
+                     <th style="background-color: #8c9eff">Phase</th>
+                     <th style="background-color: #8c9eff">数据类型</th>
+                     <th style="background-color: #8c9eff">超期天数（天）</th>
+                    </tr>
+                    {sub_td}
+                  </tbody>
+                  </table> 
+                <p style="color:red;">注：此郵件由系統自動發出，請勿直接回復,如特殊情况无需更新数据，请忽略。</p>
+                                        """ \
+        # % value[0]["Owner"]
+    sub_td = ""
+    to_email = []
+    for key, value in Projectinfo_TestPlanSWMail.items():
+        # print(value)
+        sub_td_items = """
+            <tr>
+             <td  style="text-align:center"> {sub_item_Project} </td>
+             <td  style="text-align:center"> {sub_item_Phase} </td>
+             <td  style="text-align:center"> {sub_item_data} </td>
+             <td  style="text-align:center;color:red;"> {sub_item_Exceedday} </td>
+            </tr>
+            """
+        # to_email.append(value[0]["to_emails"])
+        to_email.extend(value[0]["to_emails"])  # 合并list
+        for j in value:
+            # print(j)
+            sub_td += sub_td_items.format(sub_item_Project=j["Project"], sub_item_Phase=j["Phase"],
+                                          sub_item_data=j["dataNotupdate"], sub_item_Exceedday=j["Exceed_days"], )
+    message = messagecontend.format(sub_td=sub_td)
+    # print(message)
+    subject = '【DDIS】数据上传提醒'
+    from_email = '416434871@qq.com'
+
+    # to_email.append('edwin_cao@compal.com')
+
+    # print(key)
+    # print(to_email)
+    msg = EmailMultiAlternatives(subject, message, from_email, to_email)
+    msg.content_subtype = "html"
+    # 添加附件（可选）
+    # msg.attach_file('test.txt')
+    # 发送
+    msg.send()
+
+from exchangelib import Credentials, Account, Message, Mailbox, HTMLBody, Configuration, DELEGATE, NTLM, FileAttachment, CalendarItem
+from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
+from exchangelib.recurrence import Recurrence, WeeklyPattern, DailyPattern, RelativeMonthlyPattern
+from exchangelib.fields import MONDAY, WEDNESDAY, FRIDAY
+from exchangelib.items import MeetingRequest, MeetingCancellation,SEND_TO_ALL_AND_SAVE_COPY
+import urllib3
+from datetime import timedelta
+# 如果需要设置日历提醒，可以添加CalendarItem
+@task
+def MailOAtest():  # settings Email设置2-内網OA(Exchange)
+    # 此句用来消除ssl证书错误，exchange使用自签证书需加上
+    BaseProtocol.HTTP_ADAPTER_CLS = NoVerifyHTTPAdapter
+    urllib3.disable_warnings()  # 取消SSL安全连接警告
+    # 填入你的Exchange服务器地址、用户名和密码
+    server = 'webmail.compal.com'
+    # server = 'Edwin_Cao@compal.com'
+    primary_smtp_address = 'edwin_cao@compal.com'
+    username = 'gi\edwin_cao'
+    password = '~1234qwer'
+    html = '<html><body>Hello happy <blink>OWA user!</blink></body></html>'
+
+    # 用凭证连接到Exchange服务器
+    credentials = Credentials(username=username, password=password)
+    config = Configuration(server=server, credentials=credentials, auth_type=NTLM)
+    account = Account(primary_smtp_address=primary_smtp_address, credentials=credentials, config=config, autodiscover=False, access_type=DELEGATE)
+
+
+    # mail = Message(
+    #     account=account,
+    #     subject='邮件主题',
+    #     body=HTMLBody('<html><body><p>这是邮件正文測試</p ></body></html>'),
+    #     to_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+    #                    Mailbox(email_address='edwin_cao@compal.com')],
+    #     # cc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+    #     #                Mailbox(email_address='edwin_cao@compal.com')]
+    #     # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+    #     #                Mailbox(email_address='edwin_cao@compal.com')],
+    # )
+    #
+    # # logo_filename = 'logo.png'
+    # # with open(logo_filename, 'rb') as f:
+    # #     logo = FileAttachment(
+    # #         filename=logo_filename,
+    # #         content=f.read(),
+    # #     )
+    # # mail.attach(logo)
+    # # 发送邮件
+    # mail.send()
+
+    # # 创建日历提醒
+    # start = datetime.datetime.now(tz=account.default_timezone)
+    # # start = datetime.datetime(2017, 9, 1, 11, tzinfo=account.default_timezone)  # 放在CalendarItem外面
+    # end = start + datetime.timedelta(hours=24)
+    # ci = CalendarItem(
+    #     folder=account.calendar,
+    #     subject='Test Appointment',
+    #     body=HTMLBody(html),
+    #     start=start,
+    #     end=end,
+    #     recurrence=Recurrence(
+    #         pattern=DailyPattern(interval=1),
+    #         start=start.date(),
+    #         number=1,)
+    # )
+    # ci.save()  # 用来发送会议邀请邮件ci.save()#用来发送会议邀请邮件
+
+    # 會議
+    ci = CalendarItem(
+        account=account,
+        folder=account.calendar,
+        start=datetime.datetime.now(tz=account.default_timezone),
+        end=datetime.datetime.now(tz=account.default_timezone) + timedelta(hours=24),
+        subject="Test meeting",
+        body=HTMLBody(html),
+        required_attendees=["edwin_cao@compal.com", "edwin_cao@compal.com"],
+        recurrence=Recurrence(
+
+        )
+    )
+    ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
+
+@task
+def cheduleMailOA_CriticalIssue():
+    pass
