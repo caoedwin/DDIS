@@ -83,7 +83,7 @@ class A31TestProjectLL(models.Model):
         ('Others', 'Others'),
     )
     Customer = models.CharField('Customer', choices=Customer_choice, max_length=20)
-    Project = models.CharField('Project', max_length=20, unique=True)
+    Project = models.CharField('Project', max_length=100, unique=True)
     # Phase =models.CharField('Phase',choices=Phase_choice,max_length=20)
     Owner = models.ManyToManyField("app01.UserInfo")
 
