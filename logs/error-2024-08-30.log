@@ -1,0 +1,18 @@
+[2024-08-30 10:34:07,501] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /ProjectInfoSearch/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 329, in ProjectInfoSearch
+    MailOAtest.delay(datamail) # 启动异步任务
+  File "C:\Python372\mecheck\lib\site-packages\celery\app\task.py", line 425, in delay
+    return self.apply_async(args, kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\celery\app\task.py", line 530, in apply_async
+    check_arguments(*(args or ()), **(kwargs or {}))
+TypeError: MailOAtest() takes 0 positional arguments but 1 was given
+[2024-08-30 10:34:07,509] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /ProjectInfoSearch/ 500 [0.26, 127.0.0.1:58687]

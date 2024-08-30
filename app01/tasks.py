@@ -577,13 +577,13 @@ import urllib3
 from datetime import timedelta
 # 如果需要设置日历提醒，可以添加CalendarItem
 @task
-def MailOAtest():  # settings Email设置2-内網OA(Exchange)
+def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
     # 此句用来消除ssl证书错误，exchange使用自签证书需加上
+    # print(kwargs)
     BaseProtocol.HTTP_ADAPTER_CLS = NoVerifyHTTPAdapter
     urllib3.disable_warnings()  # 取消SSL安全连接警告
     # 填入你的Exchange服务器地址、用户名和密码
     server = 'webmail.compal.com'
-    # server = 'Edwin_Cao@compal.com'
     primary_smtp_address = 'edwin_cao@compal.com'
     username = 'gi\edwin_cao'
     password = '~1234qwer'
@@ -594,28 +594,28 @@ def MailOAtest():  # settings Email设置2-内網OA(Exchange)
     config = Configuration(server=server, credentials=credentials, auth_type=NTLM)
     account = Account(primary_smtp_address=primary_smtp_address, credentials=credentials, config=config, autodiscover=False, access_type=DELEGATE)
 
+    # 邮件
+    mail = Message(
+        account=account,
+        subject='邮件主题',
+        body=HTMLBody(html),
+        to_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+                       Mailbox(email_address='edwin_cao@compal.com')],
+        # cc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+        #                Mailbox(email_address='edwin_cao@compal.com')]
+        # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+        #                Mailbox(email_address='edwin_cao@compal.com')],
+    )
 
-    # mail = Message(
-    #     account=account,
-    #     subject='邮件主题',
-    #     body=HTMLBody('<html><body><p>这是邮件正文測試</p ></body></html>'),
-    #     to_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-    #                    Mailbox(email_address='edwin_cao@compal.com')],
-    #     # cc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-    #     #                Mailbox(email_address='edwin_cao@compal.com')]
-    #     # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-    #     #                Mailbox(email_address='edwin_cao@compal.com')],
-    # )
-    #
-    # # logo_filename = 'logo.png'
-    # # with open(logo_filename, 'rb') as f:
-    # #     logo = FileAttachment(
-    # #         filename=logo_filename,
-    # #         content=f.read(),
-    # #     )
-    # # mail.attach(logo)
-    # # 发送邮件
-    # mail.send()
+    # logo_filename = 'logo.png'
+    # with open(logo_filename, 'rb') as f:
+    #     logo = FileAttachment(
+    #         filename=logo_filename,
+    #         content=f.read(),
+    #     )
+    # mail.attach(logo)
+    # 发送邮件
+    mail.send()
 
     # # 创建日历提醒
     # start = datetime.datetime.now(tz=account.default_timezone)
@@ -634,21 +634,21 @@ def MailOAtest():  # settings Email设置2-内網OA(Exchange)
     # )
     # ci.save()  # 用来发送会议邀请邮件ci.save()#用来发送会议邀请邮件
 
-    # 會議
-    ci = CalendarItem(
-        account=account,
-        folder=account.calendar,
-        start=datetime.datetime.now(tz=account.default_timezone),
-        end=datetime.datetime.now(tz=account.default_timezone) + timedelta(hours=24),
-        subject="Test meeting",
-        body=HTMLBody(html),
-        required_attendees=["edwin_cao@compal.com", "edwin_cao@compal.com"],
-        recurrence=Recurrence(
-
-        )
-    )
-    ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
+    # # 會議
+    # ci = CalendarItem(
+    #     account=account,
+    #     folder=account.calendar,
+    #     start=datetime.datetime.now(tz=account.default_timezone),
+    #     end=datetime.datetime.now(tz=account.default_timezone) + timedelta(hours=24),
+    #     subject="Test meeting",
+    #     body=HTMLBody(html),
+    #     required_attendees=["edwin_cao@compal.com", "edwin_cao@compal.com"],
+    #     recurrence=Recurrence(
+    #
+    #     )
+    # )
+    # ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
 
 @task
-def cheduleMailOA_CriticalIssue():
+def scheduleMailOA_CriticalIssue():
     pass
