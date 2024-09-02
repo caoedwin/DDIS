@@ -831,6 +831,8 @@ def A31Lesson_project(request):
                         LessonProjectinfo['root_cause'] = i.lesson.Root_Cause
                         LessonProjectinfo['solution'] = i.lesson.Solution
                         LessonProjectinfo['action'] = i.lesson.Action
+                        LessonProjectinfo['editor'] = i.lesson.editor
+                        LessonProjectinfo['edit_time'] = i.lesson.edit_time
                         Photolist = []
                         filelist = []
                         # print(i.file_B.all)
@@ -856,6 +858,8 @@ def A31Lesson_project(request):
                         LessonProjectinfo['root_cause'] = i.lesson.Root_Cause
                         LessonProjectinfo['solution'] = i.lesson.Solution
                         LessonProjectinfo['action'] = i.lesson.Action
+                        LessonProjectinfo['editor'] = i.lesson.editor
+                        LessonProjectinfo['edit_time'] = i.lesson.edit_time
                         Photolist = []
                         filelist = []
                         # print(i.file_B.all)
@@ -933,6 +937,8 @@ def A31Lesson_project(request):
                     LessonProjectinfo['root_cause'] = i.lesson.Root_Cause
                     LessonProjectinfo['solution'] = i.lesson.Solution
                     LessonProjectinfo['action'] = i.lesson.Action
+                    LessonProjectinfo['editor'] = i.lesson.editor
+                    LessonProjectinfo['edit_time'] = i.lesson.edit_time
                     Photolist = []
                     filelist = []
                     # print(i.file_B.all)
@@ -958,6 +964,8 @@ def A31Lesson_project(request):
                     LessonProjectinfo['root_cause'] = i.lesson.Root_Cause
                     LessonProjectinfo['solution'] = i.lesson.Solution
                     LessonProjectinfo['action'] = i.lesson.Action
+                    LessonProjectinfo['editor'] = i.lesson.editor
+                    LessonProjectinfo['edit_time'] = i.lesson.edit_time
                     Photolist = []
                     filelist = []
                     # print(i.file_B.all)

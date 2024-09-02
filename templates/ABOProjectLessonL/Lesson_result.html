@@ -176,7 +176,7 @@
 {% endblock %}
 {% block content %}
     <div id="app">
-    <el-backtop ></el-backtop>
+        <el-backtop></el-backtop>
         <div class="selectMsg" v-cloak>
             <div class="customerContent" style="margin-right: 20px" v-cloak>
                 <label style="color: #FFF" for="customer">Customer</label>
@@ -218,6 +218,7 @@
        'font-weight':'800',
        'border-bottom':'1px solid rgb(103, 194, 58)'
     }">
+                <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
                 <el-table-column prop="Category" label="Category" max-width="220" sortable='custom'
                                  fixed></el-table-column>
                 <el-table-column prop="object" label="Object" sortable='custom' fixed></el-table-column>
@@ -230,6 +231,10 @@
                                  sortable='custom' label="LessonLearn ID"></el-table-column>
                 <el-table-column prop="action" label="Action" style="white-space: pre-line;" width="220"
                                  sortable='custom' label="LessonLearn ID"></el-table-column>
+                <el-table-column prop="editor" label="editor" style="white-space: pre-line;" width="220"
+                                 sortable='custom'></el-table-column>
+                <el-table-column prop="edit_time" label="edit_time" style="white-space: pre-line;" width="220"
+                                 sortable='custom'></el-table-column>
                 <el-table-column prop="photo" label="Photo" class="eltable-photo">
                     <template scope="scope">
                         <div class="eltable-photo">
@@ -388,6 +393,9 @@
                   this.selectedProject="";
                   console.log(this.selectProject,'yyyy');
               },{% endcomment %}
+                indexMethod(index) {
+                    return index + 1;
+                },
                 sortChange: function (column) {
                     console.log(column.prop, column.order, column, "order")
                     this.currentPage = 1 // return to the first page after sorting
@@ -410,6 +418,12 @@
                         this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
                         console.log(this.dataList);
                     } else if (column.prop === 'action') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'editor') {
+                        this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                        console.log(this.dataList);
+                    } else if (column.prop === 'edit_time') {
                         this.dataList = this.tableData.sort(this.sortFun(column.prop, column.order === 'ascending'));
                         console.log(this.dataList);
                     } else if (column.prop === 'id') {
@@ -524,22 +538,22 @@
                     {% comment %}this.getdata(parameter){% endcomment %}
                 },
                 cellStyle({row, column, rowIndex, columnIndex}) {
-                    if (columnIndex === 8 && row.result === 'Pass') {
+                    if (columnIndex === 11 && row.result === 'Pass') {
                         return {
                             background: '#a8c97f'
                         }
                     }
-                    if (columnIndex === 8 && row.result === 'Fail') {
+                    if (columnIndex === 11 && row.result === 'Fail') {
                         return {
                             background: '#F56C6C'
                         }
                     }
-                    if (columnIndex === 8 && (row.result === 'N/S' || row.result === 'NS')) {
+                    if (columnIndex === 11 && (row.result === 'N/S' || row.result === 'NS')) {
                         return {
                             background: '#8b968d'
                         }
                     }
-                    if (columnIndex === 8 && (row.result === 'N/A' || row.result === 'NA')) {
+                    if (columnIndex === 11 && (row.result === 'N/A' || row.result === 'NA')) {
                         return {
                             background: 'oldlace'
                         }

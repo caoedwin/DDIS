@@ -217,6 +217,7 @@
     v-loading="tableloading2"
   element-loading-text="正在加载中，请稍后"
   border>
+        <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
         <el-table-column prop="Category" label="Category" sortable='custom' fixed></el-table-column>
       <el-table-column prop="object" label="Object" sortable='custom' fixed></el-table-column>
       <el-table-column prop="symptom" label="Symptom" sortable='custom' fixed></el-table-column>
@@ -339,6 +340,9 @@
       *   comment  : 备注信息 ，
       *  }
       * */
+      indexMethod(index) {
+                    return index + 1;
+                },
       sortChange: function(column){
                 console.log(column.prop,column.order,column,"order")
             this.currentPage = 1 // return to the first page after sorting
@@ -540,7 +544,7 @@
           //生成出行号、列号、结果的集合
           {#console.log(typeof (row.project), row.project)#}
          let resultArr = row.project.map((res,index) => {
-             let colIndex = 8+2*index;
+             let colIndex = 9+2*index;
              return { result : res.result,index:colIndex,row:rowIndex} })
           for(let item in resultArr){
               //判断当前扫描的列数 和 result所在的列数
