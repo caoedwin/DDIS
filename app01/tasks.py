@@ -90,8 +90,8 @@ def ImportProjectinfoFromDCT():
                        "ModifiedDate": i['ModifyDate']
                        }
         # print(localPrjCre)
-        if ProjectinfoinDCT.objects.filter(ComPrjCode=i['ComPrjCode']):
-            ProjectinfoinDCT.objects.filter(ComPrjCode=i['ComPrjCode']).update(**localPrjCre)
+        if ProjectinfoinDCT.objects.filter(Customer=i['Customer'], ComPrjCode=i['ComPrjCode']):
+            ProjectinfoinDCT.objects.filter(Customer=i['Customer'], ComPrjCode=i['ComPrjCode']).update(**localPrjCre)
         else:
             ProjectinfoinDCT.objects.create(**localPrjCre)
 

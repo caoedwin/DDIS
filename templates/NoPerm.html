@@ -2,24 +2,14 @@
 {% load staticfiles %}
 {% block title %}lesson_form_upload{% endblock %}
 {% block css %}
-{#    <link rel="stylesheet" href="/static/css/index.css">#}
+    {#    <link rel="stylesheet" href="/static/css/index.css">#}
     <style>
-
-        /* 解决el-table 表线不齐 */
-        body .el-table th.gutter {
-            display: table-cell !important;
-        }
-
-        body .el-table colgroup.gutter {
-            display: table-cell !important;
-        }
-
-        label {
-            color: white;
+        tbody tr td:last-child {
+            text-align: left;
         }
 
         .selectMsg {
-            font-size: 12px;
+            font-size: 16px;
             padding: 15px;
             display: flex;
             flex-wrap: wrap;
@@ -27,6 +17,13 @@
 
         .selectMsg label {
             font-weight: 800;
+            margin-right: 10px;
+            color: aliceblue;
+        }
+
+        .selectItem {
+            font-size: 20px;
+            font-weight: bold;
             color: aliceblue;
         }
 
@@ -39,106 +36,8 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .demo-fit {
-            display: inline-block;
-            vertical-align: top;
-            width: 123px;
-            height: 186px;
-            border: 1px solid black;
-
-        }
-
-        .cardInformation {
-            display: inline-block;
-        !important margin-left: 20 px;
-        }
-
-        .cardInformation label {
-            margin-bottom: -25px;
-        }
-
-        .cardInformation tr td {
-            width: 300px;
-        }
-
-        tbody tr td:last-child {
-            text-align: left;
-        }
-
-        .el-pagination__total, .el-pagination__jump {
-            color: white;
-        }
-
-        .el-table .my-cell {
-            vertical-align: top
-        }
-
-        #sh {
-            font-family: 微软雅黑;
-            border: 2px solid #9f9ca1;
-        }
-
-        #sh::-webkit-input-placeholder {
-            color: #2f97a8;
-            font-family: 微软雅黑;
-        }
-
-        #sh::-moz-placeholder {
-            color: #2f97a8;
-            font-family: 微软雅黑;
-        }
-
-        #sh:-ms-input-placeholder {
-            color: #2f97a8;
-            font-family: 微软雅黑;
-        }
-
-        .showDataArea {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding: 20px;
-            -moz-box-shadow: 0px 0px 10px #333333;
-            -webkit-box-shadow: 0px 0px 10px #333333;
-            box-shadow: 0px 0px 10px #333333;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            margin: 20px 0 20px 0;
-            width: 100%;
-
-        }
-
-        .inputError {
-            /*text-align: center;*/
-            color: crimson;
-            background-color: beige;
-            width: 50%;
-            margin-left: 100px;
-            margin-top: 20px;
-            position: relative;
-        }
-
-        .inputError:before {
-            display: block;
-            content: '';
-            border-width: 8px 8px 8px 8px;
-            border-style: solid;
-            border-color: transparent transparent beige transparent;
-
-            /* 定位 */
-            position: absolute;
-            left: 50%;
-            top: -16px;
-        }
-
-        .Quatity {
-            height: 500px;
-            width: 100%;
-            vertical-align: middle;
-        }
-
-        .customerContent, .departmentContent {
-            margin-left: 20px;
+        .el-collapse-item__header {
+            background-image: linear-gradient(to right, rgba(0, 139, 139, 0), rgba(0, 139, 139, 1));
         }
 
     </style>
@@ -159,55 +58,166 @@
         </div>
         <el-backtop></el-backtop>
 
-        <div class="showDataArea" style="white-space: nowrap;">
-            <div style="width: 20%;">
-                <template v-cloak>
-                    <span style="color: #FFFFFF">有權限的地址（點擊可跳轉）：</span>
-                    <el-table border :data="tableContent1" id="out-table1"
-                              v-loading="tableloading"
-                              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
-                              style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
-                              element-loading-text="數據更新中，請稍後"
-                    >
-                        <el-table-column prop="url" label="可訪問地址" align="left" width="auto" min-width="100%">
-                            <template scope="scope">
-                                <div slot="reference" class="name-wrapper" style="text-align: left">
-                                    <a :href="scope.row.url" target="_blank"
-                                       style="text-decoration:underline;color:blue;">
-                                        ${ scope.row.url }
-                                    </a>
-                                </div>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </template>
-            </div>
-            <div style="width: 80%;">
+        <div class="tableAround" style="white-space: nowrap;">
+            <el-collapse v-model="activeNames" @change="handleChange">
                 <span style="color: #FFFFFF">權限信息：</span>
-                <template v-cloak>
-                    <el-table border :data="tableContent2" id="out-table1"
-                              v-loading="tableloading"
-                              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
-                              style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
-                              element-loading-text="數據更新中，請稍後"
-                    >
-                        <el-table-column prop="System" label="System" align="left" width="auto"
-                                         min-width="7%"></el-table-column>
-                        <el-table-column prop="Category" label="權限類別" align="left" width="auto" min-width="8%">
-                        </el-table-column>
-                        <el-table-column prop="Customer" label="客戶別" align="left" width="auto" min-width="8%">
-                        </el-table-column>
-                        <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
+                <el-collapse-item title="C38" name="1">
+                    <div style="width: 100%;">
+                        <template v-cloak>
+                            <el-image
+                                    style="width: 100%;"
+                                    src="/static/src/PerC38.jpg"></el-image>
+                            {% comment %}<el-table border :data="tableContent_C38" id="out-table1"
+                                      :span-method="daLeiSpanMethodC38"
+                                      v-loading="tableloading"
+                                      :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                                      style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                                      element-loading-text="數據更新中，請稍後"
+                            >
+                                <el-table-column prop="Category" label="分类" align="left" width="auto" min-width="8%">
+                                </el-table-column>
+                                <el-table-column prop="System" label="System" align="left" width="auto"
+                                                 min-width="7%"></el-table-column>
 
-                        </el-table-column>
-                        <el-table-column prop="Comment" label="Comment" align="left"
-                                         width="auto" min-width="40%"></el-table-column>
-                        <el-table-column prop="Contend" label="子系統" align="left" width="auto"
-                                         min-width="21%"></el-table-column>
-                    </el-table>
-                </template>
-            </div>
+                                <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
 
+                                </el-table-column>
+                                <el-table-column prop="DQA_All" label="DQA_All" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="SW_Manager" label="SW_Manager" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="ME_Manager" label="ME_Manager" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="DQA_QM" label="DQA_QM" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="DQA_AQM" label="DQA_AQM" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="RD_DD" label="RD_DD" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="RD_LD" label="RD_LD" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="RD_MEFG" label="RD_MEFG" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="RD_SW_Search" label="RD_SW_Search" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                            </el-table>{% endcomment %}
+                        </template>
+                    </div>
+                </el-collapse-item>
+                <el-collapse-item title="ABO" name="2">
+                    <div style="width: 100%;">
+                        <template v-cloak>
+                            <el-image
+                                    style="width: 100%;"
+                                    src="/static/src/PerABO.jpg"></el-image>
+                            {% comment %}<el-table border :data="tableContent_ABO" id="out-table2"
+                                      v-loading="tableloading"
+                                      :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                                      style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                                      element-loading-text="數據更新中，請稍後"
+                            >
+                                <el-table-column prop="Category" label="分类" align="left" width="auto" min-width="8%">
+                                </el-table-column>
+                                <el-table-column prop="System" label="System" align="left" width="auto"
+                                                 min-width="7%"></el-table-column>
+
+                                <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
+
+                                </el-table-column>
+                                <el-table-column prop="DQA_All" label="DQA_All" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="PL" label="PL" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                            </el-table>{% endcomment %}
+                        </template>
+                    </div>
+                </el-collapse-item>
+                <el-collapse-item title="CQT88" name="3">
+                    <div style="width: 100%;">
+                        <template v-cloak>
+                            <el-image
+                                    style="width: 100%;"
+                                    src="/static/src/PerCQT88.jpg"></el-image>
+                            {% comment %}<el-table border :data="tableContent_CQT88" id="out-table3"
+                                      v-loading="tableloading"
+                                      :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                                      style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                                      element-loading-text="數據更新中，請稍後"
+                            >
+                                <el-table-column prop="Category" label="分类" align="left" width="auto" min-width="8%">
+                                </el-table-column>
+                                <el-table-column prop="System" label="System" align="left" width="auto"
+                                                 min-width="7%"></el-table-column>
+
+                                <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
+
+                                </el-table-column>
+                                <el-table-column prop="DQA_All" label="DQA_All" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="PL" label="PL" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                            </el-table>{% endcomment %}
+                        </template>
+                    </div>
+                </el-collapse-item>
+                <el-collapse-item title="A31" name="4">
+                    <div style="width: 100%;">
+                        <template v-cloak>
+                            <el-image
+                                    style="width: 100%;"
+                                    src="/static/src/PerA31.jpg"></el-image>
+                            {% comment %}<el-table border :data="tableContent_A31" id="out-table4"
+                                      v-loading="tableloading"
+                                      :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                                      style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                                      element-loading-text="數據更新中，請稍後"
+                            >
+                                <el-table-column prop="Category" label="分类" align="left" width="auto" min-width="8%">
+                                </el-table-column>
+                                <el-table-column prop="System" label="System" align="left" width="auto"
+                                                 min-width="7%"></el-table-column>
+
+                                <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
+
+                                </el-table-column>
+                                <el-table-column prop="DQA_All" label="DQA_All" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="PL" label="PL" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                            </el-table>{% endcomment %}
+                        </template>
+                    </div>
+                </el-collapse-item>
+                <el-collapse-item title="A32" name="5">
+                    <div style="width: 100%;">
+                        <template v-cloak>
+                            <el-image
+                                    style="width: 100%;"
+                                    src="/static/src/PerA32.jpg"></el-image>
+                            {% comment %}<el-table border :data="tableContent_A32" id="out-table5"
+                                      v-loading="tableloading"
+                                      :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'12px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                                      style="min-width: 100%;border-radius: 10px;font-size: 10px;float: left"
+                                      element-loading-text="數據更新中，請稍後"
+                            >
+                                <el-table-column prop="Category" label="分类" align="left" width="auto" min-width="8%">
+                                </el-table-column>
+                                <el-table-column prop="System" label="System" align="left" width="auto"
+                                                 min-width="7%"></el-table-column>
+
+                                <el-table-column prop="RoleName" label="權限名稱" align="left" width="auto" min-width="15%">
+
+                                </el-table-column>
+                                <el-table-column prop="DQA_All" label="DQA_All" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                                <el-table-column prop="PL" label="PL" align="left" width="auto"
+                                                 min-width="6%"></el-table-column>
+                            </el-table>{% endcomment %}
+                        </template>
+                    </div>
+                </el-collapse-item>
+
+            </el-collapse>
         </div>
         {% comment %}<div class="showDataArea" style="white-space: nowrap;background-color: white">
             <div class="Quatity" id="main3" style="height:450px;"></div>
@@ -250,9 +260,18 @@
             delimiters: ['${', '}'],
             data() {
                 return {
+                    activeNames: ['1', '2', '3', '4', '5'],
                     tableloading: false,
-                    tableContent1: [],
-                    tableContent2: [],
+                    tableContent_C38: [],
+                    tableContent_ABO: [],
+                    tableContent_CQT88: [],
+                    tableContent_A31: [],
+                    tableContent_A32: [],
+                    heBingNum_C38: [],
+                    heBingNum_ABO: [],
+                    heBingNum_CQT88: [],
+                    heBingNum_A31: [],
+                    heBingNum_A32: [],
                 }
             },
             mounted() {
@@ -260,6 +279,9 @@
                 this.getdata("first")
             },
             methods: {
+                handleChange(val) {               //折疊面板變化
+                    console.log(val);
+                },
                 getdata: function (e) {
                     this.tableloading = true;
                     let data = {
@@ -271,9 +293,63 @@
                         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                     }).then((res) => {
                         this.tableloading = false;
-                        this.tableContent1 = res.data.tableContent1;
-                        this.tableContent2 = res.data.tableContent2;
+                        this.tableContent_C38 = res.data.tableContent_C38;
+                        this.tableContent_ABO = res.data.tableContent_ABO;
+                        this.tableContent_CQT88 = res.data.tableContent_CQT88;
+                        this.tableContent_A31 = res.data.tableContent_A31;
+                        this.tableContent_A32 = res.data.tableContent_A32;
+                        this.heBingNum_C38 = res.data.heBingNum_C38;
+                        this.heBingNum_ABO = res.data.heBingNum_ABO;
+                        this.heBingNum_CQT88 = res.data.heBingNum_CQT88;
+                        this.heBingNum_A31 = res.data.heBingNum_A31;
+                        this.heBingNum_A32 = res.data.heBingNum_A32;
                     });
+                },
+                daLeiSpanMethodC38({row, column, rowIndex, columnIndex}) {
+                    if (columnIndex === 0) {    //用于设置要合并的列
+                        if (rowIndex === 0) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[0],　　　　　//合并的行数
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        } else if (rowIndex === this.heBingNum_C38[0]) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[1],　　　　　//合并的行
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        } else if (rowIndex === this.heBingNum_C38[0] + this.heBingNum_C38[1]) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[2],　　　　　//合并的行
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        } else if (rowIndex === this.heBingNum_C38[0] + this.heBingNum_C38[1] + this.heBingNum_C38[2]) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[3],　　　　　//合并的行
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        } else if (rowIndex === this.heBingNum_C38[0] + this.heBingNum_C38[1] + this.heBingNum_C38[2] + this.heBingNum_C38[3]) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[4],　　　　　//合并的行
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        } else if (rowIndex === this.heBingNum_C38[0] + this.heBingNum_C38[1] + this.heBingNum_C38[2] + this.heBingNum_C38[3] + this.heBingNum_C38[4]) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[5],　　　　　//合并的行
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        } else if (rowIndex === this.heBingNum_C38[0] + this.heBingNum_C38[1] + this.heBingNum_C38[2] + this.heBingNum_C38[3] + this.heBingNum_C38[4] + this.heBingNum_C38[5]) {   //用于设置合并开始的行号
+                            return {
+                                rowspan: this.heBingNum_C38[6],　　　　　//合并的行
+                                colspan: 1          //合并的列数，设为０则直接不显示
+                            };
+                        }
+                        else {
+                            return {
+                                rowspan: 0,
+                                colspan: 0
+                            };
+                        }
+                    }
                 },
             }
         })

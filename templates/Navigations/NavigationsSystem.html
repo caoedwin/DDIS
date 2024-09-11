@@ -115,68 +115,67 @@
                 <el-table-column property="name1" :label="judgeSysname()" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.url1" target="_blank"
-                                 style="text-decoration:underline;color:blue;">
+                              {% comment %}<a :href="scope.row.url1" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
                                     :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name1"
                                     type="warning"
                                     plain
+                                    @click="hrefaddress1(scope.row)"
+                                    :disabled="!scope.row.url1 ? true : false"
                             >
                                       ${ scope.row.name1 }</el-button>
-                                  </a>
+                                  {% comment %}</a>{% endcomment %}
                               </div>
                     </template>
                 </el-table-column>
                 <el-table-column property="name2" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center;">
-                              <a :href="scope.row.url2" target="_blank"
-                                 style="text-decoration:underline;color:blue;">
                             <el-button
                                     :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name2"
                                     type="warning"
                                     plain
+                                    @click="hrefaddress2(scope.row)"
+                                    :disabled="!scope.row.url2 ? true : false"
                             >
                                       ${ scope.row.name2 }</el-button>
-                                  </a>
                               </div>
                     </template>
                 </el-table-column>
                 <el-table-column property="name3" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.url3" target="_blank"
-                                 style="text-decoration:underline;color:blue;">
                             <el-button
                                     :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name3"
                                     type="warning"
                                     plain
+                                    @click="hrefaddress3(scope.row)"
+                                    :disabled="!scope.row.url3 ? true : false"
                             >
                                       ${ scope.row.name3 }</el-button>
-                                  </a>
                               </div>
                     </template>
                 </el-table-column>
                 <el-table-column property="name4" label="" min-width="16%">
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
-                              <a :href="scope.row.url4" target="_blank"
-                                 style="text-decoration:underline;color:blue;">
                             <el-button
                                     :style="{width: '170px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name4"
                                     type="warning"
                                     plain
+                                    @click="hrefaddress4(scope.row)"
+                                    :disabled="!scope.row.url4 ? true : false"
                             >
                                       ${ scope.row.name4 }</el-button>
-                                  </a>
                               </div>
                     </template>
                 </el-table-column>
@@ -240,9 +239,9 @@
                 return {
                     {% comment %}view render 返回的local有包含特殊字符的变量，可以使用模板标签{% autoescape off %}来关闭自动转义功能。{% endcomment %}
                     {% autoescape off %}
-                    Sysname: '{{ name }}',
+                        Sysname: '{{ name }}',
                     {% endautoescape %}
-                    Navigations_system_name:'',
+                    Navigations_system_name: '',
                     gridData: [
                         {
                             name: '',
@@ -281,17 +280,45 @@
                     });{% endcomment %}
                     // Sysname包含特殊字符
                     axios.post("/Navigations_system/", data, {
-                                headers: {'Content-Type': 'application/json', 'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                            }).then((res) => {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    }).then((res) => {
                         this.gridData = res.data.gridData;
                         this.Navigations_system_name = res.data.Navigations_system_name;
                     });
                 },
-                judgeSysname(){
-                    if (this.Sysname){
+                judgeSysname() {
+                    if (this.Sysname) {
                         return this.Sysname;
-                    }else {
+                    } else {
                         return this.Navigations_system_name;
+                    }
+                },
+                hrefaddress1(row) {
+                    console.log(row);
+                    if (row.url1 && row.name1) {
+                        // window.location.href = row.url1;
+                        window.open(row.url1, '_blank');
+                    }
+                },
+                hrefaddress2(row) {
+                    if (row.url2 && row.name2) {
+                        // window.location.href = row.url2;
+                        window.open(row.url2, '_blank');
+                    }
+                },
+                hrefaddress3(row) {
+                    if (row.url3 && row.name3) {
+                        // window.location.href = row.url3;
+                        window.open(row.url3, '_blank');
+                    }
+                },
+                hrefaddress4(row) {
+                    if (row.url4 && row.name4) {
+                        // window.location.href = row.url4;
+                        window.open(row.url4, '_blank');
                     }
                 },
             }

@@ -19,6 +19,7 @@ def Lesson_project(request):
     Lesson_list=lesson_learn.objects.all()
     canEdit = 0
     msg = 400
+    ProgressData = []
     mock_data = [
         # {
         #     "len_id": 100,

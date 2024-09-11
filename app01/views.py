@@ -53,7 +53,8 @@ def login(request):
         # print(request.COOKIES['current_page'])
         # # print(request.COOKIES['Non_login_path'])
         try:
-            return redirect(request.COOKIES['current_page_DDIS'])
+            # return redirect(request.COOKIES['current_page_DDIS'])
+            return redirect('/Navigations/')
         except:
             # return redirect('/index/')
             return redirect('/Navigations/')
@@ -1549,9 +1550,9 @@ def Navigations_system_axios(request):
              },
             {"Comment": "",
              "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "T89", "url2": "", "Comment2": "",  # A39
-             "name3": "T99", "url3": "", "Comment3": "",  #
-             "name4": 'AIO', "url4": "", "Comment4": "",  #
+             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
         "LowLight": [
@@ -2194,42 +2195,35 @@ def PermInfo_axios(request):
 
     data = {}
     tableContent1 = []
-    tableContent2 = [
+    tableContent_C38 = [
         {
-            "System": "DDIS", "Category": "DQA", "Customer": "All", "RoleName": "PersonalInfo_User", "Comment": """有特定管理者，需要By系統設權限
-User：人員查看
-Admin：人員信息系統管理員""", "Contend": "PersonalInfo查看Summary信息",
-        },
-                {
-            "System": "DDIS", "Category": "DQA", "Customer": "All", "RoleName": "PersonalInfo_Admin", "Comment": """有特定管理者，需要By系統設權限
-        User：人員查看
-        Admin：人員信息系統管理員""", "Contend": "PersonalInfo",
+            "Category": "品質管控", "System": "NonDQA_LL", "RoleName": "DQA_ME_edit", "DQA_All": "", "ME_Manager": "V", "SW_Manager": "", "DQA_QM": "V", "DQA_AQM": "V",
+            "RD_DD": "V", "RD_LD": "V", "RD_MEFG": "V", "RD_SW_Search": "V",
         },
         {
-            "System": "DDIS", "Category": "DQA", "Customer": "A31", "RoleName": "DQA_A31_Admin", "Comment": """A31 LL可新增編輯LL issue""", "Contend": "A31 LL",
-        },
-        {
-            "System": "DDIS", "Category": "DQA", "Customer": "A31", "RoleName": "DQA_A31_User",
-            "Comment": """A31 LL只可查看並編輯自己機種的結果""", "Contend": "A31 LL只能編輯自己機種的結果",
-        },
-        {
-            "System": "DDIS", "Category": "DQA", "Customer": "A32", "RoleName": "DQA_A32_Admin",
-            "Comment": """A32 LL可新增編輯LL issue""", "Contend": "A32 LL",
-        },
-        {
-            "System": "DDIS", "Category": "DQA", "Customer": "A32", "RoleName": "DQA_A32_User",
-            "Comment": """A32 LL只可查看並編輯自己機種的結果""", "Contend": "A32 LL只能編輯自己機種的結果",
-        },
-        {
-            "System": "DDIS", "Category": "DQA", "Customer": "ABO", "RoleName": "DQA_ABO_Admin",
-            "Comment": """ABO LL可新增編輯LL，QIL issue，Driver,Tool, ABO TestPlan""", "Contend": "ABO TestPlan,Driver,Tool，LL,QIL",
-        },
-        {
-            "System": "DDIS", "Category": "DQA", "Customer": "ABO", "RoleName": "DQA_ABO_User",
-            "Comment": """ABO LL，QIL只可查看並編輯自己機種的結果，Driver,Tool, ABO TestPlan""", "Contend": "ABO TestPlan,Driver,Tool, LL,QIL只能編輯自己機種的結果",
+            "Category": "品質管控", "System": "QIL", "RoleName": "DQA_INV_edit, DQA_ME_edit, DQA_SW_edit, ", "DQA_All": "", "ME_Manager": "V",
+            "SW_Manager": "V", "DQA_QM": "V", "DQA_AQM": "V",
+            "RD_DD": "V", "RD_LD": "V", "RD_MEFG": "V", "RD_SW_Search": "V",
         },
 
     ]
+    heBingNum_C38 = [2,]
+    tableContent_ABO = [
+
+    ]
+    heBingNum_ABO = []
+    tableContent_CQT88 = [
+
+    ]
+    heBingNum_CQT88 = []
+    tableContent_A31 = [
+
+    ]
+    heBingNum_A31 = []
+    tableContent_A32 = [
+
+    ]
+    heBingNum_A32 = []
     # print(request.method)
     # print(request.GET)
     # print(request.POST)
@@ -2241,8 +2235,17 @@ Admin：人員信息系統管理員""", "Contend": "PersonalInfo查看Summary信
             for i in permission_url:
                 tableContent1.append({"url": i})
         data = {
-            "tableContent1": tableContent1,
-            "tableContent2": tableContent2,
+            "tableContent_C38": tableContent_C38,
+            "tableContent_ABO": tableContent_ABO,
+            "tableContent_CQT88": tableContent_CQT88,
+            "tableContent_A31": tableContent_A31,
+            "tableContent_A32": tableContent_A32,
+            "heBingNum_C38": heBingNum_C38,
+            "heBingNum_ABO": heBingNum_ABO,
+            "heBingNum_CQT88": heBingNum_CQT88,
+            "heBingNum_A31": heBingNum_A31,
+            "heBingNum_A32": heBingNum_A32,
+
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Navigations/NavigationsSystem.html', locals())
