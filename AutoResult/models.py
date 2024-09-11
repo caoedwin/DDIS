@@ -28,7 +28,7 @@ class AutoItems(models.Model):
         ('T88(AIO)', 'T88(AIO)'),
         ('C85', 'C85'),
         ('A39', 'A39'),
-        ('T89', 'T89'),
+        ('T89(NB)', 'T89(NB)'),
         ('Common', 'Common'),
         ('網絡', '網絡'),
     )
@@ -72,7 +72,7 @@ class AutoProject(models.Model):
         ('C38(AIO)', 'C38(AIO)'),
         ('T88(AIO)', 'T88(AIO)'),
         ('A39', 'A39'),
-        ('T89', 'T89'),
+        ('T89(NB)', 'T89(NB)'),
         ('C85', 'C85'),
         ('Others', 'Others'),
     )
@@ -102,7 +102,7 @@ class AutoResult(models.Model):
         ('T88(AIO)', 'T88(AIO)'),
         ('C85', 'C85'),
         ('A39', 'A39'),
-        ('T89', 'T89'),
+        ('T89(NB)', 'T89(NB)'),
         ('Common', 'Common'),
         ('網絡', '網絡'),
     )
