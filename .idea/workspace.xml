@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="49dc6e49-0cbb-4f1d-b6a9-9b615cad6699" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AutoResult/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/AutoResult/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/celerybeat-schedule.dat" beforeDir="false" afterPath="$PROJECT_DIR$/celerybeat-schedule.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scheduleflag.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scheduleflag.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_search.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_search.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,7 +64,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="14" />
-          <entry key="html" value="879" />
+          <entry key="html" value="880" />
           <entry key="js" value="10" />
           <entry key="py" value="1270" />
           <entry key="pyi" value="1" />
@@ -76,7 +76,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="14" />
-          <entry key="HTML" value="879" />
+          <entry key="HTML" value="880" />
           <entry key="JavaScript" value="10" />
           <entry key="PLAIN_TEXT" value="2" />
           <entry key="Python" value="1270" />
@@ -91,7 +91,7 @@
           <entry key="ProjectComexcelTrans" value="109" />
           <entry key="css" value="797" />
           <entry key="dummy" value="5" />
-          <entry key="html" value="14463" />
+          <entry key="html" value="14477" />
           <entry key="py" value="31822" />
           <entry key="txt" value="47" />
         </counts>
@@ -99,7 +99,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="797" />
-          <entry key="HTML" value="14463" />
+          <entry key="HTML" value="14477" />
           <entry key="PLAIN_TEXT" value="52" />
           <entry key="Python" value="31936" />
         </counts>
@@ -189,16 +189,26 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AutoResult/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="104" column="31" selection-start-line="104" selection-start-column="31" selection-end-line="104" selection-end-column="31" />
+            <state relative-caret-position="247">
+              <caret line="96" column="9" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
                 <element signature="e#838#2757#0" />
                 <element signature="e#2796#3824#0" />
+                <element signature="e#3862#6218#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_search.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="254">
+              <caret line="181" column="24" lean-forward="true" selection-start-line="181" selection-start-column="24" selection-end-line="181" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -239,7 +249,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>WeeklyPattern</find>
       <find>MailOAtest</find>
       <find>Search:function()</find>
       <find>title</find>
@@ -269,6 +278,7 @@
       <find>C38</find>
       <find>LessonLearn</find>
       <find>activeNames</find>
+      <find>elbuttonloading</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -280,7 +290,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit_AIO.html" />
         <option value="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_search.html" />
         <option value="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_search_AIO.html" />
         <option value="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_Summary.html" />
@@ -331,6 +340,7 @@
         <option value="$PROJECT_DIR$/templates/Navigations/NavigationsSystem.html" />
         <option value="$PROJECT_DIR$/app01/views.py" />
         <option value="$PROJECT_DIR$/AutoResult/models.py" />
+        <option value="$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_search.html" />
       </list>
     </option>
   </component>
@@ -396,7 +406,13 @@
             <path>
               <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
               <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
-              <item name="CQM" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="PersonalInfo" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -914,11 +930,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="767" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="top" id="SciView" order="0" sideWeight="0.4993395" side_tool="true" weight="0.39317507" />
       <window_info anchor="top" id="Database" order="1" side_tool="true" weight="0.03125" />
-      <window_info active="true" content_ui="combo" x="597" y="254" width="342" height="317" id="Project" order="0" sideWeight="0.4722689" visible="true" weight="0.27720413" />
+      <window_info content_ui="combo" x="597" y="254" width="342" height="317" id="Project" order="0" sideWeight="0.4722689" visible="true" weight="0.27720413" />
       <window_info anchor="bottom" id="REST Client" order="0" sideWeight="0.49966466" weight="0.43281472" />
       <window_info anchor="bottom" id="Database Changes" order="1" show_stripe_button="false" />
       <window_info anchor="bottom" id="Docker" order="2" show_stripe_button="false" weight="0.3293944" />
@@ -937,7 +952,7 @@
       <window_info anchor="bottom" id="Messages" order="15" />
       <window_info anchor="bottom" id="Version Control" order="16" weight="0.3267974" />
       <window_info anchor="bottom" id="Event Log" order="17" sideWeight="0.50317967" weight="0.29575163" />
-      <window_info anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="18" sideWeight="0.5006605" visible="true" weight="0.32843137" />
+      <window_info active="true" anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="18" sideWeight="0.5006605" visible="true" weight="0.32843137" />
       <window_info anchor="right" id="Coverage" order="0" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
@@ -963,21 +978,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ProjectComparison/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="216" column="17" lean-forward="true" selection-start-line="216" selection-start-column="17" selection-end-line="216" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-            <element signature="e#455#1020#0" />
-            <element signature="e#1779#3081#0" />
-            <element signature="e#3861#5674#0" />
-            <element signature="e#5742#9693#0" />
-            <element signature="e#9887#13075#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/ProjectComparison/ProjectComparison_Edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="98">
@@ -1510,13 +1510,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/AutoResult/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="104" column="31" selection-start-line="104" selection-start-column="31" selection-end-line="104" selection-end-column="31" />
+        <state relative-caret-position="247">
+          <caret line="96" column="9" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
             <element signature="e#838#2757#0" />
             <element signature="e#2796#3824#0" />
+            <element signature="e#3862#6218#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="181" column="24" lean-forward="true" selection-start-line="181" selection-start-column="24" selection-end-line="181" selection-end-column="24" />
         </state>
       </provider>
     </entry>
