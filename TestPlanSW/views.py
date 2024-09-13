@@ -1612,7 +1612,15 @@ def TestPlanSW_summary(request):
                 # print(Projectlist_top)
                 Projectlist_top = list(set(Projectlist_top))
                 Phaselist_top = list(set(Phaselist_top))
-
+                Phasesortorder = {'B(FVT)': 0, 'C(SIT)': 1, 'SIT2': 2, 'GSKU': 3, 'FFRT': 4, 'FFRT2': 5, 'FFRT3': 6,
+                                  'FFRT4': 7,
+                                  'FFRT5': 8, 'FFRT6': 9, 'Wave': 10, 'Wave2': 11, 'Wave3': 12, 'Wave4': 13,
+                                  'Wave5': 14, 'OOC': 15, 'OOC2': 16, 'OOC3': 17, 'OOC4': 18, 'OOC5': 19, 'OOC6': 20,
+                                  'Others': 21,
+                                  'Downgrade': 22, 'SIT_U9': 23, 'U9_FFRT': 24, 'U9_FFRT2': 25, 'U9_FFRT3': 26,
+                                  'GSKU_FFRT': 27, 'GSKU_FFRT2': 28, 'GSKU_FFRT3': 29,
+                                  'DG_FFRT': 30, 'DG_FFRT2': 31, 'DG_FFRT3': 32,
+                                  }
                 # print(Projectlist_top)
                 Phaselist_top.sort(key=lambda x: Phasesortorder[x])
                 for i in Projectlist_top:
