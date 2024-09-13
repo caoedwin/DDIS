@@ -48,19 +48,27 @@
             border-right: none;
         }
 
+        /*朴素按钮的样式*/
         .el-button--warning.is-plain {
             color: #E6A23C;
             background: #fdf6ec;
             border-color: #f5dab1;
-            font-size: 12px;
+            font-size: 18px;
+        }
+
+        /*正常按钮的样式*/
+        .el-button--warning {
+            color: #FFF;
+            background-color: #E6A23C;
+            border-color: #E6A23C;
+            font-size: 18px;
         }
 
         /*butoon 内容转换*/
         .wrap-text {
             white-space: normal;
             word-break: break-all;
-            {#height: 40px;#}
-            padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
+        {#height: 40px;#} padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
         }
 
         .my-table .el-table__row {
@@ -117,11 +125,11 @@
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                                   {% comment %}<el-tag size="medium">${ scope.row.name2 }</el-tag>{% endcomment %}
                                   <el-button
-                                           :style="{width: '170px', height: '100px'}"
+                                          :style="{width: '200px', height: '100px'}"
                                           class="wrap-text"
                                           v-if="scope.row.name"
                                           type="warning"
-                                          plain
+                                          {% comment %}plain{% endcomment %}
                                           @click="fetchData(scope.row.name)"
                                   >
                                       ${ scope.row.name }</el-button>
@@ -140,11 +148,11 @@
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             {% comment %}<el-tag size="medium">${ scope.row.name2 }</el-tag>{% endcomment %}
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{width: '200px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name2"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="fetchData(scope.row.name2)"
                             >
                                       ${ scope.row.name2 }</el-button>
@@ -161,11 +169,11 @@
                               {% comment %}<a :href="scope.row.address3" target="_blank"
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{width: '200px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name3"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="fetchData(scope.row.name3)"
                             >
                                       ${ scope.row.name3 }</el-button>
@@ -182,11 +190,11 @@
                               {% comment %}<a :href="scope.row.address4" target="_blank"
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{width: '200px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name4"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="fetchData(scope.row.name4)"
                             >
                                       ${ scope.row.name4 }</el-button>
@@ -265,7 +273,7 @@
                 return {
                     {% comment %}view render 返回的local有包含特殊字符的变量，可以使用模板标签{% autoescape off %}来关闭自动转义功能。{% endcomment %}
                     {% autoescape off %}
-                    Categoryname: '{{ Category }}',
+                        Categoryname: '{{ Category }}',
                     {% endautoescape %}
                     table: false,
                     Navigations_Category_name: '',
@@ -339,10 +347,10 @@
                             console.error(error);
                         });
                 },
-                judgeCatogyname(){
-                    if (this.Categoryname){
+                judgeCatogyname() {
+                    if (this.Categoryname) {
                         return this.Categoryname;
-                    }else {
+                    } else {
                         return this.Navigations_Category_name;
                     }
                 },

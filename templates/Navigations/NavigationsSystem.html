@@ -23,7 +23,8 @@
 
         /* 设置行的背景色 */
         .el-table .row-bg-color {
-            background-color: #f7e1b5;
+            {% comment %}background-color: #f7e1b5;{% endcomment %}
+            background-color: #ffffff;
         }
 
         /* 如果需要中空线，可以通过边框样式来实现 */
@@ -55,12 +56,18 @@
             border-top: 0;
             color: #FFFFFF;
         }
-
+        /*朴素按钮的样式*/
         .el-button--warning.is-plain {
             color: #E6A23C;
             background: #fdf6ec;
             border-color: #f5dab1;
-            font-size: 12px;
+            font-size: 22px;
+        }
+        /*正常按钮的样式*/
+        .el-button--warning {
+            color: #FFF;
+            background-color: #E6A23C;
+            font-size: 22px;
         }
 
         /*butoon 内容转换*/
@@ -118,11 +125,11 @@
                               {% comment %}<a :href="scope.row.url1" target="_blank"
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{{% comment %}backgroundColor: !scope.row.url1 ? '#00009C' : '#2F2F4F',{% endcomment %}width: '170px', height: '100px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name1"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="hrefaddress1(scope.row)"
                                     :disabled="!scope.row.url1 ? true : false"
                             >
@@ -139,7 +146,7 @@
                                     class="wrap-text"
                                     v-if="scope.row.name2"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="hrefaddress2(scope.row)"
                                     :disabled="!scope.row.url2 ? true : false"
                             >
@@ -155,7 +162,7 @@
                                     class="wrap-text"
                                     v-if="scope.row.name3"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="hrefaddress3(scope.row)"
                                     :disabled="!scope.row.url3 ? true : false"
                             >
@@ -171,7 +178,7 @@
                                     class="wrap-text"
                                     v-if="scope.row.name4"
                                     type="warning"
-                                    plain
+                                    {% comment %}plain{% endcomment %}
                                     @click="hrefaddress4(scope.row)"
                                     :disabled="!scope.row.url4 ? true : false"
                             >
