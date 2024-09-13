@@ -13,6 +13,7 @@ from CQM.models import CQMProject, CQM, CQM_history
 from QIL.models import QIL_M, QIL_Project
 import datetime, os
 from service.init_permission import init_permission
+from django.db import transaction
 from django.conf import settings
 # Create your views here.
 from django.forms import forms
@@ -198,7 +199,15 @@ def index(request):
             request.session.set_expiry(12 * 60 * 60)
     return render(request, 'index.html', locals())
 
-
+headermodel_Projectinfo = {
+    'Customer': 'Customer', 'Project Code': 'ComPrjCode', 'MKT Name': 'ProjectName', 'Size': 'Size',
+    'CPU': 'CPU', 'Platform': 'Platform',
+    'VGA': 'VGA',
+    'OS': 'OSSupport',
+    'SS/MP Date': 'SS', 'DQAPLNum': 'DQAPLNum', 'DQA PL': 'DQAPL', 'DQAQMNum': 'DQAQMNum', 'DQA QM': 'DQAQM',
+    'PrjEngCode1': 'PrjEngCode1', 'PrjEngCode2': 'PrjEngCode2', 'Type': 'Type', 'PPA': 'PPA', 'PQE': 'PQE',
+    'LD': 'LD', 'LDNum': 'LDNum', 'Year': 'Year',
+}
 @csrf_exempt
 def ProjectInfoSearch(request):
     if not request.session.get('is_login', None):
@@ -211,22 +220,20 @@ def ProjectInfoSearch(request):
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     mock_data = [
+        # {"id": "1", "Customer": "C38(NB)", "Comprjcode": "KLS71", "Mkt_Code": "FLAT4", "Size": "14",
+        #  "CPU": "AMD", "Platform": "Intel Lunar Lake-MX",
+        #  "VGA": "UMA", "OS_Support": "WIN11 24H2", "SS": "2023-05-22", "DQA_PLNum": "C123456", "DQA_PL": "錢嬌",
+        #  "DQA_QMNum": "C123456",
+        #  "DQA_QM": "錢嬌", "Prjengcode1": "", "Prjengcode2": "", "Type": "", "PPA": "", "PQE": "", "LD": "", "LD_Num": "",
+        #  "Year": "",
+        #  "Modified_Date": "2023-05-22"},
         # {"id": "1", "Customer": "C38(NB)", "Year": "Y2020", "Comprjcode": "FLAT4", "Prjengcode1": "TATA4",
         #  "Prjengcode2": "", "Mkt_Code": "E41-55",
         #  "Size": "14", "CPU": "AMD", "Platform": "AMD", "VGA": "UMA", "OS_Support": "WIN10 20H1", "SS": "2020-09-28",
         #  "LD": "陈威", "DQA_PL": "周课",
         #  "Modified_Date": "2020-09-11 21:19:01"},
-        # {"id": "2", "Customer": "C38(AIO)", "Year": "Y2019", "Comprjcode": "EOC20", "Prjengcode1": "TATA4",
-        #  "Prjengcode2": "", "Mkt_Code": "E41-55",
-        #  "Size": "14", "CPU": "AMD", "Platform": "AMD", "VGA": "UMA", "OS_Support": "WIN10 20H1", "SS": "2019-07-28",
-        #  "LD": "陈威", "DQA_PL": "周课",
-        #  "Modified_Date": "2019-07-28 21:19:01"},
-        # {"id": "3", "Customer": "T88(AIO)", "Year": "Y2018", "Comprjcode": "FLAT4", "Prjengcode1": "TATA4",
-        #  "Prjengcode2": "", "Mkt_Code": "E41-55",
-        #  "Size": "14", "CPU": "AMD", "Platform": "AMD", "VGA": "UMA", "OS_Support": "WIN10 20H1", "SS": "2018-10-28",
-        #  "LD": "陈威", "DQA_PL": "周课",
-        #  "Modified_Date": "2018-11-11 21:19:01"},
     ]
+    errMsg = ''
     selectItem = [
         # 'C38(NB)', 'C38(AIO)', 'T88(AIO)'
     ]
@@ -246,9 +253,10 @@ def ProjectInfoSearch(request):
         for j in ProjectinfoinDCT.objects.filter(Year=i["Year"]).values("ComPrjCode").distinct().order_by("ComPrjCode"):
             YearPro.append({"ProjectCode": j["ComPrjCode"]})
         selectYear[i["Year"]] = YearPro
-    print(ProjectinfoinDCT.objects.all().values("ComPrjCode").distinct().count(),
-          ProjectinfoinDCT.objects.all().values("ComPrjCode").count(),
-          ProjectinfoinDCT.objects.all().values("ComPrjCode", "Year").distinct().count())
+    # print(ProjectinfoinDCT.objects.all().values("ComPrjCode").distinct().count(),
+    #       ProjectinfoinDCT.objects.all().values("ComPrjCode").count(),
+    #       ProjectinfoinDCT.objects.all().values("ComPrjCode", "Year").distinct().count())
+    permission = 1
     canExport = 0
     roles = []
     onlineuser = request.session.get('account')
@@ -274,7 +282,8 @@ def ProjectInfoSearch(request):
                      "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
                      "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport,
                      "Type": i.Type,
-                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "DQA_PL": i.DQAPL,
+                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LD_Num": i.LDNum, "DQA_PLNum": i.DQAPLNum, "DQA_PL": i.DQAPL,
+                     "DQA_QMNum": i.DQAQMNum, "DQA_QM": i.DQAQM,
                      "Modified_Date": i.ModifiedDate}
                 )
             data = {
@@ -299,8 +308,9 @@ def ProjectInfoSearch(request):
                      "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
                      "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport,
                      "Type": i.Type,
-                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LDNum": i.LDNum, "DQA_PL": i.DQAPL,
-                     "DQA_PLNum": i.DQAPLNum,
+                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LD_Num": i.LDNum, "DQA_PLNum": i.DQAPLNum,
+                     "DQA_PL": i.DQAPL,
+                     "DQA_QMNum": i.DQAQMNum, "DQA_QM": i.DQAQM,
                      "Modified_Date": i.ModifiedDate}
                 )
             pass
@@ -315,26 +325,241 @@ def ProjectInfoSearch(request):
                 checkdic_PRODCT["Year"] = Year
             if ProjectCode != "All" and ProjectCode != "":
                 checkdic_PRODCT["ComPrjCode"] = ProjectCode
-            for i in ProjectinfoinDCT.objects.filter(**checkdic_PRODCT):
+
+            checkdic_PRODCTSSYear = {}
+            if Customer != "All" and Customer != "":
+                checkdic_PRODCTSSYear["Customer"] = Customer
+            if Year != "All" and Year != "":
+                checkdic_PRODCTSSYear["SS__contains"] = Year #这里的日期数据用的是字符型不是日期行，如果是日期型要用SS__year
+            if ProjectCode != "All" and ProjectCode != "":
+                checkdic_PRODCTSSYear["ComPrjCode"] = ProjectCode
+            ProjectObject = ProjectinfoinDCT.objects.filter(**checkdic_PRODCT) | ProjectinfoinDCT.objects.filter(**checkdic_PRODCTSSYear)
+            for i in ProjectObject:
                 mock_data.append(
                     {"id": i.id, "Customer": i.Customer, "Year": i.Year, "Comprjcode": i.ComPrjCode,
                      "Prjengcode1": i.PrjEngCode1,
                      "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
                      "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA, "OS_Support": i.OSSupport,
                      "Type": i.Type,
-                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LDNum": i.LDNum, "DQA_PL": i.DQAPL,
-                     "DQA_PLNum": i.DQAPLNum,
+                     "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LD_Num": i.LDNum, "DQA_PLNum": i.DQAPLNum,
+                     "DQA_PL": i.DQAPL,
+                     "DQA_QMNum": i.DQAQMNum, "DQA_QM": i.DQAQM,
                      "Modified_Date": i.ModifiedDate}
                 )
-            datamail = {"ids": [1, 2], "Projects": ['GLAMA0', 'GLMS1']}
-            MailOAtest.delay(**datamail) # 启动异步任务
+            # datamail = {"ids": [1, 2], "Projects": ['GLAMA0', 'GLMS1']}
+            # MailOAtest.delay(**datamail) # 启动异步任务
             pass
+        else:
+            try:
+                request.body
+            except:
+                pass
+            else:
+                if 'upload' in str(request.body):
+                    responseData = json.loads(request.body)
+
+                    xlsxlist = json.loads(responseData['ExcelData'])
+                    # print(xlsxlist)
+                    # pprint.pprint(xlsxlist)
+                    # 验证，先验证再上传,必须要先验证，如果边验证边上传，一旦报错，下次再传就无法通过同机种验证
+                    # Check_dic_Project = {'Customer': CustomerSearch, 'Project': ProjectSearch, }
+                    # # print(Check_dic_ProjectCQM)
+                    # Projectinfo = CQMProject.objects.filter(**Check_dic_Project).first()
+                    # print(Projectinfo)
+                    # current_user = request.session.get('user_name')
+                    # current_account = request.session.get('account')
+                    # ProjectComparison_admin_user = "0301507" #Canny
+                    # # if Projectinfo:s
+                    # #                     #     for k in Projectinfo.Owner.all():
+                    # #                     #         # print(k.username,current_user)
+                    # #                     #         # print(type(k.username),type(current_user))
+                    # #                     #         if k.username == current_uer:
+                    # #             canEdit = 1
+                    # #             break
+                    # if current_account == ProjectComparison_admin_user:
+                    #     canEdit = 1
+                    # print(canEdit)
+                    # try:
+                    if permission:
+                        rownum = 0
+                        startupload = 0
+                        # print(xlsxlist)
+                        create_list = []
+                        update_list = []
+                        for i in xlsxlist:
+                            # print(type(i),i)
+                            rownum += 1
+                            modeldata = {}
+                            for key, value in i.items():
+                                if key in headermodel_Projectinfo.keys():
+                                    # print(headermodel_Projectinfo[key],value)
+                                    modeldata[headermodel_Projectinfo[key]] = value
+                                modeldata['ModifiedDate'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            # print(modeldata)
+
+                            if 'Customer' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Customer不能爲空
+                                                            """ % rownum
+                                break
+                            if 'ComPrjCode' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Project Code不能爲空
+                                                            """ % rownum
+                                break
+                            if 'ProjectName' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，MKT Name不能爲空
+                                                            """ % rownum
+                                break
+                            if 'Size' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Size不能爲空
+                                                            """ % rownum
+                                break
+                            if 'CPU' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，CPU不能爲空
+                                                            """ % rownum
+                                break
+                            if 'Platform' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Platform不能爲空
+                                                            """ % rownum
+                                break
+                            if 'VGA' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，VGA不能爲空
+                                                            """ % rownum
+                                break
+                            if 'OSSupport' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，OS不能爲空
+                                                            """ % rownum
+                                break
+                            if 'SS' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，SS/MP Date不能爲空
+                                                            """ % rownum
+                                break
+                            if 'DQAPLNum' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，DQAPLNum不能爲空
+                                                            """ % rownum
+                                break
+                            if 'DQAPL' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，DQA PL不能爲空
+                                                            """ % rownum
+                                break
+                            if 'DQAQMNum' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，DQAQMNum不能爲空
+                                                            """ % rownum
+                                break
+                            if 'DQAQM' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，DQAQM不能爲空
+                                                            """ % rownum
+                                break
+                            if ProjectinfoinDCT.objects.filter(Customer=modeldata['Customer'], ComPrjCode=modeldata['ComPrjCode']):
+                                update_list.append(modeldata)
+                            else:
+                                create_list.append(ProjectinfoinDCT(**modeldata))  # object(**dict)
+                            # print(create_list)
+                        # print(errMsg, startupload)
+                        # print(create_list,)
+                        # print(startupload)
+                        # print(rownum, type(rownum))
+                        if startupload:
+                            try:
+                                with transaction.atomic():
+                                    if create_list:
+                                        ProjectinfoinDCT.objects.bulk_create(create_list)
+                                    if update_list:
+                                        for i in update_list:
+                                            ProjectinfoinDCT.objects.filter(Customer=i['Customer'], ComPrjCode=i['ComPrjCode']).update(**i)
+                            except Exception as e:
+                                # alert = '此数据正被其他使用者编辑中...'
+                                alert = str(e)
+                                print(alert)
+
+                    # print('IssuesBreakdown')
+                    # mock_data
+                    for i in ProjectinfoinDCT.objects.all():
+                        mock_data.append(
+                            {"id": i.id, "Customer": i.Customer, "Year": i.Year, "Comprjcode": i.ComPrjCode,
+                             "Prjengcode1": i.PrjEngCode1,
+                             "Prjengcode2": i.PrjEngCode2, "Mkt_Code": i.ProjectName,
+                             "Size": i.Size, "CPU": i.CPU, "Platform": i.Platform, "VGA": i.VGA,
+                             "OS_Support": i.OSSupport,
+                             "Type": i.Type,
+                             "PPA": i.PPA, "PQE": i.PQE, "SS": i.SS, "LD": i.LD, "LD_Num": i.LDNum,
+                             "DQA_PLNum": i.DQAPLNum,
+                             "DQA_PL": i.DQAPL,
+                             "DQA_QMNum": i.DQAQMNum, "DQA_QM": i.DQAQM,
+                             "Modified_Date": i.ModifiedDate}
+                        )
         data = {
             "err_ok": "0",
             "content": mock_data,
             "select": selectItem,
             'addselect': selectYear,
             'canExport': canExport,
+            'errMsg': errMsg,
+            'permission': permission,
         }
         # print(data)
         return HttpResponse(json.dumps(data), content_type="application/json")

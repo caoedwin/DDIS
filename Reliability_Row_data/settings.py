@@ -201,6 +201,7 @@ INSTALLED_APPS = [
     'CapitalExpenditure',
     'A31LessonLProject',
     'A32LessonLProject',
+    'CriticalIssueCrossCheck',
 ]
 
 MIDDLEWARE = [

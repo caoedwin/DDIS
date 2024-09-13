@@ -92,6 +92,55 @@
             color:#2f97a8;
         font-family:微软雅黑;
     }
+
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 30px;
+}
+.el-checkbox__label{
+    font-size: 18px;
+}
+ .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+
     </style>
 {% endblock %}
 {% block content %}
@@ -132,29 +181,43 @@
         <el-button type="success" :plain="true" @click="Import">同步DCT专案信息</el-button>
     </div>
 
+     <div v-cloak class="fileUploadContent" v-if="permission===1">
+         <div class="inputPackage" v-cloak>
+             <span v-cloak>請選擇文件</span>
+             <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+         </div>
+         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>
+         <span class="showFileName" v-cloak >${ fileName }</span>
+         <a style="margin-top: 10px;margin-left: 20px;color: #000000" href="/static/src/modelfiles/Projectinfo.xlsx" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>
+     </div>
+
 </div>
 <template>
 <el-input type="text" v-model="search"  id="sh" placeholder="关键字搜索......"></el-input>
-   <el-table id="out-table" border stripe height="750" @sort-change='sortChange' :default-sort = "{prop: 'Customer', order: 'ascending'}" :data="datas_computed.slice((currentPage-1)*pageSize,currentPage*pageSize)" tooltip-effect="dark" style="width: 100%">
+   <el-table id="out-table" ref="tableRef" border stripe height="750" @sort-change='sortChange' :default-sort = "{prop: 'Customer', order: 'ascending'}" :data="datas_computed.slice((currentPage-1)*pageSize,currentPage*pageSize)" tooltip-effect="dark" style="width: 100%">
         <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
-        <el-table-column prop="Customer" label="CUSTOMER" align="center" width="120" sortable='custom' ></el-table-column>
-        <el-table-column prop="Year" label="YEAR" align="center" sortable='custom' width="120"></el-table-column>
-        <el-table-column prop="Comprjcode" label="COMPRJCODE" align="center" width="120" sortable='custom' ></el-table-column>
-        <el-table-column prop="Prjengcode1" label="PRJENGCODE1" width="120" align="center" sortable='custom' ></el-table-column>
-        <el-table-column prop="Prjengcode2" label="PRJENGCODE2" width="120" align="center" sortable='custom' ></el-table-column>
-        <el-table-column prop="Mkt_Code" label="MKT CODE" width="120" align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="Customer" label="CUSTOMER" align="center" width="120" sortable='custom' fixed></el-table-column>
+        <el-table-column prop="Comprjcode" label="PROJECT CODE" align="center" width="120" sortable='custom' fixed></el-table-column>
+        <el-table-column prop="Mkt_Code" label="MKT NAME" width="120" align="center" sortable='custom' fixed></el-table-column>
         <el-table-column prop="Size" label="SIZE" width="80"  align="center" sortable='custom'></el-table-column>
         <el-table-column prop="CPU" label="CPU" width="100" align="center" sortable='custom'></el-table-column>
         <el-table-column prop="Platform" label="PLATFORM" width="120" align="center" sortable='custom'></el-table-column>
         <el-table-column prop="VGA" label="VGA" width="80" align="center" sortable='custom'></el-table-column>
-        <el-table-column prop="OS_Support" label="OS SUPPORT" width="120"  align="center" sortable='custom'></el-table-column>
-        <el-table-column prop="SS" label="SS" width="120"  align="center" sortable='custom'></el-table-column>
-        <el-table-column prop="LD" label="LD" width="110"  align="center" sortable='custom'></el-table-column>
-        <el-table-column prop="DQA_PL" label="DQA PL" width="110"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="OS_Support" label="OS" width="120"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="SS" label="SS/MP DATE" width="120"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="DQA_PLNum" label="DQAPLNum" width="100"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="DQA_PL" label="DQA PL" width="90"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="DQA_QMNum" label="DQAQMNum" width="100"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="DQA_QM" label="DQA QM" width="90"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="Prjengcode1" label="PRJENGCODE1" width="120" align="center" sortable='custom' ></el-table-column>
+        <el-table-column prop="Prjengcode2" label="PRJENGCODE2" width="120" align="center" sortable='custom' ></el-table-column>
         <el-table-column prop="Type" label="TYPE" width="110"  align="center" sortable='custom'></el-table-column>
         <el-table-column prop="PPA" label="PPA" width="110"  align="center" sortable='custom'></el-table-column>
         <el-table-column prop="PQE" label="PQE" width="110"  align="center" sortable='custom'></el-table-column>
-        <el-table-column prop="Modified_Date" label="MODIFIED DATE" width="130" align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="LD" label="LD" width="110"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="LD_Num" label="LDNum" width="110"  align="center" sortable='custom'></el-table-column>
+        <el-table-column prop="Year" label="YEAR" align="center" sortable='custom' width="80" sortable='custom'></el-table-column>
+        <el-table-column prop="Modified_Date" label="MODIFIED DATE" align="center" sortable='custom'></el-table-column>
    </el-table>
     <div class="block">
     <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 50, 100, 200]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
@@ -187,6 +250,10 @@ new Vue({
     delimiters: ['${', '}'],
     data: function () {
             return {
+                permission: 0,
+                excelFile:null,
+                uploadFile:null,
+                fileName:"未選擇文件",
                 visible:false,
                 tableContent:[],
                 selectedCustomer:null,
@@ -218,16 +285,7 @@ new Vue({
                 if (column.prop === 'Customer') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     console.log(this.dataList);
-                } else if (column.prop === 'Year') {
-                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                    console.log(this.dataList);
-                }else if (column.prop === 'Comprjcode') {
-                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                    console.log(this.dataList);
-                }else if (column.prop === 'Prjengcode1') {
-                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                    console.log(this.dataList);
-                }else if (column.prop === 'Prjengcode2') {
+                } else if (column.prop === 'Comprjcode') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     console.log(this.dataList);
                 }else if (column.prop === 'Mkt_Code') {
@@ -245,28 +303,50 @@ new Vue({
                 }else if (column.prop === 'VGA') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     console.log(this.dataList);
-                }else if (column.prop === 'OS_Support') {
-                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                    console.log(this.dataList);
                 }else if (column.prop === 'SS') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     console.log(this.dataList);
-                }else if (column.prop === 'LD') {
+                }else if (column.prop === 'OS_Support') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'DQA_PLNum') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     console.log(this.dataList);
                 }else if (column.prop === 'DQA_PL') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     console.log(this.dataList);
+                }else if (column.prop === 'DQA_QMNum') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'DQA_QM') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    console.log(this.dataList);
+                }else if (column.prop === 'Prjengcode1') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    {#console.log(this.dataList);#}
+                }else if (column.prop === 'Prjengcode2') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    {#console.log(this.dataList);#}
                 }else if (column.prop === 'Type') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                    console.log(this.dataList);
+                    {#console.log(this.dataList);#}
                 }else if (column.prop === 'PPA') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                    console.log(this.dataList);
+                    {#console.log(this.dataList);#}
                 }else if (column.prop === 'PQE') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     {#console.log(this.dataList);#}
-                }else if (column.prop === 'Modified_Date') {
+                }else if (column.prop === 'LD') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    {#console.log(this.dataList);#}
+                }else if (column.prop === 'LD_Num') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    {#console.log(this.dataList);#}
+                }else if (column.prop === 'Year') {
+                    this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                    {#console.log(this.dataList);#}
+                }
+                else if (column.prop === 'Modified_Date') {
                     this.dataList = this.tableContent.sort(this.sortFun(column.prop, column.order === 'ascending'));
                     {#console.log(this.dataList);#}
                 }
@@ -347,6 +427,7 @@ new Vue({
                 }).then((res) => {
                     this.tableContent = res.data.content;
                     this.selectItem = res.data.select;
+                    this.permission = res.data.permission;
                     this.totalNum=this.tableContent.length;
                     this.selectYear = res.data.addselect;
                 });
@@ -431,6 +512,148 @@ new Vue({
             return wbout;
             });
         },
+
+        updateFile:function(e){
+            const first="未選擇文件";
+            let newValue= e.target.files;
+            if(newValue){
+             let file=document.getElementById('upload');
+             let filename= file.files[0].name;
+             let fileType=filename.substr(filename.lastIndexOf(".")+1);
+             console.log(fileType.toLowerCase());
+             if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                  //console.log(this.excelFile);
+                 this.fileName=filename;
+                 this.uploadFile=file.files[0];
+             }else{
+                 alert("上傳類型不為'xlsx'或'xls'");
+                   try{
+                     }catch(e){
+                         console.log(e);
+                     }
+             }
+         }else{
+             this.uploadFile=null;
+             this.fileName=first;
+         }
+    },
+        fileUpload:function(){
+          const first="未選擇文件";
+          if(this.uploadFile){
+              //1.解析Excel
+               let outputResult;
+               let _this= this;
+               let files = this.uploadFile;
+               let undefined_to_null=function(value){
+                   if(value === undefined){
+                       value=null;
+                   }
+                   //console.log(value,value === undefined,value == undefined);
+                   return value;
+               }
+               var fileReader = new FileReader ();
+               const loading = this.$loading({
+                          lock: true,
+                          text: 'Loading',
+                          spinner: 'el-icon-loading',
+                          background: 'rgba(0,0,0,0.7)'
+               });
+               fileReader.onload = function (ev) {
+                 try {
+                // _this.loading=true;
+                 var data = ev.target.result,
+                  workbook = XLSX.read(data, {
+                    type: 'binary'
+                 }), // 以二进制流方式读取得到整份excel表格对象
+                  persons = []; // 存储获取到的数据
+               } catch (e) {
+                 //_this.loading=false;
+                     loading.close();
+                 return;
+              }
+              for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    var fromTo = workbook.Sheets[sheet]['!ref'];
+                    // console.log(fromTo);
+                    var datas = workbook.Sheets[sheet];
+                    // 如果有不规范数据可以在这里进行处理datas
+                    persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                    //break; // 只读了第一张表
+                }
+        }
+             // 数据保存在result
+              let result=JSON.stringify(persons);
+               //将之前张开的树形结构收起
+                  //_this.reset();
+               //2.上傳數據
+              let Year = _this.$refs.Year.value;
+              axios.post("/ProjectInfoSearch/" ,{"isGetData":"upload","Year":Year,"ExcelData":result},{
+              headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            }).then((res) => {
+                //console.log(res.data,"first");//上传成功的操作
+                    _this.tableContent=res.data.content;
+                    _this.totalNum=_this.tableContent.length;
+                    _this.tables=res.data.tables;
+                    _this.$nextTick(() => {
+                       _this.$refs.tableRef.doLayout()
+                    })
+                    _this.errMsg=res.data.errMsg;
+                    _this.permission=res.data.permission;
+                    _this.yearOptions = res.data.yearOptions;
+                    _this.datatypeOption = res.data.datatypeOption;
+                    _this.uploadFile=null;
+                    _this.fileName=first;
+               //_this.loading=false;
+                    loading.close();
+                //上传成功的操作
+                    if(_this.errMsg){
+                        _this.$alert(_this.errMsg, '提示', {
+                              type: 'warning',
+                            })
+                    }else {
+                        _this.$message({
+                            message: '上傳成功',
+                            type: 'success',
+                        })
+                    }
+                //接受数据的初始化
+                try{
+                }catch(e)
+                {
+                   console.log("错误异常"+e);
+                }
+            }).catch(function (e) {
+                    //_this.loading=false;
+                    loading.close();
+                    _this.uploadFile=null;
+                    var warning =confirm("上傳異常");
+                    console.log("上傳錯誤信息"+e);
+                });
+       };
+               try{
+               //console.log(fileReader.onload());
+               fileReader.readAsBinaryString(files);
+               //console.log(fileReader.readAsBinaryString(files));
+               }
+               catch(e){
+                     //this.loading=false;
+                   loading.close();
+                     console.log(e);
+                     alert("文件上傳異常") ;
+                     return;
+                }
+              //console.log(outputResult);
+
+         }else{
+          //this.loading=false;
+              loading.close();
+          alert("未選擇文件");
+          return false;
+      }
+          this.excelFile='';
+    },
+
+
       test:function (row) {
           console.log("trt");
       },

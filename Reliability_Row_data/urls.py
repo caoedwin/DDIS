@@ -115,6 +115,7 @@ urlpatterns = [
     path('CapitalExpenditure/', include('CapitalExpenditure.urls', namespace='CapitalExpenditure')),
     path('A31LessonLProject/', include('A31LessonLProject.urls', namespace='A31LessonLProject')),
     path('A32LessonLProject/', include('A32LessonLProject.urls', namespace='A32LessonLProject')),
+    path('CriticalIssueCrossCheck/', include('CriticalIssueCrossCheck.urls', namespace='CriticalIssueCrossCheck')),
 ]#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
