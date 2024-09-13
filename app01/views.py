@@ -831,7 +831,7 @@ def Navigations_Category_axios(request):
                 'name3': "Known Issue",
                 'address3': "",
                 'Comment3': "",
-                'name4': '',
+                'name4': 'CriticalIssue',
                 'address4': "",
                 'Comment4': "",
             }, {
@@ -1855,6 +1855,26 @@ def Navigations_system_axios(request):
              },
             {"Comment": "",
              "name1": "AIO", "url1": "", "Comment1": "",  # AIO
+             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "CriticalIssue": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment2": "",  # A31
+             "name3": "A32", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "CQT88", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment1": "",  # CQT88
+             "name2": "T88", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment2": "",  # T88
+             "name3": "T89", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment3": "",  # T89
+             "name4": 'T99', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment4": "",  # T99
+             },
+            {"Comment": "",
+             "name1": "AIO", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment1": "",  # AIO
              "name2": "", "url2": "", "Comment2": "",  # A39
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #

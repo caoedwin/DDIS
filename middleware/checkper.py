@@ -101,7 +101,7 @@ class RbacMiddleware(MiddlewareMixin):
                 if not Skin:
                     Skin = "/static/src/blue.jpg"
                 weizhi = "Warning"
-                message = "您的账户无权限访问,请尝试访问以下地址(点击跳转)："
+                message = "您的账户无权限访问該頁面："
                 messageurl = permission_url
                 return render(request, 'NoPerm.html', locals())
                 # return render(request, 'NoPerm.html', {'message': '无权限访问'})
