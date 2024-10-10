@@ -138,9 +138,11 @@ SECRET_KEY = 'g!4+oe!rx(r%pm^=ryc)j57sieed1eea3_de63o&6+u0tu2%^i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+FCGI_LOG = True
 ALLOWED_HOSTS = ['*']
 
+# 设置Django使用的默认编码
+DEFAULT_CHARSET = 'utf-8'
 # DjangoUeditor3
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 

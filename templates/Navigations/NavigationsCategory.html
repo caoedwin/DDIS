@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {#{% load custom_tag %}#}
 {% load staticfiles %}
-{% block title %}Navigations{% endblock %}
+{% block title %}Category{% endblock %}
 {% block css %}
     {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
     {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
@@ -21,26 +21,41 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        .my-table {
+            background-image: url("/static/src/hero.jpg"); /* 替换为你的图片路径 */
+            background-size: cover; /* 背景图片覆盖整个表格 */
+            background-repeat: no-repeat; /* 背景图片不重复 */
+            background-position: center; /* 背景图片居中 */
+        }
+
         /* 设置行的背景色 */
         .el-table .row-bg-color {
-        {#background-color: #f7e1b5;#}
+        {% comment %}background-color: #f7e1b5;{% endcomment %}
+            background-color: rgba(255, 255, 255, 0);
         }
+        .el-table th, .el-table tr {
+            /* background-color: #FFF; */
+            background-color: rgba(255,255,255,0);
+        }
+
 
         /* 如果需要中空线，可以通过边框样式来实现 */
         .el-table .cell {
         }
 
-        .el-table__header {
+        {% comment %}.el-table__header {
             table-layout: fixed;
             border-collapse: separate;
-        }
+        }{% endcomment %}
 
         .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
-        {#border-right: 10px solid #EBEEF5;#}{#border-radius: 30px#}
+            border-right: 1px solid #EBEEF5;
+            {#border-radius: 20px;#}
         }
 
         .el-table td, .el-table th.is-leaf {
-            border-bottom: 10px solid #EBEEF5;
+            {#border-bottom: 10px solid #EBEEF5;#}
+
         }
 
         /* 最后一个单元格的右边界不显示 */
@@ -48,31 +63,58 @@
             border-right: none;
         }
 
+        {% comment %}.table > thead > tr > th {
+            border-bottom: 1px solid #e7e7e7;
+            font-weight: 600;
+            border-top: 0;
+            color: #FFFFFF;
+        }{% endcomment %}
+
         /*朴素按钮的样式*/
         .el-button--warning.is-plain {
             color: #E6A23C;
             background: #fdf6ec;
             border-color: #f5dab1;
-            font-size: 18px;
+            font-size: 22px;
         }
 
         /*正常按钮的样式*/
         .el-button--warning {
             color: #FFF;
             background-color: #E6A23C;
-            border-color: #E6A23C;
-            font-size: 18px;
+            font-size: 22px;
+            border-color: #FFFFFF;
+        }
+
+        .wrap-text:hover {
+          background-image: url("/static/images/c1.jpg");
+          color: #fff; /* 悬浮时的文字颜色 */
+            font-size: 20px;
         }
 
         /*butoon 内容转换*/
         .wrap-text {
+            border-color: rgba(255,255,255,0.0);
+            background-color: rgba(255,255,255,0.7) !important;
+            color: #303231;
+            font-family: '楷体', 'KaiTi', serif;
+            font-size: 26px;
             white-space: normal;
             word-break: break-all;
-        {#height: 40px;#} padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
+            height: 40px;
+            padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
         }
+        /* 英文字体样式 */
+          .wrap-text .eng-font {
+            font-family: 'Arial', sans-serif;
+          }
 
         .my-table .el-table__row {
-            height: 133px; /* 单元格的高度 */
+            height: 160px; /* 单元格的高度 */
+        }
+        /* 去掉鼠标悬浮效果 */
+        .my-table tbody tr:hover > td {
+          background-color: transparent !important
         }
     </style>
 {% endblock %}
@@ -102,7 +144,8 @@
             </div>
         </div>
         <!-- /# column -->
-    </div>{% endblock %}
+    </div>
+{% endblock %}
 {% block content %}
 
     <div id="app" {% comment %}v-pre{% endcomment %}>
@@ -113,7 +156,8 @@
             <el-table :data="gridData_Category"
                     {% comment %}border{% endcomment %}
                       class="my-table"
-                      height="500" style="width: 100%"
+
+                      style="width: 100%"
                       row-class-name="row-bg-color">
                 <el-table-column property="name" :label="judgeCatogyname()" min-width="16%">
                     <template scope="scope">
@@ -125,7 +169,7 @@
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                                   {% comment %}<el-tag size="medium">${ scope.row.name2 }</el-tag>{% endcomment %}
                                   <el-button
-                                          :style="{width: '200px', height: '100px'}"
+                                          :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                           class="wrap-text"
                                           v-if="scope.row.name"
                                           type="warning"
@@ -133,7 +177,6 @@
                                           @click="fetchData(scope.row.name)"
                                   >
                                       ${ scope.row.name }</el-button>
-                              </a>
                           </div>
                         {% comment %}</el-popover>{% endcomment %}
                     </template>
@@ -148,7 +191,7 @@
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             {% comment %}<el-tag size="medium">${ scope.row.name2 }</el-tag>{% endcomment %}
                             <el-button
-                                    :style="{width: '200px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name2"
                                     type="warning"
@@ -169,7 +212,7 @@
                               {% comment %}<a :href="scope.row.address3" target="_blank"
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
-                                    :style="{width: '200px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name3"
                                     type="warning"
@@ -190,7 +233,7 @@
                               {% comment %}<a :href="scope.row.address4" target="_blank"
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
-                                    :style="{width: '200px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name4"
                                     type="warning"
@@ -281,23 +324,23 @@
                     loading: false,
                     drawer: false,
                     gridData_Category: [{
-                        name: 'ProjectComparison',
+                        name: '',
                         address: "",
                         Comment: "",
-                        name2: 'CapitalExpenditure',
+                        name2: '',
                         address2: "",
                         Comment2: "",
-                        name3: 'Public Area',
+                        name3: '',
                         address3: "",
                         Comment3: "",
-                        name4: 'PersonalInfo',
+                        name4: '',
                         address4: "",
                         Comment4: "",
-                        name5: 'PersonalExperience',
+                        name5: '',
                         address5: "",
                         Comment5: "",
                     }, {
-                        name: 'ProjectInfo',
+                        name: '',
                         address: '',
                         name2: '',
                         address2: "",

@@ -7,12 +7,13 @@ import datetime
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from requests_ntlm import HttpNtlmAuth
-import datetime,json,requests,time,simplejson
-from app01.models import UserInfo,lesson_learn,Imgs,ProjectinfoinDCT,Role,Permission,Menu
+import datetime, json, requests, time, simplejson, os
+from app01.models import UserInfo, lesson_learn, Imgs, ProjectinfoinDCT, Role, Permission, Menu
+
 
 # 自定义要执行的task任务
-#在项目manage.py统计目录下cmd或pycharmTerminal运行celery worker -A mydjango -l info -P eventlet，celery -A mydjango beat -l info
-#窗口不能关闭
+# 在项目manage.py统计目录下cmd或pycharmTerminal运行celery worker -A mydjango -l info -P eventlet，celery -A mydjango beat -l info
+# 窗口不能关闭
 @task
 def Ongoing_flag():
     path = settings.BASE_DIR
@@ -21,13 +22,15 @@ def Ongoing_flag():
     with open(file_flag, 'w') as f:  # 设置文件对象
         print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), file=f)
 
+
 @task
 def ProjectSync():
     print("Start")
     DATE_NOW = str(datetime.datetime.now().date())
     importPrjResult = ImportProjectinfoFromDCT()
     path = settings.BASE_DIR
-    file_flag = path + '/logs/' + 'ProjectSync-%s.txt' % (DATE_NOW.split("-")[0] + DATE_NOW.split("-")[1] + DATE_NOW.split("-")[2])
+    file_flag = path + '/logs/' + 'ProjectSync-%s.txt' % (
+                DATE_NOW.split("-")[0] + DATE_NOW.split("-")[1] + DATE_NOW.split("-")[2])
     # print(file_flag)
     with open(file_flag, 'w') as f:  # 设置文件对象
         print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), importPrjResult, file=f)
@@ -36,8 +39,8 @@ def ProjectSync():
     else:
         return "Fail"
 
-def ImportProjectinfoFromDCT():
 
+def ImportProjectinfoFromDCT():
     url = r'http://192.168.1.10/dct/api/ClientSvc/getAllProjectInfo'
     requests.adapters.DEFAULT_RETRIES = 1
     # s = requests.session()
@@ -84,9 +87,9 @@ def ImportProjectinfoFromDCT():
                        "PQE": i['PQE'],
                        "SS": i['SS'],
                        "LD": i['LD'].split("-")[0],
-                       "LDNum": i['LD'].split("-")[1] if len(i['LD'].split("-"))==2 else "",
+                       "LDNum": i['LD'].split("-")[1] if len(i['LD'].split("-")) == 2 else "",
                        "DQAPL": i['DQAPL'].split("-")[0],
-                       "DQAPLNum": i['DQAPL'].split("-")[1] if len(i['DQAPL'].split("-"))==2 else "",
+                       "DQAPLNum": i['DQAPL'].split("-")[1] if len(i['DQAPL'].split("-")) == 2 else "",
                        "ModifiedDate": i['ModifyDate']
                        }
         # print(localPrjCre)
@@ -224,12 +227,12 @@ def ImportProjectinfoFromDCT():
     #                               "ModifiedDate": json.loads(newstr9)['ModifyDate']}
     #             ProjectinfoinDCT.objects.filter(ComPrjCode=i).update(**localPrjUpdate)
 
-
     # print(sameandlocal)
     # print(samePrj)
     # print(nosamePjr)
     # print(numpro)
     return numb
+
 
 @task
 def MailhtmlSync():
@@ -400,6 +403,7 @@ def MailhtmlSync():
     # 发送
     msg.send()
 
+
 @task
 def Mailhtml():  # settings Email设置1-外網qq
     print("Starthtmlmail")
@@ -568,86 +572,109 @@ def Mailhtml():  # settings Email设置1-外網qq
     # 发送
     msg.send()
 
-from exchangelib import Credentials, Account, Message, Mailbox, HTMLBody, Configuration, DELEGATE, NTLM, FileAttachment, CalendarItem
+
+from exchangelib import Credentials, Account, Message, Mailbox, HTMLBody, Configuration, DELEGATE, NTLM, FileAttachment, \
+    CalendarItem
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 from exchangelib.recurrence import Recurrence, WeeklyPattern, DailyPattern, RelativeMonthlyPattern
 from exchangelib.fields import MONDAY, WEDNESDAY, FRIDAY
-from exchangelib.items import MeetingRequest, MeetingCancellation,SEND_TO_ALL_AND_SAVE_COPY
+from exchangelib.items import MeetingRequest, MeetingCancellation, SEND_TO_ALL_AND_SAVE_COPY
 import urllib3
 from datetime import timedelta
+
+
 # 如果需要设置日历提醒，可以添加CalendarItem
 @task
 def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
     # 此句用来消除ssl证书错误，exchange使用自签证书需加上
-    # print(kwargs)
+    print(kwargs)
     BaseProtocol.HTTP_ADAPTER_CLS = NoVerifyHTTPAdapter
     urllib3.disable_warnings()  # 取消SSL安全连接警告
     # 填入你的Exchange服务器地址、用户名和密码
     server = 'webmail.compal.com'
     primary_smtp_address = 'edwin_cao@compal.com'
-    username = 'gi\edwin_cao'
-    password = '~1234qwer'
-    html = '<html><body>Hello happy <blink>OWA user!</blink></body></html>'
+    # username = 'gi\edwin_cao'
+    # password = '~1234qwer'
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    mailaccount_file = os.path.join(BASE_DIR, 'OAmail_account.json')
+    # print(mailaccount_file)
+    if os.path.exists(mailaccount_file):
+        try:
+            with open(mailaccount_file, 'r', encoding='utf-8') as file:
+                data = file.read()
+            username = data.split(",")[0]
+            password = data.split(",")[1]
+            print(username, password)
 
-    # 用凭证连接到Exchange服务器
-    credentials = Credentials(username=username, password=password)
-    config = Configuration(server=server, credentials=credentials, auth_type=NTLM)
-    account = Account(primary_smtp_address=primary_smtp_address, credentials=credentials, config=config, autodiscover=False, access_type=DELEGATE)
 
-    # 邮件
-    mail = Message(
-        account=account,
-        subject='邮件主题',
-        body=HTMLBody(html),
-        to_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-                       Mailbox(email_address='edwin_cao@compal.com')],
-        # cc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-        #                Mailbox(email_address='edwin_cao@compal.com')]
-        # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-        #                Mailbox(email_address='edwin_cao@compal.com')],
-    )
+            html = '<html><body>Hello happy <blink>OWA user!</blink></body></html>'
 
-    # logo_filename = 'logo.png'
-    # with open(logo_filename, 'rb') as f:
-    #     logo = FileAttachment(
-    #         filename=logo_filename,
-    #         content=f.read(),
-    #     )
-    # mail.attach(logo)
-    # 发送邮件
-    mail.send()
+            # 用凭证连接到Exchange服务器
+            credentials = Credentials(username=username, password=password)
+            config = Configuration(server=server, credentials=credentials, auth_type=NTLM)
+            account = Account(primary_smtp_address=primary_smtp_address, credentials=credentials, config=config,
+                              autodiscover=False, access_type=DELEGATE)
 
-    # # 创建日历提醒
-    # start = datetime.datetime.now(tz=account.default_timezone)
-    # # start = datetime.datetime(2017, 9, 1, 11, tzinfo=account.default_timezone)  # 放在CalendarItem外面
-    # end = start + datetime.timedelta(hours=24)
-    # ci = CalendarItem(
-    #     folder=account.calendar,
-    #     subject='Test Appointment',
-    #     body=HTMLBody(html),
-    #     start=start,
-    #     end=end,
-    #     recurrence=Recurrence(
-    #         pattern=DailyPattern(interval=1),
-    #         start=start.date(),
-    #         number=1,)
-    # )
-    # ci.save()  # 用来发送会议邀请邮件ci.save()#用来发送会议邀请邮件
+            # 邮件
+            mail = Message(
+                account=account,
+                subject='邮件主题',
+                body=HTMLBody(html),
+                to_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+                               Mailbox(email_address='edwin_cao@compal.com')],
+                # cc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+                #                Mailbox(email_address='edwin_cao@compal.com')]
+                # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
+                #                Mailbox(email_address='edwin_cao@compal.com')],
+            )
 
-    # # 會議
-    # ci = CalendarItem(
-    #     account=account,
-    #     folder=account.calendar,
-    #     start=datetime.datetime.now(tz=account.default_timezone),
-    #     end=datetime.datetime.now(tz=account.default_timezone) + timedelta(hours=24),
-    #     subject="Test meeting",
-    #     body=HTMLBody(html),
-    #     required_attendees=["edwin_cao@compal.com", "edwin_cao@compal.com"],
-    #     recurrence=Recurrence(
-    #
-    #     )
-    # )
-    # ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
+            # logo_filename = 'logo.png'
+            # with open(logo_filename, 'rb') as f:
+            #     logo = FileAttachment(
+            #         filename=logo_filename,
+            #         content=f.read(),
+            #     )
+            # mail.attach(logo)
+            # 发送邮件
+            mail.send()
+
+            # # 创建日历提醒
+            # start = datetime.datetime.now(tz=account.default_timezone)
+            # # start = datetime.datetime(2017, 9, 1, 11, tzinfo=account.default_timezone)  # 放在CalendarItem外面
+            # end = start + datetime.timedelta(hours=24)
+            # ci = CalendarItem(
+            #     folder=account.calendar,
+            #     subject='Test Appointment',
+            #     body=HTMLBody(html),
+            #     start=start,
+            #     end=end,
+            #     recurrence=Recurrence(
+            #         pattern=DailyPattern(interval=1),
+            #         start=start.date(),
+            #         number=1,)
+            # )
+            # ci.save()  # 用来发送会议邀请邮件ci.save()#用来发送会议邀请邮件
+
+            # # 會議
+            # ci = CalendarItem(
+            #     account=account,
+            #     folder=account.calendar,
+            #     start=datetime.datetime.now(tz=account.default_timezone),
+            #     end=datetime.datetime.now(tz=account.default_timezone) + timedelta(hours=24),
+            #     subject="Test meeting",
+            #     body=HTMLBody(html),
+            #     required_attendees=["edwin_cao@compal.com", "edwin_cao@compal.com"],
+            #     recurrence=Recurrence(
+            #
+            #     )
+            # )
+            # ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
+        except Exception as e:
+            print(str(e))
+
+    else:
+        print("OAmail_account.json不存在")
+
 
 @task
 def scheduleMailOA_CriticalIssue():

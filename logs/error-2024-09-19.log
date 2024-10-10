@@ -1,0 +1,18 @@
+[2024-09-19 17:08:55,783] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /ProjectInfoSearch/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 481, in ProjectInfoSearch
+    modeldata['SS'] = datetime.datetime.strptime(modeldata['SS'], "%Y-%m-%d")
+  File "C:\Python372\lib\_strptime.py", line 577, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+  File "C:\Python372\lib\_strptime.py", line 359, in _strptime
+    (data_string, format))
+ValueError: time data '05/22/2023' does not match format '%Y-%m-%d'
+[2024-09-19 17:08:55,805] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /ProjectInfoSearch/ 500 [1.36, 127.0.0.1:61522]

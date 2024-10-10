@@ -94,6 +94,18 @@ class A31TestProjectLL(models.Model):
     def __str__(self):
         return '{Project}'.format(Project=self.Project)
 
+# class A31reports(models.Model):
+#     # id = models.AutoField(max_length=10, primary_key=True, verbose_name='id')
+#     report = models.ImageField(upload_to='reports/A31/LessonProjectResult/',verbose_name='报告地址')
+#     single = models.CharField(max_length=200,null=True, blank=True,verbose_name='报告名称')
+#     def __unicode__(self):  # __str__ on Python 3
+#         return (self.id,self.report)
+# from django.db.models.signals import pre_delete
+# from django.dispatch.dispatcher import receiver
+# @receiver(pre_delete, sender=A31reports)
+# def mymodel_delete(sender, instance, **kwargs):
+#     # Pass false so FileField doesn't save the model.
+#     instance.report.delete(False)
 
 class A31lessonlearn_Project(models.Model):
     result_choice = (
@@ -108,6 +120,7 @@ class A31lessonlearn_Project(models.Model):
     Projectinfo = models.ForeignKey("A31TestProjectLL", on_delete=True)
     lesson = models.ForeignKey("A31lesson_learn", on_delete=True)
     result = models.CharField(max_length=20, choices=result_choice)
+    # Report = models.ManyToManyField(A31reports, related_name='reports', blank=True, verbose_name='报告表')
     Comment = models.CharField(max_length=1000)
     editor = models.CharField(max_length=100, default='')
     edit_time = models.CharField('edit_time', max_length=26, blank=True, default='')

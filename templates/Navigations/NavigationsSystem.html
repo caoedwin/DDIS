@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {#{% load custom_tag %}#}
 {% load staticfiles %}
-{% block title %}Navigations{% endblock %}
+{% block title %}Systems{% endblock %}
 {% block css %}
     {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
     {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
@@ -21,10 +21,30 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        .my-table {
+            background-image: url("/static/src/hero.jpg"); /* 替换为你的图片路径 */
+            background-size: cover; /* 背景图片覆盖整个表格 */
+            background-repeat: no-repeat; /* 背景图片不重复 */
+            background-position: center; /* 背景图片居中 */
+        }
+
+        .el-table th, .el-table tr {
+            /* background-color: #FFF; */
+            background-color: rgba(255, 255, 255, 0);
+        }
+
         /* 设置行的背景色 */
         .el-table .row-bg-color {
-            {% comment %}background-color: #f7e1b5;{% endcomment %}
-            background-color: #ffffff;
+        {% comment %}background-color: #f7e1b5;{% endcomment %} background-color: rgba(255, 255, 255, 0);
+        }
+
+        .el-table tbody tr:hover > td {
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        /* 设置悬浮行的自定义类 */
+        .row-bg-color:hover > td {
+            background-color: rgba(255, 255, 255, 0); /* 悬浮行的背景色继承父元素的背景色 */
         }
 
         /* 如果需要中空线，可以通过边框样式来实现 */
@@ -38,11 +58,12 @@
 
         .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
             border-right: 1px solid #EBEEF5;
-            border-radius: 20px;
+        {#border-radius: 20px;#}
         }
 
         .el-table td, .el-table th.is-leaf {
-            border-bottom: 10px solid #EBEEF5;
+        {#border-bottom: 10px solid #EBEEF5;#}
+
         }
 
         /* 最后一个单元格的右边界不显示 */
@@ -56,30 +77,76 @@
             border-top: 0;
             color: #FFFFFF;
         }
+
         /*朴素按钮的样式*/
         .el-button--warning.is-plain {
-            color: #E6A23C;
-            background: #fdf6ec;
-            border-color: #f5dab1;
+        {#color: #E6A23C;#}{#background: #fdf6ec;#} border-color: #FFFFFF;
             font-size: 22px;
+            background-color: rgba(255, 255, 255, 0.3);
         }
+
         /*正常按钮的样式*/
         .el-button--warning {
-            color: #FFF;
-            background-color: #E6A23C;
-            font-size: 22px;
+            color: #000000;
+            border-color: #FFFFFF;
+        {#background-color: #E6A23C;#} font-size: 22px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        button, html [type=button] {
+            -webkit-appearance: button;
+            width: 32%;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.0);
+        }
+
+        .wrap-text:hover {
+            background-image: url("/static/images/c1.jpg");
+            color: #fff; /* 悬浮时的文字颜色 */
+            font-size: 20px;
         }
 
         /*butoon 内容转换*/
         .wrap-text {
+            border-color: rgba(255,255,255,0.0);
+            background-color: rgba(255,255,255,0.7) !important;
+            color: #303231;
+            font-family: '楷体', 'KaiTi', serif;
+            font-size: 26px;
             white-space: normal;
             word-break: break-all;
             height: 40px;
             padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
         }
+        /* 英文字体样式 */
+          .wrap-text .eng-font {
+            font-family: 'Arial', sans-serif;
+          }
+
+        .wrap-text.is-disabled, .wrap-text.is-disabled:focus, .wrap-text.is-disabled:hover {
+            border-color: rgba(255,255,255,0.0) !important; /* 禁用时的边框颜色 */
+            color: #595d60 !important; /* 禁用时的文本颜色 */
+            font-family: '楷体', 'KaiTi', serif;
+            background-color: rgba(255,255,255,0.3) !important; /* 禁用时的背景颜色 */
+            box-shadow: none !important; /* 禁用时的阴影 */
+        }
+        .wrap-text.is-disabled:hover {
+            {% comment %}background-image: url("/static/images/c1.jpg");{% endcomment %}
+            border-color: rgba(255,255,255,0.0) !important; /* 禁用时的边框颜色 */
+            color: #595d60 !important; /* 禁用时的文本颜色 */
+            font-family: '楷体', 'KaiTi', serif;
+            background-color: rgba(255,255,255,0.3) !important; /* 禁用时的背景颜色 */
+            box-shadow: none !important; /* 禁用时的阴影 */
+            font-size: 26px;
+        }
 
         .my-table .el-table__row {
-            height: 133px; /* 单元格的高度 */
+            height: 160px; /* 单元格的高度 */
+        }
+
+        /* 去掉鼠标悬浮效果 */
+        .my-table tbody tr:hover > td {
+            background-color: transparent !important
         }
     </style>
 {% endblock %}
@@ -116,8 +183,9 @@
         <div class="tableAround" v-cloak>
 
             <span>
-            <el-table :data="gridData" border height="500" style="width: 100%"
+            <el-table :data="gridData" {% comment %}border{% endcomment %} style="width: 100%"
                       class="my-table"
+
                       row-class-name="row-bg-color">
                 <el-table-column property="name1" :label="judgeSysname()" min-width="16%">
                     <template scope="scope">
@@ -125,7 +193,7 @@
                               {% comment %}<a :href="scope.row.url1" target="_blank"
                                  style="text-decoration:underline;color:blue;">{% endcomment %}
                             <el-button
-                                    :style="{{% comment %}backgroundColor: !scope.row.url1 ? '#00009C' : '#2F2F4F',{% endcomment %}width: '170px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name1"
                                     type="warning"
@@ -142,7 +210,7 @@
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center;">
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name2"
                                     type="warning"
@@ -158,7 +226,7 @@
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name3"
                                     type="warning"
@@ -174,7 +242,7 @@
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                    :style="{width: '170px', height: '100px'}"
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
                                     class="wrap-text"
                                     v-if="scope.row.name4"
                                     type="warning"

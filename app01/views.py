@@ -256,6 +256,7 @@ def ProjectInfoSearch(request):
     # print(ProjectinfoinDCT.objects.all().values("ComPrjCode").distinct().count(),
     #       ProjectinfoinDCT.objects.all().values("ComPrjCode").count(),
     #       ProjectinfoinDCT.objects.all().values("ComPrjCode", "Year").distinct().count())
+    DQAnum_no_account = []
     permission = 1
     canExport = 0
     roles = []
@@ -384,8 +385,7 @@ def ProjectInfoSearch(request):
                         rownum = 0
                         startupload = 0
                         # print(xlsxlist)
-                        create_list = []
-                        update_list = []
+                        uploadxlsxlist = []
                         for i in xlsxlist:
                             # print(type(i),i)
                             rownum += 1
@@ -394,7 +394,8 @@ def ProjectInfoSearch(request):
                                 if key in headermodel_Projectinfo.keys():
                                     # print(headermodel_Projectinfo[key],value)
                                     modeldata[headermodel_Projectinfo[key]] = value
-                                modeldata['ModifiedDate'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                modeldata['ModifiedDate'] = datetime.datetime.now().strftime('%m/%d/%Y %I:%M:%S %p')
+                                # modeldata['ModifiedDate'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                             # print(modeldata)
 
                             if 'Customer' in modeldata.keys():
@@ -470,7 +471,14 @@ def ProjectInfoSearch(request):
                                                             """ % rownum
                                 break
                             if 'SS' in modeldata.keys():
-                                startupload = 1
+                                if len(modeldata['SS'].split('-')) != 3 and len(modeldata['SS']) != 10 and len(modeldata['SS'].split('-')[0]) != 4:
+                                    startupload = 0
+                                    errMsg = """
+                                            第"%s"條數據，SS/MP Date格式不对，请使用YYYY-MM-DD格式
+                                                                                                """ % rownum
+                                else:
+                                    modeldata['SS'] = modeldata['SS'].split('-')[1] + "/" + modeldata['SS'].split('-')[2] + "/" + modeldata['SS'].split('-')[0] + " 12:00:00 AM"
+                                    startupload = 1
                             else:
                                 # canEdit = 0
                                 startupload = 0
@@ -489,6 +497,8 @@ def ProjectInfoSearch(request):
                                 break
                             if 'DQAPL' in modeldata.keys():
                                 startupload = 1
+                                if not UserInfo.objects.filter(account=modeldata['DQAPLNum']):
+                                    DQAnum_no_account.append([modeldata['DQAPLNum'], modeldata['DQAPL']])
                             else:
                                 # canEdit = 0
                                 startupload = 0
@@ -507,6 +517,8 @@ def ProjectInfoSearch(request):
                                 break
                             if 'DQAQM' in modeldata.keys():
                                 startupload = 1
+                                if not UserInfo.objects.filter(account=modeldata['DQAQMNum']):
+                                    DQAnum_no_account.append([modeldata['DQAQMNum'], modeldata['DQAQM']])
                             else:
                                 # canEdit = 0
                                 startupload = 0
@@ -514,16 +526,34 @@ def ProjectInfoSearch(request):
                                         第"%s"條數據，DQAQM不能爲空
                                                             """ % rownum
                                 break
-                            if ProjectinfoinDCT.objects.filter(Customer=modeldata['Customer'], ComPrjCode=modeldata['ComPrjCode']):
-                                update_list.append(modeldata)
-                            else:
-                                create_list.append(ProjectinfoinDCT(**modeldata))  # object(**dict)
+
+                            uploadxlsxlist.append(modeldata)
                             # print(create_list)
                         # print(errMsg, startupload)
                         # print(create_list,)
                         # print(startupload)
                         # print(rownum, type(rownum))
                         if startupload:
+                            # 让数据可以从有值更新为无值
+                            create_list = []
+                            update_list = []
+                            DevieModelfiedlist = []
+                            for i in ProjectinfoinDCT._meta.fields:
+                                if i.name != 'id':
+                                    DevieModelfiedlist.append([i.name, i.get_internal_type()])
+                            for i in uploadxlsxlist:
+                                for j in DevieModelfiedlist:
+                                    if j[0] not in i.keys():
+                                        # print(j)
+                                        if j[1] == "DateField":
+                                            i[j[0]] = None
+                                        else:
+                                            i[j[0]] = ''
+                                if ProjectinfoinDCT.objects.filter(Customer=i['Customer'],
+                                                                   ComPrjCode=i['ComPrjCode']):
+                                    update_list.append(i)
+                                else:
+                                    create_list.append(ProjectinfoinDCT(**i))  # object(**dict)
                             try:
                                 with transaction.atomic():
                                     if create_list:
@@ -531,6 +561,8 @@ def ProjectInfoSearch(request):
                                     if update_list:
                                         for i in update_list:
                                             ProjectinfoinDCT.objects.filter(Customer=i['Customer'], ComPrjCode=i['ComPrjCode']).update(**i)
+                                    if DQAnum_no_account:
+                                        errMsg = """%s 以上用户没有DDIS账户，请联系管理员注册，否则可能会影响邮件通知""" % str(DQAnum_no_account)
                             except Exception as e:
                                 # alert = '此数据正被其他使用者编辑中...'
                                 alert = str(e)
@@ -633,10 +665,26 @@ def Navigations(request):
         Skin = "/static/src/blue.jpg"
     weizhi = "Category"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
-    data = {}
-    if request.method == "GET":
+    tableData = [{
+        "lie1": "部門管理",
+        "lie2": '專案管理',
+        "lie3": '測試管理'
+    }, {
+        "lie1": '品質管控',
+        "lie2": '資產管理',
+        "lie3": '智能測試'
+    }, {
+        "lie1": '討論交流',
+        "lie2": '其他',
+        "lie3": '...'
+    }
+    ]
+    data = {
+        "tableData": tableData,
+    }
+    if request.method == "POST":
         # print(request.GET)
-        if request.GET.get("action") == "first":
+        if request.POST.get("isGetData") == "first":
             # importPrjResult = ImportProjectinfoFromDCT()
             # if importPrjResult:
             #     data['result'] = 1
@@ -683,25 +731,25 @@ def Navigations_Category_axios(request):
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     All_system_dic = {
-        "DepartmentManage": [
+        "部門管理": [
         {
-        'name': 'ProjectComparison',
+        'name': '資本支出',
         'address': "",
         'Comment': "",
-        'name2': 'CapitalExpenditure',
+        'name2': '公共區域管理',
         'address2': "",
         'Comment2': "",
-        'name3': 'Public Area',
+        'name3': '人員信息',
         'address3': "",
         'Comment3': "",
-        'name4': 'PersonalInfo',
+        'name4': '人員測試履歷',
         'address4': "",
         'Comment4': "",
     }, {
-        'name': 'PersonalExperience',
+        'name': '',
         'address': "",
         'Comment': "",
-        'name2': 'ProjectInfo',
+        'name2': '',
         'address2': "",
         'Comment2': "",
         'name3': '',
@@ -724,69 +772,28 @@ def Navigations_Category_axios(request):
         'address4': "",
         'Comment4': "",}
                         ],
-        "TestManage": [
+        "專案管理": [
             {
-                'name': 'PackageGValue',
+                'name': '專案預算',
                 'address': "",
                 'Comment': "",
-                'name2': 'CDM',
+                'name2': '專案信息',
                 'address2': "",
                 'Comment2': "",
-                'name3': 'Bouncing',
+                'name3': 'PackageGValue',
                 'address3': "",
                 'Comment3': "",
-                'name4': 'SpecDownload',
+                'name4': 'CDM',
                 'address4': "",
                 'Comment4': "",
             }, {
-                'name': 'TestPlanME',
-                'address': "",
-                'Comment': "",
-                'name2': 'TestPlanSW',
-                'address2': "",
-                'Comment2': "",
-                'name3': 'TestPlanSW-OR',
-                'address3': "",
-                'Comment3': "",
-                'name4': 'TestPlanINV',
-                'address4': "",
-                'Comment4': "",},
-            {
-                'name': 'MQM',
-                'address': "",
-                'Comment': "",
-                'name2': 'CQM',
-                'address2': "",
-                'Comment2': "",
-                'name3': 'OBIResult',
-                'address3': "",
-                'Comment3': "",
-                'name4': '',
-                'address4': "",
-                'Comment4': "", }
-        ],
-        "TestTool": [
-            {
-                'name': 'Device',
+                'name': 'Bouncing',
                 'address': "",
                 'Comment': "",
                 'name2': 'Driver',
                 'address2': "",
                 'Comment2': "",
                 'name3': 'Tool',
-                'address3': "",
-                'Comment3': "",
-                'name4': '',
-                'address4': "",
-                'Comment4': "",
-            }, {
-                'name': '',
-                'address': "",
-                'Comment': "",
-                'name2': '',
-                'address2': "",
-                'Comment2': "",
-                'name3': '',
                 'address3': "",
                 'Comment3': "",
                 'name4': '',
@@ -805,9 +812,51 @@ def Navigations_Category_axios(request):
                 'Comment3': "",
                 'name4': '',
                 'address4': "",
-                'Comment4': "",}
+                'Comment4': "", }
         ],
-        "QualityManage": [
+        "測試管理": [
+            {
+                'name': '測試規格下載',
+                'address': "",
+                'Comment': "",
+                'name2': '機構測試計劃',
+                'address2': "",
+                'Comment2': "",
+                'name3': '軟體測試計劃',
+                'address3': "",
+                'Comment3': "",
+                'name4': '軟體測試計劃OSR',
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': 'INV測試計劃',
+                'address': "",
+                'Comment': "",
+                'name2': 'MQM',
+                'address2': "",
+                'Comment2': "",
+                'name3': 'CQM',
+                'address3': "",
+                'Comment3': "",
+                'name4': 'OBI測試結果',
+                'address4': "",
+                'Comment4': "",},
+            {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "", }
+        ],
+
+        "品質管控": [
             {
                 'name': "NonDQA-Lesson",
                 'address': "",
@@ -848,25 +897,25 @@ def Navigations_Category_axios(request):
                 'address4': "",
                 'Comment4': "",}
         ],
-        "AssetsManage": [
+        "資產管理": [
             {
-                'name': "Adapter&PowerCode",
+                'name': "電源管理",
                 'address': "",
                 'Comment': "",
-                'name2': "櫃椅",
+                'name2': "櫃椅管理",
                 'address2': "",
                 'Comment2': "",
-                'name3': "工作機",
+                'name3': "工作機管理",
                 'address3': "",
                 'Comment3': "",
                 'name4': "個人設備",
                 'address4': "",
                 'Comment4': "",
             }, {
-                'name': "TumHistory-Unit",
+                'name': "測試機臺管理",
                 'address': "",
                 'Comment': "",
-                'name2': "TumHistory-Materia",
+                'name2': "材料管理",
                 'address2': "",
                 'Comment2': "",
                 'name3': '',
@@ -890,22 +939,22 @@ def Navigations_Category_axios(request):
                 'Comment4': "",
                 }
         ],
-        "Others": [
+        "智能測試": [
             {
-                'name': "RTMS",
+                'name': "智能测试",
                 'address': "",
                 'Comment': "",
-                'name2': "Discussing",
+                'name2': "",
                 'address2': "",
                 'Comment2': "",
-                'name3': "DCT",
+                'name3': "",
                 'address3': "",
                 'Comment3': "",
-                'name4': "EQUIP",
+                'name4': "",
                 'address4': "",
                 'Comment4': "",
             }, {
-                'name': 'Automation',
+                'name': '',
                 'address': "",
                 'Comment': "",
                 'name2': '',
@@ -932,6 +981,92 @@ def Navigations_Category_axios(request):
                 'Comment4': "",
                  }
         ],
+
+        "討論交流": [
+            {
+                'name': "讨论版",
+                'address': "",
+                'Comment': "",
+                'name2': "",
+                'address2': "",
+                'Comment2': "",
+                'name3': "",
+                'address3': "",
+                'Comment3': "",
+                'name4': "",
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "",
+            }
+        ],
+        "Others": [
+            {
+                'name': "",
+                'address': "",
+                'Comment': "",
+                'name2': "",
+                'address2': "",
+                'Comment2': "",
+                'name3': "",
+                'address3': "",
+                'Comment3': "",
+                'name4': "",
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "",
+            }
+        ],
+
     }
     gridData_Category = []
     Navigations_Category_name = ''
@@ -945,12 +1080,12 @@ def Navigations_Category_axios(request):
                     "gridData_Category": gridData_Category,
                 }
                 response = HttpResponse(json.dumps(data), content_type="application/json")
-                response.set_cookie('Navigations_Category_name', request.POST.get("Categoryname"), max_age=3600 * 24 * 7)
+                response.set_cookie('Navigations_Category_name', json.dumps(request.POST.get("Categoryname")), max_age=3600 * 24 * 7)
 
                 return response
             else:
-                Navigations_Category_name = request.COOKIES.get('Navigations_Category_name')
-                # print(Navigations_Category_name)
+                Navigations_Category_name = json.loads(request.COOKIES.get('Navigations_Category_name'))
+                # print(Navigations_Category_name,'category_axios')
                 gridData_Category = All_system_dic[Navigations_Category_name]
             # importPrjResult = ImportProjectinfoFromDCT()
             # if importPrjResult:
@@ -1599,27 +1734,7 @@ def Navigations_system_axios(request):
     EQUIP_add = 'http://kspqiswww'
     All_system_dic = {
         # 部门管理
-        "ProjectComparison": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/ProjectComparison/ProjectComparison_Summary/", "Comment1": "",#C38
-             "name2": "A31", "url2": "", "Comment2": "",#A31
-             "name3": "A32", "url3": "", "Comment3": "",#A32
-             "name4": 'ABO', "url4": "", "Comment4": "",#ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",#CQT88
-             "name2": "T88", "url2": "", "Comment2": "",#T88
-             "name3": "T89", "url3": "", "Comment3": "",#T89
-             "name4": 'T99', "url4": "", "Comment4": "",#T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "CapitalExpenditure": [
+        "資本支出": [
             {"Comment": "",
              "name1": "C38", "url1": "/CapitalExpenditure/CapitalExpenditure_Summary/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -1627,19 +1742,19 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "Public Area": [
+        "公共區域管理": [
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalInfo/PublicArea/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -1647,39 +1762,39 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "PersonalInfo": [
+        "人員信息": [
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalInfo/PersonalInfo-search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             "name2": "A31", "url2": "/PersonalInfo/PersonalInfo-search/", "Comment2": "",  # A31
+             "name3": "A32", "url3": "/PersonalInfo/PersonalInfo-search/", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "/PersonalInfo/PersonalInfo-search/", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "PersonalExperience": [
+        "人員測試履歷": [
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalExperience/Summary/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -1687,34 +1802,316 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "ProjectInfo": [
+        # 專案管理
+        "專案預算": [
             {"Comment": "",
-             "name1": "C38", "url1": "/ProjectInfoSearch/", "Comment1": "",  # C38
+             "name1": "C38", "url1": "/ProjectComparison/ProjectComparison_Summary/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
              "name3": "A32", "url3": "", "Comment3": "",  # A32
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "專案信息": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/ProjectInfoSearch/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "/ProjectInfoSearch/", "Comment2": "",  # A31
+             "name3": "A32", "url3": "/ProjectInfoSearch/", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "PackageGValue": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/Package/Package-search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "CDM": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/CDM/CDM-search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "Bouncing": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/Bouncing/Bouncing-search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "Driver": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/DriverTool/DriverList_search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "/ABODriverTool/ABODriverList_search/", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "Tool": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/DriverTool/ToolList_search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        # 測試管理
+        "測試規格下載": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/SpecDownload/SpecDownload-summary/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "機構測試計劃": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/TestPlanME/TestPlanME-summary/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "軟體測試計劃": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/TestPlanSW/TestPlanSW-summary/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "/ABOTestPlan/ABOTestPlan_summary/", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "軟體測試計劃OSR": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/TestPlanSWOS/TestPlanSWOS-summary/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "INV測試計劃": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/INVGantt/INVGantt-summary/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "MQM": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/MQM/MQM_search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "CQM": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/CQM/CQM_search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+        "OBI測試結果": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/OBIDeviceResult/OBIDeviceResult_search/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1728,14 +2125,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1748,14 +2145,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "/ABOQIL/ABOQIL_searchbyproject/", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1768,14 +2165,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "/ABOProjectLessonL/Lesson_SearchByProject/", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "", # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1788,14 +2185,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # A39
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1808,14 +2205,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # A39
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1828,14 +2225,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # A39
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1848,14 +2245,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # A39
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -1868,241 +2265,22 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment2": "",  # T88
-             "name3": "T89", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",
+             # CQT88
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment1": "",  # AIO
+             "name1": "", "url1": "", "Comment1": "",  # AIO
              "name2": "", "url2": "", "Comment2": "",  # A39
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        # 測試管理
-        "PackageGValue": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/Package/Package-search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "CDM": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/CDM/CDM-search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "Bouncing": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/Bouncing/Bouncing-search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "SpecDownload": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/SpecDownload/SpecDownload-summary/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "TestPlanME": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/TestPlanME/TestPlanME-summary/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "TestPlanSW": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/TestPlanSW/TestPlanSW-summary/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "/ABOTestPlan/ABOTestPlan_summary/", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "/TestPlanSW/TestPlanSW-summary/", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "TestPlanSW-OR": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/TestPlanSWOS/TestPlanSWOS-summary/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "TestPlanINV": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/INVGantt/INVGantt-summary/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "MQM": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/MQM/MQM_search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "CQM": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/CQM/CQM_search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "OBIResult": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/OBIDeviceResult/OBIDeviceResult_search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        # 測試工具
-        "Device": [
+
+        # 資產管理
+        "測試設備管理": [
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/DeviceLNV/BorrowedDeviceLNV/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2110,60 +2288,20 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": DDMS_add + "/DeviceABO/BorrowedDeviceABO/", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": DDMS_add + "/DeviceCQT88/BorrowedDeviceCQT88/", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "A39", "url4": DDMS_add + "/DeviceA39/BorrowedDeviceA39/", "Comment4": "",  # A39
+
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "A39OBI", "url2": DDMS_add + "/DeviceA39/BorrowedDeviceA39/", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # AIO
+             "name2": "", "url2": "", "Comment2": "",# CQT88
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "Driver": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/DriverTool/DriverList_search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "/ABODriverTool/ABODriverList_search/", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "Tool": [
-            {"Comment": "",
-             "name1": "C38", "url1": "/DriverTool/ToolList_search/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        # 資產管理
-        "Adapter&PowerCode": [
+        "電源管理": [
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/AdapterPowerCode/BorrowedAdapter/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2171,19 +2309,19 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "櫃椅": [
+        "櫃椅管理": [
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/ChairCabinetMS/BorrowedChairCabinet/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2191,19 +2329,19 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "工作機": [
+        "工作機管理": [
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/ComputerMS/BorrowedComputer/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2211,14 +2349,14 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
@@ -2231,19 +2369,19 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": DDMS_add + "/Summary_ABO/", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "TumHistory-Unit": [
+        "測試機臺查詢": [
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryTUM/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2251,19 +2389,19 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        "TumHistory-Materia": [
+        "材料查詢": [
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryMateria/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2271,100 +2409,20 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
-        # 其他
-        "RTMS": [
-            {"Comment": "",
-             "name1": "C38", "url1": RTMS_add + "/index/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "Discussing": [
-            {"Comment": "",
-             "name1": "C38", "url1": Discussing_add + "/index/", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "DCT": [
-            {"Comment": "",
-             "name1": "C38", "url1": DCT_add + "/DCT/RealTime/Index", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "EQUIP": [
-            {"Comment": "",
-             "name1": "C38", "url1": EQUIP_add + "/DQA_ELR/index.html", "Comment1": "",  # C38
-             "name2": "A31", "url2": "", "Comment2": "",  # A31
-             "name3": "A32", "url3": "", "Comment3": "",  # A32
-             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
-             },
-            {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
-             },
-            {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
-             "name3": "", "url3": "", "Comment3": "",  #
-             "name4": '', "url4": "", "Comment4": "",  #
-             },
-        ],
-        "Automation": [
+        # 智能测试
+        "智能测试": [
             {"Comment": "",
              "name1": "C38", "url1": "/AutoResult/AutoResult_search/", "Comment1": "",  # C38
              "name2": "A31", "url2": "", "Comment2": "",  # A31
@@ -2372,18 +2430,102 @@ def Navigations_system_axios(request):
              "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
              },
             {"Comment": "",
-             "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
-             "name2": "T88", "url2": "", "Comment2": "",  # T88
-             "name3": "T89", "url3": "", "Comment3": "",  # T89
-             "name4": 'T99', "url4": "", "Comment4": "",  # T99
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
              },
             {"Comment": "",
-             "name1": "AIO", "url1": "", "Comment1": "",  # AIO
-             "name2": "", "url2": "", "Comment2": "",  # A39
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
              "name3": "", "url3": "", "Comment3": "",  #
              "name4": '', "url4": "", "Comment4": "",  #
              },
         ],
+        # 讨论交流
+        "讨论版": [
+            {"Comment": "",
+             "name1": "C38", "url1": Discussing_add + "/index/", "Comment1": "",  # C38
+             "name2": "A31", "url2": "", "Comment2": "",  # A31
+             "name3": "A32", "url3": "", "Comment3": "",  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "",  # T88
+             "name2": "T89", "url2": "", "Comment2": "",  # T89
+             "name3": 'T99', "url3": "", "Comment3": "",  # T99
+             "name4": "", "url4": "", "Comment4": "",  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "",  # CQT88
+             "name2": "", "url2": "", "Comment2": "",  # AIO
+             "name3": "", "url3": "", "Comment3": "",  #
+             "name4": '', "url4": "", "Comment4": "",  #
+             },
+        ],
+
+        # # 其他
+        # "RTMS": [
+        #     {"Comment": "",
+        #      "name1": "C38", "url1": RTMS_add + "/index/", "Comment1": "",  # C38
+        #      "name2": "A31", "url2": "", "Comment2": "",  # A31
+        #      "name3": "A32", "url3": "", "Comment3": "",  # A32
+        #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+        #      },
+        #     {"Comment": "",
+        #      "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
+        #      "name2": "T88", "url2": "", "Comment2": "",  # T88
+        #      "name3": "T89", "url3": "", "Comment3": "",  # T89
+        #      "name4": 'T99', "url4": "", "Comment4": "",  # T99
+        #      },
+        #     {"Comment": "",
+        #      "name1": "AIO", "url1": "", "Comment1": "",  # AIO
+        #      "name2": "", "url2": "", "Comment2": "",  # A39
+        #      "name3": "", "url3": "", "Comment3": "",  #
+        #      "name4": '', "url4": "", "Comment4": "",  #
+        #      },
+        # ],
+        # "DCT": [
+        #     {"Comment": "",
+        #      "name1": "C38", "url1": DCT_add + "/DCT/RealTime/Index", "Comment1": "",  # C38
+        #      "name2": "A31", "url2": "", "Comment2": "",  # A31
+        #      "name3": "A32", "url3": "", "Comment3": "",  # A32
+        #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+        #      },
+        #     {"Comment": "",
+        #      "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
+        #      "name2": "T88", "url2": "", "Comment2": "",  # T88
+        #      "name3": "T89", "url3": "", "Comment3": "",  # T89
+        #      "name4": 'T99', "url4": "", "Comment4": "",  # T99
+        #      },
+        #     {"Comment": "",
+        #      "name1": "AIO", "url1": "", "Comment1": "",  # AIO
+        #      "name2": "", "url2": "", "Comment2": "",  # A39
+        #      "name3": "", "url3": "", "Comment3": "",  #
+        #      "name4": '', "url4": "", "Comment4": "",  #
+        #      },
+        # ],
+        # "EQUIP": [
+        #     {"Comment": "",
+        #      "name1": "C38", "url1": EQUIP_add + "/DQA_ELR/index.html", "Comment1": "",  # C38
+        #      "name2": "A31", "url2": "", "Comment2": "",  # A31
+        #      "name3": "A32", "url3": "", "Comment3": "",  # A32
+        #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
+        #      },
+        #     {"Comment": "",
+        #      "name1": "CQT88", "url1": "", "Comment1": "",  # CQT88
+        #      "name2": "T88", "url2": "", "Comment2": "",  # T88
+        #      "name3": "T89", "url3": "", "Comment3": "",  # T89
+        #      "name4": 'T99', "url4": "", "Comment4": "",  # T99
+        #      },
+        #     {"Comment": "",
+        #      "name1": "AIO", "url1": "", "Comment1": "",  # AIO
+        #      "name2": "", "url2": "", "Comment2": "",  # A39
+        #      "name3": "", "url3": "", "Comment3": "",  #
+        #      "name4": '', "url4": "", "Comment4": "",  #
+        #      },
+        # ],
+
     }
     data = {}
     gridData = []

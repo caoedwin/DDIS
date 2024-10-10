@@ -26,7 +26,6 @@
             background-size: cover; /* 背景图片覆盖整个表格 */
             background-repeat: no-repeat; /* 背景图片不重复 */
             background-position: center; /* 背景图片居中 */
-            opacity: 1;
         }
 
         /* 设置行的背景色 */
@@ -90,16 +89,16 @@
         .wrap-text:hover {
           background-image: url("/static/images/c1.jpg");
           color: #fff; /* 悬浮时的文字颜色 */
-            font-size: 45px;
+            font-size: 20px;
         }
 
         /*butoon 内容转换*/
         .wrap-text {
             border-color: rgba(255,255,255,0.0);
-            background-color: rgba(255,255,255,0.7) !important;
-            color: #0b0b0b;
+            background-color: rgba(255,255,255,0.5) !important;
+            color: #595d60;
             font-family: '楷体', 'KaiTi', serif;
-            font-size: 35px;
+            font-size: 26px;
             white-space: normal;
             word-break: break-all;
             height: 40px;
@@ -111,7 +110,7 @@
           }
 
         .my-table .el-table__row {
-            height: 160px; /* 单元格的高度 */
+            height: 180px; /* 单元格的高度 */
         }
         /* 去掉鼠标悬浮效果 */
         .my-table tbody tr:hover > td {
@@ -146,17 +145,20 @@
 {% endblock %}
 {% block content %}
     <div id="app" {% comment %}v-pre{% endcomment %}>
-        <template>
-            <el-table
-                    :data="this.tableData"
-                    class="my-table"
-                    show-header="false"
-                    style="width: 100%">
-                <el-table-column prop="lie1" label="" min-width="20%">
-                    <template scope="scope">
+        <div class="tableAround" v-cloak>
+
+                <span>
+                <el-table :data="tableData"
+                        {% comment %}border{% endcomment %}
+                          class="my-table"
+                          show-header="false"
+                          style="width: 100%"
+                          row-class-name="row-bg-color">
+                    <el-table-column property="lie1" :label="" min-width="20%">
+                        <template scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                              :style="{width: '70%', height: '120px'}"
+                                              :style="{width: '200px', height: '100px'}"
                                               class="wrap-text"
                                               type="warning"
                                               {% comment %}plain{% endcomment %}
@@ -165,12 +167,12 @@
                                           ${ scope.row.lie1 }</el-button>
                             </div>
                         </template>
-                </el-table-column>
-                <el-table-column prop="lie2" label="" min-width="20%">
-                    <template scope="scope">
+                    </el-table-column>
+                    <el-table-column property="lie2" :label="" min-width="20%">
+                        <template scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                              :style="{width: '70%', height: '120px'}"
+                                              :style="{width: '200px', height: '100px'}"
                                               class="wrap-text"
                                               type="warning"
                                               {% comment %}plain{% endcomment %}
@@ -178,13 +180,13 @@
                                       >
                                           ${ scope.row.lie2 }</el-button>
                             </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="lie3" label=""  min-width="20%">
-                    <template scope="scope">
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="lie3" :label="" min-width="20%">
+                        <template scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                              :style="{width: '70%', height: '120px'}"
+                                              :style="{width: '200px', height: '100px'}"
                                               class="wrap-text"
                                               type="warning"
                                               {% comment %}plain{% endcomment %}
@@ -194,11 +196,11 @@
                             </div>
                             {% comment %}</el-popover>{% endcomment %}
                         </template>
-                </el-table-column>
-            </el-table>
-        </template>
-
-    </div>
+                    </el-table-column>
+                </el-table>
+                </span>
+        </div>
+        </div>
 {% endblock %}
 {% block scripts %}
 
@@ -253,7 +255,7 @@
                 }
             },
             mounted() {
-                {#this.getdata("first")#}
+                this.getdata("first")
             },
             methods: {
                 getdata: function (e) {

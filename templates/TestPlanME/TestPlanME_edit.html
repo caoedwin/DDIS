@@ -1176,6 +1176,10 @@
                  case "H1-27" :
                  case "H1-30" :
                  case "H1-31" :
+                 case "H1-5 #1-2" :
+                 case "H1-5 #2-2" :
+                 case "H1-5 #3-1" :
+                 case "H1-5 #3-2" :
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1207,6 +1211,10 @@
               switch (this.tableData[i].ItemNo) {
                  case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTM)/20)?0:(this.NTU[i] * this.tableData[i].TTM)/20; break;
                  case "H1-5 #1-1" :
+                 case "H1-5 #1-2" :
+                 case "H1-5 #2-2" :
+                 case "H1-5 #3-1" :
+                 case "H1-5 #3-2" :
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1246,6 +1254,10 @@
                  case "H1-27" :
                  case "H1-30" :
                  case "H1-31" :
+                 case "H1-5 #1-2" :
+                 case "H1-5 #2-2" :
+                 case "H1-5 #3-1" :
+                 case "H1-5 #3-2" :
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1283,7 +1295,11 @@
                  case "EELP+ 03":
                  case "EELP+ 04":
                  case "EELP+ 05":
-                  case "H1-5 #1-1" :value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:this.tableData[i].TTM; break;
+                 case "H1-5 #1-2" :
+                 case "H1-5 #2-2" :
+                 case "H1-5 #3-1" :
+                 case "H1-5 #3-2" :
+                 case "H1-5 #1-1" :value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:this.tableData[i].TTM; break;
                  default : value[i] =isNaN(this.RTU[i] * this.tableData[i].TTM)?0:(this.RTU[i] * this.tableData[i].TTM);
              }
          }
