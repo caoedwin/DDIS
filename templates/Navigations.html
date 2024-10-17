@@ -31,14 +31,13 @@
 
         /* 设置行的背景色 */
         .el-table .row-bg-color {
-        {% comment %}background-color: #f7e1b5;{% endcomment %}
-            background-color: rgba(255, 255, 255, 0);
-        }
-        .el-table th, .el-table tr {
-            /* background-color: #FFF; */
-            background-color: rgba(255,255,255,0);
+        {% comment %}background-color: #f7e1b5;{% endcomment %} background-color: rgba(255, 255, 255, 0);
         }
 
+        .el-table th, .el-table tr {
+            /* background-color: #FFF; */
+            background-color: rgba(255, 255, 255, 0);
+        }
 
         /* 如果需要中空线，可以通过边框样式来实现 */
         .el-table .cell {
@@ -51,11 +50,11 @@
 
         .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
             border-right: 1px solid #EBEEF5;
-            {#border-radius: 20px;#}
+        {#border-radius: 20px;#}
         }
 
         .el-table td, .el-table th.is-leaf {
-            {#border-bottom: 10px solid #EBEEF5;#}
+        {#border-bottom: 10px solid #EBEEF5;#}
 
         }
 
@@ -88,34 +87,43 @@
         }
 
         .wrap-text:hover {
-          background-image: url("/static/images/c1.jpg");
-          color: #fff; /* 悬浮时的文字颜色 */
+            background-image: url("/static/images/c1.jpg");
+            color: #fff; /* 悬浮时的文字颜色 */
             font-size: 45px;
         }
 
         /*butoon 内容转换*/
+        @font-face {
+            font-family: "MicrosoftvistaKaiti";
+            font-weight: normal;
+            font-style: normal;
+            src: url("/static/fonts/microsoftfont/MicrosoftvistaKaiti.ttf") format('truetype');
+        }
+
         .wrap-text {
-            border-color: rgba(255,255,255,0.0);
-            background-color: rgba(255,255,255,0.7) !important;
+            border-color: rgba(255, 255, 255, 0.0);
+            background-color: rgba(255, 255, 255, 0.7) !important;
             color: #0b0b0b;
-            font-family: '楷体', 'KaiTi', serif;
+            font-family: 'MicrosoftvistaKaiti', sans-serif;
             font-size: 35px;
             white-space: normal;
             word-break: break-all;
             height: 40px;
             padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
         }
+
         /* 英文字体样式 */
-          .wrap-text .eng-font {
+        .wrap-text .eng-font {
             font-family: 'Arial', sans-serif;
-          }
+        }
 
         .my-table .el-table__row {
             height: 160px; /* 单元格的高度 */
         }
+
         /* 去掉鼠标悬浮效果 */
         .my-table tbody tr:hover > td {
-          background-color: transparent !important
+            background-color: transparent !important
         }
     </style>
 {% endblock %}
@@ -154,46 +162,49 @@
                     style="width: 100%">
                 <el-table-column prop="lie1" label="" min-width="20%">
                     <template scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                              :style="{width: '70%', height: '120px'}"
-                                              class="wrap-text"
-                                              type="warning"
-                                              {% comment %}plain{% endcomment %}
-                                              @click="fetchData(scope.row.lie1)"
-                                      >
-                                          ${ scope.row.lie1 }</el-button>
-                            </div>
-                        </template>
+                                    :style="{width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key1)"
+                            >
+                                ${ scope.row.lie1 }
+                            </el-button>
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="lie2" label="" min-width="20%">
                     <template scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                              :style="{width: '70%', height: '120px'}"
-                                              class="wrap-text"
-                                              type="warning"
-                                              {% comment %}plain{% endcomment %}
-                                              @click="fetchData(scope.row.lie2)"
-                                      >
-                                          ${ scope.row.lie2 }</el-button>
-                            </div>
+                                    :style="{width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key2)"
+                            >
+                                ${ scope.row.lie2 }
+                            </el-button>
+                        </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="lie3" label=""  min-width="20%">
+                <el-table-column prop="lie3" label="" min-width="20%">
                     <template scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                              :style="{width: '70%', height: '120px'}"
-                                              class="wrap-text"
-                                              type="warning"
-                                              {% comment %}plain{% endcomment %}
-                                              @click="fetchData(scope.row.lie3)"
-                                      >
-                                          ${ scope.row.lie3 }</el-button>
-                            </div>
-                            {% comment %}</el-popover>{% endcomment %}
-                        </template>
+                                    :style="{width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key3)"
+                            >
+                                ${ scope.row.lie3 }
+                            </el-button>
+                        </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
                 </el-table-column>
             </el-table>
         </template>
@@ -238,16 +249,26 @@
                 return {
                     tableData: [{
                         lie1: '部門管理',
+                        Key1: 'DepartMent',
                         lie2: '專案管理',
-                        lie3: '測試管理'
+                        Key2: 'Project',
+                        lie3: '資產管理',
+                        Key3: 'Property',
+
                     }, {
-                        lie1: '品質管控',
-                        lie2: '資產管理',
-                        lie3: '智能測試'
+                        lie1: '品質管理',
+                        Key1: 'Quality',
+                        lie2: '預算管理',
+                        Key2: 'Budget',
+                        lie3: '測試數據',
+                        Key3: 'TestData',
                     }, {
-                        lie1: '討論交流',
-                        lie2: '其他',
-                        lie3: '...'
+                        lie1: '智能測試',
+                        Key1: 'Automation',
+                        lie2: '討論交流',
+                        Key2: 'Discussing',
+                        lie3: '其他',
+                        Key3: 'Others'
                     }
                     ]
                 }

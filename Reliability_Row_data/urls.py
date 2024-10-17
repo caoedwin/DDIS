@@ -73,6 +73,8 @@ urlpatterns = [
     path(r'Navigations_Category/', views.Navigations_Category_axios),
     path(r'Navigations_system/<str:name>/', views.Navigations_system, name='Navigations_system'),
     path(r'Navigations_system/', views.Navigations_system_axios),
+    path(r'Navigations_customer/<str:customer>/', views.Navigations_customer, name='Navigations_customer'),
+    path(r'Navigations_customer/', views.Navigations_customer_axios),
     path(r'PermInfo/', views.PermInfo_axios),
     path(r'Lesson_upload/', views.Lesson_upload),
     path(r'Lesson_edit/', views.Lesson_edit),

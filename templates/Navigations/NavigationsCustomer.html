@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Systems{% endblock %}
+{% block css %}
+    {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
+    <style>
+        /*style.css：2714中设置最后一列是right*/
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .my-table {
+            background-image: url("/static/src/hero.jpg"); /* 替换为你的图片路径 */
+            background-size: cover; /* 背景图片覆盖整个表格 */
+            background-repeat: no-repeat; /* 背景图片不重复 */
+            background-position: center; /* 背景图片居中 */
+        }
+
+        .el-table th, .el-table tr {
+            /* background-color: #FFF; */
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        /* 设置行的背景色 */
+        .el-table .row-bg-color {
+        {% comment %}background-color: #f7e1b5;{% endcomment %} background-color: rgba(255, 255, 255, 0);
+        }
+
+        .el-table tbody tr:hover > td {
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        /* 设置悬浮行的自定义类 */
+        .row-bg-color:hover > td {
+            background-color: rgba(255, 255, 255, 0); /* 悬浮行的背景色继承父元素的背景色 */
+        }
+
+        /* 如果需要中空线，可以通过边框样式来实现 */
+        .el-table .cell {
+        }
+
+        .el-table__header {
+            table-layout: fixed;
+            border-collapse: separate;
+        }
+
+        .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+            border-right: 1px solid #EBEEF5;
+        {#border-radius: 20px;#}
+        }
+
+        .el-table td, .el-table th.is-leaf {
+        {#border-bottom: 10px solid #EBEEF5;#}
+
+        }
+
+        /* 最后一个单元格的右边界不显示 */
+        .el-table .cell:last-child {
+            border-right: none;
+        }
+
+        .table > thead > tr > th {
+            border-bottom: 1px solid #e7e7e7;
+            font-weight: 600;
+            border-top: 0;
+            color: #FFFFFF;
+        }
+
+        /*朴素按钮的样式*/
+        .el-button--warning.is-plain {
+        {#color: #E6A23C;#}{#background: #fdf6ec;#} border-color: #FFFFFF;
+            font-size: 22px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /*正常按钮的样式*/
+        .el-button--warning {
+            color: #000000;
+            border-color: #FFFFFF;
+        {#background-color: #E6A23C;#} font-size: 22px;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        button, html [type=button] {
+            -webkit-appearance: button;
+            width: 32%;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.0);
+        }
+
+        .wrap-text:hover {
+            background-image: url("/static/images/c1.jpg");
+            color: #fff; /* 悬浮时的文字颜色 */
+            font-size: 20px;
+        }
+
+        /*butoon 内容转换*/
+                @font-face {
+            font-family: "MicrosoftvistaKaiti";
+            font-weight: normal;
+            font-style: normal;
+            src: url("/static/fonts/microsoftfont/MicrosoftvistaKaiti.ttf") format('truetype');
+        }
+
+        .wrap-text {
+            border-color: rgba(255,255,255,0.0);
+            background-color: rgba(255,255,255,0.7) !important;
+            color: #303231;
+            font-family: 'MicrosoftvistaKaiti', sans-serif;
+            font-size: 26px;
+            white-space: normal;
+            word-break: break-all;
+            height: 40px;
+            padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
+        }
+        /* 英文字体样式 */
+          .wrap-text .eng-font {
+            font-family: 'Arial', sans-serif;
+          }
+
+        .wrap-text.is-disabled, .wrap-text.is-disabled:focus, .wrap-text.is-disabled:hover {
+            border-color: rgba(255,255,255,0.0) !important; /* 禁用时的边框颜色 */
+            color: #595d60 !important; /* 禁用时的文本颜色 */
+            font-family: '楷体', 'KaiTi', serif;
+            background-color: rgba(255,255,255,0.3) !important; /* 禁用时的背景颜色 */
+            box-shadow: none !important; /* 禁用时的阴影 */
+        }
+        .wrap-text.is-disabled:hover {
+            {% comment %}background-image: url("/static/images/c1.jpg");{% endcomment %}
+            border-color: rgba(255,255,255,0.0) !important; /* 禁用时的边框颜色 */
+            color: #595d60 !important; /* 禁用时的文本颜色 */
+            font-family: '楷体', 'KaiTi', serif;
+            background-color: rgba(255,255,255,0.3) !important; /* 禁用时的背景颜色 */
+            box-shadow: none !important; /* 禁用时的阴影 */
+            font-size: 26px;
+        }
+
+        .my-table .el-table__row {
+            height: 160px; /* 单元格的高度 */
+        }
+
+        /* 去掉鼠标悬浮效果 */
+        .my-table tbody tr:hover > td {
+            background-color: transparent !important
+        }
+    </style>
+{% endblock %}
+{% block content1 %}
+    <div class="row" style="height: 30px">
+        <div class="col-lg-6 p-r-0 title-margin-right" style="height: 100%">
+            <div class="page-header" style="height: 100%;margin: 0.2px">
+                <div class="page-title" style="height: 100%">
+                    <h1 style="color: #FFF;height: 100%;padding: 1px">Hello {{ request.session.user_name }}, Welcome
+                        Here</h1>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+        <div class="col-lg-5 p-l-0 title-margin-left" style="height: 100%">
+            <div class="page-header" style="height: 100%;margin: 0.2px">
+                <div class="page-title" style="height: 100%">
+                    <ol class="breadcrumb" style="height: 100%;padding: 1px">
+                        <a style="color: #FFF;padding: 1px;display: inline" href="/Navigations/">Category</a>
+                        <a style="color: #FFF;padding: 1px;display: inline" href="/Navigations_Category/">/Systems</a>
+                        <a style="color: #FFF;padding: 1px;display: inline" href="#">{{ weizhi }}</a>
+                        {% comment %}<li class="breadcrumb-item active" style="color: #FFF"></li>{% endcomment %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+    </div>
+{% endblock %}
+{% block content %}
+
+    <div id="app" {% comment %}v-pre{% endcomment %}>
+
+        <div class="tableAround" v-cloak>
+
+            <span>
+            <el-table :data="gridData" {% comment %}border{% endcomment %} style="width: 100%"
+                      class="my-table"
+
+                      row-class-name="row-bg-color">
+                <el-table-column property="name1" :label="judgeSysname()" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                              {% comment %}<a :href="scope.row.url1" target="_blank"
+                                 style="text-decoration:underline;color:blue;">{% endcomment %}
+                            <el-button
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    v-if="scope.row.name1"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="hrefaddress1(scope.row)"
+                                    :disabled="!scope.row.url1 ? true : false"
+                            >
+                                      ${ scope.row.name1 }</el-button>
+                                  {% comment %}</a>{% endcomment %}
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="name2" label="" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center;">
+                            <el-button
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    v-if="scope.row.name2"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="hrefaddress2(scope.row)"
+                                    :disabled="!scope.row.url2 ? true : false"
+                            >
+                                      ${ scope.row.name2 }</el-button>
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="name3" label="" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    v-if="scope.row.name3"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="hrefaddress3(scope.row)"
+                                    :disabled="!scope.row.url3 ? true : false"
+                            >
+                                      ${ scope.row.name3 }</el-button>
+                              </div>
+                    </template>
+                </el-table-column>
+                <el-table-column property="name4" label="" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{backgroundColor: !scope.row.url1 ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.3)',width: '70%', height: '120px'}"
+                                    class="wrap-text"
+                                    v-if="scope.row.name4"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="hrefaddress4(scope.row)"
+                                    :disabled="!scope.row.url4 ? true : false"
+                            >
+                                      ${ scope.row.name4 }</el-button>
+                              </div>
+                    </template>
+                </el-table-column>
+                {% comment %}<el-table-column property="name5" label="" min-width="16%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                              <a :href="scope.row.url5" target="_blank"
+                                 style="text-decoration:underline;color:blue;">
+                            <el-button
+                                    :style="{width: '170px', height: '150px'}"
+                                    class="wrap-text"
+                                    v-if="scope.row.name5"
+                                    type="warning"
+                                    plain
+                            >
+                                      ${ scope.row.name5 }</el-button>
+                                  </a>
+                              </div>
+                    </template>
+                </el-table-column>{% endcomment %}
+            </el-table>
+            </span>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    {#<script src="/static/js/vue-router.min.js"></script>#}
+    {% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                return {
+                    {% comment %}view render 返回的local有包含特殊字符的变量，可以使用模板标签{% autoescape off %}来关闭自动转义功能。{% endcomment %}
+                    {% autoescape off %}
+                        Sysname: '{{ name }}',
+                    {% endautoescape %}
+                    Navigations_system_name: '',
+                    gridData: [
+                        {
+                            name: '',
+                            Comment: "",
+                            LNVname: '',
+                            LNVurl: '',
+                            A31name: "",
+                            A31url: "",
+                            A32name: "",
+                            A32url: "",
+                            ABOname: '',
+                            ABOurl: '',
+                            CQT88name: "",
+                            CQT88url: "",
+                            A39name: "",
+                            A39url: "",
+                        },
+                    ],
+                }
+            },
+            mounted() {
+                console.log(this.Sysname);
+                this.getdata("first")
+            },
+            methods: {
+                getdata: function (e) {
+                    let data = {
+                        "isGetData": e,
+                        'Sysname': this.Sysname,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };
+                    {% comment %}axios.post("/Navigations_system/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.gridData = res.data.gridData;
+                    });{% endcomment %}
+                    // Sysname包含特殊字符
+                    axios.post("/Navigations_customer/", data, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    }).then((res) => {
+                        this.gridData = res.data.gridData;
+                        this.Navigations_system_name = res.data.Navigations_system_name;
+                    });
+                },
+                judgeSysname() {
+                    if (this.Sysname) {
+                        return this.Sysname;
+                    } else {
+                        return this.Navigations_system_name;
+                    }
+                },
+                hrefaddress1(row) {
+                    console.log(row);
+                    if (row.url1 && row.name1) {
+                        // window.location.href = row.url1;
+                        window.open(row.url1, '_blank');
+                    }
+                },
+                hrefaddress2(row) {
+                    if (row.url2 && row.name2) {
+                        // window.location.href = row.url2;
+                        window.open(row.url2, '_blank');
+                    }
+                },
+                hrefaddress3(row) {
+                    if (row.url3 && row.name3) {
+                        // window.location.href = row.url3;
+                        window.open(row.url3, '_blank');
+                    }
+                },
+                hrefaddress4(row) {
+                    if (row.url4 && row.name4) {
+                        // window.location.href = row.url4;
+                        window.open(row.url4, '_blank');
+                    }
+                },
+            }
+        })
+    </script>
+{% endblock %}

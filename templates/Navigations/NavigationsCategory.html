@@ -93,11 +93,18 @@
         }
 
         /*butoon 内容转换*/
+        @font-face {
+            font-family: "MicrosoftvistaKaiti";
+            font-weight: normal;
+            font-style: normal;
+            src: url("/static/fonts/microsoftfont/MicrosoftvistaKaiti.ttf") format('truetype');
+        }
+
         .wrap-text {
             border-color: rgba(255,255,255,0.0);
             background-color: rgba(255,255,255,0.7) !important;
             color: #303231;
-            font-family: '楷体', 'KaiTi', serif;
+            font-family: 'MicrosoftvistaKaiti', sans-serif;
             font-size: 26px;
             white-space: normal;
             word-break: break-all;
@@ -174,7 +181,7 @@
                                           v-if="scope.row.name"
                                           type="warning"
                                           {% comment %}plain{% endcomment %}
-                                          @click="fetchData(scope.row.name)"
+                                          @click="fetchData(scope.row.Key)"
                                   >
                                       ${ scope.row.name }</el-button>
                           </div>
@@ -196,7 +203,7 @@
                                     v-if="scope.row.name2"
                                     type="warning"
                                     {% comment %}plain{% endcomment %}
-                                    @click="fetchData(scope.row.name2)"
+                                    @click="fetchData(scope.row.Key2)"
                             >
                                       ${ scope.row.name2 }</el-button>
                               </a>
@@ -217,7 +224,7 @@
                                     v-if="scope.row.name3"
                                     type="warning"
                                     {% comment %}plain{% endcomment %}
-                                    @click="fetchData(scope.row.name3)"
+                                    @click="fetchData(scope.row.Key3)"
                             >
                                       ${ scope.row.name3 }</el-button>
                               </a>
@@ -238,7 +245,7 @@
                                     v-if="scope.row.name4"
                                     type="warning"
                                     {% comment %}plain{% endcomment %}
-                                    @click="fetchData(scope.row.name4)"
+                                    @click="fetchData(scope.row.Key4)"
                             >
                                       ${ scope.row.name4 }</el-button>
                               </a>
@@ -312,7 +319,6 @@
             el: "#app",
             delimiters: ['${', '}'],
             data() {
-                const ipdadress = 'http://127.0.0.1:8003';
                 return {
                     {% comment %}view render 返回的local有包含特殊字符的变量，可以使用模板标签{% autoescape off %}来关闭自动转义功能。{% endcomment %}
                     {% autoescape off %}
