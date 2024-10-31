@@ -145,6 +145,8 @@
                               <el-select v-model="form.Category1" placeholder="请选择">
                                   <el-option label="HW" value="HW"></el-option>
                                   <el-option label="SW" value="SW"></el-option>
+                                  <el-option label="SOP" value="SOP"></el-option>
+                                  <el-option label="Training" value="Training"></el-option>
                               </el-select>
                           </el-form-item>
                           <el-form-item label="Function">
@@ -153,6 +155,7 @@
                                     <el-option label="Stress" value="Stress"></el-option>
                                     <el-option label="Reliability" value="Reliability"></el-option>
                                     <el-option label="Panel" value="Panel"></el-option>
+                                    <el-option label="--" value="--"></el-option>
                               </el-select>
                           </el-form-item>
                           <el-form-item label="Case_name">
@@ -198,7 +201,7 @@
              <el-table-column type="index" label="No."  :index="indexMethod" ></el-table-column>
              <el-table-column width="170" label="Customer">
                  <template slot-scope="scope">
-                     <el-select v-if="showEdit[scope.$index]&&canEdit==1" v-model="Customer[scope.$index + (currentPage-1)*pagesize]" >
+                     <el-select v-if="showEdit[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1" v-model="Customer[scope.$index + (currentPage-1)*pagesize]" >
                                     <el-option label="C38(NB)" value="C38(NB)"></el-option>
                                     <el-option label="A39" value="A39"></el-option>
                                     <el-option label="C38(AIO)" value="C38(AIO)"></el-option>
@@ -212,16 +215,19 @@
              </el-table-column>
              <el-table-column width="170" label="Category">
                      <template slot-scope="scope">
-                         <el-select v-if="showEdit[scope.$index]&&canEdit==1" v-model="Category[scope.$index + (currentPage-1)*pagesize]" >
+                         <el-select v-if="showEdit[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1" v-model="Category[scope.$index + (currentPage-1)*pagesize]" >
                                   <el-option label="HW" value="HW"></el-option>
                                   <el-option label="SW" value="SW"></el-option>
+                                  <el-option label="SOP" value="SOP"></el-option>
+                                  <el-option label="Training" value="Training"></el-option>
+                                  <el-option label="--" value="--"></el-option>
                           </el-select>
                       <span v-else="showEdit[scope.$index]"  >${ scope.row.Category }</span>
                     </template>
              </el-table-column>
              <el-table-column width="170" label="Function">
                     <template slot-scope="scope">
-                         <el-select v-if="showEdit[scope.$index]&&canEdit==1" v-model="Fc[scope.$index + (currentPage-1)*pagesize]" >
+                         <el-select v-if="showEdit[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1" v-model="Fc[scope.$index + (currentPage-1)*pagesize]" >
                                     <el-option label="Performance" value="Performance"></el-option>
                                     <el-option label="Stress" value="Stress"></el-option>
                                     <el-option label="Reliability" value="Reliability"></el-option>
@@ -232,13 +238,13 @@
              </el-table-column>
              <el-table-column width="300" label="Case name">
                  <template slot-scope="scope">
-                      <input v-if="showEdit[scope.$index]&&canEdit==1" type="text"  v-model.lazy="Case_name[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner">
+                      <input v-if="showEdit[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1" type="text"  v-model.lazy="Case_name[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner">
                       <span  v-else="showEdit[scope.$index]">${ scope.row.Case_name }</span>
                 </template>
              </el-table-column>
              <el-table-column width="170" label="Version">
                  <template slot-scope="scope">
-                      <input v-if="showEdit[scope.$index]&&canEdit==1" type="text"  v-model.lazy="Version[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner">
+                      <input v-if="showEdit[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1" type="text"  v-model.lazy="Version[scope.$index + (currentPage-1)*pagesize]"  class="el-input__inner">
                       <span  v-else="showEdit[scope.$index]">${ scope.row.Version }</span>
                 </template>
              </el-table-column>
@@ -251,11 +257,11 @@
             </el-table-column>
              <el-table-column  width="170" label="操作" align="center" fixed="right">
                  <template slot-scope="scope">
-                     <el-button  size="small"     @click.native="editRow(scope.row,scope.$index + (currentPage-1)*pagesize)"    v-if="!showBtn[scope.$index]&&canEdit==1">编辑</el-button>
-                     <el-button  size="small"     @click.native="deleteRow(scope.row,scope.$index + (currentPage-1)*pagesize)"     v-if="!showBtn[scope.$index]&&canEdit==1">删除</el-button>
+                     <el-button  size="small"     @click.native="editRow(scope.row,scope.$index + (currentPage-1)*pagesize)"    v-if="!showBtn[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1">编辑</el-button>
+                     <el-button  size="small"     @click.native="deleteRow(scope.row,scope.$index + (currentPage-1)*pagesize)"     v-if="!showBtn[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1">删除</el-button>
 
-                     <el-button  size="small"     @click.native="saveRow(scope.row,scope.$index + (currentPage-1)*pagesize)"     v-if="showBtn[scope.$index]&&canEdit==1">保存</el-button>
-                     <el-button  size="small"     @click.native="cancelRow(scope.row,scope.$index + (currentPage-1)*pagesize)"     v-if="showBtn[scope.$index]&&canEdit==1">取消</el-button>
+                     <el-button  size="small"     @click.native="saveRow(scope.row,scope.$index + (currentPage-1)*pagesize)"     v-if="showBtn[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1">保存</el-button>
+                     <el-button  size="small"     @click.native="cancelRow(scope.row,scope.$index + (currentPage-1)*pagesize)"     v-if="showBtn[scope.$index]&&canEdit==1&&scope.row.Ownerflag==1">取消</el-button>
                  </template>
              </el-table-column>
          </el-table>

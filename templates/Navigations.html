@@ -89,7 +89,7 @@
         .wrap-text:hover {
             background-image: url("/static/images/c1.jpg");
             color: #fff; /* 悬浮时的文字颜色 */
-            font-size: 45px;
+            font-size: 30px;
         }
 
         /*butoon 内容转换*/
@@ -105,7 +105,7 @@
             background-color: rgba(255, 255, 255, 0.7) !important;
             color: #0b0b0b;
             font-family: 'MicrosoftvistaKaiti', sans-serif;
-            font-size: 35px;
+            font-size: 25px;
             white-space: normal;
             word-break: break-all;
             height: 40px;
@@ -164,7 +164,7 @@
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                    :style="{width: '70%', height: '120px'}"
+                                    :style="{width: '80%', height: '120px'}"
                                     class="wrap-text"
                                     type="warning"
                                     {% comment %}plain{% endcomment %}
@@ -179,7 +179,7 @@
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                    :style="{width: '70%', height: '120px'}"
+                                    :style="{width: '80%', height: '120px'}"
                                     class="wrap-text"
                                     type="warning"
                                     {% comment %}plain{% endcomment %}
@@ -194,13 +194,29 @@
                     <template scope="scope">
                         <div slot="reference" class="name-wrapper" style="text-align: center">
                             <el-button
-                                    :style="{width: '70%', height: '120px'}"
+                                    :style="{width: '80%', height: '120px'}"
                                     class="wrap-text"
                                     type="warning"
                                     {% comment %}plain{% endcomment %}
                                     @click="fetchData(scope.row.Key3)"
                             >
                                 ${ scope.row.lie3 }
+                            </el-button>
+                        </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="lie4" label="" min-width="20%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{width: '80%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key4)"
+                            >
+                                ${ scope.row.lie4 }
                             </el-button>
                         </div>
                         {% comment %}</el-popover>{% endcomment %}
@@ -254,21 +270,27 @@
                         Key2: 'Project',
                         lie3: '資產管理',
                         Key3: 'Property',
+                        lie4: '品質管理',
+                        Key4: 'Quality',
 
                     }, {
-                        lie1: '品質管理',
-                        Key1: 'Quality',
-                        lie2: '預算管理',
-                        Key2: 'Budget',
-                        lie3: '測試數據',
-                        Key3: 'TestData',
+                        lie1: '預算管理',
+                        Key1: 'Budget',
+                        lie2: '測試數據',
+                        Key2: 'TestData',
+                        lie3: 'SOP管理辦法',
+                        Key3: 'SOPManager',
+                        lie4: '測試規範',
+                        Key4: 'TestSpec',
                     }, {
-                        lie1: '智能測試',
-                        Key1: 'Automation',
-                        lie2: '討論交流',
-                        Key2: 'Discussing',
-                        lie3: '其他',
-                        Key3: 'Others'
+                        lie1: '公共事務',
+                        Key1: 'Common',
+                        lie2: '智能測試',
+                        Key2: 'Automation',
+                        lie3: '討論交流',
+                        Key3: 'Discussing',
+                        lie4: '其他',
+                        Key4: 'Others'
                     }
                     ]
                 }

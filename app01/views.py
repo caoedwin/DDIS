@@ -665,19 +665,7 @@ def Navigations(request):
         Skin = "/static/src/blue.jpg"
     weizhi = "Category"
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
-    tableData = [{
-        "lie1": "部門管理",
-        "lie2": '專案管理',
-        "lie3": '測試管理'
-    }, {
-        "lie1": '品質管控',
-        "lie2": '資產管理',
-        "lie3": '智能測試'
-    }, {
-        "lie1": '討論交流',
-        "lie2": '其他',
-        "lie3": '...'
-    }
+    tableData = [
     ]
     data = {
         "tableData": tableData,
@@ -731,6 +719,7 @@ def Navigations_Category_axios(request):
     permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
     data = {}
     All_system_dic = {
+        #部門管理
         "DepartMent": [
         {
         'name': '人員信息',
@@ -776,6 +765,7 @@ def Navigations_Category_axios(request):
         'address4': "",
         'Comment4': "",}
                         ],
+        #專案管理
         "Project": [
             {
                 'name': '專案信息',
@@ -827,6 +817,7 @@ def Navigations_Category_axios(request):
                 'address4': "",
                 'Comment4': "", }
         ],
+        #資產管理
         "Property": [
             {
 
@@ -880,7 +871,7 @@ def Navigations_Category_axios(request):
                 'Comment4': "",
             }
         ],
-
+        #品質管理
         "Quality": [
             {
                 'name': "QIL",
@@ -930,6 +921,8 @@ def Navigations_Category_axios(request):
                 'address4': "",
                 'Comment4': "", }
         ],
+
+        #預算管理
         "Budget": [
             {
 
@@ -984,27 +977,28 @@ def Navigations_Category_axios(request):
                 'address4': "",
                 'Comment4': "",
             }],
+        #測試數據
         "TestData": [
             {
-                'name': '測試規格下載',
-                'Key': 'SpecDownload',
+                'name': 'OBI測試結果',
+                'Key': 'OBIResult',
                 'address': "",
                 'Comment': "",
-                'name2': 'OBI測試結果',
-                'Key2': 'OBIResult',
+                'name2': 'PackageGValue',
+                'Key2': 'PackageGValue',
                 'address2': "",
                 'Comment2': "",
-                'name3': 'PackageGValue',
-                'Key3': 'PackageGValue',
+                'name3': 'CDM',
+                'Key3': 'CDM',
                 'address3': "",
                 'Comment3': "",
-                'name4': 'CDM',
-                'Key4': 'CDM',
+                'name4': 'Bouncing',
+                'Key4': 'Bouncing',
                 'address4': "",
                 'Comment4': "",
             }, {
-                'name': 'Bouncing',
-                'Key': 'Bouncing',
+                'name': '',
+                'Key': '',
                 'address': "",
                 'Comment': "",
                 'name2': '',
@@ -1033,7 +1027,158 @@ def Navigations_Category_axios(request):
                 'address4': "",
                 'Comment4': "", }
         ],
+        #SOP管理辦法
+        "SOPManager": [
+            {
+                'name': '測試規格下載',
+                'Key': 'SpecDownload',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'Key2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'Key3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'Key4': '',
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'Key': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'Key2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'Key3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'Key4': '',
+                'address4': "",
+                'Comment4': "", },
+            {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "", }
+        ],
+        #測試規範
+        "TestSpec": [
+            {
+                'name': '測試規格下載',
+                'Key': 'SpecDownload',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'Key2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'Key3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'Key4': '',
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'Key': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'Key2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'Key3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'Key4': '',
+                'address4': "",
+                'Comment4': "", },
+            {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "", }
+        ],
 
+        #公共事務
+        "Common": [
+            {
+                'name': '',
+                'Key': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'Key2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'Key3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'Key4': '',
+                'address4': "",
+                'Comment4': "",
+            }, {
+                'name': '',
+                'Key': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'Key2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'Key3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'Key4': '',
+                'address4': "",
+                'Comment4': "", },
+            {
+                'name': '',
+                'address': "",
+                'Comment': "",
+                'name2': '',
+                'address2': "",
+                'Comment2': "",
+                'name3': '',
+                'address3': "",
+                'Comment3': "",
+                'name4': '',
+                'address4': "",
+                'Comment4': "", }
+        ],
+        #智能測試
         "Automation": [
             {
                 'name': "智能测试",
@@ -1073,6 +1218,7 @@ def Navigations_Category_axios(request):
                  },
 
         ],
+        #討論交流
         "Discussing": [
             {
                 'name': "讨论版",
@@ -1127,6 +1273,7 @@ def Navigations_Category_axios(request):
                 'Comment4': "",
             }
         ],
+        #其他
         "Others": [
             {
                 'name': "",

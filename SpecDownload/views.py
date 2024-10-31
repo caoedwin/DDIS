@@ -113,7 +113,7 @@ def SpecDownload_summary(request):
                 SpecDownloads.Functionn =Functionn
                 SpecDownloads.Case_name = Case_name
                 SpecDownloads.Version = Version
-                SpecDownloads.editor = request.session.get('user_name')
+                SpecDownloads.editor = request.session.get('account')
                 SpecDownloads.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 SpecDownloads.save()
                 if fileList:
@@ -133,7 +133,7 @@ def SpecDownload_summary(request):
                         filelist.append("/media/" + str(h.files))
                     mock_data.append({
                         "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn, "Case_name": i.Case_name,
-                        "Version": i.Version, "file": filelist
+                        "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                     })
             else:
                 for i in SpecDownload.objects.all():
@@ -142,7 +142,7 @@ def SpecDownload_summary(request):
                         filelist.append("/media/" + str(h.files))
                     mock_data.append({
                         "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn, "Case_name": i.Case_name,
-                        "Version": i.Version, "file": filelist
+                        "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                     })
             selectOptions = []
             Customerlist = []
@@ -168,7 +168,7 @@ def SpecDownload_summary(request):
                     filelist.append("/media/" + str(h.files))
                 mock_data.append({
                     "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn, "Case_name": i.Case_name,
-                    "Version": i.Version, "file": filelist
+                    "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                 })
         if request.POST.get("action") == "edit":
             Customersearch = request.POST.get("showCustomer")
@@ -182,9 +182,10 @@ def SpecDownload_summary(request):
             Functionn = request.POST.get("Fc")
             Case_name = request.POST.get("Case_name")
             Version = request.POST.get("Version")
+            editor = request.session.get('account')
             id = request.POST.get("ID")
             updateSpecdic = {"Customer": Customer, "Category": Category, "Functionn": Functionn, "Case_name": Case_name,
-                            "Version": Version, }
+                            "Version": Version, "editor": editor}
             SpecDownload.objects.filter(id=id).update(**updateSpecdic)
             if Customersearch and Categorysearch and Functionnsearch:
                 searchdic = {"Customer": Customersearch, "Category": Categorysearch, "Functionn": Functionnsearch,}
@@ -194,7 +195,7 @@ def SpecDownload_summary(request):
                         filelist.append("/media/" + str(h.files))
                     mock_data.append({
                         "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn, "Case_name": i.Case_name,
-                        "Version": i.Version, "file": filelist
+                        "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                     })
             else:
                 for i in SpecDownload.objects.all():
@@ -203,7 +204,7 @@ def SpecDownload_summary(request):
                         filelist.append("/media/" + str(h.files))
                     mock_data.append({
                         "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn, "Case_name": i.Case_name,
-                        "Version": i.Version, "file": filelist
+                        "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                     })
             selectOptions = []
             Customerlist = []
@@ -240,7 +241,7 @@ def SpecDownload_summary(request):
                     mock_data.append({
                         "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn,
                         "Case_name": i.Case_name,
-                        "Version": i.Version, "file": filelist
+                        "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                     })
             else:
                 for i in SpecDownload.objects.all():
@@ -250,7 +251,7 @@ def SpecDownload_summary(request):
                     mock_data.append({
                         "id": i.id, "Customer": i.Customer, "Category": i.Category, "Fc": i.Functionn,
                         "Case_name": i.Case_name,
-                        "Version": i.Version, "file": filelist
+                        "Version": i.Version, "file": filelist, "Ownerflag": 1 if request.session.get('account') == i.editor else 0
                     })
             selectOptions = []
             Customerlist = []
