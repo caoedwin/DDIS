@@ -110,7 +110,7 @@ class ProjectinfoinDCTAdmin(admin.ModelAdmin):
     #     #     'fields' : ('Start_time', 'End_time', 'Result_time','Result','Comments')
     #     # }),
     # )
-    list_display = ('Year', 'ComPrjCode', 'PrjEngCode1', 'PrjEngCode2', 'ProjectName', "Size", "CPU", "Platform", "VGA", "OSSupport", "SS", "LD", "DQAPL", "DQAPLNum",)
+    list_display = ('Customer','Year', 'ComPrjCode', 'PrjEngCode1', 'PrjEngCode2', 'ProjectName', "Size", "CPU", "Platform", "VGA", "OSSupport", "SS", "LD", "DQAPL", "DQAPLNum",)
     # 列表里显示想要显示的字段
     list_per_page = 500
     # 满50条数据就自动分页

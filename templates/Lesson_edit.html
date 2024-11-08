@@ -440,11 +440,11 @@
                 beforeImageUpload(file) {
                     // 上传前格式与大小校验
                     console.log(file, file.type)
-                    const isJPG = file.type === "image/jpeg" || file.type == 'image/png' || file.type == 'video/mp4' || file.type == 'application/pdf' || file.type == 'application/x-zip-compressed' || file.type == '' || file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                    const isJPG = file.type === "image/jpeg" || file.type == 'image/png' || file.type == 'zip' || file.type == '7z' || file.type == 'rar' || file.type == 'video/mp4' || file.type == 'application/pdf' || file.type == 'application/x-zip-compressed' || file.type == '' || file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                     const isLt2M = file.size / 1024 / 1024 < 5;
 
                     if (!isJPG) {
-                        this.$message.error("上传头像图片只能是 JPG/PNG 格式，视频为mp4格式!");
+                        this.$message.error("上传头像图片只能是 JPG/PNG ,zip、7z、rar格式，视频为mp4格式!");
                     }
                     if (!isLt2M) {
                         this.$message.error("上传头像图片大小不能超过 5MB!");
