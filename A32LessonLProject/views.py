@@ -801,6 +801,99 @@ def A32Lesson_project(request):
                     canEdit = 1
                     break
             # print(canEdit)
+            if Category:
+                if Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category):
+                    for i in Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
+                        LessonProjectinfo = {}
+                        LessonProjectinfo['len_id'] = i.id
+                        LessonProjectinfo['Category'] = i.lesson.Category
+                        LessonProjectinfo['object'] = i.lesson.Object
+                        LessonProjectinfo['symptom'] = i.lesson.Symptom
+                        LessonProjectinfo['Reproduce_Steps'] = i.lesson.Reproduce_Steps
+                        LessonProjectinfo['root_cause'] = i.lesson.Root_Cause
+                        LessonProjectinfo['solution'] = i.lesson.Solution
+                        LessonProjectinfo['action'] = i.lesson.Action
+                        LessonProjectinfo['editor'] = i.lesson.editor
+                        LessonProjectinfo['edit_time'] = i.lesson.edit_time
+                        Photolist = []
+                        filelist = []
+                        # print(i.file_B.all)
+                        for j in i.lesson.Photo.all():
+                            if str(j.img).split(".")[1] == "jpg" or str(j.img).split(".")[1] == "png":
+                                Photolist.append("/media/" + str(j.img))
+                            else:
+                                filelist.append("/media/" + str(j.img))
+                        LessonProjectinfo['photo'] = Photolist
+                        LessonProjectinfo['file'] = filelist
+                        LessonProjectinfo['result'] = i.result
+                        LessonProjectinfo['comment'] = i.Comment
+                        mock_data.append(LessonProjectinfo)
+            else:
+                if Projectinfos.a32lessonlearn_project_set.all():
+                    for i in Projectinfos.a32lessonlearn_project_set.all().order_by('id'):
+                        LessonProjectinfo = {}
+                        LessonProjectinfo['len_id'] = i.id
+                        LessonProjectinfo['Category'] = i.lesson.Category
+                        LessonProjectinfo['object'] = i.lesson.Object
+                        LessonProjectinfo['symptom'] = i.lesson.Symptom
+                        LessonProjectinfo['Reproduce_Steps'] = i.lesson.Reproduce_Steps
+                        LessonProjectinfo['root_cause'] = i.lesson.Root_Cause
+                        LessonProjectinfo['solution'] = i.lesson.Solution
+                        LessonProjectinfo['action'] = i.lesson.Action
+                        LessonProjectinfo['editor'] = i.lesson.editor
+                        LessonProjectinfo['edit_time'] = i.lesson.edit_time
+                        Photolist = []
+                        filelist = []
+                        # print(i.file_B.all)
+                        for j in i.lesson.Photo.all():
+                            if str(j.img).split(".")[1] == "jpg" or str(j.img).split(".")[1] == "png":
+                                Photolist.append("/media/" + str(j.img))
+                            else:
+                                filelist.append("/media/" + str(j.img))
+                        LessonProjectinfo['photo'] = Photolist
+                        LessonProjectinfo['file'] = filelist
+                        LessonProjectinfo['result'] = i.result
+                        LessonProjectinfo['comment'] = i.Comment
+                        mock_data.append(LessonProjectinfo)
+            # print (mock_data)
+            updateData = {
+                'msg': msg,
+                'canEdit': canEdit,
+                "content": mock_data,
+                "selectMsg": combine,
+                'addselect': selectCategory,
+            }
+            # print(updateData)
+            return HttpResponse(json.dumps(updateData), content_type="application/json")
+        if request.GET.get("action") == "Sync":
+            Customer = request.GET.get('customer')
+            Project = request.GET.get('project')
+            Category = request.GET.get('Category')
+            # Phase = request.GET.get('phase')
+            # # print(type(Phase))
+            # if Phase == '0':
+            #     Phase = 'B(FVT)'
+            # if Phase == '1':
+            #     Phase = 'C(SIT)'
+            # if Phase == '2':
+            #     Phase = 'INV'
+            # if Phase == '3':
+            #     Phase = 'Others'
+
+            dic_Project = {'Customer': Customer, 'Project': Project}
+
+            # print(dic_Project)
+            Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
+            # print(Projectinfos.Owner.all())
+            canEdit = 0
+            current_user = request.session.get('user_name')
+            for i in Projectinfos.Owner.all():
+                # print(i.username,current_user)
+                # print(type(i.username),type(current_user))
+                if i.username == current_user:
+                    canEdit = 1
+                    break
+            # print(canEdit)
             if canEdit:
                 Lessonlist = []
                 for i in A32lesson_learn.objects.filter(Status="active"):

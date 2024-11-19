@@ -205,6 +205,7 @@
                 </el-select>
             </div>
             <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
+            <el-button v-cloak @click="Sync" v-if="canEdit" type="primary" style="height:40px;margin-right: 20px">同步LL</el-button>
         </div>
         <div style="margin-bottom: 20px;margin-left: 10px;">
 
@@ -591,6 +592,60 @@
                         return false;
                     }
                     let parameter = "search&customer=" + this.customer + "&project=" + this.project + "&Category=" + this.Category;
+                    // 上传流程
+                    // 先检查是否为第一次查询
+                    if (this.showCustomer || this.showProject) {
+                        // 判断不为第一次查询
+                        // 然后判断是否有未更改的值
+                        let result = this.checkChangedData();
+                        if (!result) {
+                            //都已更新完毕，没有未处理的值
+                            try {
+                                this.getdata(parameter);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        } else {
+                            //当前页面存在未保存的值，需向用户确认
+                            var warning = confirm("檢測到當前填寫的部分數據未保存，請及時點擊保存，以免數據丟失 是否繼續搜索?");
+                            if (warning) {
+                                this.getdata(parameter);
+                            } else {
+                                //取消動作
+                                return false;
+                            }
+                        }
+                    } else {
+                        // 判断为第一次查询
+                        this.getdata(parameter);
+                    }
+
+                    {% comment %}this.getdata(parameter){% endcomment %}
+                },
+                Sync: function () {
+                    let _this = this;
+                    this.PassNum = 0;
+                    this.FailNum = 0;
+                    this.IncompleteNum = 0;
+                    this.OthersNum = 0;
+
+                    this.PassPercent = 0;
+                    this.FailPercent = 0;
+                    this.IncompletePercent = 0;
+                    this.OthersPercent = 0;
+
+                    //customer和project和phase未填
+                    if (this.customer === '') {
+                        //alert("客戶別未選擇");
+                        this.customerError = true;
+                        return false;
+                    }
+                    if (this.project === '') {
+                        //alert("專案號未填寫");
+                        this.projectError = true;
+                        return false;
+                    }
+                    let parameter = "Sync&customer=" + this.customer + "&project=" + this.project + "&Category=" + this.Category;
                     // 上传流程
                     // 先检查是否为第一次查询
                     if (this.showCustomer || this.showProject) {
