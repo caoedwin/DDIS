@@ -180,32 +180,42 @@
 {% endblock %}
 {% block content %}
     <div id="app">
+    <el-backtop ></el-backtop>
         <div class="selectMsg" v-cloak>
-            <div class="customerContent" style="margin-right: 20px" v-cloak>
-                <label style="color: #FFF" for="customer">Customer</label>
-                <el-select v-model="customer" v-cloak>
-                    <el-option v-for="(item,key,index) in selectMsg" :label="key" :value="key">${ key }</el-option>
-                </el-select>
+            <div class="customerContent" style="margin-right: 20px;float: left" v-cloak>
+                <div style="margin-right: 5px;display: flex" v-cloak>
+                    <label style="color: #FFF;" for="customer">Customer</label>
+                    <el-select v-model="customer" v-cloak style="width: 100px">
+                        <el-option v-for="(item,key,index) in selectMsg" :label="key" :value="key">${ key }</el-option>
+                    </el-select>
+                </div>
                 <br>
                 <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
             </div>
-            <div class="projectContent" style="margin-right: 10px" v-cloak>
-                <label for="project" v-cloak>專案號</label>
-                <el-select v-model="project" placeholder="請輸入專案號" style="margin-right: 20px;width:200px" clearable
-                           v-cloak>
-                    <el-option v-for="item in projectvalue" :label="item.project" :value="item.project"></el-option>
-                </el-select>
+            <div class="projectContent" style="margin-right: 10px;float: left" v-cloak>
+                <div style="margin-right: 5px;display: flex" v-cloak>
+                    <label for="project" v-cloak>專案號</label>
+                    <el-select v-model="project" placeholder="請輸入專案號" style="margin-right: 5px;width:150px" clearable
+                               v-cloak>
+                        <el-option v-for="item in projectvalue" :label="item.project" :value="item.project"></el-option>
+                    </el-select>
+                </div>
                 <br>
                 <div class="inputError" v-cloak v-show="projectError">專案號不能為空</div>
             </div>
-            <div class="categoryContent">
-                <label for="Category" v-cloak>Category</label>
-                <el-select v-model="Category" style="margin-right: 20px;width:200px" clearable v-cloak>
-                    <el-option v-for="item in selectCategory" :label="item.Category" :value="item.Category"></el-option>
-                </el-select>
+            <div class="categoryContent" style="float: left">
+                <div style="margin-right: 5px;display: flex" v-cloak>
+                    <label for="Category" v-cloak>Category</label>
+                    <el-select v-model="Category" style="margin-right: 20px;width:150px" clearable v-cloak>
+                        <el-option v-for="item in selectCategory" :label="item.Category"
+                                   :value="item.Category"></el-option>
+                    </el-select>
+                </div>
             </div>
-            <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
-            <el-button v-cloak @click="Sync" v-if="canEdit" type="primary" style="height:40px;margin-right: 20px">同步LL</el-button>
+                <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 10px">搜索</el-button>
+                <el-button v-cloak @click="Sync" v-if="canEdit" type="primary" style="height:40px;margin-right: 5px">
+                    同步LL
+                </el-button>
         </div>
         <div style="margin-bottom: 20px;margin-left: 10px;">
 

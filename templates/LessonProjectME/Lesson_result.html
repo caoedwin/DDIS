@@ -169,8 +169,7 @@
             color: white;
         }
 
-        table
-        {
+        table {
             table-layout: fixed;
             word-break: break-all;
             word-wrap: break-word;
@@ -180,43 +179,59 @@
 {% endblock %}
 {% block content %}
     <div id="app">
+        <el-backtop></el-backtop>
         <div class="selectMsg" v-cloak>
-            <div class="customerContent" style="margin-right: 20px" v-cloak>
-                <label style="color: #FFF" for="customer">Customer</label>
-                <el-select v-model="customer" v-cloak>
-                    <el-option v-for="(item,key,index) in selectMsg" :label="key" :value="key">${ key }</el-option>
-                </el-select>
+            <div class="customerContent" style="margin-right: 20px;float: left" v-cloak>
+                <div style="margin-right: 5px;display: flex" v-cloak>
+                    <label style="color: #FFF;" for="customer">Customer</label>
+                    <el-select v-model="customer" v-cloak style="width: 100px">
+                        <el-option v-for="(item,key,index) in selectMsg" :label="key" :value="key">${ key }</el-option>
+                    </el-select>
+                </div>
                 <br>
                 <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
             </div>
-            <div class="projectContent" style="margin-right: 10px" v-cloak>
-                <label for="project" v-cloak>專案號</label>
-                <el-select v-model="project" placeholder="請輸入專案號" style="margin-right: 20px;width:200px" clearable
-                           v-cloak>
-                    <el-option v-for="item in projectvalue" :label="item.project" :value="item.project"></el-option>
-                </el-select>
+            <div class="projectContent" style="margin-right: 10px;float: left" v-cloak>
+                <div style="margin-right: 5px;display: flex" v-cloak>
+                    <label for="project" v-cloak>專案號</label>
+                    <el-select v-model="project" placeholder="請輸入專案號" style="margin-right: 5px;width:150px" clearable
+                               v-cloak>
+                        <el-option v-for="item in projectvalue" :label="item.project" :value="item.project"></el-option>
+                    </el-select>
+                </div>
                 <br>
                 <div class="inputError" v-cloak v-show="projectError">專案號不能為空</div>
             </div>
-            <div class="categoryContent">
-                <label for="Category" v-cloak>Category</label>
-                <el-select v-model="Category" style="margin-right: 20px;width:200px" clearable v-cloak>
-                    <el-option v-for="item in selectCategory" :label="item.Category" :value="item.Category"></el-option>
-                </el-select>
+            <div class="categoryContent" style="float: left">
+                <div style="margin-right: 5px;display: flex" v-cloak>
+                    <label for="Category" v-cloak>Category</label>
+                    <el-select v-model="Category" style="margin-right: 20px;width:150px" clearable v-cloak>
+                        <el-option v-for="item in selectCategory" :label="item.Category"
+                                   :value="item.Category"></el-option>
+                    </el-select>
+                </div>
             </div>
-            <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
-            <el-button v-cloak @click="Sync" v-if="canEdit" type="primary" style="height:40px;margin-right: 20px">同步LL</el-button>
+                <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 10px">搜索</el-button>
+                <el-button v-cloak @click="Sync" v-if="canEdit" type="primary" style="height:40px;margin-right: 5px">
+                    同步LL
+                </el-button>
         </div>
         <div style="margin-bottom: 20px;margin-left: 10px;">
 
             <table border="1px" style="height: 100px;">
                 <tr>
                     <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold"></td>
-                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Pass</td>
-                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Fail</td>
-                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Incomplete</td>
-                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Others</td>
-                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Total</td>
+                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Pass
+                    </td>
+                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Fail
+                    </td>
+                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">
+                        Incomplete
+                    </td>
+                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Others
+                    </td>
+                    <td width="100px" style="color: white;text-align: center;font-size: 16px;font-weight: bold">Total
+                    </td>
                 </tr>
                 <tr>
                     <td width="100px" style="color: white;text-align: center">Qty</td>
@@ -540,27 +555,27 @@
                         for (let num = 0; num < this.tableData.length; num++) {
                             console.log(num)
                             console.log(this.tableData[num].result)
-                            if(this.tableData[num].result === "Pass"){
+                            if (this.tableData[num].result === "Pass") {
                                 this.PassNum = this.PassNum + 1;
-                            }else if(this.tableData[num].result === "Fail"){
+                            } else if (this.tableData[num].result === "Fail") {
                                 this.FailNum = this.FailNum + 1;
-                            }else if(this.tableData[num].result === ""){
+                            } else if (this.tableData[num].result === "") {
                                 this.IncompleteNum = this.IncompleteNum + 1;
-                            }else{
+                            } else {
                                 this.OthersNum = this.OthersNum + 1;
                             }
 
                         }
-                        if(this.PassNum !== 0){
+                        if (this.PassNum !== 0) {
                             this.PassPercent = Math.round((this.PassNum / this.TotalNum) * 100) + "%"
                         }
-                        if(this.FailNum !== 0){
+                        if (this.FailNum !== 0) {
                             this.FailPercent = Math.round((this.FailNum / this.TotalNum) * 100) + "%"
                         }
-                        if(this.IncompleteNum !== 0){
+                        if (this.IncompleteNum !== 0) {
                             this.IncompletePercent = Math.round((this.IncompleteNum / this.TotalNum) * 100) + "%"
                         }
-                        if(this.OthersNum !== 0){
+                        if (this.OthersNum !== 0) {
                             this.OthersPercent = Math.round((this.OthersNum / this.TotalNum) * 100) + "%"
                         }
 
