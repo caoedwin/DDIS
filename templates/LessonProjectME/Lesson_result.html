@@ -211,8 +211,8 @@
                     </el-select>
                 </div>
             </div>
-                <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 10px">搜索</el-button>
-                <el-button v-cloak @click="Sync" v-if="canEdit" type="primary" style="height:40px;margin-right: 5px">
+                <el-button v-cloak @click="Search" :loading="elbuttonloading" type="primary" style="height:40px;margin-right: 10px">搜索</el-button>
+                <el-button v-cloak @click="Sync" :loading="elbuttonloading" v-if="canEdit" type="primary" style="height:40px;margin-right: 5px">
                     同步LL
                 </el-button>
         </div>
@@ -426,6 +426,7 @@
                     pageSize: 50,
                     //权限管理
                     canEdit: false,
+                    elbuttonloading:false,
 
                 }
             },
@@ -528,6 +529,7 @@
                     }
                 },
                 getdata: function (e) {
+                    this.elbuttonloading = true;
                     console.log("getdata begin");
                     axios.get("/LessonProjectME/Lesson_ProjectResult/?action=" + e + "&csrfmiddlewaretoken=" + $("[name='csrfmiddlewaretoken']").val() + "", {
                         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'} //改变头格式，原生默认上传json格式
@@ -578,6 +580,7 @@
                         if (this.OthersNum !== 0) {
                             this.OthersPercent = Math.round((this.OthersNum / this.TotalNum) * 100) + "%"
                         }
+                        this.elbuttonloading = false;
 
                     });
 
