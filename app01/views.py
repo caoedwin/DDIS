@@ -347,8 +347,8 @@ def ProjectInfoSearch(request):
                      "DQA_QMNum": i.DQAQMNum, "DQA_QM": i.DQAQM,
                      "Modified_Date": i.ModifiedDate}
                 )
-            # datamail = {"ids": [1, 2], "Projects": ['GLAMA0', 'GLMS1']}
-            # MailOAtest.delay(**datamail) # 启动异步任务
+            datamail = {"ids": [1, 2], "Projects": ['GLAMA0', 'GLMS1']}
+            MailOAtest.delay(**datamail) # 启动异步任务
             pass
         else:
             try:

@@ -580,7 +580,7 @@ from exchangelib.recurrence import Recurrence, WeeklyPattern, DailyPattern, Rela
 from exchangelib.fields import MONDAY, WEDNESDAY, FRIDAY
 from exchangelib.items import MeetingRequest, MeetingCancellation, SEND_TO_ALL_AND_SAVE_COPY
 import urllib3
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 
 # 如果需要设置日历提醒，可以添加CalendarItem
@@ -669,6 +669,38 @@ def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
             #     )
             # )
             # ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
+
+            # 获取当前时间
+            now = datetime.now()
+
+            # 设置当天10点的时间
+            excute_of_day1 = datetime.combine(now.date(), datetime.strptime('10:00', '%H:%M').time())
+            # 设置当天15点的时间
+            excute_of_day2 = datetime.combine(now.date(), datetime.strptime('15:00', '%H:%M').time())
+
+            # 如果当前时间超过了上午10点，则10点还有多少秒就是下个10点的秒数
+            if now > excute_of_day1:
+                excute_of_day1 += timedelta(days=1)
+            # 如果当前时间超过了下午15点，则15点还有多少秒就是下个15点的秒数
+            if now > excute_of_day2:
+                excute_of_day2 += timedelta(days=1)
+
+            # 计算时间差
+            seconds_until_1 = (excute_of_day1 - now).seconds
+            seconds_until_2 = (excute_of_day2 - now).seconds
+
+            if seconds_until_1 > seconds_until_2:
+                time.sleep(seconds_until_2)
+                mail.send()
+                time.sleep(seconds_until_1 - seconds_until_2)
+                mail.send()
+                time.sleep(24 * 60 * 60 - seconds_until_1)
+            else:
+                time.sleep(seconds_until_1)
+                mail.send()
+                time.sleep(seconds_until_2 - seconds_until_1)
+                mail.send()
+                time.sleep(24 * 60 * 60 - seconds_until_2)
         except Exception as e:
             print(str(e))
 
