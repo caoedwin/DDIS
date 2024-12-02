@@ -201,6 +201,12 @@ class ProjectinfoinDCT(models.Model):
     DQAQM = models.CharField('DQAQM', max_length=20, null=True, blank=True)
     DQAQMNum = models.CharField('DQAQMNum', max_length=20, null=True, blank=True)
     ModifiedDate = models.CharField('ModifiedDate', max_length=100, default="", null=True, blank=True)
+    class Meta:
+        verbose_name = 'ProjectinfoinDCT'  # 不写verbose_name, admin中默认的注册名会加s
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return '{Project}'.format(Project=self.ComPrjCode)
 
 # class lessonlearn_Project(models.Model):
 #     Customer = models.CharField(max_length=20)

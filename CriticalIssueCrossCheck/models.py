@@ -1,5 +1,6 @@
 from django.db import models
-from app01.models import lesson_learn, UserInfo
+from app01.models import UserInfo
+from app01.models import ProjectinfoinDCT
 
 
 # from TestPlanME.models import TestProjectME
@@ -54,7 +55,7 @@ class CriticalIssue(models.Model):
         ("active", "active"),
         ("inactive", "inactive")
     )
-    IssueNum = models.AutoField(primary_key=True, default=100001)
+    # id = models.AutoField(primary_key=True, default=100001)
     CG = models.CharField('Customer', choices=Customer_choice, max_length=20)
     Category = models.CharField(max_length=100, choices=choosecat, default="Reliability")
     Object = models.CharField(max_length=100)
@@ -88,7 +89,7 @@ class CriticalIssue(models.Model):
         # '{menu}---{permission}'.format(menu=self.menu, permission=self.title)
         return '{Category}-{Object}---{Symptom}'.format(Category=self.Category, Object=self.Object,Symptom=self.Symptom)
 
-class CriticalIssueTestProject(models.Model):
+class CriticalIssueTestProject(models.Model):#没有使用到，用的时ProjectInfo里面的机种信息
     Customer_choice = (
         # ('Select Customer', 'Select Customer'),
         ('', ''),
@@ -134,7 +135,7 @@ class CriticalIssueCrossResult(models.Model):
         ('N/A', 'N/A'),
         ('N/P', 'N/P'),
     )
-    Projectinfo = models.ForeignKey("CriticalIssueTestProject", on_delete=True)
+    Projectinfo = models.ForeignKey("app01.ProjectinfoinDCT", on_delete=True)
     CriticalIssue = models.ForeignKey("CriticalIssue", on_delete=True)
     result = models.CharField(max_length=20, choices=result_choice)
     Comment = models.CharField(max_length=1000)

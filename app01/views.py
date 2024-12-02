@@ -347,7 +347,9 @@ def ProjectInfoSearch(request):
                      "DQA_QMNum": i.DQAQMNum, "DQA_QM": i.DQAQM,
                      "Modified_Date": i.ModifiedDate}
                 )
-            datamail = {"ids": [1, 2], "Projects": ['GLAMA0', 'GLMS1']}
+            print(ProjectinfoinDCT.objects.filter(ComPrjCode='ForTest1').first())
+            print(ProjectinfoinDCT.objects.filter(ComPrjCode='ForTest1').first().DQAPLNum)
+            datamail = {"ids": [100002, 100003], "Projects": ['ForTest1', 'ForTest2', ]}
             MailOAtest.delay(**datamail) # 启动异步任务
             pass
         else:
