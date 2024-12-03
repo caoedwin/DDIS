@@ -621,31 +621,31 @@ def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
     seconds_until_1 = (excute_of_day1 - now).seconds
     seconds_until_2 = (excute_of_day2 - now).seconds
 
-    # if seconds_until_1 > seconds_until_2:
-    #     time.sleep(seconds_until_2)
-    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第二次"
-    #     Mailsend(**kwargs)
-    #
-    #     time.sleep(seconds_until_1 - seconds_until_2)
-    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第三次"
-    #     Mailsend(**kwargs)
-    #
-    #     time.sleep(24 * 60 * 60 - seconds_until_1)
-    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-截至"
-    #     Mailsend(**kwargs)
-    #
-    # else:
-    #     time.sleep(seconds_until_1)
-    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第二次"
-    #     Mailsend(**kwargs)
-    #
-    #     time.sleep(seconds_until_2 - seconds_until_1)
-    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第三次"
-    #     Mailsend(**kwargs)
-    #
-    #     time.sleep(24 * 60 * 60 - seconds_until_2)
-    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-截至"
-    #     Mailsend(**kwargs)
+    if seconds_until_1 > seconds_until_2:
+        time.sleep(seconds_until_2)
+        kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第二次"
+        Mailsend(**kwargs)
+
+        time.sleep(seconds_until_1 - seconds_until_2)
+        kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第三次"
+        Mailsend(**kwargs)
+
+        time.sleep(24 * 60 * 60 - seconds_until_1)
+        kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-截至"
+        Mailsend(**kwargs)
+
+    else:
+        time.sleep(seconds_until_1)
+        kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第二次"
+        Mailsend(**kwargs)
+
+        time.sleep(seconds_until_2 - seconds_until_1)
+        kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第三次"
+        Mailsend(**kwargs)
+
+        time.sleep(24 * 60 * 60 - seconds_until_2)
+        kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-截至"
+        Mailsend(**kwargs)
 
 
 def Mailsend(**kwargs):
