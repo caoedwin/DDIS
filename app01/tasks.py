@@ -588,24 +588,180 @@ from datetime import datetime, timedelta
 @task
 def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
     # 此句用来消除ssl证书错误，exchange使用自签证书需加上
-    print(kwargs)
+    # Tasklog设定
+    cur_path = os.path.dirname(os.path.realpath(__file__))  # log_path是存放日志的路径
+    log_path = os.path.join(os.path.dirname(cur_path), 'Tasklogs')
+    if not os.path.exists(log_path): os.mkdir(log_path)  # 如果不存在这个logs文件夹，就自动创建一个
+    filenamePass = os.path.join(log_path, 'Pass-{}.log'.format(time.strftime('%Y-%m-%d'))),
+    filenameError = os.path.join(log_path, 'Error-{}.log'.format(time.strftime('%Y-%m-%d'))),
 
+    kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第一次"
+    kwargs["filenamePass"] = filenamePass
+    kwargs["filenameError"] = filenameError
+
+    Mailsend(**kwargs)
+    # print(kwargs)
+
+    # 获取当前时间
+    now = datetime.now()
+
+    # 设置当天10点的时间
+    excute_of_day1 = datetime.combine(now.date(), datetime.strptime('10:00', '%H:%M').time())
+    # 设置当天15点的时间
+    excute_of_day2 = datetime.combine(now.date(), datetime.strptime('15:00', '%H:%M').time())
+
+    # 如果当前时间超过了上午10点，则10点还有多少秒就是下个10点的秒数
+    if now > excute_of_day1:
+        excute_of_day1 += timedelta(days=1)
+    # 如果当前时间超过了下午15点，则15点还有多少秒就是下个15点的秒数
+    if now > excute_of_day2:
+        excute_of_day2 += timedelta(days=1)
+
+    # 计算时间差
+    seconds_until_1 = (excute_of_day1 - now).seconds
+    seconds_until_2 = (excute_of_day2 - now).seconds
+
+    # if seconds_until_1 > seconds_until_2:
+    #     time.sleep(seconds_until_2)
+    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第二次"
+    #     Mailsend(**kwargs)
+    #
+    #     time.sleep(seconds_until_1 - seconds_until_2)
+    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第三次"
+    #     Mailsend(**kwargs)
+    #
+    #     time.sleep(24 * 60 * 60 - seconds_until_1)
+    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-截至"
+    #     Mailsend(**kwargs)
+    #
+    # else:
+    #     time.sleep(seconds_until_1)
+    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第二次"
+    #     Mailsend(**kwargs)
+    #
+    #     time.sleep(seconds_until_2 - seconds_until_1)
+    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-第三次"
+    #     Mailsend(**kwargs)
+    #
+    #     time.sleep(24 * 60 * 60 - seconds_until_2)
+    #     kwargs["subject"] = "【DDIS-CriticalIssue】Cross Check提醒-截至"
+    #     Mailsend(**kwargs)
+
+
+def Mailsend(**kwargs):
     CriticalIssues = kwargs['ids']
     Projects = kwargs['Projects']
+    subject = kwargs["subject"]
+    editor = ''
+
+    filenamePass = kwargs["filenamePass"][0]
+    filenameError = kwargs["filenameError"][0]
+
+    username = 'None'
+    password = 'None'
+
+    # html内容
+    messagecontend = """
+                        <p style="color:red;font-size:24px; font-weight:bold;fontfamily:"楷体";">注：此郵件由系統自動發出，請勿直接回復!!!</p>
+                        <p>Dear All:</p>
+                        <p>您的机种需要check如下issue并更新结果到DDIS：</p>
+                        <a href="http://10.129.83.21:8002/CriticalIssueCrossCheck/CriticalIssue_ProjectResult/" style="font-size: 20px;background-color: yellow;font-weight: bolder;" target="_blank">点击此处，更新结果</a>
+                        
+                          <p></p>
+                          <table border="1" cellpadding="0" cellspacing="0" width="1800" style="border-collapse: collapse;">
+                           <tbody>
+                             <tr>
+                                 <th rowspan=2 style="background-color: #8c9eff">IssueNum</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">CG</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Category</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Symptom</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Reproduce_Steps</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Root_Cause</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Solution</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Action</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Project</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Status</th>
+                                 <th rowspan=2 style="background-color: #8c9eff">Owner</th>
+                                {sub_th}
+                            </tr>
+                            <tr>
+                                {sub_th_2cd}
+                            </tr>
+                                {sub_td}
+                          </tbody>
+                          </table> 
+                                                """
+    sub_th = ""
+    sub_thItem = """
+                <th colspan=2 style="background-color: #8c9eff">{Projectname}</th>
+        """
+    sub_th_2cd = ""
+    sub_th_2cdItem = """
+                    <th style="background-color: #8c9eff">Result</th>
+                    <th style="background-color: #8c9eff">Comments</th>
+            """
+    for i in Projects:
+        sub_th += sub_thItem.format(Projectname=i)
+    num = 0
+    for i in Projects:
+        num += 1
+        if num <= len(Projects):
+            sub_th_2cd += sub_th_2cdItem
+
+    sub_td = ""
+    to_email = []
+    for i in CriticalIssues:
+        # print(value)
+        sub_td_items = """
+                                    <tr>
+                                         <td  style="text-align:center"> {sub_IssueNum} </td>
+                                         <td  style="text-align:center"> {sub_CG} </td>
+                                         <td  style="text-align:center"> {sub_Category} </td>
+                                         <td  style="text-align:center;"> {sub_Symptom} </td>
+                                         <td  style="text-align:center;"> {sub_Reproduce_Steps} </td>
+                                         <td  style="text-align:center;"> {sub_Root_Cause} </td>
+                                         <td  style="text-align:center;"> {sub_Solution} </td>
+                                         <td  style="text-align:center;"> {sub_Action} </td>
+                                         <td  style="text-align:center;"> {sub_Project} </td>
+                                         <td  style="text-align:center;"> {sub_Status} </td>
+                                         <td  style="text-align:center;"> {sub_Owner} </td>
+                                        {sub_sub_Projectreult}
+                                    </tr>
+                                    """
+        CI = CriticalIssue.objects.filter(id=i).first()
+        sub_sub_Projectreult = ""
+        sub_sub_Projectreult_Items = """
+                <td>{result}</td>
+                <td>{comments}</td>
+            """
+        for j in Projects:
+            # print(j)
+            Projectlink = ProjectinfoinDCT.objects.filter(ComPrjCode=j).first()
+            CIR = CriticalIssueCrossResult.objects.filter(Projectinfo=Projectlink, CriticalIssue=CI).first()
+            sub_sub_Projectreult += sub_sub_Projectreult_Items.format(result=CIR.result, comments=CIR.Comment)
+        sub_td += sub_td_items.format(sub_IssueNum=CI.id, sub_CG=CI.CG, sub_Category=CI.Category,
+                                      sub_Symptom=CI.Symptom,
+                                      sub_Reproduce_Steps=CI.Reproduce_Steps, sub_Root_Cause=CI.Root_Cause,
+                                      sub_Solution=CI.Solution, sub_Action=CI.Action,
+                                      sub_Project=CI.Project, sub_Status=CI.Status, sub_Owner=CI.editor,
+                                      sub_sub_Projectreult=sub_sub_Projectreult)
+        editor = CI.editor
+    html = messagecontend.format(sub_th=sub_th, sub_th_2cd=sub_th_2cd, sub_td=sub_td)
+    # print(html)
+
+    # 发送邮件
     to_recipients = []
     cc_recipients = []
     for i in Projects:
-        print(i)
+        # print(i)
         if UserInfo.objects.filter(
-            account=ProjectinfoinDCT.objects.filter(ComPrjCode=i).first().DQAPLNum):
+                account=ProjectinfoinDCT.objects.filter(ComPrjCode=i).first().DQAPLNum):
             to_recipients.append(Mailbox(email_address=str(UserInfo.objects.filter(
                 account=ProjectinfoinDCT.objects.filter(ComPrjCode=i).first().DQAPLNum).first().email)))
         if UserInfo.objects.filter(
-            account=ProjectinfoinDCT.objects.filter(ComPrjCode=i).first()):
+                account=ProjectinfoinDCT.objects.filter(ComPrjCode=i).first()):
             cc_recipients.append(Mailbox(email_address=str(UserInfo.objects.filter(
                 account=ProjectinfoinDCT.objects.filter(ComPrjCode=i).first().DQAQMNum).first().email)))
-
-
 
     BaseProtocol.HTTP_ADAPTER_CLS = NoVerifyHTTPAdapter
     urllib3.disable_warnings()  # 取消SSL安全连接警告
@@ -634,10 +790,9 @@ def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
                               autodiscover=False, access_type=DELEGATE)
 
             # 邮件
-            html = Html(**kwargs)
             mail = Message(
                 account=account,
-                subject='【DDIS-CriticalIssue】Cross Check提醒第一次',
+                subject=subject,
                 body=HTMLBody(html),
                 to_recipients=to_recipients,
                 cc_recipients=cc_recipients,
@@ -686,201 +841,27 @@ def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
             #     )
             # )
             # ci.save(send_meeting_invitations=SEND_TO_ALL_AND_SAVE_COPY)
-
-            # 获取当前时间
-            now = datetime.now()
-
-            # 设置当天10点的时间
-            excute_of_day1 = datetime.combine(now.date(), datetime.strptime('10:00', '%H:%M').time())
-            # 设置当天15点的时间
-            excute_of_day2 = datetime.combine(now.date(), datetime.strptime('15:00', '%H:%M').time())
-
-            # 如果当前时间超过了上午10点，则10点还有多少秒就是下个10点的秒数
-            if now > excute_of_day1:
-                excute_of_day1 += timedelta(days=1)
-            # 如果当前时间超过了下午15点，则15点还有多少秒就是下个15点的秒数
-            if now > excute_of_day2:
-                excute_of_day2 += timedelta(days=1)
-
-            # 计算时间差
-            seconds_until_1 = (excute_of_day1 - now).seconds
-            seconds_until_2 = (excute_of_day2 - now).seconds
-
-            # if seconds_until_1 > seconds_until_2:
-            #     time.sleep(seconds_until_2)
-            #     html = Html(**kwargs)
-            #     mail = Message(
-            #         account=account,
-            #         subject='【DDIS-CriticalIssue】Cross Check第二次',
-            #         body=HTMLBody(html),
-            #         to_recipients=to_recipients,
-            #         cc_recipients=cc_recipients,
-            #         # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-            #         #                Mailbox(email_address='edwin_cao@compal.com')],
-            #     )
-            #     mail.send()
-            #     time.sleep(seconds_until_1 - seconds_until_2)
-            #     html = Html(**kwargs)
-            #     mail = Message(
-            #         account=account,
-            #         subject='【DDIS-CriticalIssue】Cross Check第三次',
-            #         body=HTMLBody(html),
-            #         to_recipients=to_recipients,
-            #         cc_recipients=cc_recipients,
-            #         # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-            #         #                Mailbox(email_address='edwin_cao@compal.com')],
-            #     )
-            #     mail.send()
-            #     time.sleep(24 * 60 * 60 - seconds_until_1)
-            #     html = Html(**kwargs)
-            #     mail = Message(
-            #         account=account,
-            #         subject='【DDIS-CriticalIssue】Cross Check截至',
-            #         body=HTMLBody(html),
-            #         to_recipients=to_recipients,
-            #         cc_recipients=cc_recipients,
-            #         # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-            #         #                Mailbox(email_address='edwin_cao@compal.com')],
-            #     )
-            #     mail.send()
-            # else:
-            #     time.sleep(seconds_until_1)
-            #     html = Html(**kwargs)
-            #     mail = Message(
-            #         account=account,
-            #         subject='【DDIS-CriticalIssue】Cross Check第二次',
-            #         body=HTMLBody(html),
-            #         to_recipients=to_recipients,
-            #         cc_recipients=cc_recipients,
-            #         # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-            #         #                Mailbox(email_address='edwin_cao@compal.com')],
-            #     )
-            #     mail.send()
-            #     time.sleep(seconds_until_2 - seconds_until_1)
-            #     html = Html(**kwargs)
-            #     mail = Message(
-            #         account=account,
-            #         subject='【DDIS-CriticalIssue】Cross Check第三次',
-            #         body=HTMLBody(html),
-            #         to_recipients=to_recipients,
-            #         cc_recipients=cc_recipients,
-            #         # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-            #         #                Mailbox(email_address='edwin_cao@compal.com')],
-            #     )
-            #     mail.send()
-            #     time.sleep(24 * 60 * 60 - seconds_until_2)
-            #     html = Html(**kwargs)
-            #     mail = Message(
-            #         account=account,
-            #         subject='【DDIS-CriticalIssue】Cross Check截止',
-            #         body=HTMLBody(html),
-            #         to_recipients=to_recipients,
-            #         cc_recipients=cc_recipients,
-            #         # bcc_recipients=[Mailbox(email_address='edwin_cao@compal.com'),
-            #         #                Mailbox(email_address='edwin_cao@compal.com')],
-            #     )
-            #     mail.send()
         except Exception as e:
-            print(str(e))
+            print("无法连接到Exchange服务器：", str(e))
+            # 打开文件以追加模式，如果文件不存在则创建
+            with open(filenameError, 'a') as file:
+                file.write("\n" + str(time.strftime(
+                    '%Y-%m-%d, %H:%M:%S')) + "-editor:" + str(editor) + "-subject:"+str(subject) + ":" + "Issues-" + str(CriticalIssues) + "-Projects-" + str(Projects) + "-Error-" + str(
+                    e) + "-或无法连接到Exchange服务器：" + str(username) + str(password))
+            return False
 
     else:
         print("OAmail_account.json不存在")
-
-
-def Html(**kwargs):
-    CriticalIssues = kwargs['ids']
-    CriticalIssues = kwargs['ids']
-    Projects = kwargs['Projects']
-
-    messagecontend = """
-                        <p style="color:red;">注：此郵件由系統自動發出，請勿直接回復!!!</p>
-                        <p>Dear All:</p>
-                        <p>您的机种需要check如下issue并更新结果到DDIS：</p>
-                        <a href="http://10.129.83.21:8002/CriticalIssueCrossCheck/CriticalIssue_ProjectResult/" style="font-size: 20px;background-color: yellow;font-weight: bolder;" target="_blank">点击此处，更新结果</a>
-                        
-                          <p></p>
-                          <table border="1" cellpadding="0" cellspacing="0" width="1800" style="border-collapse: collapse;">
-                           <tbody>
-                             <tr>
-                                 <th rowspan=2 style="background-color: #8c9eff">IssueNum</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">CG</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Category</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Symptom</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Reproduce_Steps</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Root_Cause</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Solution</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Action</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Project</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Status</th>
-                                 <th rowspan=2 style="background-color: #8c9eff">Owner</th>
-                                {sub_th}
-                            </tr>
-                            <tr>
-                                {sub_th_2cd}
-                            </tr>
-                                {sub_td}
-                          </tbody>
-                          </table> 
-                                                """
-    sub_th = ""
-    sub_thItem = """
-                <th colspan=2 style="background-color: #8c9eff">{Projectname}</th>
-        """
-    sub_th_2cd = ""
-    sub_th_2cdItem = """
-                    <th>Result</th>
-                    <th>Comments</th>
-            """
-    for i in Projects:
-        sub_th += sub_thItem.format(Projectname=i)
-    num = 0
-    for i in Projects:
-        num += 1
-        if num <= len(Projects):
-            sub_th_2cd += sub_th_2cdItem
-
-
-
-    sub_td = ""
-    to_email = []
-    for i in CriticalIssues:
-        # print(value)
-        sub_td_items = """
-                                    <tr>
-                                         <td  style="text-align:center"> {sub_IssueNum} </td>
-                                         <td  style="text-align:center"> {sub_CG} </td>
-                                         <td  style="text-align:center"> {sub_Category} </td>
-                                         <td  style="text-align:center;"> {sub_Symptom} </td>
-                                         <td  style="text-align:center;"> {sub_Reproduce_Steps} </td>
-                                         <td  style="text-align:center;"> {sub_Root_Cause} </td>
-                                         <td  style="text-align:center;"> {sub_Solution} </td>
-                                         <td  style="text-align:center;"> {sub_Action} </td>
-                                         <td  style="text-align:center;"> {sub_Project} </td>
-                                         <td  style="text-align:center;"> {sub_Status} </td>
-                                         <td  style="text-align:center;"> {sub_Owner} </td>
-                                        {sub_sub_Projectreult}
-                                    </tr>
-                                    """
-        CI = CriticalIssue.objects.filter(id=i).first()
-        sub_sub_Projectreult = ""
-        sub_sub_Projectreult_Items = """
-                <td>{result}</td>
-                <td>{comments}</td>
-            """
-        for j in Projects:
-            # print(j)
-            Projectlink = ProjectinfoinDCT.objects.filter(ComPrjCode=j).first()
-            CIR = CriticalIssueCrossResult.objects.filter(Projectinfo=Projectlink, CriticalIssue=CI).first()
-            sub_sub_Projectreult += sub_sub_Projectreult_Items.format(result=CIR.result, comments=CIR.Comment)
-        sub_td += sub_td_items.format(sub_IssueNum=CI.id, sub_CG=CI.CG, sub_Category=CI.Category,
-                                      sub_Symptom=CI.Symptom,
-                                      sub_Reproduce_Steps=CI.Reproduce_Steps, sub_Root_Cause=CI.Root_Cause,
-                                      sub_Solution=CI.Solution, sub_Action=CI.Action,
-                                      sub_Project=CI.Project, sub_Status=CI.Status, sub_Owner=CI.editor,
-                                      sub_sub_Projectreult=sub_sub_Projectreult)
-    html = messagecontend.format(sub_th=sub_th, sub_th_2cd=sub_th_2cd, sub_td=sub_td)
-    print(html)
-    return html
+        # 打开文件以追加模式，如果文件不存在则创建
+        with open(filenameError, 'a') as file:
+            file.write("\n" + time.strftime(
+                '%Y-%m-%d, %H:%M:%S') + "-editor:" + str(editor) + "-subject" + str(subject) + ":" + "Issues-" + str(CriticalIssues) + "-Projects-" + str(Projects) + "-Error-" + "OAmail_account.json不存在")
+        return False
+        # 打开文件以追加模式，如果文件不存在则创建
+    with open(filenamePass, 'a') as file:
+        file.write("\n" + str(time.strftime(
+            '%Y-%m-%d, %H:%M:%S')) + "-editor:" + str(editor) + "-subject" + str(subject) + ":" + "Issues-" + str(CriticalIssues) + "-Projects-" + str(Projects))
+    return True
 
 
 @task
