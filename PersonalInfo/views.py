@@ -5522,7 +5522,7 @@ def Summary2(request):
                     for j in mounthlist:
                         if j[0] in i.keys():
                             monthSummaryValue += float(i[j[0]].split("%")[0]) / 100
-                    i["monthSummary"] = '%.2f%%' % (round(monthSummaryValue / mounthnum, 4) * 100)
+                    i["monthSummary"] = '%.2f%%' % (round(monthSummaryValue / (mounthnum - 1), 4) * 100)
                 else:
                     monthSummaryValue = 0
                     for j in mounthlist:
@@ -6353,7 +6353,7 @@ def Summary2(request):
                     for j in mounthlist:
                         if j[0] in i.keys():
                             monthSummaryValue += float(i[j[0]].split("%")[0]) / 100
-                    i["monthSummary"] = '%.2f%%' % (round(monthSummaryValue / mounthnum, 4) * 100)
+                    i["monthSummary"] = '%.2f%%' % (round(monthSummaryValue / (mounthnum - 1), 4) * 100)
                 else:
                     monthSummaryValue = 0
                     for j in mounthlist:

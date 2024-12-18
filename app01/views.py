@@ -896,7 +896,7 @@ def Navigations_Category_axios(request):
                 'address': "",
                 'Comment': "",
                 'name2': "CriticalIssue",
-                'Key1': "CriticalIssue",
+                'Key2': "CriticalIssue",
                 'address2': "",
                 'Comment2': "",
                 'name3': "",  # Issue Notes
@@ -1907,35 +1907,35 @@ def Navigations_system_axios(request):
         #      "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  #
         #      },
         # ],
-        # "NonDQA-Lesson": [
-        #     {"Comment": "",
-        #      "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
-        #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
-        #      "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
-        #      },
-        #     {"Comment": "",
-        #      "name1": "T88", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # T88
-        #      "name2": "T89", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # T89
-        #      "name3": 'T99', "url3": "", "Comment3": "", "CustomerFlag3": 0,  # T99
-        #      "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0,  # A39
-        #      },
-        #     {"Comment": "",
-        #      "name1": "", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # CQT88
-        #      "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # AIO
-        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
-        #      "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  #
-        #      },
-        # ],
+        "NonDQA-Lesson": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
+             "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # T88
+             "name2": "T89", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # T89
+             "name3": 'T99', "url3": "", "Comment3": "", "CustomerFlag3": 0,  # T99
+             "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0,  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # CQT88
+             "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # AIO
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  #
+             },
+        ],
         "CriticalIssue": [
             {"Comment": "",
-             "name1": "C38", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment1": "",
+             "name1": "C38", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
-             "name2": "A31", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment2": "",
+             "name2": "A31", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment2": "",
              "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment3": "",
+             "name3": "A32", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment3": "",
              "CustomerFlag3": 0,  # A32
-             "name4": 'ABO', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByProject/", "Comment4": "",
+             "name4": 'ABO', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment4": "",
              "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",

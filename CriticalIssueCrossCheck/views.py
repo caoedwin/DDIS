@@ -536,7 +536,7 @@ def CriticalIssue_ProjectResult(request):
     return render(request, 'CriticalIssueCrossCheck/CriticalIssue_result.html', locals())
 
 
-def CriticalIssue_SearchByProject(request):
+def CriticalIssue_SearchByIssue(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')

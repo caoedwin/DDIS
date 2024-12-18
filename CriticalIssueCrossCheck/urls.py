@@ -9,5 +9,5 @@ urlpatterns = [
     # path(r'Lesson_project/', views.Lesson_project),
     # path(r'Lesson_update/', views.Lessonupdate),
     path('CriticalIssue_ProjectResult/', views.CriticalIssue_ProjectResult, name='LessonProject_edit'),
-    path('CriticalIssue_SearchByProject/', views.CriticalIssue_SearchByProject, name='LessonProject_search'),
+    path('CriticalIssue_SearchByIssue/', views.CriticalIssue_SearchByIssue, name='CriticalIssue_SearchByIssue'),
 ]
