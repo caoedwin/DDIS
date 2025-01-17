@@ -1,595 +1,765 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}Critical Issue edit{% endblock %}
+{% block title %}perIn_search{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="/static/css/ElementUI.css">
-    <link href="/static/css/bouncing.css" rel="stylesheet">
-    <style>
-        [v-cloak] {
-            display: none;
-        }
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+.tableAround{
+padding: 20px;
+-moz-box-shadow: 0px 0px 10px #333333;
+-webkit-box-shadow: 0px 0px 10px #333333;
+box-shadow: 0px 0px 10px #333333;
+border-radius: 10px;
+background-color: rgba(255,255,255,0.1);
+}
 
-        .selectMsg {
-            font-size: 16px;
-            padding: 15px;
-            display: flex;
-        }
+.el-collapse-item__header{
+    background-image: linear-gradient(to right, rgba(0,139,139,0), rgba(0,139,139,1));
+}
 
-        .selectMsg label {
-            font-weight: 800;
-            margin-right: 10px;
-            color: white;
-        }
+/* 解决el-table 表线不齐 */
+body .el-table th.gutter {
+    display: table-cell !important;
+}
 
-        .selectMsg label:last-child {
-            margin-left: 15px;
-        }
+body .el-table colgroup.gutter {
+    display: table-cell !important;
+}
 
-        .el-table .el-table__row.warning-row {
-            background: oldlace !important;
-        }
+label{
+    color:white;
+}
+ .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .selectMsg label{
+      font-weight: 800;
+      color:aliceblue;
+  }
 
-        .el-table .el-table__row.warning-row:hover {
-            background: oldlace !important;
-        }
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+.demo-fit{
+   display:inline-block;
+   vertical-align: top;
+   width:123px;
+   height:186px;
+   border:1px solid black;
 
-        .el-table .info-row {
-            background: #8b968d !important;
-        }
+}
+.cardInformation{
+   display:inline-block;!important
+   margin-left:20px;
+}
+.cardInformation label{
+   margin-bottom: -25px;
+}
+.cardInformation tr td{
+   width: 300px;
+}
+tbody tr td:last-child {
+   text-align:left;
+}
 
-        .el-table .info-row:hover {
-            background: #8b968d !important;
-        }
+.el-table .my-cell {
+    vertical-align: top
+  }
+#sh {
+        font-size:18px;
+        font-family:微软雅黑;
+        border: 2px solid #9f9ca1;
+}
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+        font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family: 微软雅黑;
+}
 
-        .el-table .danger-row {
-            background: #F56C6C !important;
-        }
+.showDataArea{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 20px 0 20px 0;
+    width: 100%;
 
-        .el-table .danger-row:hover {
-            background: #F56C6C !important;
-        }
+}
 
-        .el-table .success-row {
-            background: #a8c97f !important;
-        }
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin-left: 60px;
+    margin-top: 20px;
+    position: relative;
+}
 
-        .el-table .success-row:hover {
-            background-color: #a8c97f !important;
-        }
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
 
-        .el-table .cell {
-            text-align: left;
-            white-space: pre-line;
-        }
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
 
-        .selectItem {
-            font-size: 20px;
-            font-weight: bold;
-            color: aliceblue;
-        }
 
-        .tips {
-            font-size: 20px;
-            font-weight: bold;
-            color: coral;
-            margin-left: 15px;
-        }
+ .Quatity {
+    height: 500px;
+    width: 100%;
+    vertical-align: middle;
+}
 
-        .el-icon-circle-check, .el-icon-circle-close {
-            font-size: 2.5rem;
-            color: cadetblue;
-        }
+  .customerContent,.departmentContent{
+     margin-left: 20px;
+  }
 
-        .tableAround {
-            padding: 20px;
-            -moz-box-shadow: 0px 0px 10px #333333;
-            -webkit-box-shadow: 0px 0px 10px #333333;
-            box-shadow: 0px 0px 10px #333333;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
 
-        .inputError {
-            text-align: center;
-            color: crimson;
-            background-color: beige;
-            width: 50%;
-            margin: 10px auto 5px;
-            position: relative;
-        }
 
-        .inputError:before {
-            display: block;
-            content: '';
-            border-width: 8px 8px 8px 8px;
-            border-style: solid;
-            border-color: transparent transparent beige transparent;
-            /* 定位 */
-            position: absolute;
-            left: 50%;
-            top: -16px;
-        }
-
-        {% comment %}解决hover事件的高亮{% endcomment %}
-        .el-table--enable-row-hover .el-table__body tr:hover > td {
-            background-color: transparent !important;
-        }
-
-        {% comment %}解决点击事件出现 current_row class对上面的样式的影响{% endcomment %}
-        .el-table__body tr.current-row > td {
-            background-color: transparent !important;
-        }
-
-        .el-table .el-select .el-input__inner {
-            height: 50px;
-        }
-
-        .eltable-photo {
-            white-space: nowrap;
-            overflow-x: auto;
-            text-overflow: clip
-        }
-
-        .eltable-photo::-webkit-scrollbar { /*滚动条整体样式*/
-            width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
-            height: 10px;
-        }
-
-        .eltable-photo::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .eltable-photo::-webkit-scrollbar-track { /*滚动条里面轨道*/
-            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .eltable-photo .el-image {
-            margin-left: 6px;
-
-        }
-
-        .eltable-photo .el-image:first-child {
-            margin-left: 0px;
-        }
-
-        .el-pagination.is-background {
-            text-align: right;
-            margin: 10px 0 0 0;
-        }
-
-        .el-pagination__total, .el-pagination__jump {
-            color: white;
-        }
-    </style>
+</style>
 
 {% endblock %}
 {% block content %}
+<div id="app">
+    <!--搜索框-->
+    <div class="selectMsg" >
+           <div class="customerContent">
+                 <label for="year">Year</label>
+                 <select  ref="Year"  v-model="year" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                       <option v-for="(item,key,index) in yearOptions" >${ item }</option>
+                 </select>
+                 <div class="inputError" v-cloak v-show="customerError">不能為空</div>
+           </div>
+           <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px;margin-left: 20px">搜索</el-button>
+        <br/>
 
-    <div id="app">
-    <el-backtop ></el-backtop>
-        <div class="selectMsg" v-cloak>
-            <div class="categoryContent">
-                <label for="Category" v-cloak>Category</label>
-                <el-select v-model="selectedCategory" ref="Category" style="margin-right: 20px;width:200px" clearable
-                           v-cloak>
-                    <el-option v-for="item in selectCategory" :label="item.Category" :value="item.Category"></el-option>
-                </el-select>
-            </div>
-            <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
-        </div>
-        <el-dialog :visible.sync="update">
-            <template>
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item label="Category">
-                        <el-select v-model="form.Category" placeholder="请选择">
-                            <el-option label="Reliability" value="Reliability"></el-option>
-                            <el-option label="Compatibility" value="Compatibility"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="Object">
-                        <el-input v-model="form.Object"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Symptom">
-                        <el-input v-model="form.Symptom"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Reproduce_Steps">
-                        <el-input type="textarea" v-model="form.Reproduce_Steps"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Root_Cause">
-                        <el-input type="textarea" v-model="form.Root_Cause"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Solution">
-                        <el-input type="textarea" v-model="form.Solution"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Action">
-                        <el-input type="textarea" v-model="form.Action"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Status">
-                        <el-select v-model="form.Status" placeholder="请选择">
-                            <el-option label="active" value="active"></el-option>
-                            <el-option label="inactive" value="inactive"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="Photo">
-                        <el-upload
-                                action="#"
-                                list-type="picture-card"
-                                :on-success="handleImageSuccess"
-                                :before-upload="beforeImageUpload"
-                                :auto-upload="true"
-                                :file-list="fileListO"
-                        >
-                            <!-- 十字图标 -->
-                            <i slot="default" class="el-icon-plus"></i>
-                            <!-- 文件 -->
-                            <div slot="file" slot-scope="{file}">
-                                <img class="el-upload-list__item-thumbnail" :src="file.url" alt/>
-                            </div>
-                        </el-upload>
-                    </el-form-item>
-                    <el-form-item label="Video">
-                        <el-upload
-                          action="#"
-                          :accept="'.mp4, .avi, .flv, .mov, .wmv, .rmvb, .ogg'"
-                          :on-success="handleVideoUploadSuccess"
-                          :file-list="fileList1"
-                        >
-                          <el-button type="primary">点击上传视频</el-button>
-                            <!-- 文件 -->
-                            <div slot="file" slot-scope="{file}">
-                                <video controls width="320" height="240" :src="file.url"></video>
-                            </div>
-                        </el-upload>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit">更新</el-button>
-                    </el-form-item>
-                </el-form>
-            </template>
-        </el-dialog>
-        <div class="tableAround" v-cloak>
-            {% csrf_token %}
-            <!--數據表-->
-            <el-table height="700" border :data="tableData" style="min-width: 100%;border-radius: 10px"
-                    {#        :row-class-name="tableRowClassName"#}
-                    {#        row-click="rowClick"#}
-                      :header-cell-style="{
-       'background-color':'#fafafa',
-       'font-weight':'800',
-       'border-bottom':'1px solid rgb(103, 194, 58)'
-    }">
-                <el-table-column label="Edit">
-                    <template slot-scope="scope">
-                        <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"
-                                   @click="alertID(scope.row.id);update=true"></el-button>
-                    </template>
-                </el-table-column>
-                {% comment %}    <el-table-column prop="id" label="ID" sortable ></el-table-column>{% endcomment %}
-                <el-table-column type="index" :index="indexMethod"></el-table-column>
-                <el-table-column prop="Category" label="Category" width="104" sortable></el-table-column>
-                <el-table-column prop="Object" label="Object" width="97" sortable></el-table-column>
-                <el-table-column prop="Symptom" label="Symptom" width="121" sortable></el-table-column>
-                <el-table-column prop="Reproduce_Steps" label="Reproduce Steps" style="white-space: pre-line;"
-                                 width="220" sortable></el-table-column>
-                <el-table-column prop="Root_Cause" label="Root Cause" style="white-space: pre-line;" width="220"
-                                 sortable></el-table-column>
-                <el-table-column prop="Solution" label="Solution" style="white-space: pre-line;" width="220"
-                                 sortable></el-table-column>
-                <el-table-column prop="Action" label="Action" style="white-space: pre-line;" width="220"
-                                 sortable></el-table-column>
-                <el-table-column prop="Status" label="Status" style="white-space: pre-line;" width="220"
-                                 sortable></el-table-column>
-                <el-table-column prop="Photo" label="Photo" width="100" sortable class="eltable-photo">
-                    <template scope="scope">
-                        <div class="eltable-photo">
-                            <el-image v-for="(item) in scope.row.Photo" :src="item" style="width: 100px; height: 100px;"
-                                      :preview-src-list="scope.row.Photo" lazy="true"></el-image>
-                        </div>
-                        <div v-if="scope.row.file[0]">
-                            <a v-for="(item) in scope.row.file" v-bind:href="item"><img
-                                    src="/static/src/back/document_save_2_24px_539656_easyicon.net.png"></a>
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="Video" label="Video" width="100" sortable class="eltable-video">
-                    <template scope="scope">
-                        <div class="eltable-video">
-                            {% comment %} <el-video v-for="(item) in scope.row.Video" :src="item" style="width: 200px; height: 100px;" :preview-src-list="scope.row.Video" lazy="true"><source src="item" type="video/mp4">  </el-video>{% endcomment %}
-
-
-                            {#                                                                                <img src="../media/{{ i.img }}" height="100" width="200" alt="" />#}
-                            <video v-for="(item) in scope.row.Video" width="200" height="100" controls>
-                                <source :src="item" type="video/mp4">
-                                # 播放器形式
-                                您的浏览器不支持 video 标签。
-                            </video>
-
-
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="editor" label="Latest editor" style="white-space: pre-line;" width="220"
-                                 sortable></el-table-column>
-                <el-table-column prop="edit_time" label="Latest edit_time" style="white-space: pre-line;" width="220"
-                                 sortable></el-table-column>
-            </el-table>
-        </div>
     </div>
+
+    <div class="showDataArea" style="white-space: nowrap;">
+        <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">實際專案數量 減去 預算專案數量</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent1" style="width: 100%;" id="out-table1"
+              v-loading="tableloading" fit
+              :header-cell-style="{color:'#333',{% comment %}fontFamily:'MicrosoftYaHeiUI',{% endcomment %}fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+          </template>
+
+    </div>
+{#    <div class="showDataArea" style="white-space: nowrap;">#}
+    <div class="tableAround" v-cloak>
+          <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">${ this.YearTitle } 實際專案數量</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent2" style="width: 100%;" id="out-table2"
+              v-loading="tableloading"
+              :header-cell-style="{color:'#333',{% comment %}fontFamily:'MicrosoftYaHeiUI',{% endcomment %}fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+
+              <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item name="1">
+                      <template slot="title">
+                              實際專案清單
+                          <div style="margin-left: 30px;" @click.stop="showCollapse"><el-button @click="exportExcel" type="primary" v-cloak size="small">導出</el-button></div>
+                      </template>
+{#                      <div style="margin-top: 10px;"><el-button @click="exportExcel" type="primary" v-cloak style="height:40px">導出</el-button></div>#}
+                      <el-table {% comment %}height="1500px" {% endcomment %} id="out-table3" border stripe :data="tableContent3.slice((currentPage1-1)*pageSize1,currentPage1*pageSize1)"
+                        style="width: 100%;border-radius: 10px;margin-top: 20px;font-size: 12px"
+                        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        v-loading="tableloading" @sort-change='sortChange1'
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                          <el-table-column  prop="RD_Project_Plan" label="RD Project Plan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  type="index" :index="indexMethod" label="No." width="auto" min-width="2%" align="center"></el-table-column>
+                          <el-table-column  prop="CG" label="CG" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Compal_Model" label="Compal Model" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Customer_Model" label="Customer Model" align="center" width="auto" min-width="14%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Marketing_type" label="Marketing type(Commerical/Consumer)" align="center" width="auto" min-width="10%" sortable='custom'></el-table-column>
+        {#                  <el-table-column  prop="Status" label="Status: Planning=P Executing=E" align="center" width="140"></el-table-column>#}
+        {#                  <el-table-column  prop="Customer" label="Customer" align="center" width="120"></el-table-column>#}
+        {#                  <el-table-column  prop="Project_Type" label="Project Type(NB/PAD/AIO/IPC)" align="center" width="120"></el-table-column>#}
+                          <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="May" label="May" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="July" label="July" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+
+                      </el-table>
+                    <div class="block">
+                        <el-pagination  @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[15, 30, 50]" :page-size="30" layout="total, sizes, prev, pager, next, jumper" :total="totalNum1">
+                        </el-pagination>
+                    </div>
+              </el-collapse-item>
+               </el-collapse>
+          </template>
+
+    </div>
+{#    <div class="showDataArea" style="white-space: nowrap;">#}
+    <div class="tableAround" v-cloak >
+          <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">${ this.YearTitle } 預算專案數量(w/o OOC)</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent4" style="width: 100%;" id="out-table4"
+              v-loading="tableloading"
+              :header-cell-style="{color:'#333',{% comment %}fontFamily:'MicrosoftYaHeiUI',{% endcomment %}fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+
+              <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item title="預算專案清單(w/o OOC)" name="2">
+                      <el-table  {% comment %}height="1500px" {% endcomment %}id="out-table5" border stripe :data="tableContent5.slice((currentPage2-1)*pageSize2,currentPage2*pageSize2)"
+                        style="width: 100%;border-radius: 10px;margin-top: 20px;font-size: 12px"
+                        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        v-loading="tableloading" @sort-change='sortChange2'
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                          <el-table-column  prop="RD_Project_Plan" label="RD Project Plan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  type="index" :index="indexMethod" label="No." width="auto" min-width="2%" align="center"></el-table-column>
+                          <el-table-column  prop="CG" label="CG" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Compal_Model" label="Compal Model" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Customer_Model" label="Customer Model" align="center" width="auto" min-width="14%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Marketing_type" label="Marketing type(Commerical/Consumer)" align="center" width="auto" min-width="10%" sortable='custom'></el-table-column>
+        {#                  <el-table-column  prop="Status" label="Status: Planning=P Executing=E" align="center" width="140"></el-table-column>#}
+        {#                  <el-table-column  prop="Customer" label="Customer" align="center" width="120"></el-table-column>#}
+        {#                  <el-table-column  prop="Project_Type" label="Project Type(NB/PAD/AIO/IPC)" align="center" width="120"></el-table-column>#}
+                          <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="May" label="May" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="July" label="July" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+
+                      </el-table>
+                    <div class="block">
+                        <el-pagination  @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage2" :page-sizes="[15, 30, 50]" :page-size="30" layout="total, sizes, prev, pager, next, jumper" :total="totalNum2">
+                        </el-pagination>
+                    </div>
+              </el-collapse-item>
+               </el-collapse>
+          </template>
+    </div>
+{#    <div class="showDataArea" style="white-space: nowrap;">#}
+    <div class="tableAround" v-cloak >
+          <div style="width: 100%;margin-bottom: 10px;color: #FF9933;font-size: 18px;">${ this.YearTitle } 預算專案數量(with OOC)</div>
+          <template v-cloak>
+              <el-table  border :data="tableContent6" style="width: 100%;" id="out-table6"
+              v-loading="tableloading"
+              :header-cell-style="{color:'#333',fontFamily:'MicrosoftYaHeiUI',fontSize:'15px',fontWeight:900,background:'#CCDDFF','border-bottom':'1px solid rgb(103, 194, 58)'}"
+              element-loading-text="數據更新中，請稍後"
+              >
+                <el-table-column  prop="Phase" label="Phase" align="center" width="auto" min-width="7%"width="80"></el-table-column>
+                <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="May" label="May" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="July" label="July" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="7%"></el-table-column>
+                <el-table-column  prop="Total" label="Total" align="center" width="auto" min-width="7%"></el-table-column>
+              </el-table>
+
+               <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item title="預算專案清單(with OOC)" name="3">
+                      <el-table {% comment %}height="1500px" {% endcomment %}id="out-table7" border stripe :data="tableContent7.slice((currentPage3-1)*pageSize3,currentPage3*pageSize3)"
+                        style="width: 100%;border-radius: 10px;margin-top: 20px;font-size: 12px"
+                        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                        v-loading="tableloading" @sort-change='sortChange3'
+                        element-loading-text="數據更新中，請稍後"
+                        border>
+                          <el-table-column  prop="RD_Project_Plan" label="RD Project Plan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  type="index" :index="indexMethod" label="No." width="auto" min-width="2%" align="center"></el-table-column>
+                          <el-table-column  prop="CG" label="CG" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Compal_Model" label="Compal Model" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Customer_Model" label="Customer Model" align="center" width="auto" min-width="14%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Marketing_type" label="Marketing type(Commerical/Consumer)" align="center" width="auto" min-width="10%" sortable='custom'></el-table-column>
+        {#                  <el-table-column  prop="Status" label="Status: Planning=P Executing=E" align="center" width="140"></el-table-column>#}
+        {#                  <el-table-column  prop="Customer" label="Customer" align="center" width="120"></el-table-column>#}
+        {#                  <el-table-column  prop="Project_Type" label="Project Type(NB/PAD/AIO/IPC)" align="center" width="120"></el-table-column>#}
+                          <el-table-column  prop="Jan" label="Jan" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Feb" label="Feb" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Mar" label="Mar" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Apr" label="Apr" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="May" label="May" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Jun" label="Jun" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="July" label="July" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Aug" label="Aug" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Sep" label="Sep" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Oct" label="Oct" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Nov" label="Nov" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                          <el-table-column  prop="Dec" label="Dec" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+                      </el-table>
+                    <div class="block">
+                        <el-pagination  @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage3" :page-sizes="[15, 30, 50]" :page-size="30" layout="total, sizes, prev, pager, next, jumper" :total="totalNum2">
+                        </el-pagination>
+                    </div>
+                  </el-collapse-item>
+                   </el-collapse>
+          </template>
+    </div>
+</div>
 {% endblock %}
 {% block scripts %}
-    <script src="/static/js/es6/polyfill.min.js"></script>
-    <script src="/static/js/es6/babel.min.js"></script>
-    <script src="/static/js/axios.min.js"></script>
-    <script src="/static/js/vue.min.js"></script>
-    <script src="/static/js/qs.js"></script>
-    <script src="/static/js/xlsx/FileSaver.min.js"></script>
-    <script src="/static/js/Element/table.js"></script>
-    <script src="/static/js/Element/main.js"></script>
-    <script src="/static/js/Element/input.js"></script>
-    <script src="/static/js/Element/table-column.js"></script>
-    <script src="/static/js/Element/icon.js"></script>
-    <script src="/static/js/Element/index.js"></script>
-    <script src="/static/js/Element/image.js"></script>
-    <script src="/static/js/Element/message.js"></script>
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
     <script type="text/babel">
-        new Vue({
-            el: "#app",
-            delimiters: ['${', '}'],
-            data() {
-                return {
-                    tableData: [],
-                    selectCategory: [],
-                    selectedCategory: '',
-                    serchCategory: '',
-                    update: false,
-                    dialogImageUrl: '',
-                    dialogVisible: false,
-                    videoFile: null, // 用于保存用户上传的视频文件
-                    videoUrl: '',// 用于保存视频文件的URL
-                    videoShow: false,
-                    disabled: false,
-                    PhotoList: [],
-                    fileListO: [],
-                    fileList1: [],
-                    fileListPic: [],
-                    fileListVideo: [],
-                    editID: '',
-                    form: {
-                        Category: '',
-                        Object: '',
-                        Symptom: '',
-                        Reproduce_Steps: '',
-                        Root_Cause: '',
-                        Solution: '',
-                        Action: '',
-                        Status: '',
-                    },
-                    formData: []
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                // 搜索条件
+                activeNames:['1','2','3'],
+                year:'',
+                currentPage1: 1,
+                pageSize1:30,
+                currentPage2: 1,
+                pageSize2:30,
+                currentPage3: 1,
+                pageSize3:30,
+                totalNum1:null,
+                totalNum2:null,
+                totalNum3:null,
+                customerError:false,
+                departmentError:false,
+                ProjectcodeCompal:"",
+                YearTitle: "",
+                yearOptions:[],
+                elbuttonloading: false,
+                tableloading: false,
+                dialogloading: false,
+                tableContent1:[],
+                tableContent2:[],
+                tableContent3:[],
+                tableContent4:[],
+                tableContent5:[],
+                tableContent6:[],
+                tableContent7:[],
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            handleChange(val) {               //折疊面板變化
+                console.log(val);
+            },
+            indexMethod(index) {
+                  return index +1;
+            },
+             //分页
+             handleSizeChange1(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize1 = val;
+
+             },
+             handleCurrentChange1(val) {
+              console.log(`当前页: ${val}`);
+              this.currentPage1 = val;
+             },
+
+             handleSizeChange2(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize2 = val;
+
+             },
+             handleCurrentChange2(val) {
+              console.log(`当前页: ${val}`);
+              this.currentPage2 = val;
+             },
 
 
+             handleSizeChange3(val) {
+                console.log(`每页 ${val} 条`);
+                this.pageSize3 = val;
+
+             },
+             handleCurrentChange3(val) {
+              console.log(`当前页: ${val}`);
+              this.currentPage3 = val;
+             },
+
+            //获取数据
+            getdata: function (e) {
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/PersonalInfo/PersonalInfo-search/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent1=res.data.content1;
+                    this.tableContent2=res.data.content2;
+                    this.tableContent3=res.data.content3;
+                    this.totalNum1=this.tableContent3.length;
+                    this.tableContent4=res.data.content4;
+                    this.tableContent5=res.data.content5;
+                    this.totalNum2=this.tableContent5.length;
+                    this.tableContent6=res.data.content6;
+                    this.tableContent7=res.data.content7;
+                    this.totalNum3=this.tableContent7.length;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.customerError= false;
+                    this.yearOptions=res.data.yearOptions;
+                });
+            },
+
+
+            find:function(){
+                if(this.$refs.Year.value ===""){
+                      this.customerError= true;
+                      return false;
+                }
+
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let Year=this.$refs.Year.value;
+                this.YearTitle = this.$refs.Year.value;
+                let data ={"isGetData":"SEARCH","Year":Year,
+                           "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+               axios.post("/PersonalInfo/PersonalInfo-search/",Qs.stringify(data), {
+               headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableContent1=res.data.content1;
+                    this.tableContent2=res.data.content2;
+                    this.tableContent3=res.data.content3;
+                    this.tableContent4=res.data.content4;
+                    this.tableContent5=res.data.content5;
+                    this.tableContent6=res.data.content6;
+                    this.tableContent7=res.data.content7;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.customerError= false;
+                })
+
+            },
+
+
+            exportExcel: function () {
+             /* 从表生成工作簿对象 */
+             {#console.log(document.querySelector("#out-table"));#}
+             let temp = [];
+             temp.push(Number(this.currentPage1));
+             temp.push(Number(this.pageSize1));
+             {#console.log(temp);#}
+             this.currentPage1 = 1;
+             this.pageSize1 = this.tableContent3.length;
+             {#console.log(temp, this.defaultPage1, this.pageSize);#}
+             setTimeout(() => {
+                 let table = document.querySelector("#out-table3").cloneNode(true);
+                 let fix = table.querySelector(".el-table__fixed");
+                 let wb;
+                 if(fix){
+                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
+                    table.appendChild(fix);
+                 }else{
+                    wb = XLSX.utils.table_to_book(table,{raw: true});
+                 }
+                 console.log("wb", wb);
+                 /* 获取二进制字符串作为输出 */
+                 var wbout = XLSX.write(wb, {
+                     bookType: "xlsx",
+                     bookSST: true,
+                     type: "array"
+                 });
+                 console.log("wbout", wbout);
+                 try {
+                     saveAs(
+                         //Blob 对象表示一个不可变、原始数据的类文件对象。
+                         //Blob 表示的不一定是JavaScript原生格式的数据。
+                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                         new Blob([wbout], {type: "application/octet-stream"}),
+                         //设置导出文件名称
+                         "sheetjs.xlsx"
+                     );
+
+                 } catch (e) {
+                     if (typeof console !== "undefined") console.log(e, wbout);
+                 }
+                 this.currentPage1 = temp[0];
+                 this.pageSize1 = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                 temp = [];
+                 return wbout;
+             }, 100);
+         },
+
+
+
+            sortChange1: function(column){
+            this.currentPage1 = 1 // return to the first page after sorting
+                if (column.prop === 'RD_Project_Plan') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                } else if (column.prop === 'CG') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Compal_Model') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer_Model') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Marketing_type') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Status') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Project_Type') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jan') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Feb') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Mar') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Apr') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'May') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jun') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'July') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Aug') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Sep') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Oct') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Nov') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Dec') {
+                    this.dataList1 = this.tableContent3.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else{
+                    this.dataList1 = this.tableContent3.sort(this.sortFun("CG", column.order === 'ascending'));
+                }
+
+                    this.showed_data1 = this.tableContent3.slice(0, this.pageSize1) // 排序完显示到第一页
+
+        },
+
+            sortChange2: function(column){
+            this.currentPage2 = 1 // return to the first page after sorting
+            if (column.prop === 'CG') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Compal_Model') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer_Model') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Marketing_type') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Status') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Project_Type') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jan') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Feb') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Mar') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Apr') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'May') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jun') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'July') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Aug') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Sep') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Oct') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Nov') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Dec') {
+                    this.dataList2 = this.tableContent5.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else{
+                    this.dataList2 = this.tableContent5.sort(this.sortFun("CG", column.order === 'ascending'));
+                }
+
+                    this.showed_data2 = this.tableContent5.slice(0, this.pageSize2) // 排序完显示到第一页
+
+        },
+
+            sortChange3: function(column){
+            this.currentPage3 = 1 // return to the first page after sorting
+            if (column.prop === 'CG') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Compal_Model') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer_Model') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Marketing_type') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Status') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Customer') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Project_Type') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jan') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Feb') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Mar') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Apr') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'May') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Jun') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'July') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Aug') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Sep') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Oct') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Nov') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else if (column.prop === 'Dec') {
+                    this.dataList3 = this.tableContent7.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                }else{
+                    this.dataList3 = this.tableContent7.sort(this.sortFun("CG", column.order === 'ascending'));
+                }
+
+                    this.showed_data3 = this.tableContent7.slice(0, this.pageSize3) // 排序完显示到第一页
+
+        },
+
+            //排序方法
+            sortFun: function(attr, rev) {            //第一个参数传入info里的prop表示排的是哪一列，第二个参数是升还是降排序
+           if (rev == undefined) {
+               rev = 1;
+           } else {
+               rev = (rev) ? 1 : -1;
+           }
+                return function (a, b) {
+                    a = a[attr];
+                    b = b[attr];
+                    if (a < b) {
+                        return rev * -1;
+                    }
+                    if (a > b) {
+                        return rev * 1;
+                    }
+                    return 0;
                 }
             },
-            mounted() {
-                this.getdata("first");
-            },
-            methods: {
 
-                handleFileUpload(event) {
-                   this.videoFile =  event.target.files[0];
+        },
+        watch: {
+                dataList1() {
+                    this.showed_data1 = this.tableContent3.slice((this.currentPage1 - 1) * this.pageSize1, this.currentPage1 * this.pageSize1);
+                    this.currentPage1 = 1;
                 },
-
-                handleVideoPlay() {
-                    // 检查是否有视频文件可播放
-                    if (this.videoUrl !== '') {
-                    let videoPlayer = document.querySelector('video');
-                    videoPlayer.play();
-                    }
+                dataList2() {
+                    this.showed_data2 = this.tableContent5.slice((this.currentPage2 - 1) * this.pageSize2, this.currentPage2 * this.pageSize2);
+                    this.currentPage2 = 1;
                 },
-
-                indexMethod(index) {
-                    return index + 1;
+                dataList3() {
+                    this.showed_data3 = this.tableContent7.slice((this.currentPage3 - 1) * this.pageSize3, this.currentPage3 * this.pageSize3);
+                    this.currentPage3 = 1;
                 },
-                handleRemove(file) {
-                    // 删除文件
-                    console.log(file.response.data);
-                    let fileNames = file.response.data.split("/");
-                    fileDelete(fileNames[fileNames.length - 1]).then(res => {
-                        if (res.data.code == "0000") {
-                            this.fileList.splice(file, 1);
-                        }
-                    });
-                },
-                handlePictureCardPreview(file) {
-                    // 预览文件
-                    this.dialogImageUrl = file.url;
-                    this.dialogVisible = true;
-                },
-                handleDownload(file) {
-                    console.log("下载成功");
-                    let fileNames = file.response.data.split("/");
-                    let fileName = fileNames[fileNames.length - 1];
-                    fileDownload(fileName).then(res => {
-                        if (res.data.code == "0000") {
-                            this.downloadFile(fileName, res.data.data);
-                        }
-                    });
-                },
-                handleImageSuccess(res, files, fileList) {
-                    // 上传成功
-                   this.fileListPic = fileList;
-                },
-
-                handleVideoUploadSuccess(res, files, fileList){
-
-                    this.fileListVideo = fileList;
-
-                },
-
-                handlePictureCardPreview(file) {
-                    // 预览文件
-                    this.dialogImageUrl = file.url;
-                    this.dialogVisible = true;
-                },
-
-
-
-                beforeImageUpload(file) {
-                    // 上传前格式与大小校验
-                    console.log(file, file.type)
-                    const isJPG = file.type === "image/jpeg" || file.type == 'image/png' || file.type == 'video/mp4' || file.type == 'application/pdf' || file.type == 'application/x-zip-compressed' || file.type == '' || file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                    const isLt2M = file.size / 1024 / 1024 < 5;
-
-                    if (!isJPG) {
-                        this.$message.error("上传头像图片只能是 JPG/PNG 格式，视频为mp4格式!");
-                    }
-                    if (!isLt2M) {
-                        this.$message.error("上传头像图片大小不能超过 5MB!");
-                    }
-                    return isJPG && isLt2M;
-                    console.log("before")
-                    //也是成功的
-                },
-                // 下载
-                downloadFile(fileName, content) {
-                    let aLink = document.createElement("a");
-                    let blob = this.base64ToBlob(content); //new Blob([content]);
-
-                    let evt = document.createEvent("HTMLEvents");
-                    evt.initEvent("click", true, true); // initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-                    aLink.download = fileName;
-                    aLink.href = URL.createObjectURL(blob);
-
-                    // aLink.dispatchEvent(evt);
-                    aLink.click();
-                },
-                // base64转blob
-                base64ToBlob(code) {
-                    let parts = code.split(";base64,");
-                    let contentType = parts[0].split(":")[1];
-                    let raw = window.atob(parts[1]);
-                    let rawLength = raw.length;
-
-                    let uInt8Array = new Uint8Array(rawLength);
-
-                    for (let i = 0; i < rawLength; ++i) {
-                        uInt8Array[i] = raw.charCodeAt(i);
-                    }
-                    return new Blob([uInt8Array], {type: contentType});
-                },
-                onSubmit() {
-                    console.log('submit!', this.$refs.form.model, typeof (this.$refs.form.model), this.formData);
-                    {#var submitData = new FormData();#}
-                    if (this.formData.length == 0) {
-                        this.formData = new FormData();
-                    }
-                    if(this.fileListPic.length !== 0){
-                        for (var i = 0; i < this.fileListPic.length; i++) {
-                          this.formData.append('fileListPic', this.fileListPic[i].raw)//fileList里面raw才是文件对象，与files一样
-                       }
-                    }
-                    if(this.fileListVideo.length !== 0){
-                        for (var i = 0; i < this.fileListVideo.length; i++) {
-                          this.formData.append('fileListVideo', this.fileListVideo[i].raw)//fileList里面raw才是文件对象，与files一样
-                       }
-                    }
-                    this.formData.append('serchCategory', this.serchCategory)
-                    this.formData.append('id', this.editID)
-                    this.formData.append('Category', this.$refs.form.model.Category)
-                    this.formData.append('Object', this.$refs.form.model.Object)
-                    this.formData.append('Symptom', this.$refs.form.model.Symptom)
-                    this.formData.append('Reproduce_Steps', this.$refs.form.model.Reproduce_Steps)
-                    this.formData.append('Root_Cause', this.$refs.form.model.Root_Cause)
-                    this.formData.append('Solution', this.$refs.form.model.Solution)
-                    this.formData.append('Action', this.$refs.form.model.Action)
-                    this.formData.append('Status', this.$refs.form.model.Status)
-                    {#submitData['Photolist'] = this.formData;#}
-                    this.formData.append("action", 'submit');
-                    console.log(this.formData)
-                    axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", this.formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableData = res.data.content;
-                        this.update = false;
-                        this.formData = new FormData();
-                        this.fileListPic = [];
-                        this.fileListVideo=[];
-
-                    })
-                },
-                getdata: function (e) {
-                    let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
-                    axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", Qs.stringify(data), {
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
-                    }).then((res) => {
-                        this.selectCategory = res.data.addselect;
-                    });
-
-                },
-                Search: function () {
-                    let Category = this.$refs.Category.value;
-                    this.serchCategory = this.$refs.Category.value;
-                    let msg = {
-                        "isGetData": "Search", "Category": Category
-                    }
-                    axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", Qs.stringify(msg, {indices: false}), {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableData = res.data.content;
-
-
-                    })
-                },
-                alertID: function (id) {
-                    let Category = this.$refs.Category.value;
-                    let msg = {
-                        "isGetData": "alertID", "Category": Category, "ID": id
-                    }
-                    axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", Qs.stringify(msg, {indices: false}), {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.form = res.data.form;
-                        this.editID = id;
-                        this.fileListO = res.data.fileListO;
-                        this.fileList1 = res.data.fileList1;
-
-                    })
-                },
-                //保存
-                submitForm(formdata, id) {
-                    let Category = this.$refs.Category.value;
-                    console.log(this.$refs.formdata, "ffff")
-                    let submitForm_data = this.$refs.formdata.model;
-                    let data = {"isGetData": "SAVE", "Category": Category, "submitForm_data": submitForm_data, "ID": id}
-                    axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", Qs.stringify(data), {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableData = res.data.content;
-                        this.form = res.data.form;
-                        this.fileListO = res.data.fileListO;
-                        this.fileList1 = res.data.fileList1;
-                        this.update = false;
-
-                    });
-                },
-            }
-        })
+        },
+    })
     </script>
-
-
 {% endblock %}

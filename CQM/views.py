@@ -144,16 +144,16 @@ def CQM_upload(request):
         if 'type' in request.POST:
             # print(request.POST.get('type'))
             xlsxlist = request.POST.get('upload')
-            CQMList=[{'Customer':'Customer','Project':'Project','Phase':'Phase',
+            CQMList=[{'Customer':'Customer','Project':'Project','Phase':'Phase','Supplier':'Supplier',
                      #  'Material_Group': 'Material_Group',
                      # 'Keyparts':'Keyparts','Character':'Character','PID':'PID',
                      # 'VID':'VID','HW':'HW','FW': 'FW','Supplier': 'Supplier','R1_PN_Description': 'R1_PN_Description',
-                      'Compal_R1_PN': 'Compal_R1_PN','Compal_R3_PN': 'Compal_R3_PN',}]
-            uploadsuccess = [{'Customer':'Customer','Project':'Project','Phase':'Phase',
+                      'Compal_R1_PN': 'Compal_R1_PN','Compal_R3_PN': 'Compal_R3_PN','R1S': 'R1S',}]
+            uploadsuccess = [{'Customer':'Customer','Project':'Project','Phase':'Phase','Supplier':'Supplier',
                      #  'Material_Group': 'Material_Group',
                      # 'Keyparts':'Keyparts','Character':'Character','PID':'PID',
                      # 'VID':'VID','HW':'HW','FW': 'FW','Supplier': 'Supplier','R1_PN_Description': 'R1_PN_Description',
-                      'Compal_R1_PN': 'Compal_R1_PN', 'Compal_R3_PN': 'Compal_R3_PN',}]
+                      'Compal_R1_PN': 'Compal_R1_PN', 'Compal_R3_PN': 'Compal_R3_PN','R1S': 'R1S',}]
             num = 1
             for i in simplejson.loads(xlsxlist):
                 if num > 1:
