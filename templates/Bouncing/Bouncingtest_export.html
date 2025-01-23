@@ -154,10 +154,10 @@ tbody tr td:last-child {
             <td >${ items.Hinge_s }</td>
             <td >${ items.Torque }</td>
             <td >${ items.Push_F }</td>
-            <td :class="[items.PV_L>=8?'fail':'pass']">${ items.PV_L }</td>
-            <td :class="[items.PV_R>=8?'fail':'pass']">${ items.PV_R }</td>
-            <td :class="[items.D_L>=2?'fail':'pass']">${ items.D_L }</td>
-            <td :class="[items.D_R>=2?'fail':'pass']">${ items.D_R }</td>
+            <td :class="[items.PV_L>8?'fail':'pass']">${ items.PV_L }</td>
+            <td :class="[items.PV_R>8?'fail':'pass']">${ items.PV_R }</td>
+            <td :class="[items.D_L>2?'fail':'pass']">${ items.D_L }</td>
+            <td :class="[items.D_R>2?'fail':'pass']">${ items.D_R }</td>
              <td   :id="'on'+index" class="con_td" {% comment %}@mouseover="showDes($event)" @mouseleave="hiddenDes($event)"{% endcomment %} ><div :id="'con'+index" class="con">${ items.CON }</div><i :id="'n'+index" class="ti-zoom-in"  @click="showAll($event)"></i></td>
             {% comment %}<td style="color:#FFF" >${ items.editor }</td>
             <td style="color:#FFF" >${ items.edit_time }</td>{% endcomment %}
