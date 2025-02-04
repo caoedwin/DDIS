@@ -3,7 +3,7 @@ from app01.models import UserInfo
 from TestPlanSW.models import TestProjectSW, TestPlanSW
 from CQM.models import CQM
 from DriverTool.models import DriverList_M, ToolList_M
-import datetime
+# import datetime
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from requests_ntlm import HttpNtlmAuth
@@ -581,7 +581,7 @@ from exchangelib.recurrence import Recurrence, WeeklyPattern, DailyPattern, Rela
 from exchangelib.fields import MONDAY, WEDNESDAY, FRIDAY
 from exchangelib.items import MeetingRequest, MeetingCancellation, SEND_TO_ALL_AND_SAVE_COPY
 import urllib3
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 
 
 # 如果需要设置日历提醒，可以添加CalendarItem
@@ -603,19 +603,19 @@ def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
     # print(kwargs)
 
     # 获取当前时间
-    now = datetime.now()
+    now = datetime.datetime.now()
 
     # 设置当天10点的时间
-    excute_of_day1 = datetime.combine(now.date(), datetime.strptime('10:00', '%H:%M').time())
+    excute_of_day1 = datetime.datetime.combine(now.date(), datetime.datetime.strptime('10:00', '%H:%M').time())
     # 设置当天15点的时间
-    excute_of_day2 = datetime.combine(now.date(), datetime.strptime('15:00', '%H:%M').time())
+    excute_of_day2 = datetime.datetime.combine(now.date(), datetime.datetime.strptime('15:00', '%H:%M').time())
 
     # 如果当前时间超过了上午10点，则10点还有多少秒就是下个10点的秒数
     if now > excute_of_day1:
-        excute_of_day1 += timedelta(days=1)
+        excute_of_day1 += datetime.timedelta(days=1)
     # 如果当前时间超过了下午15点，则15点还有多少秒就是下个15点的秒数
     if now > excute_of_day2:
-        excute_of_day2 += timedelta(days=1)
+        excute_of_day2 += datetime.timedelta(days=1)
 
     # 计算时间差
     seconds_until_1 = (excute_of_day1 - now).seconds
