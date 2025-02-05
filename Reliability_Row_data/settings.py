@@ -204,6 +204,7 @@ INSTALLED_APPS = [
     'A31LessonLProject',
     'A32LessonLProject',
     'CriticalIssueCrossCheck',
+    'MiscellaneousPurchases',
 ]
 
 MIDDLEWARE = [

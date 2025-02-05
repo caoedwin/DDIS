@@ -180,7 +180,7 @@ def get_menu_html(menu_data):
                         Class = "ti-view-list-alt"
                     if item['title'] == 'XQM':
                         Class = "ti-files"
-                    if item['title'] == 'CQM':
+                    if item['title'] == 'CQM' or item['title'] == '申購記錄':
                         Class = "ti-target"
                     if item['title'] == 'MQM':
                         Class = "ti-bar-chart-alt"
