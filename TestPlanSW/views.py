@@ -10,7 +10,7 @@ from django.db.models import Max,Min,Sum,Count,Q
 from django.views.decorators.csrf import csrf_exempt
 
 # phase list 需要与TestPlanSW额edit, search里面的phaseName一样, Summary里的coloroder需要添加ui应的颜色
-phase_list = ["B(FVT)", 'FVT Regression1', 'FVT Regression2', 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', "C(SIT)", "SIT2", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3']
+phase_list = ["B(FVT)", 'FVT Regression1', 'FVT Regression2', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3']
 
 # Create your views here.
 def TestPlanSW_summary(request):
@@ -5971,7 +5971,7 @@ def TestPlanSW_search(request):
             # print(Customer)
             Time_key = []
             if TestProjectSW.objects.filter(**check_dic_Pro).first():#至少存在一个Phase
-                for h in TestProjectSW.objects.filter(**check_dic_Pro).values("Phase").order_by("-ScheduleEnd"):
+                for h in TestProjectSW.objects.filter(**check_dic_Pro).values("Phase").order_by("-ScheduleEnd", "-ScheduleBegin"):
                     Time_key.append(h["Phase"])
 
                 Time_value_Re = []
@@ -8245,7 +8245,7 @@ def TestPlanSW_search_AIO(request):
             # print(Customer)
             Testahour_key = []
             if TestProjectSWAIO.objects.filter(**check_dic_Pro).first():#至少存在一个Phase
-                for h in TestProjectSWAIO.objects.filter(**check_dic_Pro).values("Phase").order_by("-ScheduleEnd"):
+                for h in TestProjectSWAIO.objects.filter(**check_dic_Pro).values("Phase").order_by("-ScheduleEnd", "-ScheduleBegin"):
                     Testahour_key.append(h["Phase"])
 
                 Time_value_Re = []
