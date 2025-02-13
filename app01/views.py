@@ -1084,8 +1084,8 @@ def Navigations_Category_axios(request):
                 'Key': 'SpecDownload',
                 'address': "",
                 'Comment': "",
-                'name2': '',
-                'Key2': '',
+                'name2': '實驗室管理規範',
+                'Key2': 'ManagementSop',
                 'address2': "",
                 'Comment2': "",
                 'name3': '',
@@ -2047,6 +2047,26 @@ def Navigations_system_axios(request):
              "name1": "T88", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # T88
              "name2": "T89", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # T89
              "name3": 'T99', "url3": "", "Comment3": "", "CustomerFlag3": 0,  # T99
+             "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0,  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # CQT88
+             "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # AIO
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  #
+             },
+        ],
+        "ManagementSop": [
+            {"Comment": "",
+             "name1": "管理規範", "url1": "/SpecDownload/ManagementSop-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
+             "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # T88
+             "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # T89
+             "name3": '', "url3": "", "Comment3": "", "CustomerFlag3": 0,  # T99
              "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0,  # A39
              },
             {"Comment": "",

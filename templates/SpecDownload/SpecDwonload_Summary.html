@@ -155,6 +155,7 @@
                                     <el-option label="Stress" value="Stress"></el-option>
                                     <el-option label="Reliability" value="Reliability"></el-option>
                                     <el-option label="Panel" value="Panel"></el-option>
+                                    <el-option label="實驗室管理" value="實驗室管理"></el-option>
                                     <el-option label="--" value="--"></el-option>
                               </el-select>
                           </el-form-item>
@@ -220,7 +221,6 @@
                                   <el-option label="SW" value="SW"></el-option>
                                   <el-option label="SOP" value="SOP"></el-option>
                                   <el-option label="Training" value="Training"></el-option>
-                                  <el-option label="--" value="--"></el-option>
                           </el-select>
                       <span v-else="showEdit[scope.$index]"  >${ scope.row.Category }</span>
                     </template>
@@ -232,6 +232,8 @@
                                     <el-option label="Stress" value="Stress"></el-option>
                                     <el-option label="Reliability" value="Reliability"></el-option>
                                     <el-option label="Panel" value="Panel"></el-option>
+{#                                    <el-option label="實驗室管理" value="實驗室管理"></el-option>#}
+                                    <el-option label="--" value="--"></el-option>
                           </el-select>
                       <span v-else="showEdit[scope.$index]"  >${ scope.row.Fc }</span>
                     </template>
