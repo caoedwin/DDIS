@@ -33,7 +33,7 @@ class files_SopRom(models.Model):
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 @receiver(pre_delete, sender=files_SopRom)
-def mymodel_delete(sender, instance, **kwargs):
+def files_SopRom_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.files.delete(False)
 
@@ -54,7 +54,7 @@ class files_SopProcess(models.Model):
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 @receiver(pre_delete, sender=files_SopProcess)
-def mymodel_delete(sender, instance, **kwargs):
+def files_SopProcess_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.files.delete(False)
 

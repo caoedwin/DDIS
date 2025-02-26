@@ -1,10 +1,867 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ManagementSop_Summary</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DriverList_upload{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    @media screen and (min-width: 1416px ){
+        .selectMsg .fileUploadContent{
+           {#margin: 15px 0 0 0 ;#}
+           display: inline-flex;
+           display: -webkit-inline-flex
+       }
+    }
+    @media screen and (min-width: 970px ) and ( max-width: 1415px) {
+       .container-fluid .row{
+              flex-wrap: nowrap;
+          }
+       .selectMsg .el-select{
+           width: 150px;
+       }
+       .selectMsg .fileUploadContent{
+           {#margin: 15px 0 0 0 ;#}
+           display: inline-flex;
+           display: -webkit-inline-flex
+       }
+    }
+    @media screen and (min-width:769px ) and (max-width: 969px){
+          .container-fluid .row{
+              flex-wrap: nowrap;
+          }
+         .selectMsg .el-select{
+           width: 150px;
+         }
+    }
+    @media screen and (min-width:600px ) and (max-width: 768px){
+        .container-fluid .row{
+              flex-wrap: nowrap;
+          }
+        .customerContent,.categoryContent,.functionContent{
+            width: 140px;
+            text-align: center
+        }
+        .selectMsg .Button{
+            margin: 34px 0 0 0 ;
+        }
+    }
+      .selectMsg{
+         font-size:16px;
+          padding: 15px;
+          display: flex;
+      }
+      .selectMsg label{
+          font-weight: 800;
+          margin-right: 10px;
+          color:aliceblue;
+      }
+       .selectMsg label:last-child{
+         margin-left: 15px;
+       }
+      .selectMsg #category{
+          margin-left: 0;
+      }
+       .tableAround{
+        padding: 20px;
+        -moz-box-shadow: 0px 0px 10px #333333;
+        -webkit-box-shadow: 0px 0px 10px #333333;
+        box-shadow: 0px 0px 10px #333333;
+        border-radius: 10px;
+        background-color: rgba(255,255,255,0.1);
+    }
+     .inputError{
+        text-align: center;
+        color: crimson;
+        background-color: beige;
+        width: 50%;
+        margin: 10px auto 5px;
+        position: relative;
+    }
+      .inputError:before{
+        display:block;
+        content:'';
+        border-width:8px 8px 8px 8px;
+        border-style:solid;
+        border-color:transparent transparent beige transparent;
 
-</body>
-</html>
+        /* 定位 */
+        position:absolute;
+        left:50%;
+        top:-16px;
+    }
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+    }
+.el-pagination__total,.el-pagination__jump{
+    color: white;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+     <div class="selectMsg" >
+         <span class="selectItem" v-cloak style="font-size: 28px;">實驗室設備管理規範--標準化文件連結</span>
+     </div>
+
+     <el-dialog :visible.sync="add1" title="PCQAU實驗室設備管理規範">
+          <template>
+                <el-form ref="form1" :model="form1" label-width="100px">
+                          <el-form-item label="No">
+                                <el-input v-model="form1.No"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Title">
+                                <el-input v-model="form1.Title"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Description">
+                                <el-input v-model="form1.Description"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Version">
+                              <el-input v-model="form1.Version"></el-input>
+                          </el-form-item>
+                          {% comment %}<el-form-item label="Upload_Date">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form1.Upload_Date" value-format="yyyy-MM-dd" style="width: 100%;">
+                              </el-date-picker>
+                          </el-form-item>{% endcomment %}
+                          <el-form-item label="Attachment">
+                                <el-upload
+                                  action="#"
+                                  list-type="picture-card"
+                                  :on-success="handleImageSuccess1"
+                                  {% comment %}:before-upload="beforeImageUpload"{% endcomment %}
+                                  :auto-upload="true"
+                                  :file-list="fileListO"
+                                >
+                                  <!-- 十字图标 -->
+                                  <i slot="default" class="el-icon-plus"></i>
+                                  <!-- 文件 -->
+                                  {% comment %}<div slot="file" slot-scope="{file}">
+                                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+                                    <video class="el-upload-list__item-thumbnail" :src="file.url" alt />{% endcomment %}
+                                    <span class="el-upload-list__item-actions">
+                                      <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                        <i class="el-icon-zoom-in"></i>
+                                      </span>
+                                    </span>
+                                  {% comment %}</div>{% endcomment %}
+                                </el-upload>
+                          </el-form-item>
+                          <el-form-item>
+                               <el-button type="primary" @click="onSubmit1">上传</el-button>
+                          </el-form-item>
+                </el-form>
+          </template>
+     </el-dialog>
+
+     <el-dialog :visible.sync="add2" title="流程指導書">
+          <template>
+                <el-form ref="form2" :model="form2" label-width="100px">
+                          <el-form-item label="No">
+                                <el-input v-model="form2.No"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Title">
+                                <el-input v-model="form2.Title"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Description">
+                                <el-input v-model="form2.Description"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Version">
+                              <el-input v-model="form2.Version"></el-input>
+                          </el-form-item>
+                          {% comment %}<el-form-item label="Upload_Date">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form2.Upload_Date" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
+                          </el-form-item>{% endcomment %}
+                          <el-form-item label="Attachment">
+                                <el-upload
+                                  action="#"
+                                  list-type="picture-card"
+                                  :on-success="handleImageSuccess2"
+                                  {% comment %}:before-upload="beforeImageUpload"{% endcomment %}
+                                  :auto-upload="true"
+                                  :file-list="fileListO"
+                                >
+                                  <!-- 十字图标 -->
+                                  <i slot="default" class="el-icon-plus"></i>
+                                  <!-- 文件 -->
+                                  {% comment %}<div slot="file" slot-scope="{file}">
+                                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+                                    <video class="el-upload-list__item-thumbnail" :src="file.url" alt />{% endcomment %}
+                                    <span class="el-upload-list__item-actions">
+                                      <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                        <i class="el-icon-zoom-in"></i>
+                                      </span>
+                                    </span>
+                                  {% comment %}</div>{% endcomment %}
+                                </el-upload>
+                          </el-form-item>
+                          <el-form-item>
+                               <el-button type="primary" @click="onSubmit2">上传</el-button>
+                          </el-form-item>
+                </el-form>
+          </template>
+     </el-dialog>
+
+     <el-dialog :visible.sync="add3" title="設備管理與使用規範">
+          <template>
+                <el-form ref="form3" :model="form3" label-width="100px">
+                          <el-form-item label="No">
+                                <el-input v-model="form3.No"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Title">
+                                <el-input v-model="form3.Title"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Description">
+                                <el-input v-model="form3.Description"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Version">
+                              <el-input v-model="form3.Version"></el-input>
+                          </el-form-item>
+                          {% comment %}<el-form-item label="Upload_Date">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form3.Upload_Date" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
+                          </el-form-item>{% endcomment %}
+                          <el-form-item label="Attachment">
+                                <el-upload
+                                  action="#"
+                                  list-type="picture-card"
+                                  :on-success="handleImageSuccess3"
+                                  {% comment %}:before-upload="beforeImageUpload"{% endcomment %}
+                                  :auto-upload="true"
+                                  :file-list="fileListO"
+                                >
+                                  <!-- 十字图标 -->
+                                  <i slot="default" class="el-icon-plus"></i>
+                                  <!-- 文件 -->
+                                  {% comment %}<div slot="file" slot-scope="{file}">
+                                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+                                    <video class="el-upload-list__item-thumbnail" :src="file.url" alt />{% endcomment %}
+                                    <span class="el-upload-list__item-actions">
+                                      <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                        <i class="el-icon-zoom-in"></i>
+                                      </span>
+                                    </span>
+                                  {% comment %}</div>{% endcomment %}
+                                </el-upload>
+                          </el-form-item>
+                          <el-form-item>
+                               <el-button type="primary" @click="onSubmit3">上传</el-button>
+                          </el-form-item>
+                </el-form>
+          </template>
+     </el-dialog>
+
+     <div class="tableAround" v-cloak >
+         <div>
+         <span class="selectItem" style="float: left" v-cloak>PCQAU實驗室設備管理規範</span>
+         <el-button type="danger"  style="height:40px;float: right;" @click="Delete1"><i class="el-icon-remove-outline el-icon--left"></i>刪除信息</el-button>
+         <el-button type="success"  style="height:40px;float: right;margin-right: 20px;" @click="Add1"><i class="el-icon-circle-plus el-icon--left"></i>新增信息</el-button>
+         </div>
+         <el-table border stripe :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
+                   @selection-change="handleSelectionChange1"
+                   style="font-size: 16px;">
+             <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>
+             <el-table-column label="No." prop="No" min-width="8%" align="center"></el-table-column>
+             <el-table-column label="Title" prop="Title" min-width="20%" align="center">
+             </el-table-column>
+             <el-table-column label="Description" prop="Description" min-width="30%" align="center">
+             </el-table-column>
+             <el-table-column label="Version" prop="Version" min-width="8%" align="center">
+             </el-table-column>
+             <el-table-column label="Upload Date" prop="Upload_Date" min-width="15%" align="center">
+             </el-table-column>
+             <el-table-column prop="file" label="Attachment" min-width="12%" align="center">
+              <template scope="scope">
+{#                  <img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" >#}
+                  <div v-if="scope.row.file[0]">
+                       <a v-for="(item) in scope.row.file" v-bind:href="item"><img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+                  </div>
+              </template>
+            </el-table-column>
+         </el-table>
+         {% comment %}
+         <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[20, 50, 100, 150]"
+          :page-size="100"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="tableData.length"
+          :hide-on-single-page="!tableData.length">
+          </el-pagination>
+          {% endcomment %}
+     </div>
+
+    <br />
+
+     <div class="tableAround" v-cloak >
+         <span class="selectItem" style="float: left" v-cloak>流程指導書</span> &nbsp;&nbsp;&nbsp;
+         <el-button type="danger"  style="height:40px;float: right;" @click="Delete2"><i class="el-icon-remove-outline el-icon--left"></i>刪除信息</el-button>
+         <el-button type="success"  style="height:40px;float: right;margin-right: 20px;" @click="Add2"><i class="el-icon-circle-plus el-icon--left"></i>新增信息</el-button>
+         <br />
+         <el-table border stripe :data="tableData1.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
+                   @selection-change="handleSelectionChange2"
+                   style="font-size: 16px;">
+             <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>
+             <el-table-column label="No." prop="No" min-width="8%" align="center"></el-table-column>
+             <el-table-column label="Title" prop="Title" min-width="20%" align="center">
+             </el-table-column>
+             <el-table-column label="Description" prop="Description" min-width="30%" align="center">
+             </el-table-column>
+             <el-table-column label="Version" prop="Version" min-width="8%" align="center">
+             </el-table-column>
+             <el-table-column label="Upload Date" prop="Upload_Date" min-width="15%" align="center">
+             </el-table-column>
+             <el-table-column prop="file" label="Attachment" min-width="12%" align="center">
+              <template scope="scope">
+{#                  <img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" >#}
+                  <div v-if="scope.row.file[0]">
+                       <a v-for="(item) in scope.row.file" v-bind:href="item"><img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+                  </div>
+              </template>
+            </el-table-column>
+         </el-table>
+     </div>
+
+    <br />
+
+     <div class="tableAround" v-cloak >
+         <span class="selectItem" style="float: left" v-cloak>設備管理與使用規範</span> &nbsp;&nbsp;&nbsp;
+         <el-button type="danger"  style="height:40px;float: right;" @click="Delete3"><i class="el-icon-remove-outline el-icon--left"></i>刪除信息</el-button>
+         <el-button type="success"  style="height:40px;float: right;margin-right: 20px;" @click="Add3"><i class="el-icon-circle-plus el-icon--left"></i>新增信息</el-button>
+         <br />
+         <el-table border stripe :data="tableData2.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
+                   @selection-change="handleSelectionChange3"
+                   style="font-size: 16px;">
+             <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>
+             <el-table-column label="No." prop="No" min-width="8%" align="center"></el-table-column>
+             <el-table-column label="Title" prop="Title" min-width="20%" align="center">
+             </el-table-column>
+             <el-table-column label="Description" prop="Description" min-width="30%" align="center">
+             </el-table-column>
+             <el-table-column label="Version" prop="Version" min-width="8%" align="center">
+             </el-table-column>
+             <el-table-column label="Upload Date" prop="Upload_Date" min-width="15%" align="center">
+             </el-table-column>
+             <el-table-column prop="file" label="Attachment" min-width="12%" align="center">
+              <template scope="scope">
+{#                  <img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" >#}
+                  <div v-if="scope.row.file[0]">
+                       <a v-for="(item) in scope.row.file" v-bind:href="item"><img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" ></a>
+                  </div>
+              </template>
+            </el-table-column>
+         </el-table>
+     </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/dialog.js"></script>
+<script src="/static/js/Element/form.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/pagination.js"></script>
+<script type="text/babel">
+new Vue ({
+    el: "#app",
+    delimiters: ['${', '}'],
+    data() {
+        return {
+
+            multipleSelection1: [],
+            multipleSelection2: [],
+            multipleSelection3: [],
+            deletePermission: 0,
+            addPermission: 0,
+            add1:false,
+            add2:false,
+            add3:false,
+
+            form1: {
+              No:'',
+              Title: '',
+              Description: '',
+              Version: '',
+              {#Upload_Date: '',#}
+            },
+
+            form2: {
+              No:'',
+              Title: '',
+              Description: '',
+              Version: '',
+              {#Upload_Date: '',#}
+            },
+
+            form3: {
+              No:'',
+              Title: '',
+              Description: '',
+              Version: '',
+              {#Upload_Date: '',#}
+            },
+            formData1:[],
+            formData2:[],
+            formData3:[],
+            tableData:[],
+            tableData1:[],
+            tableData2:[],
+
+            customer:'',
+            customerError:false,
+            category:'',
+            categoryError:false,
+            fc:'',
+            functionError:false,
+            showCustomer:'',
+            showCategory:'',
+            showFunction:'',
+            showEdit: [], //显示编辑框
+            showBtn: [],
+            showBtnOrdinary: true,
+            currentPage:1,
+            pagesize:100,
+            totalNum: null,
+
+             Customer:[],
+             Category:[],
+             Fc:[],
+             Case_name:[],
+             Version:[],
+
+            dialogImageUrl: '',
+            disabled: false,
+            PhotoList:[],
+            fileListO: [],
+            editID:'',
+
+
+
+
+
+
+        }
+    },
+    mounted(){
+         this.getdata("first");
+    },
+    methods: {
+        indexMethod(index) {
+            return index + 1;
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+              },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+              this.currentPage = val;
+        },
+
+        //判断勾选
+        selectable(row, index) {
+            if (row.Ownerflag == this.deletePermission) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        handleSelectionChange1(val) {
+            this.multipleSelection1 = val;
+        },
+
+        handleSelectionChange2(val) {
+            this.multipleSelection2 = val;
+        },
+
+        handleSelectionChange3(val) {
+            this.multipleSelection3 = val;
+        },
+
+        getdata:function(e){
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/SpecDownload/ManagementSop-summary/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableData = res.data.content;
+                    this.tableData1 = res.data.content1;
+                    this.tableData2 = res.data.content2;
+                    this.addPermission = res.data.addPermission;
+                    this.deletePermission = res.data.deletePermission;
+                    });
+        },
+
+        Add1(){
+            if(this.addPermission == 1){
+                this.add1 = true;
+            }else{
+                 this.$message({
+                         message: '您無新增此表格權限！',
+                         type: 'warning'
+                 });
+            }
+
+        },
+
+        Add2(){
+            if(this.addPermission == 1){
+                this.add2 = true;
+            }else{
+                 this.$message({
+                         message: '您無新增此表格權限！',
+                         type: 'warning'
+                 });
+            }
+
+        },
+
+        Add3(){
+            if(this.addPermission == 1){
+                this.add3 = true;
+            }else{
+                 this.$message({
+                         message: '您無新增此表格權限！',
+                         type: 'warning'
+                 });
+            }
+
+        },
+
+
+        Delete1() {
+            if(this.multipleSelection1.length == 0){
+                     this.$message({
+                             message: '請至少選擇一條數據！',
+                             type: 'warning'
+                     });
+
+            }else{
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+                if(warning) {
+                     {#this.multiDeleteVisible = false;#}
+                     let checkArr = this.multipleSelection1;
+                     let params = [];
+                     let self = this;
+                     checkArr.forEach(function (item) {
+                         params.push(item.id);
+                });
+                   let data = {
+                       "isGetData": "delete1",
+                       "params": params,
+                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                   };
+                   axios.post('/SpecDownload/ManagementSop-summary/', data).then((res) =>{
+                         this.tableData = res.data.content;
+                         self.$message({
+                             message: '删除成功',
+                             type: 'success'
+                         });
+                 //this.tableData = res.data.content;
+             })
+             }else{
+                 return false;
+             }
+            }
+         },
+
+        Delete2() {
+            if(this.multipleSelection2.length == 0){
+                     this.$message({
+                             message: '請至少選擇一條數據！',
+                             type: 'warning'
+                     });
+
+            }else{
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+                if(warning) {
+                     {#this.multiDeleteVisible = false;#}
+                     let checkArr = this.multipleSelection2;
+                     let params = [];
+                     let self = this;
+                     checkArr.forEach(function (item) {
+                         params.push(item.id);
+                });
+                   let data = {
+                       "isGetData": "delete2",
+                       "params": params,
+                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                   };
+                   axios.post('/SpecDownload/ManagementSop-summary/', data).then((res) =>{
+                         this.tableData1 = res.data.content1;
+                         self.$message({
+                             message: '删除成功',
+                             type: 'success'
+                         });
+                 //this.tableData1 = res.data.content1;
+             })
+             }else{
+                 return false;
+             }
+            }
+         },
+
+        Delete3() {
+            if(this.multipleSelection3.length == 0){
+                     this.$message({
+                             message: '請至少選擇一條數據！',
+                             type: 'warning'
+                     });
+
+            }else{
+                var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+                if(warning) {
+                     {#this.multiDeleteVisible = false;#}
+                     let checkArr = this.multipleSelection3;
+                     let params = [];
+                     let self = this;
+                     checkArr.forEach(function (item) {
+                         params.push(item.id);
+                });
+                   let data = {
+                       "isGetData": "delete3",
+                       "params": params,
+                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                   };
+                   axios.post('/SpecDownload/ManagementSop-summary/', data).then((res) =>{
+                         this.tableData2 = res.data.content2;
+                         self.$message({
+                             message: '删除成功',
+                             type: 'success'
+                         });
+                 //this.tableData2 = res.data.content2;
+             })
+             }else{
+                 return false;
+             }
+            }
+         },
+
+        handleRemove(file) {
+          // 删除文件
+          console.log(file.response.data);
+          let fileNames = file.response.data.split("/");
+          fileDelete(fileNames[fileNames.length - 1]).then(res => {
+            if (res.data.code == "0000") {
+              this.fileList.splice(file, 1);
+            }
+          });
+        },
+        handlePictureCardPreview(file) {
+          // 预览文件
+          this.dialogImageUrl = file.url;
+          this.dialogVisible = true;
+        },
+        handleDownload(file) {
+          console.log("下载成功");
+          let fileNames = file.response.data.split("/");
+          let fileName = fileNames[fileNames.length - 1];
+          fileDownload(fileName).then(res => {
+            if (res.data.code == "0000") {
+                this.downloadFile(fileName,res.data.data);
+            }
+          });
+        },
+        handleImageSuccess1(res, files, fileList) {
+          // 上传成功
+          this.formData1 = new FormData();
+
+          this.fileList = fileList;
+
+          for(var i=0; i<this.fileList.length; i++){
+                this.formData1.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样
+          }
+
+        },
+
+        handleImageSuccess2(res, files, fileList) {
+          // 上传成功
+          this.formData2 = new FormData();
+
+          this.fileList = fileList;
+
+          for(var i=0; i<this.fileList.length; i++){
+                this.formData2.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样
+          }
+
+        },
+
+        handleImageSuccess3(res, files, fileList) {
+          // 上传成功
+          this.formData3 = new FormData();
+
+          this.fileList = fileList;
+
+          for(var i=0; i<this.fileList.length; i++){
+                this.formData3.append('fileList', fileList[i].raw)//fileList里面raw才是文件对象，与files一样
+          }
+
+        },
+
+
+
+        beforeImageUpload(file) {
+          // 上传前格式与大小校验
+
+          {#const isJPG = file.type === "image/jpeg"|| file.type == 'image/png'|| file.type == 'video/mp4';#}
+          const isLt2M = file.size / 1024 / 1024 < 500;
+
+          {% comment %}if (!isJPG) {
+            this.$message.error("上传头像图片只能是 JPG/PNG 格式，视频为mp4格式!");
+          }{% endcomment %}
+          if (!isLt2M) {
+            this.$message.error("上传头像图片大小不能超过 500MB!");
+          }
+          return isJPG && isLt2M;
+            console.log("before" )
+            //也是成功的
+        },
+        // 下载
+        downloadFile(fileName, content) {
+          let aLink = document.createElement("a");
+          let blob = this.base64ToBlob(content); //new Blob([content]);
+
+          let evt = document.createEvent("HTMLEvents");
+          evt.initEvent("click", true, true); // initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+          aLink.download = fileName;
+          aLink.href = URL.createObjectURL(blob);
+
+          // aLink.dispatchEvent(evt);
+          aLink.click();
+        },
+        // base64转blob
+        base64ToBlob(code) {
+          let parts = code.split(";base64,");
+          let contentType = parts[0].split(":")[1];
+          let raw = window.atob(parts[1]);
+          let rawLength = raw.length;
+
+          let uInt8Array = new Uint8Array(rawLength);
+
+          for (let i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+          }
+          return new Blob([uInt8Array], { type: contentType });
+        },
+
+        onSubmit1() {
+
+            if (this.formData1.length==0){this.formData1 = new FormData();}
+
+            this.formData1.append('No', this.$refs.form1.model.No)
+            this.formData1.append('Title', this.$refs.form1.model.Title)
+            this.formData1.append('Description', this.$refs.form1.model.Description)
+            {#this.formData1.append('Upload_Date', this.$refs.form1.model.Upload_Date)#}
+            this.formData1.append('Version', this.$refs.form1.model.Version)
+            this.formData1.append("action",'submit1');
+            axios.post("/SpecDownload/ManagementSop-summary/", this.formData1,{
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res)=>{
+                        if(res.data.errMessage == ""){
+                            this.tableData = res.data.content;
+                            this.add1 = false;
+                            this.form1={};
+                            this.fileListO=[];
+                            this.$message({
+                                  message:'上傳成功',
+                                  type:'success',
+                              });
+                            this.formData1 = [];
+
+                        }else{
+
+                            this.$message({
+                                  message:'数据已存在！',
+                                  type:'warning',
+                            })
+                        }
+
+            })
+        },
+
+        onSubmit2() {
+
+            if (this.formData2.length==0){this.formData2 = new FormData();}
+
+            this.formData2.append('No', this.$refs.form2.model.No)
+            this.formData2.append('Title', this.$refs.form2.model.Title)
+            this.formData2.append('Description', this.$refs.form2.model.Description)
+            {#this.formData2.append('Upload_Date', this.$refs.form2.model.Upload_Date)#}
+            this.formData2.append('Version', this.$refs.form2.model.Version)
+            this.formData2.append("action",'submit2');
+            axios.post("/SpecDownload/ManagementSop-summary/", this.formData2,{
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res)=>{
+                        if(res.data.errMessage == ""){
+                            this.tableData1 = res.data.content1;
+                            this.add2 = false;
+                            this.form2={};
+                            this.fileListO=[];
+                            this.$message({
+                                  message:'上傳成功',
+                                  type:'success',
+                              });
+                            this.formData2 = [];
+
+                        }else{
+
+                            this.$message({
+                                  message:'数据已存在！',
+                                  type:'warning',
+                            })
+                        }
+
+            })
+        },
+
+        onSubmit3() {
+
+            if (this.formData3.length==0){this.formData3 = new FormData();}
+
+            this.formData3.append('No', this.$refs.form3.model.No)
+            this.formData3.append('Title', this.$refs.form3.model.Title)
+            this.formData3.append('Description', this.$refs.form3.model.Description)
+            {#this.formData3.append('Upload_Date', this.$refs.form3.model.Upload_Date)#}
+            this.formData3.append('Version', this.$refs.form3.model.Version)
+            this.formData3.append("action",'submit3');
+            axios.post("/SpecDownload/ManagementSop-summary/", this.formData3,{
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res)=>{
+                        if(res.data.errMessage == ""){
+                            this.tableData2 = res.data.content2;
+                            this.add3 = false;
+                            this.form3={};
+                            this.fileListO=[];
+                            this.$message({
+                                  message:'上傳成功',
+                                  type:'success',
+                              });
+                            this.formData3 = [];
+
+                        }else{
+
+                            this.$message({
+                                  message:'数据已存在！',
+                                  type:'warning',
+                            })
+                        }
+
+            })
+        },
+
+    }
+})
+
+</script>
+{% endblock %}
