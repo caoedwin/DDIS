@@ -22,7 +22,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         try:
             user = UserInfo.objects.get(**authenticate_kwargs)
             # print(attrs, self, self.context['request'], "attrs")
-            request = self.context['request']
+            request = self.context['request']#没有经过login的view登录是没有写入登录用户信息的，需要增加api登录的用户信息到session中去，log里面才有用户信息输出，
             request.session['user_id'] = user.id
             request.session['user_name'] = user.username
             request.session['account'] = authenticate_kwargs['account']
