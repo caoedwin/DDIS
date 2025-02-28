@@ -29,7 +29,7 @@ class LogMiddle(MiddlewareMixin):
             status_code = response.status_code
             # 响应内容
             content = {}
-            if method == "POST":#get返回的html，json.loads时会报错
+            if method == "POST" or method == "GET":#get返回的html，json.loads时会报错
                 """
                 json时可能会报错，导致系统错误，前端报500，excel上传失败。contend也没有用到
                 """
