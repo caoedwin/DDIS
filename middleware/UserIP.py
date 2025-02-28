@@ -53,6 +53,9 @@ class LogMiddle(MiddlewareMixin):
                 username = request.session.get('user_name')
                 Account = request.session.get('account')
                 # print(username,Account)
+                if not username:#JTW api账户，没有经过login的view
+                    username = request.session.get('user_name')
+                    Account = request.session.get('account')
                 server_name = request.META.get('SERVER_NAME')
                 COMPUTERNAME = None
                 USERNAME = None

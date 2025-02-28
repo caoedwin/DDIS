@@ -18,10 +18,16 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # authenticate_kwargs = {self.username_field: attrs[self.username_field], 'password': attrs['password']}
         authenticate_kwargs = {'account': attrs[self.username_field], 'password': attrs['password']}
-        print(authenticate_kwargs,"authenticate_kwargs")
+        # print(authenticate_kwargs,"authenticate_kwargs")
         try:
             user = UserInfo.objects.get(**authenticate_kwargs)
-            print(user, user.role.all(), 'user')
+            # print(attrs, self, self.context['request'], "attrs")
+            request = self.context['request']
+            request.session['user_id'] = user.id
+            request.session['user_name'] = user.username
+            request.session['account'] = authenticate_kwargs['account']
+            # print(request.session.get('user_id'),request.session.get('account'))
+            # print(user, user.role.all(), 'user')
         except Exception as e:
             raise exceptions.NotFound(e.args[0])
 
@@ -33,6 +39,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             return False
         else:
             data = {"userId": user.id, "token": str(refresh.access_token), "refresh": str(refresh)}
+            # print(data)
         # data = {"userId": user.id, "token": str(refresh.access_token), "refresh": str(refresh)}
         return data
 
@@ -56,6 +63,6 @@ class MyJWTAuthentication(JWTAuthentication):
             user = UserInfo.objects.get(**{'id': user_id})
         except UserInfo.DoesNotExist:
             raise AuthenticationFailed(_('User not found'), code='user_not_found')
-        print(user,validated_token,"MyJWTAuthentication")
+        # print(user,validated_token,"MyJWTAuthentication")
 
         return user

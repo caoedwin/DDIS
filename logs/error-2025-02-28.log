@@ -1,0 +1,86 @@
+[2025-02-28 11:50:52,595] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CQM/api/login/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+TypeError: validate() missing 1 required positional argument: 'attrs'
+[2025-02-28 11:50:52,605] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CQM/api/login/ 500 [0.61, 127.0.0.1:65326]
+[2025-02-28 11:51:53,110] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CQM/api/login/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+TypeError: validate() missing 1 required positional argument: 'request'
+[2025-02-28 11:51:53,121] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CQM/api/login/ 500 [0.45, 127.0.0.1:65491]
+[2025-02-28 13:33:42,208] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CQM/api/login/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python372\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\CQM\authentication.py", line 21, in validate
+    print(attrs, self.context.request, "attrs")
+AttributeError: 'dict' object has no attribute 'request'
+[2025-02-28 13:33:42,218] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CQM/api/login/ 500 [0.55, 127.0.0.1:52244]

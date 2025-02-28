@@ -1231,15 +1231,16 @@ class CQMSeriView(APIView):
     authentication_classes = [MyJWTAuthentication, SessionAuthentication, BasicAuthentication]
     # authentication_classes = [MyAuth]	# 局部认证(全局在setting里面设置),不写默认用全局（全局需要用DRF写用户的注册登陆接口，可以另外创建一个用于DRF的用户module）
     permission_classes = [MyPermission]  # 局部配置(全局在setting里面设置),不写默认用全局（全局需要用DRF写用户的注册登陆接口，可以另外创建一个用于DRF的用户module）
+
     # 所有用户都可以访问
     # def get(self, request, *args, **kwargs):
     #     return APIResponse(0, '自定义读 OK')
     #
     # # 必须是 自定义“管理员”分组 下的用户
     # def post(self, request, *args, **kwargs):
-    #     return APIResponse(0, '自定义写 OK')
+    #     return APIResponse(0, '自定义写
+    #         # print(request.GET) OK')
     def get(self, request):
-        # print(request.GET)
         # cqm = CQM.objects.all()
         # print(2 ,request.auth)
         cqm = []
