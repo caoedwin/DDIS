@@ -48,11 +48,11 @@ class LogMiddle(MiddlewareMixin):
                 # print('2----请求视图前被调用')
                 ip = None
                 proxy_ip = None
-                # useraccount = request.user
-                # print(useraccount.id)
+                useraccount = request.user
+                # print(useraccount)
                 username = request.session.get('user_name')
                 Account = request.session.get('account')
-                # print(username,Account)
+                # print(username,Account,"Userip")
                 if not username:#JTW api账户，没有经过login的view
                     username = request.session.get('user_name')
                     Account = request.session.get('account')
@@ -89,7 +89,7 @@ class LogMiddle(MiddlewareMixin):
                 # print('3----请求视图后被调用')
                 # log_init().info(f'{server_name} {ip} {proxy_ip} {request_url} {}')
                 # message = '%s %s %s>%s %s>%s %s %s %s %s %s' % (dateime, server_name, Account, username, CLIENTNAME, COMPUTERNAME, USERNAME, ip, proxy_ip, request_url, method, content)
-                message = '%s %s>%s %s>%s>%s %s %s %s %s' % (dateime, Account, username, CLIENTNAME, COMPUTERNAME, USERNAME, ip, proxy_ip, request_url, method)
+                message = '%s: %s/%s/%s> %s/%s/%s > %s/%s > %s' % (dateime, Account, request.user, username, CLIENTNAME, COMPUTERNAME, USERNAME, ip, proxy_ip, request)
                 logger.info(message)
         except Exception as e:
             logger.critical('系统错误: %s' % e)

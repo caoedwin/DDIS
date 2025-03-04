@@ -17,8 +17,8 @@ app_name = 'MiscellaneousPurchases'
 
 urlpatterns = [
 
-    path('Budget/', views.Budget, name='Budget'),
-    path('ReceiptAmount/', views.ReceiptAmount, name='SubscriptionStatus'),
-    path('SubscriptionStatus/', views.SubscriptionStatus, name='SubscriptionStatus'),
+    path('Budget/', views.Budget_view, name='Budget'),
+    path('ReceiptAmount/', views.ReceiptAmount_view, name='SubscriptionStatus'),
+    path('SubscriptionStatus/', views.SubscriptionStatus_view, name='SubscriptionStatus'),
 
 ]

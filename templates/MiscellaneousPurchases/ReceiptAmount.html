@@ -1,10 +1,906 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}PersonalInfo_edit{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+.el-table th .gutter{
+    display: table-cell!important;
+}
 
-</body>
-</html>
+label{
+    color:white;
+}
+
+ .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+      color:aliceblue;
+  }
+
+  .customerContent,.departmentContent,.lessonContent,.groupemployeesContent{
+     margin-left: 20px;
+  }
+
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin-left: 80px;
+    margin-top: 20px;
+    position: relative;
+}
+
+    /*.el-table .cell {
+      white-space: pre-line;
+      text-align: left;
+    }
+
+     */
+
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 30px;
+}
+.el-checkbox__label{
+    font-size: 18px;
+}
+ .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+ .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+.el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+.gutter{
+    display:block!important;
+    width:17px!important;
+}
+
+[v-cloak]{
+    display: none;
+}
+
+#sh {
+    font-size:18px;
+    font-family:微软雅黑;
+    border: 2px solid #9f9ca1;
+}
+
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+
+
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+      <!--搜索框-->
+    <div class="selectMsg" >
+
+           <div class="customerContent">
+                 <label for="customer">Year</label>
+                 <select  ref="Year"  v-model="year" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option v-for="(item,key,index) in yearOptions" >${ item }</option>
+                 </select>
+                 <div class="inputError" v-cloak v-show="customerError">不能為空</div>
+           </div>
+
+           <div style="margin-left: 100px;">
+                 <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
+                 <el-button  @click="AddInfo" type="success" >Add</el-button>
+{#                 <el-button @click="exportExcel"  type="info" v-cloak style="height:40px">導出</el-button>#}
+{#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
+{#                 <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak style="margin-left: 20px;width: 80px;">刪除</el-button>#}
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{#                 <a href="/static/src/modelfiles/PersonInfo.xlsx" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>#}
+           </div>
+
+    </div>
+
+     <el-dialog :visible.sync="add" :close-on-click-modal="false">
+        <template>
+            <el-form ref="form"  :model="form" label-width="100px">
+                  <el-form-item label="Year" prop="Year">
+                      <el-date-picker type="year" placeholder="选择年" v-model="form.Year" value-format="yyyy" style="width: 100%;">
+                      </el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="Ledger" prop="Ledger">
+                      <el-input  v-model="form.Ledger" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Jan" prop="Jan">
+                      <el-input  v-model="form.Jan" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Feb" prop="Feb">
+                      <el-input  v-model="form.Feb" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Mar" prop="Mar">
+                      <el-input  v-model="form.Mar" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Apr" prop="Apr">
+                      <el-input  v-model="form.Apr" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="May" prop="May">
+                      <el-input  v-model="form.May" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Jun" prop="Jun">
+                      <el-input  v-model="form.Jun" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="July" prop="July">
+                      <el-input  v-model="form.July" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Aug" prop="Aug">
+                      <el-input  v-model="form.Aug" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Sep" prop="Sep">
+                      <el-input  v-model="form.Sep" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Oct" prop="Oct">
+                      <el-input  v-model="form.Oct" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Nov" prop="Nov">
+                      <el-input  v-model="form.Nov" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Dec" prop="Dec">
+                      <el-input  v-model="form.Dec" ></el-input>
+                  </el-form-item>
+                <div class="el-form-item__content" style="margin-left: 220px;">
+                  <el-form-item>
+                        <el-button type="primary" @click="addData('form')">確定</el-button>
+                  </el-form-item>
+                </div>
+             </el-form>
+        </template>
+    </el-dialog>
+
+     <el-dialog :visible.sync="update" :close-on-click-modal="false">
+        <template>
+            <el-form ref="form1"  :model="form1" :rules="rules"  label-width="100px">
+                  <el-form-item label="Year" prop="Year">
+                      <el-select v-model="form1.Year" disabled>
+                            <el-option
+                                v-for="item in yearOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                            </el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="Ledger" prop="Ledger" >
+                      <el-input  v-model="form1.Ledger" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="Jan" prop="Jan">
+                      <el-input  v-model="form1.Jan" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Feb" prop="Feb">
+                      <el-input  v-model="form1.Feb" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Mar" prop="Mar">
+                      <el-input  v-model="form1.Mar" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Apr" prop="Apr">
+                      <el-input  v-model="form1.Apr" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="May" prop="May">
+                      <el-input  v-model="form1.May" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Jun" prop="Jun">
+                      <el-input  v-model="form1.Jun" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="July" prop="July">
+                      <el-input  v-model="form1.July" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Aug" prop="Aug">
+                      <el-input  v-model="form1.Aug" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Sep" prop="Sep">
+                      <el-input  v-model="form1.Sep" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Oct" prop="Oct">
+                      <el-input  v-model="form1.Oct" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Nov" prop="Nov">
+                      <el-input  v-model="form1.Nov" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Dec" prop="Dec">
+                      <el-input  v-model="form1.Dec" ></el-input>
+                  </el-form-item>
+                <div class="el-form-item__content" style="margin-left: 220px;">
+                  <el-form-item>
+                        <el-button type="primary" @click="updateData('form')">確定</el-button>
+                  </el-form-item>
+                </div>
+             </el-form>
+        </template>
+    </el-dialog>
+
+  <div class="tableAround">
+
+    <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input><br>
+{#    <span  class="selectItem" v-cloak  v-if="showCustomer&&showDepartment&&showLesson">當前表格信息：${ showYear }/${ showCustomer }/${ showDepartment }/${ showLesson }/${ showGroupEmployees } </span>#}
+    <el-table id="out-table"  ref="tableRef" height="700" border stripe :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
+        style="min-width: 100%;border-radius: 10px"  @selection-change="handleSelectionChange" :row-key="getRowKeys"
+        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+        v-loading="tableloading"
+        element-loading-text="數據更新中，請稍後"
+        border>
+{#              <el-table-column type="selection" width="50" align="center" fixed></el-table-column>#}
+              <el-table-column  label="Edit" align="center" min-width="6%">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                  </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Year" label="Year" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Ledger" label="Ledger" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Jan" label="Jan" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Feb" label="Feb" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Mar" label="Mar" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Apr" label="Apr" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="May" label="May" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Jun" label="Jun" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="July" label="July" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Aug" label="Aug" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Sep" label="Sep" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Oct" label="Oct" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Nov" label="Nov" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Dec" label="Dec" align="center" min-width="6%"></el-table-column>
+
+
+    </el-table>
+      <div class="block">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+        </el-pagination>
+      </div>
+  </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/Element/table.js"></script>
+<script src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/babel">
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: function () {
+            return {
+                excelFile:null,
+                uploadFile:null,
+                fileName:"未選擇文件",
+                search:'',
+                loading:false,
+                SectionProjectcode:[],
+                yearOptions:[],
+                ProjectCodeOption:[],
+                ProjectcodeCompal:"",
+                datatype:'',
+                year:'',
+                editpermission: 0,
+                permission: 0,
+                customerOptions:{},
+                customerError:false,
+                department:'',
+                departmentOptions:[],
+                departmentError:false,
+                tableContent:[],
+                update:false,
+                add:false,
+                ID:"",
+                labelPosition:'right',
+                tableloading: false,
+                elbuttonloading: false,
+                form: {
+                    Year: '',
+                    Ledger: '',
+                    Jan: '',
+                    Feb: '',
+                    Mar: '',
+                    Apr: '',
+                    May: '',
+                    Jun: '',
+                    July: '',
+                    Aug: '',
+                    Sep: '',
+                    Oct: '',
+                    Nov: '',
+                    Dec: '',
+
+                },
+
+                form1: {
+                    Year: '',
+                    Ledger: '',
+                    Jan: '',
+                    Feb: '',
+                    Mar: '',
+                    Apr: '',
+                    May: '',
+                    Jun: '',
+                    July: '',
+                    Aug: '',
+                    Sep: '',
+                    Oct: '',
+                    Nov: '',
+                    Dec: '',
+
+                },
+                formData:[],
+                editID: '',
+                multiDeleteVisible:false,
+                multipleSelection: [],
+                //表格信息顯示
+                showCustomer:'',
+                showDepartment:'',
+                //新增信息
+                appendss:false,
+                //分页
+                currentPage: 1,//默认显示第一页
+                pageSize:20,//默认每页显示100条
+                totalNum: null,
+                errMsg:null,
+                 rules: {
+                      Year: [
+                         { required: true, message: "不能為空", trigger:['blur','change'] }
+                      ],
+                      DataType: [
+                         { required: true, message: "不能為空", trigger:['blur','change'] }
+                      ],
+                      CG: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                      Customer: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                    },
+
+
+
+
+
+            }
+        },
+        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
+            this.getdata("first");
+        },
+        methods: {
+            //获取数据
+            getdata: function (e) {
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/MiscellaneousPurchases/ReceiptAmount/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.yearOptions = res.data.yearOptions;
+                    this.tableContent=res.data.content;
+                    this.totalNum=this.tableContent.length;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.$nextTick(() => {
+                       this.$refs.tableRef.doLayout()
+                    })
+                 });
+            },
+
+            exportExcel: function () {
+             /* 从表生成工作簿对象 */
+             {#console.log(document.querySelector("#out-table"));#}
+             let temp = [];
+             temp.push(Number(this.currentPage));
+             temp.push(Number(this.pageSize));
+             {#console.log(temp);#}
+             this.currentPage = 1;
+             this.pageSize = this.tableContent.length;
+             {#console.log(temp, this.defaultPage1, this.pageSize);#}
+             setTimeout(() => {
+                 let table = document.querySelector("#out-table").cloneNode(true);
+                 let fix = table.querySelector(".el-table__fixed");
+                 let wb;
+                 if(fix){
+                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
+                    table.appendChild(fix);
+                 }else{
+                    wb = XLSX.utils.table_to_book(table,{raw: true});
+                 }
+                 console.log("wb", wb);
+                 /* 获取二进制字符串作为输出 */
+                 var wbout = XLSX.write(wb, {
+                     bookType: "xlsx",
+                     bookSST: true,
+                     type: "array"
+                 });
+                 console.log("wbout", wbout);
+                 try {
+                     saveAs(
+                         //Blob 对象表示一个不可变、原始数据的类文件对象。
+                         //Blob 表示的不一定是JavaScript原生格式的数据。
+                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                         new Blob([wbout], {type: "application/octet-stream"}),
+                         //设置导出文件名称
+                         "sheetjs.xlsx"
+                     );
+
+                 } catch (e) {
+                     if (typeof console !== "undefined") console.log(e, wbout);
+                 }
+                 this.currentPage = temp[0];
+                 this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                 temp = [];
+                 return wbout;
+             }, 100);
+         },
+
+             AddInfo(){
+                    this.add=true;
+             },
+
+            //上传搜索项：以此选项搜索符合条件的内容
+            find:function(){
+
+                if(this.$refs.Year.value ===""){
+                      this.customerError= true;
+                      return false;
+                }
+
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let Year = this.$refs.Year.value;
+                let data ={"isGetData":"SEARCH","Year":Year,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                axios.post("/MiscellaneousPurchases/ReceiptAmount/",Qs.stringify(data), {
+                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.tableContent=res.data.content;
+                  this.totalNum=this.tableContent.length;
+                  this.permission=res.data.permission;
+                  this.elbuttonloading = false;
+                  this.tableloading = false;
+                  this.yearOptions = res.data.yearOptions;
+                  this.$nextTick(() => {
+                       this.$refs.tableRef.doLayout()
+                  })
+                })
+
+                  this.customerError= false;
+
+             },
+
+            indexMethod(index) {
+                  return index +1;
+            },
+
+            handleSelectionChange(rows) {
+                this.multipleSelection = rows;
+            },
+
+            getRowKeys (row) {
+              return row.id
+            },
+
+
+            updateFile:function(e){
+                const first="未選擇文件";
+                let newValue= e.target.files;
+                if(newValue){
+                 let file=document.getElementById('upload');
+                 let filename= file.files[0].name;
+                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
+                 console.log(fileType.toLowerCase());
+                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                      //console.log(this.excelFile);
+                     this.fileName=filename;
+                     this.uploadFile=file.files[0];
+                 }else{
+                     alert("上傳類型不為'xlsx'或'xls'");
+                       try{
+                         }catch(e){
+                             console.log(e);
+                         }
+                 }
+             }else{
+                 this.uploadFile=null;
+                 this.fileName=first;
+             }
+      },
+            fileUpload:function(){
+              const first="未選擇文件";
+              if(this.uploadFile){
+                  //1.解析Excel
+                   let outputResult;
+                   let _this= this;
+                   let files = this.uploadFile;
+                   let undefined_to_null=function(value){
+                       if(value === undefined){
+                           value=null;
+                       }
+                       //console.log(value,value === undefined,value == undefined);
+                       return value;
+                   }
+                   var fileReader = new FileReader ();
+                   const loading = this.$loading({
+                              lock: true,
+                              text: 'Loading',
+                              spinner: 'el-icon-loading',
+                              background: 'rgba(0,0,0,0.7)'
+                   });
+                   fileReader.onload = function (ev) {
+                     try {
+                    // _this.loading=true;
+                     var data = ev.target.result,
+                      workbook = XLSX.read(data, {
+                        type: 'binary'
+                     }), // 以二进制流方式读取得到整份excel表格对象
+                      persons = []; // 存储获取到的数据
+                   } catch (e) {
+                     //_this.loading=false;
+                         loading.close();
+                     return;
+                  }
+                  for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        var fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo);
+                        var datas = workbook.Sheets[sheet];
+                        // 如果有不规范数据可以在这里进行处理datas
+                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                        //break; // 只读了第一张表
+                    }
+            }
+                 // 数据保存在result
+                  let result=JSON.stringify(persons);
+                   //将之前张开的树形结构收起
+                      //_this.reset();
+                   //2.上傳數據
+                  let Year = _this.$refs.Year.value;
+                  let DataType = _this.$refs.DataType.value;
+                  axios.post("/MiscellaneousPurchases/ReceiptAmount/" ,{"isGetData":"upload","Year":Year,"DataType":DataType,"ExcelData":result},{
+                  headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    //console.log(res.data,"first");//上传成功的操作
+                        _this.tableContent=res.data.content;
+                        _this.totalNum=_this.tableContent.length;
+                        _this.$nextTick(() => {
+                           _this.$refs.tableRef.doLayout()
+                        })
+                        _this.errMsg=res.data.errMsg;
+                        _this.permission=res.data.permission;
+                        _this.yearOptions = res.data.yearOptions;
+                        _this.datatypeOption = res.data.datatypeOption;
+                        _this.uploadFile=null;
+                        _this.fileName=first;
+                   //_this.loading=false;
+                        loading.close();
+                    //上传成功的操作
+                        if(_this.errMsg){
+                            _this.$alert(_this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+                            _this.$message({
+                                message: '上傳成功',
+                                type: 'success',
+                            })
+                        }
+                    //接受数据的初始化
+                    try{
+                    }catch(e)
+                    {
+                       console.log("错误异常"+e);
+                    }
+                }).catch(function (e) {
+                        //_this.loading=false;
+                        loading.close();
+                        _this.uploadFile=null;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+           };
+                   try{
+                   //console.log(fileReader.onload());
+                   fileReader.readAsBinaryString(files);
+                   //console.log(fileReader.readAsBinaryString(files));
+                   }
+                   catch(e){
+                         //this.loading=false;
+                       loading.close();
+                         console.log(e);
+                         alert("文件上傳異常") ;
+                         return;
+                    }
+                  //console.log(outputResult);
+
+             }else{
+              //this.loading=false;
+                  loading.close();
+              alert("未選擇文件");
+              return false;
+          }
+              this.excelFile='';
+      },
+
+
+            addData(){
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchYear', this.$refs.Year.value);
+                    this.formData.append('Year', this.$refs.form.model.Year);
+                    this.formData.append('Ledger', this.$refs.form.model.Ledger);
+                    this.formData.append('Jan', this.$refs.form.model.Jan);
+                    this.formData.append('Feb', this.$refs.form.model.Feb);
+                    this.formData.append('Mar', this.$refs.form.model.Mar);
+                    this.formData.append('Apr', this.$refs.form.model.Apr);
+                    this.formData.append('May', this.$refs.form.model.May);
+                    this.formData.append('Jun', this.$refs.form.model.Jun);
+                    this.formData.append('July', this.$refs.form.model.July);
+                    this.formData.append('Aug', this.$refs.form.model.Aug);
+                    this.formData.append('Sep', this.$refs.form.model.Sep);
+                    this.formData.append('Oct', this.$refs.form.model.Oct);
+                    this.formData.append('Nov', this.$refs.form.model.Nov);
+                    this.formData.append('Dec', this.$refs.form.model.Dec);
+                    this.formData.append("action", 'addData');
+                    axios.post("/MiscellaneousPurchases/ReceiptAmount/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.yearOptions = res.data.yearOptions;
+                        this.totalNum = this.tableContent.length;
+                        this.$nextTick(() => {
+                           this.$refs.tableRef.doLayout()
+                        })
+                        this.errMsg=res.data.errMsg;
+                        this.formData = new FormData();
+                        if(this.errMsg){
+                          this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                          });
+                          this.add = true;
+                        }else{
+                          try {
+                                  this.$refs.form.resetFields();
+                          } catch (e) {
+
+                          }
+                          this.add = false;
+                          this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                          })
+                        }
+
+                    })
+            },
+
+
+            updateData() {
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchYear', this.$refs.Year.value);
+                    this.formData.append('ID', this.editID);
+                    this.formData.append('Year', this.$refs.form1.model.Year);
+                    this.formData.append('Ledger', this.$refs.form1.model.Ledger);
+                    this.formData.append('Jan', this.$refs.form1.model.Jan);
+                    this.formData.append('Feb', this.$refs.form1.model.Feb);
+                    this.formData.append('Mar', this.$refs.form1.model.Mar);
+                    this.formData.append('Apr', this.$refs.form1.model.Apr);
+                    this.formData.append('May', this.$refs.form1.model.May);
+                    this.formData.append('Jun', this.$refs.form1.model.Jun);
+                    this.formData.append('July', this.$refs.form1.model.July);
+                    this.formData.append('Aug', this.$refs.form1.model.Aug);
+                    this.formData.append('Sep', this.$refs.form1.model.Sep);
+                    this.formData.append('Oct', this.$refs.form1.model.Oct);
+                    this.formData.append('Nov', this.$refs.form1.model.Nov);
+                    this.formData.append('Dec', this.$refs.form1.model.Dec);
+                    this.formData.append("action", 'update');
+                    axios.post("/MiscellaneousPurchases/ReceiptAmount/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.$nextTick(() => {
+                           this.$refs.tableRef.doLayout()
+                        })
+                        this.errMsg=res.data.errMsg;
+                        this.formData = new FormData();
+                        if(this.errMsg){
+                          this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                          });
+                          this.update = true;
+                        }else{
+                          try {
+                                  this.$refs.form.resetFields();
+                          } catch (e) {
+
+                          }
+                          this.update = false;
+                          this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                          })
+                        }
+
+                    })
+            },
+
+            alertID:function(id,row){
+                 this.update=true;
+                 this.form1.Year=row.Year;
+                 this.form1.Ledger=row.Ledger;
+                 this.form1.Jan=row.Jan;
+                 this.form1.Feb=row.Feb;
+                 this.form1.Mar=row.Mar;
+                 this.form1.Apr=row.Apr;
+                 this.form1.May=row.May;
+                 this.form1.Jun=row.Jun;
+                 this.form1.July=row.July;
+                 this.form1.Aug=row.Aug;
+                 this.form1.Sep=row.Sep;
+                 this.form1.Oct=row.Oct;
+                 this.form1.Nov=row.Nov;
+                 this.form1.Dec=row.Dec;
+                 this.editID = id;
+
+            },
+    {% comment %}
+            alertID:function(id,row){
+                if(this.permission === 1){
+                     this.update=true;
+                     this.form1.Year=row.Year;
+                     this.form1.Jan=row.Jan;
+                     this.form1.Feb=row.Feb;
+                     this.form1.Mar=row.Mar;
+                     this.form1.Apr=row.Apr;
+                     this.form1.May=row.May;
+                     this.form1.Jun=row.Jun;
+                     this.form1.July=row.July;
+                     this.form1.Aug=row.Aug;
+                     this.form1.Sep=row.Sep;
+                     this.form1.Oct=row.Oct;
+                     this.form1.Nov=row.Nov;
+                     this.form1.Dec=row.Dec;
+                     this.editID = id;
+                    }else{
+                           this.update=false;
+                           this.$message({
+                              showClose: true,
+                              message: '無編輯權限！',
+                              type: 'warning'
+                            });
+                   }
+            },
+
+
+        {% endcomment %}
+            //分页
+            handleSizeChange(val) {
+                  //console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+            },
+            handleCurrentChange(val) {
+                //console.log(`当前页: ${val}`);
+                  this.currentPage = val;
+                  //console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+            },
+
+        },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    console.log(this.Totalsize);
+                    return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
+    })
+    </script>
+{% endblock %}
+
+
+
+
+

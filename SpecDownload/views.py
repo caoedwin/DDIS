@@ -5,6 +5,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import *
 from app01.models import UserInfo
+from django.db.models import F
 from django.db.models.functions import ExtractYear
 # Create your views here.
 @csrf_exempt
@@ -478,7 +479,7 @@ def ManagementSop_summary(request):
                         ManagementSopDevice.objects.get(id=i).files_Spec.all().delete()#删除实体文件 model中的files_SopRom_delete方法
                         ManagementSopDevice.objects.get(id=i).delete()
         # mock_data
-        for i in ManagementSopRoom.objects.all():
+        for i in ManagementSopRoom.objects.all().order_by(F('Num')):#.desc()從大到小
             filelist = []
             for h in i.files_Spec.all():
                 filelist.append("/media/" + str(h.files))
@@ -489,7 +490,7 @@ def ManagementSop_summary(request):
                 "Ownerflag": 1 if request.session.get('account') == i.editor else 0,
                 "editor": i.editor
             })
-        for i in ManagementSopProcess.objects.all():
+        for i in ManagementSopProcess.objects.all().order_by(F('Num')):
             filelist = []
             for h in i.files_Spec.all():
                 filelist.append("/media/" + str(h.files))
@@ -500,7 +501,7 @@ def ManagementSop_summary(request):
                 "Ownerflag": 1 if request.session.get('account') == i.editor else 0,
                 "editor": i.editor
             })
-        for i in ManagementSopDevice.objects.all():
+        for i in ManagementSopDevice.objects.all().order_by(F('Num')):
             filelist = []
             for h in i.files_Spec.all():
                 filelist.append("/media/" + str(h.files))

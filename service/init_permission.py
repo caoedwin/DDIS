@@ -15,6 +15,7 @@ def init_permission(request, user_obj):
     permission_menu_list_account = []
 
     for item in permission_item_list:
+        # print(item['perms__url'])
         permission_url_list.append(item['perms__url'])
     #显示全部菜单第一步：permission_menu_list统计成所有菜单。
         if item['perms__menu_id']:

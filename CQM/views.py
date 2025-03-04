@@ -1243,6 +1243,7 @@ class CQMSeriView(APIView):
     def get(self, request):
         # cqm = CQM.objects.all()
         # print(2 ,request.auth)
+
         cqm = []
         checklist = {}
         if request.GET.get("Customer"):

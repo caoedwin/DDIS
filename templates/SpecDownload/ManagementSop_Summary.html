@@ -472,7 +472,7 @@ new Vue ({
 
         //判断勾选
         selectable(row, index) {
-            if (row.Ownerflag == this.deletePermission) {
+            if (row.Ownerflag == 1 && this.deletePermission == 1) {
                 return true;
             } else {
                 return false;
