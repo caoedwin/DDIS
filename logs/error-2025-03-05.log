@@ -1,0 +1,128 @@
+[2025-03-05 07:58:46,208] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=float(Num)).order_by('Num_length'):
+UnboundLocalError: local variable 'Num' referenced before assignment
+[2025-03-05 07:58:46,213] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.35, 127.0.0.1:55477]
+[2025-03-05 07:58:49,287] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=float(Num)).order_by('Num_length'):
+UnboundLocalError: local variable 'Num' referenced before assignment
+[2025-03-05 07:58:49,295] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.10, 127.0.0.1:55475]
+[2025-03-05 07:58:56,964] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=float(Num)).order_by('Num_length'):
+UnboundLocalError: local variable 'Num' referenced before assignment
+[2025-03-05 07:58:56,969] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.10, 127.0.0.1:55477]
+[2025-03-05 08:00:10,743] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=float(Num)).order_by('Num_length'):
+UnboundLocalError: local variable 'Num' referenced before assignment
+[2025-03-05 08:00:10,748] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.27, 127.0.0.1:55651]
+[2025-03-05 08:00:22,437] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=float(Num)).order_by('Num_length'):
+UnboundLocalError: local variable 'Num' referenced before assignment
+[2025-03-05 08:00:22,448] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.11, 127.0.0.1:55666]
+[2025-03-05 08:01:27,593] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=float('Num')).order_by('Num_length'):
+ValueError: could not convert string to float: 'Num'
+[2025-03-05 08:01:27,598] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.26, 127.0.0.1:55790]
+[2025-03-05 08:02:22,440] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_length=int('Num')).order_by('Num_length'):
+ValueError: invalid literal for int() with base 10: 'Num'
+[2025-03-05 08:02:22,445] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.31, 127.0.0.1:55877]
+[2025-03-05 08:21:37,129] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /SpecDownload/ManagementSop-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\SpecDownload\views.py", line 504, in ManagementSop_summary
+    for i in ManagementSopDevice.objects.annotate(Num_float=Cast('Unm', FloatField())).order_by('Num_float', 'Num'):
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\query.py", line 1008, in annotate
+    clone.query.add_annotation(annotation, alias, is_summary=False)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 988, in add_annotation
+    summarize=is_summary)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\expressions.py", line 597, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\expressions.py", line 509, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1570, in resolve_ref
+    join_info = self.setup_joins(field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse)
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1473, in setup_joins
+    names[:pivot], opts, allow_many, fail_on_missing=True,
+  File "C:\Python372\mecheck\lib\site-packages\django\db\models\sql\query.py", line 1389, in names_to_path
+    "Choices are: %s" % (name, ", ".join(available)))
+django.core.exceptions.FieldError: Cannot resolve keyword 'Unm' into field. Choices are: Description, Num, Title, Version, edit_time, editor, files_Spec, id
+[2025-03-05 08:21:37,136] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /SpecDownload/ManagementSop-summary/ 500 [0.34, 127.0.0.1:58007]
