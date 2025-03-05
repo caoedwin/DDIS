@@ -479,7 +479,8 @@ def ManagementSop_summary(request):
                         ManagementSopDevice.objects.get(id=i).files_Spec.all().delete()#删除实体文件 model中的files_SopRom_delete方法
                         ManagementSopDevice.objects.get(id=i).delete()
         # mock_data
-        for i in ManagementSopDevice.objects.annotate(Num_float=Cast('Num', FloatField())).order_by('Num_float', 'Num'):
+        for i in ManagementSopRoom.objects.annotate(Num_float=Cast('Num', FloatField())).order_by('Num_float',
+                                                                                                    'Num'):
         # for i in ManagementSopDevice.objects.annotate(Num_length=Length('Num')).order_by('Num_length'):
             filelist = []
             for h in i.files_Spec.all():
@@ -491,7 +492,8 @@ def ManagementSop_summary(request):
                 "Ownerflag": 1 if request.session.get('account') == i.editor else 0,
                 "editor": i.editor
             })
-        for i in ManagementSopDevice.objects.annotate(Num_float=Cast('Num', FloatField())).order_by('Num_float', 'Num'):
+        for i in ManagementSopProcess.objects.annotate(Num_float=Cast('Num', FloatField())).order_by('Num_float',
+                                                                                                    'Num'):
         # for i in ManagementSopDevice.objects.annotate(Num_length=Length('Num')).order_by('Num_length'):
             filelist = []
             for h in i.files_Spec.all():
