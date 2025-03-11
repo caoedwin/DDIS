@@ -1,10 +1,667 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DriverList_upload{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    @media screen and (min-width: 1416px ){
+        .selectMsg .fileUploadContent{
+           {#margin: 15px 0 0 0 ;#}
+           display: inline-flex;
+           display: -webkit-inline-flex
+       }
+    }
+    @media screen and (min-width: 970px ) and ( max-width: 1415px) {
+       .container-fluid .row{
+              flex-wrap: nowrap;
+          }
+       .selectMsg .el-select{
+           width: 150px;
+       }
+       .selectMsg .fileUploadContent{
+           {#margin: 15px 0 0 0 ;#}
+           display: inline-flex;
+           display: -webkit-inline-flex
+       }
+    }
+    @media screen and (min-width:769px ) and (max-width: 969px){
+          .container-fluid .row{
+              flex-wrap: nowrap;
+          }
+         .selectMsg .el-select{
+           width: 150px;
+         }
+    }
+    @media screen and (min-width:600px ) and (max-width: 768px){
+        .container-fluid .row{
+              flex-wrap: nowrap;
+          }
+        .customerContent,.categoryContent,.functionContent{
+            width: 140px;
+            text-align: center
+        }
+        .selectMsg .Button{
+            margin: 34px 0 0 0 ;
+        }
+    }
+      .selectMsg{
+         font-size:16px;
+          padding: 15px;
+          display: flex;
+      }
+      .selectMsg label{
+          font-weight: 800;
+          margin-right: 10px;
+          color:aliceblue;
+      }
+       .selectMsg label:last-child{
+         margin-left: 15px;
+       }
+      .selectMsg #category{
+          margin-left: 0;
+      }
+       .tableAround{
+        padding: 20px;
+        -moz-box-shadow: 0px 0px 10px #333333;
+        -webkit-box-shadow: 0px 0px 10px #333333;
+        box-shadow: 0px 0px 10px #333333;
+        border-radius: 10px;
+        background-color: rgba(255,255,255,0.1);
+    }
+     .inputError{
+        text-align: center;
+        color: crimson;
+        background-color: beige;
+        width: 50%;
+        margin: 10px auto 5px;
+        position: relative;
+    }
+      .inputError:before{
+        display:block;
+        content:'';
+        border-width:8px 8px 8px 8px;
+        border-style:solid;
+        border-color:transparent transparent beige transparent;
 
-</body>
-</html>
+        /* 定位 */
+        position:absolute;
+        left:50%;
+        top:-16px;
+    }
+    .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+    }
+.el-pagination__total,.el-pagination__jump{
+    color: white;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+    <div class="selectMsg" >
+
+           <div class="customerContent">
+                 <label for="customer">Year</label>
+                 <select  ref="Year"  v-model="year" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option v-for="(item,key,index) in yearOptions" >${ item }</option>
+                 </select>
+                 <div class="inputError" v-cloak v-show="customerError">不能為空</div>
+           </div>
+
+           <div class="customerContent" style="margin-left: 80px;">
+                 <label for="customer">Ledger</label>
+                 <select  ref="Ledger"  v-model="ledger" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option v-for="(item,key,index) in ledgerOptions" >${ item }</option>
+                 </select>
+                 <div class="inputError" v-cloak v-show="LedgerError">不能為空</div>
+           </div>
+
+           <div style="margin-left: 100px;">
+                 <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
+                 <el-button  @click="AddInfo" type="success" >Add</el-button>
+                 <el-button @click="exportExcel"  type="info" v-cloak style="height:40px">導出</el-button>
+{#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
+{#                 <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak style="margin-left: 20px;width: 80px;">刪除</el-button>#}
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{#                 <a href="/static/src/modelfiles/PersonInfo.xlsx" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>#}
+           </div>
+
+    </div>
+
+     <el-dialog :visible.sync="add">
+          <template>
+                <el-form ref="form1" :model="form1" label-width="110px">
+                          <el-form-item label="Year">
+                                <el-input v-model="form1.Year"></el-input>
+                          </el-form-item>
+                          <el-form-item label="會計科目">
+                                <el-input v-model="form1.Ledger"></el-input>
+                          </el-form-item>
+                          <el-form-item label="設備名稱/项目">
+                                <el-input v-model="form1.Name"></el-input>
+                          </el-form-item>
+                          <el-form-item label="到貨狀態">
+                              <el-input v-model="form1.Status"></el-input>
+                          </el-form-item>
+                          <el-form-item label="型號規格">
+                                <el-input v-model="form1.ModelSpecifications"></el-input>
+                          </el-form-item>
+                          <el-form-item label="申購日期">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form1.SubscribeDate" value-format="yyyy-MM-dd" style="width: 100%;">
+                              </el-date-picker>
+                          </el-form-item>
+                          <el-form-item label="申購單">
+                                <el-input v-model="form1.SubscribeForm"></el-input>
+                          </el-form-item>
+                          <el-form-item label="申購單價">
+                              <el-input v-model="form1.SubscribeUnitPrice"></el-input>
+                          </el-form-item>
+                          <el-form-item label="數量">
+                              <el-input v-model="form1.Number"></el-input>
+                          </el-form-item>
+                          <el-form-item label="驗收單號">
+                              <el-input v-model="form1.AcceptanceForm"></el-input>
+                          </el-form-item>
+                          <el-form-item label="驗收日期">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form1.AcceptanceDate" value-format="yyyy-MM-dd" style="width: 100%;">
+                              </el-date-picker>
+                          </el-form-item>
+{#                          <el-form-item label="實際單價">#}
+{#                              <el-input v-model="form1.ActUnitPrice"></el-input>#}
+{#                          </el-form-item>#}
+                          <el-form-item label="客戶別">
+                              <el-input v-model="form1.Customer"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Project Code">
+                              <el-input v-model="form1.ProjectCode"></el-input>
+                          </el-form-item>
+                          <el-form-item label="申購部門">
+                              <el-input v-model="form1.Department"></el-input>
+                          </el-form-item>
+
+                          <div style="display: flex;justify-content: center;">
+                                <el-button type="primary" @click="onSubmit1">上传</el-button>
+                          </div>
+
+                </el-form>
+          </template>
+     </el-dialog>
+
+     <el-dialog :visible.sync="update">
+          <template>
+                <el-form ref="form2" :model="form2" label-width="110px">
+                          <el-form-item label="Year">
+                                <el-input v-model="form2.Year"></el-input>
+                          </el-form-item>
+                          <el-form-item label="會計科目">
+                                <el-input v-model="form2.Ledger"></el-input>
+                          </el-form-item>
+                          <el-form-item label="設備名稱/项目">
+                                <el-input v-model="form2.Name"></el-input>
+                          </el-form-item>
+                          <el-form-item label="到貨狀態">
+                              <el-input v-model="form2.Status"></el-input>
+                          </el-form-item>
+                          <el-form-item label="型號規格">
+                                <el-input v-model="form2.ModelSpecifications"></el-input>
+                          </el-form-item>
+                          <el-form-item label="申購日期">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form2.SubscribeDate" value-format="yyyy-MM-dd" style="width: 100%;">
+                              </el-date-picker>
+                          </el-form-item>
+                          <el-form-item label="申購單">
+                                <el-input v-model="form2.SubscribeForm"></el-input>
+                          </el-form-item>
+                          <el-form-item label="申購單價">
+                              <el-input v-model="form2.SubscribeUnitPrice"></el-input>
+                          </el-form-item>
+                          <el-form-item label="數量">
+                              <el-input v-model="form2.Number"></el-input>
+                          </el-form-item>
+                          <el-form-item label="驗收單號">
+                              <el-input v-model="form2.AcceptanceForm"></el-input>
+                          </el-form-item>
+                          <el-form-item label="驗收日期">
+                              <el-date-picker type="date" placeholder="选择日期" v-model="form2.AcceptanceDate" value-format="yyyy-MM-dd" style="width: 100%;">
+                              </el-date-picker>
+                          </el-form-item>
+{#                          <el-form-item label="實際單價">#}
+{#                              <el-input v-model="form2.ActUnitPrice"></el-input>#}
+{#                          </el-form-item>#}
+                          <el-form-item label="客戶別">
+                              <el-input v-model="form2.Customer"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Project Code">
+                              <el-input v-model="form2.ProjectCode"></el-input>
+                          </el-form-item>
+                          <el-form-item label="申購部門">
+                              <el-input v-model="form2.Department"></el-input>
+                          </el-form-item>
+
+                          <div style="display: flex;justify-content: center;">
+                                <el-button type="primary" @click="onSubmit2">修改</el-button>
+                          </div>
+
+                </el-form>
+          </template>
+     </el-dialog>
+
+     <div class="tableAround" v-cloak >
+{#         <div>#}
+{#         <span class="selectItem" style="float: left" v-cloak>PCQAU實驗室設備管理規範</span>#}
+{#         <el-button type="danger"  style="height:40px;float: right;" @click="Delete1"><i class="el-icon-remove-outline el-icon--left"></i>刪除信息</el-button>#}
+{#         <el-button type="success"  style="height:40px;float: right;margin-right: 20px;" @click="Add1"><i class="el-icon-circle-plus el-icon--left"></i>新增信息</el-button>#}
+{#         </div>#}
+         <el-table border stripe :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
+                   style="font-size: 16px;">
+{#             <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>#}
+{#             <el-table-column label="No." prop="No" min-width="8%" align="center"></el-table-column>#}
+              <el-table-column  prop="Year" label="Year" align="center" min-width="8%"></el-table-column>
+              <el-table-column  prop="Jan" label="Jan" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Feb" label="Feb" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Mar" label="Mar" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Apr" label="Apr" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="May" label="May" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Jun" label="Jun" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="July" label="July" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Aug" label="Aug" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Sep" label="Sep" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Oct" label="Oct" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Nov" label="Nov" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Dec" label="Dec" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Total" label="Total" align="center" min-width="7%"></el-table-column>
+         </el-table>
+         {% comment %}
+         <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[20, 50, 100, 150]"
+          :page-size="100"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="tableData.length"
+          :hide-on-single-page="!tableData.length">
+          </el-pagination>
+          {% endcomment %}
+     </div>
+
+    <br />
+
+     <div class="tableAround" v-cloak >
+{#         <span class="selectItem" style="float: left" v-cloak>流程指導書</span> &nbsp;&nbsp;&nbsp;#}
+{#         <el-button type="danger"  style="height:40px;float: right;" @click="Delete2"><i class="el-icon-remove-outline el-icon--left"></i>刪除信息</el-button>#}
+{#         <el-button type="success"  style="height:40px;float: right;margin-right: 20px;" @click="Add2"><i class="el-icon-circle-plus el-icon--left"></i>新增信息</el-button>#}
+{#         <br />#}
+         <el-table id="out-table" border stripe :data="tableData1.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
+                   ref="tableRef" style="font-size: 16px;">
+              <el-table-column  label="Edit" align="center" min-width="5%">
+                  <template slot-scope="scope">
+                      <el-button v-if="scope.row.editPermission == 1" style="border:0;color: #D9B300;" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                  </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod" align="center" min-width="3%"></el-table-column>
+              <el-table-column  prop="Year" label="Year" align="center" min-width="5%"></el-table-column>
+              <el-table-column  prop="Name" label="設備名稱/項目" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="Status" label="到貨狀態" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="ModelSpecifications" label="型號規格" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="SubscribeDate" label="申購日期" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="AcceptanceForm" label="驗收單號" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="AcceptanceDate" label="驗收日期" align="center" min-width="7%"></el-table-column>
+              <el-table-column  prop="SubscribeForm" label="申購單" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="SubscribeUnitPrice" label="申購單價" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Number" label="數量" align="center" min-width="4%"></el-table-column>
+              <el-table-column  prop="TotalPrice" label="總價" align="center" min-width="4%"></el-table-column>
+              <el-table-column  prop="Customer" label="客戶別" align="center" min-width="5%"></el-table-column>
+              <el-table-column  prop="ProjectCode" label="Project Code" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Department" label="申購部門" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="Requisitioner" label="申購人" align="center" min-width="6%"></el-table-column>
+         </el-table>
+     </div>
+
+    <br />
+
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script  src="/static/js/Element/table.js"></script>
+<script  src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script  src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/dialog.js"></script>
+<script src="/static/js/Element/form.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/Element/pagination.js"></script>
+<script type="text/babel">
+new Vue ({
+    el: "#app",
+    delimiters: ['${', '}'],
+    data() {
+        return {
+
+            yearOptions:[],
+            ledgerOptions:[],
+            elbuttonloading: false,
+            ledger: "",
+            year: "",
+            add:false,
+            update:false,
+            editPermission: 0,
+            form1: {
+              Year:'',
+              Ledger: '',
+              Name: '',
+              Status: '',
+              ModelSpecifications: '',
+              SubscribeDate: '',
+              SubscribeForm: '',
+              SubscribeUnitPrice: '',
+              Number: '',
+              AcceptanceForm: '',
+              AcceptanceDate: '',
+              ActUnitPrice: '',
+              Customer: '',
+              ProjectCode: '',
+              Department: '',
+            },
+
+            form2: {
+              Year:'',
+              Ledger: '',
+              Name: '',
+              Status: '',
+              ModelSpecifications: '',
+              SubscribeDate: '',
+              SubscribeForm: '',
+              SubscribeUnitPrice: '',
+              Number: '',
+              AcceptanceForm: '',
+              AcceptanceDate: '',
+              ActUnitPrice: '',
+              Customer: '',
+              ProjectCode: '',
+              Department: '',
+            },
+            formData1:[],
+            formData2:[],
+            formData3:[],
+            tableData:[],
+            tableData1:[],
+            tableData2:[],
+
+            customer:'',
+            customerError:false,
+            LedgerError:false,
+            category:'',
+            categoryError:false,
+            fc:'',
+            functionError:false,
+            showCustomer:'',
+            showCategory:'',
+            currentPage:1,
+            pagesize:100,
+            totalNum: null,
+            editID:'',
+
+
+        }
+    },
+    mounted(){
+         this.getdata("first");
+    },
+    methods: {
+        indexMethod(index) {
+            return index + 1;
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
+              },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+              this.currentPage = val;
+        },
+
+        getdata:function(e){
+
+                this.elbuttonloading = true;
+                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                axios.post("/MiscellaneousPurchases/SubscriptionStatus/", Qs.stringify(data), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                    this.tableData = res.data.content;
+                    this.tableData1 = res.data.content1;
+                    this.tableData2 = res.data.content2;
+                    this.yearOptions = res.data.yearOptions;
+                    this.ledgerOptions = res.data.ledgerOptions;
+                    this.elbuttonloading = false;
+                    this.editPermission = res.data.editPermission;
+                    });
+        },
+
+        find:function(){
+
+                if(this.$refs.Year.value ===""){
+                      this.customerError= true;
+                      return false;
+                }
+                this.customerError= false;
+                if(this.$refs.Ledger.value ===""){
+                      this.LedgerError= true;
+                      return false;
+                }
+                 this.LedgerError= false;
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let Year = this.$refs.Year.value;
+                let Ledger = this.$refs.Ledger.value;
+                let data ={"isGetData":"SEARCH","Year":Year, "Ledger": Ledger,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                axios.post("/MiscellaneousPurchases/SubscriptionStatus/",Qs.stringify(data), {
+                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.tableData = res.data.content;
+                  this.tableData1 = res.data.content1;
+                  this.elbuttonloading = false;
+                  this.tableloading = false;
+                  this.yearOptions = res.data.yearOptions;
+                  this.ledgerOptions = res.data.ledgerOptions;
+                  this.$nextTick(() => {
+                       this.$refs.tableRef.doLayout()
+                  })
+                })
+
+                  this.customerError= false;
+                  this.LedgerError= false;
+
+             },
+
+        exportExcel:function (){
+          let temp=[];
+          temp.push(Number(this.currentPage));
+          temp.push(Number(this.pageSize));
+          this.currentPage = 1; //当前页为第一页
+          this.pageSize = this.Totalsize; //每页大小限制条数：为总条数（将表格数据全部渲染出来在第一页上）
+          this.$nextTick(function () {
+                   /* 从表生成工作簿对象 */
+                 let table = document.querySelector("#out-table").cloneNode(true);
+                 // 因为element-ui的表格的fixed属性导致多出一个table，会下载重复内容，这里删除掉
+                 //table.removeChild(table.querySelector(".el-table__fixed"))
+                    //let wb = XLSX.utils.table_to_book(table,{raw:true});//mytable为表格的id名
+                var wb = XLSX.utils.table_to_book(table,{raw:true});
+                /* 获取二进制字符串作为输出 */
+                var wbout = XLSX.write(wb, {
+                    bookType: "xlsx",
+                    bookSST: true,
+                    type: "array"
+                });
+                try {
+                    saveAs(
+                    //Blob 对象表示一个不可变、原始数据的类文件对象。
+                    //Blob 表示的不一定是JavaScript原生格式的数据。
+                    //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                    //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                    new Blob([wbout], { type: "application/octet-stream" }),
+                    //设置导出文件名称
+                    "sheetjs.xlsx"
+                    );
+                } catch (e) {
+                    if (typeof console !== "undefined") console.log(e, wbout);
+                }
+                this.currentPage=temp[0];
+                this.pageSize=temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                temp=[];
+                return wbout;
+                });
+          },
+
+
+
+        AddInfo(){
+
+            this.add=true;
+        },
+
+
+        alertID:function(id,row){
+               let Year = this.$refs.Year.value;
+               let Ledger = this.$refs.Ledger.value;
+
+               let msg = {
+                  "isGetData" : "alertID" ,"ID":id, "searchYear": Year, "searchLedger": Ledger,
+                };
+                axios.post("/MiscellaneousPurchases/SubscriptionStatus/", Qs.stringify(msg, {indices: false}), {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    } //改变头格式，原生默认上传json格式
+                }).then((res) => {
+                    this.update=true;
+                    this.form2.Year = row.Year;
+                    this.form2.Ledger = row.Ledger;
+                    this.form2.Name = row.Name;
+                    this.form2.Status = row.Status;
+                    this.form2.ModelSpecifications = row.ModelSpecifications;
+                    this.form2.SubscribeDate = row.SubscribeDate;
+                    this.form2.SubscribeForm = row.SubscribeForm;
+                    this.form2.SubscribeUnitPrice = row.SubscribeUnitPrice;
+                    this.form2.Number = row.Number;
+                    this.form2.AcceptanceForm = row.AcceptanceForm;
+                    this.form2.AcceptanceDate = row.AcceptanceDate;
+                    this.form2.ActUnitPrice = row.ActUnitPrice;
+                    this.form2.Customer = row.Customer;
+                    this.form2.ProjectCode = row.ProjectCode;
+                    this.form2.Department = row.Department;
+                    this.editID = id;
+
+                })
+
+          },
+
+        onSubmit1() {
+
+            if (this.formData1.length==0){this.formData1 = new FormData();}
+
+            this.formData1.append('searchYear', this.$refs.Year.value)
+            this.formData1.append('searchLedger', this.$refs.Ledger.value)
+            this.formData1.append('Year', this.$refs.form1.model.Year)
+            this.formData1.append('Ledger', this.$refs.form1.model.Ledger)
+            this.formData1.append('Name', this.$refs.form1.model.Name)
+            this.formData1.append('Status', this.$refs.form1.model.Status)
+            this.formData1.append('ModelSpecifications', this.$refs.form1.model.ModelSpecifications)
+            this.formData1.append('SubscribeDate', this.$refs.form1.model.SubscribeDate)
+            this.formData1.append('SubscribeForm', this.$refs.form1.model.SubscribeForm)
+            this.formData1.append('SubscribeUnitPrice', this.$refs.form1.model.SubscribeUnitPrice)
+            this.formData1.append('Number', this.$refs.form1.model.Number)
+            this.formData1.append('AcceptanceForm', this.$refs.form1.model.AcceptanceForm)
+            this.formData1.append('AcceptanceDate', this.$refs.form1.model.AcceptanceDate)
+            this.formData1.append('ActUnitPrice', this.$refs.form1.model.ActUnitPrice)
+            this.formData1.append('Customer', this.$refs.form1.model.Customer)
+            this.formData1.append('ProjectCode', this.$refs.form1.model.ProjectCode)
+            this.formData1.append('Department', this.$refs.form1.model.Department)
+            this.formData1.append("action",'addSubmit');
+            axios.post("/MiscellaneousPurchases/SubscriptionStatus/", this.formData1,{
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res)=>{
+                        if(res.data.errMessage == ""){
+                            this.tableData1 = res.data.content1;
+                            this.yearOptions = res.data.yearOptions;
+                            this.ledgerOptions = res.data.ledgerOptions;
+                            this.add = false;
+                            this.form1={};
+                            this.formData1 = [];
+                            this.$message({
+                                  message:'上傳成功',
+                                  type:'success',
+                              })
+
+                        }else{
+                            this.$message({
+                                  message:'数据已存在！',
+                                  type:'warning',
+                            })
+                        }
+
+            })
+        },
+
+        onSubmit2() {
+
+            if (this.formData1.length==0){this.formData1 = new FormData();}
+
+            this.formData1.append('searchYear', this.$refs.Year.value)
+            this.formData1.append('searchLedger', this.$refs.Ledger.value)
+            this.formData1.append('Year', this.$refs.form2.model.Year)
+            this.formData1.append('Ledger', this.$refs.form2.model.Ledger)
+            this.formData1.append('Name', this.$refs.form2.model.Name)
+            this.formData1.append('Status', this.$refs.form2.model.Status)
+            this.formData1.append('ModelSpecifications', this.$refs.form2.model.ModelSpecifications)
+            this.formData1.append('SubscribeDate', this.$refs.form2.model.SubscribeDate)
+            this.formData1.append('SubscribeForm', this.$refs.form2.model.SubscribeForm)
+            this.formData1.append('SubscribeUnitPrice', this.$refs.form2.model.SubscribeUnitPrice)
+            this.formData1.append('Number', this.$refs.form2.model.Number)
+            this.formData1.append('AcceptanceForm', this.$refs.form2.model.AcceptanceForm)
+            this.formData1.append('AcceptanceDate', this.$refs.form2.model.AcceptanceDate)
+            this.formData1.append('Customer', this.$refs.form2.model.Customer)
+            this.formData1.append('ProjectCode', this.$refs.form2.model.ProjectCode)
+            this.formData1.append('Department', this.$refs.form2.model.Department)
+            this.formData1.append('editID', this.editID)
+            this.formData1.append("action",'updateSubmit');
+            axios.post("/MiscellaneousPurchases/SubscriptionStatus/", this.formData1,{
+                        headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
+                    }).then((res)=>{
+                        if(res.data.errMessage == ""){
+                            this.tableData1 = res.data.content1;
+                            this.update = false;
+                            this.form2={};
+                            this.formData1 = [];
+                            this.$message({
+                                  message:'修改成功',
+                                  type:'success',
+                              })
+
+                        }else{
+                            this.$message({
+                                  message:'修改失败！',
+                                  type:'warning',
+                            })
+                        }
+
+            })
+        },
+
+    }
+})
+
+</script>
+{% endblock %}

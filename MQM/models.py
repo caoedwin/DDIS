@@ -7,6 +7,7 @@ class MQM(models.Model):
         ('C38(NB)', 'C38(NB)'),
         ('C38(AIO)', 'C38(AIO)'),
         ('T88(AIO)', 'T88(AIO)'),
+        ('T89(NB)', 'T89(NB)'),
         ('A39', 'A39'),
         ('C85', 'C85'),
         ('Others', 'Others')
