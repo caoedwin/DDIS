@@ -226,7 +226,7 @@ def SubscriptionStatus_view(request):
                     if monthly_total['month'] == j[1]:
                         shengoujine[j[0]] = monthly_total['total']
                         continue
-                print(f"Year: {monthly_total['year']}, Month: {monthly_total['month']}, Total: {monthly_total['total']}")
+                # print(f"Year: {monthly_total['year']}, Month: {monthly_total['month']}, Total: {monthly_total['total']}")
             shengoujine["Total"] = Shengou_Total
             mock_data.append(shengoujine)
 
