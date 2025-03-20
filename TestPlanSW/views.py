@@ -1289,6 +1289,7 @@ def TestPlanSW_summary(request):
                 Phasesortorder = {'B(SDV)': 0, 'C(SIT)': 1, 'Wave2': 2, 'Wave3': 3, 'EELP+': 4, 'OOC': 5, 'OOC2': 6, 'OOC3': 7, }
                 # print(Projectlist_top)
                 Phaselist_top.sort(key=lambda x: Phasesortorder[x])
+                # Phaselist_top.sort(key=lambda x: Phasesortorder[x])
                 # print(Phaselist_top)
                 for i in Projectlist_top:
                     ProjecttotalATO = 0.00
@@ -7071,28 +7072,12 @@ def TestPlanSW_Edit_AIO(request):
 
     for i in Customer_list:
         Customerlist = []
-        for j in TestProjectSWAIO.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
+        for j in TestProjectSW.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
             Projectinfo = {}
             phaselist = []
             dic = {'Customer': i['Customer'], 'Project': j['Project']}
-            for m in TestProjectSWAIO.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
-
-                if m['Phase'] == "B(SDV)":
-                    PhaseValue = 0
-                if m['Phase'] == "C(SIT)":
-                    PhaseValue = 1
-                if m['Phase'] == "Wave2":
-                    PhaseValue = 2
-                if m['Phase'] == "Wave3":
-                    PhaseValue = 3
-                if m['Phase'] == "EELP+":
-                    PhaseValue = 4
-                if m['Phase'] == "OOC":
-                    PhaseValue = 5
-                if m['Phase'] == "OOC2":
-                    PhaseValue = 6
-                if m['Phase'] == "OOC3":
-                    PhaseValue = 7
+            for m in TestProjectSW.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
+                PhaseValue = phase_list.index(m['Phase'])
                 phaselist.append(PhaseValue)
             Projectinfo['phase'] = phaselist
             Projectinfo['project'] = j['Project']
@@ -7114,22 +7099,8 @@ def TestPlanSW_Edit_AIO(request):
             Project = request.GET.get('project')
             Phase = request.GET.get('phase')
             # print(type(Phase))
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
+            PhaseinItem = ['C(SIT)', 'FFRT']
 
 
 
@@ -7228,22 +7199,7 @@ def TestPlanSW_Edit_AIO(request):
             Category=request.GET.get('category')
             # print(Category2)
             #Search的时候不需要知道Items是link那个Item的，读的都是TestPlan里面的测试当下的Item信息，并且创建时可能就没有Link case（比如测试当下的版本不是上传时的最新版本，因为现在只有excel才能创建PLan）
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
 
             dic_Project = {'Customer': Customer, 'Project': Project, 'Phase': Phase}
             # print(dic_Project)
@@ -7342,22 +7298,7 @@ def TestPlanSW_Edit_AIO(request):
             Category=request.GET.get('category')
             # print(Category2)
             #Search的时候不需要知道Items是link那个Item的，读的都是TestPlan里面的测试当下的Item信息，并且创建时可能就没有Link case（比如测试当下的版本不是上传时的最新版本，因为现在只有excel才能创建PLan）
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
 
             dic_Project = {'Customer': Customer, 'Project': Project, 'Phase': Phase}
             # print(dic_Project)
@@ -7486,22 +7427,7 @@ def TestPlanSW_Edit_AIO(request):
             Phase = request.POST.get('phase')
             # print(type(Phase))
             #edit时也不需要知道Items是link那个Item的，直接通过id查找的
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
             dic_Project = {'Customer': Customer, 'Project': Project, 'Phase': Phase}
             # print(float('1.1'))
             #print(float('NULL'))
@@ -7585,22 +7511,7 @@ def TestPlanSW_Edit_AIO(request):
                 check_list_list = []
                 Phase = str(responseData['phase'])
 
-                if Phase == '0':
-                    Phase = 'B(SDV)'
-                if Phase == '1':
-                    Phase = 'C(SIT)'
-                if Phase == '2':
-                    Phase = 'Wave2'
-                if Phase == '3':
-                    Phase = 'Wave3'
-                if Phase == '4':
-                    Phase = 'EELP+'
-                if Phase == '5':
-                    Phase = 'OOC'
-                if Phase == '6':
-                    Phase = 'OOC2'
-                if Phase == '7':
-                    Phase = 'OOC3'
+                Phase = phase_list[int(Phase)]
 
                 dic_Project = {'Customer': responseData['customer'],
                                'Project': responseData['project'], 'Phase': Phase}
@@ -7666,22 +7577,7 @@ def TestPlanSW_Edit_AIO(request):
                             TestPlanSWAIO.objects.create(**updatedic)
 
             Phase = responseData['phase']
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
             dic_Project_search = {'Customer': responseData['customer'],
                                'Project': responseData['project'], 'Phase': Phase}
             # print(dic_Project)
@@ -7920,28 +7816,12 @@ def TestPlanSW_search_AIO(request):
     Customer_list = TestProjectSWAIO.objects.all().values('Customer').distinct().order_by('Customer')
     for i in Customer_list:
         Customerlist = []
-        for j in TestProjectSWAIO.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
+        for j in TestProjectSW.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
             Projectinfo = {}
             phaselist = []
             dic = {'Customer': i['Customer'], 'Project': j['Project']}
-            for m in TestProjectSWAIO.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
-
-                if m['Phase'] == "B(SDV)":
-                    PhaseValue = 0
-                if m['Phase'] == "C(SIT)":
-                    PhaseValue = 1
-                if m['Phase'] == "Wave2":
-                    PhaseValue = 2
-                if m['Phase'] == "Wave3":
-                    PhaseValue = 3
-                if m['Phase'] == "EELP+":
-                    PhaseValue = 4
-                if m['Phase'] == "OOC":
-                    PhaseValue = 5
-                if m['Phase'] == "OOC2":
-                    PhaseValue = 6
-                if m['Phase'] == "OOC3":
-                    PhaseValue = 7
+            for m in TestProjectSW.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
+                PhaseValue = phase_list.index(m['Phase'])
                 phaselist.append(PhaseValue)
             Projectinfo['phase'] = phaselist
             Projectinfo['project'] = j['Project']
@@ -7961,22 +7841,7 @@ def TestPlanSW_search_AIO(request):
             Project = request.GET.get('project')
             Phase = request.GET.get('phase')
 
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
 
             dic_Project = {'Customer': Customer, 'Project': Project, 'Phase': Phase}
             # print(dic_Project)
@@ -8343,22 +8208,7 @@ def TestPlanSW_search_AIO(request):
             Customer = request.POST.get("Customer")
             Project = request.POST.get("Project")
             Phase = request.POST.get("Phase")
-            if Phase == '0':
-                Phase = 'B(SDV)'
-            if Phase == '1':
-                Phase = 'C(SIT)'
-            if Phase == '2':
-                Phase = 'Wave2'
-            if Phase == '3':
-                Phase = 'Wave3'
-            if Phase == '4':
-                Phase = 'EELP+'
-            if Phase == '5':
-                Phase = 'OOC'
-            if Phase == '6':
-                Phase = 'OOC2'
-            if Phase == '7':
-                Phase = 'OOC3'
+            Phase = phase_list[int(Phase)]
             Category = request.POST.get("category")
             dicProject = {'Customer': Customer, "Project": Project,
                        'Phase': Phase,}
