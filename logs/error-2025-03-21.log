@@ -1,0 +1,56 @@
+[2025-03-21 10:16:10,979] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7080, in TestPlanSW_Edit_AIO
+    PhaseValue = phase_list.index(m['Phase'])
+ValueError: 'B(SDV)' is not in list
+[2025-03-21 10:16:10,990] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSW/TestPlanSW-edit-AIO/ 500 [0.28, 127.0.0.1:61571]
+[2025-03-21 10:16:50,214] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7080, in TestPlanSW_Edit_AIO
+    PhaseValue = phase_list.index(m['Phase'])
+ValueError: 'B(SDV)' is not in list
+[2025-03-21 10:16:50,229] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSW/TestPlanSW-edit-AIO/ 500 [0.44, 127.0.0.1:61638]
+[2025-03-21 10:44:16,358] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-search-AIO/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python372\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7916, in TestPlanSW_search_AIO
+    'basetime': round(TestPlanSWAIO.objects.filter(Projectinfo=ProjectSum, Owner__contains="DQA").aggregate(Sum('AT_AttendTime'))['AT_AttendTime__sum']/60, 0),
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'int'
+[2025-03-21 10:44:16,385] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSW/TestPlanSW-search-AIO/?action=getContent&customer=T88(AIO)&project=Test1A&phase=3&category= 500 [1.45, 127.0.0.1:63808]
+[2025-03-21 10:49:28,899] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-summary/
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 1291, in TestPlanSW_summary
+    Phaselist_top.sort(key=lambda x: Phasesortorder[x])
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 1291, in <lambda>
+    Phaselist_top.sort(key=lambda x: Phasesortorder[x])
+KeyError: 'FVT Regression2'
+[2025-03-21 10:49:28,903] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-summary/ 500 [22.26, 127.0.0.1:64226]

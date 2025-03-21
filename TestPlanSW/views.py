@@ -9,8 +9,8 @@ import datetime,json,simplejson
 from django.db.models import Max,Min,Sum,Count,Q
 from django.views.decorators.csrf import csrf_exempt
 
-# phase list 需要与TestPlanSW额edit, search里面的phaseName一样, Summary里的coloroder需要添加ui应的颜色
-phase_list = ["B(FVT)", 'FVT Regression1', 'FVT Regression2', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3']
+# phase list 需要与TestPlanSW额edit, search里面的phaseName一样,斌且需要是C38和AIO的phase的并集， Summary里的coloroder需要添加ui应的颜色
+phase_list = ["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',]
 
 # Create your views here.
 def TestPlanSW_summary(request):
@@ -1286,9 +1286,8 @@ def TestPlanSW_summary(request):
                 # print(Projectlist_top)
                 Projectlist_top = list(set(Projectlist_top))
                 Phaselist_top = list(set(Phaselist_top))
-                Phasesortorder = {'B(SDV)': 0, 'C(SIT)': 1, 'Wave2': 2, 'Wave3': 3, 'EELP+': 4, 'OOC': 5, 'OOC2': 6, 'OOC3': 7, }
                 # print(Projectlist_top)
-                Phaselist_top.sort(key=lambda x: Phasesortorder[x])
+                Phaselist_top.sort(key=lambda x: phase_list.index(x))
                 # Phaselist_top.sort(key=lambda x: Phasesortorder[x])
                 # print(Phaselist_top)
                 for i in Projectlist_top:
@@ -7072,11 +7071,11 @@ def TestPlanSW_Edit_AIO(request):
 
     for i in Customer_list:
         Customerlist = []
-        for j in TestProjectSW.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
+        for j in TestProjectSWAIO.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
             Projectinfo = {}
             phaselist = []
             dic = {'Customer': i['Customer'], 'Project': j['Project']}
-            for m in TestProjectSW.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
+            for m in TestProjectSWAIO.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
                 PhaseValue = phase_list.index(m['Phase'])
                 phaselist.append(PhaseValue)
             Projectinfo['phase'] = phaselist
@@ -7105,7 +7104,9 @@ def TestPlanSW_Edit_AIO(request):
 
 
             dic_Project = {'Customer': Customer, 'Project': Project, 'Phase': Phase}
+            # print(dic_Project)
             Projectinfos = TestProjectSWAIO.objects.filter(**dic_Project).first()
+            # print(Projectinfos)
             # func = lambda z: dict([(x, y) for y, x in z.items()])
 
             if TestPlanSWAIO.objects.filter(Projectinfo=Projectinfos).first():
@@ -7816,11 +7817,11 @@ def TestPlanSW_search_AIO(request):
     Customer_list = TestProjectSWAIO.objects.all().values('Customer').distinct().order_by('Customer')
     for i in Customer_list:
         Customerlist = []
-        for j in TestProjectSW.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
+        for j in TestProjectSWAIO.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
             Projectinfo = {}
             phaselist = []
             dic = {'Customer': i['Customer'], 'Project': j['Project']}
-            for m in TestProjectSW.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
+            for m in TestProjectSWAIO.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
                 PhaseValue = phase_list.index(m['Phase'])
                 phaselist.append(PhaseValue)
             Projectinfo['phase'] = phaselist
@@ -8196,8 +8197,8 @@ def TestPlanSW_search_AIO(request):
 
             canEdit = 0
             current_user = request.session.get('user_name')
-            if TestProjectSW.objects.filter(**check_dic_Pro).first():
-                for h in TestProjectSW.objects.filter(**check_dic_Pro):
+            if TestProjectSWAIO.objects.filter(**check_dic_Pro).first():
+                for h in TestProjectSWAIO.objects.filter(**check_dic_Pro):
                     for i in h.Owner.all():
                         # print(i.username,current_user)
                         # print(type(i.username),type(current_user))
