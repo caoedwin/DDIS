@@ -54,3 +54,43 @@ Traceback (most recent call last):
     Phaselist_top.sort(key=lambda x: Phasesortorder[x])
 KeyError: 'FVT Regression2'
 [2025-03-21 10:49:28,903] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-summary/ 500 [22.26, 127.0.0.1:64226]
+[2025-03-21 12:58:40,951] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-03-21 12:58:40,960] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET / 500 [1.49, 127.0.0.1:57207]
+[2025-03-21 12:58:41,280] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-03-21 12:58:41,284] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /favicon.ico 500 [0.08, 127.0.0.1:57207]
+[2025-03-21 12:58:48,723] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-03-21 12:58:48,728] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET / 500 [0.09, 127.0.0.1:57207]
+[2025-03-21 12:58:49,062] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "C:\Python372\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-03-21 12:58:49,068] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /favicon.ico 500 [0.09, 127.0.0.1:57207]
