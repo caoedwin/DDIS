@@ -440,7 +440,7 @@ def TestPlanME_Summary(request):
             # print(Projectlist_top)
             Projectlist_top = list(set(Projectlist_top))
             Phaselist_top = list(set(Phaselist_top))
-            Phasesortorder = {'B(FVT)': 0, 'C(SIT)': 1, }
+            Phasesortorder = {'B(FVT)': 0, 'C(SIT)': 1, 'INV': 2, 'Others': 3, }
             # print(Projectlist_top)
             Phaselist_top.sort(key=lambda x: Phasesortorder[x])
             for i in Projectlist_top:
@@ -1028,7 +1028,7 @@ def TestPlanME_Summary(request):
             # print(Projectlist_top)
             Projectlist_top = list(set(Projectlist_top))
             Phaselist_top = list(set(Phaselist_top))
-            Phasesortorder = {'B(FVT)': 0, 'C(SIT)': 1, }
+            Phasesortorder = {'B(FVT)': 0, 'C(SIT)': 1, 'INV': 2, 'Others': 3, }
             # print(Projectlist_top)
             Phaselist_top.sort(key=lambda x: Phasesortorder[x])
             for i in Projectlist_top:
