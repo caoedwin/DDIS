@@ -1142,8 +1142,8 @@ def Navigations_Category_axios(request):
                 'Key': 'NonDQA-Lesson',
                 'address': "",
                 'Comment': "",
-                'name2': "CriticalIssue",
-                'Key2': "CriticalIssue",
+                'name2': '',#'"CriticalIssue",
+                'Key2': '',#'"CriticalIssue",
                 'address2': "",
                 'Comment2': "",
                 'name3': "",  # Issue Notes
