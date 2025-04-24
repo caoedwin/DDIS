@@ -1170,7 +1170,16 @@
              /* value[i] = this.RTR[i] * this.tableData[i].TTP;
               value[i]= isNaN(value[i])?0:value[i];*/
              switch (this.tableData[i].ItemNo) {
-                 case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTF)/20)?0:((this.NTU[i] * this.tableData[i].TTF)/20); break;
+                 {% comment %}case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTF)/20)?0:((this.NTU[i] * this.tableData[i].TTF)/20); break;{% endcomment %}
+                 case "E1.1" :
+                 case "E1.2" :
+                 case "E1.3-1" :
+                 case "E1.3-2" :
+                 case "E1.3-3" :
+                 case "E1.3-4" :
+                 case "E1.4" :
+                 case "E1.6" :
+                 case "M1.8-1" :
                  case "H1-16-1" :
                  case "H1-3" :
                  case "H1-4" :
@@ -1212,12 +1221,13 @@
               {#value[i] = this.RTR[i] * this.tableData[i].TTP;#}
               {#value[i]= isNaN(value[i])?0:value[i];#}
               switch (this.tableData[i].ItemNo) {
-                 case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTM)/20)?0:(this.NTU[i] * this.tableData[i].TTM)/20; break;
+                 {% comment %}case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTM)/20)?0:(this.NTU[i] * this.tableData[i].TTM)/20; break;
                  case "H1-5 #1-1" :
                  case "H1-5 #1-2" :
+                 case "H1-5 #2-1" :
                  case "H1-5 #2-2" :
                  case "H1-5 #3-1" :
-                 case "H1-5 #3-2" :
+                 case "H1-5 #3-2" :{% endcomment %}
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1231,7 +1241,7 @@
                  case "EELP+ 03":
                  case "EELP+ 04":
                  case "EELP+ 05":
-                 case "H1-5 #2-1" :
+
                      value[i]=(this.NTU[i] == 0||this.NTU[i] == null)?0:this.tableData[i].TTM; break;
                  default : value[i] =isNaN(this.NTU[i] * this.tableData[i].TTM)?0:(this.NTU[i] * this.tableData[i].TTM);
              }
@@ -1247,7 +1257,16 @@
           {% comment %}    value[i] = this.RTR[i] * this.tableData[i].TTP;
               value[i]= isNaN(value[i])?0:value[i];{% endcomment %}
            switch (this.tableData[i].ItemNo) {
-                 case "H1-33" : value[i]=isNaN((this.RTU[i] * this.tableData[i].TTF)/20)?0:((this.RTU[i] * this.tableData[i].TTF)/20); break;
+                 {% comment %}case "H1-33" : value[i]=isNaN((this.RTU[i] * this.tableData[i].TTF)/20)?0:((this.RTU[i] * this.tableData[i].TTF)/20); break;{% endcomment %}
+                 case "E1.1" :
+                 case "E1.2" :
+                 case "E1.3-1" :
+                 case "E1.3-2" :
+                 case "E1.3-3" :
+                 case "E1.3-4" :
+                 case "E1.4" :
+                 case "E1.6" :
+                 case "M1.8-1" :
                  case "H1-34" : value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:this.tableData[i].TTF; break;
                  case "H1-16-1" :
                  case "H1-3" :
