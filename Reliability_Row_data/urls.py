@@ -119,6 +119,7 @@ urlpatterns = [
     path('A32LessonLProject/', include('A32LessonLProject.urls', namespace='A32LessonLProject')),
     path('CriticalIssueCrossCheck/', include('CriticalIssueCrossCheck.urls', namespace='CriticalIssueCrossCheck')),
     path('MiscellaneousPurchases/', include('MiscellaneousPurchases.urls', namespace='MiscellaneousPurchases')),
+    path('CommonDevice/', include('CommonDevice.urls', namespace='CommonDevice')),
 ]#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

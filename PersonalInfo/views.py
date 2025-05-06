@@ -9928,7 +9928,7 @@ def PublicArea(request):
     # print(roles)
     # editPpriority = 100
     for i in roles:
-        if i == 'admin' or i == 'PublicAreaAdmin':
+        if i == 'admin' or i == 'DQA_LNV_Public_admin':
             permission = 0
 
     if request.method == "POST":

@@ -205,6 +205,7 @@ INSTALLED_APPS = [
     'A32LessonLProject',
     'CriticalIssueCrossCheck',
     'MiscellaneousPurchases',
+    'CommonDevice',
 ]
 
 MIDDLEWARE = [
