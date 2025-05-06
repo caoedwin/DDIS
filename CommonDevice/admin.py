@@ -8,12 +8,12 @@ class CommonDeviceAdmin(admin.ModelAdmin):
 
     list_display = (
         'Category', 'Product_Type', 'Name', 'Num', 'Manufacturer', 'Cost', 'Account', 'PW',
-        'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'Owner_Num', 'Owner', 'Mail', 'Contact_info', 'Comments', 'Editor', 'Edit_data',
+        'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'Owner_Num', 'Owner', 'Mail', 'Contact_info', 'Comments', 'Editor', 'created_at', 'updated_at',
                     )
     # 列表里显示想要显示的字段
     list_per_page = 500
     # 满50条数据就自动分页
-    ordering = ('-Edit_data',)
+    ordering = ('-created_at',)
     #后台数据列表排序方式
     list_display_links = ('Category', 'Product_Type', 'Name', 'Num', 'Manufacturer', 'Cost', 'Account', 'PW',
         'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'Owner_Num', 'Owner', 'Mail', 'Contact_info',  'Comments' )

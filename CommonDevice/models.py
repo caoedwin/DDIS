@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 class CommonDevice(models.Model):
     Category = models.CharField("大项", max_length=50)
@@ -20,7 +19,8 @@ class CommonDevice(models.Model):
     Contact_info = models.CharField("聯係方式", max_length=50)
     Comments = models.CharField("Comments", max_length=2000, null=True, blank=True)
     Editor = models.CharField("Editor", max_length=50)
-    Edit_data = models.DateTimeField("Creator_data", max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
     class Meta:
         verbose_name = '公共设备'#不写verbose_name, admin中默认的注册名会加s
         verbose_name_plural = verbose_name

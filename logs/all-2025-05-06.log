@@ -397,3 +397,126 @@ TypeError: 'bool' object is not callable
 [2025-05-06 13:48:04,884] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/app01/role/ 200 [1.73, 127.0.0.1:56895]
 [2025-05-06 13:48:04,912] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 13:48:04: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
 [2025-05-06 13:48:04,923] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.02, 127.0.0.1:56895]
+[2025-05-06 14:19:16,521] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /admin/CommonDevice/commondevice/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\mysql\base.py", line 71, in execute
+    return self.cursor.execute(query, args)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.InternalError: (1054, "Unknown column 'CommonDevice_commondevice.created_at' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 604, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\cache.py", line 44, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\sites.py", line 223, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 45, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1793, in changelist_view
+    'selection_note': _('0 of %(cnt)s selected') % {'cnt': len(cl.result_list)},
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 250, in __len__
+    self._fetch_all()
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1186, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 54, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1065, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\utils.py", line 100, in execute
+    return super().execute(sql, params)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\utils.py", line 68, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\utils.py", line 77, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\utils.py", line 85, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\backends\mysql\base.py", line 71, in execute
+    return self.cursor.execute(query, args)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\Python3129\mecheck\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.InternalError: (1054, "Unknown column 'CommonDevice_commondevice.created_at' in 'field list'")
+[2025-05-06 14:19:16,554] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:19:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/'>
+[2025-05-06 14:19:16,557] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /admin/CommonDevice/commondevice/ 500 [1.05, 127.0.0.1:53850]
+[2025-05-06 14:19:16,589] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:19:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-05-06 14:19:16,640] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [1.10, 127.0.0.1:53852]
+[2025-05-06 14:23:14,840] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:14: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/'>
+[2025-05-06 14:23:14,852] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/ 200 [0.65, 127.0.0.1:55556]
+[2025-05-06 14:23:15,059] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:15: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/'>
+[2025-05-06 14:23:15,066] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonDevice/commondevice/ 200 [0.11, 127.0.0.1:55556]
+[2025-05-06 14:23:15,097] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:15: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-05-06 14:23:15,104] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.03, 127.0.0.1:55556]
+[2025-05-06 14:23:15,177] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:15: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-05-06 14:23:15,198] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.03, 127.0.0.1:55556]
+[2025-05-06 14:23:16,661] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/add/'>
+[2025-05-06 14:23:16,667] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonDevice/commondevice/add/ 200 [0.05, 127.0.0.1:55556]
+[2025-05-06 14:23:16,679] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/admin/js/calendar.js 304 [0.00, 127.0.0.1:55557]
+[2025-05-06 14:23:16,688] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-05-06 14:23:16,698] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.02, 127.0.0.1:55556]
+[2025-05-06 14:23:16,701] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/admin/js/admin/DateTimeShortcuts.js 304 [0.02, 127.0.0.1:55574]
+[2025-05-06 14:23:16,724] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/admin/img/icon-calendar.svg 304 [0.00, 127.0.0.1:55574]
+[2025-05-06 14:23:25,053] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:23:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/'>
+[2025-05-06 14:23:25,081] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonDevice/commondevice/ 200 [0.08, 127.0.0.1:55574]
+[2025-05-06 14:24:22,554] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/'>
+[2025-05-06 14:24:22,578] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/ 200 [0.70, 127.0.0.1:56008]
+[2025-05-06 14:24:22,752] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/'>
+[2025-05-06 14:24:22,759] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonDevice/commondevice/ 200 [0.12, 127.0.0.1:56008]
+[2025-05-06 14:24:22,791] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-05-06 14:24:22,803] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.04, 127.0.0.1:56008]
+[2025-05-06 14:24:22,859] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-05-06 14:24:22,892] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.04, 127.0.0.1:56008]
+[2025-05-06 14:24:30,219] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:30: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/add/'>
+[2025-05-06 14:24:30,233] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonDevice/commondevice/add/ 200 [0.19, 127.0.0.1:56008]
+[2025-05-06 14:24:30,261] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:30: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-05-06 14:24:30,273] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.03, 127.0.0.1:56008]
+[2025-05-06 14:24:32,956] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:32: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonDevice/commondevice/'>
+[2025-05-06 14:24:32,968] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonDevice/commondevice/ 200 [0.12, 127.0.0.1:56008]
+[2025-05-06 14:24:33,018] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-05-06 14:24:33: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-05-06 14:24:33,037] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.05, 127.0.0.1:56008]
