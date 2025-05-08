@@ -1,0 +1,160 @@
+[2025-05-08 11:31:26,606] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /admin/CommonDevice/commondevice/2/change/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 604, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\cache.py", line 44, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\sites.py", line 223, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1640, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 45, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1525, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1564, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1091, in save_model
+    obj.save()
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\models.py", line 36, in save
+    if not self.password_hash.startswith('pbkdf2_sha256$'):
+AttributeError: 'CommonDevice' object has no attribute 'password_hash'
+[2025-05-08 11:31:26,616] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /admin/CommonDevice/commondevice/2/change/ 500 [0.13, 127.0.0.1:55665]
+[2025-05-08 11:32:27,872] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /admin/CommonDevice/commondevice/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\options.py", line 564, in get_field
+    return self.fields_map[field_name]
+KeyError: 'show_user'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 278, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 309, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\options.py", line 566, in get_field
+    raise FieldDoesNotExist("%s has no field named '%s'" % (self.object_name, field_name))
+django.core.exceptions.FieldDoesNotExist: CommonDevice has no field named 'show_user'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 156, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 154, in _get_response
+    response = response.render()
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\response.py", line 106, in render
+    self.content = self.rendered_content
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\response.py", line 83, in rendered_content
+    content = template.render(context, self._request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\templatetags\base.py", line 33, in render
+    return super().render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\library.py", line 214, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 341, in result_list
+    'results': list(results(cl))}
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 318, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 309, in __init__
+    super().__init__(*items)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\templatetags\admin_list.py", line 228, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 287, in lookup_field
+    value = attr(obj)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\admin.py", line 16, in show_user
+    user_list.append(user.name)
+AttributeError: 'UserInfo' object has no attribute 'name'
+[2025-05-08 11:32:27,905] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /admin/CommonDevice/commondevice/ 500 [0.46, 127.0.0.1:55852]
+[2025-05-08 11:54:07,056] [UserIP.py:95] [UserIP:process_response] [CRITICAL]- 系统错误: (2003, "Can't connect to MySQL server on '127.0.0.1' (timed out)")
+[2025-05-08 12:02:42,215] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /admin/CommonDevice/commondevice/2/change/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 703, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\Python3129\mecheck\lib\site-packages\django\forms\models.py", line 551, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\forms\models.py", line 266, in __new__
+    raise FieldError(message)
+django.core.exceptions.FieldError: Unknown field(s) (show_user) specified for CommonDevice
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 604, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\cache.py", line 44, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\sites.py", line 223, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1640, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 45, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1525, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1554, in _changeform_view
+    ModelForm = self.get_form(request, obj, change=not add)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 707, in get_form
+    % (e, self.__class__.__name__)
+django.core.exceptions.FieldError: Unknown field(s) (show_user) specified for CommonDevice. Check fields/fieldsets/exclude attributes of class CommonDeviceAdmin.
+[2025-05-08 12:02:42,218] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /admin/CommonDevice/commondevice/2/change/ 500 [0.05, 127.0.0.1:61536]
