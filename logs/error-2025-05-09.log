@@ -1,0 +1,72 @@
+[2025-05-09 09:41:16,039] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /admin/CommonDevice/commondevice/2/change/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 604, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\cache.py", line 44, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\sites.py", line 223, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1640, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 45, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1525, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1571, in _changeform_view
+    self.log_change(request, new_object, change_message)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 824, in log_change
+    object_repr=str(object),
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\models.py", line 45, in __str__
+    Name=self.Name, Owner_Num=self.Owner_Num, Owner=self.Owner)
+AttributeError: 'CommonDevice' object has no attribute 'Owner_Num'
+[2025-05-09 09:41:16,053] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /admin/CommonDevice/commondevice/2/change/ 500 [0.15, 127.0.0.1:49975]
+[2025-05-09 09:41:30,738] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /admin/CommonDevice/commondevice/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 604, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\cache.py", line 44, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\sites.py", line 223, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 45, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1717, in changelist_view
+    response = self.response_action(request, queryset=cl.get_queryset(request))
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1400, in response_action
+    response = func(self, request, queryset)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\actions.py", line 28, in delete_selected
+    deletable_objects, model_count, perms_needed, protected = modeladmin.get_deleted_objects(queryset, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\options.py", line 1823, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 167, in get_deleted_objects
+    to_delete = collector.nested(format_callback)
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 227, in nested
+    roots.extend(self._nested(root, seen, format_callback))
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 213, in _nested
+    ret = [format_callback(obj)]
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\admin\utils.py", line 142, in format_callback
+    no_edit_link = '%s: %s' % (capfirst(opts.verbose_name), obj)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\models.py", line 45, in __str__
+    Name=self.Name, Owner_Num=self.Owner_Num, Owner=self.Owner)
+AttributeError: 'CommonDevice' object has no attribute 'Owner_Num'
+[2025-05-09 09:41:30,741] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /admin/CommonDevice/commondevice/ 500 [0.09, 127.0.0.1:49975]

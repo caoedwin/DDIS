@@ -132,52 +132,57 @@
 
      <el-dialog :visible.sync="add">
           <template>
-                <el-form ref="form1" :model="form1" label-width="110px">
-                          <el-form-item label="Year">
-                                <el-input v-model="form1.Year"></el-input>
+                <el-form ref="form1" :model="form1" :rules="rules" label-width="110px">
+                          <el-form-item label="Year" prop="Year">
+                              <el-date-picker
+                                  v-model="form1.Year"
+                                  type="year"
+                                  value-format="yyyy"
+                                  placeholder="选择日期">
+                                </el-date-picker>
                           </el-form-item>
-                          <el-form-item label="會計科目">
+                          <el-form-item label="會計科目" prop="Ledger">
                                 <el-input v-model="form1.Ledger"></el-input>
                           </el-form-item>
-                          <el-form-item label="設備名稱/项目">
+                          <el-form-item label="設備名稱/项目" prop="Name">
                                 <el-input v-model="form1.Name"></el-input>
                           </el-form-item>
-                          <el-form-item label="到貨狀態">
+                          <el-form-item label="到貨狀態" prop="Status">
                               <el-input v-model="form1.Status"></el-input>
                           </el-form-item>
-                          <el-form-item label="型號規格">
+                          <el-form-item label="型號規格" prop="ModelSpecifications">
                                 <el-input v-model="form1.ModelSpecifications"></el-input>
                           </el-form-item>
-                          <el-form-item label="申購日期">
+                          <el-form-item label="申購日期" prop="SubscribeDate">
                               <el-date-picker type="date" placeholder="选择日期" v-model="form1.SubscribeDate" value-format="yyyy-MM-dd" style="width: 100%;">
                               </el-date-picker>
                           </el-form-item>
-                          <el-form-item label="申購單">
+                          <el-form-item label="申購單" prop="SubscribeForm">
                                 <el-input v-model="form1.SubscribeForm"></el-input>
                           </el-form-item>
-                          <el-form-item label="申購單價">
-                              <el-input v-model="form1.SubscribeUnitPrice"></el-input>
+                          <el-form-item label="申購單價(CNY)" prop="SubscribeUnitPrice">
+                              <el-input v-model.number="form1.SubscribeUnitPrice"></el-input>
                           </el-form-item>
-                          <el-form-item label="數量">
-                              <el-input v-model="form1.Number"></el-input>
+                          <el-form-item label="數量" prop="Number">
+                              <el-input v-model.number="form1.Number" type="number"></el-input>
                           </el-form-item>
-                          <el-form-item label="驗收單號">
+                          <el-form-item label="驗收單號" prop="AcceptanceForm">
                               <el-input v-model="form1.AcceptanceForm"></el-input>
                           </el-form-item>
-                          <el-form-item label="驗收日期">
+                          <el-form-item label="驗收日期" prop="AcceptanceDate">
                               <el-date-picker type="date" placeholder="选择日期" v-model="form1.AcceptanceDate" value-format="yyyy-MM-dd" style="width: 100%;">
                               </el-date-picker>
                           </el-form-item>
 {#                          <el-form-item label="實際單價">#}
 {#                              <el-input v-model="form1.ActUnitPrice"></el-input>#}
 {#                          </el-form-item>#}
-                          <el-form-item label="客戶別">
+                          <el-form-item label="客戶別" prop="Customer">
                               <el-input v-model="form1.Customer"></el-input>
                           </el-form-item>
-                          <el-form-item label="Project Code">
+                          <el-form-item label="Project Code" prop="ProjectCode">
                               <el-input v-model="form1.ProjectCode"></el-input>
                           </el-form-item>
-                          <el-form-item label="申購部門">
+                          <el-form-item label="申購部門" prop="Department">
                               <el-input v-model="form1.Department"></el-input>
                           </el-form-item>
 
@@ -191,52 +196,57 @@
 
      <el-dialog :visible.sync="update">
           <template>
-                <el-form ref="form2" :model="form2" label-width="110px">
-                          <el-form-item label="Year">
-                                <el-input v-model="form2.Year"></el-input>
+                <el-form ref="form2" :model="form2" :rules="rules" label-width="110px">
+                          <el-form-item label="Year" prop="Year">
+                                <el-date-picker
+                                  v-model="form2.Year"
+                                  type="year"
+                                  value-format="yyyy"
+                                  placeholder="选择日期">
+                                </el-date-picker>
                           </el-form-item>
-                          <el-form-item label="會計科目">
+                          <el-form-item label="會計科目" prop="Ledger">
                                 <el-input v-model="form2.Ledger"></el-input>
                           </el-form-item>
-                          <el-form-item label="設備名稱/项目">
+                          <el-form-item label="設備名稱/项目" prop="Name">
                                 <el-input v-model="form2.Name"></el-input>
                           </el-form-item>
-                          <el-form-item label="到貨狀態">
+                          <el-form-item label="到貨狀態" prop="Status">
                               <el-input v-model="form2.Status"></el-input>
                           </el-form-item>
-                          <el-form-item label="型號規格">
+                          <el-form-item label="型號規格"  prop="ModelSpecifications">
                                 <el-input v-model="form2.ModelSpecifications"></el-input>
                           </el-form-item>
-                          <el-form-item label="申購日期">
+                          <el-form-item label="申購日期"  prop="SubscribeDate">
                               <el-date-picker type="date" placeholder="选择日期" v-model="form2.SubscribeDate" value-format="yyyy-MM-dd" style="width: 100%;">
                               </el-date-picker>
                           </el-form-item>
-                          <el-form-item label="申購單">
+                          <el-form-item label="申購單" prop="SubscribeForm">
                                 <el-input v-model="form2.SubscribeForm"></el-input>
                           </el-form-item>
-                          <el-form-item label="申購單價">
-                              <el-input v-model="form2.SubscribeUnitPrice"></el-input>
+                          <el-form-item label="申購單價(CNY)" prop="SubscribeUnitPrice">
+                              <el-input v-model.number="form2.SubscribeUnitPrice"></el-input>
                           </el-form-item>
-                          <el-form-item label="數量">
-                              <el-input v-model="form2.Number"></el-input>
+                          <el-form-item label="數量" prop="Number">
+                              <el-input v-model.number="form2.Number" type="number"></el-input>
                           </el-form-item>
-                          <el-form-item label="驗收單號">
+                          <el-form-item label="驗收單號" prop="AcceptanceForm">
                               <el-input v-model="form2.AcceptanceForm"></el-input>
                           </el-form-item>
-                          <el-form-item label="驗收日期">
+                          <el-form-item label="驗收日期" prop="AcceptanceDate">
                               <el-date-picker type="date" placeholder="选择日期" v-model="form2.AcceptanceDate" value-format="yyyy-MM-dd" style="width: 100%;">
                               </el-date-picker>
                           </el-form-item>
 {#                          <el-form-item label="實際單價">#}
 {#                              <el-input v-model="form2.ActUnitPrice"></el-input>#}
 {#                          </el-form-item>#}
-                          <el-form-item label="客戶別">
+                          <el-form-item label="客戶別"  prop="Customer">
                               <el-input v-model="form2.Customer"></el-input>
                           </el-form-item>
-                          <el-form-item label="Project Code">
+                          <el-form-item label="Project Code"  prop="ProjectCode">
                               <el-input v-model="form2.ProjectCode"></el-input>
                           </el-form-item>
-                          <el-form-item label="申購部門">
+                          <el-form-item label="申購部門"  prop="Department">
                               <el-input v-model="form2.Department"></el-input>
                           </el-form-item>
 
@@ -254,6 +264,7 @@
 {#         <el-button type="danger"  style="height:40px;float: right;" @click="Delete1"><i class="el-icon-remove-outline el-icon--left"></i>刪除信息</el-button>#}
 {#         <el-button type="success"  style="height:40px;float: right;margin-right: 20px;" @click="Add1"><i class="el-icon-circle-plus el-icon--left"></i>新增信息</el-button>#}
 {#         </div>#}
+         <span class="selectItem" v-if="tableData" style="float: left" v-cloak>剩餘金額(CNY):${RemainBudget}</span>
          <el-table border stripe :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize)"
                    style="font-size: 16px;">
 {#             <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>#}
@@ -311,7 +322,7 @@
               <el-table-column  prop="AcceptanceForm" label="驗收單號" align="center" min-width="6%"></el-table-column>
               <el-table-column  prop="AcceptanceDate" label="驗收日期" align="center" min-width="7%"></el-table-column>
               <el-table-column  prop="SubscribeForm" label="申購單" align="center" min-width="6%"></el-table-column>
-              <el-table-column  prop="SubscribeUnitPrice" label="申購單價" align="center" min-width="6%"></el-table-column>
+              <el-table-column  prop="SubscribeUnitPrice" label="申購單價(CNY)" align="center" min-width="6%"></el-table-column>
               <el-table-column  prop="Number" label="數量" align="center" min-width="4%"></el-table-column>
               <el-table-column  prop="TotalPrice" label="總價" align="center" min-width="4%"></el-table-column>
               <el-table-column  prop="Customer" label="客戶別" align="center" min-width="5%"></el-table-column>
@@ -348,6 +359,21 @@ new Vue ({
     el: "#app",
     delimiters: ['${', '}'],
     data() {
+        const validateNumber = (rule, value, callback) => {
+          if (value === '') return callback(new Error('不能为空'));
+          if (!/^\d+$/.test(value)) return callback(new Error('必须为纯数字'));
+          callback();
+        };
+        // 自定义浮点数验证规则
+        const validateFloat = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入浮点数'));
+          } else if (!/^-?\d*\.?\d+$/.test(value)) {
+            callback(new Error('请输入有效的浮点数'));
+          } else {
+            callback();
+          }
+        };
         return {
 
             yearOptions:[],
@@ -413,6 +439,16 @@ new Vue ({
             pagesize:100,
             totalNum: null,
             editID:'',
+            RemainBudget: '',
+
+            rules: {
+                      SubscribeUnitPrice: [
+                      { required: true, validator: validateFloat, trigger: 'blur' }
+                    ],
+                      Number: [
+                      { required: true, validator: validateNumber, trigger: 'blur' }
+                    ],
+                    },
 
 
         }
@@ -471,6 +507,21 @@ new Vue ({
                 headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
                   this.tableData = res.data.content;
+                  //console.log(res.data.content)
+                  try {
+                            let shengouTotal = '';
+                            res.data.content.forEach(function(item) {
+                                console.log(item.Year,item.Total);
+                                if (item.Year === "申購金額"){
+                                    shengouTotal = item.Total
+                                }
+                            });
+                            if(shengouTotal){
+                                 this.RemainBudget = res.data.content[0]['Total'] - shengouTotal;
+                            }
+                            } catch (error) {
+                              console.log("An error occurred:", error);
+                            }
                   this.tableData1 = res.data.content1;
                   this.elbuttonloading = false;
                   this.tableloading = false;
@@ -595,6 +646,20 @@ new Vue ({
                     }).then((res)=>{
                         if(res.data.errMessage == ""){
                             this.tableData1 = res.data.content1;
+                            try {
+                            let shengouTotal = '';
+                            res.data.content.forEach(function(item) {
+                                console.log(item.Year,item.Total);
+                                if (item.Year === "申購金額"){
+                                    shengouTotal = item.Total
+                                }
+                            });
+                            if(shengouTotal){
+                                 this.RemainBudget = res.data.content[0]['Total'] - shengouTotal;
+                            }
+                            } catch (error) {
+                              console.log("An error occurred:", error);
+                            }
                             this.yearOptions = res.data.yearOptions;
                             this.ledgerOptions = res.data.ledgerOptions;
                             this.add = false;
@@ -642,6 +707,20 @@ new Vue ({
                     }).then((res)=>{
                         if(res.data.errMessage == ""){
                             this.tableData1 = res.data.content1;
+                            try {
+                            let shengouTotal = '';
+                            res.data.content.forEach(function(item) {
+                                console.log(item.Year,item.Total);
+                                if (item.Year === "申購金額"){
+                                    shengouTotal = item.Total
+                                }
+                            });
+                            if(shengouTotal){
+                                 this.RemainBudget = res.data.content[0]['Total'] - shengouTotal;
+                            }
+                            } catch (error) {
+                              console.log("An error occurred:", error);
+                            }
                             this.update = false;
                             this.form2={};
                             this.formData1 = [];

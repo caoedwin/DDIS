@@ -15,12 +15,12 @@ class CommonDevice(models.Model):
     Department = models.CharField("部別", max_length=50)
     Location = models.CharField("位置", max_length=50, null=True, blank=True)
     Asset_Num = models.CharField("資產編號", max_length=50, null=True, blank=True)
-    Owner_Num = models.ManyToManyField("app01.UserInfo")
-    Owner = models.CharField("负责人", max_length=50, null=True, blank=True)
+    Owner = models.ManyToManyField("app01.UserInfo")
+    # Owner = models.CharField("负责人", max_length=50, null=True, blank=True)
     Mail = models.EmailField("郵件地址", null=True, blank=True)
     Contact_info = models.CharField("聯係方式", max_length=50, null=True, blank=True)
     Comments = models.CharField("Comments", max_length=2000, null=True, blank=True)
-    Editor = models.CharField("Editor", max_length=50)
+    Creator = models.CharField("Creator", max_length=50)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     # password_hash = models.CharField(max_length=128, null=True)
@@ -41,5 +41,5 @@ class CommonDevice(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         # '{menu}---{permission}'.format(menu=self.menu, permission=self.title)
-        return '{Category}-{Product_Type}-{Name}-{Owner_Num}-{Owner}'.format(Category=self.Category, Product_Type=self.Product_Type,
-                                                                                           Name=self.Name, Owner_Num=self.Owner_Num, Owner=self.Owner)
+        return '{Category}-{Product_Type}-{Name}-{Owner}'.format(Category=self.Category, Product_Type=self.Product_Type,
+                                                                                           Name=self.Name, Owner=self.Owner)
