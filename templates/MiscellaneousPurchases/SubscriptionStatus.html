@@ -161,7 +161,7 @@
                                 <el-input v-model="form1.SubscribeForm"></el-input>
                           </el-form-item>
                           <el-form-item label="申購單價(CNY)" prop="SubscribeUnitPrice">
-                              <el-input v-model.number="form1.SubscribeUnitPrice"></el-input>
+                              <el-input v-model="form1.SubscribeUnitPrice" @input="handleFloatInput1"></el-input>
                           </el-form-item>
                           <el-form-item label="數量" prop="Number">
                               <el-input v-model.number="form1.Number" type="number"></el-input>
@@ -225,7 +225,7 @@
                                 <el-input v-model="form2.SubscribeForm"></el-input>
                           </el-form-item>
                           <el-form-item label="申購單價(CNY)" prop="SubscribeUnitPrice">
-                              <el-input v-model.number="form2.SubscribeUnitPrice"></el-input>
+                              <el-input v-model="form2.SubscribeUnitPrice" @input="handleFloatInput2"></el-input>
                           </el-form-item>
                           <el-form-item label="數量" prop="Number">
                               <el-input v-model.number="form2.Number" type="number"></el-input>
@@ -457,6 +457,21 @@ new Vue ({
          this.getdata("first");
     },
     methods: {
+        // 输入过滤（允许小数点）
+        handleFloatInput1(value) {
+          this.form1.SubscribeUnitPrice = value
+            .replace(/[^0-9.-]/g, '')           // 保留数字、小数点和负号
+            .replace(/(\..*)\./g, '$1')          // 禁止多个小数点
+            .replace(/(?!^)-/g, '')              // 只能有一个负号且在开头
+            .replace(/^(-)?0+(\d)/, '$1$2');    // 禁止前导零（可选）
+        },
+        handleFloatInput2(value) {
+              this.form2.SubscribeUnitPrice = value
+                .replace(/[^0-9.-]/g, '')           // 保留数字、小数点和负号
+                .replace(/(\..*)\./g, '$1')          // 禁止多个小数点
+                .replace(/(?!^)-/g, '')              // 只能有一个负号且在开头
+                .replace(/^(-)?0+(\d)/, '$1$2');    // 禁止前导零（可选）
+            },
         indexMethod(index) {
             return index + 1;
         },
