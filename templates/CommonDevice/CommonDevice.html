@@ -1,249 +1,564 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}公共環節負責人錄入及編輯{% endblock %}
+{% block title %}PersonalInfo_edit{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="/static/css/index.css">
 <style>
-.showNum{
-font-size: 20px;
-font-weight: bold;
-color: white;
+.el-table th .gutter{
+    display: table-cell!important;
 }
-.el-tabs__item{
-color:white;
+
+.transfer-footer {
+    margin-left: 20px;
+    padding: 6px 5px;
 }
+
+label{
+    color:white;
+}
+
+ .selectMsg{
+     font-size:16px;
+      padding: 15px;
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .selectMsg label{
+      font-weight: 800;
+      margin-right: 10px;
+      color:aliceblue;
+  }
+
+  .customerContent,.departmentContent,.lessonContent,.groupemployeesContent{
+     margin-left: 20px;
+  }
+
+.inputError{
+    text-align: center;
+    color: crimson;
+    background-color: beige;
+    width: 50%;
+    margin-left: 80px;
+    margin-top: 20px;
+    position: relative;
+}
+
+    /*.el-table .cell {
+      white-space: pre-line;
+      text-align: left;
+    }
+
+     */
+
+  .inputError:before{
+    display:block;
+    content:'';
+    border-width:8px 8px 8px 8px;
+    border-style:solid;
+    border-color:transparent transparent beige transparent;
+
+    /* 定位 */
+    position:absolute;
+    left:50%;
+    top:-16px;
+}
+  .fileUploadContent{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+}
+  .fileUploadContent label{
+    display: inline-block;
+    word-break: keep-all;
+    line-height: 30px;
+}
+.el-checkbox__label{
+    font-size: 18px;
+}
+ .fileUploadContent{
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  .inputPackage{
+    background: #2980b9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .inputPackage span{
+    position: absolute;
+    line-height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: aliceblue;
+  }
+  .fileUploadContent .showFileName{
+     line-height: 40px;
+     margin-left: 20px;
+     font-size: 18px;
+     color: aliceblue;
+   }
+  .inputPackage input{
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+  }
+ .selectItem{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+}
+  .tableAround{
+    padding: 20px;
+    -moz-box-shadow: 0px 0px 10px #333333;
+    -webkit-box-shadow: 0px 0px 10px #333333;
+    box-shadow: 0px 0px 10px #333333;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.1);
+}
+.el-pagination__total,.el-pagination__jump{
+        color:white;
+    }
+.gutter{
+    display:block!important;
+    width:17px!important;
+}
+
+[v-cloak]{
+    display: none;
+}
+
+#sh {
+    font-size:18px;
+    font-family:微软雅黑;
+    border: 2px solid #9f9ca1;
+}
+
+#sh::-webkit-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh::-moz-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+#sh:-ms-input-placeholder{
+        color:#2f97a8;
+    font-family:微软雅黑;
+}
+
+
 </style>
 {% endblock %}
 {% block content %}
 <div id="app">
-<el-backtop ></el-backtop>
-<div class="111" style="margin-bottom:20px;">
-      <span class="showNum" style="margin-left: 30px">本頁已選 <span id="selectNum">0</span> 條</span> <el-button @click="Add()" size="medium" style="margin-left: 50px" v-if="permission===0"><i class="el-icon-circle-plus"></i>新增</el-button> <el-button @click="Delete()" size="medium" style="margin-left: 50px" v-if="permission===0"><i class="el-icon-remove"></i>刪除</el-button>
-</div>
-<el-dialog :visible.sync="appendss">
-           <template>
-             <el-form ref="form"  :model="form" :rules="rules"  :label-position="labelPosition" label-width="130px">
-                 <el-form-item label="大項" prop="DX">
-                          <el-select v-model="form.DX" placeholder="請選擇" >
-                              <el-option label="房間" value="房間"></el-option>
-                              <el-option label="設備" value="設備"></el-option>
-                              <el-option label="機台材料" value="機台材料"></el-option>
-                              <el-option label="賬號" value="賬號"></el-option>
-                              <el-option label="網絡環境" value="網絡環境"></el-option>
-                              <el-option label="其他" value="其他"></el-option>
-                           </el-select>
-                  </el-form-item>
-                  <el-form-item label="細項" prop="XX">
-                          <el-input  v-model="form.XX"></el-input>
-                  </el-form-item>
-                  <el-form-item label="負責人">
-                          <el-input  v-model="form.FZR"></el-input>
-                  </el-form-item>
-                 {#                  <el-form-item label="處別">#}
-{#                          <el-input  v-model="form.CHU"></el-input>#}
-{#                  </el-form-item>#}
-                 <el-form-item label="部別">
-                          <el-input  v-model="form.DEPARTMENT"></el-input>
-                  </el-form-item>
-                 <el-form-item label="郵件地址">
-                          <el-input  v-model="form.MAIL"></el-input>
-                  </el-form-item>
-                  <el-form-item label="聯繫方式">
-                          <el-input  v-model="form.LXFS"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                        <el-button type="primary" @click="addSubmit(form)">確定</el-button>
-                  </el-form-item>
-             </el-form>
-        </template>
-     </el-dialog>
-<template>
-  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane name="first">
-           <span slot="label"><i class="el-icon-s-home"></i>房間</span>
-          <el-table height="700" ref="multipleTable" border stripe :data="FJtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
-                    :header-cell-style="{
-                                       'background-color':'#fafafa',
-                                       'font-weight':'800',
-                                       'border-bottom':'1px solid rgb(103, 194, 58)'
-                                    }">
-              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
-              <el-table-column  label="Edit" width="80">
-                  <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
-                      </template>
-              </el-table-column>
-              <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
-              <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
-              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
-              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
-              {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
-               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
-               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
-              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
-          </el-table>
-    </el-tab-pane>
-    <el-tab-pane name="second">
-        <span slot="label"><i class="el-icon-s-tools"></i>設備</span>
-          <el-table height="700" ref="multipleTable1" border stripe :data="SBtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
-                    :header-cell-style="{
-                                       'background-color':'#fafafa',
-                                       'font-weight':'800',
-                                       'border-bottom':'1px solid rgb(103, 194, 58)'
-                                    }">
-              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
-              <el-table-column  label="Edit" width="80">
-                  <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
-                      </template>
-              </el-table-column>
-              <el-table-column type="index" :index="indexMethod"></el-table-column>
-               <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
-              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
-              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
-              {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
-               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
-               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
-              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
-          </el-table>
-    </el-tab-pane>
-    <el-tab-pane name="third">
-        <span slot="label"><i class="el-icon-s-platform"></i>機台材料</span>
-          <el-table height="700" ref="multipleTable2" border stripe :data="JTtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
-                    :header-cell-style="{
-                                       'background-color':'#fafafa',
-                                       'font-weight':'800',
-                                       'border-bottom':'1px solid rgb(103, 194, 58)'
-                                    }">
-              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
-              <el-table-column  label="Edit" width="80">
-                  <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
-                      </template>
-              </el-table-column>
-              <el-table-column type="index" :index="indexMethod"></el-table-column>
-               <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
-              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
-              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
-              {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
-               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
-               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
-              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
-          </el-table>
-    </el-tab-pane>
-    <el-tab-pane name="fourth">
-        <span slot="label"><i class="el-icon-user-solid"></i>賬號</span>
-           <el-table height="700" ref="multipleTable3" border stripe :data="ZHtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
-                    :header-cell-style="{
-                                       'background-color':'#fafafa',
-                                       'font-weight':'800',
-                                       'border-bottom':'1px solid rgb(103, 194, 58)'
-                                    }">
-              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
-               <el-table-column  label="Edit" width="80">
-                  <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
-                      </template>
-              </el-table-column>
-              <el-table-column type="index" :index="indexMethod"></el-table-column>
-                <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
-              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
-              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
-               {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
-               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
-               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
-              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
-          </el-table>
-    </el-tab-pane>
-    <el-tab-pane name="fifth">
-        <span slot="label"><i class="el-icon-eleme"></i>網絡環境</span>
-           <el-table height="700" ref="multipleTable4" border stripe :data="WLtable" @selection-change="handleSelectionChange" :row-key="getRowKeys"
-                    :header-cell-style="{
-                                       'background-color':'#fafafa',
-                                       'font-weight':'800',
-                                       'border-bottom':'1px solid rgb(103, 194, 58)'
-                                    }">
-              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
-               <el-table-column  label="Edit" width="80">
-                  <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
-                      </template>
-              </el-table-column>
-              <el-table-column type="index" :index="indexMethod"></el-table-column>
-                <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
-              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
-              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
-               {#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
-               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
-               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
-              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
-          </el-table>
-    </el-tab-pane>
-      <el-tab-pane name="sixth">
-        <span slot="label"><i class="el-icon-more"></i>其他</span>
-           <el-table height="700" ref="multipleTable5" border stripe :data="Others" @selection-change="handleSelectionChange" :row-key="getRowKeys"
-                    :header-cell-style="{
-                                       'background-color':'#fafafa',
-                                       'font-weight':'800',
-                                       'border-bottom':'1px solid rgb(103, 194, 58)'
-                                    }">
-              <el-table-column type="selection" width="50" :reserve-selection="true"></el-table-column>
-               <el-table-column  label="Edit" width="80">
-                  <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
-                      </template>
-              </el-table-column>
-              <el-table-column type="index" :index="indexMethod"></el-table-column>
-                <el-table-column  prop="DX" label="大項" align="center"></el-table-column>
-              <el-table-column  prop="XX" label="細項" align="center"></el-table-column>
-              <el-table-column  prop="FZR" label="負責人" align="center"></el-table-column>
-{#               <el-table-column  prop="CHU" label="處別" align="center"></el-table-column>#}
-               <el-table-column  prop="DEPARTMENT" label="部別" align="center"></el-table-column>
-               <el-table-column  prop="MAIL" label="郵件地址" align="center"></el-table-column>
-              <el-table-column  prop="LXFS" label="聯繫方式" align="center"></el-table-column>
-          </el-table>
-    </el-tab-pane>
-  </el-tabs>
-</template>
+      <!--搜索框-->
+    <div class="selectMsg" >
 
-<el-dialog :visible.sync="update">
+           <div class="customerContent">
+                 <label for="customer">大项</label>
+                 <select  ref="Category"  v-model="category1" style="height:40px;width:150px;border-radius:5px 5px 5px 5px;">
+                    <option v-for="(item,key,index) in categoryOptions" >${ item }</option>
+                 </select>
+           </div>
+
+           <div class="customerContent">
+               <label style="font-size: 16px;font-weight: bold;margin-left: 15px;" for="Owner">负责人</label>
+                 <el-autocomplete
+                          class="inline-input"
+                          v-model="Owner"
+                          ref="Owner"
+                          :fetch-suggestions="querySearch"
+                          placeholder="请输入负责人"
+                          @select="handleSelect"
+                        >
+                     <template slot-scope="{ item }">
+                         <div style="text-align: center">${ item.value }&nbsp;(${ item.number })</div>
+                     </template>
+                 </el-autocomplete>
+           </div>
+
+           <div style="margin-left: 100px;">
+                 <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
+                 <el-button  @click="AddInfo" type="success" >Add</el-button>
+{#                 <el-button  @click="AddInfo" type="success" >Edit</el-button>#}
+                 <el-button @click="exportExcel"  type="info" v-cloak style="height:40px">導出</el-button>
+{#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
+{#                 <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak style="margin-left: 20px;width: 80px;">刪除</el-button>#}
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{#                 <a href="/static/src/modelfiles/PersonInfo.xlsx" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>#}
+           </div>
+
+    </div>
+
+{#    <div v-cloak class="fileUploadContent" v-if="permission===1">#}
+{#         <div class="inputPackage" v-cloak>#}
+{#             <span v-cloak>請選擇文件</span>#}
+{#             <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">#}
+{#         </div>#}
+{#         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>#}
+{#         <span class="showFileName" v-cloak >${ fileName }</span>#}
+{#    </div>#}
+
+     <el-dialog :visible.sync="add" :close-on-click-modal="false">
         <template>
-             <el-form ref="form"  :model="form"  :label-position="labelPosition" label-width="130px">
-                 <el-form-item label="大項" prop="DX">
-                          <el-select v-model="form.DX" placeholder="請選擇" >
-                              <el-option label="房間" value="房間"></el-option>
-                              <el-option label="設備" value="設備"></el-option>
-                              <el-option label="機台材料" value="機台材料"></el-option>
-                              <el-option label="賬號" value="賬號"></el-option>
-                              <el-option label="網絡環境" value="網絡環境"></el-option>
-                              <el-option label="其他" value="其他"></el-option>
-                           </el-select>
+            <el-form ref="form"  :model="form" label-width="100px">
+                  <el-form-item label="大项" prop="Category">
+                      <el-select v-model="form.Category" placeholder="请选择">
+                            <el-option
+                                v-for="item in categoryOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                            </el-option>
+                      </el-select>
                   </el-form-item>
-                  <el-form-item label="細項">
-                          <el-input  v-model="form.XX"></el-input>
+                  <el-form-item label="细项" prop="Product_Type">
+                      <el-select v-model="form.Product_Type" placeholder="请选择">
+                            <el-option
+                                v-for="item in ProductTypeOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                            </el-option>
+                      </el-select>
                   </el-form-item>
-                  <el-form-item label="負責人">
-                          <el-input  v-model="form.FZR"></el-input>
-                  </el-form-item>
-{#                  <el-form-item label="處別">#}
-{#                          <el-input  v-model="form.CHU"></el-input>#}
+{#                  <el-form-item label="Year" prop="Year">#}
+{#                      <el-date-picker type="year" placeholder="选择年" v-model="form.Year" value-format="yyyy" style="width: 100%;">#}
+{#                      </el-date-picker>#}
 {#                  </el-form-item>#}
-                 <el-form-item label="部別">
-                          <el-input  v-model="form.DEPARTMENT"></el-input>
+                  <el-form-item label="Name" prop="Name">
+                      <el-input  v-model="form.Name" ></el-input>
                   </el-form-item>
-                 <el-form-item label="郵件地址">
-                          <el-input  v-model="form.MAIL"></el-input>
+                  <el-form-item label="號碼" prop="Num">
+                      <el-input  v-model="form.Num" ></el-input>
                   </el-form-item>
-                  <el-form-item label="聯繫方式">
-                          <el-input  v-model="form.LXFS"></el-input>
+                  <el-form-item label="廠商" prop="Manufacturer">
+                      <el-input  v-model="form.Manufacturer" ></el-input>
                   </el-form-item>
+                  <el-form-item label="費用(CNY)" prop="Cost">
+                      <el-input  v-model="form.Cost" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="賬號" prop="Account">
+                      <el-input  v-model="form.Account" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="密碼" prop="PW">
+                      <el-input  v-model="form.PW" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買日期" prop="Purchasing_Date">
+                      <el-input  v-model="form.Purchasing_Date" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="部別" prop="Department">
+                      <el-input  v-model="form.Department" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="位置" prop="Location">
+                      <el-input  v-model="form.Location" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="資產編號" prop="Asset_Num">
+                      <el-input  v-model="form.Asset_Num" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="负责人" prop="Owner">
+                    <el-transfer
+                      style="text-align: left; display: inline-block"
+{#                      v-model="value4"#}
+                      filterable
+                      :left-default-checked="[2, 3]"
+                      :right-default-checked="[1]"
+                      :titles="['Source', 'Target']"
+                      :button-texts="['到左边', '到右边']"
+                      :format="{
+                        noChecked: '${total}',
+                        hasChecked: '${checked}/${total}'
+                      }"
+                      @change="handleChange"
+                      :data="OwnersOptions">
+                        <template slot-scope="{scope}">
+                            <span>{{ scope.key }} - {{ scope.label }}</span>
+                        </template>
+
+                      <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
+                      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
+                    </el-transfer>
+                  </el-form-item>
+                  <el-form-item label="聯係方式" prop="Contact_info">
+                      <el-input  v-model="form.Contact_info" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="comments" prop="Comments">
+                      <el-input  v-model="form.Comments" ></el-input>
+                  </el-form-item>
+                <div class="el-form-item__content" style="margin-left: 220px;">
                   <el-form-item>
-                        <el-button type="primary" @click="editSubmit">更新</el-button>
+                        <el-button type="primary" @click="addData('form')">確定</el-button>
                   </el-form-item>
+                </div>
              </el-form>
         </template>
     </el-dialog>
-</div>
+
+     <el-dialog :visible.sync="update" :close-on-click-modal="false">
+        <template>
+            <el-form ref="form1"  :model="form1" :rules="rules"  label-width="120px">
+                  <el-form-item label="Category" prop="Category">
+                      <el-select v-model="form1.Category" placeholder="请选择">
+                            <el-option
+                                v-for="item in categoryOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                            </el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="Class" prop="Class">
+                      <el-select v-model="form1.Class" placeholder="请选择">
+                            <el-option
+                                v-for="item in classOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                            </el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="Type" prop="Type">
+                      <el-input  v-model="form1.Type" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Covered range for case" prop="Covered_range_for_case">
+                      <el-input  v-model="form1.Covered_range_for_case" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Require State" prop="Require_State">
+                      <el-select v-model="form1.Require_State" placeholder="请选择">
+                            <el-option value="Must">Must</el-option>
+                            <el-option value="Optional">Optional</el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="Comments" prop="Comments">
+                      <el-input  v-model="form1.Comments"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Remark" prop="Remark">
+                      <el-input  v-model="form1.Remark" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="ODM status" prop="ODM_status">
+                      <el-input  v-model="form1.ODM_status" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Purchase Plan" prop="Purchase_Plan">
+                      <el-input  v-model="form1.Purchase_Plan" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device Price" prop="Device_Price">
+                      <el-input  v-model="form1.Device_Price" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Act_Status" prop="Act_Status">
+                      <el-select v-model="form1.Act_Status" placeholder="请选择">
+                            <el-option value="Active">Must</el-option>
+                            <el-option value="Optional">Removed</el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="Device #1" prop="Device1">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device1"
+                              :fetch-suggestions="querySearchDevice1"
+                              placeholder="请输入"
+                              @select="handleSelectDevice1">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status1">
+                      <el-input  v-model="form1.Status1" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period1">
+                      <el-input  v-model="form1.Purchase_period1" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #2" prop="Device2">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device2"
+                              :fetch-suggestions="querySearchDevice2"
+                              placeholder="请输入"
+                              @select="handleSelectDevice2">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status2">
+                      <el-input  v-model="form1.Status2" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period2">
+                      <el-input  v-model="form1.Purchase_period2" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #3" prop="Device3">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device3"
+                              :fetch-suggestions="querySearchDevice3"
+                              placeholder="请输入"
+                              @select="handleSelectDevice3">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status3">
+                      <el-input  v-model="form1.Status3" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period3">
+                      <el-input  v-model="form1.Purchase_period3" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #4" prop="Device4">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device4"
+                              :fetch-suggestions="querySearchDevice4"
+                              placeholder="请输入"
+                              @select="handleSelectDevice4">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status4">
+                      <el-input  v-model="form1.Status4" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period4">
+                      <el-input  v-model="form1.Purchase_period4" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #5" prop="Device5">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device5"
+                              :fetch-suggestions="querySearchDevice5"
+                              placeholder="请输入"
+                              @select="handleSelectDevice5">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status5">
+                      <el-input  v-model="form1.Status5" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period5">
+                      <el-input  v-model="form1.Purchase_period5" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #6" prop="Device6">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device6"
+                              :fetch-suggestions="querySearchDevice6"
+                              placeholder="请输入"
+                              @select="handleSelectDevice6">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status6">
+                      <el-input  v-model="form1.Status6" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period6">
+                      <el-input  v-model="form1.Purchase_period6" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #7" prop="Device7">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device7"
+                              :fetch-suggestions="querySearchDevice7"
+                              placeholder="请输入"
+                              @select="handleSelectDevice7">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status7">
+                      <el-input  v-model="form1.Status7" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period7">
+                      <el-input  v-model="form1.Purchase_period7" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #8" prop="Device8">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device8"
+                              :fetch-suggestions="querySearchDevice8"
+                              placeholder="请输入"
+                              @select="handleSelectDevice8">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status8">
+                      <el-input  v-model="form1.Status8" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period8">
+                      <el-input  v-model="form1.Purchase_period8" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #9" prop="Device9">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device9"
+                              :fetch-suggestions="querySearchDevice9"
+                              placeholder="请输入"
+                              @select="handleSelectDevice9">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status9">
+                      <el-input  v-model="form1.Status9" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period9">
+                      <el-input  v-model="form1.Purchase_period9" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Device #10" prop="Device10">
+                       <el-autocomplete
+                              class="inline-input"
+                              v-model="form1.Device10"
+                              :fetch-suggestions="querySearchDevice10"
+                              placeholder="请输入"
+                              @select="handleSelectDevice10">
+                       </el-autocomplete>
+                  </el-form-item>
+                  <el-form-item label="Status" prop="Status10">
+                      <el-input  v-model="form1.Status10" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="購買年限" prop="Purchase_period10">
+                      <el-input  v-model="form1.Purchase_period10" :disabled="true"></el-input>
+                  </el-form-item>
+
+{#                <div class="el-form-item__content" style="margin-left: 220px;">#}
+{#                  <el-form-item>#}
+{#                        <el-button type="primary" @click="updateData('form')">確定</el-button>#}
+{#                  </el-form-item>#}
+{#                </div>#}
+                  <div style="display: flex;justify-content: center;">
+                        <el-button type="primary" @click="updateData()">確定</el-button>
+                  </div>
+             </el-form>
+        </template>
+    </el-dialog>
+
+  <div class="tableAround">
+
+    <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input><br>
+{#    <span  class="selectItem" v-cloak  v-if="showCustomer&&showDepartment&&showLesson">當前表格信息：${ showYear }/${ showCustomer }/${ showDepartment }/${ showLesson }/${ showGroupEmployees } </span>#}
+    <el-table id="out-table"  ref="tableRef" height="700" border stripe :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
+        style="min-width: 100%;border-radius: 10px"  @selection-change="handleSelectionChange" :row-key="getRowKeys"
+        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+        v-loading="tableloading"
+        element-loading-text="數據更新中，請稍後"
+        border>
+{#              <el-table-column type="selection" width="50" align="center" fixed></el-table-column>#}
+              <el-table-column  v-if="this.permission == 1" label="Edit" align="center">
+                  <template slot-scope="scope">
+                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                  </template>
+              </el-table-column>
+              <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
+              <el-table-column  prop="Category" label="大项" width="90" align="center"></el-table-column>
+              <el-table-column  prop="Product_Type" label="细项" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Name" label="Name" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Num" label="號碼" width="180" align="center"></el-table-column>
+              <el-table-column  prop="Manufacturer" label="廠商" width="80" align="center"></el-table-column>
+              <el-table-column  prop="Cost" label="費用(CNY)" width="140" align="center"></el-table-column>
+              <el-table-column  prop="Account" label="賬號" width="100" align="center"></el-table-column>
+              <el-table-column  prop="PW" label="密碼" width="110" align="center"></el-table-column>
+              <el-table-column  prop="Purchasing_Date" label="購買日期" width="120" align="center"></el-table-column>
+              <el-table-column  prop="Duration" label="年限" width="80" align="center"></el-table-column>
+              <el-table-column  prop="Department" label="部別" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Location" label="位置" width="120" align="center"></el-table-column>
+              <el-table-column  prop="Asset_Num" label="資產編號" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Owner" label="负责人" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Mail" label="郵件地址" width="120" align="center"></el-table-column>
+              <el-table-column  prop="Contact_info" label="聯係方式" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Comments" label="comments" align="center"></el-table-column>
+    </el-table>
+      <div class="block">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+        </el-pagination>
+      </div>
+  </div>
+  </div>
 {% endblock %}
 {% block scripts %}
 <script src="/static/js/es6/polyfill.min.js"></script>
@@ -252,42 +567,164 @@ color:white;
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/qs.js"></script>
 <script src="/static/js/Element/index.js"></script>
-    <script type="text/babel">
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/Element/table.js"></script>
+<script src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/babel">
     new Vue({
         el: '#app',
         delimiters: ['${', '}'],
         data: function () {
+              const generateData = _ => {
+                const data = [];
+                for (let i = 1; i <= 15; i++) {
+                  data.push({
+                    key: i,
+                    label: `备选项 ${ i }`,
+                    disabled: i % 4 === 0
+                  });
+                }
+                return data;
+              };
+
             return {
-            activeName: 'first',
-            FJtable:[],
-            SBtable:[],
-            JTtable:[],
-            ZHtable:[],
-            WLtable:[],
-            Others:[],
-            update:false,
-            labelPosition:'right',
-            editID:'',
-            form: {
-                DX:'',
-                XX:'',
-                FZR:'',
-{#                CHU:'',#}
-                DEPARTMENT:'',
-                MAIL:'',
-                LXFS:'',
-                CHU:'',
-                DEPARTMENT:'',
-                MAIL:'',
-            },
-            formData:[],
-            permission:null,//编辑权限
-            appendss:false,
-            rules: {
-              XX: [
-                 { required: true, message: "不可為空", trigger:['blur','change'] }
-              ]
-            }
+
+                OwnersOptions:[],
+                value: [1],
+                value4: [1],
+                renderFunc(h, option) {
+                  return <span>{ option.key } - { option.label }</span>;
+                },
+                excelFile:null,
+                uploadFile:null,
+                fileName:"未選擇文件",
+                search:'',
+                Owner: '',
+                number: '',
+                sectionOwner: [],
+                loading:false,
+                selectDevice:[],
+                SectionProjectcode:[],
+                yearOptions:[],
+                categoryOptions:[],
+                ProductTypeOptions:[],
+                classOptions:[],
+                ProjectCodeOption:[],
+                ProjectcodeCompal:"",
+                datatype:'',
+                year:'',
+                category1:'',
+                class1:'',
+                editpermission: 0,
+                permission: 0,
+                customerOptions:{},
+                customerError:false,
+                department:'',
+                departmentOptions:[],
+                departmentError:false,
+                tableContent:[],
+                update:false,
+                add:false,
+                ID:"",
+                labelPosition:'right',
+                tableloading: false,
+                elbuttonloading: false,
+                form: {
+                    Category: '',
+                    Product_Type: '',
+                    Name: '',
+                    Num: '',
+                    Manufacturer: '',
+                    Cost: '',
+                    Account: '',
+                    PW: '',
+                    Purchasing_Date: '',
+                    Department: '',
+                    Location: '',
+                    Asset_Num: '',
+                    Owner: '',
+                    Contact_info: '',
+                    Comments: '',
+
+                },
+
+                form1: {
+                    Category: '',
+                    Class: '',
+                    Type: '',
+                    Covered_range_for_case: '',
+                    Require_State: '',
+                    Comments: '',
+                    Remark: '',
+                    ODM_status: '',
+                    Purchase_Plan: '',
+                    Act_Status: '',
+                    Device1: '',
+                    Status1: '',
+                    Purchase_period1: '',
+                    Device2: '',
+                    Status2: '',
+                    Purchase_period2: '',
+                    Device3: '',
+                    Status3: '',
+                    Purchase_period3: '',
+                    Device4: '',
+                    Status4: '',
+                    Purchase_period4: '',
+                    Device5: '',
+                    Status5: '',
+                    Purchase_period5: '',
+                    Device6: '',
+                    Status6: '',
+                    Purchase_period6: '',
+                    Device7: '',
+                    Status7: '',
+                    Purchase_period7: '',
+                    Device8: '',
+                    Status8: '',
+                    Purchase_period8: '',
+                    Device9: '',
+                    Status9: '',
+                    Purchase_period9: '',
+                    Device10: '',
+                    Status10: '',
+                    Purchase_period10: '',
+
+                },
+                formData:[],
+                editID: '',
+                multiDeleteVisible:false,
+                multipleSelection: [],
+                //表格信息顯示
+                showCustomer:'',
+                showDepartment:'',
+                //新增信息
+                appendss:false,
+                //分页
+                currentPage: 1,//默认显示第一页
+                pageSize:20,//默认每页显示100条
+                totalNum: null,
+                errMsg:null,
+                 rules: {
+                      Year: [
+                         { required: true, message: "不能為空", trigger:['blur','change'] }
+                      ],
+                      DataType: [
+                         { required: true, message: "不能為空", trigger:['blur','change'] }
+                      ],
+                      CG: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                      Customer: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                    },
+
 
             }
         },
@@ -297,179 +734,929 @@ color:white;
         methods: {
             //获取数据
             getdata: function (e) {
+                this.elbuttonloading = true;
+                this.tableloading = true;
                 let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
-                axios.post("/PersonalInfo/PublicArea/", Qs.stringify(data), {
+                axios.post("/CommonDevice/CommonDevice_edit/", Qs.stringify(data), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
-                    this.FJtable=res.data.FJtable;
-                    this.SBtable=res.data.SBtable;
-                    this.JTtable=res.data.JTtable;
-                    this.ZHtable=res.data.ZHtable;
-                    this.WLtable=res.data.WLtable;
-                    this.Others=res.data.Others;
-                    this.permission=res.data.permission;
-                });
+                    this.yearOptions = res.data.yearOptions;
+                    this.sectionOwner=res.data.sectionOwner;
+                    this.categoryOptions = res.data.categoryOptions;
+                    this.ProductTypeOptions = res.data.ProductTypeOptions;
+                    this.classOptions = res.data.classOptions;
+                    this.selectDevice = res.data.DeviceOptions;
+                    this.OwnersOptions = res.data.OwnersOptions;
+                    this.permission = res.data.permission;
+                    this.tableContent=res.data.content;
+                    this.totalNum = this.tableContent.length;
+                    this.elbuttonloading = false;
+                    this.tableloading = false;
+                    this.$nextTick(() => {
+                       this.$refs.tableRef.doLayout()
+                    })
+                 });
             },
-            handleClick(tab, event) {
-                console.log(tab, event);
-                this.$refs.multipleTable.clearSelection()
-                this.$refs.multipleTable1.clearSelection()
-                this.$refs.multipleTable2.clearSelection()
-                this.$refs.multipleTable3.clearSelection()
-                this.$refs.multipleTable4.clearSelection()
-                this.$refs.multipleTable5.clearSelection()
+
+          handleChange(value, direction, movedKeys) {
+            console.log(value, direction, movedKeys);
+          },
+
+
+          createStateFilter(queryString) {
+            return (state) => {
+              return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+
+          createFilter(queryString) {
+            return (state) => {
+              return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+
+          querySearch(queryString,cb) {
+                var sectionOwner = this.sectionOwner;
+                //console.log(queryString,'p1');
+                var results = queryString ? sectionOwner.filter(this.createFilter(queryString)) : sectionOwner;
+                // 调用 callback 返回建议列表的数据
+                cb(results);
+           },
+
+          handleSelect(item) {
+            this.number = item.number;
+            {#console.log(this.number, 'this.number');#}
+          },
+
+          querySearchDevice1(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update === true){
+                if(this.form1.Device1 == ""){
+                    this.form1.Status1 = ""
+                    this.form1.Purchase_period1 = ""
+                }
+            }
+            if(this.form1.Device1 === results[0].value){
+                    this.form1.Status1 = results[0].Status;
+                    this.form1.Purchase_period1 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice1(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status1 = this.Status;
+                  this.form1.Purchase_period1 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice2(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device2 == ""){
+                    this.form1.Status2 = ""
+                    this.form1.Purchase_period2 = ""
+                }
+            }
+            if(this.form1.Device2 === results[0].value){
+                    this.form1.Status2 = results[0].Status;
+                    this.form1.Purchase_period2 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice2(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status2 = this.Status;
+                  this.form1.Purchase_period2 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice3(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device3 == ""){
+                    this.form1.Status3 = ""
+                    this.form1.Purchase_period3 = ""
+                }
+            }
+            if(this.form1.Device3 === results[0].value){
+                    this.form1.Status3 = results[0].Status;
+                    this.form1.Purchase_period3 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice3(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status3 = this.Status;
+                  this.form1.Purchase_period3 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice4(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device4 == ""){
+                    this.form1.Status4 = ""
+                    this.form1.Purchase_period4 = ""
+                }
+            }
+            if(this.form1.Device4 === results[0].value){
+                    this.form1.Status4 = results[0].Status;
+                    this.form1.Purchase_period4 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice4(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status4 = this.Status;
+                  this.form1.Purchase_period4 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice5(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device5 == ""){
+                    this.form1.Status5 = ""
+                    this.form1.Purchase_period5 = ""
+                }
+            }
+            if(this.form1.Device5 === results[0].value){
+                    this.form1.Status5 = results[0].Status;
+                    this.form1.Purchase_period5 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice5(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status5 = this.Status;
+                  this.form1.Purchase_period5 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice6(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device6 == ""){
+                    this.form1.Status6 = ""
+                    this.form1.Purchase_period6 = ""
+                }
+            }
+            if(this.form1.Device6 === results[0].value){
+                    this.form1.Status6 = results[0].Status;
+                    this.form1.Purchase_period6 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice6(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status6 = this.Status;
+                  this.form1.Purchase_period6 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice7(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device7 == ""){
+                    this.form1.Status7 = ""
+                    this.form1.Purchase_period7 = ""
+                }
+            }
+            if(this.form1.Device7 === results[0].value){
+                    this.form1.Status7 = results[0].Status;
+                    this.form1.Purchase_period7 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice7(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status7 = this.Status;
+                  this.form1.Purchase_period7 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice8(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device8 == ""){
+                    this.form1.Status8 = ""
+                    this.form1.Purchase_period8 = ""
+                }
+            }
+            if(this.form1.Device8 === results[0].value){
+                    this.form1.Status8 = results[0].Status;
+                    this.form1.Purchase_period8 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice8(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status8 = this.Status;
+                  this.form1.Purchase_period8 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice9(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device9 == ""){
+                    this.form1.Status9 = ""
+                    this.form1.Purchase_period9 = ""
+                }
+            }
+            if(this.form1.Device9 === results[0].value){
+                    this.form1.Status9 = results[0].Status;
+                    this.form1.Purchase_period9 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice9(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status9 = this.Status;
+                  this.form1.Purchase_period9 = this.Purchase_period;
+              }
+          },
+
+          querySearchDevice10(queryString, cb) {
+            var selectDevice = this.selectDevice;
+            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+            if(this.update == true){
+                if(this.form1.Device10 == ""){
+                    this.form1.Status10 = ""
+                    this.form1.Purchase_period10 = ""
+                }
+            }
+            if(this.form1.Device10 === results[0].value){
+                    this.form1.Status10 = results[0].Status;
+                    this.form1.Purchase_period10 = results[0].Purchase_period;
+            }
+          },
+
+          handleSelectDevice10(item) {
+              this.Status = item.Status;
+              this.Purchase_period = item.Purchase_period;
+              if(this.update == true){
+                  this.form1.Status10 = this.Status;
+                  this.form1.Purchase_period10 = this.Purchase_period;
+              }
+          },
+
+            handleSpan({ row, column, rowIndex, columnIndex }) {
+                if (columnIndex === 2) {
+                  if (rowIndex === 0) {
+                    // 查找相同name的行数
+                    let rowspan = this.datas.filter(item => item.Category === row.Category).length;
+                    return {
+                      rowspan: rowspan,
+                      colspan: 1
+                    };
+                  } else {
+                    // 检查当前行是否与上一行name相同
+                    console.log(row.Category, "row.category")
+                    console.log(row, "row")
+                    console.log(this.datas[rowIndex - 1].Category, "row11111111111")
+                    if (row.Category === this.datas[rowIndex - 1].Category) {
+                      return {
+                        rowspan: 0,
+                        colspan: 0
+                      };
+                    } else {
+                      let rowspan = this.datas.filter(item => item.Category === row.Category).length;
+                      console.log(rowspan)
+                      return {
+                        rowspan: rowspan,
+                        colspan: 1
+                      };
+                    }
+                  }
+                }
+                if (columnIndex === 3) {
+                  if (rowIndex === 0) {
+                    // 查找相同name的行数
+                    let rowspan = this.datas.filter(item => item.Class === row.Class).length;
+                    return {
+                      rowspan: rowspan,
+                      colspan: 1
+                    };
+                  } else {
+                    // 检查当前行是否与上一行name相同
+                    if (row.Class === this.datas[rowIndex - 1].Class) {
+                      return {
+                        rowspan: 0,
+                        colspan: 0
+                      };
+                    } else {
+                      let rowspan = this.datas.filter(item => item.Class === row.Class).length;
+                      return {
+                        rowspan: rowspan,
+                        colspan: 1
+                      };
+                    }
+                  }
+                }
+                if (columnIndex === 5) {
+                  if (rowIndex === 0) {
+                    // 查找相同name的行数
+                    let rowspan = this.datas.filter(item => item.Covered_range_for_case === row.Covered_range_for_case).length;
+                    return {
+                      rowspan: rowspan,
+                      colspan: 1
+                    };
+                  } else {
+                    // 检查当前行是否与上一行name相同
+                    if (row.Covered_range_for_case === this.datas[rowIndex - 1].Covered_range_for_case) {
+                      return {
+                        rowspan: 0,
+                        colspan: 0
+                      };
+                    } else {
+                      let rowspan = this.datas.filter(item => item.Covered_range_for_case === row.Covered_range_for_case).length;
+                      return {
+                        rowspan: rowspan,
+                        colspan: 1
+                      };
+                    }
+                  }
+                }
+                if (columnIndex === 7) {
+                  if (rowIndex === 0) {
+                    // 查找相同name的行数
+                    let rowspan = this.datas.filter(item => item.Comments === row.Comments).length;
+                    return {
+                      rowspan: rowspan,
+                      colspan: 1
+                    };
+                  } else {
+                    // 检查当前行是否与上一行name相同
+                    if (row.Comments === this.datas[rowIndex - 1].Comments) {
+                      return {
+                        rowspan: 0,
+                        colspan: 0
+                      };
+                    } else {
+                      let rowspan = this.datas.filter(item => item.Comments === row.Comments).length;
+                      return {
+                        rowspan: rowspan,
+                        colspan: 1
+                      };
+                    }
+                  }
+                }
+                if (columnIndex === 8) {
+                  if (rowIndex === 0) {
+                    // 查找相同name的行数
+                    let rowspan = this.datas.filter(item => item.Remark === row.Remark).length;
+                    return {
+                      rowspan: rowspan,
+                      colspan: 1
+                    };
+                  } else {
+                    // 检查当前行是否与上一行name相同
+                    if (row.Remark === this.datas[rowIndex - 1].Remark) {
+                      return {
+                        rowspan: 0,
+                        colspan: 0
+                      };
+                    } else {
+                      let rowspan = this.datas.filter(item => item.Remark === row.Remark).length;
+                      return {
+                        rowspan: rowspan,
+                        colspan: 1
+                      };
+                    }
+                  }
+                }
             },
+
+            AddInfo(){
+                this.add=true;
+            },
+
+            exportExcel: function () {
+             /* 从表生成工作簿对象 */
+             {#console.log(document.querySelector("#out-table"));#}
+             let temp = [];
+             temp.push(Number(this.currentPage));
+             temp.push(Number(this.pageSize));
+             {#console.log(temp);#}
+             this.currentPage = 1;
+             this.pageSize = this.tableContent.length;
+             {#console.log(temp, this.defaultPage1, this.pageSize);#}
+             setTimeout(() => {
+                 let table = document.querySelector("#out-table").cloneNode(true);
+                 let fix = table.querySelector(".el-table__fixed");
+                 let wb;
+                 if(fix){
+                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
+                    table.appendChild(fix);
+                 }else{
+                    wb = XLSX.utils.table_to_book(table,{raw: true});
+                 }
+                 console.log("wb", wb);
+                 /* 获取二进制字符串作为输出 */
+                 var wbout = XLSX.write(wb, {
+                     bookType: "xlsx",
+                     bookSST: true,
+                     type: "array"
+                 });
+                 console.log("wbout", wbout);
+                 try {
+                     saveAs(
+                         //Blob 对象表示一个不可变、原始数据的类文件对象。
+                         //Blob 表示的不一定是JavaScript原生格式的数据。
+                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                         new Blob([wbout], {type: "application/octet-stream"}),
+                         //设置导出文件名称
+                         "sheetjs.xlsx"
+                     );
+
+                 } catch (e) {
+                     if (typeof console !== "undefined") console.log(e, wbout);
+                 }
+                 this.currentPage = temp[0];
+                 this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                 temp = [];
+                 return wbout;
+             }, 100);
+         },
+
+             AddInfo(){
+                    this.add=true;
+             },
+
+            //上传搜索项：以此选项搜索符合条件的内容
+            find:function(){
+
+                this.elbuttonloading = true;
+                this.tableloading = true;
+                let Category = this.$refs.Category.value;
+                let Owner = this.$refs.Owner.value;
+                let OwnerNumber = this.number;
+                let data ={"isGetData":"SEARCH","Category":Category,"Owner":Owner,"OwnerNumber": OwnerNumber,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                axios.post("/CommonDevice/CommonDevice_edit/",Qs.stringify(data), {
+                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                }).then((res) => {
+                  this.tableContent=res.data.content;
+                  this.totalNum=this.tableContent.length;
+                  this.permission=res.data.permission;
+                  this.elbuttonloading = false;
+                  this.tableloading = false;
+                  this.yearOptions = res.data.yearOptions;
+                  this.categoryOptions = res.data.categoryOptions;
+                  this.classOptions = res.data.classOptions;
+                  this.$nextTick(() => {
+                       this.$refs.tableRef.doLayout()
+                  })
+                })
+
+             },
+
             indexMethod(index) {
-                return index + 1;
+                  return index +1;
             },
+
             handleSelectionChange(rows) {
                 this.multipleSelection = rows;
-                console.log(rows,'111')
-                var len=document.getElementById("selectNum")
-                len.innerHTML=this.multipleSelection.length;
             },
-            getRowKeys (row) {
-              return row.id;
-            },
-            Delete(){
-                 if(this.multipleSelection.length==0){
-                alert('未勾选数据！')
-                  }else{
-                  this.$confirm('您正在刪除材料, 是否繼續?', '提示', {
-                          confirmButtonText: '確定',
-                          cancelButtonText: '取消',
-                          type: 'warning'
-                  }).then(() => {
-                         let checkArr = this.multipleSelection;   // multipleSelection存储了勾选到的数据
-                         let params = [];
-                         let self = this;
-                         checkArr.forEach(function (item) {
-                             console.log(item);
-                             params.push(item.id);       // 添加所有需要删除数据的id到一个数组，post提交过去
-                         });
-                         console.log(params);
-                         let data ={"isGetData":"Delete","DeleteId":params,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
-                         axios.post("/PersonalInfo/PublicArea/",data).then((res) => {
-                                  this.FJtable=res.data.FJtable;
-                                  this.SBtable=res.data.SBtable;
-                                  this.JTtable=res.data.JTtable;
-                                  this.ZHtable=res.data.ZHtable;
-                                  this.WLtable=res.data.WLtable;
-                                  this.Others=res.data.Others;
-                                })
-                                this.$refs.multipleTable.clearSelection()
-                                this.$refs.multipleTable1.clearSelection()
-                                this.$refs.multipleTable2.clearSelection()
-                                this.$refs.multipleTable3.clearSelection()
-                                this.$refs.multipleTable4.clearSelection()
-                                this.$refs.multipleTable5.clearSelection()
-                         this.$message({
-                         type: 'success',
-                         message: '刪除成功!'
-                         });
-                  }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消刪除'
-                        });
-                  });
-               }
-            },
-            Add(){
-                 this.form={
-                     DX:'',
-                    XX:'',
-                    FZR:'',
-{#                    CHU:'',#}
-                    DEPARTMENT:'',
-                    MAIL:'',
-                    LXFS:'',
-                 };
-                 this.appendss=true;
-            },
-            addSubmit(){
-                this.$refs.form.validate((valid) => {
-                   if (valid) {
-                        if (this.formData.length==0){this.formData = new FormData();}
-                        this.formData.append("action",'addSubmit');
-                        this.formData.append('DX', this.$refs.form.model.DX)
-                        this.formData.append('XX', this.$refs.form.model.XX)
-                        this.formData.append('FZR', this.$refs.form.model.FZR)
-                        {#                this.formData.append('CHU', this.$refs.form.model.CHU)#}
-                        this.formData.append('DEPARTMENT', this.$refs.form.model.DEPARTMENT)
-                        this.formData.append('MAIL', this.$refs.form.model.MAIL)
-                        this.formData.append('LXFS', this.$refs.form.model.LXFS)
-                        console.log(this.formData)
-                        axios.post("/PersonalInfo/PublicArea/", this.formData,{
-                                    headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
-                                }).then((res)=>{
-                                this.FJtable=res.data.FJtable;
-                                this.SBtable=res.data.SBtable;
-                                this.JTtable=res.data.JTtable;
-                                this.ZHtable=res.data.ZHtable;
-                                this.WLtable=res.data.WLtable;
-                                this.Others=res.data.Others;
-                                this.appendss=false;
-                                this.formData = new FormData();
 
-                        })
-                   } else {
-                        console.log('error submit!');
-                        return false;
-                   }
-                });
+            getRowKeys (row) {
+              return row.id
             },
+
+
+            updateFile:function(e){
+                const first="未選擇文件";
+                let newValue= e.target.files;
+                if(newValue){
+                 let file=document.getElementById('upload');
+                 let filename= file.files[0].name;
+                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
+                 console.log(fileType.toLowerCase());
+                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
+                      //console.log(this.excelFile);
+                     this.fileName=filename;
+                     this.uploadFile=file.files[0];
+                 }else{
+                     alert("上傳類型不為'xlsx'或'xls'");
+                       try{
+                         }catch(e){
+                             console.log(e);
+                         }
+                 }
+             }else{
+                 this.uploadFile=null;
+                 this.fileName=first;
+             }
+      },
+            fileUpload:function(){
+              const first="未選擇文件";
+              if(this.uploadFile){
+                  //1.解析Excel
+                   let outputResult;
+                   let _this= this;
+                   let files = this.uploadFile;
+                   let undefined_to_null=function(value){
+                       if(value === undefined){
+                           value=null;
+                       }
+                       //console.log(value,value === undefined,value == undefined);
+                       return value;
+                   }
+                   var fileReader = new FileReader ();
+                   const loading = this.$loading({
+                              lock: true,
+                              text: 'Loading',
+                              spinner: 'el-icon-loading',
+                              background: 'rgba(0,0,0,0.7)'
+                   });
+                   fileReader.onload = function (ev) {
+                     try {
+                    // _this.loading=true;
+                     var data = ev.target.result,
+                      workbook = XLSX.read(data, {
+                        type: 'binary'
+                     }), // 以二进制流方式读取得到整份excel表格对象
+                      persons = []; // 存储获取到的数据
+                   } catch (e) {
+                     //_this.loading=false;
+                         loading.close();
+                     return;
+                  }
+                  for (var sheet in workbook.Sheets) {
+                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                        var fromTo = workbook.Sheets[sheet]['!ref'];
+                        // console.log(fromTo);
+                        var datas = workbook.Sheets[sheet];
+                        // 如果有不规范数据可以在这里进行处理datas
+                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                        //break; // 只读了第一张表
+                    }
+            }
+                 // 数据保存在result
+                  let result=JSON.stringify(persons);
+                   //将之前张开的树形结构收起
+                      //_this.reset();
+                   //2.上傳數據
+                  let Category = _this.$refs.Category.value;
+                  let Class = _this.$refs.Class.value;
+                  axios.post("/CommonDevice/CommonDevice_edit/" ,{"isGetData":"upload","searchCategory":Category,"searchClass":Class,"ExcelData":result},{
+                  headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                }).then((res) => {
+                    //console.log(res.data,"first");//上传成功的操作
+                        _this.tableContent=res.data.content;
+                        _this.totalNum=_this.tableContent.length;
+                        _this.$nextTick(() => {
+                           _this.$refs.tableRef.doLayout()
+                        })
+                        _this.errMsg=res.data.errMsg;
+                        _this.permission=res.data.permission;
+                        _this.yearOptions = res.data.yearOptions;
+                        _this.categoryOptions = res.data.categoryOptions;
+                        _this.classOptions = res.data.classOptions;
+                        _this.datatypeOption = res.data.datatypeOption;
+                        _this.uploadFile=null;
+                        _this.fileName=first;
+                   //_this.loading=false;
+                        loading.close();
+                    //上传成功的操作
+                        if(_this.errMsg){
+                            _this.$alert(_this.errMsg, '提示', {
+                                  type: 'warning',
+                                })
+                        }else {
+                            _this.$message({
+                                message: '上傳成功',
+                                type: 'success',
+                            })
+                        }
+                    //接受数据的初始化
+                    try{
+                    }catch(e)
+                    {
+                       console.log("错误异常"+e);
+                    }
+                }).catch(function (e) {
+                        //_this.loading=false;
+                        loading.close();
+                        _this.uploadFile=null;
+                        var warning =confirm("上傳異常");
+                        console.log("上傳錯誤信息"+e);
+                    });
+           };
+                   try{
+                   //console.log(fileReader.onload());
+                   fileReader.readAsBinaryString(files);
+                   //console.log(fileReader.readAsBinaryString(files));
+                   }
+                   catch(e){
+                         //this.loading=false;
+                       loading.close();
+                         console.log(e);
+                         alert("文件上傳異常");
+                         return;
+                    }
+                  //console.log(outputResult);
+
+             }else{
+              //this.loading=false;
+                  loading.close();
+              alert("未選擇文件");
+              return false;
+          }
+              this.excelFile='';
+      },
+
+
+            addData(){
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchYear', this.$refs.Year.value)
+                    this.formData.append('Year', this.$refs.form.model.Year)
+                    this.formData.append('Jan', this.$refs.form.model.Jan)
+                    this.formData.append('Feb', this.$refs.form.model.Feb)
+                    this.formData.append('Mar', this.$refs.form.model.Mar)
+                    this.formData.append('Apr', this.$refs.form.model.Apr)
+                    this.formData.append('May', this.$refs.form.model.May)
+                    this.formData.append('Jun', this.$refs.form.model.Jun)
+                    this.formData.append('July', this.$refs.form.model.July)
+                    this.formData.append('Aug', this.$refs.form.model.Aug)
+                    this.formData.append('Sep', this.$refs.form.model.Sep)
+                    this.formData.append('Oct', this.$refs.form.model.Oct)
+                    this.formData.append('Nov', this.$refs.form.model.Nov)
+                    this.formData.append('Dec', this.$refs.form.model.Dec)
+                    this.formData.append("action", 'addData');
+                    axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.$nextTick(() => {
+                           this.$refs.tableRef.doLayout()
+                        })
+                        this.errMsg=res.data.errMsg;
+                        this.formData = new FormData();
+                        if(this.errMsg){
+                          this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                          });
+                          this.add = true;
+                        }else{
+                          try {
+                                  this.$refs.form.resetFields();
+                          } catch (e) {
+
+                          }
+                          this.add = false;
+                          this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                          })
+                        }
+
+                    })
+            },
+
+
+            updateData() {
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchCategory', this.$refs.Category.value)
+                    this.formData.append('searchClass', this.$refs.Class.value)
+                    this.formData.append('ID', this.editID)
+                    this.formData.append('Category', this.$refs.form1.model.Category)
+                    this.formData.append('Class', this.$refs.form1.model.Class)
+                    this.formData.append('Type', this.$refs.form1.model.Type)
+                    this.formData.append('Covered_range_for_case', this.$refs.form1.model.Covered_range_for_case)
+                    this.formData.append('Require_State', this.$refs.form1.model.Require_State)
+                    this.formData.append('Comments', this.$refs.form1.model.Comments)
+                    this.formData.append('Remark', this.$refs.form1.model.Remark)
+                    this.formData.append('ODM_status', this.$refs.form1.model.ODM_status)
+                    this.formData.append('Purchase_Plan', this.$refs.form1.model.Purchase_Plan)
+                    this.formData.append('Act_Status', this.$refs.form1.model.Act_Status)
+                    this.formData.append('Device1', this.$refs.form1.model.Device1)
+                    this.formData.append('Status1', this.$refs.form1.model.Status1)
+                    this.formData.append('Purchase_period1', this.$refs.form1.model.Purchase_period1)
+                    this.formData.append('Device2', this.$refs.form1.model.Device2)
+                    this.formData.append('Status2', this.$refs.form1.model.Status2)
+                    this.formData.append('Purchase_period2', this.$refs.form1.model.Purchase_period2)
+                    this.formData.append('Device3', this.$refs.form1.model.Device3)
+                    this.formData.append('Status3', this.$refs.form1.model.Status3)
+                    this.formData.append('Purchase_period3', this.$refs.form1.model.Purchase_period3)
+                    this.formData.append('Device4', this.$refs.form1.model.Device4)
+                    this.formData.append('Status4', this.$refs.form1.model.Status4)
+                    this.formData.append('Purchase_period4', this.$refs.form1.model.Purchase_period4)
+                    this.formData.append('Device5', this.$refs.form1.model.Device5)
+                    this.formData.append('Status5', this.$refs.form1.model.Status5)
+                    this.formData.append('Purchase_period5', this.$refs.form1.model.Purchase_period5)
+                    this.formData.append('Device6', this.$refs.form1.model.Device6)
+                    this.formData.append('Status6', this.$refs.form1.model.Status6)
+                    this.formData.append('Purchase_period6', this.$refs.form1.model.Purchase_period6)
+                    this.formData.append('Device7', this.$refs.form1.model.Device7)
+                    this.formData.append('Status7', this.$refs.form1.model.Status7)
+                    this.formData.append('Purchase_period7', this.$refs.form1.model.Purchase_period7)
+                    this.formData.append('Device8', this.$refs.form1.model.Device8)
+                    this.formData.append('Status8', this.$refs.form1.model.Status8)
+                    this.formData.append('Purchase_period8', this.$refs.form1.model.Purchase_period8)
+                    this.formData.append('Device9', this.$refs.form1.model.Device9)
+                    this.formData.append('Status9', this.$refs.form1.model.Status9)
+                    this.formData.append('Purchase_period9', this.$refs.form1.model.Purchase_period9)
+                    this.formData.append('Device10', this.$refs.form1.model.Device10)
+                    this.formData.append('Status10', this.$refs.form1.model.Status10)
+                    this.formData.append('Purchase_period10', this.$refs.form1.model.Purchase_period10)
+                    this.formData.append("action", 'update');
+                    axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.$nextTick(() => {
+                           this.$refs.tableRef.doLayout()
+                        })
+                        this.errMsg=res.data.errMsg;
+                        this.formData = new FormData();
+                        if(this.errMsg){
+                          this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                          });
+                          this.update = true;
+                        }else{
+                          try {
+                                  this.$refs.form1.resetFields();
+                          } catch (e) {
+
+                          }
+                          this.update = false;
+                          this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                          })
+                        }
+
+                    })
+            },
+
             alertID:function(id,row){
-                  if(this.permission===0){
-                    this.update=true;
-                    this.form.DX=row.DX;
-                    this.form.XX=row.XX;
-                    this.form.FZR=row.FZR;
-{#                    this.form.CHU=row.CHU;#}
-                    this.form.DEPARTMENT=row.DEPARTMENT;
-                    this.form.MAIL=row.MAIL;
-                    this.form.LXFS=row.LXFS;
-                    this.editID = id;
-                  }else{
+                 this.update=true;
+                 this.form1.Category=row.Category;
+                 this.form1.Class=row.Class;
+                 this.form1.Type=row.Type;
+                 this.form1.Covered_range_for_case=row.Covered_range_for_case;
+                 this.form1.Require_State=row.Require_State;
+                 this.form1.Comments=row.Comments;
+                 this.form1.Remark=row.Remark;
+                 this.form1.ODM_status=row.ODM_status;
+                 this.form1.Purchase_Plan=row.Purchase_Plan;
+                 this.form1.Act_Status=row.Act_Status;
+                 this.form1.Device1=row.Device1;
+                 this.form1.Status1=row.Status1;
+                 this.form1.Purchase_period1=row.Purchase_period1;
+                 this.form1.Device2=row.Device2;
+                 this.form1.Status2=row.Status2;
+                 this.form1.Purchase_period2=row.Purchase_period2;
+                 this.form1.Device3=row.Device3;
+                 this.form1.Status3=row.Status3;
+                 this.form1.Purchase_period3=row.Purchase_period3;
+                 this.form1.Device4=row.Device4;
+                 this.form1.Status4=row.Status4;
+                 this.form1.Purchase_period4=row.Purchase_period4;
+                 this.form1.Device5=row.Device5;
+                 this.form1.Status5=row.Status5;
+                 this.form1.Purchase_period5=row.Purchase_period5;
+                 this.form1.Device6=row.Device6;
+                 this.form1.Status6=row.Status6;
+                 this.form1.Purchase_period6=row.Purchase_period6;
+                 this.form1.Device7=row.Device7;
+                 this.form1.Status7=row.Status7;
+                 this.form1.Purchase_period7=row.Purchase_period7;
+                 this.form1.Device8=row.Device8;
+                 this.form1.Status8=row.Status8;
+                 this.form1.Purchase_period8=row.Purchase_period8;
+                 this.form1.Device9=row.Device9;
+                 this.form1.Status9=row.Status9;
+                 this.form1.Purchase_period9=row.Purchase_period9;
+                 this.form1.Device10=row.Device10;
+                 this.form1.Status10=row.Status10;
+                 this.form1.Purchase_period10=row.Purchase_period10;
+                 this.editID = id;
+
+            },
+    {% comment %}
+            alertID:function(id,row){
+                if(this.permission === 1){
+                     this.update=true;
+                     this.form1.Year=row.Year;
+                     this.form1.Jan=row.Jan;
+                     this.form1.Feb=row.Feb;
+                     this.form1.Mar=row.Mar;
+                     this.form1.Apr=row.Apr;
+                     this.form1.May=row.May;
+                     this.form1.Jun=row.Jun;
+                     this.form1.July=row.July;
+                     this.form1.Aug=row.Aug;
+                     this.form1.Sep=row.Sep;
+                     this.form1.Oct=row.Oct;
+                     this.form1.Nov=row.Nov;
+                     this.form1.Dec=row.Dec;
+                     this.editID = id;
+                    }else{
                            this.update=false;
                            this.$message({
                               showClose: true,
-                              message: '您無此權限',
+                              message: '無編輯權限！',
                               type: 'warning'
-                           });
-                  }
+                            });
+                   }
             },
-            editSubmit() {
-                console.log('submit!',this.$refs.form.model,typeof (this.$refs.form.model),this.formData);
-                if (this.formData.length==0){this.formData = new FormData();}
-                this.formData.append("isGetData",'editSubmit');
-                this.formData.append('id', this.editID)
-                this.formData.append('DX', this.$refs.form.model.DX)
-                this.formData.append('XX', this.$refs.form.model.XX)
-                this.formData.append('FZR', this.$refs.form.model.FZR)
-{#                this.formData.append('CHU', this.$refs.form.model.CHU)#}
-                this.formData.append('DEPARTMENT', this.$refs.form.model.DEPARTMENT)
-                this.formData.append('MAIL', this.$refs.form.model.MAIL)
-                this.formData.append('LXFS', this.$refs.form.model.LXFS)
-                console.log(this.formData)
-                axios.post("/PersonalInfo/PublicArea/", this.formData,{
-                            headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
-                        }).then((res)=>{
-                            this.FJtable=res.data.FJtable;
-                            this.SBtable=res.data.SBtable;
-                            this.JTtable=res.data.JTtable;
-                            this.ZHtable=res.data.ZHtable;
-                            this.WLtable=res.data.WLtable;
-                            this.Others=res.data.Others;
-                            this.update=false;
-                            this.formData = new FormData();
 
-                })
+
+        {% endcomment %}
+            //分页
+            handleSizeChange(val) {
+                  //console.log(`每页 ${val} 条`);
+                    this.pageSize = val;
             },
+            handleCurrentChange(val) {
+                //console.log(`当前页: ${val}`);
+                  this.currentPage = val;
+                  //console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+            },
+
         },
+        computed:{
+                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableContent//axios返回时接受数据的变量
+                },
+                total_computed () {
+                    this.Totalsize = this.datas.length;//edwin:export数据的个数
+                    console.log(this.Totalsize);
+                    return this.datas.length//必须是el-table里面绑定的数据变量
+                }
+            },
     })
     </script>
-
 {% endblock %}
 
 
