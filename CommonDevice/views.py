@@ -133,7 +133,7 @@ def CommonDevice_edit(request):
             Owner_list = []
             Ownerflag = False
             for j in i.Owner.all():
-                Owner_list.append([j.username, j.account])
+                Owner_list.append({'Name': j.username, 'Num': j.account})
                 if not Ownerflag:
                     if j.account == onlineuser:
                         Ownerflag = True

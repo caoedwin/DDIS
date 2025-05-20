@@ -697,27 +697,27 @@ new Vue ({
 
         onSubmit2() {
 
-            if (this.formData1.length==0){this.formData1 = new FormData();}
+            if (this.formData1.length==0){this.formData2 = new FormData();}
 
-            this.formData1.append('searchYear', this.$refs.Year.value)
-            this.formData1.append('searchLedger', this.$refs.Ledger.value)
-            this.formData1.append('Year', this.$refs.form2.model.Year)
-            this.formData1.append('Ledger', this.$refs.form2.model.Ledger)
-            this.formData1.append('Name', this.$refs.form2.model.Name)
-            this.formData1.append('Status', this.$refs.form2.model.Status)
-            this.formData1.append('ModelSpecifications', this.$refs.form2.model.ModelSpecifications)
-            this.formData1.append('SubscribeDate', this.$refs.form2.model.SubscribeDate)
-            this.formData1.append('SubscribeForm', this.$refs.form2.model.SubscribeForm)
-            this.formData1.append('SubscribeUnitPrice', this.$refs.form2.model.SubscribeUnitPrice)
-            this.formData1.append('Number', this.$refs.form2.model.Number)
-            this.formData1.append('AcceptanceForm', this.$refs.form2.model.AcceptanceForm)
-            this.formData1.append('AcceptanceDate', this.$refs.form2.model.AcceptanceDate)
-            this.formData1.append('Customer', this.$refs.form2.model.Customer)
-            this.formData1.append('ProjectCode', this.$refs.form2.model.ProjectCode)
-            this.formData1.append('Department', this.$refs.form2.model.Department)
-            this.formData1.append('editID', this.editID)
-            this.formData1.append("action",'updateSubmit');
-            axios.post("/MiscellaneousPurchases/SubscriptionStatus/", this.formData1,{
+            this.formData2.append('searchYear', this.$refs.Year.value)
+            this.formData2.append('searchLedger', this.$refs.Ledger.value)
+            this.formData2.append('Year', this.$refs.form2.model.Year)
+            this.formData2.append('Ledger', this.$refs.form2.model.Ledger)
+            this.formData2.append('Name', this.$refs.form2.model.Name)
+            this.formData2.append('Status', this.$refs.form2.model.Status)
+            this.formData2.append('ModelSpecifications', this.$refs.form2.model.ModelSpecifications)
+            this.formData2.append('SubscribeDate', this.$refs.form2.model.SubscribeDate)
+            this.formData2.append('SubscribeForm', this.$refs.form2.model.SubscribeForm)
+            this.formData2.append('SubscribeUnitPrice', this.$refs.form2.model.SubscribeUnitPrice)
+            this.formData2.append('Number', this.$refs.form2.model.Number)
+            this.formData2.append('AcceptanceForm', this.$refs.form2.model.AcceptanceForm)
+            this.formData2.append('AcceptanceDate', this.$refs.form2.model.AcceptanceDate)
+            this.formData2.append('Customer', this.$refs.form2.model.Customer)
+            this.formData2.append('ProjectCode', this.$refs.form2.model.ProjectCode)
+            this.formData2.append('Department', this.$refs.form2.model.Department)
+            this.formData2.append('editID', this.editID)
+            this.formData2.append("action",'updateSubmit');
+            axios.post("/MiscellaneousPurchases/SubscriptionStatus/", this.formData2,{
                         headers:{ 'Content-Type': 'multipart/form-data','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                     }).then((res)=>{
                         if(res.data.errMessage == ""){
