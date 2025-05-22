@@ -1,0 +1,112 @@
+[2025-05-21 15:37:51,272] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 121, in CommonDevice_edit
+    Mail = Mail.split('/')[-2] + '@Compal.com'
+IndexError: list index out of range
+[2025-05-21 15:37:51,285] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.23, 127.0.0.1:57764]
+[2025-05-21 15:41:11,387] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 121, in CommonDevice_edit
+    Mail = Mail.split[-2] + '@Compal.com'
+TypeError: 'builtin_function_or_method' object is not subscriptable
+[2025-05-21 15:41:11,406] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.58, 127.0.0.1:62802]
+[2025-05-21 15:42:25,980] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 121, in CommonDevice_edit
+    Mail = Mail[-2] + '@Compal.com'
+IndexError: string index out of range
+[2025-05-21 15:42:25,993] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.23, 127.0.0.1:64577]
+[2025-05-21 15:43:44,913] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 122, in CommonDevice_edit
+    Mail = Mail[-2] + '@Compal.com'
+IndexError: string index out of range
+[2025-05-21 15:43:44,944] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.28, 127.0.0.1:51112]
+[2025-05-21 15:44:36,815] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 123, in CommonDevice_edit
+    Mail = Mail[-2] + '@Compal.com'
+IndexError: string index out of range
+[2025-05-21 15:44:36,827] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.09, 127.0.0.1:52118]
+[2025-05-21 15:46:08,129] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 124, in CommonDevice_edit
+    Mail = Mail[-2] + '@Compal.com'
+IndexError: string index out of range
+[2025-05-21 15:46:08,144] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.02, 127.0.0.1:54039]
+[2025-05-21 15:46:48,829] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 124, in CommonDevice_edit
+    Mail = Mail[-2] + '@Compal.com'
+IndexError: string index out of range
+[2025-05-21 15:46:48,861] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.18, 127.0.0.1:56015]
+[2025-05-21 16:03:29,536] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonDevice/CommonDevice_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonDevice\views.py", line 104, in CommonDevice_edit
+    print(request.data)
+AttributeError: 'AsgiRequest' object has no attribute 'data'
+[2025-05-21 16:03:29,571] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonDevice/CommonDevice_edit/ 500 [1.38, 127.0.0.1:50352]

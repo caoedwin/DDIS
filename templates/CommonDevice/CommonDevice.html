@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}PersonalInfo_edit{% endblock %}
+{% block title %}CommonDevice_edit{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="/static/css/index.css">
 <style>
@@ -151,7 +151,10 @@ label{
     font-family:微软雅黑;
 }
 
-
+.transfer-footer {
+    margin-left: 20px;
+    padding: 6px 5px;
+  }
 </style>
 {% endblock %}
 {% block content %}
@@ -184,7 +187,7 @@ label{
 
            <div style="margin-left: 100px;">
                  <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
-                 <el-button  @click="AddInfo" type="success" >Add</el-button>
+                 <el-button  @click="handleAdd" type="success" >Add</el-button>
 {#                 <el-button  @click="AddInfo" type="success" >Edit</el-button>#}
                  <el-button @click="exportExcel"  type="info" v-cloak style="height:40px">導出</el-button>
 {#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
@@ -204,316 +207,124 @@ label{
 {#         <span class="showFileName" v-cloak >${ fileName }</span>#}
 {#    </div>#}
 
-     <el-dialog :visible.sync="add" :close-on-click-modal="false">
+     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="80%">
         <template>
-            <el-form ref="form"  :model="form" label-width="100px">
-                  <el-form-item label="大项" prop="Category">
-                      <el-select v-model="form.Category" placeholder="请选择">
-                            <el-option
-                                v-for="item in categoryOptions"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                            </el-option>
+            <el-form ref="form"  :model="form" :rules="rules" label-width="100px" style="width: 100%">
+                  <!-- 大项选择 -->
+                    <el-form-item label="大项">
+                      <el-select
+                        v-model="form.Category"
+                        placeholder="请选择大项"
+                        @change="handleCategoryChange"
+                      >
+                        <el-option
+                          v-for="item in Categorys"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        />
                       </el-select>
-                  </el-form-item>
-                  <el-form-item label="细项" prop="Product_Type">
-                      <el-select v-model="form.Product_Type" placeholder="请选择">
-                            <el-option
-                                v-for="item in ProductTypeOptions"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                            </el-option>
+                    </el-form-item>
+
+                    <!-- 细项选择 -->
+                    <el-form-item label="细项">
+                      <el-select
+                        v-model="form.Product_Type"
+                        placeholder="请先选择大项"
+                        :disabled="!SubCategorys.length"
+                      >
+                        <el-option
+                          v-for="item in SubCategorys"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        />
                       </el-select>
-                  </el-form-item>
-{#                  <el-form-item label="Year" prop="Year">#}
-{#                      <el-date-picker type="year" placeholder="选择年" v-model="form.Year" value-format="yyyy" style="width: 100%;">#}
-{#                      </el-date-picker>#}
-{#                  </el-form-item>#}
-                  <el-form-item label="Name" prop="Name">
+                    </el-form-item>
+                  <el-form-item label="Name" prop="Name" style="width: 100%;">
                       <el-input  v-model="form.Name" ></el-input>
                   </el-form-item>
-                  <el-form-item label="號碼" prop="Num">
+                  <el-form-item label="號碼" prop="Num" style="width: 100%;">
                       <el-input  v-model="form.Num" ></el-input>
                   </el-form-item>
-                  <el-form-item label="廠商" prop="Manufacturer">
+                  <el-form-item label="廠商" prop="Manufacturer" style="width: 100%;">
                       <el-input  v-model="form.Manufacturer" ></el-input>
                   </el-form-item>
-                  <el-form-item label="費用(CNY)" prop="Cost">
-                      <el-input  v-model="form.Cost" ></el-input>
+                  <el-form-item label="費用(CNY)" prop="Cost" style="width: 100%;">
+                      <el-input  v-model="form.Cost" @input="handleFloatInput"></el-input>
                   </el-form-item>
-                  <el-form-item label="賬號" prop="Account">
+                  <el-form-item label="賬號" prop="Account" style="width: 100%;">
                       <el-input  v-model="form.Account" ></el-input>
                   </el-form-item>
-                  <el-form-item label="密碼" prop="PW">
+                  <el-form-item label="密碼" prop="PW" style="width: 100%;">
                       <el-input  v-model="form.PW" ></el-input>
                   </el-form-item>
-                  <el-form-item label="購買日期" prop="Purchasing_Date">
-                      <el-input  v-model="form.Purchasing_Date" ></el-input>
+                  <el-form-item label="購買日期" prop="Purchasing_Date" style="width: 100%;">
+                      <el-date-picker
+                         v-model="form.Purchasing_Date"
+                         type="date"
+                         value-format="yyyy-MM-dd"
+                         placeholder="选择日期">
+                      </el-date-picker>
                   </el-form-item>
-                  <el-form-item label="部別" prop="Department">
+                  <el-form-item label="部別" prop="Department" style="width: 100%;">
                       <el-input  v-model="form.Department" ></el-input>
                   </el-form-item>
-                  <el-form-item label="位置" prop="Location">
+                  <el-form-item label="位置" prop="Location" style="width: 100%;">
                       <el-input  v-model="form.Location" ></el-input>
                   </el-form-item>
-                  <el-form-item label="資產編號" prop="Asset_Num">
+                  <el-form-item label="資產編號" prop="Asset_Num"style="width: 100%;">
                       <el-input  v-model="form.Asset_Num" ></el-input>
                   </el-form-item>
-                  <el-form-item label="负责人" prop="Owner">
+                  <el-form-item label="狀態" prop="Status" style="width: 100%;">
+                      <el-select v-model="form.Status" placeholder="请选择">
+                            <el-option
+                                v-for="item in StatusOptions"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                            </el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="负责人" prop="Owner" style="width: 100%;">
                     <el-transfer
                       style="text-align: left; display: inline-block"
-{#                      v-model="value4"#}
+                      v-model="selectedKeys"
                       filterable
-                      :left-default-checked="[2, 3]"
-                      :right-default-checked="[1]"
-                      :titles="['Source', 'Target']"
+                      :left-default-checked="leftChecked"
+                      :right-default-checked="rightChecked"
+                      :titles="['人员名单', '负责人']"
                       :button-texts="['到左边', '到右边']"
                       :format="{
                         noChecked: '${total}',
                         hasChecked: '${checked}/${total}'
                       }"
                       @change="handleChange"
-                      :data="OwnersOptions">
-                        <template slot-scope="{scope}">
-                            <span>{{ scope.key }} - {{ scope.label }}</span>
-                        </template>
-
+                      :data="this.OwnersOptions"
+                    :props="{
+                        key: 'account',
+                        label: 'username'
+                      }"
+                    >
+                        <span slot-scope="{ option }">${ option.username } - ${ option.account }</span>
                       <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
                       <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
                     </el-transfer>
                   </el-form-item>
-                  <el-form-item label="聯係方式" prop="Contact_info">
+                <el-form-item label="郵件地址" prop="Mail" style="width: 100%;">
+                      <el-input  v-model="form.Mail" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="聯係方式" prop="Contact_info" style="width: 100%;">
                       <el-input  v-model="form.Contact_info" ></el-input>
                   </el-form-item>
-                  <el-form-item label="comments" prop="Comments">
-                      <el-input  v-model="form.Comments" ></el-input>
+                  <el-form-item label="comments" prop="Comments" style="width: 100%;">
+                      <el-input  v-model="form.Comments" type="textarea"></el-input>
                   </el-form-item>
                 <div class="el-form-item__content" style="margin-left: 220px;">
                   <el-form-item>
-                        <el-button type="primary" @click="addData('form')">確定</el-button>
+                        <el-button type="primary" @click="submitForm('form')">確定</el-button>
                   </el-form-item>
                 </div>
-             </el-form>
-        </template>
-    </el-dialog>
-
-     <el-dialog :visible.sync="update" :close-on-click-modal="false">
-        <template>
-            <el-form ref="form1"  :model="form1" :rules="rules"  label-width="120px">
-                  <el-form-item label="Category" prop="Category">
-                      <el-select v-model="form1.Category" placeholder="请选择">
-                            <el-option
-                                v-for="item in categoryOptions"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                            </el-option>
-                      </el-select>
-                  </el-form-item>
-                  <el-form-item label="Class" prop="Class">
-                      <el-select v-model="form1.Class" placeholder="请选择">
-                            <el-option
-                                v-for="item in classOptions"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                            </el-option>
-                      </el-select>
-                  </el-form-item>
-                  <el-form-item label="Type" prop="Type">
-                      <el-input  v-model="form1.Type" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Covered range for case" prop="Covered_range_for_case">
-                      <el-input  v-model="form1.Covered_range_for_case" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Require State" prop="Require_State">
-                      <el-select v-model="form1.Require_State" placeholder="请选择">
-                            <el-option value="Must">Must</el-option>
-                            <el-option value="Optional">Optional</el-option>
-                      </el-select>
-                  </el-form-item>
-                  <el-form-item label="Comments" prop="Comments">
-                      <el-input  v-model="form1.Comments"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Remark" prop="Remark">
-                      <el-input  v-model="form1.Remark" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="ODM status" prop="ODM_status">
-                      <el-input  v-model="form1.ODM_status" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Purchase Plan" prop="Purchase_Plan">
-                      <el-input  v-model="form1.Purchase_Plan" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device Price" prop="Device_Price">
-                      <el-input  v-model="form1.Device_Price" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Act_Status" prop="Act_Status">
-                      <el-select v-model="form1.Act_Status" placeholder="请选择">
-                            <el-option value="Active">Must</el-option>
-                            <el-option value="Optional">Removed</el-option>
-                      </el-select>
-                  </el-form-item>
-                  <el-form-item label="Device #1" prop="Device1">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device1"
-                              :fetch-suggestions="querySearchDevice1"
-                              placeholder="请输入"
-                              @select="handleSelectDevice1">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status1">
-                      <el-input  v-model="form1.Status1" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period1">
-                      <el-input  v-model="form1.Purchase_period1" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #2" prop="Device2">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device2"
-                              :fetch-suggestions="querySearchDevice2"
-                              placeholder="请输入"
-                              @select="handleSelectDevice2">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status2">
-                      <el-input  v-model="form1.Status2" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period2">
-                      <el-input  v-model="form1.Purchase_period2" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #3" prop="Device3">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device3"
-                              :fetch-suggestions="querySearchDevice3"
-                              placeholder="请输入"
-                              @select="handleSelectDevice3">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status3">
-                      <el-input  v-model="form1.Status3" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period3">
-                      <el-input  v-model="form1.Purchase_period3" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #4" prop="Device4">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device4"
-                              :fetch-suggestions="querySearchDevice4"
-                              placeholder="请输入"
-                              @select="handleSelectDevice4">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status4">
-                      <el-input  v-model="form1.Status4" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period4">
-                      <el-input  v-model="form1.Purchase_period4" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #5" prop="Device5">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device5"
-                              :fetch-suggestions="querySearchDevice5"
-                              placeholder="请输入"
-                              @select="handleSelectDevice5">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status5">
-                      <el-input  v-model="form1.Status5" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period5">
-                      <el-input  v-model="form1.Purchase_period5" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #6" prop="Device6">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device6"
-                              :fetch-suggestions="querySearchDevice6"
-                              placeholder="请输入"
-                              @select="handleSelectDevice6">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status6">
-                      <el-input  v-model="form1.Status6" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period6">
-                      <el-input  v-model="form1.Purchase_period6" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #7" prop="Device7">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device7"
-                              :fetch-suggestions="querySearchDevice7"
-                              placeholder="请输入"
-                              @select="handleSelectDevice7">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status7">
-                      <el-input  v-model="form1.Status7" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period7">
-                      <el-input  v-model="form1.Purchase_period7" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #8" prop="Device8">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device8"
-                              :fetch-suggestions="querySearchDevice8"
-                              placeholder="请输入"
-                              @select="handleSelectDevice8">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status8">
-                      <el-input  v-model="form1.Status8" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period8">
-                      <el-input  v-model="form1.Purchase_period8" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #9" prop="Device9">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device9"
-                              :fetch-suggestions="querySearchDevice9"
-                              placeholder="请输入"
-                              @select="handleSelectDevice9">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status9">
-                      <el-input  v-model="form1.Status9" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period9">
-                      <el-input  v-model="form1.Purchase_period9" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Device #10" prop="Device10">
-                       <el-autocomplete
-                              class="inline-input"
-                              v-model="form1.Device10"
-                              :fetch-suggestions="querySearchDevice10"
-                              placeholder="请输入"
-                              @select="handleSelectDevice10">
-                       </el-autocomplete>
-                  </el-form-item>
-                  <el-form-item label="Status" prop="Status10">
-                      <el-input  v-model="form1.Status10" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買年限" prop="Purchase_period10">
-                      <el-input  v-model="form1.Purchase_period10" :disabled="true"></el-input>
-                  </el-form-item>
-
-{#                <div class="el-form-item__content" style="margin-left: 220px;">#}
-{#                  <el-form-item>#}
-{#                        <el-button type="primary" @click="updateData('form')">確定</el-button>#}
-{#                  </el-form-item>#}
-{#                </div>#}
-                  <div style="display: flex;justify-content: center;">
-                        <el-button type="primary" @click="updateData()">確定</el-button>
-                  </div>
              </el-form>
         </template>
     </el-dialog>
@@ -531,24 +342,49 @@ label{
 {#              <el-table-column type="selection" width="50" align="center" fixed></el-table-column>#}
               <el-table-column  v-if="this.permission == 1" label="Edit" align="center">
                   <template slot-scope="scope">
-                      <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
+                      <el-button v-if="scope.row.Ownerflag" style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="handleEdit(scope.row.id,scope.row)"></el-button>
                   </template>
               </el-table-column>
               <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
-              <el-table-column  prop="Category" label="大项" width="90" align="center"></el-table-column>
-              <el-table-column  prop="Product_Type" label="细项" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Category" label="大项" width="90" align="center">
+                  <template slot-scope="scope">
+                      <span  >${ allCategorys[scope.row.Category] }</span>
+                  </template>
+              </el-table-column>
+              <el-table-column  prop="Product_Type" label="细项" width="100" align="center">
+                  <template slot-scope="scope">
+                      <span  >${ allSubCategorys[scope.row.Product_Type] }</span>
+                  </template>
+              </el-table-column>
               <el-table-column  prop="Name" label="Name" width="100" align="center"></el-table-column>
               <el-table-column  prop="Num" label="號碼" width="180" align="center"></el-table-column>
               <el-table-column  prop="Manufacturer" label="廠商" width="80" align="center"></el-table-column>
               <el-table-column  prop="Cost" label="費用(CNY)" width="140" align="center"></el-table-column>
               <el-table-column  prop="Account" label="賬號" width="100" align="center"></el-table-column>
-              <el-table-column  prop="PW" label="密碼" width="110" align="center"></el-table-column>
+              <el-table-column  prop="PW" label="密碼" width="110" align="center">
+                  <template slot-scope="scope">
+                     <span  v-if="scope.row.Ownerflag || permission===1 && SSVIP_users===1">${ scope.row.PW }</span>
+                     <span  v-else="scope.row.Ownerflag || permission===1 && SSVIP_users===1">******</span>
+                  </template>
+              </el-table-column>
               <el-table-column  prop="Purchasing_Date" label="購買日期" width="120" align="center"></el-table-column>
               <el-table-column  prop="Duration" label="年限" width="80" align="center"></el-table-column>
               <el-table-column  prop="Department" label="部別" width="100" align="center"></el-table-column>
               <el-table-column  prop="Location" label="位置" width="120" align="center"></el-table-column>
               <el-table-column  prop="Asset_Num" label="資產編號" width="100" align="center"></el-table-column>
-              <el-table-column  prop="Owner" label="负责人" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Status" label="狀態" width="100" align="center"></el-table-column>
+              <el-table-column  prop="CreatedBy" label="创建人" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Owner" label="负责人" width="100" align="center">
+                  <template slot-scope="scope">
+                    <!-- 使用 div 循环，每个元素自然换行 -->
+                    <div
+                      v-for="(item, index) in scope.row.Owner"
+                      :key="index"
+                    >
+                      ${ item.username } (${ item.account })
+                    </div>
+                  </template>
+              </el-table-column>
               <el-table-column  prop="Mail" label="郵件地址" width="120" align="center"></el-table-column>
               <el-table-column  prop="Contact_info" label="聯係方式" width="100" align="center"></el-table-column>
               <el-table-column  prop="Comments" label="comments" align="center"></el-table-column>
@@ -580,56 +416,42 @@ label{
         el: '#app',
         delimiters: ['${', '}'],
         data: function () {
-              const generateData = _ => {
-                const data = [];
-                for (let i = 1; i <= 15; i++) {
-                  data.push({
-                    key: i,
-                    label: `备选项 ${ i }`,
-                    disabled: i % 4 === 0
-                  });
-                }
-                return data;
-              };
-
+            // 自定义浮点数验证规则
+                const validateFloat = (rule, value, callback) => {
+                  if (value === '') {
+                    callback(new Error('请输入浮点数'));
+                  } else if (!/^-?\d*\.?\d+$/.test(value)) {
+                    callback(new Error('请输入有效的浮点数'));
+                  } else {
+                    callback();
+                  }
+                };
             return {
-
-                OwnersOptions:[],
-                value: [1],
-                value4: [1],
-                renderFunc(h, option) {
-                  return <span>{ option.key } - { option.label }</span>;
-                },
-                excelFile:null,
-                uploadFile:null,
-                fileName:"未選擇文件",
+                allCategorys:{}, //将表格中的大类的id映射显示为name
+                allSubCategorys:{},//将表格中的细项的id映射显示为name
+                Categorys: [],  //级联下拉选项的所有值
+                SubCategorys: [], // 动态细项列表
+                selectedKeys: [], //["C1010S3"] 初始已选到右侧的账户（右侧默认显示 user003）
+                leftChecked: [],  //["C1010S3"] 左侧默认选中 user001（但未移动到右侧）
+                rightChecked: [], //["C1010S3"] 右侧默认选中 user003（已移动到右侧）
                 search:'',
                 Owner: '',
                 number: '',
                 sectionOwner: [],
                 loading:false,
-                selectDevice:[],
-                SectionProjectcode:[],
-                yearOptions:[],
                 categoryOptions:[],
                 ProductTypeOptions:[],
-                classOptions:[],
-                ProjectCodeOption:[],
-                ProjectcodeCompal:"",
+                StatusOptions:[],
                 datatype:'',
-                year:'',
                 category1:'',
-                class1:'',
                 editpermission: 0,
                 permission: 0,
-                customerOptions:{},
-                customerError:false,
-                department:'',
-                departmentOptions:[],
-                departmentError:false,
+                SSVIP_users: 0,
                 tableContent:[],
                 update:false,
-                add:false,
+                dialogVisible:false,
+                dialogTitle: '添加数据',
+                isEdit: false, // 标识当前是编辑还是新增
                 ID:"",
                 labelPosition:'right',
                 tableloading: false,
@@ -647,55 +469,15 @@ label{
                     Department: '',
                     Location: '',
                     Asset_Num: '',
-                    Owner: '',
+                    Status: '',
+                    CreatedBy: '',
+                    Owner: [],
+                    Mail: [],
                     Contact_info: '',
                     Comments: '',
 
                 },
 
-                form1: {
-                    Category: '',
-                    Class: '',
-                    Type: '',
-                    Covered_range_for_case: '',
-                    Require_State: '',
-                    Comments: '',
-                    Remark: '',
-                    ODM_status: '',
-                    Purchase_Plan: '',
-                    Act_Status: '',
-                    Device1: '',
-                    Status1: '',
-                    Purchase_period1: '',
-                    Device2: '',
-                    Status2: '',
-                    Purchase_period2: '',
-                    Device3: '',
-                    Status3: '',
-                    Purchase_period3: '',
-                    Device4: '',
-                    Status4: '',
-                    Purchase_period4: '',
-                    Device5: '',
-                    Status5: '',
-                    Purchase_period5: '',
-                    Device6: '',
-                    Status6: '',
-                    Purchase_period6: '',
-                    Device7: '',
-                    Status7: '',
-                    Purchase_period7: '',
-                    Device8: '',
-                    Status8: '',
-                    Purchase_period8: '',
-                    Device9: '',
-                    Status9: '',
-                    Purchase_period9: '',
-                    Device10: '',
-                    Status10: '',
-                    Purchase_period10: '',
-
-                },
                 formData:[],
                 editID: '',
                 multiDeleteVisible:false,
@@ -711,16 +493,43 @@ label{
                 totalNum: null,
                 errMsg:null,
                  rules: {
-                      Year: [
+                        Cost: [
+                          { required: true, validator: validateFloat, trigger: 'blur' }
+                        ],
+                      Category: [
                          { required: true, message: "不能為空", trigger:['blur','change'] }
                       ],
-                      DataType: [
+                      Product_Type: [
                          { required: true, message: "不能為空", trigger:['blur','change'] }
                       ],
-                      CG: [
+                      Name: [
                          { required: true, message: "不能為空", trigger:['blur','blur'] }
                       ],
-                      Customer: [
+                      Num: [
+                         { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
+                      ],
+                     Manufacturer: [
+                         { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
+                      ],
+                     Account: [
+                         { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
+                      ],
+                     PW: [
+                         { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
+                      ],
+                     Purchasing_Date: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                     Department: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                     Location: [
+                         { required: true, message: "不能為空", trigger:['blur','blur'] }
+                      ],
+                     Asset_Num: [
+                         { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
+                      ],
+                     Status: [
                          { required: true, message: "不能為空", trigger:['blur','blur'] }
                       ],
                     },
@@ -744,10 +553,15 @@ label{
                     this.sectionOwner=res.data.sectionOwner;
                     this.categoryOptions = res.data.categoryOptions;
                     this.ProductTypeOptions = res.data.ProductTypeOptions;
+                    this.StatusOptions = res.data.StatusOptions;
                     this.classOptions = res.data.classOptions;
                     this.selectDevice = res.data.DeviceOptions;
-                    this.OwnersOptions = res.data.OwnersOptions;
+                    this.OwnersOptions = res.data.OwnersOptions;//人员名单
                     this.permission = res.data.permission;
+                    this.SSVIP_users = res.data.SSVIP_users;
+                    this.Categorys = res.data.selectItem;
+                    this.allSubCategorys = res.data.allSubCategorys;
+                    this.allCategorys = res.data.allCategorys;
                     this.tableContent=res.data.content;
                     this.totalNum = this.tableContent.length;
                     this.elbuttonloading = false;
@@ -759,15 +573,16 @@ label{
             },
 
           handleChange(value, direction, movedKeys) {
-            console.log(value, direction, movedKeys);
+            console.log(value, direction, movedKeys,'movedKeys');
           },
 
-
-          createStateFilter(queryString) {
-            return (state) => {
-              return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-            };
-          },
+            handleFloatInput(value) {
+              this.form.Cost = value
+                .replace(/[^0-9.-]/g, '')           // 保留数字、小数点和负号
+                .replace(/(\..*)\./g, '$1')          // 禁止多个小数点
+                .replace(/(?!^)-/g, '')              // 只能有一个负号且在开头
+                .replace(/^(-)?0+(\d)/, '$1$2');    // 禁止前导零（可选）
+            },
 
           createFilter(queryString) {
             return (state) => {
@@ -788,395 +603,221 @@ label{
             {#console.log(this.number, 'this.number');#}
           },
 
-          querySearchDevice1(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update === true){
-                if(this.form1.Device1 == ""){
-                    this.form1.Status1 = ""
-                    this.form1.Purchase_period1 = ""
-                }
-            }
-            if(this.form1.Device1 === results[0].value){
-                    this.form1.Status1 = results[0].Status;
-                    this.form1.Purchase_period1 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice1(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status1 = this.Status;
-                  this.form1.Purchase_period1 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice2(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device2 == ""){
-                    this.form1.Status2 = ""
-                    this.form1.Purchase_period2 = ""
-                }
-            }
-            if(this.form1.Device2 === results[0].value){
-                    this.form1.Status2 = results[0].Status;
-                    this.form1.Purchase_period2 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice2(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status2 = this.Status;
-                  this.form1.Purchase_period2 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice3(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device3 == ""){
-                    this.form1.Status3 = ""
-                    this.form1.Purchase_period3 = ""
-                }
-            }
-            if(this.form1.Device3 === results[0].value){
-                    this.form1.Status3 = results[0].Status;
-                    this.form1.Purchase_period3 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice3(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status3 = this.Status;
-                  this.form1.Purchase_period3 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice4(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device4 == ""){
-                    this.form1.Status4 = ""
-                    this.form1.Purchase_period4 = ""
-                }
-            }
-            if(this.form1.Device4 === results[0].value){
-                    this.form1.Status4 = results[0].Status;
-                    this.form1.Purchase_period4 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice4(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status4 = this.Status;
-                  this.form1.Purchase_period4 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice5(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device5 == ""){
-                    this.form1.Status5 = ""
-                    this.form1.Purchase_period5 = ""
-                }
-            }
-            if(this.form1.Device5 === results[0].value){
-                    this.form1.Status5 = results[0].Status;
-                    this.form1.Purchase_period5 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice5(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status5 = this.Status;
-                  this.form1.Purchase_period5 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice6(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device6 == ""){
-                    this.form1.Status6 = ""
-                    this.form1.Purchase_period6 = ""
-                }
-            }
-            if(this.form1.Device6 === results[0].value){
-                    this.form1.Status6 = results[0].Status;
-                    this.form1.Purchase_period6 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice6(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status6 = this.Status;
-                  this.form1.Purchase_period6 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice7(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device7 == ""){
-                    this.form1.Status7 = ""
-                    this.form1.Purchase_period7 = ""
-                }
-            }
-            if(this.form1.Device7 === results[0].value){
-                    this.form1.Status7 = results[0].Status;
-                    this.form1.Purchase_period7 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice7(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status7 = this.Status;
-                  this.form1.Purchase_period7 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice8(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device8 == ""){
-                    this.form1.Status8 = ""
-                    this.form1.Purchase_period8 = ""
-                }
-            }
-            if(this.form1.Device8 === results[0].value){
-                    this.form1.Status8 = results[0].Status;
-                    this.form1.Purchase_period8 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice8(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status8 = this.Status;
-                  this.form1.Purchase_period8 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice9(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device9 == ""){
-                    this.form1.Status9 = ""
-                    this.form1.Purchase_period9 = ""
-                }
-            }
-            if(this.form1.Device9 === results[0].value){
-                    this.form1.Status9 = results[0].Status;
-                    this.form1.Purchase_period9 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice9(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status9 = this.Status;
-                  this.form1.Purchase_period9 = this.Purchase_period;
-              }
-          },
-
-          querySearchDevice10(queryString, cb) {
-            var selectDevice = this.selectDevice;
-            var results = queryString ? selectDevice.filter(this.createStateFilter(queryString)) : selectDevice;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-            if(this.update == true){
-                if(this.form1.Device10 == ""){
-                    this.form1.Status10 = ""
-                    this.form1.Purchase_period10 = ""
-                }
-            }
-            if(this.form1.Device10 === results[0].value){
-                    this.form1.Status10 = results[0].Status;
-                    this.form1.Purchase_period10 = results[0].Purchase_period;
-            }
-          },
-
-          handleSelectDevice10(item) {
-              this.Status = item.Status;
-              this.Purchase_period = item.Purchase_period;
-              if(this.update == true){
-                  this.form1.Status10 = this.Status;
-                  this.form1.Purchase_period10 = this.Purchase_period;
-              }
-          },
-
-            handleSpan({ row, column, rowIndex, columnIndex }) {
-                if (columnIndex === 2) {
-                  if (rowIndex === 0) {
-                    // 查找相同name的行数
-                    let rowspan = this.datas.filter(item => item.Category === row.Category).length;
-                    return {
-                      rowspan: rowspan,
-                      colspan: 1
-                    };
-                  } else {
-                    // 检查当前行是否与上一行name相同
-                    console.log(row.Category, "row.category")
-                    console.log(row, "row")
-                    console.log(this.datas[rowIndex - 1].Category, "row11111111111")
-                    if (row.Category === this.datas[rowIndex - 1].Category) {
-                      return {
-                        rowspan: 0,
-                        colspan: 0
-                      };
-                    } else {
-                      let rowspan = this.datas.filter(item => item.Category === row.Category).length;
-                      console.log(rowspan)
-                      return {
-                        rowspan: rowspan,
-                        colspan: 1
-                      };
-                    }
-                  }
-                }
-                if (columnIndex === 3) {
-                  if (rowIndex === 0) {
-                    // 查找相同name的行数
-                    let rowspan = this.datas.filter(item => item.Class === row.Class).length;
-                    return {
-                      rowspan: rowspan,
-                      colspan: 1
-                    };
-                  } else {
-                    // 检查当前行是否与上一行name相同
-                    if (row.Class === this.datas[rowIndex - 1].Class) {
-                      return {
-                        rowspan: 0,
-                        colspan: 0
-                      };
-                    } else {
-                      let rowspan = this.datas.filter(item => item.Class === row.Class).length;
-                      return {
-                        rowspan: rowspan,
-                        colspan: 1
-                      };
-                    }
-                  }
-                }
-                if (columnIndex === 5) {
-                  if (rowIndex === 0) {
-                    // 查找相同name的行数
-                    let rowspan = this.datas.filter(item => item.Covered_range_for_case === row.Covered_range_for_case).length;
-                    return {
-                      rowspan: rowspan,
-                      colspan: 1
-                    };
-                  } else {
-                    // 检查当前行是否与上一行name相同
-                    if (row.Covered_range_for_case === this.datas[rowIndex - 1].Covered_range_for_case) {
-                      return {
-                        rowspan: 0,
-                        colspan: 0
-                      };
-                    } else {
-                      let rowspan = this.datas.filter(item => item.Covered_range_for_case === row.Covered_range_for_case).length;
-                      return {
-                        rowspan: rowspan,
-                        colspan: 1
-                      };
-                    }
-                  }
-                }
-                if (columnIndex === 7) {
-                  if (rowIndex === 0) {
-                    // 查找相同name的行数
-                    let rowspan = this.datas.filter(item => item.Comments === row.Comments).length;
-                    return {
-                      rowspan: rowspan,
-                      colspan: 1
-                    };
-                  } else {
-                    // 检查当前行是否与上一行name相同
-                    if (row.Comments === this.datas[rowIndex - 1].Comments) {
-                      return {
-                        rowspan: 0,
-                        colspan: 0
-                      };
-                    } else {
-                      let rowspan = this.datas.filter(item => item.Comments === row.Comments).length;
-                      return {
-                        rowspan: rowspan,
-                        colspan: 1
-                      };
-                    }
-                  }
-                }
-                if (columnIndex === 8) {
-                  if (rowIndex === 0) {
-                    // 查找相同name的行数
-                    let rowspan = this.datas.filter(item => item.Remark === row.Remark).length;
-                    return {
-                      rowspan: rowspan,
-                      colspan: 1
-                    };
-                  } else {
-                    // 检查当前行是否与上一行name相同
-                    if (row.Remark === this.datas[rowIndex - 1].Remark) {
-                      return {
-                        rowspan: 0,
-                        colspan: 0
-                      };
-                    } else {
-                      let rowspan = this.datas.filter(item => item.Remark === row.Remark).length;
-                      return {
-                        rowspan: rowspan,
-                        colspan: 1
-                      };
-                    }
-                  }
-                }
+            // 添加按钮点击
+            handleAdd() {
+                this.isEdit = false;
+                  this.dialogTitle = '添加数据';
+                  this.resetForm();
+                  this.selectedKeys = [];
+                this.dialogVisible=true;
             },
 
-            AddInfo(){
-                this.add=true;
+            // 编辑按钮点击
+            handleEdit:function(id,row){
+                this.resetForm();
+                this.selectedKeys = row.Owner.map(item => item.account);
+                //console.log(this.selectedKeys,'this.selectedKeys');
+                this.isEdit = true;
+                  this.dialogTitle = '编辑数据';
+                  this.dialogVisible = true;
+                 {% comment %}this.form.Category=row.Category;
+                 this.form.Product_Type=row.Product_Type;{% endcomment %}
+                // 先设置大项
+                  this.form.Category = row.Category;
+
+                  // 手动触发分类变化来加载对应的细项
+                  this.handleCategoryChange(row.Category);
+
+                  // 短暂延迟确保SubCategorys已更新
+                  this.$nextTick(() => {
+                      this.form.Product_Type = row.Product_Type;
+                      this.form.Name = row.Name;
+                      this.form.Num = row.Num;
+                      this.form.Manufacturer = row.Manufacturer;
+                      this.form.Cost = row.Cost;
+                      this.form.Account = row.Account;
+                      this.form.PW = row.PW;
+                      this.form.Purchasing_Date = row.Purchasing_Date;
+                      this.form.Department = row.Department;
+                      this.form.Location = row.Location;
+                      this.form.Asset_Num = row.Asset_Num;
+                      this.form.Status = row.Status;
+                      //this.form.Owner=row.Owner;
+                      this.form.Mail = row.Mail;
+                      this.form.Contact_info = row.Contact_info;
+                      this.form.Comments = row.Comments;
+                      this.editID = id;
+                  })
+
+            },
+
+            handleCategoryChange(CategoryId) {
+              // 清空已选细项
+              this.form.Product_Type = ''
+              // 查找对应大项的细项列表
+              const selectedCategory = this.Categorys.find(
+                item => item.id === CategoryId
+              )
+              this.SubCategorys = selectedCategory ? selectedCategory.SubCategorys : []
+            },
+
+            // 提交表单
+            submitForm() {
+              this.$refs.form.validate(valid => {
+                if (valid) {
+                  if (this.isEdit) {
+                    // 执行编辑操作
+                    this.updateData()
+                  } else {
+                    // 执行新增操作
+                    this.addData()
+                  }
+                  this.dialogVisible = false
+                }
+              })
+            },
+
+            async  addData(){
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchCategory', this.$refs.Category.value)
+                    this.formData.append('searchOwner', this.$refs.Owner.value)
+                    this.formData.append('Category', this.$refs.form.model.Category)
+                    this.formData.append('Product_Type', this.$refs.form.model.Product_Type)
+                    this.formData.append('Name', this.$refs.form.model.Name)
+                    this.formData.append('Num', this.$refs.form.model.Num)
+                    this.formData.append('Manufacturer', this.$refs.form.model.Manufacturer)
+                    this.formData.append('Cost', this.$refs.form.model.Cost)
+                    this.formData.append('Account', this.$refs.form.model.Account)
+                    this.formData.append('PW', this.$refs.form.model.PW)
+                    this.formData.append('Purchasing_Date', this.$refs.form.model.Purchasing_Date)
+                    this.formData.append('Department', this.$refs.form.model.Department)
+                    this.formData.append('Location', this.$refs.form.model.Location)
+                    this.formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
+                    this.formData.append('Status', this.$refs.form.model.Status)
+                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
+                    this.formData.append('Mail', this.$refs.form.model.Mail)
+                    this.formData.append('Contact_info', this.$refs.form.model.Contact_info)
+                    this.formData.append('Comments', this.$refs.form.model.Comments)
+                    this.formData.append("action", 'addData');
+                    await axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.$nextTick(() => {
+                           this.$refs.tableRef.doLayout()
+                        })
+                        this.errMsg=res.data.errMsg;
+                        this.formData = new FormData();
+                        if(this.errMsg){
+                          this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                          });
+                          this.dialogVisible = true;
+                        }else{
+                          try {
+                                  this.$refs.form.resetFields();
+                          } catch (e) {
+
+                          }
+                          this.dialogVisible = false;
+                          this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                          })
+                        }
+
+                    })
+            },
+
+
+            async  updateData() {
+                    if (this.formData.length === 0) {
+                        this.formData = new FormData();
+                    }
+                    this.formData.append('searchCategory', this.$refs.Category.value)
+                    this.formData.append('searchOwner', this.$refs.Owner.value)
+                    this.formData.append('ID', this.editID)
+                    this.formData.append('Category', this.$refs.form.model.Category)
+                    this.formData.append('Product_Type', this.$refs.form.model.Product_Type)
+                    this.formData.append('Name', this.$refs.form.model.Name)
+                    this.formData.append('Num', this.$refs.form.model.Num)
+                    this.formData.append('Manufacturer', this.$refs.form.model.Manufacturer)
+                    this.formData.append('Cost', this.$refs.form.model.Cost)
+                    this.formData.append('Account', this.$refs.form.model.Account)
+                    this.formData.append('PW', this.$refs.form.model.PW)
+                    this.formData.append('Purchasing_Date', this.$refs.form.model.Purchasing_Date)
+                    this.formData.append('Department', this.$refs.form.model.Department)
+                    this.formData.append('Location', this.$refs.form.model.Location)
+                    this.formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
+                    this.formData.append('Status', this.$refs.form.model.Status)
+                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
+                    this.formData.append('Mail', this.$refs.form.model.Mail)
+                    this.formData.append('Contact_info', this.$refs.form.model.Contact_info)
+                    this.formData.append('Comments', this.$refs.form.model.Comments)
+                    this.formData.append("action", 'update');
+                    await axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                        } //改变头格式，原生默认上传json格式
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.$nextTick(() => {
+                           this.$refs.tableRef.doLayout()
+                        })
+                        this.errMsg=res.data.errMsg;
+                        this.resetForm();
+                        if(this.errMsg){
+                          this.$alert(this.errMsg, '提示', {
+                                type: 'warning',
+                          });
+                          this.update = true;
+                        }else{
+                          try {
+                                  this.$refs.form1.resetFields();
+                          } catch (e) {
+
+                          }
+                          this.update = false;
+                          this.$nextTick(() => {
+                                this.$refs.tableRef.doLayout()
+                          })
+                        }
+
+                    })
+            },
+
+            // 重置表单
+            resetForm() {
+              this.form = {
+                    Category: '',
+                    Product_Type: '',
+                    Name: '',
+                    Num: '',
+                    Manufacturer: '',
+                    Cost: '',
+                    Account: '',
+                    PW: '',
+                    Purchasing_Date: '',
+                    Department: '',
+                    Location: '',
+                    Asset_Num: '',
+                    Status: '',
+                    Owner: [],
+                    Contact_info: '',
+                    Comments: '',
+
+                };
+              if (this.$refs.form) {
+                this.$refs.form.resetFields()
+              }
             },
 
             exportExcel: function () {
@@ -1228,9 +869,6 @@ label{
              }, 100);
          },
 
-             AddInfo(){
-                    this.add=true;
-             },
 
             //上传搜索项：以此选项搜索符合条件的内容
             find:function(){
@@ -1247,6 +885,8 @@ label{
                   this.tableContent=res.data.content;
                   this.totalNum=this.tableContent.length;
                   this.permission=res.data.permission;
+                  this.SSVIP_users=res.data.SSVIP_users;
+                  this.Categorys=res.data.selectItem;
                   this.elbuttonloading = false;
                   this.tableloading = false;
                   this.yearOptions = res.data.yearOptions;
@@ -1258,6 +898,7 @@ label{
                 })
 
              },
+
 
             indexMethod(index) {
                   return index +1;
@@ -1415,215 +1056,6 @@ label{
       },
 
 
-            addData(){
-                    if (this.formData.length === 0) {
-                        this.formData = new FormData();
-                    }
-                    this.formData.append('searchYear', this.$refs.Year.value)
-                    this.formData.append('Year', this.$refs.form.model.Year)
-                    this.formData.append('Jan', this.$refs.form.model.Jan)
-                    this.formData.append('Feb', this.$refs.form.model.Feb)
-                    this.formData.append('Mar', this.$refs.form.model.Mar)
-                    this.formData.append('Apr', this.$refs.form.model.Apr)
-                    this.formData.append('May', this.$refs.form.model.May)
-                    this.formData.append('Jun', this.$refs.form.model.Jun)
-                    this.formData.append('July', this.$refs.form.model.July)
-                    this.formData.append('Aug', this.$refs.form.model.Aug)
-                    this.formData.append('Sep', this.$refs.form.model.Sep)
-                    this.formData.append('Oct', this.$refs.form.model.Oct)
-                    this.formData.append('Nov', this.$refs.form.model.Nov)
-                    this.formData.append('Dec', this.$refs.form.model.Dec)
-                    this.formData.append("action", 'addData');
-                    axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableContent = res.data.content;
-                        this.totalNum = this.tableContent.length;
-                        this.$nextTick(() => {
-                           this.$refs.tableRef.doLayout()
-                        })
-                        this.errMsg=res.data.errMsg;
-                        this.formData = new FormData();
-                        if(this.errMsg){
-                          this.$alert(this.errMsg, '提示', {
-                                type: 'warning',
-                          });
-                          this.add = true;
-                        }else{
-                          try {
-                                  this.$refs.form.resetFields();
-                          } catch (e) {
-
-                          }
-                          this.add = false;
-                          this.$nextTick(() => {
-                                this.$refs.tableRef.doLayout()
-                          })
-                        }
-
-                    })
-            },
-
-
-            updateData() {
-                    if (this.formData.length === 0) {
-                        this.formData = new FormData();
-                    }
-                    this.formData.append('searchCategory', this.$refs.Category.value)
-                    this.formData.append('searchClass', this.$refs.Class.value)
-                    this.formData.append('ID', this.editID)
-                    this.formData.append('Category', this.$refs.form1.model.Category)
-                    this.formData.append('Class', this.$refs.form1.model.Class)
-                    this.formData.append('Type', this.$refs.form1.model.Type)
-                    this.formData.append('Covered_range_for_case', this.$refs.form1.model.Covered_range_for_case)
-                    this.formData.append('Require_State', this.$refs.form1.model.Require_State)
-                    this.formData.append('Comments', this.$refs.form1.model.Comments)
-                    this.formData.append('Remark', this.$refs.form1.model.Remark)
-                    this.formData.append('ODM_status', this.$refs.form1.model.ODM_status)
-                    this.formData.append('Purchase_Plan', this.$refs.form1.model.Purchase_Plan)
-                    this.formData.append('Act_Status', this.$refs.form1.model.Act_Status)
-                    this.formData.append('Device1', this.$refs.form1.model.Device1)
-                    this.formData.append('Status1', this.$refs.form1.model.Status1)
-                    this.formData.append('Purchase_period1', this.$refs.form1.model.Purchase_period1)
-                    this.formData.append('Device2', this.$refs.form1.model.Device2)
-                    this.formData.append('Status2', this.$refs.form1.model.Status2)
-                    this.formData.append('Purchase_period2', this.$refs.form1.model.Purchase_period2)
-                    this.formData.append('Device3', this.$refs.form1.model.Device3)
-                    this.formData.append('Status3', this.$refs.form1.model.Status3)
-                    this.formData.append('Purchase_period3', this.$refs.form1.model.Purchase_period3)
-                    this.formData.append('Device4', this.$refs.form1.model.Device4)
-                    this.formData.append('Status4', this.$refs.form1.model.Status4)
-                    this.formData.append('Purchase_period4', this.$refs.form1.model.Purchase_period4)
-                    this.formData.append('Device5', this.$refs.form1.model.Device5)
-                    this.formData.append('Status5', this.$refs.form1.model.Status5)
-                    this.formData.append('Purchase_period5', this.$refs.form1.model.Purchase_period5)
-                    this.formData.append('Device6', this.$refs.form1.model.Device6)
-                    this.formData.append('Status6', this.$refs.form1.model.Status6)
-                    this.formData.append('Purchase_period6', this.$refs.form1.model.Purchase_period6)
-                    this.formData.append('Device7', this.$refs.form1.model.Device7)
-                    this.formData.append('Status7', this.$refs.form1.model.Status7)
-                    this.formData.append('Purchase_period7', this.$refs.form1.model.Purchase_period7)
-                    this.formData.append('Device8', this.$refs.form1.model.Device8)
-                    this.formData.append('Status8', this.$refs.form1.model.Status8)
-                    this.formData.append('Purchase_period8', this.$refs.form1.model.Purchase_period8)
-                    this.formData.append('Device9', this.$refs.form1.model.Device9)
-                    this.formData.append('Status9', this.$refs.form1.model.Status9)
-                    this.formData.append('Purchase_period9', this.$refs.form1.model.Purchase_period9)
-                    this.formData.append('Device10', this.$refs.form1.model.Device10)
-                    this.formData.append('Status10', this.$refs.form1.model.Status10)
-                    this.formData.append('Purchase_period10', this.$refs.form1.model.Purchase_period10)
-                    this.formData.append("action", 'update');
-                    axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableContent = res.data.content;
-                        this.totalNum = this.tableContent.length;
-                        this.$nextTick(() => {
-                           this.$refs.tableRef.doLayout()
-                        })
-                        this.errMsg=res.data.errMsg;
-                        this.formData = new FormData();
-                        if(this.errMsg){
-                          this.$alert(this.errMsg, '提示', {
-                                type: 'warning',
-                          });
-                          this.update = true;
-                        }else{
-                          try {
-                                  this.$refs.form1.resetFields();
-                          } catch (e) {
-
-                          }
-                          this.update = false;
-                          this.$nextTick(() => {
-                                this.$refs.tableRef.doLayout()
-                          })
-                        }
-
-                    })
-            },
-
-            alertID:function(id,row){
-                 this.update=true;
-                 this.form1.Category=row.Category;
-                 this.form1.Class=row.Class;
-                 this.form1.Type=row.Type;
-                 this.form1.Covered_range_for_case=row.Covered_range_for_case;
-                 this.form1.Require_State=row.Require_State;
-                 this.form1.Comments=row.Comments;
-                 this.form1.Remark=row.Remark;
-                 this.form1.ODM_status=row.ODM_status;
-                 this.form1.Purchase_Plan=row.Purchase_Plan;
-                 this.form1.Act_Status=row.Act_Status;
-                 this.form1.Device1=row.Device1;
-                 this.form1.Status1=row.Status1;
-                 this.form1.Purchase_period1=row.Purchase_period1;
-                 this.form1.Device2=row.Device2;
-                 this.form1.Status2=row.Status2;
-                 this.form1.Purchase_period2=row.Purchase_period2;
-                 this.form1.Device3=row.Device3;
-                 this.form1.Status3=row.Status3;
-                 this.form1.Purchase_period3=row.Purchase_period3;
-                 this.form1.Device4=row.Device4;
-                 this.form1.Status4=row.Status4;
-                 this.form1.Purchase_period4=row.Purchase_period4;
-                 this.form1.Device5=row.Device5;
-                 this.form1.Status5=row.Status5;
-                 this.form1.Purchase_period5=row.Purchase_period5;
-                 this.form1.Device6=row.Device6;
-                 this.form1.Status6=row.Status6;
-                 this.form1.Purchase_period6=row.Purchase_period6;
-                 this.form1.Device7=row.Device7;
-                 this.form1.Status7=row.Status7;
-                 this.form1.Purchase_period7=row.Purchase_period7;
-                 this.form1.Device8=row.Device8;
-                 this.form1.Status8=row.Status8;
-                 this.form1.Purchase_period8=row.Purchase_period8;
-                 this.form1.Device9=row.Device9;
-                 this.form1.Status9=row.Status9;
-                 this.form1.Purchase_period9=row.Purchase_period9;
-                 this.form1.Device10=row.Device10;
-                 this.form1.Status10=row.Status10;
-                 this.form1.Purchase_period10=row.Purchase_period10;
-                 this.editID = id;
-
-            },
-    {% comment %}
-            alertID:function(id,row){
-                if(this.permission === 1){
-                     this.update=true;
-                     this.form1.Year=row.Year;
-                     this.form1.Jan=row.Jan;
-                     this.form1.Feb=row.Feb;
-                     this.form1.Mar=row.Mar;
-                     this.form1.Apr=row.Apr;
-                     this.form1.May=row.May;
-                     this.form1.Jun=row.Jun;
-                     this.form1.July=row.July;
-                     this.form1.Aug=row.Aug;
-                     this.form1.Sep=row.Sep;
-                     this.form1.Oct=row.Oct;
-                     this.form1.Nov=row.Nov;
-                     this.form1.Dec=row.Dec;
-                     this.editID = id;
-                    }else{
-                           this.update=false;
-                           this.$message({
-                              showClose: true,
-                              message: '無編輯權限！',
-                              type: 'warning'
-                            });
-                   }
-            },
-
-
-        {% endcomment %}
             //分页
             handleSizeChange(val) {
                   //console.log(`每页 ${val} 条`);
