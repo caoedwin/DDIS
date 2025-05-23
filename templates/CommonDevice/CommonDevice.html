@@ -155,6 +155,23 @@ label{
     margin-left: 20px;
     padding: 6px 5px;
   }
+/*穿梭框宽度等样式*/
+.el-transfer-panel {
+    border: 1px solid #EBEEF5;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #FFF;
+    display: inline-block;
+    vertical-align: middle;
+    width: 300px;
+    max-height: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+/*穿梭框字体大小样式*/
+.el-checkbox__label {
+    font-size: 16px;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -208,84 +225,127 @@ label{
 {#    </div>#}
 
      <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="80%">
+         <el-radio-group v-model="labelPosition" size="small">
+          <el-radio-button label="left">左对齐</el-radio-button>
+          <el-radio-button label="right">右对齐</el-radio-button>
+          <el-radio-button label="top">顶部对齐</el-radio-button>
+        </el-radio-group>
         <template>
-            <el-form ref="form"  :model="form" :rules="rules" label-width="100px" style="width: 100%">
-                  <!-- 大项选择 -->
-                    <el-form-item label="大项">
-                      <el-select
-                        v-model="form.Category"
-                        placeholder="请选择大项"
-                        @change="handleCategoryChange"
-                      >
-                        <el-option
-                          v-for="item in Categorys"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                        />
-                      </el-select>
-                    </el-form-item>
+            <el-form :label-position="labelPosition" ref="form"  :model="form" :rules="rules" label-width="100px" style="width: 100%">
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                          <!-- 大项选择 -->
+                            <el-form-item label="大项" prop="Category" style="width: 100%;">
+                              <el-select
+                                v-model="form.Category"
+                                placeholder="请选择大项"
+                                @change="handleCategoryChange"
+                              >
+                                <el-option
+                                  v-for="item in Categorys"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item.id"
+                                />
+                              </el-select>
+                            </el-form-item>
+                        </el-col>
+                    <el-col :span="12">
 
-                    <!-- 细项选择 -->
-                    <el-form-item label="细项">
-                      <el-select
-                        v-model="form.Product_Type"
-                        placeholder="请先选择大项"
-                        :disabled="!SubCategorys.length"
-                      >
-                        <el-option
-                          v-for="item in SubCategorys"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                        />
-                      </el-select>
-                    </el-form-item>
-                  <el-form-item label="Name" prop="Name" style="width: 100%;">
-                      <el-input  v-model="form.Name" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="號碼" prop="Num" style="width: 100%;">
-                      <el-input  v-model="form.Num" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="廠商" prop="Manufacturer" style="width: 100%;">
-                      <el-input  v-model="form.Manufacturer" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="費用(CNY)" prop="Cost" style="width: 100%;">
-                      <el-input  v-model="form.Cost" @input="handleFloatInput"></el-input>
-                  </el-form-item>
-                  <el-form-item label="賬號" prop="Account" style="width: 100%;">
-                      <el-input  v-model="form.Account" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="密碼" prop="PW" style="width: 100%;">
-                      <el-input  v-model="form.PW" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="購買日期" prop="Purchasing_Date" style="width: 100%;">
-                      <el-date-picker
-                         v-model="form.Purchasing_Date"
-                         type="date"
-                         value-format="yyyy-MM-dd"
-                         placeholder="选择日期">
-                      </el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="部別" prop="Department" style="width: 100%;">
-                      <el-input  v-model="form.Department" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="位置" prop="Location" style="width: 100%;">
-                      <el-input  v-model="form.Location" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="資產編號" prop="Asset_Num"style="width: 100%;">
-                      <el-input  v-model="form.Asset_Num" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="狀態" prop="Status" style="width: 100%;">
-                      <el-select v-model="form.Status" placeholder="请选择">
-                            <el-option
-                                v-for="item in StatusOptions"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                            </el-option>
-                      </el-select>
-                  </el-form-item>
+                            <!-- 细项选择 -->
+                            <el-form-item label="细项" prop="Product_Type" style="width: 100%;">
+                              <el-select
+                                v-model="form.Product_Type"
+                                placeholder="请先选择细项"
+                                :disabled="!SubCategorys.length"
+                              >
+                                <el-option
+                                  v-for="item in SubCategorys"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item.id"
+                                />
+                              </el-select>
+                            </el-form-item>
+                         </el-col>
+                     </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="Name" prop="Name" style="width: 100%;">
+                          <el-input  v-model="form.Name" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="號碼" prop="Num" style="width: 100%;">
+                          <el-input  v-model="form.Num" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                 </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="廠商" prop="Manufacturer" style="width: 100%;">
+                          <el-input  v-model="form.Manufacturer" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="費用(CNY)" prop="Cost" style="width: 100%;">
+                          <el-input  v-model="form.Cost" @input="handleFloatInput"></el-input>
+                      </el-form-item>
+                    </el-col>
+                 </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="賬號" prop="Account" style="width: 100%;">
+                          <el-input  v-model="form.Account" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="密碼" prop="PW" style="width: 100%;">
+                          <el-input  v-model="form.PW" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="購買日期" prop="Purchasing_Date" style="width: 100%;">
+                          <el-date-picker
+                             v-model="form.Purchasing_Date"
+                             type="date"
+                             value-format="yyyy-MM-dd"
+                             placeholder="选择日期">
+                          </el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="部別" prop="Department" style="width: 100%;">
+                          <el-input  v-model="form.Department" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="8">
+                      <el-form-item label="位置" prop="Location" style="width: 100%;">
+                          <el-input  v-model="form.Location" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="資產編號" prop="Asset_Num"style="width: 100%;">
+                          <el-input  v-model="form.Asset_Num" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="狀態" prop="Status" style="width: 100%;">
+                          <el-select v-model="form.Status" placeholder="请选择">
+                                <el-option
+                                    v-for="item in StatusOptions"
+                                    :key="item"
+                                    :label="item"
+                                    :value="item">
+                                </el-option>
+                          </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                   <el-form-item label="负责人" prop="Owner" style="width: 100%;">
                     <el-transfer
                       style="text-align: left; display: inline-block"
@@ -305,18 +365,28 @@ label{
                         key: 'account',
                         label: 'username'
                       }"
+                      {% comment %}:list-style="{
+                    width: '300px',  // 增大宽度
+                    height: '400px'
+                  }"{% endcomment %}
                     >
                         <span slot-scope="{ option }">${ option.username } - ${ option.account }</span>
-                      <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
-                      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
+                      {% comment %}<el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
+                      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>{% endcomment %}
                     </el-transfer>
                   </el-form-item>
-                <el-form-item label="郵件地址" prop="Mail" style="width: 100%;">
-                      <el-input  v-model="form.Mail" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="聯係方式" prop="Contact_info" style="width: 100%;">
-                      <el-input  v-model="form.Contact_info" ></el-input>
-                  </el-form-item>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="郵件地址" prop="Mail" style="width: 100%;">
+                          <el-input  v-model="form.Mail" :disabled="true"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="聯係方式" prop="Contact_info" style="width: 100%;">
+                          <el-input  v-model="form.Contact_info" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
                   <el-form-item label="comments" prop="Comments" style="width: 100%;">
                       <el-input  v-model="form.Comments" type="textarea"></el-input>
                   </el-form-item>
@@ -427,6 +497,7 @@ label{
                   }
                 };
             return {
+                labelPosition: 'right',
                 allCategorys:{}, //将表格中的大类的id映射显示为name
                 allSubCategorys:{},//将表格中的细项的id映射显示为name
                 Categorys: [],  //级联下拉选项的所有值
