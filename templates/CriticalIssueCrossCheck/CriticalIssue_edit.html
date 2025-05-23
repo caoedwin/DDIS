@@ -477,7 +477,7 @@ tbody tr td:last-child {
                 this.elbuttonloading = true;
                 this.tableloading = true;
                 let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
-                axios.post("/PersonalInfo/PersonalInfo-search/", Qs.stringify(data), {
+                axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", Qs.stringify(data), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
                     this.tableContent1=res.data.content1;
@@ -510,7 +510,7 @@ tbody tr td:last-child {
                 this.YearTitle = this.$refs.Year.value;
                 let data ={"isGetData":"SEARCH","Year":Year,
                            "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
-               axios.post("/PersonalInfo/PersonalInfo-search/",Qs.stringify(data), {
+               axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/",Qs.stringify(data), {
                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
                     this.tableContent1=res.data.content1;

@@ -122,7 +122,7 @@ def CommonDevice_edit(request):
             SSVIP_users = 1
         if i == 'admin' or i == 'PublicAreaAdmin':
             permission = 1
-    mock_obj = CommonDevice.objects.all()
+    mock_obj = CommonDevice.objects.all().order_by('-created_at')
     if request.method == "POST":
         if request.POST:
             ch_dic = {}
@@ -133,7 +133,7 @@ def CommonDevice_edit(request):
                     user = UserInfo.objects.filter(account=request.POST.get('OwnerNumber')).first()
                     ch_dic['Owner'] = user
                 if ch_dic:
-                    mock_obj = CommonDevice.objects.filter(**ch_dic)
+                    mock_obj = CommonDevice.objects.filter(**ch_dic).order_by('-created_at')
             if request.POST.get('action') == 'addData':
                 # ID = request.POST.get('ID')
                 Owners = json.loads(request.POST.get('Owner'))
@@ -187,10 +187,10 @@ def CommonDevice_edit(request):
                 if request.POST.get('searchCategory'):
                     check_dic['Category'] = request.POST.get('searchCategory')
                 if request.POST.get('searchOwner'):
-                    user = UserInfo.objects.filter(account=request.POST.get('searchOwner')).first()
+                    user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
                     check_dic['Owner'] = user
                 if check_dic:
-                    mock_obj = CommonDevice.objects.filter(**check_dic)
+                    mock_obj = CommonDevice.objects.filter(**check_dic).order_by('-created_at')
             if request.POST.get('action') == 'update':
                 ID = request.POST.get('ID')
                 Owners = json.loads(request.POST.get('Owner'))
@@ -247,10 +247,10 @@ def CommonDevice_edit(request):
                 if request.POST.get('searchCategory'):
                     check_dic['Category'] = request.POST.get('searchCategory')
                 if request.POST.get('searchOwner'):
-                    user = UserInfo.objects.filter(account=request.POST.get('searchOwner')).first()
+                    user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
                     check_dic['Owner'] = user
                 if check_dic:
-                    mock_obj = CommonDevice.objects.filter(**check_dic)
+                    mock_obj = CommonDevice.objects.filter(**check_dic).order_by('-created_at')
 
         else:
             try:
@@ -259,10 +259,20 @@ def CommonDevice_edit(request):
             except:
                 pass
             else:
-                if 'Delete' in str(request.body):
+                if 'delete' in str(request.body):
                     responseData = json.loads(request.body)
-                    # print(responseData['DeleteId'])
-                    pass
+                    for i in responseData['params']:
+                        print(i)
+                        CommonDevice.objects.get(id=i).delete()
+                    # mock_data
+                    check_dic = {}
+                    if request.POST.get('searchCategory'):
+                        check_dic['Category'] = responseData['searchCategory']
+                    if responseData['searchOwner']:
+                        user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
+                        check_dic['Owner'] = user
+                    if check_dic:
+                        mock_obj = CommonDevice.objects.filter(**check_dic).order_by('-created_at')
 
         # mock_data
         for i in mock_obj:

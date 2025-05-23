@@ -205,7 +205,8 @@ label{
            <div style="margin-left: 100px;">
                  <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
                  <el-button  @click="handleAdd" type="success" >Add</el-button>
-{#                 <el-button  @click="AddInfo" type="success" >Edit</el-button>#}
+                 <el-button @click="editData()" type="success" v-cloak style="margin-left: 20px;">Edit</el-button>
+                 <el-button type="danger"  style="height:40px;float: right;" @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除</el-button>
                  <el-button @click="exportExcel"  type="info" v-cloak style="height:40px">導出</el-button>
 {#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
 {#                 <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak style="margin-left: 20px;width: 80px;">刪除</el-button>#}
@@ -410,11 +411,13 @@ label{
         element-loading-text="數據更新中，請稍後"
         border>
 {#              <el-table-column type="selection" width="50" align="center" fixed></el-table-column>#}
-              <el-table-column  v-if="this.permission == 1" label="Edit" align="center">
+              <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>
+                {% comment %}用右上角的编辑按钮了，有删除时，又有多选框，又有每一条的删除功能页面很拥挤{% endcomment %}
+              {% comment %}<el-table-column  v-if="this.permission == 1" label="Edit" align="center">
                   <template slot-scope="scope">
                       <el-button v-if="scope.row.Ownerflag" style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="handleEdit(scope.row.id,scope.row)"></el-button>
                   </template>
-              </el-table-column>
+              </el-table-column>{% endcomment %}
               <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
               <el-table-column  prop="Category" label="大项" width="90" align="center">
                   <template slot-scope="scope">
@@ -506,7 +509,7 @@ label{
                 leftChecked: [],  //["C1010S3"] 左侧默认选中 user001（但未移动到右侧）
                 rightChecked: [], //["C1010S3"] 右侧默认选中 user003（已移动到右侧）
                 search:'',
-                Owner: '',
+                Owner: '',//搜索按钮前面的负责人绑定的值，用来记录搜索条件-负责人的值，是字符串
                 number: '',
                 sectionOwner: [],
                 loading:false,
@@ -524,7 +527,6 @@ label{
                 dialogTitle: '添加数据',
                 isEdit: false, // 标识当前是编辑还是新增
                 ID:"",
-                labelPosition:'right',
                 tableloading: false,
                 elbuttonloading: false,
                 form: {
@@ -542,7 +544,7 @@ label{
                     Asset_Num: '',
                     Status: '',
                     CreatedBy: '',
-                    Owner: [],
+                    Owner: [],//用来记录form表单中的负责人列表最后交给后端存入数据库的，是数组结构，不要跟前面的Owner字符串混淆了
                     Mail: [],
                     Contact_info: '',
                     Comments: '',
@@ -603,6 +605,7 @@ label{
                      Status: [
                          { required: true, message: "不能為空", trigger:['blur','blur'] }
                       ],
+
                     },
 
 
@@ -736,6 +739,10 @@ label{
             submitForm() {
               this.$refs.form.validate(valid => {
                 if (valid) {
+                    if (this.selectedKeys.length === 0) {
+                    this.$message.error('请至少选择一个负责人');
+                    return;
+                  }
                   if (this.isEdit) {
                     // 执行编辑操作
                     this.updateData()
@@ -754,6 +761,7 @@ label{
                     }
                     this.formData.append('searchCategory', this.$refs.Category.value)
                     this.formData.append('searchOwner', this.$refs.Owner.value)
+                    this.formData.append('searchOwnerNumber', this.number)
                     this.formData.append('Category', this.$refs.form.model.Category)
                     this.formData.append('Product_Type', this.$refs.form.model.Product_Type)
                     this.formData.append('Name', this.$refs.form.model.Name)
@@ -813,6 +821,7 @@ label{
                     }
                     this.formData.append('searchCategory', this.$refs.Category.value)
                     this.formData.append('searchOwner', this.$refs.Owner.value)
+                    this.formData.append('searchOwnerNumber', this.number)
                     this.formData.append('ID', this.editID)
                     this.formData.append('Category', this.$refs.form.model.Category)
                     this.formData.append('Product_Type', this.$refs.form.model.Product_Type)
@@ -940,6 +949,111 @@ label{
              }, 100);
          },
 
+            //判断勾选
+            selectable(row, index) {
+                if (row.Ownerflag == 1 && this.permission == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
+            Delete() {
+                    if(this.multipleSelection.length == 0){
+                             this.$message({
+                                     message: '請至少選擇一條數據！',
+                                     type: 'warning'
+                             });
+
+                    }else{
+                        var warning=confirm('此操作将永久删除该条数据, 是否继续?')
+                        if(warning) {
+                             {#this.multiDeleteVisible = false;#}
+                             let checkArr = this.multipleSelection;
+                             let params = [];
+                             let self = this;
+                             let Category = this.$refs.Category.value;
+                             let Owner = this.$refs.Owner.value;
+                             let OwnerNumber = this.number;
+                             checkArr.forEach(function (item) {
+                                 params.push(item.id);
+                        });
+                           let data = {
+                               "isGetData": "delete",
+                               "searchCategory":Category,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,
+                               "params": params,
+                               "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                           };
+                           axios.post('/CommonDevice/CommonDevice_edit/', data).then((res) =>{
+                                 this.tableData2 = res.data.content2;
+                                 self.$message({
+                                     message: '删除成功',
+                                     type: 'success'
+                                 });
+                         //this.tableData2 = res.data.content2;
+                     })
+                     }else{
+                         return false;
+                     }
+                    }
+                 },
+
+            editData(){
+                if(this.multipleSelection.length < 1){
+                      this.$alert("请选择一条数据！", '提示', {
+                            type: 'warning',
+                      });
+                }else if(this.multipleSelection.length === 1){
+                    if(this.permission === 1){
+                        console.log(this.multipleSelection[0],'this.multipleSelection[0]')
+                        this.resetForm();
+                        this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
+                        //console.log(this.selectedKeys,'this.selectedKeys');
+                        this.isEdit = true;
+                          this.dialogTitle = '编辑数据';
+                          this.dialogVisible = true;
+                         {% comment %}this.form.Category=row.Category;
+                         this.form.Product_Type=row.Product_Type;{% endcomment %}
+                        // 先设置大项
+                          this.form.Category = this.multipleSelection[0].Category;
+
+                          // 手动触发分类变化来加载对应的细项
+                          this.handleCategoryChange(this.multipleSelection[0].Category);
+                          console.log(this.multipleSelection[0], this.form.Product_Type,'this.form.Product_Type')
+                          // 短暂延迟确保SubCategorys已更新
+                          //this.$nextTick(() => {延迟后this.multipleSelection[0]就变成undefine了。
+                              console.log(this.multipleSelection[0], this.form.Product_Type,'this.form.Product_Type')
+                              this.form.Product_Type = this.multipleSelection[0].Product_Type;
+                              this.form.Name = this.multipleSelection[0].Name;
+                              this.form.Num = this.multipleSelection[0].Num;
+                              this.form.Manufacturer = this.multipleSelection[0].Manufacturer;
+                              this.form.Cost = this.multipleSelection[0].Cost;
+                              this.form.Account = this.multipleSelection[0].Account;
+                              this.form.PW = this.multipleSelection[0].PW;
+                              this.form.Purchasing_Date = this.multipleSelection[0].Purchasing_Date;
+                              this.form.Department = this.multipleSelection[0].Department;
+                              this.form.Location = this.multipleSelection[0].Location;
+                              this.form.Asset_Num = this.multipleSelection[0].Asset_Num;
+                              this.form.Status = this.multipleSelection[0].Status;
+                              //this.form.Owner=row.Owner;
+                              this.form.Mail = this.multipleSelection[0].Mail;
+                              this.form.Contact_info = this.multipleSelection[0].Contact_info;
+                              this.form.Comments = this.multipleSelection[0].Comments;
+                              this.editID = this.multipleSelection[0].id;
+                          //})
+                    }else {
+                      this.$alert("无编辑权限！", '提示', {
+                            type: 'warning',
+                      });
+                    }
+
+                }else {
+                      this.$alert("只能选择一条数据！", '提示', {
+                            type: 'warning',
+                      });
+                }
+
+            },
 
             //上传搜索项：以此选项搜索符合条件的内容
             find:function(){
