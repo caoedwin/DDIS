@@ -29,7 +29,7 @@ def CommonDevice_edit(request):
 
     allSubCategorys = {}
     for i in SubCategory.objects.all():
-        print(i)
+        # print(i)
         allSubCategorys[i.id] = i.name
 
     selectItem = [
@@ -269,11 +269,11 @@ def CommonDevice_edit(request):
             Duration = ''
             if i.Purchasing_Date:
                 if datetime.datetime.now().date() > i.Purchasing_Date:
-                    Useyears = round(
+                    Duration = round(
                         float(
                             str((datetime.datetime.now().date() - i.Purchasing_Date)).split(' ')[
                                 0]) / 365,
-                        1)
+                        2)
             Owner_list = []
             Ownerflag = False
             for j in i.Owner.all():
@@ -312,7 +312,7 @@ def CommonDevice_edit(request):
                     'CreatedBy': UserInfo.objects.filter(account=i.Creator).first().username if UserInfo.objects.filter(account=i.Creator).first() else '',
                 }
             )
-        print(mock_data)
+        # print(mock_data)
         data = {
             "errMsg": errMsg,
             "sectionOwner": sectionOwner,
