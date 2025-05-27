@@ -84,7 +84,7 @@ def CommonDevice_edit(request):
     for i in UserInfo.objects.all():
         OwnersOptions.append(
             {
-                "account": i.account, "username": i.username, "id": i.id
+                "account": i.account, "username": i.username, "disabled": False if i.is_active else True, "id": i.id,
             }
         )
 

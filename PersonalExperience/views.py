@@ -736,7 +736,7 @@ def Summary(request):
                 account_Now_list = list(UserInfo.objects.all().values("account").distinct())
                 # print(account_Now_list)
                 # LNV注册
-                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer='C38').values("GroupNum",
+                for i in PersonalInfo.objects.filter(Customer='C38').values("GroupNum",
                                                                                          "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
@@ -747,7 +747,7 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True, "is_staff": False, "is_SVPuser": False,
+                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)
@@ -755,7 +755,7 @@ def Summary(request):
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role).first(), )#移除用remove
                 # CQ 注册
-                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer__in=['CQABO']).values("GroupNum",
+                for i in PersonalInfo.objects.filter(Customer__in=['CQABO']).values("GroupNum",
                                                                                                  "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
@@ -766,7 +766,7 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True, "is_staff": False, "is_SVPuser": False,
+                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)
@@ -774,7 +774,7 @@ def Summary(request):
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role_CQABO).first(), )#移除用remove
                 # A31 注册
-                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer__in=['A31']).values("GroupNum",
+                for i in PersonalInfo.objects.filter(Customer__in=['A31']).values("GroupNum",
                                                                                                  "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
@@ -785,7 +785,7 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True, "is_staff": False, "is_SVPuser": False,
+                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)
@@ -793,7 +793,7 @@ def Summary(request):
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role_A31).first(), )#移除用remove
                 # A32 注册
-                for i in PersonalInfo.objects.exclude(Status="離職").filter(Status="在職", Customer__in=['A32']).values("GroupNum",
+                for i in PersonalInfo.objects.filter(Customer__in=['A32']).values("GroupNum",
                                                                                                "EngName").distinct():
                     if {'account': i["GroupNum"]} in account_Now_list:
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
@@ -804,7 +804,7 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True, "is_staff": False, "is_SVPuser": False,
+                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)

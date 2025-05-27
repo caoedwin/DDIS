@@ -364,7 +364,8 @@ label{
                       :data="this.OwnersOptions"
                     :props="{
                         key: 'account',
-                        label: 'username'
+                        label: 'username',
+                        {% comment %}disabled:'isdisabled'{% endcomment %}{% comment %}后端返回的字段中是diabled，与原来的Transfer 仅能识别数据项中的 key、label 和 disabled 字段，中同名，就不需要写在:props中了{% endcomment %}
                       }"
                       {% comment %}:list-style="{
                     width: '300px',  // 增大宽度
@@ -505,13 +506,14 @@ label{
                 allSubCategorys:{},//将表格中的细项的id映射显示为name
                 Categorys: [],  //级联下拉选项的所有值
                 SubCategorys: [], // 动态细项列表
-                selectedKeys: [], //["C1010S3"] 初始已选到右侧的账户（右侧默认显示 user003）
+                selectedKeys: [], //["C1010S3"] 初始已选到右侧的账户和传给后端的所有选中的人员（右侧默认显示 user003）
                 leftChecked: [],  //["C1010S3"] 左侧默认选中 user001（但未移动到右侧）
                 rightChecked: [], //["C1010S3"] 右侧默认选中 user003（已移动到右侧）
                 search:'',
                 Owner: '',//搜索按钮前面的负责人绑定的值，用来记录搜索条件-负责人的值，是字符串
                 number: '',
                 sectionOwner: [],
+                OwnersOptions: [],//穿梭框绑定的数据，所有数据内容
                 loading:false,
                 categoryOptions:[],
                 ProductTypeOptions:[],
@@ -640,8 +642,12 @@ label{
                     this.totalNum = this.tableContent.length;
                     this.elbuttonloading = false;
                     this.tableloading = false;
+                    //console.log(this.$refs.tableRef);
                     this.$nextTick(() => {
-                       this.$refs.tableRef.doLayout()
+                        //console.log(this.$refs.tableRef);
+                       if (this.$refs.tableRef) {
+                            this.$refs.tableRef.doLayout();//使用this.$nextTick确保DOM更新，在axios请求的‘then‘回调中添加‘this.nextTick()`，确保表格数据更新后DOM已经渲染完成。
+                        }
                     })
                  });
             },
@@ -686,7 +692,7 @@ label{
                 this.dialogVisible=true;
             },
 
-            // 编辑按钮点击
+            // 每条数据的编辑按钮点击
             handleEdit:function(id,row){
                 this.resetForm();
                 this.selectedKeys = row.Owner.map(item => item.account);
@@ -722,6 +728,64 @@ label{
                       this.form.Comments = row.Comments;
                       this.editID = id;
                   })
+
+            },
+
+            //编辑按钮点击
+            editData(){
+                if(this.multipleSelection.length < 1){
+                      this.$alert("请选择一条数据！", '提示', {
+                            type: 'warning',
+                      });
+                }else if(this.multipleSelection.length === 1){
+                    if(this.permission === 1){
+                        console.log(this.multipleSelection[0],'this.multipleSelection[0]')
+                        this.resetForm();
+                        this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
+                        //console.log(this.selectedKeys,'this.selectedKeys');
+                        this.isEdit = true;
+                          this.dialogTitle = '编辑数据';
+                          this.dialogVisible = true;
+                         {% comment %}this.form.Category=row.Category;
+                         this.form.Product_Type=row.Product_Type;{% endcomment %}
+                        // 先设置大项
+                          this.form.Category = this.multipleSelection[0].Category;
+
+                          // 手动触发分类变化来加载对应的细项
+                          this.handleCategoryChange(this.multipleSelection[0].Category);
+                          console.log(this.multipleSelection[0], this.form.Product_Type,'this.form.Product_Type')
+                          // 短暂延迟确保SubCategorys已更新
+                          //this.$nextTick(() => {延迟后this.multipleSelection[0]就变成undefine了。
+                              console.log(this.multipleSelection[0], this.form.Product_Type,'this.form.Product_Type')
+                              this.form.Product_Type = this.multipleSelection[0].Product_Type;
+                              this.form.Name = this.multipleSelection[0].Name;
+                              this.form.Num = this.multipleSelection[0].Num;
+                              this.form.Manufacturer = this.multipleSelection[0].Manufacturer;
+                              this.form.Cost = this.multipleSelection[0].Cost;
+                              this.form.Account = this.multipleSelection[0].Account;
+                              this.form.PW = this.multipleSelection[0].PW;
+                              this.form.Purchasing_Date = this.multipleSelection[0].Purchasing_Date;
+                              this.form.Department = this.multipleSelection[0].Department;
+                              this.form.Location = this.multipleSelection[0].Location;
+                              this.form.Asset_Num = this.multipleSelection[0].Asset_Num;
+                              this.form.Status = this.multipleSelection[0].Status;
+                              //this.form.Owner=row.Owner;
+                              this.form.Mail = this.multipleSelection[0].Mail;
+                              this.form.Contact_info = this.multipleSelection[0].Contact_info;
+                              this.form.Comments = this.multipleSelection[0].Comments;
+                              this.editID = this.multipleSelection[0].id;
+                          //})
+                    }else {
+                      this.$alert("无编辑权限！", '提示', {
+                            type: 'warning',
+                      });
+                    }
+
+                }else {
+                      this.$alert("只能选择一条数据！", '提示', {
+                            type: 'warning',
+                      });
+                }
 
             },
 
@@ -790,7 +854,9 @@ label{
                         this.tableContent = res.data.content;
                         this.totalNum = this.tableContent.length;
                         this.$nextTick(() => {
-                           this.$refs.tableRef.doLayout()
+                           if (this.$refs.tableRef) {
+                                this.$refs.tableRef.doLayout();
+                            }
                         })
                         this.errMsg=res.data.errMsg;
                         this.formData = new FormData();
@@ -807,7 +873,9 @@ label{
                           }
                           this.dialogVisible = false;
                           this.$nextTick(() => {
-                                this.$refs.tableRef.doLayout()
+                                if (this.$refs.tableRef) {
+                                    this.$refs.tableRef.doLayout();
+                                }
                           })
                         }
 
@@ -850,7 +918,9 @@ label{
                         this.tableContent = res.data.content;
                         this.totalNum = this.tableContent.length;
                         this.$nextTick(() => {
-                           this.$refs.tableRef.doLayout()
+                           if (this.$refs.tableRef) {
+                                this.$refs.tableRef.doLayout();
+                            }
                         })
                         this.errMsg=res.data.errMsg;
                         this.resetForm();
@@ -867,7 +937,9 @@ label{
                           }
                           this.update = false;
                           this.$nextTick(() => {
-                                this.$refs.tableRef.doLayout()
+                                if (this.$refs.tableRef) {
+                                    this.$refs.tableRef.doLayout();
+                                }
                           })
                         }
 
@@ -998,62 +1070,6 @@ label{
                     }
                  },
 
-            editData(){
-                if(this.multipleSelection.length < 1){
-                      this.$alert("请选择一条数据！", '提示', {
-                            type: 'warning',
-                      });
-                }else if(this.multipleSelection.length === 1){
-                    if(this.permission === 1){
-                        console.log(this.multipleSelection[0],'this.multipleSelection[0]')
-                        this.resetForm();
-                        this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
-                        //console.log(this.selectedKeys,'this.selectedKeys');
-                        this.isEdit = true;
-                          this.dialogTitle = '编辑数据';
-                          this.dialogVisible = true;
-                         {% comment %}this.form.Category=row.Category;
-                         this.form.Product_Type=row.Product_Type;{% endcomment %}
-                        // 先设置大项
-                          this.form.Category = this.multipleSelection[0].Category;
-
-                          // 手动触发分类变化来加载对应的细项
-                          this.handleCategoryChange(this.multipleSelection[0].Category);
-                          console.log(this.multipleSelection[0], this.form.Product_Type,'this.form.Product_Type')
-                          // 短暂延迟确保SubCategorys已更新
-                          //this.$nextTick(() => {延迟后this.multipleSelection[0]就变成undefine了。
-                              console.log(this.multipleSelection[0], this.form.Product_Type,'this.form.Product_Type')
-                              this.form.Product_Type = this.multipleSelection[0].Product_Type;
-                              this.form.Name = this.multipleSelection[0].Name;
-                              this.form.Num = this.multipleSelection[0].Num;
-                              this.form.Manufacturer = this.multipleSelection[0].Manufacturer;
-                              this.form.Cost = this.multipleSelection[0].Cost;
-                              this.form.Account = this.multipleSelection[0].Account;
-                              this.form.PW = this.multipleSelection[0].PW;
-                              this.form.Purchasing_Date = this.multipleSelection[0].Purchasing_Date;
-                              this.form.Department = this.multipleSelection[0].Department;
-                              this.form.Location = this.multipleSelection[0].Location;
-                              this.form.Asset_Num = this.multipleSelection[0].Asset_Num;
-                              this.form.Status = this.multipleSelection[0].Status;
-                              //this.form.Owner=row.Owner;
-                              this.form.Mail = this.multipleSelection[0].Mail;
-                              this.form.Contact_info = this.multipleSelection[0].Contact_info;
-                              this.form.Comments = this.multipleSelection[0].Comments;
-                              this.editID = this.multipleSelection[0].id;
-                          //})
-                    }else {
-                      this.$alert("无编辑权限！", '提示', {
-                            type: 'warning',
-                      });
-                    }
-
-                }else {
-                      this.$alert("只能选择一条数据！", '提示', {
-                            type: 'warning',
-                      });
-                }
-
-            },
 
             //上传搜索项：以此选项搜索符合条件的内容
             find:function(){
@@ -1075,10 +1091,13 @@ label{
                   this.elbuttonloading = false;
                   this.tableloading = false;
                   this.yearOptions = res.data.yearOptions;
+                  this.OwnersOptions = res.data.OwnersOptions;//人员名单
                   this.categoryOptions = res.data.categoryOptions;
                   this.classOptions = res.data.classOptions;
                   this.$nextTick(() => {
-                       this.$refs.tableRef.doLayout()
+                       if (this.$refs.tableRef) {
+                            this.$refs.tableRef.doLayout();
+                        }
                   })
                 })
 
@@ -1180,7 +1199,9 @@ label{
                         _this.tableContent=res.data.content;
                         _this.totalNum=_this.tableContent.length;
                         _this.$nextTick(() => {
-                           _this.$refs.tableRef.doLayout()
+                           if (_this.$refs.tableRef) {
+                                _this.$refs.tableRef.doLayout();
+                            }
                         })
                         _this.errMsg=res.data.errMsg;
                         _this.permission=res.data.permission;
