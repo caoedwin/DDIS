@@ -28,6 +28,16 @@ class UserInfo(models.Model):
     """
     用户：划分角色
     """
+    SeatChoice = (
+        ('KS-Plant5', 'KS-Plant5'),
+        ('KS-Plant3', 'KS-Plant3'),
+        ('KS-Plant2', 'KS-Plant2'),
+        ('CQ', 'CQ'),
+        ('CD', 'CD'),
+        ('TPE', 'TPE'),
+        ('PCP', 'PCP'),
+        ('LKE', 'LKE'),
+    )
     DEPARTMENT_CHOICES = {
         (1, '测试部门'),
         (2, '开发部门'),
@@ -37,6 +47,9 @@ class UserInfo(models.Model):
     account = models.CharField(max_length=32,unique=True)
     password = models.CharField(max_length=64)
     username = models.CharField(max_length=32)
+    CNname = models.CharField(max_length=32, null=True, blank=True)
+    Tel = models.CharField(max_length=32, null=True, blank=True, default='')
+    Seat = models.CharField(max_length=108, choices=SeatChoice, null=True, blank=True)
     email = models.EmailField()
     department = models.IntegerField(verbose_name='部门', choices=DEPARTMENT_CHOICES, default=1)
     is_active = models.BooleanField(default=True)

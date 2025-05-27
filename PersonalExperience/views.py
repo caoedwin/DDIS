@@ -738,7 +738,15 @@ def Summary(request):
                 # LNV注册
                 for i in PersonalInfo.objects.filter(Customer='C38').values("GroupNum",
                                                                                          "EngName").distinct():
+                    per = PersonalInfo.objects.filter(GroupNum=i["GroupNum"]).first()
                     if {'account': i["GroupNum"]} in account_Now_list:
+                        update_dic = {
+                            "is_active": True if per.Status == '在職' else False,
+                            "CNname": per.CNName if per.CNName else '',
+                            "Tel": per.MobileNum if per.MobileNum else '',
+                            "username": i["EngName"],
+                        }
+                        UserInfo.objects.filter(account=i["GroupNum"]).update(**update_dic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role).first(), )#移除用remove
                     else:
@@ -747,7 +755,9 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
+                                     "CNname": per.CNName if per.CNName else '',
+                                     "Tel": per.MobileNum if per.MobileNum else '',
+                                     "department": 1, "is_active": True if per.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)
@@ -757,7 +767,15 @@ def Summary(request):
                 # CQ 注册
                 for i in PersonalInfo.objects.filter(Customer__in=['CQABO']).values("GroupNum",
                                                                                                  "EngName").distinct():
+                    per = PersonalInfo.objects.filter(GroupNum=i["GroupNum"]).first()
                     if {'account': i["GroupNum"]} in account_Now_list:
+                        update_dic = {
+                            "is_active": True if per.Status == '在職' else False,
+                            "CNname": per.CNName if per.CNName else '',
+                            "Tel": per.MobileNum if per.MobileNum else '',
+                            "username": i["EngName"],
+                        }
+                        UserInfo.objects.filter(account=i["GroupNum"]).update(**update_dic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role_CQABO).first(), )#移除用remove
                     else:
@@ -766,7 +784,9 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
+                                     "CNname": per.CNName if per.CNName else '',
+                                     "Tel": per.MobileNum if per.MobileNum else '',
+                                     "department": 1, "is_active": True if per.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)
@@ -776,7 +796,15 @@ def Summary(request):
                 # A31 注册
                 for i in PersonalInfo.objects.filter(Customer__in=['A31']).values("GroupNum",
                                                                                                  "EngName").distinct():
+                    per = PersonalInfo.objects.filter(GroupNum=i["GroupNum"]).first()
                     if {'account': i["GroupNum"]} in account_Now_list:
+                        update_dic = {
+                            "is_active": True if per.Status == '在職' else False,
+                            "CNname": per.CNName if per.CNName else '',
+                            "Tel": per.MobileNum if per.MobileNum else '',
+                            "username": i["EngName"],
+                        }
+                        UserInfo.objects.filter(account=i["GroupNum"]).update(**update_dic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role_A31).first(), )#移除用remove
                     else:
@@ -785,7 +813,9 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
+                                     "CNname": per.CNName if per.CNName else '',
+                                     "Tel": per.MobileNum if per.MobileNum else '',
+                                     "department": 1, "is_active": True if per.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)
@@ -795,7 +825,15 @@ def Summary(request):
                 # A32 注册
                 for i in PersonalInfo.objects.filter(Customer__in=['A32']).values("GroupNum",
                                                                                                "EngName").distinct():
+                    per = PersonalInfo.objects.filter(GroupNum=i["GroupNum"]).first()
                     if {'account': i["GroupNum"]} in account_Now_list:
+                        update_dic = {
+                            "is_active": True if per.Status == '在職' else False,
+                            "CNname": per.CNName if per.CNName else '',
+                            "Tel": per.MobileNum if per.MobileNum else '',
+                            "username": i["EngName"],
+                        }
+                        UserInfo.objects.filter(account=i["GroupNum"]).update(**update_dic)
                         UserInfo.objects.filter(account=i["GroupNum"]).first().role.add(
                             Role.objects.filter(name=name_role_A32).first(), )#移除用remove
                     else:
@@ -804,7 +842,9 @@ def Summary(request):
                                      "email": i["EngName"] + '@compal.com' if '.' not in i["EngName"] else
                                      i["EngName"].replace(' ', '').split('.')[1] + '_' +
                                      i["EngName"].replace(' ', '').split('.')[0] + '@compal.com',
-                                     "department": 1, "is_active": True if i.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
+                                     "CNname": per.CNName if per.CNName else '',
+                                     "Tel": per.MobileNum if per.MobileNum else '',
+                                     "department": 1, "is_active": True if per.Status == '在職' else False, "is_staff": False, "is_SVPuser": False,
                                      }
                         # Role.objects.filter(name=role).first(),
                         # print(createdic)

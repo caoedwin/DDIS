@@ -985,7 +985,7 @@ class RoleAdmin(admin.ModelAdmin):
 class UserInfoAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields' : ('account','password','username','email','role',)
+            'fields' : ('account','password', 'CNname','username','Tel','Seat', 'email','role',)
         }),
         ('Advanced options',{
             'classes': ('collapse',),
@@ -993,7 +993,7 @@ class UserInfoAdmin(admin.ModelAdmin):
         }),
     )
     filter_horizontal = ('role',)
-    list_display = ('account','password','username','email','show_role')
+    list_display = ('account','password', 'CNname','username','Tel','Seat', 'email','show_role', 'department','is_active','is_staff','is_SVPuser')
     '''展示show_role'''
 
     def show_role(self, obj):

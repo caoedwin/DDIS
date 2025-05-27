@@ -1,0 +1,42 @@
+[2025-05-27 13:10:21,767] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/PersonalInfo-edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\views.py", line 1415, in PersonalInfo_edit
+    float(str((i.QuitDate - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+TypeError: unsupported operand type(s) for -: 'NoneType' and 'datetime.date'
+[2025-05-27 13:10:21,796] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/PersonalInfo-edit/ 500 [0.24, 127.0.0.1:60273]
+[2025-05-27 13:10:22,319] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/PersonalInfo-edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\views.py", line 1415, in PersonalInfo_edit
+    float(str((i.QuitDate - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+TypeError: unsupported operand type(s) for -: 'NoneType' and 'datetime.date'
+[2025-05-27 13:10:22,324] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/PersonalInfo-edit/ 500 [0.17, 127.0.0.1:60273]
+[2025-05-27 13:10:38,540] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/PersonalInfo-edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\views.py", line 1415, in PersonalInfo_edit
+    float(str((i.QuitDate - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+TypeError: unsupported operand type(s) for -: 'NoneType' and 'datetime.date'
+[2025-05-27 13:10:38,543] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/PersonalInfo-edit/ 500 [0.09, 127.0.0.1:60230]
