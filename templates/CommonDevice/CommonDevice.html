@@ -512,7 +512,7 @@ label{
                 search:'',
                 Owner: '',//搜索按钮前面的负责人绑定的值，用来记录搜索条件-负责人的值，是字符串
                 number: '',
-                sectionOwner: [],
+                sectionOwner: [],//以onwer为条件搜索的全部下拉选项
                 OwnersOptions: [],//穿梭框绑定的数据，所有数据内容
                 loading:false,
                 categoryOptions:[],
@@ -1038,35 +1038,58 @@ label{
                              });
 
                     }else{
-                        var warning=confirm('此操作将永久删除该条数据, 是否继续?')
-                        if(warning) {
-                             {#this.multiDeleteVisible = false;#}
-                             let checkArr = this.multipleSelection;
-                             let params = [];
-                             let self = this;
-                             let Category = this.$refs.Category.value;
-                             let Owner = this.$refs.Owner.value;
-                             let OwnerNumber = this.number;
-                             checkArr.forEach(function (item) {
-                                 params.push(item.id);
+                        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                          confirmButtonText: '确定',
+                          cancelButtonText: '取消',
+                          type: 'warning'
+                        }).then(() => {
+                                    {#this.multiDeleteVisible = false;#}
+                                     let checkArr = this.multipleSelection;
+                                     let params = [];
+                                     let self = this;
+                                     let Category = this.$refs.Category.value;
+                                     let Owner = this.$refs.Owner.value;
+                                     let OwnerNumber = this.number;
+                                     checkArr.forEach(function (item) {
+                                         params.push(item.id);
+                                });
+                                   let data = {
+                                       "isGetData": "delete",
+                                       "searchCategory":Category,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,
+                                       "params": params,
+                                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                                   };
+                                   axios.post('/CommonDevice/CommonDevice_edit/', data).then((res) =>{
+                                         // 正确更新绑定到表格的数据源
+                                        this.tableContent = res.data.content;
+
+                                        // 更新总条数
+                                        this.totalNum = this.tableContent.length;
+
+                                        // 重置分页到第一页
+                                        this.currentPage = 1;
+
+                                        // 清空多选状态
+                                        this.multipleSelection = [];
+
+                                        // 确保表格重新渲染
+                                        this.$nextTick(() => {
+                                            if (this.$refs.tableRef) {
+                                                this.$refs.tableRef.doLayout();
+                                            }
+                                        });
+                                         self.$message({
+                                             message: '删除成功',
+                                             type: 'success'
+                                         });
+                                 //this.tableData2 = res.data.content2;
+                             });
+                        }).catch(() => {
+                          this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                          });
                         });
-                           let data = {
-                               "isGetData": "delete",
-                               "searchCategory":Category,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,
-                               "params": params,
-                               "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
-                           };
-                           axios.post('/CommonDevice/CommonDevice_edit/', data).then((res) =>{
-                                 this.tableData2 = res.data.content2;
-                                 self.$message({
-                                     message: '删除成功',
-                                     type: 'success'
-                                 });
-                         //this.tableData2 = res.data.content2;
-                     })
-                     }else{
-                         return false;
-                     }
                     }
                  },
 
