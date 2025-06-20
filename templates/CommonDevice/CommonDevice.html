@@ -172,6 +172,14 @@ label{
 .el-checkbox__label {
     font-size: 16px;
 }
+tbody tr td:last-child {
+   text-align:left;
+}
+/*表格内容换行显示*/
+  .el-table  .cell{
+     {#text-align: left;#}
+      white-space: pre-line;
+ }
 </style>
 {% endblock %}
 {% block content %}
@@ -462,7 +470,7 @@ label{
               </el-table-column>
               <el-table-column  prop="Mail" label="郵件地址" width="120" align="center"></el-table-column>
               <el-table-column  prop="Contact_info" label="聯係方式" width="100" align="center"></el-table-column>
-              <el-table-column  prop="Comments" label="comments" align="center"></el-table-column>
+              <el-table-column  prop="Comments" label="comments" width="300" align="left"></el-table-column>
     </el-table>
       <div class="block">
         <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
