@@ -217,11 +217,11 @@ def SubscriptionStatus_view(request):
                 month=ExtractMonth('SubscribeDate')
             ).values('year', 'month').annotate(total=Sum(F('SubscribeUnitPrice') * F('Number'), output_field=models.FloatField()))
             Mounthlist = [
-                ("Jan", 1), ("Feb", 2), ("Mar", 3), ("Apr", 4), ("May", 5), ("July", 6), ("Jul", 7), ("Aug", 8), ("Sep", 9), ("Oct", 10), ("Nov", 11), ("Dec", 12),
+                ("Jan", 1), ("Feb", 2), ("Mar", 3), ("Apr", 4), ("May", 5), ("Jun", 6), ("July", 7), ("Aug", 8), ("Sep", 9), ("Oct", 10), ("Nov", 11), ("Dec", 12),
             ]
 
             for monthly_total in monthly_totals:
-                Shengou_Total +=  monthly_total['total']
+                Shengou_Total += monthly_total['total']
                 for j in Mounthlist:
                     if monthly_total['month'] == j[1]:
                         shengoujine[j[0]] = monthly_total['total']

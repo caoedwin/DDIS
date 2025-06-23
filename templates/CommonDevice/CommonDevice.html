@@ -4,6 +4,37 @@
 {% block css %}
 <link rel="stylesheet" href="/static/css/index.css">
 <style>
+.toolbar-container {
+  display: flex;           /* 使用flex布局 */
+  width: 100%;             /* 填充容器宽度 */
+  overflow: hidden;        /* 隐藏溢出部分 */
+}
+
+.search-conditions {
+  flex: 1;                 /* 占据剩余空间 */
+  display: flex;
+  overflow-x: auto;        /* 允许水平滚动 */
+  gap: 8px;                /* 元素间隙 */
+  padding: 8px 0;          /* 垂直内边距 */
+  scrollbar-width: none;   /* 隐藏滚动条（兼容Firefox） */
+}
+
+/* 隐藏搜索区域的滚动条（WebKit浏览器） */
+.search-conditions::-webkit-scrollbar {
+  display: none;
+}
+
+.condition-item {
+  min-width: 150px;        /* 最小宽度 */
+  flex-shrink: 0;          /* 禁止宽度缩小 */
+}
+
+.action-buttons {
+  margin-top: 8px;          /* 设置元素距离上方的距离 */
+  flex-shrink: 0;          /* 禁止宽度缩小 */
+  white-space: nowrap;      /* 按钮不换行 */
+  padding-left: 12px;       /* 与搜索区域的间距 */
+}
 .el-table th .gutter{
     display: table-cell!important;
 }
@@ -187,14 +218,24 @@ tbody tr td:last-child {
       <!--搜索框-->
     <div class="selectMsg" >
 
-           <div class="customerContent">
+           <div class="toolbar-container">
+               <div class="search-conditions">
                  <label for="customer">大项</label>
-                 <select  ref="Category"  v-model="category1" style="height:40px;width:150px;border-radius:5px 5px 5px 5px;">
-                    <option v-for="(item,key,index) in categoryOptions" >${ item }</option>
+                 <select  ref="Category" @change="changeCategory"  v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option v-for="(item,key,index) in Categorys"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"></option>
                  </select>
-           </div>
 
-           <div class="customerContent">
+               <label for="customer1">细项</label>
+                 <select  ref="Product_Type"  v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <option v-for="(item,key,index) in Product_TypeOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"></option>
+                 </select>
+
                <label style="font-size: 16px;font-weight: bold;margin-left: 15px;" for="Owner">负责人</label>
                  <el-autocomplete
                           class="inline-input"
@@ -208,14 +249,15 @@ tbody tr td:last-child {
                          <div style="text-align: center">${ item.value }&nbsp;(${ item.number })</div>
                      </template>
                  </el-autocomplete>
-           </div>
+               </div>
 
-           <div style="margin-left: 100px;">
+               <div class="action-buttons">
                  <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
                  <el-button  @click="handleAdd" type="success" >Add</el-button>
                  <el-button @click="editData()" type="success" v-cloak style="margin-left: 20px;">Edit</el-button>
                  <el-button type="danger"  style="height:40px;float: right;" @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除</el-button>
                  <el-button @click="exportExcel" v-if="SSVIP_users===1" type="info" v-cloak style="height:40px">導出</el-button>
+               </div>
 {#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
 {#                 <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak style="margin-left: 20px;width: 80px;">刪除</el-button>#}
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -525,10 +567,12 @@ tbody tr td:last-child {
                 OwnersOptions: [],//穿梭框绑定的数据，所有数据内容
                 loading:false,
                 categoryOptions:[],
+                Product_TypeOptions:[],
                 ProductTypeOptions:[],
                 StatusOptions:[],
                 datatype:'',
                 category1:'',
+                category2 :'',
                 editpermission: 0,
                 permission: 0,
                 SSVIP_users: 0,
@@ -659,6 +703,26 @@ tbody tr td:last-child {
                         }
                     })
                  });
+            },
+
+            //级联
+             changeCategory: function() {
+              // 直接使用 v-model 绑定的值，而不是通过 ref
+              const CategoryId = this.category1;
+
+              if (!CategoryId) {
+                this.Product_TypeOptions = [""];
+                return;
+              }
+
+              // 查找对应大项
+              const selectedCategory = this.Categorys.find(
+                item => item.id === CategoryId
+              );
+
+              // 更新细项选项
+              this.Product_TypeOptions = selectedCategory ? selectedCategory.SubCategorys : [];
+              this.category2 = ""; // 重置细项选择
             },
 
           handleChange(value, direction, movedKeys) {
@@ -833,6 +897,7 @@ tbody tr td:last-child {
                         this.formData = new FormData();
                     }
                     this.formData.append('searchCategory', this.$refs.Category.value)
+                    this.formData.append('searchProduct_Type', this.$refs.Product_Type.value)
                     this.formData.append('searchOwner', this.$refs.Owner.value)
                     this.formData.append('searchOwnerNumber', this.number)
                     this.formData.append('Category', this.$refs.form.model.Category)
@@ -897,6 +962,7 @@ tbody tr td:last-child {
                         this.formData = new FormData();
                     }
                     this.formData.append('searchCategory', this.$refs.Category.value)
+                    this.formData.append('searchProduct_Type', this.$refs.Product_Type.value)
                     this.formData.append('searchOwner', this.$refs.Owner.value)
                     this.formData.append('searchOwnerNumber', this.number)
                     this.formData.append('ID', this.editID)
@@ -1057,6 +1123,7 @@ tbody tr td:last-child {
                                      let params = [];
                                      let self = this;
                                      let Category = this.$refs.Category.value;
+                                     let Product_Type = this.$refs.Product_Type.value;
                                      let Owner = this.$refs.Owner.value;
                                      let OwnerNumber = this.number;
                                      checkArr.forEach(function (item) {
@@ -1064,7 +1131,7 @@ tbody tr td:last-child {
                                 });
                                    let data = {
                                        "isGetData": "delete",
-                                       "searchCategory":Category,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,
+                                       "searchCategory":Category,"searchProduct_Type":Product_Type,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,
                                        "params": params,
                                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
                                    };
@@ -1109,9 +1176,10 @@ tbody tr td:last-child {
                 this.elbuttonloading = true;
                 this.tableloading = true;
                 let Category = this.$refs.Category.value;
+                let Product_Type = this.$refs.Product_Type.value;
                 let Owner = this.$refs.Owner.value;
                 let OwnerNumber = this.number;
-                let data ={"isGetData":"SEARCH","Category":Category,"Owner":Owner,"OwnerNumber": OwnerNumber,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
+                let data ={"isGetData":"SEARCH","Category":Category,"Product_Type":Product_Type,"Owner":Owner,"OwnerNumber": OwnerNumber,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
                 axios.post("/CommonDevice/CommonDevice_edit/",Qs.stringify(data), {
                 headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {

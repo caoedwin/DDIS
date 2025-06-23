@@ -268,7 +268,9 @@ def CommonDevice_edit(request):
             ch_dic = {}
             if request.POST.get('isGetData') == 'SEARCH':
                 if request.POST.get('Category'):
-                    ch_dic['Category'] = Category.objects.filter(name=request.POST.get('Category')).first()
+                    ch_dic['Category'] = Category.objects.filter(id=request.POST.get('Category')).first()
+                if request.POST.get('Product_Type'):
+                    ch_dic['Product_Type'] = SubCategory.objects.filter(id=request.POST.get('Product_Type')).first()
                 if request.POST.get('Owner'):
                     user = UserInfo.objects.filter(account=request.POST.get('OwnerNumber')).first()
                     ch_dic['Owner'] = user
@@ -325,7 +327,9 @@ def CommonDevice_edit(request):
                 # mock_data
                 check_dic = {}
                 if request.POST.get('searchCategory'):
-                    check_dic['Category'] = Category.objects.filter(name=request.POST.get('searchCategory')).first()
+                    check_dic['Category'] = Category.objects.filter(id=request.POST.get('searchCategory')).first()
+                if request.POST.get('searchProduct_Type'):
+                    check_dic['Product_Type'] = SubCategory.objects.filter(id=request.POST.get('searchProduct_Type')).first()
                 if request.POST.get('searchOwner'):
                     user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
                     check_dic['Owner'] = user
@@ -385,7 +389,9 @@ def CommonDevice_edit(request):
                 # mock_data
                 check_dic = {}
                 if request.POST.get('searchCategory'):
-                    check_dic['Category'] = Category.objects.filter(name=request.POST.get('searchCategory')).first()
+                    check_dic['Category'] = Category.objects.filter(id=request.POST.get('searchCategory')).first()
+                if request.POST.get('searchProduct_Type'):
+                    check_dic['Product_Type'] = SubCategory.objects.filter(id=request.POST.get('searchProduct_Type')).first()
                 if request.POST.get('searchOwner'):
                     user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
                     check_dic['Owner'] = user
@@ -406,8 +412,10 @@ def CommonDevice_edit(request):
                         CommonDevice.objects.get(id=i).delete()
                     # mock_data
                     check_dic = {}
-                    if request.POST.get('searchCategory'):
-                        check_dic['Category'] = Category.objects.filter(name=responseData['searchCategory']).first()
+                    if responseData['searchCategory']:
+                        check_dic['Category'] = Category.objects.filter(id=responseData['searchCategory']).first()
+                    if responseData['searchProduct_Type']:
+                        check_dic['Product_Type'] = SubCategory.objects.filter(id=responseData['searchProduct_Type']).first()
                     if responseData['searchOwner']:
                         user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
                         check_dic['Owner'] = user
