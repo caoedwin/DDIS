@@ -253,9 +253,9 @@ tbody tr td:last-child {
 
                <div class="action-buttons">
                  <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
-                 <el-button  @click="handleAdd" type="success" >Add</el-button>
-                 <el-button @click="editData()" type="success" v-cloak style="margin-left: 20px;">Edit</el-button>
-                 <el-button type="danger"  style="height:40px;float: right;" @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除</el-button>
+                 <el-button :loading="elbuttonloading" @click="handleAdd" type="success" >Add</el-button>
+                 <el-button :loading="elbuttonloading" @click="editData()" type="success" v-cloak style="margin-left: 20px;">Edit</el-button>
+                 <el-button :loading="elbuttonloading" type="danger"  style="height:40px;float: right;" @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除</el-button>
                  <el-button @click="exportExcel" v-if="SSVIP_users===1" type="info" v-cloak style="height:40px">導出</el-button>
                </div>
 {#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
@@ -893,6 +893,8 @@ tbody tr td:last-child {
             },
 
             async  addData(){
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
                     if (this.formData.length === 0) {
                         this.formData = new FormData();
                     }
@@ -951,13 +953,20 @@ tbody tr td:last-child {
                                     this.$refs.tableRef.doLayout();
                                 }
                           })
+                            this.$message({
+                                  message:'上传成功',
+                                  type:'success',
+                              })
                         }
-
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
                     })
             },
 
 
             async  updateData() {
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
                     if (this.formData.length === 0) {
                         this.formData = new FormData();
                     }
@@ -1016,8 +1025,14 @@ tbody tr td:last-child {
                                     this.$refs.tableRef.doLayout();
                                 }
                           })
-                        }
+                            this.$message({
+                                  message:'修改成功',
+                                  type:'success',
+                              })
 
+                        }
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
                     })
             },
 
@@ -1118,6 +1133,8 @@ tbody tr td:last-child {
                           cancelButtonText: '取消',
                           type: 'warning'
                         }).then(() => {
+                                    this.elbuttonloading = true;
+                                    this.tableloading = true;
                                     {#this.multiDeleteVisible = false;#}
                                      let checkArr = this.multipleSelection;
                                      let params = [];
@@ -1159,6 +1176,8 @@ tbody tr td:last-child {
                                              type: 'success'
                                          });
                                  //this.tableData2 = res.data.content2;
+                                        this.elbuttonloading = false;
+                                        this.tableloading = false;
                              });
                         }).catch(() => {
                           this.$message({
