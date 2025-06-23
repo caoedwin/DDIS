@@ -221,26 +221,27 @@ tbody tr td:last-child {
            <div class="toolbar-container">
                <div class="search-conditions">
                  <label for="customer">大项</label>
-                 <select  ref="Category" @change="changeCategory"  v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <option v-for="(item,key,index) in Categorys"
+                 <el-select  ref="Category" @change="changeCategory" clearable v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <el-option v-for="(item,key,index) in Categorys"
                     :key="item.id"
                     :label="item.name"
-                    :value="item.id"></option>
-                 </select>
+                    :value="item.id"></el-option>
+                 </el-select>
 
                <label for="customer1">细项</label>
-                 <select  ref="Product_Type"  v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <option v-for="(item,key,index) in Product_TypeOptions"
+                 <el-select  ref="Product_Type" value-key="id" clearable v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                    <el-option v-for="(item,key,index) in Product_TypeOptions"
                     :key="item.id"
                     :label="item.name"
-                    :value="item.id"></option>
-                 </select>
+                    :value="item.id"></el-option>
+                 </el-select>
 
                <label style="font-size: 16px;font-weight: bold;margin-left: 15px;" for="Owner">负责人</label>
                  <el-autocomplete
                           class="inline-input"
                           v-model="Owner"
                           ref="Owner"
+                          clearable
                           :fetch-suggestions="querySearch"
                           placeholder="请输入负责人名称筛选"
                           @select="handleSelect"
@@ -712,6 +713,7 @@ tbody tr td:last-child {
 
               if (!CategoryId) {
                 this.Product_TypeOptions = [""];
+                this.category2 = null; // 清空细项选择
                 return;
               }
 
