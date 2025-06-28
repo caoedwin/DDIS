@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect, HttpResponse
-from .models import ABOlessonlearn_Project, ABOTestProjectLL, ABOlesson_learn, ABOImgs, ABOfiles
+from .models import A32lessonlearn_Project, A32TestProjectLL, A32lesson_learn, A32Imgs, A32files
 from app01.models import ProjectinfoinDCT, UserInfo
 from django.views.decorators.csrf import csrf_exempt
-from .forms import ABOlessonlearn as lessonlearn
+from .forms import A32lessonlearn as lessonlearn
 # from TestPlanME.models import TestProjectME
 import datetime, os
 
@@ -12,7 +12,7 @@ import datetime, json
 
 # Create your views here.
 @csrf_exempt
-def ABOLesson_upload(request):
+def A32Lesson_upload(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -40,8 +40,8 @@ def ABOLesson_upload(request):
             # print(Comments)
             Photo = request.FILES.getlist("myfiles", "")
             print(Photo)
-            Object_check = ABOlesson_learn.objects.filter(Object=Object)
-            Symptom_check = ABOlesson_learn.objects.filter(Symptom=Symptom)
+            Object_check = A32lesson_learn.objects.filter(Object=Object)
+            Symptom_check = A32lesson_learn.objects.filter(Symptom=Symptom)
             # print (Object_check,Symptom_check)
             # if Object_check:
             #     #message = "Object '%s' already exists" % (Object)
@@ -61,7 +61,7 @@ def ABOLesson_upload(request):
                 #     else:
                 #         Photos=Photos+','+'img/test/'+image.name
                 # print (Photos)
-                lesson = ABOlesson_learn()
+                lesson = A32lesson_learn()
                 lesson.Category = Category
                 lesson.Object = Object
                 lesson.Symptom = Symptom
@@ -78,7 +78,7 @@ def ABOLesson_upload(request):
                 # print(request.FILES)
                 for f in request.FILES.getlist('myfiles'):
                     # print(f)
-                    empt = ABOImgs()
+                    empt = A32Imgs()
                     # 增加其他字段应分别对应填写
                     empt.single = f
                     empt.img = f
@@ -86,7 +86,7 @@ def ABOLesson_upload(request):
                     lesson.Photo.add(empt)
                 for f in request.FILES.getlist('myvideos'):
                     # print(f)
-                    empt = ABOfiles()
+                    empt = A32files()
                     # 增加其他字段应分别对应填写
                     empt.single = f
                     empt.files = f
@@ -102,12 +102,12 @@ def ABOLesson_upload(request):
             cleanData = lesson.errors
             # print(lesson.errors)
     # print (locals())
-    return render(request, 'ABOProjectLessonL/Lesson_upload.html',
+    return render(request, 'A32LessonLProject/Lesson_upload.html',
                   locals())  # {'weizhi':weizhi,'Skin':Skin,'lesson_form':lesson_form,'message':message})
 
 
 @csrf_exempt
-def ABOLesson_edit(request):
+def A32Lesson_edit(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -115,7 +115,6 @@ def ABOLesson_edit(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "Lesson-Learn/Reliability/Redit"
-    errMsg = ''
     selectCategory = [
         # {"Category": "SW"},
         # {"Category": "ME"}
@@ -146,10 +145,10 @@ def ABOLesson_edit(request):
         # {'name': 'Screenshot_15.png', 'url': '/media/img/test/Screenshot_15.png'}
     ]
     # print(request.POST)
-    Categorylist = ABOlesson_learn.objects.all().values("Category").distinct().order_by("-Category")
+    Categorylist = A32lesson_learn.objects.all().values("Category").distinct().order_by("-Category")
     for i in Categorylist:
         selectCategory.append({"Category": i["Category"]})
-    Lesson_list = ABOlesson_learn.objects.all()
+    Lesson_list = A32lesson_learn.objects.all()
     if request.method == "POST":
         if request.POST.get("isGetData") == "first":
             data = {
@@ -162,21 +161,21 @@ def ABOLesson_edit(request):
             if Category:
                 # print(Category)
                 Check_dic = {"Category": Category}
-                Lesson_list = ABOlesson_learn.objects.filter(**Check_dic)
+                Lesson_list = A32lesson_learn.objects.filter(**Check_dic)
             else:
-                Lesson_list = ABOlesson_learn.objects.all()
+                Lesson_list = A32lesson_learn.objects.all()
             for i in Lesson_list:
                 Photolist = []
                 filelist = []
                 for h in i.Photo.all():
                     # print(str(h.img).split("."))
                     if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
-                        Photolist.append({"id": h.id, "url": "/media/" + str(h.img)})
+                        Photolist.append("/media/" + str(h.img))
                     else:
-                        filelist.append({"id": h.id, "url": "/media/" + str(h.img)})
+                        filelist.append("/media/" + str(h.img))
                 Videolist = []
                 for h in i.video.all():
-                    Videolist.append({"id": h.id, "url": "/media/" + str(h.files)})
+                    Videolist.append("/media/" + str(h.files))
                 # print(Photolist)
                 mock_data.append(
                     {
@@ -205,7 +204,7 @@ def ABOLesson_edit(request):
         if request.POST.get("isGetData") == "alertID":
             id = request.POST.get('ID')
             if id:
-                editlesson = ABOlesson_learn.objects.get(id=id)
+                editlesson = A32lesson_learn.objects.get(id=id)
                 form["Category"] = editlesson.Category
                 form["Object"] = editlesson.Object
                 form["Symptom"] = editlesson.Symptom
@@ -229,136 +228,108 @@ def ABOLesson_edit(request):
             }
             # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
-        if request.POST.get("isGetData") == "submit":
-            errMsg = ''
-            try:
-                serchCategory = request.POST.get("serchCategory")
-                editID = request.POST.get('id')
-                # print(serchCategory, request.POST.get('Category'))
-                Photolist = request.FILES.getlist("new_photos", "")
-                videolist = request.FILES.getlist("new_videos", "")
-                # 获取待删除文件列表
-                photos_to_delete = json.loads(request.POST.get('photos_to_delete', '[]'))
-                videos_to_delete = json.loads(request.POST.get('videos_to_delete', '[]'))
-                # print(photos_to_delete, videos_to_delete)
-
-                # print(Photolist,editID)
-                if editID:
-                    # print("1")
-                    editlesson = ABOlesson_learn.objects.get(id=editID)
-                    editlesson.Category = request.POST.get('Category')
-                    editlesson.Object = request.POST.get('Object')
-                    editlesson.Symptom = request.POST.get('Symptom')
-                    editlesson.Reproduce_Steps = request.POST.get('Reproduce_Steps')
-                    editlesson.Root_Cause = request.POST.get('Root_Cause')
-                    editlesson.Solution = request.POST.get('Solution')
-                    editlesson.Action = request.POST.get('Action')
-                    editlesson.Status = request.POST.get('Status')
-                    # lesson.Photo=Photos
-                    editlesson.editor = request.session.get('user_name')
-                    editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    editlesson.save()
-                    if Photolist:
-                        for f in Photolist:
-                            # print(f)
-                            if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
-                                1] == "mov" or f.name.split(".")[1] == "rmvb":
-                                # empt = ABOfiles()
-                                # # 增加其他字段应分别对应填写
-                                # empt.single = f
-                                # empt.files = f
-                                # empt.save()
-                                # editlesson.video.add(empt)
-                                pass
-                            else:
-                                empt = ABOImgs()
-                                # 增加其他字段应分别对应填写
-                                empt.single = f
-                                empt.img = f
-                                empt.save()
-                                editlesson.Photo.add(empt)
-
-                    # image_ids = request.POST.getlist('image_ids[]')
-
-                    # 获取图片对象
-                    # images = ABOImgs.objects.filter(single__in=image_ids)
-                    images = ABOImgs.objects.filter(id__in=photos_to_delete)#最好是用id，这样搜索时就需要返回带id的信息
-                    # print(images)
-
-                    # 解除关联
-                    editlesson.Photo.remove(*images)  # 使用 * 解包列表
-                    images.delete()  # 删除实体文件 model中的files_SopRom_delete方法
-                    if videolist:
-                        for f in videolist:
-                            # print(f)
-                            empt = ABOfiles()
+        if request.POST.get("action") == "submit":
+            serchCategory = request.POST.get("serchCategory")
+            editID = request.POST.get('id')
+            # print(serchCategory, request.POST.get('Category'))
+            Photolist = request.FILES.getlist("fileListPic", "")
+            videolist = request.FILES.getlist("fileListVideo", "")
+            # print(Photolist,editID)
+            if editID:
+                # print("1")
+                editlesson = A32lesson_learn.objects.get(id=editID)
+                editlesson.Category = request.POST.get('Category')
+                editlesson.Object = request.POST.get('Object')
+                editlesson.Symptom = request.POST.get('Symptom')
+                editlesson.Reproduce_Steps = request.POST.get('Reproduce_Steps')
+                editlesson.Root_Cause = request.POST.get('Root_Cause')
+                editlesson.Solution = request.POST.get('Solution')
+                editlesson.Action = request.POST.get('Action')
+                editlesson.Status = request.POST.get('Status')
+                # lesson.Photo=Photos
+                editlesson.editor = request.session.get('user_name')
+                editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                editlesson.save()
+                if Photolist:
+                    for f in Photolist:
+                        # print(f)
+                        if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
+                            1] == "mov" or f.name.split(".")[1] == "rmvb":
+                            # empt = A32files()
+                            # # 增加其他字段应分别对应填写
+                            # empt.single = f
+                            # empt.files = f
+                            # empt.save()
+                            # editlesson.video.add(empt)
+                            pass
+                        else:
+                            empt = A32Imgs()
                             # 增加其他字段应分别对应填写
                             empt.single = f
-                            empt.files = f
+                            empt.img = f
                             empt.save()
-                            editlesson.video.add(empt)
-                    vedios = ABOfiles.objects.filter(id__in=videos_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
-                    # print(vedios)
+                            editlesson.Photo.add(empt)
+                if videolist:
+                    for f in videolist:
+                        # print(f)
+                        empt = A32files()
+                        # 增加其他字段应分别对应填写
+                        empt.single = f
+                        empt.files = f
+                        empt.save()
+                        editlesson.video.add(empt)
+            if serchCategory:
+                # print(Category)
+                Check_dic = {"Category": serchCategory}
+                Lesson_list = A32lesson_learn.objects.filter(**Check_dic)
+            else:
+                Lesson_list = A32lesson_learn.objects.all()
+            for i in Lesson_list:
+                Photolist = []
+                filelist = []
+                for h in i.Photo.all():
+                    # print(str(h.img).split("."))
+                    if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
+                        Photolist.append("/media/" + str(h.img))
+                    else:
+                        filelist.append("/media/" + str(h.img))
+                Videolist = []
+                for h in i.video.all():
+                    Videolist.append("/media/" + str(h.files))
+                # print(Photolist)
+                mock_data.append(
+                    {
+                        "id": i.id,
+                        "Category": i.Category,
+                        "Object": i.Object,
+                        "Symptom": i.Symptom,
+                        "Reproduce_Steps": i.Reproduce_Steps,
+                        "Root_Cause": i.Root_Cause,
+                        "Solution": i.Solution,
+                        "Action": i.Action,
+                        "Status": i.Status,
+                        "Photo": Photolist,
+                        "file": filelist,
+                        "Video": Videolist,
+                        "editor": i.editor,
+                        "edit_time": i.edit_time,
+                    },
+                )
+            # print(mock_data)
 
-                    # 解除关联
-                    editlesson.video.remove(*vedios)  # 使用 * 解包列表
-                    vedios.delete()  # 删除实体文件 model中的files_SopRom_delete方法
-                if serchCategory:
-                    # print(Category)
-                    Check_dic = {"Category": serchCategory}
-                    Lesson_list = ABOlesson_learn.objects.filter(**Check_dic)
-                else:
-                    Lesson_list = ABOlesson_learn.objects.all()
-                for i in Lesson_list:
-                    Photolist = []
-                    filelist = []
-                    for h in i.Photo.all():
-                        # print(str(h.img).split("."))
-                        if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
-                            Photolist.append({"id": h.id, "url": "/media/" + str(h.img)})
-                        else:
-                            filelist.append({"id": h.id, "url": "/media/" + str(h.img)})
-                    Videolist = []
-                    for h in i.video.all():
-                        Videolist.append({"id": h.id, "url": "/media/" + str(h.files)})
-                    # print(Photolist)
-                    mock_data.append(
-                        {
-                            "id": i.id,
-                            "Category": i.Category,
-                            "Object": i.Object,
-                            "Symptom": i.Symptom,
-                            "Reproduce_Steps": i.Reproduce_Steps,
-                            "Root_Cause": i.Root_Cause,
-                            "Solution": i.Solution,
-                            "Action": i.Action,
-                            "Status": i.Status,
-                            "Photo": Photolist,
-                            "file": filelist,
-                            "Video": Videolist,
-                            "editor": i.editor,
-                            "edit_time": i.edit_time,
-                        },
-                    )
-                # print(mock_data)
-
-                # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
-                #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
-            except Exception as e:
-                errMsg = str(e)
+            # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
+            #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
             data = {
                 #     'fileList': fileList
                 'addselect': selectCategory,
                 'content': mock_data,
-                'errMsg': errMsg,
             }
-                # print(updateData)
-
+            # print(updateData)
             return HttpResponse(json.dumps(data), content_type="application/json")
-    return render(request, 'ABOProjectLessonL/Lesson_edit.html', locals())
+    return render(request, 'A32LessonLProject/Lesson_edit.html', locals())
 
 
-def ABOLesson_update(request, id):
+def A32Lesson_update(request, id):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -368,7 +339,7 @@ def ABOLesson_update(request, id):
     weizhi = "Lesson-Learn/Reliability/Redit/%s" % id
     message = ''
     # form=TestUEditorForm()
-    lesson_formdefault = ABOlesson_learn.objects.get(id=id)
+    lesson_formdefault = A32lesson_learn.objects.get(id=id)
     # print(lesson_formdefault)
     # print(request.POST)
     lesson_form = lessonlearn(request.POST)
@@ -387,7 +358,7 @@ def ABOLesson_update(request, id):
             # print(choose)
             # print(Root_Cause,Comments)
             Photo = request.FILES.getlist("myfiles", "")
-            # lesson = ABOlesson_learn()
+            # lesson = A32lesson_learn()
             # print(lesson_formdefault)
             # print (lesson)
             lesson_formdefault.Object = Object
@@ -403,7 +374,7 @@ def ABOLesson_update(request, id):
                 lesson_formdefault.Photo.clear()
             for f in request.FILES.getlist('myfiles'):
                 # print(f)
-                empt = ABOImgs()
+                empt = A32Imgs()
                 # 增加其他字段应分别对应填写
                 empt.single = f
                 empt.img = f
@@ -414,7 +385,7 @@ def ABOLesson_update(request, id):
                 lesson_formdefault.video.clear()
             for f in request.FILES.getlist('myvideos'):
                 # print(f)
-                empt = ABOfiles()
+                empt = A32files()
                 # 增加其他字段应分别对应填写
                 empt.single = f
                 empt.files = f
@@ -437,13 +408,13 @@ def ABOLesson_update(request, id):
         lesson_form = lessonlearn(values)
     # print (locals())
     # print(settings.BASE_DIR,settings.STATICFILES_DIRS)
-    return render(request, 'ABOProjectLessonL/Lesson_update.html',
+    return render(request, 'A32LessonLProject/Lesson_update.html',
                   locals())  # {'weizhi':weizhi,'Skin':Skin,'lesson_form':lesson_form,'message':message})
     # return render(request, 'Lesson_update.html', locals())
 
 
 @csrf_exempt
-def ABOLesson_search(request):
+def A32Lesson_search(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -454,8 +425,8 @@ def ABOLesson_search(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "Lesson-Learn/Reliability/Search"
-    # Lesson_list=ABOlesson_learn.objects.all()
-    Lesson_list = ABOlesson_learn.objects.filter(Category=Categoryfromcookie)
+    # Lesson_list=A32lesson_learn.objects.all()
+    Lesson_list = A32lesson_learn.objects.filter(Category=Categoryfromcookie)
     selectCategory = [
         # {"Category": "SW"},
         # {"Category": "ME"}
@@ -511,7 +482,7 @@ def ABOLesson_search(request):
             canExport = 1
         elif i == 'DQA_director':
             canExport = 1
-    Categorylist = ABOlesson_learn.objects.all().values("Category").distinct().order_by("-Category")
+    Categorylist = A32lesson_learn.objects.all().values("Category").distinct().order_by("-Category")
     for i in Categorylist:
         selectCategory.append({"Category": i["Category"]})
     if request.method == "POST":
@@ -564,9 +535,9 @@ def ABOLesson_search(request):
             if Category:
                 # print(Category)
                 Check_dic = {"Category": Category}
-                Lesson_list = ABOlesson_learn.objects.filter(**Check_dic)
+                Lesson_list = A32lesson_learn.objects.filter(**Check_dic)
             else:
-                Lesson_list = ABOlesson_learn.objects.all()
+                Lesson_list = A32lesson_learn.objects.all()
             for i in Lesson_list:
                 Photolist = []
                 filelist = []
@@ -621,11 +592,11 @@ def ABOLesson_search(request):
         # }
         # return HttpResponse(json.dumps(data), content_type="application/json")
         # print(locals())
-    return render(request, 'ABOProjectLessonL/Lesson_search.html', locals())
+    return render(request, 'A32LessonLProject/Lesson_search.html', locals())
 
 
 @csrf_exempt
-def ABOLesson_export(request):
+def A32Lesson_export(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -646,7 +617,7 @@ def ABOLesson_export(request):
         #  "Solution": "", "Action": "", "Photo": "", "Video": "", "editor": "", "edit_time": ""},
     ]
     # print(request.method)
-    Categorylist = ABOlesson_learn.objects.all().values("Category").distinct().order_by("-Category")
+    Categorylist = A32lesson_learn.objects.all().values("Category").distinct().order_by("-Category")
     for i in Categorylist:
         selectCategory.append({"Category": i["Category"]})
     if request.method == "POST":
@@ -663,9 +634,9 @@ def ABOLesson_export(request):
             if Category:
                 # print(Category)
                 Check_dic = {"Category": Category}
-                Lesson_list = ABOlesson_learn.objects.filter(**Check_dic)
+                Lesson_list = A32lesson_learn.objects.filter(**Check_dic)
             else:
-                Lesson_list = ABOlesson_learn.objects.all()
+                Lesson_list = A32lesson_learn.objects.all()
             for i in Lesson_list:
                 Photolist = []
                 filelist = []
@@ -718,10 +689,10 @@ def ABOLesson_export(request):
         # return HttpResponse(json.dumps(data), content_type="application/json")
         # print(locals())
 
-    return render(request, 'ABOProjectLessonL/Lesson_export.html', locals())
+    return render(request, 'A32LessonLProject/Lesson_export.html', locals())
 
 
-def ABOLesson_project(request):
+def A32Lesson_project(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -729,7 +700,7 @@ def ABOLesson_project(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "LessonProjectME/Edit"
-    Lesson_list = ABOlesson_learn.objects.all()
+    Lesson_list = A32lesson_learn.objects.all()
     canEdit = 0
     msg = 400
     mock_data = [
@@ -759,11 +730,11 @@ def ABOLesson_project(request):
         #         {"project": "DLAE3", "phase": [1, 2, 3]}],
         # "Other": [{"project": "OTHER", "phase": [1, 2, 3]}]
     }
-    Customer_list = ABOTestProjectLL.objects.all().values('Customer').distinct().order_by('Customer')
+    Customer_list = A32TestProjectLL.objects.all().values('Customer').distinct().order_by('Customer')
 
     for i in Customer_list:
         Customerlist = []
-        for j in ABOTestProjectLL.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by(
+        for j in A32TestProjectLL.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by(
                 'Project'):
             Projectinfo = {}
             phaselist = []
@@ -788,7 +759,7 @@ def ABOLesson_project(request):
     # print(request.GET)
     # print(request.POST)
     # print(str(request.body, encoding='utf-8'))
-    Categorylist = ABOlesson_learn.objects.all().values("Category").distinct().order_by("Category")
+    Categorylist = A32lesson_learn.objects.all().values("Category").distinct().order_by("Category")
     for i in Categorylist:
         selectCategory.append({"Category": i['Category']})
 
@@ -819,7 +790,7 @@ def ABOLesson_project(request):
             dic_Project = {'Customer': Customer, 'Project': Project}
 
             # print(dic_Project)
-            Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
+            Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
             # print(Projectinfos.Owner.all())
             canEdit = 0
             current_user = request.session.get('user_name')
@@ -831,8 +802,8 @@ def ABOLesson_project(request):
                     break
             # print(canEdit)
             if Category:
-                if Projectinfos.abolessonlearn_project_set.filter(lesson__Category=Category):
-                    for i in Projectinfos.abolessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
+                if Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category):
+                    for i in Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
                         LessonProjectinfo = {}
                         LessonProjectinfo['len_id'] = i.id
                         LessonProjectinfo['Category'] = i.lesson.Category
@@ -858,8 +829,8 @@ def ABOLesson_project(request):
                         LessonProjectinfo['comment'] = i.Comment
                         mock_data.append(LessonProjectinfo)
             else:
-                if Projectinfos.abolessonlearn_project_set.all():
-                    for i in Projectinfos.abolessonlearn_project_set.all().order_by('id'):
+                if Projectinfos.a32lessonlearn_project_set.all():
+                    for i in Projectinfos.a32lessonlearn_project_set.all().order_by('id'):
                         LessonProjectinfo = {}
                         LessonProjectinfo['len_id'] = i.id
                         LessonProjectinfo['Category'] = i.lesson.Category
@@ -912,7 +883,7 @@ def ABOLesson_project(request):
             dic_Project = {'Customer': Customer, 'Project': Project}
 
             # print(dic_Project)
-            Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
+            Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
             # print(Projectinfos.Owner.all())
             canEdit = 0
             current_user = request.session.get('user_name')
@@ -925,12 +896,12 @@ def ABOLesson_project(request):
             # print(canEdit)
             if canEdit:
                 Lessonlist = []
-                for i in ABOlesson_learn.objects.filter(Status="active"):
+                for i in A32lesson_learn.objects.filter(Status="active"):
                     Lessonlist.append(i.id)
                 # print (Lessonlist)
                 existlesson = []
-                # print(Projectinfos.abolessonlearn_project_set)
-                for i in Projectinfos.abolessonlearn_project_set.all():
+                # print(Projectinfos.a32lessonlearn_project_set)
+                for i in Projectinfos.a32lessonlearn_project_set.all():
                     # print(i)
                     existlesson.append(i.lesson.id)
                 # print(existlesson)
@@ -938,12 +909,12 @@ def ABOLesson_project(request):
                     if i in existlesson:
                         continue
                     else:
-                        ABOlessonlearn_Project.objects.create(lesson=ABOlesson_learn.objects.get(id=i),
-                                                              Projectinfo=ABOTestProjectLL.objects.filter(
+                        A32lessonlearn_Project.objects.create(lesson=A32lesson_learn.objects.get(id=i),
+                                                              Projectinfo=A32TestProjectLL.objects.filter(
                                                                   **dic_Project).first())
             if Category:
-                if Projectinfos.abolessonlearn_project_set.filter(lesson__Category=Category):
-                    for i in Projectinfos.abolessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
+                if Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category):
+                    for i in Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
                         LessonProjectinfo = {}
                         LessonProjectinfo['len_id'] = i.id
                         LessonProjectinfo['Category'] = i.lesson.Category
@@ -969,8 +940,8 @@ def ABOLesson_project(request):
                         LessonProjectinfo['comment'] = i.Comment
                         mock_data.append(LessonProjectinfo)
             else:
-                if Projectinfos.abolessonlearn_project_set.all():
-                    for i in Projectinfos.abolessonlearn_project_set.all().order_by('id'):
+                if Projectinfos.a32lessonlearn_project_set.all():
+                    for i in Projectinfos.a32lessonlearn_project_set.all().order_by('id'):
                         LessonProjectinfo = {}
                         LessonProjectinfo['len_id'] = i.id
                         LessonProjectinfo['Category'] = i.lesson.Category
@@ -1020,11 +991,11 @@ def ABOLesson_project(request):
                            'Project': request.POST.get("project")}
             Category = request.POST.get("Category")
 
-            Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
-            # learninfo = ABOlesson_learn.objects.get(id=request.POST.get("lesson_id"))
-            # editplan = ABOlessonlearn_Project.objects.filter(lesson=learninfo, Projectinfo=Projectinfos).first()
+            Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
+            # learninfo = A32lesson_learn.objects.get(id=request.POST.get("lesson_id"))
+            # editplan = A32lessonlearn_Project.objects.filter(lesson=learninfo, Projectinfo=Projectinfos).first()
             try:
-                editplan = ABOlessonlearn_Project.objects.filter(id=request.POST.get("lesson_id")).first()
+                editplan = A32lessonlearn_Project.objects.filter(id=request.POST.get("lesson_id")).first()
                 # print(type(editplan))
                 editplan.result = request.POST.get("result")
                 editplan.Comment = request.POST.get("comment")
@@ -1037,7 +1008,7 @@ def ABOLesson_project(request):
                 Content = "保存失败,请检查网络并重新尝试保存"
 
             # print(dic_Project)
-            Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
+            Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
             # print(Projectinfos.Owner.all())
             canEdit = 0
             current_user = request.session.get('user_name')
@@ -1048,8 +1019,8 @@ def ABOLesson_project(request):
                     canEdit = 1
                     break
             if Category:
-                Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
-                for i in Projectinfos.abolessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
+                Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
+                for i in Projectinfos.a32lessonlearn_project_set.filter(lesson__Category=Category).order_by('id'):
                     LessonProjectinfo = {}
                     LessonProjectinfo['len_id'] = i.id
                     LessonProjectinfo['Category'] = i.lesson.Category
@@ -1075,8 +1046,8 @@ def ABOLesson_project(request):
                     LessonProjectinfo['comment'] = i.Comment
                     mock_data.append(LessonProjectinfo)
             else:
-                Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
-                for i in Projectinfos.abolessonlearn_project_set.all().order_by('id'):
+                Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
+                for i in Projectinfos.a32lessonlearn_project_set.all().order_by('id'):
                     LessonProjectinfo = {}
                     LessonProjectinfo['len_id'] = i.id
                     LessonProjectinfo['Category'] = i.lesson.Category
@@ -1113,10 +1084,10 @@ def ABOLesson_project(request):
             # print(updateData)
             return HttpResponse(json.dumps(updateData), content_type="application/json")
 
-    return render(request, 'ABOProjectLessonL/Lesson_result.html', locals())
+    return render(request, 'A32LessonLProject/Lesson_result.html', locals())
 
 
-def ABOLesson_project_Search(request):
+def A32Lesson_project_Search(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
@@ -1124,7 +1095,7 @@ def ABOLesson_project_Search(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "LessonProjectME/ProjectResult"
-    Lesson_list = ABOlesson_learn.objects.all()
+    Lesson_list = A32lesson_learn.objects.all()
     mock_data = [
     ]
     projectMsg = [
@@ -1164,11 +1135,11 @@ def ABOLesson_project_Search(request):
             canExport = 1
         elif i == 'DQA_director':
             canExport = 1
-    Customer_list = ABOTestProjectLL.objects.all().values('Customer').distinct().order_by('Customer')
+    Customer_list = A32TestProjectLL.objects.all().values('Customer').distinct().order_by('Customer')
 
     for i in Customer_list:
         Customerlist = []
-        for j in ABOTestProjectLL.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by(
+        for j in A32TestProjectLL.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by(
                 'Project'):
             Projectinfo = {}
             phaselist = []
@@ -1188,14 +1159,14 @@ def ABOLesson_project_Search(request):
             Projectinfo['project'] = j['Project']
             Customerlist.append(Projectinfo)
         combine[i['Customer']] = Customerlist
-    Customer_list = ABOTestProjectLL.objects.all().values('Customer').distinct().order_by('Customer')
-    Categorylist = ABOlesson_learn.objects.all().values("Category").distinct().order_by("Category")
+    Customer_list = A32TestProjectLL.objects.all().values('Customer').distinct().order_by('Customer')
+    Categorylist = A32lesson_learn.objects.all().values("Category").distinct().order_by("Category")
     for i in Categorylist:
         selectCategory.append({"Category": i['Category']})
 
     # for i in Customer_list:
     #     Customerlist = []
-    #     for j in ABOTestProjectLL.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
+    #     for j in A32TestProjectLL.objects.filter(Customer=i['Customer']).values('Project').distinct().order_by('Project'):
     #         Projectinfo = {}
     #         phaselist = []
     #         # dic = {'Customer': i['Customer'], 'Project': j['Project']}
@@ -1234,11 +1205,11 @@ def ABOLesson_project_Search(request):
             Customer = request.GET.get('customer')
             Prolist = []
             if Customer != "ALL":  # 前端加了为空的判断,所以Customer不可能为空，并且el-option的value不能设为空
-                for i in ABOTestProjectLL.objects.filter(Customer=Customer).values("Project").distinct().order_by(
+                for i in A32TestProjectLL.objects.filter(Customer=Customer).values("Project").distinct().order_by(
                         "Project"):
                     Prolist.append(i["Project"])
             else:
-                for i in ABOTestProjectLL.objects.all().values("Project").distinct().order_by("Project"):
+                for i in A32TestProjectLL.objects.all().values("Project").distinct().order_by("Project"):
                     Prolist.append(i["Project"])
             # print(Prolist)
             for i in Prolist:
@@ -1297,19 +1268,19 @@ def ABOLesson_project_Search(request):
             print(Projectlist)
             Category = request.POST.get('Category')
             if Category:
-                for i in ABOlesson_learn.objects.filter(Category=Category):
+                for i in A32lesson_learn.objects.filter(Category=Category):
                     projectresult = []
                     for j in Projectlist:
                         print(j)
                         dic_Project = {'Customer': Customer, 'Project': j}
-                        Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
-                        ABOlessonlearn_Projectinfo = ABOlessonlearn_Project.objects.filter(lesson=i.id,
+                        Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
+                        A32lessonlearn_Projectinfo = A32lessonlearn_Project.objects.filter(lesson=i.id,
                                                                                            Projectinfo=Projectinfos).first()
-                        if ABOlessonlearn_Projectinfo:
-                            # print(type(ABOlessonlearn_Project.objects.filter(lesson=i.id,
-                            #                                Projectinfo=Projectinfos)),type(ABOlessonlearn_Project.objects.filter(lesson=i.id,Projectinfo=Projectinfos).first()))
-                            projectresult.append({"projectname": j, "result": ABOlessonlearn_Projectinfo.result,
-                                                  "comment": ABOlessonlearn_Projectinfo.Comment})
+                        if A32lessonlearn_Projectinfo:
+                            # print(type(A32lessonlearn_Project.objects.filter(lesson=i.id,
+                            #                                Projectinfo=Projectinfos)),type(A32lessonlearn_Project.objects.filter(lesson=i.id,Projectinfo=Projectinfos).first()))
+                            projectresult.append({"projectname": j, "result": A32lessonlearn_Projectinfo.result,
+                                                  "comment": A32lessonlearn_Projectinfo.Comment})
                         else:  # 占位，否则结果会错位
                             projectresult.append({"projectname": j, "result": '',
                                                   "comment": ''})
@@ -1338,20 +1309,20 @@ def ABOLesson_project_Search(request):
                         },
                     )
             else:
-                for i in ABOlesson_learn.objects.all():
+                for i in A32lesson_learn.objects.all():
                     projectresult = []
                     for j in Projectlist:
                         # print(j)
                         dic_Project = {'Customer': Customer, 'Project': j}
-                        Projectinfos = ABOTestProjectLL.objects.filter(**dic_Project).first()
-                        ABOlessonlearn_Projectinfo = ABOlessonlearn_Project.objects.filter(lesson=i.id,
+                        Projectinfos = A32TestProjectLL.objects.filter(**dic_Project).first()
+                        A32lessonlearn_Projectinfo = A32lessonlearn_Project.objects.filter(lesson=i.id,
                                                                                            Projectinfo=Projectinfos).first()
-                        if ABOlessonlearn_Projectinfo:
+                        if A32lessonlearn_Projectinfo:
 
-                            # print(type(ABOlessonlearn_Project.objects.filter(lesson=i.id,
-                            #                                Projectinfo=Projectinfos)),type(ABOlessonlearn_Project.objects.filter(lesson=i.id,Projectinfo=Projectinfos).first()))
-                            projectresult.append({"projectname": j, "result": ABOlessonlearn_Projectinfo.result,
-                                                  "comment": ABOlessonlearn_Projectinfo.Comment})
+                            # print(type(A32lessonlearn_Project.objects.filter(lesson=i.id,
+                            #                                Projectinfo=Projectinfos)),type(A32lessonlearn_Project.objects.filter(lesson=i.id,Projectinfo=Projectinfos).first()))
+                            projectresult.append({"projectname": j, "result": A32lessonlearn_Projectinfo.result,
+                                                  "comment": A32lessonlearn_Projectinfo.Comment})
                         else:  # 占位，否则结果会错位
                             projectresult.append({"projectname": j, "result": '',
                                                   "comment": ''})
@@ -1392,4 +1363,4 @@ def ABOLesson_project_Search(request):
             # print(updateData)
             return HttpResponse(json.dumps(updateData), content_type="application/json")
 
-    return render(request, 'ABOProjectLessonL/Lesson_result_search.html', locals())
+    return render(request, 'A32LessonLProject/Lesson_result_search.html', locals())

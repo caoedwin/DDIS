@@ -1415,7 +1415,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalInfo/PersonalInfo-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "/PersonalInfo/PersonalInfo-search/", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "/PersonalInfo/PersonalInfo-search/", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "/PersonalInfo/PersonalInfo-search/", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/PersonalInfo/PersonalInfo-search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1435,7 +1435,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalExperience/Summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1455,7 +1455,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalInfo/PublicArea/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1477,7 +1477,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/ProjectInfoSearch/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "/ProjectInfoSearch/", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "/ProjectInfoSearch/", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "/ProjectInfoSearch/", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1497,7 +1497,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/TestPlanME/TestPlanME-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1517,7 +1517,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/TestPlanSW/TestPlanSW-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABOTestPlan/ABOTestPlan_summary/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1537,7 +1537,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/TestPlanSWOS/TestPlanSWOS-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1557,7 +1557,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/INVGantt/INVGantt-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1577,7 +1577,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/CQM/CQM_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1597,7 +1597,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/MQM/MQM_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1617,7 +1617,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/DriverTool/DriverList_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABODriverTool/ABODriverList_search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1637,7 +1637,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/DriverTool/ToolList_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1660,7 +1660,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryMateria/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1681,7 +1681,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/AdapterPowerCode/BorrowedAdapter/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1702,7 +1702,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/ComputerMS/BorrowedComputer/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1723,7 +1723,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/ChairCabinetMS/BorrowedChairCabinet/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1743,7 +1743,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": DDMS_add + "/Summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
         #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
         #      "name4": 'ABO', "url4": DDMS_add + "/Summary_ABO/", "Comment4": "", "CustomerFlag4": 0,  # ABO
         #      },
         #     {"Comment": "",
@@ -1764,7 +1764,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/DeviceLNV/BorrowedDeviceLNV/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": DDMS_add + "/DeviceABO/BorrowedDeviceABO/", "Comment4": "", "CustomerFlag4": 0,
              # ABO
              },
@@ -1790,7 +1790,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/QIL/QIL_searchbyproject/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABOQIL/ABOQIL_searchbyproject/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1810,7 +1810,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/LessonProjectME/Lesson_SearchByProject/", "Comment1": "",  # C38
              "name2": "A31", "url2": "/A31LessonLProject/Lesson_SearchByProject/", "Comment2": "",  # A31
-             "name3": "A32", "url3": "/A32LessonLProject/Lesson_SearchByProject/", "Comment3": "",  # A32
+             "name3": "", "url3": "/LessonLProject/Lesson_SearchByProject/", "Comment3": "",  #
              "name4": 'ABO', "url4": "/ABOProjectLessonL/Lesson_SearchByProject/", "Comment4": "",  # ABO
              },
             {"Comment": "",
@@ -1830,7 +1830,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/LowLightList/LowLightList_edit/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1851,7 +1851,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": "/IssuesBreakdown/IssuesBreakdown_Summary/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1871,7 +1871,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": "/Issue_Notes/Issue_Notes-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
         #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
         #      "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
         #      },
         #     {"Comment": "",
@@ -1891,7 +1891,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": "/KnowIssue/KnowIssue-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
         #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
         #      "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
         #      },
         #     {"Comment": "",
@@ -1911,7 +1911,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1933,8 +1933,8 @@ def Navigations_system_axios(request):
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment2": "",
              "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment3": "",
-             "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment3": "",
+             "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment4": "",
              "CustomerFlag4": 0,  # ABO
              },
@@ -1958,7 +1958,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": "/CapitalExpenditure/CapitalExpenditure_Summary/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFla3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFla3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1978,7 +1978,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/ProjectComparison/ProjectComparison_Summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1998,7 +1998,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryTUM/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2018,7 +2018,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/MiscellaneousPurchases/SubscriptionStatus/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2040,7 +2040,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/SpecDownload/SpecDownload-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2060,7 +2060,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "管理規範", "url1": "/SpecDownload/ManagementSop-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2080,7 +2080,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/OBIDeviceResult/OBIDeviceResult_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2100,7 +2100,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/Package/Package-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2120,7 +2120,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/CDM/CDM-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2140,7 +2140,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/Bouncing/Bouncing-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2162,7 +2162,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/AutoResult/AutoResult_search/", "Comment1": "",  "CustomerFlag1": 0, # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,# A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,# A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,#
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,# ABO
              },
             {"Comment": "",
@@ -2183,7 +2183,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": Discussing_add + "/index/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  # A32
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2205,7 +2205,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": RTMS_add + "/index/", "Comment1": "",  # C38
         #      "name2": "A31", "url2": "", "Comment2": "",  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "",  # A32
+        #      "name3": "", "url3": "", "Comment3": "",  #
         #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
         #      },
         #     {"Comment": "",
@@ -2225,7 +2225,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": DCT_add + "/DCT/RealTime/Index", "Comment1": "",  # C38
         #      "name2": "A31", "url2": "", "Comment2": "",  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "",  # A32
+        #      "name3": "", "url3": "", "Comment3": "",  #
         #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
         #      },
         #     {"Comment": "",
@@ -2245,7 +2245,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": EQUIP_add + "/DQA_ELR/index.html", "Comment1": "",  # C38
         #      "name2": "A31", "url2": "", "Comment2": "",  # A31
-        #      "name3": "A32", "url3": "", "Comment3": "",  # A32
+        #      "name3": "", "url3": "", "Comment3": "",  #
         #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
         #      },
         #     {"Comment": "",
@@ -2431,10 +2431,10 @@ def PermInfo_axios(request):
 
     ]
     heBingNum_A31 = []
-    tableContent_A32 = [
+    tableContent_ = [
 
     ]
-    heBingNum_A32 = []
+    heBingNum_ = []
     # print(request.method)
     # print(request.GET)
     # print(request.POST)
@@ -2450,12 +2450,12 @@ def PermInfo_axios(request):
             "tableContent_ABO": tableContent_ABO,
             "tableContent_CQT88": tableContent_CQT88,
             "tableContent_A31": tableContent_A31,
-            "tableContent_A32": tableContent_A32,
+            "tableContent_": tableContent_,
             "heBingNum_C38": heBingNum_C38,
             "heBingNum_ABO": heBingNum_ABO,
             "heBingNum_CQT88": heBingNum_CQT88,
             "heBingNum_A31": heBingNum_A31,
-            "heBingNum_A32": heBingNum_A32,
+            "heBingNum_": heBingNum_,
 
         }
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -2655,6 +2655,7 @@ def Lesson_edit(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "Lesson-Learn/Reliability/Redit"
+    errMsg = ''
     selectCategory = [
         # {"Category": "SW"},
         # {"Category": "ME"}
@@ -2710,12 +2711,12 @@ def Lesson_edit(request):
                 for h in i.Photo.all():
                     # print(str(h.img).split("."))
                     if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
-                        Photolist.append("/media/" + str(h.img))
+                        Photolist.append({"id": h.id, "url": "/media/" + str(h.img)})
                     else:
-                        filelist.append("/media/" + str(h.img))
+                        filelist.append({"id": h.id, "url": "/media/" + str(h.img)})
                 Videolist = []
                 for h in i.video.all():
-                    Videolist.append("/media/" + str(h.files))
+                    Videolist.append({"id": h.id, "url": "/media/" + str(h.files)})
                 # print(Photolist)
                 mock_data.append(
                     {
@@ -2760,7 +2761,7 @@ def Lesson_edit(request):
                     fileListO.append({'name': '', 'url': '/media/' + i.img.name})
 
                 for i in editlesson.video.all():
-                    fileList1.append({'name': '', 'url': '/media/' + i.files.name})
+                    fileList1.append({'name': '', 'url': '/media/'+i.files.name})
             data = {
                 'form': form,
                 'fileListO': fileListO,
@@ -2768,106 +2769,131 @@ def Lesson_edit(request):
             }
             # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
-        if request.POST.get("action") == "submit":
-            serchCategory = request.POST.get("serchCategory")
-            editID = request.POST.get('id')
-            # print(serchCategory, request.POST.get('Category'))
-            Photolist = request.FILES.getlist("fileListPic", "")
-            videolist = request.FILES.getlist("fileListVideo", "")
-            # print(Photolist,editID)
-            if editID:
-                # print("1")
-                editlesson = lesson_learn.objects.get(id=editID)
-                editlesson.Category = request.POST.get('Category')
-                editlesson.Object = request.POST.get('Object')
-                editlesson.Symptom = request.POST.get('Symptom')
-                editlesson.Reproduce_Steps = request.POST.get('Reproduce_Steps')
-                editlesson.Root_Cause = request.POST.get('Root_Cause')
-                editlesson.Solution = request.POST.get('Solution')
-                editlesson.Action = request.POST.get('Action')
-                editlesson.Status = request.POST.get('Status')
-                # lesson.Photo=Photos
-                editlesson.editor = request.session.get('user_name')
-                editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                # editlesson.Photo.clear()
-                # editlesson.video.clear()
-                editlesson.save()
-                if Photolist:
-                    for f in Photolist:
-                        # print(f)
-                        if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
-                            1] == "mov" or f.name.split(".")[1] == "rmvb":
-                            # empt = files()
-                            # # 增加其他字段应分别对应填写
-                            # empt.single = f
-                            # empt.files = f
-                            # empt.save()
-                            # editlesson.video.add(empt)
-                            pass
-                        else:
-                            empt = Imgs()
+        if request.POST.get("isGetData") == "submit":
+            errMsg = ''
+            try:
+                serchCategory = request.POST.get("serchCategory")
+                editID = request.POST.get('id')
+                # print(serchCategory, request.POST.get('Category'))
+                Photolist = request.FILES.getlist("new_photos", "")
+                videolist = request.FILES.getlist("new_videos", "")
+                # 获取待删除文件列表
+                photos_to_delete = json.loads(request.POST.get('photos_to_delete', '[]'))
+                videos_to_delete = json.loads(request.POST.get('videos_to_delete', '[]'))
+                # print(photos_to_delete, videos_to_delete)
+
+                # print(Photolist,editID)
+                if editID:
+                    # print("1")
+                    editlesson = lesson_learn.objects.get(id=editID)
+                    editlesson.Category = request.POST.get('Category')
+                    editlesson.Object = request.POST.get('Object')
+                    editlesson.Symptom = request.POST.get('Symptom')
+                    editlesson.Reproduce_Steps = request.POST.get('Reproduce_Steps')
+                    editlesson.Root_Cause = request.POST.get('Root_Cause')
+                    editlesson.Solution = request.POST.get('Solution')
+                    editlesson.Action = request.POST.get('Action')
+                    editlesson.Status = request.POST.get('Status')
+                    # lesson.Photo=Photos
+                    editlesson.editor = request.session.get('user_name')
+                    editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    editlesson.save()
+                    if Photolist:
+                        for f in Photolist:
+                            # print(f)
+                            if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
+                                1] == "mov" or f.name.split(".")[1] == "rmvb":
+                                # empt = files()
+                                # # 增加其他字段应分别对应填写
+                                # empt.single = f
+                                # empt.files = f
+                                # empt.save()
+                                # editlesson.video.add(empt)
+                                pass
+                            else:
+                                empt = Imgs()
+                                # 增加其他字段应分别对应填写
+                                empt.single = f
+                                empt.img = f
+                                empt.save()
+                                editlesson.Photo.add(empt)
+
+                    # image_ids = request.POST.getlist('image_ids[]')
+
+                    # 获取图片对象
+                    # images = Imgs.objects.filter(single__in=image_ids)
+                    images = Imgs.objects.filter(id__in=photos_to_delete)#最好是用id，这样搜索时就需要返回带id的信息
+                    # print(images)
+
+                    # 解除关联
+                    editlesson.Photo.remove(*images)  # 使用 * 解包列表
+                    images.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                    if videolist:
+                        for f in videolist:
+                            # print(f)
+                            empt = Files()
                             # 增加其他字段应分别对应填写
                             empt.single = f
-                            empt.img = f
+                            empt.files = f
                             empt.save()
-                            editlesson.Photo.add(empt)
-                if videolist:
-                    for f in videolist:
-                        # print(f)
-                        empt = Files()
-                        # 增加其他字段应分别对应填写
-                        empt.single = f
-                        empt.files = f
-                        empt.save()
-                        editlesson.video.add(empt)
-            if serchCategory:
-                # print(Category)
-                Check_dic = {"Category": serchCategory}
-                Lesson_list = lesson_learn.objects.filter(**Check_dic)
-            else:
-                Lesson_list = lesson_learn.objects.all()
-            for i in Lesson_list:
-                Photolist = []
-                filelist = []
-                for h in i.Photo.all():
-                    # print(str(h.img).split("."))
-                    if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
-                        Photolist.append("/media/" + str(h.img))
-                    else:
-                        filelist.append("/media/" + str(h.img))
-                Videolist = []
-                for h in i.video.all():
-                    # print(h,"1",h.files,"2",h.single)
-                    Videolist.append("/media/" + str(h.files))
-                # print(Videolist)
-                mock_data.append(
-                    {
-                        "id": i.id,
-                        "Category": i.Category,
-                        "Object": i.Object,
-                        "Symptom": i.Symptom,
-                        "Reproduce_Steps": i.Reproduce_Steps,
-                        "Root_Cause": i.Root_Cause,
-                        "Solution": i.Solution,
-                        "Action": i.Action,
-                        "Status": i.Status,
-                        "Photo": Photolist,
-                        "file": filelist,
-                        "Video": Videolist,
-                        "editor": i.editor,
-                        "edit_time": i.edit_time,
-                    },
-                )
-            # print(mock_data)
+                            editlesson.video.add(empt)
+                    vedios = Files.objects.filter(id__in=videos_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                    # print(vedios)
 
-            # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
-            #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
+                    # 解除关联
+                    editlesson.video.remove(*vedios)  # 使用 * 解包列表
+                    vedios.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                if serchCategory:
+                    # print(Category)
+                    Check_dic = {"Category": serchCategory}
+                    Lesson_list = lesson_learn.objects.filter(**Check_dic)
+                else:
+                    Lesson_list = lesson_learn.objects.all()
+                for i in Lesson_list:
+                    Photolist = []
+                    filelist = []
+                    for h in i.Photo.all():
+                        # print(str(h.img).split("."))
+                        if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
+                            Photolist.append({"id": h.id, "url": "/media/" + str(h.img)})
+                        else:
+                            filelist.append({"id": h.id, "url": "/media/" + str(h.img)})
+                    Videolist = []
+                    for h in i.video.all():
+                        Videolist.append({"id": h.id, "url": "/media/" + str(h.files)})
+                    # print(Photolist)
+                    mock_data.append(
+                        {
+                            "id": i.id,
+                            "Category": i.Category,
+                            "Object": i.Object,
+                            "Symptom": i.Symptom,
+                            "Reproduce_Steps": i.Reproduce_Steps,
+                            "Root_Cause": i.Root_Cause,
+                            "Solution": i.Solution,
+                            "Action": i.Action,
+                            "Status": i.Status,
+                            "Photo": Photolist,
+                            "file": filelist,
+                            "Video": Videolist,
+                            "editor": i.editor,
+                            "edit_time": i.edit_time,
+                        },
+                    )
+                # print(mock_data)
+
+                # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
+                #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
+            except Exception as e:
+                errMsg = str(e)
             data = {
                 #     'fileList': fileList
                 'addselect': selectCategory,
                 'content': mock_data,
+                'errMsg': errMsg,
             }
-            # print(updateData)
+                # print(updateData)
+
             return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'Lesson_edit.html', locals())
 

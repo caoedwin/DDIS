@@ -115,6 +115,7 @@ def A31Lesson_edit(request):
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "Lesson-Learn/Reliability/Redit"
+    errMsg = ''
     selectCategory = [
         # {"Category": "SW"},
         # {"Category": "ME"}
@@ -170,12 +171,12 @@ def A31Lesson_edit(request):
                 for h in i.Photo.all():
                     # print(str(h.img).split("."))
                     if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
-                        Photolist.append("/media/" + str(h.img))
+                        Photolist.append({"id": h.id, "url": "/media/" + str(h.img)})
                     else:
-                        filelist.append("/media/" + str(h.img))
+                        filelist.append({"id": h.id, "url": "/media/" + str(h.img)})
                 Videolist = []
                 for h in i.video.all():
-                    Videolist.append("/media/" + str(h.files))
+                    Videolist.append({"id": h.id, "url": "/media/" + str(h.files)})
                 # print(Photolist)
                 mock_data.append(
                     {
@@ -228,103 +229,131 @@ def A31Lesson_edit(request):
             }
             # print(data)
             return HttpResponse(json.dumps(data), content_type="application/json")
-        if request.POST.get("action") == "submit":
-            serchCategory = request.POST.get("serchCategory")
-            editID = request.POST.get('id')
-            # print(serchCategory, request.POST.get('Category'))
-            Photolist = request.FILES.getlist("fileListPic", "")
-            videolist = request.FILES.getlist("fileListVideo", "")
-            # print(Photolist,editID)
-            if editID:
-                # print("1")
-                editlesson = A31lesson_learn.objects.get(id=editID)
-                editlesson.Category = request.POST.get('Category')
-                editlesson.Object = request.POST.get('Object')
-                editlesson.Symptom = request.POST.get('Symptom')
-                editlesson.Reproduce_Steps = request.POST.get('Reproduce_Steps')
-                editlesson.Root_Cause = request.POST.get('Root_Cause')
-                editlesson.Solution = request.POST.get('Solution')
-                editlesson.Action = request.POST.get('Action')
-                editlesson.Status = request.POST.get('Status')
-                # lesson.Photo=Photos
-                editlesson.editor = request.session.get('user_name')
-                editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                editlesson.save()
-                if Photolist:
-                    for f in Photolist:
-                        # print(f)
-                        if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
-                            1] == "mov" or f.name.split(".")[1] == "rmvb":
-                            # empt = A31files()
-                            # # 增加其他字段应分别对应填写
-                            # empt.single = f
-                            # empt.files = f
-                            # empt.save()
-                            # editlesson.video.add(empt)
-                            pass
-                        else:
-                            empt = A31Imgs()
+        if request.POST.get("isGetData") == "submit":
+            errMsg = ''
+            try:
+                serchCategory = request.POST.get("serchCategory")
+                editID = request.POST.get('id')
+                # print(serchCategory, request.POST.get('Category'))
+                Photolist = request.FILES.getlist("new_photos", "")
+                videolist = request.FILES.getlist("new_videos", "")
+                # 获取待删除文件列表
+                photos_to_delete = json.loads(request.POST.get('photos_to_delete', '[]'))
+                videos_to_delete = json.loads(request.POST.get('videos_to_delete', '[]'))
+                # print(photos_to_delete, videos_to_delete)
+
+                # print(Photolist,editID)
+                if editID:
+                    # print("1")
+                    editlesson = A31lesson_learn.objects.get(id=editID)
+                    editlesson.Category = request.POST.get('Category')
+                    editlesson.Object = request.POST.get('Object')
+                    editlesson.Symptom = request.POST.get('Symptom')
+                    editlesson.Reproduce_Steps = request.POST.get('Reproduce_Steps')
+                    editlesson.Root_Cause = request.POST.get('Root_Cause')
+                    editlesson.Solution = request.POST.get('Solution')
+                    editlesson.Action = request.POST.get('Action')
+                    editlesson.Status = request.POST.get('Status')
+                    # lesson.Photo=Photos
+                    editlesson.editor = request.session.get('user_name')
+                    editlesson.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    editlesson.save()
+                    if Photolist:
+                        for f in Photolist:
+                            # print(f)
+                            if f.name.split(".")[1] == "mp4" or f.name.split(".")[1] == "AVI" or f.name.split(".")[
+                                1] == "mov" or f.name.split(".")[1] == "rmvb":
+                                # empt = A31files()
+                                # # 增加其他字段应分别对应填写
+                                # empt.single = f
+                                # empt.files = f
+                                # empt.save()
+                                # editlesson.video.add(empt)
+                                pass
+                            else:
+                                empt = A31Imgs()
+                                # 增加其他字段应分别对应填写
+                                empt.single = f
+                                empt.img = f
+                                empt.save()
+                                editlesson.Photo.add(empt)
+
+                    # image_ids = request.POST.getlist('image_ids[]')
+
+                    # 获取图片对象
+                    # images = A31Imgs.objects.filter(single__in=image_ids)
+                    images = A31Imgs.objects.filter(id__in=photos_to_delete)#最好是用id，这样搜索时就需要返回带id的信息
+                    # print(images)
+
+                    # 解除关联
+                    editlesson.Photo.remove(*images)  # 使用 * 解包列表
+                    images.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                    if videolist:
+                        for f in videolist:
+                            # print(f)
+                            empt = A31files()
                             # 增加其他字段应分别对应填写
                             empt.single = f
-                            empt.img = f
+                            empt.files = f
                             empt.save()
-                            editlesson.Photo.add(empt)
-                if videolist:
-                    for f in videolist:
-                        # print(f)
-                        empt = A31files()
-                        # 增加其他字段应分别对应填写
-                        empt.single = f
-                        empt.files = f
-                        empt.save()
-                        editlesson.video.add(empt)
-            if serchCategory:
-                # print(Category)
-                Check_dic = {"Category": serchCategory}
-                Lesson_list = A31lesson_learn.objects.filter(**Check_dic)
-            else:
-                Lesson_list = A31lesson_learn.objects.all()
-            for i in Lesson_list:
-                Photolist = []
-                filelist = []
-                for h in i.Photo.all():
-                    # print(str(h.img).split("."))
-                    if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
-                        Photolist.append("/media/" + str(h.img))
-                    else:
-                        filelist.append("/media/" + str(h.img))
-                Videolist = []
-                for h in i.video.all():
-                    Videolist.append("/media/" + str(h.files))
-                # print(Photolist)
-                mock_data.append(
-                    {
-                        "id": i.id,
-                        "Category": i.Category,
-                        "Object": i.Object,
-                        "Symptom": i.Symptom,
-                        "Reproduce_Steps": i.Reproduce_Steps,
-                        "Root_Cause": i.Root_Cause,
-                        "Solution": i.Solution,
-                        "Action": i.Action,
-                        "Status": i.Status,
-                        "Photo": Photolist,
-                        "file": filelist,
-                        "Video": Videolist,
-                        "editor": i.editor,
-                        "edit_time": i.edit_time,
-                    },
-                )
-            # print(mock_data)
+                            editlesson.video.add(empt)
+                    vedios = A31files.objects.filter(id__in=videos_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                    # print(vedios)
 
-            # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
-            #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
+                    # 解除关联
+                    editlesson.video.remove(*vedios)  # 使用 * 解包列表
+                    vedios.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                if serchCategory:
+                    # print(Category)
+                    Check_dic = {"Category": serchCategory}
+                    Lesson_list = A31lesson_learn.objects.filter(**Check_dic)
+                else:
+                    Lesson_list = A31lesson_learn.objects.all()
+                for i in Lesson_list:
+                    Photolist = []
+                    filelist = []
+                    for h in i.Photo.all():
+                        # print(str(h.img).split("."))
+                        if str(h.img).split(".")[1] == "jpg" or str(h.img).split(".")[1] == "png":
+                            Photolist.append({"id": h.id, "url": "/media/" + str(h.img)})
+                        else:
+                            filelist.append({"id": h.id, "url": "/media/" + str(h.img)})
+                    Videolist = []
+                    for h in i.video.all():
+                        Videolist.append({"id": h.id, "url": "/media/" + str(h.files)})
+                    # print(Photolist)
+                    mock_data.append(
+                        {
+                            "id": i.id,
+                            "Category": i.Category,
+                            "Object": i.Object,
+                            "Symptom": i.Symptom,
+                            "Reproduce_Steps": i.Reproduce_Steps,
+                            "Root_Cause": i.Root_Cause,
+                            "Solution": i.Solution,
+                            "Action": i.Action,
+                            "Status": i.Status,
+                            "Photo": Photolist,
+                            "file": filelist,
+                            "Video": Videolist,
+                            "editor": i.editor,
+                            "edit_time": i.edit_time,
+                        },
+                    )
+                # print(mock_data)
+
+                # fileList = [{name: 'food.jpeg', url: '/static/images/spec.png'},
+                #             {name: 'food2.jpeg', url: '/static/images/spec.png'}]
+            except Exception as e:
+                errMsg = str(e)
             data = {
                 #     'fileList': fileList
                 'addselect': selectCategory,
                 'content': mock_data,
+                'errMsg': errMsg,
             }
-            # print(updateData)
+                # print(updateData)
+
             return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'A31LessonLProject/Lesson_edit.html', locals())
 

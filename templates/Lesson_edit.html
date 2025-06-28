@@ -165,7 +165,6 @@
             color: white;
         }
     </style>
-
 {% endblock %}
 {% block content %}
 
@@ -181,9 +180,9 @@
             </div>
             <el-button v-cloak @click="Search" type="primary" style="height:40px;margin-right: 20px">搜索</el-button>
         </div>
-        <el-dialog :visible.sync="update">
+        <el-dialog :visible.sync="update" @close="resetForm">
             <template>
-                <el-form ref="form" :model="form" label-width="80px">
+                <el-form ref="form" :model="form" label-width="120px">
                     <el-form-item label="Category">
                         <el-select v-model="form.Category" placeholder="请选择">
                             <el-option label="Reliability" value="Reliability"></el-option>
@@ -218,35 +217,48 @@
                         <el-upload
                                 action="#"
                                 list-type="picture-card"
-                                :on-success="handleImageSuccess"
-                                :before-upload="beforeImageUpload"
-                                :auto-upload="true"
+                                :auto-upload="false"
                                 :file-list="fileListO"
+                                :on-change="handleImageChange"
+                                :on-remove="handleImageRemove"
                         >
-                            <!-- 十字图标 -->
                             <i slot="default" class="el-icon-plus"></i>
-                            <!-- 文件 -->
                             <div slot="file" slot-scope="{file}">
                                 <img class="el-upload-list__item-thumbnail" :src="file.url" alt/>
+                                <span class="el-upload-list__item-actions">
+                                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                        <i class="el-icon-zoom-in"></i>
+                                    </span>
+                                    <span class="el-upload-list__item-delete" @click="handleImageRemove(file)">
+                                        <i class="el-icon-delete"></i>
+                                    </span>
+                                </span>
                             </div>
                         </el-upload>
+                        <el-dialog :visible.sync="dialogVisible">
+                            <img width="100%" :src="dialogImageUrl" alt="">
+                        </el-dialog>
                     </el-form-item>
                     <el-form-item label="Video">
                         <el-upload
                           action="#"
-                          :accept="'.mp4, .avi, .flv, .mov, .wmv, .rmvb, .ogg'"
-                          :on-success="handleVideoUploadSuccess"
+                          :auto-upload="false"
                           :file-list="fileList1"
+                          :on-change="handleVideoChange"
+                          :on-remove="handleVideoRemove"
                         >
                           <el-button type="primary">点击上传视频</el-button>
-                            <!-- 文件 -->
-                            <div slot="file" slot-scope="{file}">
-                                <video controls width="320" height="240" :src="file.url"></video>
-                            </div>
+                          <div slot="file" slot-scope="{file}">
+                              <video controls width="320" height="180" :src="file.url"></video>
+                              <div style="margin-top: 10px">
+                                  <el-button size="mini" type="danger" @click="handleVideoRemove(file)">删除</el-button>
+                              </div>
+                          </div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">更新</el-button>
+                        <el-button @click="update = false">取消</el-button>
                     </el-form-item>
                 </el-form>
             </template>
@@ -255,8 +267,6 @@
             {% csrf_token %}
             <!--數據表-->
             <el-table height="700" border :data="tableData" style="min-width: 100%;border-radius: 10px"
-                    {#        :row-class-name="tableRowClassName"#}
-                    {#        row-click="rowClick"#}
                       :header-cell-style="{
        'background-color':'#fafafa',
        'font-weight':'800',
@@ -265,10 +275,9 @@
                 <el-table-column label="Edit">
                     <template slot-scope="scope">
                         <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"
-                                   @click="alertID(scope.row.id);update=true"></el-button>
+                                   @click="alertID(scope.row);update=true"></el-button>
                     </template>
                 </el-table-column>
-                {% comment %}    <el-table-column prop="id" label="ID" sortable ></el-table-column>{% endcomment %}
                 <el-table-column type="index" :index="indexMethod"></el-table-column>
                 <el-table-column prop="Category" label="Category" width="104" sortable></el-table-column>
                 <el-table-column prop="Object" label="Object" width="97" sortable></el-table-column>
@@ -286,29 +295,18 @@
                 <el-table-column prop="Photo" label="Photo" width="100" sortable class="eltable-photo">
                     <template scope="scope">
                         <div class="eltable-photo">
-                            <el-image v-for="(item) in scope.row.Photo" :src="item" style="width: 100px; height: 100px;"
-                                      :preview-src-list="scope.row.Photo" lazy="true"></el-image>
-                        </div>
-                        <div v-if="scope.row.file[0]">
-                            <a v-for="(item) in scope.row.file" v-bind:href="item"><img
-                                    src="/static/src/back/document_save_2_24px_539656_easyicon.net.png"></a>
+                            <el-image v-for="(item) in scope.row.Photo" :src="item.url" style="width: 100px; height: 100px;"
+                                      :preview-src-list="getPreviewList(scope.row.Photo)" lazy="true"></el-image>
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="Video" label="Video" width="100" sortable class="eltable-video">
                     <template scope="scope">
                         <div class="eltable-video">
-                            {% comment %} <el-video v-for="(item) in scope.row.Video" :src="item" style="width: 200px; height: 100px;" :preview-src-list="scope.row.Video" lazy="true"><source src="item" type="video/mp4">  </el-video>{% endcomment %}
-
-
-                            {#                                                                                <img src="../media/{{ i.img }}" height="100" width="200" alt="" />#}
                             <video v-for="(item) in scope.row.Video" width="200" height="100" controls>
-                                <source :src="item" type="video/mp4">
-                                # 播放器形式
+                                <source :src="item.url" type="video/mp4">
                                 您的浏览器不支持 video 标签。
                             </video>
-
-
                         </div>
                     </template>
                 </el-table-column>
@@ -348,16 +346,15 @@
                     update: false,
                     dialogImageUrl: '',
                     dialogVisible: false,
-                    videoFile: null, // 用于保存用户上传的视频文件
-                    videoUrl: '',// 用于保存视频文件的URL
-                    videoShow: false,
-                    disabled: false,
-                    PhotoList: [],
-                    fileListO: [],
-                    fileList1: [],
-                    fileListPic: [],
-                    fileListVideo: [],
+                    fileListO: [],  // 图片显示列表
+                    fileList1: [],  // 视频显示列表
+                    newPhotos: [],    // 新上传的图片
+                    newVideos: [],    // 新上传的视频
+                    photosToDelete: [], // 待删除的图片
+                    videosToDelete: [], // 待删除的视频
                     editID: '',
+                    originalPhotos: [], // 原始图片URL
+                    originalVideos: [], // 原始视频URL
                     form: {
                         Category: '',
                         Object: '',
@@ -368,160 +365,122 @@
                         Action: '',
                         Status: '',
                     },
-                    formData: []
-
-
                 }
             },
             mounted() {
                 this.getdata("first");
             },
             methods: {
-
-                handleFileUpload(event) {
-                   this.videoFile =  event.target.files[0];
-                },
-
-                handleVideoPlay() {
-                    // 检查是否有视频文件可播放
-                    if (this.videoUrl !== '') {
-                    let videoPlayer = document.querySelector('video');
-                    videoPlayer.play();
-                    }
-                },
-
                 indexMethod(index) {
                     return index + 1;
                 },
-                handleRemove(file) {
-                    // 删除文件
-                    console.log(file.response.data);
-                    let fileNames = file.response.data.split("/");
-                    fileDelete(fileNames[fileNames.length - 1]).then(res => {
-                        if (res.data.code == "0000") {
-                            this.fileList.splice(file, 1);
+                // 获取完整URL
+                getFullUrl(url) {
+                    if (!url) return '';
+                    // 如果是blob临时URL或完整URL直接返回
+                    if (url.startsWith('blob:') || url.startsWith('http')) {
+                        return url;
+                    }
+                    // 相对路径转换为绝对路径
+                    return window.location.origin + url;
+                },
+                // 生成预览列表
+                getPreviewList(photos) {
+                    return photos.map(photo => this.getFullUrl(photo.url)).filter(url => url);
+                },
+                handleImageChange(file, fileList) {
+                    // 添加新图片到待上传列表
+                    this.newPhotos.push(file.raw);
+
+                    // 为文件创建临时URL
+                    const tempUrl = URL.createObjectURL(file.raw);
+
+                  // 创建文件对象
+                    const newFile = {
+                    name: file.name,
+                    status: file.status,
+                    size: file.size,
+                    raw: file.raw,
+                    url: tempUrl, // 添加预览URL
+                    uid: file.uid,
+                    isNew: true   // 标记为新文件
+                  };
+
+                  // 添加到预览列表
+                  this.fileListO.push(newFile);
+                },
+                handleImageRemove(file) {
+                    // 如果删除的是原始图片，添加到待删除列表
+                    if (file.isOld) {
+                        this.photosToDelete.push(file.id);
+                    } else {
+                        console.log(file)
+                        // 从新上传列表中移除
+                        const newIndex = this.newPhotos.findIndex(f => f.uid === file.uid);
+                        if (newIndex > -1) {
+                            this.newPhotos.splice(newIndex, 1);
                         }
-                    });
+                    }
+
+                    // 从显示列表中移除
+                    const index = this.fileListO.findIndex(f => f.uid === file.uid);
+                    if (index > -1) {
+                        this.fileListO.splice(index, 1);
+                    }
+                    console.log(this.fileListO,"fileListO")
+                },
+                handleVideoChange(file, fileList) {
+                    // 添加新视频到待上传列表
+                    this.newVideos.push(file.raw);
+                    // 为文件创建临时URL
+                    const tempUrl = URL.createObjectURL(file.raw);
+
+                  // 创建文件对象
+                    const newFile = {
+                    name: file.name,
+                    status: file.status,
+                    size: file.size,
+                    raw: file.raw,
+                    url: tempUrl, // 添加预览URL
+                    uid: file.uid,
+                    isNew: true   // 标记为新文件
+                  };
+
+                  // 添加到预览列表
+                  this.fileList1.push(newFile);
+                },
+                handleVideoRemove(file) {
+                    // 如果删除的是原始视频，添加到待删除列表
+                    if (file.isOld) {
+                        this.videosToDelete.push(file.id);
+                    } else {
+                        // 从新上传列表中移除
+                        const newIndex = this.newVideos.findIndex(f => f.uid === file.uid);
+                        if (newIndex > -1) {
+                            this.newVideos.splice(newIndex, 1);
+                        }
+                    }
+
+                    // 从显示列表中移除
+                    const index = this.fileList1.findIndex(f => f.uid === file.uid);
+                    if (index > -1) {
+                        this.fileList1.splice(index, 1);
+                    }
                 },
                 handlePictureCardPreview(file) {
-                    // 预览文件
                     this.dialogImageUrl = file.url;
                     this.dialogVisible = true;
                 },
-                handleDownload(file) {
-                    console.log("下载成功");
-                    let fileNames = file.response.data.split("/");
-                    let fileName = fileNames[fileNames.length - 1];
-                    fileDownload(fileName).then(res => {
-                        if (res.data.code == "0000") {
-                            this.downloadFile(fileName, res.data.data);
-                        }
-                    });
-                },
-                handleImageSuccess(res, files, fileList) {
-                    // 上传成功
-                   this.fileListPic = fileList;
-                },
-
-                handleVideoUploadSuccess(res, files, fileList){
-
-                    this.fileListVideo = fileList;
-
-                },
-
-                handlePictureCardPreview(file) {
-                    // 预览文件
-                    this.dialogImageUrl = file.url;
-                    this.dialogVisible = true;
-                },
-
-
-
-                beforeImageUpload(file) {
-                    // 上传前格式与大小校验
-                    console.log(file, file.type)
-                    const isJPG = file.type === "image/jpeg" || file.type == 'image/png' || file.type == 'zip' || file.type == '7z' || file.type == 'rar' || file.type == 'video/mp4' || file.type == 'application/pdf' || file.type == 'application/x-zip-compressed' || file.type == '' || file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                    const isLt2M = file.size / 1024 / 1024 < 5;
-
-                    if (!isJPG) {
-                        this.$message.error("上传头像图片只能是 JPG/PNG ,zip、7z、rar格式，视频为mp4格式!");
-                    }
-                    if (!isLt2M) {
-                        this.$message.error("上传头像图片大小不能超过 5MB!");
-                    }
-                    return isJPG && isLt2M;
-                    console.log("before")
-                    //也是成功的
-                },
-                // 下载
-                downloadFile(fileName, content) {
-                    let aLink = document.createElement("a");
-                    let blob = this.base64ToBlob(content); //new Blob([content]);
-
-                    let evt = document.createEvent("HTMLEvents");
-                    evt.initEvent("click", true, true); // initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-                    aLink.download = fileName;
-                    aLink.href = URL.createObjectURL(blob);
-
-                    // aLink.dispatchEvent(evt);
-                    aLink.click();
-                },
-                // base64转blob
-                base64ToBlob(code) {
-                    let parts = code.split(";base64,");
-                    let contentType = parts[0].split(":")[1];
-                    let raw = window.atob(parts[1]);
-                    let rawLength = raw.length;
-
-                    let uInt8Array = new Uint8Array(rawLength);
-
-                    for (let i = 0; i < rawLength; ++i) {
-                        uInt8Array[i] = raw.charCodeAt(i);
-                    }
-                    return new Blob([uInt8Array], {type: contentType});
-                },
-                onSubmit() {
-                    console.log('submit!', this.$refs.form.model, typeof (this.$refs.form.model), this.formData);
-                    {#var submitData = new FormData();#}
-                    if (this.formData.length == 0) {
-                        this.formData = new FormData();
-                    }
-                    if(this.fileListPic.length !== 0){
-                        for (var i = 0; i < this.fileListPic.length; i++) {
-                          this.formData.append('fileListPic', this.fileListPic[i].raw)//fileList里面raw才是文件对象，与files一样
-                       }
-                    }
-                    if(this.fileListVideo.length !== 0){
-                        for (var i = 0; i < this.fileListVideo.length; i++) {
-                          this.formData.append('fileListVideo', this.fileListVideo[i].raw)//fileList里面raw才是文件对象，与files一样
-                       }
-                    }
-                    this.formData.append('serchCategory', this.serchCategory)
-                    this.formData.append('id', this.editID)
-                    this.formData.append('Category', this.$refs.form.model.Category)
-                    this.formData.append('Object', this.$refs.form.model.Object)
-                    this.formData.append('Symptom', this.$refs.form.model.Symptom)
-                    this.formData.append('Reproduce_Steps', this.$refs.form.model.Reproduce_Steps)
-                    this.formData.append('Root_Cause', this.$refs.form.model.Root_Cause)
-                    this.formData.append('Solution', this.$refs.form.model.Solution)
-                    this.formData.append('Action', this.$refs.form.model.Action)
-                    this.formData.append('Status', this.$refs.form.model.Status)
-                    {#submitData['Photolist'] = this.formData;#}
-                    this.formData.append("action", 'submit');
-                    console.log(this.formData)
-                    axios.post("/Lesson_edit/", this.formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableData = res.data.content;
-                        this.update = false;
-                        this.formData = new FormData();
-                        this.fileListPic = [];
-                        this.fileListVideo=[];
-
-                    })
+                resetForm() {
+                    // 重置表单和文件列表
+                    this.fileListO = [];
+                    this.fileList1 = [];
+                    this.newPhotos = [];
+                    this.newVideos = [];
+                    this.photosToDelete = [];
+                    this.videosToDelete = [];
+                    this.originalPhotos = [];
+                    this.originalVideos = [];
                 },
                 getdata: function (e) {
                     let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
@@ -530,7 +489,6 @@
                     }).then((res) => {
                         this.selectCategory = res.data.addselect;
                     });
-
                 },
                 Search: function () {
                     let Category = this.$refs.Category.value;
@@ -542,54 +500,101 @@
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
+                        }
                     }).then((res) => {
                         this.tableData = res.data.content;
-
-
                     })
                 },
-                alertID: function (id) {
-                    let Category = this.$refs.Category.value;
-                    let msg = {
-                        "isGetData": "alertID", "Category": Category, "ID": id
+                alertID: function (row) {
+                    this.resetForm();
+
+                    this.form = {...row};
+                    this.editID = row.id;
+
+                    // 保存原始文件URL
+                    this.originalPhotos = [...(row.Photo.url || [])];
+                    this.originalVideos = [...(row.Video.url || [])];
+
+                    // 初始化图片显示列表
+                    if (row.Photo && row.Photo.length > 0) {
+                        row.Photo.forEach(u => {
+                            this.fileListO.push({
+                                name: u.url.split('/').pop(),
+                                url: u.url,
+                                id: u.id,
+                                isOld: true
+                            });
+                        });
                     }
-                    axios.post("/Lesson_edit/", Qs.stringify(msg, {indices: false}), {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.form = res.data.form;
-                        this.editID = id;
-                        this.fileListO = res.data.fileListO;
-                        this.fileList1 = res.data.fileList1;
 
-                    })
-                },
-                //保存
-                submitForm(formdata, id) {
-                    let Category = this.$refs.Category.value;
-                    console.log(this.$refs.formdata, "ffff")
-                    let submitForm_data = this.$refs.formdata.model;
-                    let data = {"isGetData": "SAVE", "Category": Category, "submitForm_data": submitForm_data, "ID": id}
-                    axios.post("/Lesson_edit/", Qs.stringify(data), {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                            'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
-                        } //改变头格式，原生默认上传json格式
-                    }).then((res) => {
-                        this.tableData = res.data.content;
-                        this.form = res.data.form;
-                        this.fileListO = res.data.fileListO;
-                        this.fileList1 = res.data.fileList1;
-                        this.update = false;
+                    // 初始化视频显示列表
+                    if (row.Video && row.Video.length > 0) {
+                        row.Video.forEach(u => {
+                            this.fileList1.push({
+                                name: u.url.split('/').pop(),
+                                url: u.url,
+                                id: u.id,
+                                isOld: true
+                            });
+                        });
+                    }
 
-                    });
+                    this.update = true;
                 },
+                async onSubmit() {
+                    try {
+                        const formData = new FormData();
+
+                        // 添加表单数据
+                        formData.append('id', this.editID);
+                        formData.append('isGetData', "submit");
+                        formData.append('Category', this.form.Category);
+                        formData.append('Object', this.form.Object);
+                        formData.append('Symptom', this.form.Symptom);
+                        formData.append('Reproduce_Steps', this.form.Reproduce_Steps);
+                        formData.append('Root_Cause', this.form.Root_Cause);
+                        formData.append('Solution', this.form.Solution);
+                        formData.append('Action', this.form.Action);
+                        formData.append('Status', this.form.Status);
+
+                        // 添加待删除的图片和视频
+                        formData.append('photos_to_delete', JSON.stringify(this.photosToDelete));
+                        formData.append('videos_to_delete', JSON.stringify(this.videosToDelete));
+
+                        // 添加新上传的图片
+                        this.newPhotos.forEach(file => {
+                            formData.append('new_photos', file);
+                        });
+
+                        // 添加新上传的视频
+                        this.newVideos.forEach(file => {
+                            formData.append('new_videos', file);
+                        });
+
+                        // 提交表单
+                        const response = await axios.post(
+                            "/Lesson_edit/",
+                            formData,
+                            {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                    'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                                }
+                            }
+                        );
+
+                        if (!response.data.errMsg) {
+                            this.$message.success('更新成功');
+                            this.update = false;
+                            this.Search(); // 刷新数据
+                        } else {
+                            this.$message.error('更新失败: ' + response.data.errMsg);
+                        }
+                    } catch (error) {
+                        this.$message.error('请求错误: ' + error.message);
+                    }
+                }
             }
         })
     </script>
-
-
 {% endblock %}
