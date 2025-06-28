@@ -242,6 +242,12 @@
                 <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r1[scope.$index+(currentPage-1)*pageSize] }</span>
        </template>
         </el-table-column>
+        <el-table-column label="Compal_R3_PN" align="center" width="116">
+            <template slot-scope="scope">
+            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Compal_R3_PN"></el-input>
+                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r3[scope.$index+(currentPage-1)*pageSize] }</span>
+            </template>
+        </el-table-column>
         <el-table-column  label="DQA test result" align="center">
             <el-table-column label="Test result" align="center" width="100">
             <template slot-scope="scope">
@@ -331,12 +337,7 @@
                 <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ r1_pn[scope.$index+(currentPage-1)*pageSize] }</span>
        </template>
         </el-table-column>
-        <el-table-column label="Compal_R3_PN" align="center" width="116">
-            <template slot-scope="scope">
-            <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.Compal_R3_PN"></el-input>
-                <span v-else="showEdit[scope.$index] && (statu === 4 || statu === 5)">${ compal_r3[scope.$index+(currentPage-1)*pageSize] }</span>
-            </template>
-        </el-table-column>
+
         <el-table-column label="R1S" align="center" width="116">
             <template slot-scope="scope">
             <el-input class="edit-cell" v-if="showEdit[scope.$index] && (statu === 4 || statu === 5)&&canEdit "    v-model="scope.row.R1S"></el-input>
