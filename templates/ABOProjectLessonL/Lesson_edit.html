@@ -249,10 +249,20 @@
                         >
                           <el-button type="primary">点击上传视频</el-button>
                           <div slot="file" slot-scope="{file}">
-                              <video controls width="320" height="180" :src="file.url"></video>
-                              <div style="margin-top: 10px">
-                                  <el-button size="mini" type="danger" @click="handleVideoRemove(file)">删除</el-button>
-                              </div>
+                            <!-- 视频文件显示预览 -->
+                            <video v-if="isVideoFile(file)" controls width="320" height="180" :src="file.url"></video>
+
+                            <!-- 非视频文件显示下载链接 -->
+                            <div v-else>
+                              <a :href="file.url" :download="file.name" style="margin-bottom: 10px; display: block;">
+                                <el-button type="primary" size="mini">下载文件</el-button>
+                              </a>
+                              <div style="font-size: 12px; color: #999;">{{ file.name }}</div>
+                            </div>
+
+                            <div style="margin-top: 10px">
+                              <el-button size="mini" type="danger" @click="handleVideoRemove(file)">删除</el-button>
+                            </div>
                           </div>
                         </el-upload>
                     </el-form-item>
@@ -303,10 +313,17 @@
                 <el-table-column prop="Video" label="Video" width="100" sortable class="eltable-video">
                     <template scope="scope">
                         <div class="eltable-video">
-                            <video v-for="(item) in scope.row.Video" width="200" height="100" controls>
-                                <source :src="item.url" type="video/mp4">
-                                您的浏览器不支持 video 标签。
-                            </video>
+                            <div v-for="(item) in scope.row.Video" :key="item.id">
+                                <!-- 视频文件显示预览 -->
+                                <video v-if="isVideoFile(item)" width="200" height="100" controls>
+                                    <source :src="getFullUrl(item.url)" type="video/mp4">
+                                    您的浏览器不支持 video 标签。
+                                </video>
+                                <!-- 非视频文件显示下载链接 -->
+                                <a v-else :href="getFullUrl(item.url)" download>
+                                    <el-button type="primary" size="mini">下载文件</el-button>
+                                </a>
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -373,6 +390,31 @@
             methods: {
                 indexMethod(index) {
                     return index + 1;
+                },
+                // 判断是否为视频文件
+                // 增强的 isVideoFile 方法，支持多种参数类型
+                isVideoFile(item) {
+                    // 1. 处理文件对象（编辑弹框中使用）
+                    if (item && item.raw) {
+                        // 新上传的文件
+                        return item.raw.type.startsWith('video/');
+                    }
+
+                    // 2. 处理包含 url 属性的对象（表格中使用）
+                    if (item && item.url) {
+                        const url = item.url.toLowerCase();
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        return videoExts.some(ext => url.endsWith(`.${ext}`));
+                    }
+
+                    // 3. 处理纯字符串 URL（备用方案）
+                    if (typeof item === 'string') {
+                        const url = item.toLowerCase();
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        return videoExts.some(ext => url.endsWith(`.${ext}`));
+                    }
+
+                    return false;
                 },
                 // 获取完整URL
                 getFullUrl(url) {
