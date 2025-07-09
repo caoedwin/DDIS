@@ -206,6 +206,7 @@ INSTALLED_APPS = [
     'CriticalIssueCrossCheck',
     'MiscellaneousPurchases',
     'CommonDevice',
+    'CommonFiles',
 ]
 
 MIDDLEWARE = [

@@ -120,6 +120,7 @@ urlpatterns = [
     path('CriticalIssueCrossCheck/', include('CriticalIssueCrossCheck.urls', namespace='CriticalIssueCrossCheck')),
     path('MiscellaneousPurchases/', include('MiscellaneousPurchases.urls', namespace='MiscellaneousPurchases')),
     path('CommonDevice/', include('CommonDevice.urls', namespace='CommonDevice')),
+    path('CommonFiles/', include('CommonFiles.urls', namespace='CommonFiles')),
 ]#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
