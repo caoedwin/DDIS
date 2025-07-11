@@ -1,0 +1,195 @@
+[2025-07-11 12:39:50,213] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:39:50: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:39:50,237] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.09, 127.0.0.1:50010]
+[2025-07-11 12:39:50,280] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:39:50: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-11 12:39:50,307] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.04, 127.0.0.1:50010]
+[2025-07-11 12:39:50,330] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:50010]
+[2025-07-11 12:39:50,340] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.00, 127.0.0.1:50010]
+[2025-07-11 12:39:50,379] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:50014]
+[2025-07-11 12:39:50,416] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50014]
+[2025-07-11 12:39:50,458] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.00, 127.0.0.1:50010]
+[2025-07-11 12:39:50,463] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.00, 127.0.0.1:50010]
+[2025-07-11 12:39:50,945] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 505, in CommonFiles_edit
+    return HttpResponse(json.dumps(data), content_type="application/json")
+  File "C:\Python372\lib\json\__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+  File "C:\Python372\lib\json\encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Python372\lib\json\encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Python372\lib\json\encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type ManyRelatedManager is not JSON serializable
+[2025-07-11 12:39:50,948] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:39:50: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:39:50,950] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.35, 127.0.0.1:50010]
+[2025-07-11 12:39:50,956] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:39:50: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:39:50,978] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.36, 127.0.0.1:50011]
+[2025-07-11 12:42:49,129] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:42:49: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:42:49,140] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.08, 127.0.0.1:50198]
+[2025-07-11 12:42:49,189] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:42:49: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-11 12:42:49,213] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.04, 127.0.0.1:50198]
+[2025-07-11 12:42:49,247] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.00, 127.0.0.1:50198]
+[2025-07-11 12:42:49,260] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.00, 127.0.0.1:50198]
+[2025-07-11 12:42:49,329] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:50202]
+[2025-07-11 12:42:49,373] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50202]
+[2025-07-11 12:42:49,457] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.00, 127.0.0.1:50198]
+[2025-07-11 12:42:49,466] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:50198]
+[2025-07-11 12:42:49,659] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:42:49: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:42:49,668] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.07, 127.0.0.1:50198]
+[2025-07-11 12:42:49,687] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:42:49: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:42:49,712] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.10, 127.0.0.1:50199]
+[2025-07-11 12:42:49,726] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:42:49: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB_Kzyx0oG.mp4'>
+[2025-07-11 12:42:49,732] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB_Kzyx0oG.mp4 304 [0.01, 127.0.0.1:50199]
+[2025-07-11 12:46:16,943] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:16: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:46:16,973] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.08, 127.0.0.1:50518]
+[2025-07-11 12:46:17,043] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:17: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-11 12:46:17,067] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.05, 127.0.0.1:50518]
+[2025-07-11 12:46:17,072] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:50519]
+[2025-07-11 12:46:17,076] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.01, 127.0.0.1:50518]
+[2025-07-11 12:46:17,116] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:50525]
+[2025-07-11 12:46:17,143] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50525]
+[2025-07-11 12:46:17,205] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.00, 127.0.0.1:50518]
+[2025-07-11 12:46:17,209] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:50519]
+[2025-07-11 12:46:17,402] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:17: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:46:17,410] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.09, 127.0.0.1:50519]
+[2025-07-11 12:46:17,417] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:17: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:46:17,443] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.11, 127.0.0.1:50518]
+[2025-07-11 12:46:37,129] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:37: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/'>
+[2025-07-11 12:46:37,141] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /admin/ 302 [0.52, 127.0.0.1:50518]
+[2025-07-11 12:46:37,204] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:37: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/login/?next=/admin/'>
+[2025-07-11 12:46:37,214] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/login/?next=/admin/ 200 [0.07, 127.0.0.1:50518]
+[2025-07-11 12:46:37,316] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:37: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:46:37,341] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.04, 127.0.0.1:50518]
+[2025-07-11 12:46:39,842] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:39: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/login/?next=/admin/'>
+[2025-07-11 12:46:39,854] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /admin/login/?next=/admin/ 302 [0.36, 127.0.0.1:50518]
+[2025-07-11 12:46:40,671] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:40: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/'>
+[2025-07-11 12:46:40,711] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/ 200 [0.85, 127.0.0.1:50518]
+[2025-07-11 12:46:40,905] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:40: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:46:40,937] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.06, 127.0.0.1:50518]
+[2025-07-11 12:46:43,252] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:43: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonFiles/commonfiles/'>
+[2025-07-11 12:46:43,268] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonFiles/commonfiles/ 200 [0.25, 127.0.0.1:50518]
+[2025-07-11 12:46:43,297] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:43: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:46:43,325] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.30, 127.0.0.1:50519]
+[2025-07-11 12:46:43,339] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:43: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-07-11 12:46:43,352] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.07, 127.0.0.1:50518]
+[2025-07-11 12:46:46,477] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/CommonFiles/commonfiles/'>
+[2025-07-11 12:46:46,497] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /admin/CommonFiles/commonfiles/ 200 [0.17, 127.0.0.1:50518]
+[2025-07-11 12:46:46,516] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/admin/js/cancel.js 200 [0.01, 127.0.0.1:50518]
+[2025-07-11 12:46:48,130] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:48: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/CommonFiles/commonfiles/'>
+[2025-07-11 12:46:48,145] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /admin/CommonFiles/commonfiles/ 302 [0.14, 127.0.0.1:50518]
+[2025-07-11 12:46:48,323] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:48: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonFiles/commonfiles/'>
+[2025-07-11 12:46:48,338] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonFiles/commonfiles/ 200 [0.19, 127.0.0.1:50518]
+[2025-07-11 12:46:48,361] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:48: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-07-11 12:46:48,373] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.02, 127.0.0.1:50518]
+[2025-07-11 12:46:54,813] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:54: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:46:54,831] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.16, 127.0.0.1:50518]
+[2025-07-11 12:46:54,840] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50525]
+[2025-07-11 12:46:54,912] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:54: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-11 12:46:54,943] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.08, 127.0.0.1:50518]
+[2025-07-11 12:46:54,948] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.03, 127.0.0.1:50519]
+[2025-07-11 12:46:54,954] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.02, 127.0.0.1:50520]
+[2025-07-11 12:46:54,982] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:50593]
+[2025-07-11 12:46:54,984] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50593]
+[2025-07-11 12:46:55,081] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.00, 127.0.0.1:50520]
+[2025-07-11 12:46:55,100] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:50520]
+[2025-07-11 12:46:55,296] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:55: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:46:55,339] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.15, 127.0.0.1:50520]
+[2025-07-11 12:46:55,379] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:46:55: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:46:55,414] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.22, 127.0.0.1:50519]
+[2025-07-11 12:48:02,743] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:48:02: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:48:02,874] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [3.61, 127.0.0.1:50519]
+[2025-07-11 12:49:35,586] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:49:35: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:49:35,715] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [3.67, 127.0.0.1:50896]
+[2025-07-11 12:49:35,931] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:49:35: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4'>
+[2025-07-11 12:49:35,954] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4 200 [0.04, 127.0.0.1:50896]
+[2025-07-11 12:49:35,968] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:49:35: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4'>
+[2025-07-11 12:49:35,996] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4 200 [0.08, 127.0.0.1:50904]
+[2025-07-11 12:52:34,050] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:52:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:52:34,082] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.09, 127.0.0.1:51074]
+[2025-07-11 12:52:34,142] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:52:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-11 12:52:34,165] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.03, 127.0.0.1:51074]
+[2025-07-11 12:52:34,171] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:51075]
+[2025-07-11 12:52:34,182] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.00, 127.0.0.1:51074]
+[2025-07-11 12:52:34,198] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51079]
+[2025-07-11 12:52:34,226] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51079]
+[2025-07-11 12:52:34,240] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.00, 127.0.0.1:51074]
+[2025-07-11 12:52:34,243] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:51075]
+[2025-07-11 12:52:34,403] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:52:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:52:34,411] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.07, 127.0.0.1:51075]
+[2025-07-11 12:52:34,423] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:52:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:52:34,449] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.09, 127.0.0.1:51074]
+[2025-07-11 12:52:34,458] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:52:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4'>
+[2025-07-11 12:52:34,479] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4 200 [0.04, 127.0.0.1:51075]
+[2025-07-11 12:52:34,505] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:52:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4'>
+[2025-07-11 12:52:34,527] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4 200 [0.09, 127.0.0.1:51078]
+[2025-07-11 12:53:45,919] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:53:45: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:53:45,951] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.08, 127.0.0.1:51155]
+[2025-07-11 12:53:46,028] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:53:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-11 12:53:46,052] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51163]
+[2025-07-11 12:53:46,054] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.06, 127.0.0.1:51155]
+[2025-07-11 12:53:46,058] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.03, 127.0.0.1:51154]
+[2025-07-11 12:53:46,084] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.03, 127.0.0.1:51155]
+[2025-07-11 12:53:46,089] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51163]
+[2025-07-11 12:53:46,092] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:51155]
+[2025-07-11 12:53:46,096] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:51154]
+[2025-07-11 12:53:46,240] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:53:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:53:46,250] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.06, 127.0.0.1:51154]
+[2025-07-11 12:53:46,260] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:53:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:53:46,296] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.10, 127.0.0.1:51155]
+[2025-07-11 12:53:46,320] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:53:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4'>
+[2025-07-11 12:53:46,340] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4 200 [0.06, 127.0.0.1:51154]
+[2025-07-11 12:53:46,352] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:53:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4'>
+[2025-07-11 12:53:46,376] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4 200 [0.10, 127.0.0.1:51158]
+[2025-07-11 12:54:04,987] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:54:04: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4'>
+[2025-07-11 12:54:05,037] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4 200 [0.06, 127.0.0.1:51155]
+[2025-07-11 12:54:05,069] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:54:05: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4'>
+[2025-07-11 12:54:05,092] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4 200 [0.11, 127.0.0.1:51185]
+[2025-07-11 12:54:21,385] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:54:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:54:21,400] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.15, 127.0.0.1:51202]
+[2025-07-11 12:57:20,114] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:20: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/AutoResult/AutoResult_edit/'>
+[2025-07-11 12:57:20,125] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /AutoResult/AutoResult_edit/ 200 [0.42, 127.0.0.1:51388]
+[2025-07-11 12:57:20,253] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51392]
+[2025-07-11 12:57:20,256] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51392]
+[2025-07-11 12:57:21,066] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/AutoResult/AutoResult_edit/'>
+[2025-07-11 12:57:21,081] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /AutoResult/AutoResult_edit/ 200 [0.73, 127.0.0.1:51388]
+[2025-07-11 12:57:21,114] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:57:21,144] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.76, 127.0.0.1:51389]
+[2025-07-11 12:57:22,660] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:57:22,676] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.15, 127.0.0.1:51389]
+[2025-07-11 12:57:22,724] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51400]
+[2025-07-11 12:57:22,726] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51400]
+[2025-07-11 12:57:22,732] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51392]
+[2025-07-11 12:57:22,970] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 12:57:23,001] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.16, 127.0.0.1:51389]
+[2025-07-11 12:57:23,021] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:23: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:57:23,056] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.19, 127.0.0.1:51388]
+[2025-07-11 12:57:23,089] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:23: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4'>
+[2025-07-11 12:57:23,138] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4 200 [0.11, 127.0.0.1:51405]
+[2025-07-11 12:57:23,156] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:23: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4'>
+[2025-07-11 12:57:23,184] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4 200 [0.15, 127.0.0.1:51389]
+[2025-07-11 12:57:25,063] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonDevice/CommonDevice_edit/'>
+[2025-07-11 12:57:25,074] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonDevice/CommonDevice_edit/ 200 [0.16, 127.0.0.1:51388]
+[2025-07-11 12:57:25,106] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51412]
+[2025-07-11 12:57:25,109] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51412]
+[2025-07-11 12:57:25,123] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51400]
+[2025-07-11 12:57:25,422] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-11 12:57:25,434] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.19, 127.0.0.1:51388]
+[2025-07-11 12:57:25,460] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-11 12:57:25,497] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.23, 127.0.0.1:51414]
+[2025-07-11 12:57:34,898] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 12:57:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-11 12:57:34,914] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.22, 127.0.0.1:51414]
+[2025-07-11 13:00:12,637] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 13:00:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4'>
+[2025-07-11 13:00:12,671] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B0%94%E8%B4%A8%E7%BE%8E%E5%A5%B3%E6%AC%A7%E7%BE%8E%E7%BE%8E%E5%A5%B3%E5%81%A5%E8%BA%AB%E7%BE%8E%E5%A5%B3_IIdhXjd.mp4 200 [0.09, 127.0.0.1:51614]
+[2025-07-11 13:00:12,698] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 13:00:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4'>
+[2025-07-11 13:00:12,717] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E5%85%B6%E5%AE%9E%E5%A5%B3%E7%94%9F%E6%AF%94%E7%94%B7%E7%94%9F%E6%9B%B4%E7%88%B1%E7%9C%8B%E7%BE%8E%E5%A5%B3%E5%BD%93%E7%BE%8E%E5%A5%B3%E7%A2%B0%E5%88%B0%E7%BE%8E%E5%A5%B3%E7%BE%8E%E5%A5%B3%E8%80%81%E6%9D%BF%E5%A4%8F%E6%9C%AB.mp4 200 [0.12, 127.0.0.1:51615]
+[2025-07-11 13:00:19,142] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-11 13:00:19: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-07-11 13:00:19,172] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.19, 127.0.0.1:51622]

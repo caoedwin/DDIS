@@ -1,5 +1,5 @@
 from django.db import models
-
+from app01.models import UserInfo
 # Create your models here.
 class files(models.Model):
     files = models.FileField(upload_to="CommonFiles/", null=True, blank=True, verbose_name="文件内容")
@@ -51,7 +51,8 @@ class CommonFiles(models.Model):
     Description = models.CharField("Description", max_length=1000)
     Version = models.CharField("Version", max_length=20)
     Attachment = models.ManyToManyField(files, related_name='Attachment', blank=True, verbose_name='文件表')
-    Owner = models.CharField("Owner", max_length=50)
+    Owner = models.ManyToManyField("app01.UserInfo")
+    Creator = models.CharField("Creator", max_length=50,default='')
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:

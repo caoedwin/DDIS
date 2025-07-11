@@ -393,6 +393,37 @@ tbody tr td:last-child {
                       </el-form-item>
                     </el-col>{% endcomment %}
                  </el-row>
+                <el-form-item label="负责人" prop="Owner" style="width: 100%;">
+                    <el-transfer
+                      style="text-align: left; display: inline-block"
+                      v-model="selectedKeys"
+                      filterable
+                      filter-placeholder="请输入名字筛选"
+                      :left-default-checked="leftChecked"
+                      :right-default-checked="rightChecked"
+                      :titles="['人员名单', '负责人']"
+                      :button-texts="['到左边', '到右边']"
+                      :format="{
+                        noChecked: '${total}',
+                        hasChecked: '${checked}/${total}'
+                      }"
+                      @change="handleChange"
+                      :data="this.OwnersOptions"
+                    :props="{
+                        key: 'account',
+                        label: 'username',
+                        {% comment %}disabled:'isdisabled',{% endcomment %}{% comment %}后端返回的字段中是diabled，与原来的Transfer 仅能识别数据项中的 key、label 和 disabled 字段，中同名，就不需要写在:props中了{% endcomment %}
+                      }"
+                      {% comment %}:list-style="{
+                    width: '300px',  // 增大宽度
+                    height: '400px'
+                  }"{% endcomment %}
+                    >
+                        <span slot-scope="{ option }">${ option.username } - ${ option.account }</span>
+                      {% comment %}<el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
+                      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>{% endcomment %}
+                    </el-transfer>
+                  </el-form-item>
                 <el-row :gutter="20">
                     <el-form-item label="Attachment">
                         <el-upload
@@ -474,7 +505,18 @@ tbody tr td:last-child {
                   </template>
               </el-table-column>{% endcomment %}
               <el-table-column  prop="updated_at" label="updated_at" width="120" align="center"></el-table-column>
-              <el-table-column  prop="Ownershow" label="负责人" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Creator" label="创建人" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Owner" label="负责人" width="100" align="center">
+                  <template slot-scope="scope">
+                    <!-- 使用 div 循环，每个元素自然换行 -->
+                    <div
+                      v-for="(item, index) in scope.row.Owner"
+                      :key="index"
+                    >
+                      ${ item.username } (${ item.account })
+                    </div>
+                  </template>
+              </el-table-column>
               <el-table-column prop="Attachment" label="Attachment" width="300" sortable class="eltable-video">
                     <template scope="scope">
                         <div class="eltable-video">
@@ -579,19 +621,7 @@ tbody tr td:last-child {
                     Item: '',
                     Description: '',
                     Version: '',
-                    Cost: '',
-                    Account: '',
-                    PW: '',
-                    updated_at: '',
-                    Department: '',
-                    Location: '',
-                    Asset_Num: '',
-                    Status: '',
-                    CreatedBy: '',
                     Owner: [],//用来记录form表单中的负责人列表最后交给后端存入数据库的，是数组结构，不要跟前面的Owner字符串混淆了
-                    Mail: [],
-                    Contact_info: '',
-                    Comments: '',
 
                 },
 
@@ -862,6 +892,7 @@ tbody tr td:last-child {
                     if(this.permission === 1){
                         //console.log(this.multipleSelection[0],'this.multipleSelection[0]')
                         this.resetForm();
+                        this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
                         this.fileList = [];
                         //console.log(this.selectedKeys,'this.selectedKeys');
                         this.isEdit = true;
@@ -967,6 +998,7 @@ tbody tr td:last-child {
                     this.formData.append('Item', this.$refs.form.model.Item)
                     this.formData.append('Description', this.$refs.form.model.Description)
                     this.formData.append('Version', this.$refs.form.model.Version)
+                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
                     // 添加待删除的文件
                     this.formData.append('files_to_delete', JSON.stringify(this.FilesToDelete));
                     // 添加新上传的视频
@@ -1038,6 +1070,7 @@ tbody tr td:last-child {
                     this.formData.append('Item', this.$refs.form.model.Item)
                     this.formData.append('Description', this.$refs.form.model.Description)
                     this.formData.append('Version', this.$refs.form.model.Version)
+                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
                     // 添加待删除的文件
                     this.formData.append('files_to_delete', JSON.stringify(this.FilesToDelete));
                     // 添加新上传的视频
@@ -1098,17 +1131,8 @@ tbody tr td:last-child {
                     Item: '',
                     Description: '',
                     Version: '',
-                    Cost: '',
-                    Account: '',
-                    PW: '',
                     updated_at: '',
-                    Department: '',
-                    Location: '',
-                    Asset_Num: '',
-                    Status: '',
                     Owner: [],
-                    Contact_info: '',
-                    Comments: '',
 
                 };
               if (this.$refs.form) {

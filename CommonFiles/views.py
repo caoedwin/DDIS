@@ -284,12 +284,15 @@ def CommonFiles_edit(request):
                     if request.POST.get('Category_L2'):
                         ch_dic['Category_L2'] = SubCategory.objects.filter(id=request.POST.get('Category_L2')).first()
                     if request.POST.get('Owner'):
-                        # user = UserInfo.objects.filter(account=request.POST.get('OwnerNumber')).first()
-                        ch_dic['Owner'] = request.POST.get('OwnerNumber')
+                        user = UserInfo.objects.filter(account=request.POST.get('OwnerNumber')).first()
+                        ch_dic['Owner'] = user
                     if ch_dic:
                         mock_obj = CommonFiles.objects.filter(**ch_dic).order_by('-created_at')
                 if request.POST.get('action') == 'addData':
                     # ID = request.POST.get('ID')
+                    Owners = json.loads(request.POST.get('Owner'))
+                    # print(Owners)
+                    UserInfos = UserInfo.objects.filter(account__in=Owners)
                     new_files = request.FILES.getlist("new_files", "")
                     print(new_files)
                     files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
@@ -303,7 +306,7 @@ def CommonFiles_edit(request):
                         "Item": request.POST.get('Item') if request.POST.get('Item') else '',
                         "Description": request.POST.get('Description') if request.POST.get('Description') else '',
                         "Version": request.POST.get('Version') if request.POST.get('Version') else '',
-                        "Owner": onlineuser,
+                        "Creator": onlineuser,
                     }
                     # try:
                     with transaction.atomic():
@@ -322,6 +325,7 @@ def CommonFiles_edit(request):
 
                         # 解除关联
                         CommonFiles_object.Attachment.remove(*fileslist)  # 使用 * 解包列表
+                        CommonFiles_object.Owner.add(*UserInfos)
                         fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
 
                         CommonFiles_object.Category_L1 = Category.objects.get(id=request.POST.get('Category_L1'))
@@ -343,12 +347,16 @@ def CommonFiles_edit(request):
                     if request.POST.get('searchCategory_L2'):
                         check_dic['Category_L2'] = SubCategory.objects.filter(id=request.POST.get('searchCategory_L2')).first()
                     if request.POST.get('searchOwner'):
-                        # user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
-                        check_dic['Owner'] = request.POST.get('searchOwnerNumber')
+                        user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
+                        check_dic['Owner'] = user
                     if check_dic:
                         mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
                 if request.POST.get('action') == 'update':
                     ID = request.POST.get('ID')
+                    Owners = json.loads(request.POST.get('Owner'))
+                    # print(Owners)
+                    Mail = ''
+                    UserInfos = UserInfo.objects.filter(account__in=Owners)
                     new_files = request.FILES.getlist("new_files", "")
                     files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
 
@@ -360,12 +368,14 @@ def CommonFiles_edit(request):
                         "Item": request.POST.get('Item') if request.POST.get('Item') else '',
                         "Description": request.POST.get('Description') if request.POST.get('Description') else '',
                         "Version": request.POST.get('Version') if request.POST.get('Version') else '',
-                        "Owner": onlineuser,
+                        # "Creator": onlineuser,
                     }
                     try:
                         with transaction.atomic():
                             CommonFiles.objects.filter(id=ID).update(**update_dic)
                             CommonFiles_object = CommonFiles.objects.filter(id=ID).first()
+                            CommonFiles_object.Owner.clear()
+                            CommonFiles_object.Owner.add(*UserInfos)
                             if new_files:
                                 for f in new_files:
                                     # print(f)
@@ -404,8 +414,8 @@ def CommonFiles_edit(request):
                     if request.POST.get('searchCategory_L2'):
                         check_dic['Category_L2'] = SubCategory.objects.filter(id=request.POST.get('searchCategory_L2')).first()
                     if request.POST.get('searchOwner'):
-                        # user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
-                        check_dic['Owner'] = request.POST.get('searchOwnerNumber')
+                        user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
+                        check_dic['Owner'] = user
                     if check_dic:
                         mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
 
@@ -432,8 +442,8 @@ def CommonFiles_edit(request):
                         if responseData['searchCategory_L2']:
                             check_dic['searchCategory_L2'] = SubCategory.objects.filter(id=responseData['searchCategory_L2']).first()
                         if responseData['searchOwner']:
-                            # user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
-                            check_dic['Owner'] = responseData['searchOwnerNumber']
+                            user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
+                            check_dic['Owner'] = user
                         if check_dic:
                             mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
 
@@ -454,6 +464,18 @@ def CommonFiles_edit(request):
                 for h in i.Attachment.all():
                     Attachmentlist.append({"id": h.id, "url": "/media/" + str(h.files)})
 
+                Owner_list = []
+                Ownerflag = False
+                for j in i.Owner.all():
+                    Owner_list.append(
+                        {
+                            "account": j.account, "username": j.username, "id": j.id
+                        }
+                    )
+                    if not Ownerflag:
+                        if j.account == onlineuser:
+                            Ownerflag = True
+
                 mock_data.append(
                     {
                         "id": i.id,
@@ -465,9 +487,9 @@ def CommonFiles_edit(request):
                         "Description": i.Description,
                         "Version": i.Version,
                         "updated_at": str(i.updated_at) if i.updated_at else '',
-                        "Owner": i.Owner,
-                        "Ownershow": UserInfo.objects.filter(account=i.Owner).first().username + "/" + i.Owner if UserInfo.objects.filter(account=i.Owner) else '',
-                        "Ownerflag": i.Owner == onlineuser, #creator才有权限。
+                        "Owner": Owner_list,
+                        "Creator": UserInfo.objects.filter(account=i.Creator).first().username + "/" + i.Creator if UserInfo.objects.filter(account=i.Creator) else '',
+                        "Ownerflag": Ownerflag, # 只要是Owner中的一个有权限，Owner改变了权限就会随之变化
                         "Attachment": Attachmentlist,
                     }
                 )
