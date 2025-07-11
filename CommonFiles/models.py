@@ -44,9 +44,9 @@ class CommonFiles(models.Model):
         ("Common", "Common"),
     )
     CG = models.CharField(max_length=10, choices=chooseCG, default="")
-    SWHW = models.CharField(max_length=10, choices=chooseSWHW, default="")
+    SWHW = models.CharField(max_length=10, choices=chooseSWHW, default="",  null=True, blank=True)
     Category_L1 = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="大类")
-    Category_L2 = models.ForeignKey(SubCategory, on_delete=models.CASCADE, verbose_name="细项")
+    Category_L2 = models.ForeignKey(SubCategory, on_delete=models.CASCADE, verbose_name="细项",  null=True, blank=True)
     Item = models.CharField('Item', max_length=100)
     Description = models.CharField("Description", max_length=1000)
     Version = models.CharField("Version", max_length=20)

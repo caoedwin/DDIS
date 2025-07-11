@@ -729,24 +729,63 @@ tbody tr td:last-child {
               this.category2 = ""; // 重置细项选择
             },
             handleVideoChange(file, fileList) {
-                    // 添加新视频到待上传列表
-                    this.newFiles.push(file.raw);
-                    // 为文件创建临时URL
+                    //这里检查是否重复只检查了文件的大小和名称，不是很准确，要准确判断需要用hash，前端需要安装npm install crypto-js第三方库，后端存储时也要存储hash
+                    {% comment %}后端：
+                        import hashlib
+
+                        def calculate_file_hash(file):
+                            """计算文件的SHA256哈希值"""
+                            sha256 = hashlib.sha256()
+                            for chunk in file.chunks():
+                                sha256.update(chunk)
+                            return sha256.hexdigest()
+                        class CommonFile(models.Model):
+                            # 原有字段...
+                            attachment = models.FileField(upload_to='common_files/')
+                            file_hash = models.CharField(max_length=64, blank=True, db_index=True)  # SHA256结果固定64字符
+
+                            def save(self, *args, **kwargs):
+                                """自动计算文件哈希"""
+                                if self.attachment and not self.file_hash:
+                                    self.file_hash = calculate_file_hash(self.attachment)
+                                super().save(*args, **kwargs){% endcomment %}
+                    // 创建临时URL用于预览
                     const tempUrl = URL.createObjectURL(file.raw);
 
-                  // 创建文件对象
+                    // 创建新文件对象
                     const newFile = {
-                    name: file.name,
-                    status: file.status,
-                    size: file.size,
-                    raw: file.raw,
-                    url: tempUrl, // 添加预览URL
-                    uid: file.uid,
-                    isNew: true   // 标记为新文件
-                  };
+                        name: file.name,
+                        status: file.status,
+                        size: file.size,
+                        raw: file.raw,
+                        url: tempUrl,
+                        uid: file.uid,
+                        isNew: true
+                    };
 
-                  // 添加到预览列表
-                  this.fileList.push(newFile);
+                    // 检查是否已存在相同文件（同时检查原始文件和新上传文件）
+                    const exists = this.fileList.some(f =>
+                        f.name === file.name && f.size === file.size
+                    );
+
+                    if (exists) {
+                        this.$message.warning('文件已存在，请勿重复上传');
+
+                        // 重要：释放临时URL避免内存泄漏
+                        URL.revokeObjectURL(tempUrl);
+
+                        // 从element-ui的内部列表中移除重复项
+                        const index = fileList.findIndex(f => f.uid === file.uid);
+                        if (index > -1) {
+                            fileList.splice(index, 1);
+                        }
+                        return;
+                    }
+
+                    // 添加到显示列表
+                    this.fileList.push(newFile);
+                    // 添加到待上传列表
+                    this.newFiles.push(file.raw);
                 },
             handleVideoRemove(file) {
                 // 如果删除的是原始视频，添加到待删除列表
@@ -982,31 +1021,30 @@ tbody tr td:last-child {
             async  addData(){
                     this.elbuttonloading = true;
                     this.tableloading = true;
-                    if (this.formData.length === 0) {
-                        this.formData = new FormData();
-                    }
-                    this.formData.append('searchCG', this.$refs.CG.value)
-                    this.formData.append('searchSWHW', this.$refs.SWHW.value)
-                    this.formData.append('searchCategory_L1', this.$refs.Category_L1.value)
-                    this.formData.append('searchCategory_L2', this.$refs.Category_L2.value)
-                    this.formData.append('searchOwner', this.$refs.Owner.value)
-                    this.formData.append('searchOwnerNumber', this.number)
-                    this.formData.append('CG', this.$refs.form.model.CG)
-                    this.formData.append('SWHW', this.$refs.form.model.SWHW)
-                    this.formData.append('Category_L1', this.$refs.form.model.Category_L1)
-                    this.formData.append('Category_L2', this.$refs.form.model.Category_L2)
-                    this.formData.append('Item', this.$refs.form.model.Item)
-                    this.formData.append('Description', this.$refs.form.model.Description)
-                    this.formData.append('Version', this.$refs.form.model.Version)
-                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
+                    // 每次创建新的 FormData 实例
+                    const formData = new FormData(); // 改为局部变量
+                    formData.append('searchCG', this.$refs.CG.value)
+                    formData.append('searchSWHW', this.$refs.SWHW.value)
+                    formData.append('searchCategory_L1', this.$refs.Category_L1.value)
+                    formData.append('searchCategory_L2', this.$refs.Category_L2.value)
+                    formData.append('searchOwner', this.$refs.Owner.value)
+                    formData.append('searchOwnerNumber', this.number)
+                    formData.append('CG', this.$refs.form.model.CG)
+                    formData.append('SWHW', this.$refs.form.model.SWHW)
+                    formData.append('Category_L1', this.$refs.form.model.Category_L1)
+                    formData.append('Category_L2', this.$refs.form.model.Category_L2)
+                    formData.append('Item', this.$refs.form.model.Item)
+                    formData.append('Description', this.$refs.form.model.Description)
+                    formData.append('Version', this.$refs.form.model.Version)
+                    formData.append('Owner', JSON.stringify(this.selectedKeys))
                     // 添加待删除的文件
-                    this.formData.append('files_to_delete', JSON.stringify(this.FilesToDelete));
+                    formData.append('files_to_delete', JSON.stringify(this.FilesToDelete));
                     // 添加新上传的视频
                     this.newFiles.forEach(file => {
-                        this.formData.append('new_files', file);
+                        formData.append('new_files', file);
                     });
-                    this.formData.append("action", 'addData');
-                    await axios.post("/CommonFiles/CommonFiles_edit/", this.formData, {
+                    formData.append("action", 'addData');
+                    await axios.post("/CommonFiles/CommonFiles_edit/", formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
@@ -1043,9 +1081,15 @@ tbody tr td:last-child {
                                   message:'上传成功',
                                   type:'success',
                               })
+                            // 清空文件列表
+                            this.fileList = [];
+                            this.newFiles = [];
+                            this.FilesToDelete = [];
                         }
                         this.elbuttonloading = false;
                         this.tableloading = false;
+
+
                     })
             },
 
@@ -1053,32 +1097,31 @@ tbody tr td:last-child {
             async  updateData() {
                     this.elbuttonloading = true;
                     this.tableloading = true;
-                    if (this.formData.length === 0) {
-                        this.formData = new FormData();
-                    }
-                    this.formData.append('searchCG', this.$refs.CG.value)
-                    this.formData.append('searchSWHW', this.$refs.SWHW.value)
-                    this.formData.append('searchCategory_L1', this.$refs.Category_L1.value)
-                    this.formData.append('searchCategory_L2', this.$refs.Category_L2.value)
-                    this.formData.append('searchOwner', this.$refs.Owner.value)
-                    this.formData.append('searchOwnerNumber', this.number)
-                    this.formData.append('ID', this.editID)
-                    this.formData.append('CG', this.$refs.form.model.CG)
-                    this.formData.append('SWHW', this.$refs.form.model.SWHW)
-                    this.formData.append('Category_L1', this.$refs.form.model.Category_L1)
-                    this.formData.append('Category_L2', this.$refs.form.model.Category_L2)
-                    this.formData.append('Item', this.$refs.form.model.Item)
-                    this.formData.append('Description', this.$refs.form.model.Description)
-                    this.formData.append('Version', this.$refs.form.model.Version)
-                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
+                    // 每次创建新的 FormData 实例
+                    const formData = new FormData(); // 改为局部变量
+                    formData.append('searchCG', this.$refs.CG.value)
+                    formData.append('searchSWHW', this.$refs.SWHW.value)
+                    formData.append('searchCategory_L1', this.$refs.Category_L1.value)
+                    formData.append('searchCategory_L2', this.$refs.Category_L2.value)
+                    formData.append('searchOwner', this.$refs.Owner.value)
+                    formData.append('searchOwnerNumber', this.number)
+                    formData.append('ID', this.editID)
+                    formData.append('CG', this.$refs.form.model.CG)
+                    formData.append('SWHW', this.$refs.form.model.SWHW)
+                    formData.append('Category_L1', this.$refs.form.model.Category_L1)
+                    formData.append('Category_L2', this.$refs.form.model.Category_L2)
+                    formData.append('Item', this.$refs.form.model.Item)
+                    formData.append('Description', this.$refs.form.model.Description)
+                    formData.append('Version', this.$refs.form.model.Version)
+                    formData.append('Owner', JSON.stringify(this.selectedKeys))
                     // 添加待删除的文件
-                    this.formData.append('files_to_delete', JSON.stringify(this.FilesToDelete));
+                    formData.append('files_to_delete', JSON.stringify(this.FilesToDelete));
                     // 添加新上传的视频
                     this.newFiles.forEach(file => {
-                        this.formData.append('new_files', file);
+                        formData.append('new_files', file);
                     });
-                    this.formData.append("action", 'update');
-                    await axios.post("/CommonFiles/CommonFiles_edit/", this.formData, {
+                    formData.append("action", 'update');
+                    await axios.post("/CommonFiles/CommonFiles_edit/", formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
@@ -1114,10 +1157,14 @@ tbody tr td:last-child {
                                   message:'修改成功',
                                   type:'success',
                               })
-
+                                // 清空文件列表
+                            this.fileList = [];
+                            this.newFiles = [];
+                            this.FilesToDelete = [];
                         }
                         this.elbuttonloading = false;
                         this.tableloading = false;
+
                     })
             },
 

@@ -431,25 +431,43 @@
                     return photos.map(photo => this.getFullUrl(photo.url)).filter(url => url);
                 },
                 handleImageChange(file, fileList) {
-                    // 添加新图片到待上传列表
-                    this.newPhotos.push(file.raw);
+                    // 创建临时URL用于预览
+                    const tempUrl_Image = URL.createObjectURL(file.raw);
 
-                    // 为文件创建临时URL
-                    const tempUrl = URL.createObjectURL(file.raw);
-
-                  // 创建文件对象
+                    // 创建新文件对象
                     const newFile = {
-                    name: file.name,
-                    status: file.status,
-                    size: file.size,
-                    raw: file.raw,
-                    url: tempUrl, // 添加预览URL
-                    uid: file.uid,
-                    isNew: true   // 标记为新文件
-                  };
+                        name: file.name,
+                        status: file.status,
+                        size: file.size,
+                        raw: file.raw,
+                        url: tempUrl_Image,
+                        uid: file.uid,
+                        isNew: true
+                    };
 
-                  // 添加到预览列表
-                  this.fileListO.push(newFile);
+                    // 检查是否已存在相同文件（同时检查原始文件和新上传文件）
+                    const exists = this.fileListO.some(f =>
+                        f.name === file.name && f.size === file.size
+                    );
+
+                    if (exists) {
+                        this.$message.warning('文件已存在，请勿重复上传');
+
+                        // 重要：释放临时URL避免内存泄漏
+                        URL.revokeObjectURL(tempUrl_Image);
+
+                        // 从element-ui的内部列表中移除重复项
+                        const index = fileList.findIndex(f => f.uid === file.uid);
+                        if (index > -1) {
+                            fileList.splice(index, 1);
+                        }
+                        return;
+                    }
+
+                    // 添加到显示列表
+                    this.fileListO.push(newFile);
+                    // 添加到待上传列表
+                    this.newPhotos.push(file.raw);
                 },
                 handleImageRemove(file) {
                     // 如果删除的是原始图片，添加到待删除列表
@@ -472,24 +490,43 @@
                     console.log(this.fileListO,"fileListO")
                 },
                 handleVideoChange(file, fileList) {
-                    // 添加新视频到待上传列表
-                    this.newVideos.push(file.raw);
-                    // 为文件创建临时URL
+                    // 创建临时URL用于预览
                     const tempUrl = URL.createObjectURL(file.raw);
 
-                  // 创建文件对象
+                    // 创建新文件对象
                     const newFile = {
-                    name: file.name,
-                    status: file.status,
-                    size: file.size,
-                    raw: file.raw,
-                    url: tempUrl, // 添加预览URL
-                    uid: file.uid,
-                    isNew: true   // 标记为新文件
-                  };
+                        name: file.name,
+                        status: file.status,
+                        size: file.size,
+                        raw: file.raw,
+                        url: tempUrl,
+                        uid: file.uid,
+                        isNew: true
+                    };
 
-                  // 添加到预览列表
-                  this.fileList1.push(newFile);
+                    // 检查是否已存在相同文件（同时检查原始文件和新上传文件）
+                    const exists = this.fileList1.some(f =>
+                        f.name === file.name && f.size === file.size
+                    );
+
+                    if (exists) {
+                        this.$message.warning('文件已存在，请勿重复上传');
+
+                        // 重要：释放临时URL避免内存泄漏
+                        URL.revokeObjectURL(tempUrl);
+
+                        // 从element-ui的内部列表中移除重复项
+                        const index = fileList.findIndex(f => f.uid === file.uid);
+                        if (index > -1) {
+                            fileList.splice(index, 1);
+                        }
+                        return;
+                    }
+
+                    // 添加到显示列表
+                    this.fileList1.push(newFile);
+                    // 添加到待上传列表
+                    this.newVideos.push(file.raw);
                 },
                 handleVideoRemove(file) {
                     // 如果删除的是原始视频，添加到待删除列表
@@ -623,12 +660,19 @@
                                     'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
                                 }
                             }
-                        );
+                        )
 
                         if (!response.data.errMsg) {
                             this.$message.success('更新成功');
                             this.update = false;
                             this.Search(); // 刷新数据
+                            // 清空文件列表
+                            this.fileListO = [];  // 图片显示列表
+                            this.fileList1 = [];  // 视频显示列表
+                            this.newPhotos = [];    // 新上传的图片
+                            this.newVideos = [];    // 新上传的视频
+                            this.photosToDelete = []; // 待删除的图片
+                            this.videosToDelete = []; // 待删除的视频
                         } else {
                             this.$message.error('更新失败: ' + response.data.errMsg);
                         }

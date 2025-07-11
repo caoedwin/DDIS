@@ -897,32 +897,31 @@ tbody tr td:last-child {
             async  addData(){
                     this.elbuttonloading = true;
                     this.tableloading = true;
-                    if (this.formData.length === 0) {
-                        this.formData = new FormData();
-                    }
-                    this.formData.append('searchCategory', this.$refs.Category.value)
-                    this.formData.append('searchProduct_Type', this.$refs.Product_Type.value)
-                    this.formData.append('searchOwner', this.$refs.Owner.value)
-                    this.formData.append('searchOwnerNumber', this.number)
-                    this.formData.append('Category', this.$refs.form.model.Category)
-                    this.formData.append('Product_Type', this.$refs.form.model.Product_Type)
-                    this.formData.append('Name', this.$refs.form.model.Name)
-                    this.formData.append('Num', this.$refs.form.model.Num)
-                    this.formData.append('Manufacturer', this.$refs.form.model.Manufacturer)
-                    this.formData.append('Cost', this.$refs.form.model.Cost)
-                    this.formData.append('Account', this.$refs.form.model.Account)
-                    this.formData.append('PW', this.$refs.form.model.PW)
-                    this.formData.append('Purchasing_Date', this.$refs.form.model.Purchasing_Date)
-                    this.formData.append('Department', this.$refs.form.model.Department)
-                    this.formData.append('Location', this.$refs.form.model.Location)
-                    this.formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
-                    this.formData.append('Status', this.$refs.form.model.Status)
-                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
-                    this.formData.append('Mail', this.$refs.form.model.Mail)
-                    this.formData.append('Contact_info', this.$refs.form.model.Contact_info)
-                    this.formData.append('Comments', this.$refs.form.model.Comments)
-                    this.formData.append("action", 'addData');
-                    await axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
+                    // 每次创建新的 FormData 实例
+                    const formData = new FormData(); // 改为局部变量
+                    formData.append('searchCategory', this.$refs.Category.value)
+                    formData.append('searchProduct_Type', this.$refs.Product_Type.value)
+                    formData.append('searchOwner', this.$refs.Owner.value)
+                    formData.append('searchOwnerNumber', this.number)
+                    formData.append('Category', this.$refs.form.model.Category)
+                    formData.append('Product_Type', this.$refs.form.model.Product_Type)
+                    formData.append('Name', this.$refs.form.model.Name)
+                    formData.append('Num', this.$refs.form.model.Num)
+                    formData.append('Manufacturer', this.$refs.form.model.Manufacturer)
+                    formData.append('Cost', this.$refs.form.model.Cost)
+                    formData.append('Account', this.$refs.form.model.Account)
+                    formData.append('PW', this.$refs.form.model.PW)
+                    formData.append('Purchasing_Date', this.$refs.form.model.Purchasing_Date)
+                    formData.append('Department', this.$refs.form.model.Department)
+                    formData.append('Location', this.$refs.form.model.Location)
+                    formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
+                    formData.append('Status', this.$refs.form.model.Status)
+                    formData.append('Owner', JSON.stringify(this.selectedKeys))
+                    formData.append('Mail', this.$refs.form.model.Mail)
+                    formData.append('Contact_info', this.$refs.form.model.Contact_info)
+                    formData.append('Comments', this.$refs.form.model.Comments)
+                    formData.append("action", 'addData');
+                    await axios.post("/CommonDevice/CommonDevice_edit/", formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
@@ -962,6 +961,10 @@ tbody tr td:last-child {
                         }
                         this.elbuttonloading = false;
                         this.tableloading = false;
+                        // 清空文件列表
+                        this.fileList = [];
+                        this.newFiles = [];
+                        this.FilesToDelete = [];
                     })
             },
 
@@ -969,33 +972,32 @@ tbody tr td:last-child {
             async  updateData() {
                     this.elbuttonloading = true;
                     this.tableloading = true;
-                    if (this.formData.length === 0) {
-                        this.formData = new FormData();
-                    }
-                    this.formData.append('searchCategory', this.$refs.Category.value)
-                    this.formData.append('searchProduct_Type', this.$refs.Product_Type.value)
-                    this.formData.append('searchOwner', this.$refs.Owner.value)
-                    this.formData.append('searchOwnerNumber', this.number)
-                    this.formData.append('ID', this.editID)
-                    this.formData.append('Category', this.$refs.form.model.Category)
-                    this.formData.append('Product_Type', this.$refs.form.model.Product_Type)
-                    this.formData.append('Name', this.$refs.form.model.Name)
-                    this.formData.append('Num', this.$refs.form.model.Num)
-                    this.formData.append('Manufacturer', this.$refs.form.model.Manufacturer)
-                    this.formData.append('Cost', this.$refs.form.model.Cost)
-                    this.formData.append('Account', this.$refs.form.model.Account)
-                    this.formData.append('PW', this.$refs.form.model.PW)
-                    this.formData.append('Purchasing_Date', this.$refs.form.model.Purchasing_Date)
-                    this.formData.append('Department', this.$refs.form.model.Department)
-                    this.formData.append('Location', this.$refs.form.model.Location)
-                    this.formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
-                    this.formData.append('Status', this.$refs.form.model.Status)
-                    this.formData.append('Owner', JSON.stringify(this.selectedKeys))
-                    this.formData.append('Mail', this.$refs.form.model.Mail)
-                    this.formData.append('Contact_info', this.$refs.form.model.Contact_info)
-                    this.formData.append('Comments', this.$refs.form.model.Comments)
-                    this.formData.append("action", 'update');
-                    await axios.post("/CommonDevice/CommonDevice_edit/", this.formData, {
+                    // 每次创建新的 FormData 实例
+                    const formData = new FormData(); // 改为局部变量
+                    formData.append('searchCategory', this.$refs.Category.value)
+                    formData.append('searchProduct_Type', this.$refs.Product_Type.value)
+                    formData.append('searchOwner', this.$refs.Owner.value)
+                    formData.append('searchOwnerNumber', this.number)
+                    formData.append('ID', this.editID)
+                    formData.append('Category', this.$refs.form.model.Category)
+                    formData.append('Product_Type', this.$refs.form.model.Product_Type)
+                    formData.append('Name', this.$refs.form.model.Name)
+                    formData.append('Num', this.$refs.form.model.Num)
+                    formData.append('Manufacturer', this.$refs.form.model.Manufacturer)
+                    formData.append('Cost', this.$refs.form.model.Cost)
+                    formData.append('Account', this.$refs.form.model.Account)
+                    formData.append('PW', this.$refs.form.model.PW)
+                    formData.append('Purchasing_Date', this.$refs.form.model.Purchasing_Date)
+                    formData.append('Department', this.$refs.form.model.Department)
+                    formData.append('Location', this.$refs.form.model.Location)
+                    formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
+                    formData.append('Status', this.$refs.form.model.Status)
+                    formData.append('Owner', JSON.stringify(this.selectedKeys))
+                    formData.append('Mail', this.$refs.form.model.Mail)
+                    formData.append('Contact_info', this.$refs.form.model.Contact_info)
+                    formData.append('Comments', this.$refs.form.model.Comments)
+                    formData.append("action", 'update');
+                    await axios.post("/CommonDevice/CommonDevice_edit/", formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
@@ -1031,10 +1033,14 @@ tbody tr td:last-child {
                                   message:'修改成功',
                                   type:'success',
                               })
-
+                            // 清空文件列表
+                            this.fileList = [];
+                            this.newFiles = [];
+                            this.FilesToDelete = [];
                         }
                         this.elbuttonloading = false;
                         this.tableloading = false;
+
                     })
             },
 
