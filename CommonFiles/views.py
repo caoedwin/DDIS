@@ -282,10 +282,10 @@ def CommonFiles_edit(request):
                     if request.POST.get('Category_L1'):
                         ch_dic['Category_L1'] = Category.objects.filter(id=request.POST.get('Category_L1')).first()
                     if request.POST.get('Category_L2'):
-                        ch_dic['v'] = SubCategory.objects.filter(id=request.POST.get('Category_L2')).first()
+                        ch_dic['Category_L2'] = SubCategory.objects.filter(id=request.POST.get('Category_L2')).first()
                     if request.POST.get('Owner'):
-                        user = UserInfo.objects.filter(account=request.POST.get('OwnerNumber')).first()
-                        ch_dic['Owner'] = user
+                        # user = UserInfo.objects.filter(account=request.POST.get('OwnerNumber')).first()
+                        ch_dic['Owner'] = request.POST.get('OwnerNumber')
                     if ch_dic:
                         mock_obj = CommonFiles.objects.filter(**ch_dic).order_by('-created_at')
                 if request.POST.get('action') == 'addData':
@@ -343,8 +343,8 @@ def CommonFiles_edit(request):
                     if request.POST.get('searchCategory_L2'):
                         check_dic['Category_L2'] = SubCategory.objects.filter(id=request.POST.get('searchCategory_L2')).first()
                     if request.POST.get('searchOwner'):
-                        user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
-                        check_dic['Owner'] = user
+                        # user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
+                        check_dic['Owner'] = request.POST.get('searchOwnerNumber')
                     if check_dic:
                         mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
                 if request.POST.get('action') == 'update':
@@ -364,7 +364,8 @@ def CommonFiles_edit(request):
                     }
                     try:
                         with transaction.atomic():
-                            CommonFiles_object = CommonFiles.objects.filter(id=ID).update(**update_dic)
+                            CommonFiles.objects.filter(id=ID).update(**update_dic)
+                            CommonFiles_object = CommonFiles.objects.filter(id=ID).first()
                             if new_files:
                                 for f in new_files:
                                     # print(f)
@@ -394,13 +395,17 @@ def CommonFiles_edit(request):
 
                     # mock_data
                     check_dic = {}
-                    if request.POST.get('searchCategory'):
-                        check_dic['Category'] = Category.objects.filter(id=request.POST.get('searchCategory')).first()
-                    if request.POST.get('searchProduct_Type'):
-                        check_dic['Product_Type'] = SubCategory.objects.filter(id=request.POST.get('searchProduct_Type')).first()
+                    if request.POST.get('searchCG'):
+                        check_dic['searchCG'] = request.POST.get('searchCG')
+                    if request.POST.get('searchSWHW'):
+                        check_dic['searchSWHW'] = request.POST.get('searchSWHW')
+                    if request.POST.get('searchCategory_L1'):
+                        check_dic['Category_L1'] = Category.objects.filter(id=request.POST.get('searchCategory_L1')).first()
+                    if request.POST.get('searchCategory_L2'):
+                        check_dic['Category_L2'] = SubCategory.objects.filter(id=request.POST.get('searchCategory_L2')).first()
                     if request.POST.get('searchOwner'):
-                        user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
-                        check_dic['Owner'] = user
+                        # user = UserInfo.objects.filter(account=request.POST.get('searchOwnerNumber')).first()
+                        check_dic['Owner'] = request.POST.get('searchOwnerNumber')
                     if check_dic:
                         mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
 
@@ -418,13 +423,17 @@ def CommonFiles_edit(request):
                             CommonFiles.objects.get(id=i).delete()
                         # mock_data
                         check_dic = {}
-                        if responseData['searchCategory']:
-                            check_dic['Category'] = Category.objects.filter(id=responseData['searchCategory']).first()
-                        if responseData['searchProduct_Type']:
-                            check_dic['Product_Type'] = SubCategory.objects.filter(id=responseData['searchProduct_Type']).first()
+                        if responseData['searchCG']:
+                            check_dic['searchCG'] = Category.objects.filter(id=responseData['searchCG']).first()
+                        if responseData['searchSWHW']:
+                            check_dic['searchSWHW'] = SubCategory.objects.filter(id=responseData['searchSWHW']).first()
+                        if responseData['searchCategory_L1']:
+                            check_dic['searchCategory_L1'] = SubCategory.objects.filter(id=responseData['searchCategory_L1']).first()
+                        if responseData['searchCategory_L2']:
+                            check_dic['searchCategory_L2'] = SubCategory.objects.filter(id=responseData['searchCategory_L2']).first()
                         if responseData['searchOwner']:
-                            user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
-                            check_dic['Owner'] = user
+                            # user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
+                            check_dic['Owner'] = responseData['searchOwnerNumber']
                         if check_dic:
                             mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
 
@@ -462,7 +471,7 @@ def CommonFiles_edit(request):
                         "Attachment": Attachmentlist,
                     }
                 )
-            # print(mock_data)
+                # print(mock_data)
         except Exception as e:
             errMsg = str(e)
         data = {

@@ -287,8 +287,42 @@ mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400  #上传文件大小，改成25M
-DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400	#上传数据大小，也改成了25M
+# 允许内存中处理的最大文件大小（默认 2.5MB）,如果超过1G最好是用分块上传
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000 * 2  # 500MB # 设置为0，表示所有文件都写入磁盘，避免内存溢出
+# 另外，我们可能需要调整临时文件目录
+FILE_UPLOAD_TEMP_DIR = '/media/temp'  # 确保该目录有足够空间和权限
+
+# 非文件表单数据的最大大小
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000 * 2  # 500MB
+
+# 也可以通过 web.config 文件配置（推荐）
+# <configuration>
+#   <system.webServer>
+#     <security>
+#       <requestFiltering>
+#         <!-- 设置最大请求内容长度（单位：字节） -->
+#         <requestLimits maxAllowedContentLength="1073741824" /> <!-- 1GB -->
+#       </requestFiltering>
+#     </security>
+#     <handlers>
+#       <!-- 确保 Python 处理程序配置 -->
+#       <add name="PythonHandler"
+#            path="*"
+#            verb="*"
+#            modules="httpPlatformHandler"
+#            resourceType="Unspecified" />
+#     </handlers>
+#     <httpProtocol>
+#       <customHeaders>
+#         <!-- 增加超时时间（单位：秒） -->
+#         <add name="RequestTimeout" value="3600" /> <!-- 1小时 -->
+#       </customHeaders>
+#     </httpProtocol>
+#   </system.webServer>
+# </configuration>
+
+# 单个字段最大解析大小
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000  # 默认 1000
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

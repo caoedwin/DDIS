@@ -62,7 +62,8 @@ label{
   }
 
   .customerContent,.departmentContent,.lessonContent,.groupemployeesContent{
-     margin-left: 20px;
+     margin-left: 2px;
+      font-size: 8px;
   }
 
 .inputError{
@@ -220,7 +221,7 @@ tbody tr td:last-child {
 
            <div class="toolbar-container">
                <div class="search-conditions">
-                   <label for="customer">CG</label>
+                   <label for="customer" style="font-size: 12px">CG</label>
                  <el-select  ref="CG" clearable v-model="CG" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="item in CGOptions"
                     :key="item"
@@ -228,7 +229,7 @@ tbody tr td:last-child {
                     :value="item"></el-option>
                  </el-select>
 
-                   <label for="customer">HW/SW</label>
+                   <label for="customer" style="font-size: 12px">HW/SW</label>
                  <el-select  ref="SWHW" clearable v-model="SWHW" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="item in SWHWOptions"
                     :key="item"
@@ -236,7 +237,7 @@ tbody tr td:last-child {
                     :value="item"></el-option>
                  </el-select>
 
-                 <label for="customer">大项</label>
+                 <label for="customer" style="font-size: 12px">大项</label>
                  <el-select  ref="Category_L1" @change="changeCategory_L1" clearable v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="(item,key,index) in Categorys"
                     :key="item.id"
@@ -244,7 +245,7 @@ tbody tr td:last-child {
                     :value="item.id"></el-option>
                  </el-select>
 
-               <label for="customer1">细项</label>
+               <label for="customer1" style="font-size: 12px">细项</label>
                  <el-select  ref="Category_L2" value-key="id" clearable v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="(item,key,index) in Category_L2Options"
                     :key="item.id"
@@ -252,7 +253,7 @@ tbody tr td:last-child {
                     :value="item.id"></el-option>
                  </el-select>
 
-               <label style="font-size: 16px;font-weight: bold;margin-left: 15px;" for="Owner">负责人</label>
+               <label style="font-size: 12px;font-weight: bold;margin-left: 6px;" for="Owner">负责人</label>
                  <el-autocomplete
                           class="inline-input"
                           v-model="Owner"
@@ -474,7 +475,7 @@ tbody tr td:last-child {
               </el-table-column>{% endcomment %}
               <el-table-column  prop="updated_at" label="updated_at" width="120" align="center"></el-table-column>
               <el-table-column  prop="Ownershow" label="负责人" width="100" align="center"></el-table-column>
-              <el-table-column prop="Attachment" label="Attachment" width="100" sortable class="eltable-video">
+              <el-table-column prop="Attachment" label="Attachment" width="300" sortable class="eltable-video">
                     <template scope="scope">
                         <div class="eltable-video">
                             <div v-for="(item) in scope.row.Attachment" :key="item.id">
@@ -533,7 +534,7 @@ tbody tr td:last-child {
                 fileList: [],  // 视频显示列表
                 newFiles: [],    // 新上传的视频
                 FilesToDelete: [], // 待删除的视频
-                originalVideos: [], // 原始视频URL
+                originalFiles: [], // 原始视频URL
 
                 labelPosition: 'right',
                 allCategorys:{}, //将表格中的大类的id映射显示为name
@@ -645,7 +646,7 @@ tbody tr td:last-child {
                 this.elbuttonloading = true;
                 this.tableloading = true;
                 let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
-                axios.post("	/CommonFiles/CommonFiles_edit/", Qs.stringify(data), {
+                axios.post("/CommonFiles/CommonFiles_edit/", Qs.stringify(data), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
                     this.yearOptions = res.data.yearOptions;
@@ -812,7 +813,7 @@ tbody tr td:last-child {
                 this.dialogVisible=true;
             },
 
-            // 每条数据的编辑按钮点击
+            {% comment %}// 每条数据的编辑按钮点击
             handleEdit:function(id,row){
                 this.resetForm();
                 this.selectedKeys = row.Owner.map(item => item.account);
@@ -820,8 +821,8 @@ tbody tr td:last-child {
                 this.isEdit = true;
                   this.dialogTitle = '编辑数据';
                   this.dialogVisible = true;
-                 {% comment %}this.form.Category=row.Category;
-                 this.form.Category_L2=row.Category_L2;{% endcomment %}
+                 this.form.Category=row.Category;
+                 this.form.Category_L2=row.Category_L2;
                 // 先设置大项
                   this.form.Category = row.Category;
 
@@ -849,7 +850,7 @@ tbody tr td:last-child {
                       this.editID = id;
                   })
 
-            },
+            },{% endcomment %}
 
             //编辑按钮点击
             editData(){
@@ -861,8 +862,7 @@ tbody tr td:last-child {
                     if(this.permission === 1){
                         //console.log(this.multipleSelection[0],'this.multipleSelection[0]')
                         this.resetForm();
-                        {#this.fileList = [];#}
-                        this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
+                        this.fileList = [];
                         //console.log(this.selectedKeys,'this.selectedKeys');
                         this.isEdit = true;
                           this.dialogTitle = '编辑数据';
@@ -872,7 +872,7 @@ tbody tr td:last-child {
                         // 先设置大项
                             this.form.CG = this.multipleSelection[0].CG;
                             this.form.SWHW = this.multipleSelection[0].SWHW;
-                          this.form.Category = this.multipleSelection[0].Category_L1;
+                          this.form.Category_L1 = this.multipleSelection[0].Category_L1;
 
                           // 手动触发分类变化来加载对应的细项
                           this.handleCategoryChange(this.multipleSelection[0].Category_L1);
@@ -886,6 +886,23 @@ tbody tr td:last-child {
                               this.form.Version = this.multipleSelection[0].Version;
 
                               this.editID = this.multipleSelection[0].id;
+                              // 保存原始文件URL
+                                this.originalFiles = [...(this.multipleSelection[0].Attachment.url || [])];
+
+                                // 初始化图片显示列表
+
+                                // 初始化视频显示列表
+                                if (this.multipleSelection[0].Attachment && this.multipleSelection[0].Attachment.length > 0) {
+                                    this.multipleSelection[0].Attachment.forEach(u => {
+                                        this.fileList.push({
+                                            name: u.url.split('/').pop(),
+                                            url: u.url,
+                                            id: u.id,
+                                            isOld: true
+                                        });
+                                    });
+                                }
+
                           //})
                     }else {
                       this.$alert("无编辑权限！", '提示', {
@@ -957,7 +974,7 @@ tbody tr td:last-child {
                         this.formData.append('new_files', file);
                     });
                     this.formData.append("action", 'addData');
-                    await axios.post("	/CommonFiles/CommonFiles_edit/", this.formData, {
+                    await axios.post("/CommonFiles/CommonFiles_edit/", this.formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
@@ -1028,7 +1045,7 @@ tbody tr td:last-child {
                         this.formData.append('new_files', file);
                     });
                     this.formData.append("action", 'update');
-                    await axios.post("	/CommonFiles/CommonFiles_edit/", this.formData, {
+                    await axios.post("/CommonFiles/CommonFiles_edit/", this.formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
@@ -1191,7 +1208,7 @@ tbody tr td:last-child {
                                        "params": params,
                                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
                                    };
-                                   axios.post('	/CommonFiles/CommonFiles_edit/', data).then((res) =>{
+                                   axios.post('/CommonFiles/CommonFiles_edit/', data).then((res) =>{
                                          // 正确更新绑定到表格的数据源
                                         this.tableContent = res.data.content;
 
@@ -1240,7 +1257,7 @@ tbody tr td:last-child {
                 let Owner = this.$refs.Owner.value;
                 let OwnerNumber = this.number;
                 let data ={"isGetData":"SEARCH","CG":CG,"SWHW":SWHW,"Category_L1":Category_L1,"Category_L2":Category_L2,"Owner":Owner,"OwnerNumber": OwnerNumber,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
-                axios.post("	/CommonFiles/CommonFiles_edit/",Qs.stringify(data), {
+                axios.post("/CommonFiles/CommonFiles_edit/",Qs.stringify(data), {
                 headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
                   this.tableContent=res.data.content;
@@ -1354,7 +1371,7 @@ tbody tr td:last-child {
                    //2.上傳數據
                   let Category_L1 = _this.$refs.Category_L1.value;
                   let Class = _this.$refs.Class.value;
-                  axios.post("	/CommonFiles/CommonFiles_edit/" ,{"isGetData":"upload","searchCategory_L1":Category_L1,"searchClass":Class,"ExcelData":result},{
+                  axios.post("/CommonFiles/CommonFiles_edit/" ,{"isGetData":"upload","searchCategory_L1":Category_L1,"searchClass":Class,"ExcelData":result},{
                   headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                 }).then((res) => {
                     //console.log(res.data,"first");//上传成功的操作
