@@ -72,7 +72,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
 class CommonFilesAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('CG', 'SWHW', 'Category_L1', 'Category_L2', 'Item', 'Description', 'Version', 'Attachment', 'Creator',)
+            'fields': ('CG', 'SWHW', 'Category_L1', 'Category_L2', 'Item', 'Description', 'Version', 'Attachment', 'Owner', 'Creator',)
         }),
         # ('Advanced options',{
         #     'classes': ('collapse',),

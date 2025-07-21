@@ -86,7 +86,7 @@ def CommonFiles_edit(request):
     # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
-    weizhi = "DepartmentManage/公共設備"
+    weizhi = "DepartmentManage/知行智库"
 
     allCategorys = {}
     categoryOptions = []

@@ -1002,10 +1002,10 @@ tbody tr td:last-child {
             submitForm() {
               this.$refs.form.validate(valid => {
                 if (valid) {
-                    {% comment %}if (this.selectedKeys.length === 0) {
+                    if (this.selectedKeys.length === 0) {
                     this.$message.error('请至少选择一个负责人');
                     return;
-                  }{% endcomment %}
+                  }
                   if (this.isEdit) {
                     // 执行编辑操作
                     this.updateData()
