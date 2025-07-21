@@ -431,7 +431,18 @@ def CommonFiles_edit(request):
                 if 'delete' in str(request.body):
                     responseData = json.loads(request.body)
                     for i in responseData['params']:
-                        print(i)
+                        # print(i)
+                        files_to_delete = []
+                        # print(CommonFiles.objects.get(id=i).Attachment.all())
+                        for j in CommonFiles.objects.get(id=i).Attachment.all():
+                            files_to_delete.append(j.id)
+                        # print(files_to_delete)
+                        fileslist = files.objects.filter(id__in=files_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                        # print(vedios)
+
+                        # 解除关联
+                        CommonFiles.objects.get(id=i).Attachment.remove(*fileslist)  # 使用 * 解包列表
+                        fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
                         CommonFiles.objects.get(id=i).delete()
                     # mock_data
                     check_dic = {}
