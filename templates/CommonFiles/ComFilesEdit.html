@@ -237,7 +237,7 @@ tbody tr td:last-child {
                     :value="item"></el-option>
                  </el-select>
 
-                 <label for="customer" style="font-size: 12px">大项</label>
+                 <label for="customer" style="font-size: 12px">Category-L1</label>
                  <el-select  ref="Category_L1" @change="changeCategory_L1" clearable v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="(item,key,index) in Categorys"
                     :key="item.id"
@@ -245,7 +245,7 @@ tbody tr td:last-child {
                     :value="item.id"></el-option>
                  </el-select>
 
-               <label for="customer1" style="font-size: 12px">细项</label>
+               <label for="customer1" style="font-size: 12px">Category-L2</label>
                  <el-select  ref="Category_L2" value-key="id" clearable v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="(item,key,index) in Category_L2Options"
                     :key="item.id"
@@ -276,22 +276,18 @@ tbody tr td:last-child {
                  <el-button :loading="elbuttonloading" type="danger"  style="height:40px;float: right;" @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除</el-button>
                  <el-button @click="exportExcel" v-if="SSVIP_users===1" type="info" v-cloak style="height:40px">導出</el-button>
                </div>
-{#                     <el-button  type="danger" v-if="uploadpermission===1" v-cloak @click="addData" style="margin-left: 20px;">Upload</el-button>#}
-{#                 <el-button @click="deleteData()" type="danger" v-if="permission===1" v-cloak style="margin-left: 20px;width: 80px;">刪除</el-button>#}
-                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-{#                 <a href="/static/src/modelfiles/PersonInfo.xlsx" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>#}
            </div>
 
     </div>
 
-{#    <div v-cloak class="fileUploadContent" v-if="permission===1">#}
-{#         <div class="inputPackage" v-cloak>#}
-{#             <span v-cloak>請選擇文件</span>#}
-{#             <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">#}
-{#         </div>#}
-{#         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳</el-button>#}
-{#         <span class="showFileName" v-cloak >${ fileName }</span>#}
-{#    </div>#}
+    <div v-cloak class="fileUploadContent" v-if="SSVIP_users===1">
+         <div class="inputPackage" v-cloak>
+             <span v-cloak>請選擇文件</span>
+             <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+         </div>
+         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳清单</el-button>
+         <span class="showFileName" v-cloak >${ fileName }</span>
+    </div>
 
      <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="80%">
          <el-radio-group v-model="labelPosition" size="small">
@@ -330,10 +326,10 @@ tbody tr td:last-child {
                 <el-row :gutter="20">
                     <el-col :span="12">
                           <!-- 大项选择 -->
-                            <el-form-item label="大项" prop="Category_L1" style="width: 100%;">
+                            <el-form-item label="Category-L1" prop="Category_L1" style="width: 100%;">
                               <el-select
                                 v-model="form.Category_L1"
-                                placeholder="请选择大项"
+                                placeholder="请选择Category-L1"
                                 @change="handleCategoryChange"
                               >
                                 <el-option
@@ -348,10 +344,10 @@ tbody tr td:last-child {
                     <el-col :span="12">
 
                             <!-- 细项选择 -->
-                            <el-form-item label="细项" prop="Category_L2" style="width: 100%;">
+                            <el-form-item label="Category-L2" prop="Category_L2" style="width: 100%;">
                               <el-select
                                 v-model="form.Category_L2"
-                                placeholder="请先选择细项"
+                                placeholder="请先选择Category-L2"
                                 :disabled="!SubCategorys.length"
                               >
                                 <el-option
@@ -484,19 +480,19 @@ tbody tr td:last-child {
               <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
               <el-table-column  prop="CG" label="CG" width="100" align="center"></el-table-column>
               <el-table-column  prop="SWHW" label="SW/HW" width="100" align="center"></el-table-column>
-              <el-table-column  prop="Category_L1" label="大项" width="90" align="center">
+              <el-table-column  prop="Category_L1" label="Category-L1" width="90" align="center">
                   <template slot-scope="scope">
                       <span  >${ allCategorys[scope.row.Category_L1] }</span>
                   </template>
               </el-table-column>
-              <el-table-column  prop="Category_L2" label="细项" width="100" align="center">
+              <el-table-column  prop="Category_L2" label="Category-L2" width="100" align="center">
                   <template slot-scope="scope">
                       <span  >${ allSubCategorys[scope.row.Category_L2] }</span>
                   </template>
               </el-table-column>
               <el-table-column  prop="Item" label="Item" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Version" label="Version" width="100" align="center"></el-table-column>
               <el-table-column  prop="Description" label="Description" width="280" align="left"></el-table-column>
-              <el-table-column  prop="Version" label="廠商" width="80" align="center"></el-table-column>
 
               {% comment %}<el-table-column  prop="PW" label="密碼" width="110" align="center">
                   <template slot-scope="scope">
@@ -591,6 +587,8 @@ tbody tr td:last-child {
                 number: '',
                 sectionOwner: [],//以onwer为条件搜索的全部下拉选项
                 OwnersOptions: [],//穿梭框绑定的数据，所有数据内容
+                excelFile: '',
+                fileName: '',
                 loading:false,
                 CGOptions:[],
                 SWHWOptions:[],
@@ -1440,9 +1438,13 @@ tbody tr td:last-child {
                    //将之前张开的树形结构收起
                       //_this.reset();
                    //2.上傳數據
+                  let CG = _this.$refs.CG.value;
+                  let SWHW = _this.$refs.SWHW.value;
                   let Category_L1 = _this.$refs.Category_L1.value;
-                  let Class = _this.$refs.Class.value;
-                  axios.post("/CommonFiles/CommonFiles_edit/" ,{"isGetData":"upload","searchCategory_L1":Category_L1,"searchClass":Class,"ExcelData":result},{
+                  let Category_L2 = _this.$refs.Category_L2.value;
+                  let Owner = _this.$refs.Owner.value;
+                  let OwnerNumber = _this.number;
+                  axios.post("/CommonFiles/CommonFiles_edit/" ,{"isGetData":"upload","searchCG":CG,"searchSWHW":SWHW,"searchCategory_L1":Category_L1,"searchCategory_L2":Category_L2,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,"ExcelData":result},{
                   headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                 }).then((res) => {
                     //console.log(res.data,"first");//上传成功的操作
@@ -1454,13 +1456,13 @@ tbody tr td:last-child {
                             }
                         })
                         _this.errMsg=res.data.errMsg;
-                        _this.permission=res.data.permission;
-                        _this.CGOptions=res.data.CGOptions;
-                        _this.SWHWOptions=res.data.SWHWOptions;
-                        _this.yearOptions = res.data.yearOptions;
-                        _this.categoryOptions = res.data.categoryOptions;
-                        _this.classOptions = res.data.classOptions;
-                        _this.datatypeOption = res.data.datatypeOption;
+                        _this.tableContent = res.data.content;
+                        _this.totalNum = this.tableContent.length;
+                        _this.$nextTick(() => {
+                           if (this.$refs.tableRef) {
+                                this.$refs.tableRef.doLayout();
+                            }
+                        })
                         _this.uploadFile=null;
                         _this.fileName=first;
                    //_this.loading=false;

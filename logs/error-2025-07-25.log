@@ -1,0 +1,162 @@
+[2025-07-25 15:48:12,156] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 588, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'人員管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 15:48:12,159] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.16, 127.0.0.1:62574]
+[2025-07-25 16:13:20,128] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 590, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:13:20,132] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.26, 127.0.0.1:64348]
+[2025-07-25 16:14:50,351] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 590, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:14:50,353] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.21, 127.0.0.1:64443]
+[2025-07-25 16:17:55,917] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 591, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:17:55,920] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.19, 127.0.0.1:64652]
+[2025-07-25 16:23:55,565] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 594, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:23:55,575] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.58, 127.0.0.1:65080]
+[2025-07-25 16:25:19,944] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 596, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:25:19,947] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.21, 127.0.0.1:65196]
+[2025-07-25 16:26:39,331] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 596, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:26:39,334] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.23, 127.0.0.1:65264]
+[2025-07-25 16:51:41,652] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 597, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:51:41,663] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.67, 127.0.0.1:49988]
+[2025-07-25 16:56:14,039] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 597, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'行政管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-25 16:56:14,043] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.17, 127.0.0.1:50388]

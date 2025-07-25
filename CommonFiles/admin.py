@@ -16,7 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'name',
+        'id', 'name',
                     )
     # 列表里显示想要显示的字段
     list_per_page = 500

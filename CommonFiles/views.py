@@ -14,6 +14,12 @@ from django.db.models.functions import ExtractYear
 
 from django.db import models
 
+headermodel_Commonfiles = {
+    'CG': 'CG', 'HW/SW': 'SWHW', 'Category-L1': 'Category_L1', 'Category-L2': 'Category_L2',
+    'Item': 'Item', 'Version': 'Version',
+    'Owner': 'Owner',
+    'Description': 'Description',
+}
 
 def map_field_type(field):
     """映射 Django 字段类型到前端显示类型"""
@@ -90,7 +96,7 @@ def CommonFiles_edit(request):
 
     allCategorys = {}
     categoryOptions = []
-    for i in Category.objects.all():
+    for i in Category.objects.all().order_by('id'):
         allCategorys[i.id] = i.name
         categoryOptions.append(i.name)
 
@@ -109,7 +115,7 @@ def CommonFiles_edit(request):
         #   ]
         # },
     ]
-    for i in Category.objects.all():
+    for i in Category.objects.all().order_by('id'):
         SubCategorylist = []
 
         for j in SubCategory.objects.filter(category__name=i.name):
@@ -361,7 +367,7 @@ def CommonFiles_edit(request):
                 update_dic = {
                     "CG": request.POST.get('CG'),
                     "SWHW": request.POST.get('SWHW') if request.POST.get('SWHW') and request.POST.get(
-                        'v') != 'null' and request.POST.get('SWHW') != 'None' else "",
+                        'SWHW') != 'null' and request.POST.get('SWHW') != 'None' else "",
                     "Category_L1_id": request.POST.get('Category_L1'),
                     # "Category_L2_id": request.POST.get('Category_L2'),
                     "Category_L2": SubCategory.objects.get(id=request.POST.get('Category_L2')) if request.POST.get('Category_L2') else None,
@@ -428,6 +434,205 @@ def CommonFiles_edit(request):
             except:
                 pass
             else:
+                if 'upload' in str(request.body):
+                    responseData = json.loads(request.body)
+                    # print(responseData)
+
+                    xlsxlist = json.loads(responseData['ExcelData'])
+                    # print(xlsxlist)
+                    # pprint.pprint(xlsxlist)
+                    # 验证，先验证再上传,必须要先验证，如果边验证边上传，一旦报错，下次再传就无法通过同机种验证
+                    # Check_dic_Project = {'Customer': CustomerSearch, 'Project': ProjectSearch, }
+                    # # print(Check_dic_ProjectCQM)
+                    # Projectinfo = CQMProject.objects.filter(**Check_dic_Project).first()
+                    # print(Projectinfo)
+                    # current_user = request.session.get('user_name')
+                    # current_account = request.session.get('account')
+                    # ProjectComparison_admin_user = "0301507" #Canny
+                    # # if Projectinfo:s
+                    # #                     #     for k in Projectinfo.Owner.all():
+                    # #                     #         # print(k.username,current_user)
+                    # #                     #         # print(type(k.username),type(current_user))
+                    # #                     #         if k.username == current_uer:
+                    # #             canEdit = 1
+                    # #             break
+                    # if current_account == ProjectComparison_admin_user:
+                    #     canEdit = 1
+                    # print(canEdit)
+                    # try:
+                    if True:
+                        # print('1')
+                        rownum = 0
+                        startupload = 0
+                        # print(xlsxlist)
+                        uploadxlsxlist = []
+                        C2s = []
+                        for i in xlsxlist:
+                            # print(type(i),i)
+                            rownum += 1
+                            modeldata = {}
+                            for key, value in i.items():
+                                if key in headermodel_Commonfiles.keys():
+                                    # print(headermodel_Commonfiles[key],value)
+                                    modeldata[headermodel_Commonfiles[key]] = value
+                                # modeldata['created_at'] = datetime.datetime.now().strftime('%m/%d/%Y %I:%M:%S %p')
+                                # modeldata['updated_at'] = datetime.datetime.now().strftime('%m/%d/%Y %I:%M:%S %p') #auto
+                                # modeldata['ModifiedDate'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            # print(modeldata)
+
+                            if 'CG' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，CG不能爲空
+                                                            """ % rownum
+                                break
+                            if 'SWHW' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，SWHW不能爲空
+                                                            """ % rownum
+                                break
+                            if 'Category_L1' in modeldata.keys():
+                                flag = False
+                                for C1 in selectItem:
+                                    if C1['name'] == modeldata['Category_L1']:
+                                        # print(C1['name'], modeldata['Category_L1'])
+                                        flag = True
+                                        modeldata['Category_L1'] = Category.objects.get(name=modeldata['Category_L1'])
+                                        C2s = C1['SubCategorys']
+                                        break
+                                if flag:
+                                    startupload = 1
+                                else:
+                                    startupload = 0
+                                    errMsg = """
+                                                                            第"%s"條數據，Category_L1不在列表清单中，如需添加此清单项，请联系管理员
+                                                                                                """ % rownum
+                                    break
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Category_L1不能爲空
+                                                            """ % rownum
+                                break
+                            if 'Category_L2' in modeldata.keys() and C2s:
+                                if modeldata['Category_L2'] in C2s:
+                                    startupload = 1
+                                    modeldata['Category_L2'] = SubCategory.objects.get(category=Category.objects.get(name=modeldata['Category_L1']), name=modeldata['Category_L2'])
+                                else:
+                                    startupload = 0
+                                    errMsg = """
+                                                                            第"%s"條數據，Category_L2不在列表清单中，如需添加此清单项，请联系管理员
+                                                                                                """ % rownum
+                                    break
+                            else:
+                                # canEdit = 0
+                                # startupload = 0
+                                # errMsg = """
+                                #         第"%s"條數據，Size不能爲空
+                                #                             """ % rownum
+                                pass
+                            if 'Item' in modeldata.keys():
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Item不能爲空
+                                                            """ % rownum
+                                break
+                            if 'Owner' in modeldata.keys():
+                                modeldata['Owner'] = modeldata['Owner'].split('/')
+                                modeldata['Creator'] = modeldata['Owner'][0]
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                errMsg = """
+                                        第"%s"條數據，Owner工号不能爲空
+                                                            """ % rownum
+                                break
+
+                            uploadxlsxlist.append(modeldata)
+                            # print(create_list)
+                        # print(errMsg, startupload)
+                        # print(create_list,)
+                        # print(startupload)
+                        # print(rownum, type(rownum))
+                        if startupload:
+                            # 让数据可以从有值更新为无值
+                            owner_data = []  # 单独保存每个对象对应的 Owner 数据
+                            create_list = []
+                            update_list = []
+                            ComFileModelfiedlist = []
+                            for i in CommonFiles._meta.fields:
+                                if i.name != 'id':
+                                    ComFileModelfiedlist.append([i.name, i.get_internal_type()])
+                            for i in uploadxlsxlist:
+                                # 深拷贝数据避免修改原始数据
+                                data = i.copy()
+                                print(data)
+                                for j in ComFileModelfiedlist:
+                                        if j[0] not in i.keys():
+                                            print(j)
+                                            if j[1] == "DateField" or j[1] == "ForeignKey":
+                                                i[j[0]] = None
+                                            else:
+                                                i[j[0]] = ''
+                                # if CommonFiles.objects.filter(Customer=i['CG'],SWHW=i['SWHW'],Category_L2=i['Category_L2'],
+                                #                               Item=i['Item']):
+                                #     update_list.append(i)
+                                # else:
+                                #     create_list.append(CommonFiles(**i))  # object(**dict)
+                                # 提取并移除 Owner 字段
+                                owner = data.pop("Owner", [])  # 假设这里存放用户 ID 列表
+                                owner_data.append(owner)
+                                create_list.append(CommonFiles(**data))  # object(**dict)
+                                # print(create_list)
+                            try:
+                                with transaction.atomic():
+                                    if create_list:
+                                        created_objs = CommonFiles.objects.bulk_create(create_list)
+                                        #在 Django 中使用 bulk_create() 时，不能直接为多对多字段（如 Owner）赋值。这是因为多对多关系需要额外的中间表记录，而 bulk_create() 不会自动处理这种关系。
+                                        # 3. 处理多对多关系
+                                        for obj, owner in zip(created_objs, owner_data):
+                                            # 获取用户对象集合
+                                            UserInfos = UserInfo.objects.filter(account__in=owner)
+
+                                            # 设置多对多关系（使用 add()）
+                                            obj.Owner.add(*UserInfos)  # 注意这里的 *
+                                    if update_list:
+                                        pass
+                            except Exception as e:
+                                # alert = '此数据正被其他使用者编辑中...'
+                                errMsg = str(e)
+                                print(errMsg)
+                            # mock_data
+                            check_dic = {}
+                            if responseData['searchCG']:
+                                check_dic['searchCG'] = Category.objects.filter(id=responseData['searchCG']).first()
+                            if responseData['searchSWHW']:
+                                check_dic['searchSWHW'] = SubCategory.objects.filter(
+                                    id=responseData['searchSWHW']).first()
+                            if responseData['searchCategory_L1']:
+                                check_dic['searchCategory_L1'] = SubCategory.objects.filter(
+                                    id=responseData['searchCategory_L1']).first()
+                            if responseData['searchCategory_L2']:
+                                check_dic['searchCategory_L2'] = SubCategory.objects.filter(
+                                    id=responseData['searchCategory_L2']).first()
+                            if responseData['searchOwner']:
+                                user = UserInfo.objects.filter(account=responseData['searchOwnerNumber']).first()
+                                check_dic['Owner'] = user
+                            if check_dic:
+                                mock_obj = CommonFiles.objects.filter(**check_dic).order_by('-created_at')
+
                 if 'delete' in str(request.body):
                     responseData = json.loads(request.body)
                     for i in responseData['params']:

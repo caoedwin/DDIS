@@ -141,6 +141,12 @@ DEBUG = True
 FCGI_LOG = True
 ALLOWED_HOSTS = ['*']
 
+# 允许代理头
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+
 # 设置Django使用的默认编码
 DEFAULT_CHARSET = 'utf-8'
 # DjangoUeditor3
