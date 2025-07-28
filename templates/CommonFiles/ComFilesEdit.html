@@ -241,7 +241,7 @@ tbody tr td:last-child {
                     :value="item"></el-option>
                  </el-select>
 
-                 <label for="customer" style="font-size: 12px">Category-L1</label>
+                 <label for="customer" style="font-size: 12px">C-L1</label>
                  <el-select  ref="Category_L1" @change="changeCategory_L1" clearable v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="(item,key,index) in Categorys"
                     :key="item.id"
@@ -249,7 +249,7 @@ tbody tr td:last-child {
                     :value="item.id"></el-option>
                  </el-select>
 
-               <label for="customer1" style="font-size: 12px">Category-L2</label>
+               <label for="customer1" style="font-size: 12px">C-L2</label>
                  <el-select  ref="Category_L2" value-key="id" clearable v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
                     <el-option v-for="(item,key,index) in Category_L2Options"
                     :key="item.id"
@@ -291,11 +291,17 @@ tbody tr td:last-child {
          </div>
          <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳清单</el-button>
          <span class="showFileName" v-cloak >${ fileName }</span>
-        <el-tooltip class="item" effect="dark" content="excel上传无法上传附件，只能上传清单，附件还需各owner编辑上传。清单不要重复上传。"
-                            placement="right"><i class="el-icon-question"></i></el-tooltip>
+        <el-tooltip class="item" effect="dark" placement="right" raw-content >
+              <div slot="content">
+                1.excel上传无法上传附件，只能上传清单，附件还需各owner编辑上传。清单不要重复上传。<br>
+                2.附件名稱不要有中文和特殊符號。<br>
+                3.附件可以是視頻，非視頻文件最好打包在一起
+              </div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
                 <span class="showFileName" v-cloak>${ fileName }</span>
                 <a style="margin-top: 10px;margin-left: 20px;color: #FFFFFF"
-                   href="/static/src/modelfiles/Projectinfo.xlsx" style="color: orange;font-size: 16px"><img
+                   href="/static/src/modelfiles/CommonFiles.xlsx" style="color: orange;font-size: 16px"><img
                         src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="...">模板下载</a>
     </div>
 

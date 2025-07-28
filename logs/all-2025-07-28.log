@@ -676,3 +676,50 @@ CommonFiles.models.Category.DoesNotExist: Category matching query does not exist
 [2025-07-28 10:24:00,172] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.18, 127.0.0.1:61865]
 [2025-07-28 10:25:22,509] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:25:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
 [2025-07-28 10:25:22,521] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.10, 127.0.0.1:61944]
+[2025-07-28 10:28:23,797] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:28:23: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:28:23,811] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.25, 127.0.0.1:62263]
+[2025-07-28 10:29:12,116] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:29:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:29:12,128] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonDevice/CommonDevice_edit/ 200 [0.06, 127.0.0.1:62263]
+[2025-07-28 10:29:12,148] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:61869]
+[2025-07-28 10:29:12,198] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:29:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-28 10:29:12,216] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.03, 127.0.0.1:62263]
+[2025-07-28 10:29:12,259] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.00, 127.0.0.1:62263]
+[2025-07-28 10:29:12,303] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.00, 127.0.0.1:62263]
+[2025-07-28 10:29:12,360] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62312]
+[2025-07-28 10:29:12,362] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62312]
+[2025-07-28 10:29:12,460] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.00, 127.0.0.1:62263]
+[2025-07-28 10:29:12,472] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:62263]
+[2025-07-28 10:29:12,724] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:29:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:29:12,735] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.12, 127.0.0.1:62263]
+[2025-07-28 10:29:12,750] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:29:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-28 10:29:13,457] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.82, 127.0.0.1:62309]
+[2025-07-28 10:29:49,141] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:29:49: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:29:49,155] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.22, 127.0.0.1:62309]
+[2025-07-28 10:33:11,746] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:33:11: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:33:11,757] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonDevice/CommonDevice_edit/ 200 [0.07, 127.0.0.1:62628]
+[2025-07-28 10:33:11,771] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62312]
+[2025-07-28 10:33:11,799] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:33:11: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-07-28 10:33:11,822] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.03, 127.0.0.1:62628]
+[2025-07-28 10:33:11,850] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.00, 127.0.0.1:62628]
+[2025-07-28 10:33:11,855] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.00, 127.0.0.1:62629]
+[2025-07-28 10:33:11,911] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62632]
+[2025-07-28 10:33:11,913] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62632]
+[2025-07-28 10:33:12,021] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:62629]
+[2025-07-28 10:33:12,068] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:62628]
+[2025-07-28 10:33:12,258] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:33:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:33:12,268] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.10, 127.0.0.1:62628]
+[2025-07-28 10:33:12,278] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:33:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-28 10:33:12,305] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.12, 127.0.0.1:62629]
+[2025-07-28 10:33:39,673] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:33:39: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:33:39,685] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.23, 127.0.0.1:62629]
+[2025-07-28 10:34:03,420] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:34:03: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-07-28 10:34:03,432] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.23, 127.0.0.1:62629]
+[2025-07-28 10:35:21,546] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:35:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/'>
+[2025-07-28 10:35:21,563] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/ 200 [1.35, 127.0.0.1:62784]
+[2025-07-28 10:35:21,821] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:35:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CommonFiles/subcategory/'>
+[2025-07-28 10:35:21,834] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CommonFiles/subcategory/ 200 [0.19, 127.0.0.1:62784]
+[2025-07-28 10:35:21,878] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:35:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-07-28 10:35:21,892] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.04, 127.0.0.1:62784]
+[2025-07-28 10:35:21,993] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-07-28 10:35:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-07-28 10:35:22,014] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.04, 127.0.0.1:62784]
+[2025-07-28 10:39:45,618] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62632]
