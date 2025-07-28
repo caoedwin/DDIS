@@ -212,6 +212,10 @@ tbody tr td:last-child {
      {#text-align: left;#}
       white-space: pre-line;
  }
+.el-icon-question:before {
+            color: yellowgreen;
+            font-size: xx-large;
+        }
 </style>
 {% endblock %}
 {% block content %}
@@ -287,6 +291,12 @@ tbody tr td:last-child {
          </div>
          <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳清单</el-button>
          <span class="showFileName" v-cloak >${ fileName }</span>
+        <el-tooltip class="item" effect="dark" content="excel上传无法上传附件，只能上传清单，附件还需各owner编辑上传。清单不要重复上传。"
+                            placement="right"><i class="el-icon-question"></i></el-tooltip>
+                <span class="showFileName" v-cloak>${ fileName }</span>
+                <a style="margin-top: 10px;margin-left: 20px;color: #FFFFFF"
+                   href="/static/src/modelfiles/Projectinfo.xlsx" style="color: orange;font-size: 16px"><img
+                        src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="...">模板下载</a>
     </div>
 
      <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="80%">
@@ -490,8 +500,8 @@ tbody tr td:last-child {
                       <span  >${ allSubCategorys[scope.row.Category_L2] }</span>
                   </template>
               </el-table-column>
-              <el-table-column  prop="Item" label="Item" width="100" align="center"></el-table-column>
-              <el-table-column  prop="Version" label="Version" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Item" label="Item" width="120" align="center"></el-table-column>
+              <el-table-column  prop="Version" label="Version" width="80" align="center"></el-table-column>
               <el-table-column  prop="Description" label="Description" width="280" align="left"></el-table-column>
 
               {% comment %}<el-table-column  prop="PW" label="密碼" width="110" align="center">
@@ -501,7 +511,7 @@ tbody tr td:last-child {
                   </template>
               </el-table-column>{% endcomment %}
               <el-table-column  prop="updated_at" label="updated_at" width="120" align="center"></el-table-column>
-              <el-table-column  prop="Creator" label="创建人" width="100" align="center"></el-table-column>
+{#              <el-table-column  prop="Creator" label="创建人" width="100" align="center"></el-table-column>#}
               <el-table-column  prop="Owner" label="负责人" width="100" align="center">
                   <template slot-scope="scope">
                     <!-- 使用 div 循环，每个元素自然换行 -->
@@ -1437,7 +1447,7 @@ tbody tr td:last-child {
                   let result=JSON.stringify(persons);
                    //将之前张开的树形结构收起
                       //_this.reset();
-                   //2.上傳數據
+                   //2.上errMsg傳數據
                   let CG = _this.$refs.CG.value;
                   let SWHW = _this.$refs.SWHW.value;
                   let Category_L1 = _this.$refs.Category_L1.value;
@@ -1456,11 +1466,12 @@ tbody tr td:last-child {
                             }
                         })
                         _this.errMsg=res.data.errMsg;
+                        //console.log(_this.errMsg);
                         _this.tableContent = res.data.content;
-                        _this.totalNum = this.tableContent.length;
+                        _this.totalNum = _this.tableContent.length;
                         _this.$nextTick(() => {
-                           if (this.$refs.tableRef) {
-                                this.$refs.tableRef.doLayout();
+                           if (_this.$refs.tableRef) {
+                                _this.$refs.tableRef.doLayout();
                             }
                         })
                         _this.uploadFile=null;

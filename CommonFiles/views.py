@@ -296,7 +296,7 @@ def CommonFiles_edit(request):
                 # print(Owners)
                 UserInfos = UserInfo.objects.filter(account__in=Owners)
                 new_files = request.FILES.getlist("new_files", "")
-                print(new_files)
+                # print(new_files)
                 files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
 
                 create_dic = {
@@ -504,9 +504,11 @@ def CommonFiles_edit(request):
                                     if C1['name'] == modeldata['Category_L1']:
                                         # print(C1['name'], modeldata['Category_L1'])
                                         flag = True
-                                        modeldata['Category_L1'] = Category.objects.get(name=modeldata['Category_L1'])
+                                        modeldata['Category_L1_id'] = Category.objects.get(name=modeldata['Category_L1']).id
+                                        del modeldata['Category_L1']
                                         C2s = C1['SubCategorys']
                                         break
+                                # print(flag)
                                 if flag:
                                     startupload = 1
                                 else:
@@ -523,9 +525,12 @@ def CommonFiles_edit(request):
                                                             """ % rownum
                                 break
                             if 'Category_L2' in modeldata.keys() and C2s:
-                                if modeldata['Category_L2'] in C2s:
+                                # print(C2s,modeldata['Category_L2'],modeldata['Category_L2'] in C2s)
+
+                                if any(d['name'] == modeldata['Category_L2'] for d in C2s):
                                     startupload = 1
-                                    modeldata['Category_L2'] = SubCategory.objects.get(category=Category.objects.get(name=modeldata['Category_L1']), name=modeldata['Category_L2'])
+                                    modeldata['Category_L2_id'] = SubCategory.objects.get(category=Category.objects.get(id=modeldata['Category_L1_id']), name=modeldata['Category_L2']).id
+                                    del modeldata['Category_L2']
                                 else:
                                     startupload = 0
                                     errMsg = """
@@ -578,10 +583,9 @@ def CommonFiles_edit(request):
                             for i in uploadxlsxlist:
                                 # 深拷贝数据避免修改原始数据
                                 data = i.copy()
-                                print(data)
                                 for j in ComFileModelfiedlist:
                                         if j[0] not in i.keys():
-                                            print(j)
+                                            # print(j)
                                             if j[1] == "DateField" or j[1] == "ForeignKey":
                                                 i[j[0]] = None
                                             else:
@@ -598,16 +602,23 @@ def CommonFiles_edit(request):
                                 # print(create_list)
                             try:
                                 with transaction.atomic():
-                                    if create_list:
-                                        created_objs = CommonFiles.objects.bulk_create(create_list)
-                                        #在 Django 中使用 bulk_create() 时，不能直接为多对多字段（如 Owner）赋值。这是因为多对多关系需要额外的中间表记录，而 bulk_create() 不会自动处理这种关系。
-                                        # 3. 处理多对多关系
-                                        for obj, owner in zip(created_objs, owner_data):
-                                            # 获取用户对象集合
-                                            UserInfos = UserInfo.objects.filter(account__in=owner)
-
-                                            # 设置多对多关系（使用 add()）
-                                            obj.Owner.add(*UserInfos)  # 注意这里的 *
+                                    for i in uploadxlsxlist:
+                                        print(i)
+                                        UserInfos = UserInfo.objects.filter(account__in=i['Owner'])
+                                        del i['Owner']
+                                        CommonFiles_object = CommonFiles.objects.create(**i)
+                                        CommonFiles_object.Owner.add(*UserInfos)
+                                        CommonFiles_object.save()
+                                    # if create_list:
+                                    #     created_objs = CommonFiles.objects.bulk_create(create_list)# Category_L1,Category_L2也都是many_to_many
+                                    #     #在 Django 中使用 bulk_create() 时，不能直接为多对多字段（如 Owner）赋值。这是因为多对多关系需要额外的中间表记录，而 bulk_create() 不会自动处理这种关系。
+                                    #     # 3. 处理多对多关系
+                                    #     for obj, owner in zip(created_objs, owner_data):
+                                    #         # 获取用户对象集合
+                                    #         UserInfos = UserInfo.objects.filter(account__in=owner)
+                                    #
+                                    #         # 设置多对多关系（使用 add()）
+                                    #         obj.Owner.add(*UserInfos)  # 注意这里的 *
                                     if update_list:
                                         pass
                             except Exception as e:

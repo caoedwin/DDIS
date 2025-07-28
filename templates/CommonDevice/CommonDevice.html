@@ -398,6 +398,9 @@ tbody tr td:last-child {
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-form-item label="Purpose" prop="用途" style="width: 100%;">
+                      <el-input  v-model="form.Purpose" type="textarea"></el-input>
+                  </el-form-item>
                   <el-form-item label="负责人" prop="Owner" style="width: 100%;">
                     <el-transfer
                       style="text-align: left; display: inline-block"
@@ -499,6 +502,7 @@ tbody tr td:last-child {
               <el-table-column  prop="Location" label="位置" width="120" align="center"></el-table-column>
               <el-table-column  prop="Asset_Num" label="資產編號" width="100" align="center"></el-table-column>
               <el-table-column  prop="Status" label="狀態" width="100" align="center"></el-table-column>
+              <el-table-column  prop="Purpose" label="用途" width="180" align="left"></el-table-column>
               <el-table-column  prop="CreatedBy" label="创建人" width="100" align="center"></el-table-column>
               <el-table-column  prop="Owner" label="负责人" width="100" align="center">
                   <template slot-scope="scope">
@@ -599,6 +603,7 @@ tbody tr td:last-child {
                     Location: '',
                     Asset_Num: '',
                     Status: '',
+                    Purpose: '',
                     CreatedBy: '',
                     Owner: [],//用来记录form表单中的负责人列表最后交给后端存入数据库的，是数组结构，不要跟前面的Owner字符串混淆了
                     Mail: [],
@@ -797,6 +802,7 @@ tbody tr td:last-child {
                       this.form.Location = row.Location;
                       this.form.Asset_Num = row.Asset_Num;
                       this.form.Status = row.Status;
+                      this.form.Purpose = row.Purpose;
                       //this.form.Owner=row.Owner;
                       this.form.Mail = row.Mail;
                       this.form.Contact_info = row.Contact_info;
@@ -844,6 +850,7 @@ tbody tr td:last-child {
                               this.form.Location = this.multipleSelection[0].Location;
                               this.form.Asset_Num = this.multipleSelection[0].Asset_Num;
                               this.form.Status = this.multipleSelection[0].Status;
+                              this.form.Purpose = this.multipleSelection[0].Purpose;
                               //this.form.Owner=row.Owner;
                               this.form.Mail = this.multipleSelection[0].Mail;
                               this.form.Contact_info = this.multipleSelection[0].Contact_info;
@@ -916,6 +923,7 @@ tbody tr td:last-child {
                     formData.append('Location', this.$refs.form.model.Location)
                     formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
                     formData.append('Status', this.$refs.form.model.Status)
+                    formData.append('Purpose', this.$refs.form.model.Purpose)
                     formData.append('Owner', JSON.stringify(this.selectedKeys))
                     formData.append('Mail', this.$refs.form.model.Mail)
                     formData.append('Contact_info', this.$refs.form.model.Contact_info)
@@ -992,6 +1000,7 @@ tbody tr td:last-child {
                     formData.append('Location', this.$refs.form.model.Location)
                     formData.append('Asset_Num', this.$refs.form.model.Asset_Num)
                     formData.append('Status', this.$refs.form.model.Status)
+                    formData.append('Purpose', this.$refs.form.model.Purpose)
                     formData.append('Owner', JSON.stringify(this.selectedKeys))
                     formData.append('Mail', this.$refs.form.model.Mail)
                     formData.append('Contact_info', this.$refs.form.model.Contact_info)
@@ -1060,6 +1069,7 @@ tbody tr td:last-child {
                     Location: '',
                     Asset_Num: '',
                     Status: '',
+                    Purpose: '',
                     Owner: [],
                     Contact_info: '',
                     Comments: '',

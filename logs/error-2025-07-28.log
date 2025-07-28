@@ -1,0 +1,158 @@
+[2025-07-28 09:16:55,005] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 600, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'人員管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-28 09:16:55,013] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.31, 127.0.0.1:57063]
+[2025-07-28 09:25:24,870] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 602, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'人員管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-28 09:25:24,881] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.92, 127.0.0.1:57537]
+[2025-07-28 09:27:23,918] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 603, in CommonFiles_edit
+    create_list.append(CommonFiles(**data))  # object(**dict)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 467, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\related_descriptors.py", line 210, in __set__
+    self.field.remote_field.model._meta.object_name,
+ValueError: Cannot assign "'人員管理'": "CommonFiles.Category_L1" must be a "Category" instance.
+[2025-07-28 09:27:23,947] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.96, 127.0.0.1:57699]
+[2025-07-28 09:28:31,558] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 532, in CommonFiles_edit
+    modeldata['Category_L2'] = SubCategory.objects.get(category=Category.objects.get(name=modeldata['Category_L1']), name=modeldata['Category_L2'])
+KeyError: 'Category_L1'
+[2025-07-28 09:28:31,565] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.21, 127.0.0.1:57786]
+[2025-07-28 09:30:15,508] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 532, in CommonFiles_edit
+    modeldata['Category_L2'] = SubCategory.objects.get(id=Category.objects.get(name=modeldata['Category_L1_id']))
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 399, in get
+    self.model._meta.object_name
+CommonFiles.models.Category.DoesNotExist: Category matching query does not exist.
+[2025-07-28 09:30:15,515] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.17, 127.0.0.1:57883]
+[2025-07-28 09:32:23,038] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 532, in CommonFiles_edit
+    modeldata['Category_L2_id'] = SubCategory.objects.get(id=Category.objects.get(id=modeldata['Category_L1_id']).id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 399, in get
+    self.model._meta.object_name
+CommonFiles.models.SubCategory.DoesNotExist: SubCategory matching query does not exist.
+[2025-07-28 09:32:23,047] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.19, 127.0.0.1:58043]
+[2025-07-28 09:34:09,836] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 532, in CommonFiles_edit
+    modeldata['Category_L2_id'] = SubCategory.objects.get(category=Category.objects.get(id=modeldata['Category_L1_id'])).id
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 403, in get
+    (self.model._meta.object_name, num)
+CommonFiles.models.SubCategory.MultipleObjectsReturned: get() returned more than one SubCategory -- it returned 2!
+[2025-07-28 09:34:09,844] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.19, 127.0.0.1:58131]
+[2025-07-28 09:36:02,953] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 533, in CommonFiles_edit
+    modeldata['Category_L2_id'] = SubCategory.objects.get(category=Category.objects.get(id=modeldata['Category_L1_id'])).id
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 403, in get
+    (self.model._meta.object_name, num)
+CommonFiles.models.SubCategory.MultipleObjectsReturned: get() returned more than one SubCategory -- it returned 2!
+[2025-07-28 09:36:02,961] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.21, 127.0.0.1:58238]
+[2025-07-28 09:38:57,007] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CommonFiles/CommonFiles_edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CommonFiles\views.py", line 532, in CommonFiles_edit
+    modeldata['Category_L2_id'] = SubCategory.objects.get(category=Category.objects.get(id=modeldata['Category_L1_id'], name=modeldata['Category_L2'])).id
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 399, in get
+    self.model._meta.object_name
+CommonFiles.models.Category.DoesNotExist: Category matching query does not exist.
+[2025-07-28 09:38:57,015] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CommonFiles/CommonFiles_edit/ 500 [0.22, 127.0.0.1:58372]

@@ -56,6 +56,7 @@ class CommonDevice(models.Model):
     Location = models.CharField("位置", max_length=50, null=True, blank=True)
     Asset_Num = models.CharField("資產編號", max_length=50, null=True, blank=True)
     Dev_Status = models.CharField("狀態", choices=Status_choice, max_length=50, null=True, blank=True)
+    Purpose = models.CharField("用途", max_length=2000, null=True, blank=True)
     Owner = models.ManyToManyField("app01.UserInfo")
     # Owner = models.CharField("负责人", max_length=50, null=True, blank=True)
     Mail = models.EmailField("郵件地址", null=True, blank=True)
