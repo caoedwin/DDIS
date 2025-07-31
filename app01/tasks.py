@@ -583,7 +583,7 @@ from exchangelib.items import MeetingRequest, MeetingCancellation, SEND_TO_ALL_A
 import urllib3
 # from datetime import datetime, timedelta
 
-
+# 1OA内exchange发送邮件
 # 如果需要设置日历提醒，可以添加CalendarItem
 @task
 def MailOAtest(**kwargs):  # settings Email设置2-内網OA(Exchange)
@@ -863,7 +863,54 @@ def Mailsend(**kwargs):
             '%Y-%m-%d, %H:%M:%S')) + "-editor:" + str(editor) + "-subject" + str(subject) + ":" + "Issues-" + str(CriticalIssues) + "-Projects-" + str(Projects))
     return True
 
+# 2OA内SMTP发送邮件，需要跟IT开单申请发送服务器的SMTP服务
+from email.mime.text import MIMEText
+from aiosmtplib import SMTP, SMTPException
+from traceback import print_exc
+import asyncio
+
+
+async def test_smtp():
+    # 创建邮件内容
+    msg = MIMEText("TEST SMTP", "html", "utf-8")
+
+    # 设置发件人
+    user_name = 'DDIS_Admin@Compal.com'  # 移除了结尾的分号
+    msg['From'] = user_name
+
+    # 设置多个收件人 (逗号分隔的字符串)
+    to_recipients = ['edwin_cao@compal.com', 'user2@example.com', 'user3@example.com']
+    msg['To'] = ', '.join(to_recipients)  # 注意: 用逗号+空格分隔
+
+    # 设置多个抄送人
+    cc_recipients = ['wenys1@lenovo.com', 'cc1@example.com', 'cc2@example.com']
+    msg['Cc'] = ', '.join(cc_recipients)  # 同样用逗号+空格分隔
+
+    # 合并所有收件人用于实际发送
+    all_recipients = to_recipients + cc_recipients
+
+    msg['Subject'] = 'TEST SMTP - Compal'
+
+    try:
+        print('Ready to send E-Mail')
+        async with SMTP(hostname='10.128.2.181', port=25, use_tls=False) as smtp:
+            print('Start send E-Mail')
+            # 发送时需要合并所有收件地址
+            await smtp.send_message(
+                msg,
+                sender=user_name,
+                recipients=all_recipients
+            )
+            print('Send E-Mail Success')
+            # 不需要显式调用quit()和close()，async with会自动处理
+            print('SMTP connect closed')
+            return True
+    except Exception as e:  # 更具体的异常捕获
+        print(f"Failed to send email: {str(e)}")
+        print_exc()
+        return False
+
 
 @task
-def scheduleMailOA_CriticalIssue():
-    pass
+def OASMTPMail():
+    asyncio.run(test_smtp())

@@ -73,7 +73,7 @@ class CommonDeviceAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('Category', 'Product_Type', 'Name', 'Num', 'Manufacturer', 'Cost', 'Account', 'PW',
-        'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'Owner', 'Mail', 'Contact_info', 'Comments', 'Creator',)
+        'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'Dev_Status', 'Purpose', 'Owner', 'Mail', 'Contact_info', 'Comments', 'Creator',)
         }),
         # ('Advanced options',{
         #     'classes': ('collapse',),
@@ -83,7 +83,7 @@ class CommonDeviceAdmin(admin.ModelAdmin):
 
     list_display = (
         'Category', 'Product_Type', 'Name', 'Num', 'Manufacturer', 'Cost', 'Account', 'PW',
-        'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'show_user', 'Mail', 'Contact_info', 'Comments', 'Creator', 'created_at', 'updated_at',
+        'Purchasing_Date', 'Department', 'Location', 'Asset_Num', 'Dev_Status', 'Purpose', 'show_user', 'Mail', 'Contact_info', 'Comments', 'Creator', 'created_at', 'updated_at',
                     )
     def show_user(self, obj):
         user_list = []
