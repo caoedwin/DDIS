@@ -893,7 +893,13 @@ async def test_smtp():
 
     try:
         print('Ready to send E-Mail')
-        async with SMTP(hostname='10.128.2.181', port=25, use_tls=False) as smtp:
+        async with SMTP(
+                hostname='10.128.2.181',
+                port=25,
+                # username='your_username',  # 如果需要
+                # password='your_password',  # 如果需要
+                use_tls=False
+        ) as smtp:
             print('Start send E-Mail')
             # 发送时需要合并所有收件地址
             await smtp.send_message(
