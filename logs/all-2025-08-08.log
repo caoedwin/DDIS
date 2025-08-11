@@ -1,0 +1,280 @@
+[2025-08-08 09:57:03,416] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:57:03: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 09:57:03,431] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.09, 127.0.0.1:54819]
+[2025-08-08 09:57:03,497] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:54825]
+[2025-08-08 09:57:03,555] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:54825]
+[2025-08-08 09:57:03,657] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:57:03: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 09:57:03,668] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.04, 127.0.0.1:54819]
+[2025-08-08 09:57:03,705] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:57:03: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 09:57:03,729] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.09, 127.0.0.1:54820]
+[2025-08-08 09:57:09,501] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 161, in CapitalExpenditure_Summary
+    'first_seven']).first().Customer,
+AttributeError: 'NoneType' object has no attribute 'Customer'
+[2025-08-08 09:57:09,503] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:57:09: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 09:57:09,504] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.14, 127.0.0.1:54820]
+[2025-08-08 09:58:56,473] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:58:56: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/'>
+[2025-08-08 09:58:56,487] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/ 200 [2.69, 127.0.0.1:64987]
+[2025-08-08 09:58:56,510] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:58:56: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 09:58:56,537] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [2.71, 127.0.0.1:64989]
+[2025-08-08 09:58:56,561] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:58:56: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 09:58:56,572] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.07, 127.0.0.1:64987]
+[2025-08-08 09:58:58,895] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:58:58: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/add/'>
+[2025-08-08 09:58:58,909] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/add/ 200 [0.23, 127.0.0.1:64987]
+[2025-08-08 09:58:58,936] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:58:58: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 09:58:58,948] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.02, 127.0.0.1:64987]
+[2025-08-08 09:59:13,257] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/PersonalInfo/departments/add/'>
+[2025-08-08 09:59:13,273] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /admin/PersonalInfo/departments/add/ 200 [0.22, 127.0.0.1:64987]
+[2025-08-08 09:59:13,326] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 09:59:13,340] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.05, 127.0.0.1:64987]
+[2025-08-08 09:59:18,352] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:18: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/PersonalInfo/departments/add/'>
+[2025-08-08 09:59:18,366] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /admin/PersonalInfo/departments/add/ 302 [0.07, 127.0.0.1:64987]
+[2025-08-08 09:59:20,315] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:20: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/'>
+[2025-08-08 09:59:20,334] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/ 200 [1.97, 127.0.0.1:64987]
+[2025-08-08 09:59:20,369] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:20: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 09:59:20,380] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.03, 127.0.0.1:64987]
+[2025-08-08 09:59:22,168] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:22: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 09:59:22,213] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:64987]
+[2025-08-08 09:59:36,369] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:36: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CapitalExpenditure/c38customert88aiodepartmentcode/add/'>
+[2025-08-08 09:59:36,380] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CapitalExpenditure/c38customert88aiodepartmentcode/add/ 200 [0.09, 127.0.0.1:65071]
+[2025-08-08 09:59:36,410] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:36: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 09:59:36,420] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.03, 127.0.0.1:65071]
+[2025-08-08 09:59:38,181] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:38: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 09:59:38,210] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:65071]
+[2025-08-08 09:59:41,709] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:41: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/?o=2.-1'>
+[2025-08-08 09:59:41,939] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:41: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/add/'>
+[2025-08-08 09:59:41,951] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/add/ 200 [2.41, 127.0.0.1:65096]
+[2025-08-08 09:59:42,007] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 09:59:42: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 09:59:42,019] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.05, 127.0.0.1:65096]
+[2025-08-08 10:00:03,276] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:03: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/PersonalInfo/departments/add/'>
+[2025-08-08 10:00:03,311] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /admin/PersonalInfo/departments/add/ 302 [0.08, 127.0.0.1:65096]
+[2025-08-08 10:00:05,268] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:05: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/'>
+[2025-08-08 10:00:05,288] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/ 200 [1.97, 127.0.0.1:65096]
+[2025-08-08 10:00:05,312] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:05: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 10:00:05,324] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.03, 127.0.0.1:65096]
+[2025-08-08 10:00:06,934] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:06: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 10:00:06,967] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:65096]
+[2025-08-08 10:00:09,034] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:09: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/CapitalExpenditure/c38customert88aiodepartmentcode/'>
+[2025-08-08 10:00:09,048] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/CapitalExpenditure/c38customert88aiodepartmentcode/ 200 [0.13, 127.0.0.1:65096]
+[2025-08-08 10:00:09,077] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:09: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 10:00:09,099] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.04, 127.0.0.1:65096]
+[2025-08-08 10:00:19,325] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:19: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 10:00:19,353] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.06, 127.0.0.1:65096]
+[2025-08-08 10:00:25,173] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/1380/change/'>
+[2025-08-08 10:00:25,186] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/1380/change/ 200 [0.23, 127.0.0.1:65096]
+[2025-08-08 10:00:25,242] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 10:00:25,255] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.05, 127.0.0.1:65096]
+[2025-08-08 10:00:38,198] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:38: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/admin/PersonalInfo/departments/1380/change/'>
+[2025-08-08 10:00:38,211] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /admin/PersonalInfo/departments/1380/change/ 302 [0.06, 127.0.0.1:65096]
+[2025-08-08 10:00:40,229] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:40: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/PersonalInfo/departments/'>
+[2025-08-08 10:00:40,243] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/PersonalInfo/departments/ 200 [2.03, 127.0.0.1:65096]
+[2025-08-08 10:00:40,285] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:40: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/admin/jsi18n/'>
+[2025-08-08 10:00:40,298] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /admin/jsi18n/ 200 [0.04, 127.0.0.1:65096]
+[2025-08-08 10:00:45,345] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:45: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 10:00:45,361] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.07, 127.0.0.1:65096]
+[2025-08-08 10:00:45,368] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:54825]
+[2025-08-08 10:00:45,420] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:65317]
+[2025-08-08 10:00:45,425] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:65317]
+[2025-08-08 10:00:45,565] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:45: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 10:00:45,578] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.06, 127.0.0.1:65096]
+[2025-08-08 10:00:45,598] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:45: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 10:00:45,633] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.10, 127.0.0.1:65315]
+[2025-08-08 10:00:52,335] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:52: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 10:00:52,350] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.08, 127.0.0.1:65315]
+[2025-08-08 10:00:55,647] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:00:55: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 10:00:55,662] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.10, 127.0.0.1:65315]
+[2025-08-08 10:12:13,276] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:12:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 10:12:13,289] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.05, 127.0.0.1:50751]
+[2025-08-08 10:12:17,577] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 10:12:17: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CapitalExpenditure/CapitalExpenditure_Summary/'>
+[2025-08-08 10:12:17,590] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 200 [0.14, 127.0.0.1:50751]
+[2025-08-08 11:57:05,082] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 11:57:05: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2025-08-08 11:57:05,103] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.14, 127.0.0.1:58643]
+[2025-08-08 11:57:05,118] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:65317]
+[2025-08-08 11:57:05,226] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:58648]
+[2025-08-08 11:57:05,566] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 11:57:05: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 11:57:05,572] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:58648]
+[2025-08-08 11:57:05,679] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.16, 127.0.0.1:58643]
+[2025-08-08 11:59:32,184] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 11:59:32: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 11:59:32,198] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.08, 127.0.0.1:59590]
+[2025-08-08 11:59:32,231] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 11:59:32: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 11:59:32,245] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.03, 127.0.0.1:59590]
+[2025-08-08 11:59:32,251] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:58648]
+[2025-08-08 11:59:32,293] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:59594]
+[2025-08-08 11:59:32,297] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:59594]
+[2025-08-08 11:59:32,384] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 11:59:32: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_Category/'>
+[2025-08-08 11:59:32,397] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_Category/ 200 [0.03, 127.0.0.1:59590]
+[2025-08-08 11:59:32,422] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 11:59:32: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 11:59:32,444] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:59593]
+[2025-08-08 12:05:56,143] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:05:56: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonDevice/CommonDevice_edit/'>
+[2025-08-08 12:05:56,157] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonDevice/CommonDevice_edit/ 200 [0.12, 127.0.0.1:61987]
+[2025-08-08 12:05:56,226] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:61991]
+[2025-08-08 12:05:56,275] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:61991]
+[2025-08-08 12:05:56,479] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:05:56: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-08-08 12:05:56,493] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.13, 127.0.0.1:61987]
+[2025-08-08 12:05:56,508] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:05:56: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:05:56,545] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.17, 127.0.0.1:61988]
+[2025-08-08 12:06:24,364] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:06:24: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonFiles/CommonFiles_edit/'>
+[2025-08-08 12:06:24,377] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonFiles/CommonFiles_edit/ 200 [0.11, 127.0.0.1:62227]
+[2025-08-08 12:06:24,422] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62249]
+[2025-08-08 12:06:24,452] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62249]
+[2025-08-08 12:06:25,247] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:06:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonFiles/CommonFiles_edit/'>
+[2025-08-08 12:06:25,263] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonFiles/CommonFiles_edit/ 200 [0.71, 127.0.0.1:62227]
+[2025-08-08 12:06:25,277] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:06:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:06:25,304] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.74, 127.0.0.1:62234]
+[2025-08-08 12:06:25,380] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:06:25: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/CommonFiles/%E6%B3%B3%E6%B1%A0%E7%BE%8E%E5%A5%B3%E7%8E%A9%E6%B0%B4%E7%9A%84%E5%B0%8F%E5%A7%90%E5%A7%90.mp4'>
+[2025-08-08 12:06:25,438] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/CommonFiles/%E6%B3%B3%E6%B1%A0%E7%BE%8E%E5%A5%B3%E7%8E%A9%E6%B0%B4%E7%9A%84%E5%B0%8F%E5%A7%90%E5%A7%90.mp4 200 [0.07, 127.0.0.1:62234]
+[2025-08-08 12:07:06,227] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:06: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigation/'>
+[2025-08-08 12:07:06,241] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigation/ 200 [0.12, 127.0.0.1:62690]
+[2025-08-08 12:07:06,282] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/css/down_base.css 304 [0.01, 127.0.0.1:62690]
+[2025-08-08 12:07:06,285] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/css/down_index.css 304 [0.01, 127.0.0.1:62691]
+[2025-08-08 12:07:06,301] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/src/test20.jpg 304 [0.00, 127.0.0.1:62691]
+[2025-08-08 12:07:06,304] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/src/test12.jpg 304 [0.01, 127.0.0.1:62690]
+[2025-08-08 12:07:06,335] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62694]
+[2025-08-08 12:07:06,426] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62694]
+[2025-08-08 12:07:06,431] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:06: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:06,466] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.06, 127.0.0.1:62690]
+[2025-08-08 12:07:08,902] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:08: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigation/'>
+[2025-08-08 12:07:08,917] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigation/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:08,926] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62694]
+[2025-08-08 12:07:08,964] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62719]
+[2025-08-08 12:07:08,966] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62719]
+[2025-08-08 12:07:09,048] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:09: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:09,071] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.04, 127.0.0.1:62690]
+[2025-08-08 12:07:12,501] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2025-08-08 12:07:12,518] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.06, 127.0.0.1:62690]
+[2025-08-08 12:07:12,527] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62719]
+[2025-08-08 12:07:12,557] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62760]
+[2025-08-08 12:07:12,561] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62760]
+[2025-08-08 12:07:12,664] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:12: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:12,688] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.04, 127.0.0.1:62690]
+[2025-08-08 12:07:13,515] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/Property/'>
+[2025-08-08 12:07:13,525] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/Property/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:13,555] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/Property/'>
+[2025-08-08 12:07:13,571] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/Property/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:13,578] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62760]
+[2025-08-08 12:07:13,612] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62771]
+[2025-08-08 12:07:13,617] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62771]
+[2025-08-08 12:07:13,686] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_Category/'>
+[2025-08-08 12:07:13,698] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_Category/ 200 [0.02, 127.0.0.1:62690]
+[2025-08-08 12:07:13,718] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:13: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:13,752] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:62691]
+[2025-08-08 12:07:15,952] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:15: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2025-08-08 12:07:15,963] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.03, 127.0.0.1:62691]
+[2025-08-08 12:07:15,972] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62771]
+[2025-08-08 12:07:16,012] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62785]
+[2025-08-08 12:07:16,016] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62785]
+[2025-08-08 12:07:16,084] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:16,120] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.06, 127.0.0.1:62691]
+[2025-08-08 12:07:16,717] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 12:07:16,730] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.06, 127.0.0.1:62691]
+[2025-08-08 12:07:16,779] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 12:07:16,793] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.05, 127.0.0.1:62691]
+[2025-08-08 12:07:16,803] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62785]
+[2025-08-08 12:07:16,832] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62794]
+[2025-08-08 12:07:16,835] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62794]
+[2025-08-08 12:07:16,909] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_Category/'>
+[2025-08-08 12:07:16,920] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_Category/ 200 [0.03, 127.0.0.1:62691]
+[2025-08-08 12:07:16,956] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:16: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:16,988] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.09, 127.0.0.1:62690]
+[2025-08-08 12:07:19,675] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:19: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_system/ComDev/'>
+[2025-08-08 12:07:19,686] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_system/ComDev/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:19,710] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:19: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_system/ComDev/'>
+[2025-08-08 12:07:19,721] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_system/ComDev/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:19,728] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62794]
+[2025-08-08 12:07:19,762] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62829]
+[2025-08-08 12:07:19,765] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62829]
+[2025-08-08 12:07:19,828] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:19: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_system/'>
+[2025-08-08 12:07:19,841] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_system/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:19,884] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:19: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:19,911] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.09, 127.0.0.1:62691]
+[2025-08-08 12:07:21,372] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/CommonDevice/CommonDevice_edit/'>
+[2025-08-08 12:07:21,386] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /CommonDevice/CommonDevice_edit/ 200 [0.14, 127.0.0.1:62691]
+[2025-08-08 12:07:21,433] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:62839]
+[2025-08-08 12:07:21,438] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62839]
+[2025-08-08 12:07:21,740] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/CommonDevice/CommonDevice_edit/'>
+[2025-08-08 12:07:21,753] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /CommonDevice/CommonDevice_edit/ 200 [0.20, 127.0.0.1:62691]
+[2025-08-08 12:07:21,774] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:21: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:21,809] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.22, 127.0.0.1:62690]
+[2025-08-08 12:07:41,635] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62839]
+[2025-08-08 12:07:43,876] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:43: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 12:07:43,892] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.04, 127.0.0.1:62690]
+[2025-08-08 12:07:43,900] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:62829]
+[2025-08-08 12:07:43,949] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:63123]
+[2025-08-08 12:07:43,953] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63123]
+[2025-08-08 12:07:44,013] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:44: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_Category/'>
+[2025-08-08 12:07:44,024] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_Category/ 200 [0.02, 127.0.0.1:62690]
+[2025-08-08 12:07:44,045] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:44: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:44,071] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.06, 127.0.0.1:62691]
+[2025-08-08 12:07:45,647] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:45: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_system/undefined/'>
+[2025-08-08 12:07:45,661] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_system/undefined/ 200 [0.04, 127.0.0.1:62691]
+[2025-08-08 12:07:45,693] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:45: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_system/undefined/'>
+[2025-08-08 12:07:45,705] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_system/undefined/ 200 [0.03, 127.0.0.1:62691]
+[2025-08-08 12:07:45,712] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63123]
+[2025-08-08 12:07:45,745] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:63135]
+[2025-08-08 12:07:45,749] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63135]
+[2025-08-08 12:07:46,307] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2327, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'undefined'
+[2025-08-08 12:07:46,312] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_system/'>
+[2025-08-08 12:07:46,313] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.51, 127.0.0.1:62691]
+[2025-08-08 12:07:46,331] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:46: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:46,351] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.53, 127.0.0.1:62690]
+[2025-08-08 12:07:52,887] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:52: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 12:07:52,898] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.03, 127.0.0.1:62690]
+[2025-08-08 12:07:52,906] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63135]
+[2025-08-08 12:07:52,956] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:63162]
+[2025-08-08 12:07:52,959] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63162]
+[2025-08-08 12:07:53,036] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:53: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_Category/'>
+[2025-08-08 12:07:53,048] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_Category/ 200 [0.05, 127.0.0.1:62690]
+[2025-08-08 12:07:53,069] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:07:53: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:07:53,092] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.08, 127.0.0.1:62691]
+[2025-08-08 12:08:34,714] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_Category/DepartMent/'>
+[2025-08-08 12:08:34,725] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_Category/DepartMent/ 200 [0.05, 127.0.0.1:63464]
+[2025-08-08 12:08:34,772] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:63467]
+[2025-08-08 12:08:34,807] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63467]
+[2025-08-08 12:08:34,838] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_Category/'>
+[2025-08-08 12:08:34,847] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /Navigations_Category/ 200 [0.02, 127.0.0.1:63464]
+[2025-08-08 12:08:34,876] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:34: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:08:34,898] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.06, 127.0.0.1:63465]
+[2025-08-08 12:08:36,156] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:36: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_system/undefined/'>
+[2025-08-08 12:08:36,165] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_system/undefined/ 200 [0.03, 127.0.0.1:63465]
+[2025-08-08 12:08:36,201] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:36: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations_system/undefined/'>
+[2025-08-08 12:08:36,216] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations_system/undefined/ 200 [0.04, 127.0.0.1:63465]
+[2025-08-08 12:08:36,221] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63467]
+[2025-08-08 12:08:36,249] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:63486]
+[2025-08-08 12:08:36,251] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:63486]
+[2025-08-08 12:08:36,429] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2328, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'undefined'
+[2025-08-08 12:08:36,433] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:36: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/Navigations_system/'>
+[2025-08-08 12:08:36,434] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.13, 127.0.0.1:63465]
+[2025-08-08 12:08:36,443] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-08-08 12:08:36: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-08-08 12:08:36,469] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.15, 127.0.0.1:63464]

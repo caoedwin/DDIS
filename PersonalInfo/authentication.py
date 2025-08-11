@@ -18,7 +18,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # authenticate_kwargs = {self.username_field: attrs[self.username_field], 'password': attrs['password']}
         authenticate_kwargs = {'account': attrs[self.username_field], 'password': attrs['password']}
-        print(authenticate_kwargs,"authenticate_kwargs")
+        # print(authenticate_kwargs,"authenticate_kwargs")
         try:
             user = UserInfo.objects.get(**authenticate_kwargs)
             print(user, user.role.all(), 'user')

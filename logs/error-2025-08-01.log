@@ -1,0 +1,300 @@
+[2025-08-05 16:10:59,360] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:10:59,381] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.68, 127.0.0.1:64784]
+[2025-08-05 16:12:54,008] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:12:54,014] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.05, 127.0.0.1:65031]
+[2025-08-05 16:12:56,273] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:12:56,282] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.04, 127.0.0.1:65045]
+[2025-08-05 16:13:26,816] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:13:26,823] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.04, 127.0.0.1:65130]
+[2025-08-05 16:13:41,742] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:13:41,747] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.02, 127.0.0.1:65176]
+[2025-08-05 16:14:36,552] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:14:36,557] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.03, 127.0.0.1:65306]
+[2025-08-05 16:16:04,090] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:16:04,099] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [1.10, 127.0.0.1:65181]
+[2025-08-05 16:21:18,871] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:21:18,904] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.06, 127.0.0.1:49269]
+[2025-08-05 16:25:40,174] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:25:40,214] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.07, 127.0.0.1:49963]
+[2025-08-05 16:26:59,380] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /PersonalInfo/api_Per/login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework_simplejwt\views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 234, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\serializers.py", line 436, in run_validation
+    value = self.validate(value)
+  File "C:\djangoproject\Reliability_Row_data\PersonalInfo\authentication.py", line 21, in validate
+    print(authenticate_kwargs,"authenticate_kwargs")
+OSError: [Errno 22] Invalid argument
+[2025-08-05 16:26:59,419] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/api_Per/login/ 500 [0.08, 127.0.0.1:50113]

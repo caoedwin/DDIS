@@ -1,0 +1,42 @@
+[2025-08-08 09:57:09,501] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 161, in CapitalExpenditure_Summary
+    'first_seven']).first().Customer,
+AttributeError: 'NoneType' object has no attribute 'Customer'
+[2025-08-08 09:57:09,504] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.14, 127.0.0.1:54820]
+[2025-08-08 12:07:46,307] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2327, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'undefined'
+[2025-08-08 12:07:46,313] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.51, 127.0.0.1:62691]
+[2025-08-08 12:08:36,429] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Navigations_system/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 2328, in Navigations_system_axios
+    gridData = All_system_dic[Sysname]
+KeyError: 'undefined'
+[2025-08-08 12:08:36,434] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Navigations_system/ 500 [0.13, 127.0.0.1:63465]

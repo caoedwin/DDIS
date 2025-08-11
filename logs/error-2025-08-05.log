@@ -1,0 +1,28 @@
+[2025-08-08 09:49:21,089] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 161, in CapitalExpenditure_Summary
+    'first_seven']).first().Customer,
+AttributeError: 'NoneType' object has no attribute 'Customer'
+[2025-08-08 09:49:21,095] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.07, 127.0.0.1:50591]
+[2025-08-08 09:54:46,284] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /CapitalExpenditure/CapitalExpenditure_Summary/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\CapitalExpenditure\views.py", line 161, in CapitalExpenditure_Summary
+    'first_seven']).first().Customer,
+AttributeError: 'NoneType' object has no attribute 'Customer'
+[2025-08-08 09:54:46,293] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /CapitalExpenditure/CapitalExpenditure_Summary/ 500 [0.11, 127.0.0.1:51710]

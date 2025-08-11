@@ -221,8 +221,8 @@ label{
      <el-dialog :visible.sync="update" :close-on-click-modal="false">
         <template>
             <el-form ref="form"  :model="form" :label-position="labelPosition" label-width="180px">
-                  <el-form-item label="PlanYear" prop="PlanYear">
-                      <el-select v-model="form.PlanYear" placeholder="请选择">
+                  <el-form-item label="PlanYear" prop="PlanYear" :disabled="permission === 0">
+                      <el-select v-model="form.PlanYear" placeholder="请选择" :disabled="permission === 0">
                             <el-option
                                 v-for="item in yearOptions"
                                 :key="item"
@@ -231,93 +231,93 @@ label{
                             </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="預算編號" prop="BudgetCode">
-                      <el-input  v-model="form.BudgetCode" ></el-input>
+                  <el-form-item label="預算編號" prop="BudgetCode" :disabled="permission === 0">
+                      <el-input  v-model="form.BudgetCode"  :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="投資性質" prop="Investment_Nature">
-                      <el-input  v-model="form.Investment_Nature" ></el-input>
+                  <el-form-item label="投資性質" prop="Investment_Nature" :disabled="permission === 0">
+                      <el-input  v-model="form.Investment_Nature"  :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="屬性代碼" prop="Attribute_Code">
-                      <el-input  v-model="form.Attribute_Code" ></el-input>
+                  <el-form-item label="屬性代碼" prop="Attribute_Code" :disabled="permission === 0">
+                      <el-input  v-model="form.Attribute_Code"  :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="申請部門" prop="Application_Department">
-                      <el-input  v-model="form.Application_Department" ></el-input>
+                  <el-form-item label="申請部門" prop="Application_Department" :disabled="permission === 0">
+                      <el-input  v-model="form.Application_Department" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="設備或工程名稱" prop="Device_Name">
-                      <el-input  v-model="form.Device_Name" ></el-input>
+                  <el-form-item label="設備或工程名稱" prop="Device_Name" :disabled="permission === 0">
+                      <el-input  v-model="form.Device_Name" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="用途說明" prop="Usage_Description">
-                      <el-input  v-model="form.Usage_Description" ></el-input>
+                  <el-form-item label="用途說明" prop="Usage_Description" :disabled="permission === 0">
+                      <el-input  v-model="form.Usage_Description" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="廠牌規格" prop="Specifications">
-                      <el-input  v-model="form.Specifications" ></el-input>
+                  <el-form-item label="廠牌規格" prop="Specifications" :disabled="permission === 0">
+                      <el-input  v-model="form.Specifications" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="驗收月份" prop="Acceptance_Month">
-                      <el-input  v-model="form.Acceptance_Month" ></el-input>
+                  <el-form-item label="驗收月份" prop="Acceptance_Month" :disabled="permission === 0">
+                      <el-input  v-model="form.Acceptance_Month" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="預算數量" prop="Budget_Quantity">
-                      <el-input  v-model="form.Budget_Quantity" ></el-input>
+                  <el-form-item label="預算數量" prop="Budget_Quantity" :disabled="permission === 0">
+                      <el-input  v-model="form.Budget_Quantity" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="幣別">
-                      <el-select  v-model="form.Estimated_Original_Currency" placeholder="請選擇">
+                  <el-form-item label="幣別" :disabled="permission === 0">
+                      <el-select  v-model="form.Estimated_Original_Currency" placeholder="請選擇" :disabled="permission === 0">
                         <el-option label="CNY" value="CNY"></el-option>
                         <el-option label="USD" value="USD"></el-option>
                         <el-option label="NTD" value="NTD"></el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="金額" prop="Estimated_Original_Price">
-                      <el-input  v-model="form.Estimated_Original_Price" ></el-input>
+                  <el-form-item label="金額" prop="Estimated_Original_Price":disabled="permission === 0">
+                      <el-input  v-model="form.Estimated_Original_Price" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="折合人民幣" prop="Equivalent_To_RMB">
-                      <el-input  v-model="form.Equivalent_To_RMB" ></el-input>
+                  <el-form-item label="折合人民幣" prop="Equivalent_To_RMB" :disabled="permission === 0">
+                      <el-input  v-model="form.Equivalent_To_RMB" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="付款條件" prop="Payment_Terms">
-                      <el-input  v-model="form.Payment_Terms" ></el-input>
+                  <el-form-item label="付款條件" prop="Payment_Terms" :disabled="permission === 0">
+                      <el-input  v-model="form.Payment_Terms" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="折舊月數" prop="Depreciation_Months">
-                      <el-input  v-model="form.Depreciation_Months" ></el-input>
+                  <el-form-item label="折舊月數" prop="Depreciation_Months" :disabled="permission === 0">
+                      <el-input  v-model="form.Depreciation_Months" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="會計科目" prop="Accounting_Subjects">
-                      <el-input  v-model="form.Accounting_Subjects" ></el-input>
+                  <el-form-item label="會計科目" prop="Accounting_Subjects" :disabled="permission === 0">
+                      <el-input  v-model="form.Accounting_Subjects" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="是否自動化" prop="Automated_Or_Not">
-                      <el-input  v-model="form.Automated_Or_Not" ></el-input>
+                  <el-form-item label="是否自動化" prop="Automated_Or_Not" :disabled="permission === 0">
+                      <el-input  v-model="form.Automated_Or_Not" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="Project Code" prop="Project_Code">
-                      <el-input  v-model="form.Project_Code" ></el-input>
+                  <el-form-item label="Project Code" prop="Project_Code" :disabled="permission === 0">
+                      <el-input  v-model="form.Project_Code" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="現狀說明" prop="Current_Situation">
-                      <el-input  v-model="form.Current_Situation" ></el-input>
+                  <el-form-item label="現狀說明" prop="Current_Situation" :disabled="permission === 0">
+                      <el-input  v-model="form.Current_Situation" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="適用範圍" prop="Applicable_Scope">
-                      <el-input  v-model="form.Applicable_Scope" ></el-input>
+                  <el-form-item label="適用範圍" prop="Applicable_Scope" :disabled="permission === 0">
+                      <el-input  v-model="form.Applicable_Scope" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="投資動機與目的" prop="Investment_Purpose">
-                      <el-input  v-model="form.Investment_Purpose" ></el-input>
+                  <el-form-item label="投資動機與目的" prop="Investment_Purpose" :disabled="permission === 0">
+                      <el-input  v-model="form.Investment_Purpose" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="投資動機與目的其他說明" prop="Investment_Purpose_Des">
-                      <el-input  v-model="form.Investment_Purpose_Des" ></el-input>
+                  <el-form-item label="投資動機與目的其他說明" prop="Investment_Purpose_Des" :disabled="permission === 0">
+                      <el-input  v-model="form.Investment_Purpose_Des" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="潛在問題" prop="Potential_Issues">
-                      <el-input  v-model="form.Potential_Issues" ></el-input>
+                  <el-form-item label="潛在問題" prop="Potential_Issues" :disabled="permission === 0">
+                      <el-input  v-model="form.Potential_Issues" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="潛在問題的其他說明" prop="Potential_Issues_Des">
-                      <el-input  v-model="form.Potential_Issues_Des" ></el-input>
+                  <el-form-item label="潛在問題的其他說明" prop="Potential_Issues_Des" :disabled="permission === 0">
+                      <el-input  v-model="form.Potential_Issues_Des":disabled="permission === 0" ></el-input>
                   </el-form-item>
-                  <el-form-item label="年節省支出" prop="Tighten_Expenses">
-                      <el-input  v-model="form.Tighten_Expenses" ></el-input>
+                  <el-form-item label="年節省支出" prop="Tighten_Expenses" :disabled="permission === 0">
+                      <el-input  v-model="form.Tighten_Expenses" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="年增加收益" prop="Annual_Increase_PerYear">
-                      <el-input  v-model="form.Annual_Increase_PerYear" ></el-input>
+                  <el-form-item label="年增加收益" prop="Annual_Increase_PerYear" :disabled="permission === 0">
+                      <el-input  v-model="form.Annual_Increase_PerYear" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="年投資效益" prop="Investment_Benefits_PerYear">
-                      <el-input  v-model="form.Investment_Benefits_PerYear" ></el-input>
+                  <el-form-item label="年投資效益" prop="Investment_Benefits_PerYear" :disabled="permission === 0">
+                      <el-input  v-model="form.Investment_Benefits_PerYear" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="年淨現金流入" prop="Cash_Inflows_PerYear">
-                      <el-input  v-model="form.Cash_Inflows_PerYear" ></el-input>
+                  <el-form-item label="年淨現金流入" prop="Cash_Inflows_PerYear" :disabled="permission === 0">
+                      <el-input  v-model="form.Cash_Inflows_PerYear" :disabled="permission === 0"></el-input>
                   </el-form-item>
-                  <el-form-item label="回收年限(月數)" prop="Payback_Period">
-                      <el-input  v-model="form.Payback_Period" ></el-input>
+                  <el-form-item label="回收年限(月數)" prop="Payback_Period" :disabled="permission === 0">
+                      <el-input  v-model="form.Payback_Period" :disabled="permission === 0"></el-input>
                   </el-form-item>
                   <el-form-item label="申購狀況" prop="Subscription_Status">
                       <el-input  v-model="form.Subscription_Status" ></el-input>
@@ -370,7 +370,7 @@ label{
         element-loading-text="數據更新中，請稍後"
         >
 {#              <el-table-column type="selection" width="50" align="center"  :reserve-selection="true"></el-table-column>#}
-              <el-table-column v-if="permission===1" label="Edit" align="center" width="auto" min-width="3%">
+              <el-table-column {% comment %}v-if="permission===1"{% endcomment %} label="Edit" align="center" width="auto" min-width="3%">
                   <template slot-scope="scope">
                       <el-button style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="alertID(scope.row.id,scope.row)"></el-button>
                   </template>
@@ -1120,7 +1120,7 @@ label{
             },
             {% endcomment %}
             alertID:function(id,row){
-                if(this.permission === 1){
+                {% comment %}if(this.permission === 1){{% endcomment %}
                      this.update=true;
                      this.form.PlanYear=row.PlanYear;
                      this.form.BudgetCode=row.BudgetCode;
@@ -1156,14 +1156,14 @@ label{
                      this.form.Subscription_Amount=row.Subscription_Amount;
                      this.form.Entry_Amount=row.Entry_Amount;
                      this.editID = id;
-                    }else{
+                    {% comment %}}else{
                            this.update=false;
                            this.$message({
                               showClose: true,
                               message: '無編輯權限！',
                               type: 'warning'
                             });
-                   }
+                   }{% endcomment %}
             },
 
 

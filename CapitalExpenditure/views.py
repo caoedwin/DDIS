@@ -155,7 +155,7 @@ def CapitalExpenditure_Summary(request):
             for i in CapitalExpenditure.objects.exclude(Application_Department=None).filter(
                     PlanYear=YearSearch).annotate(
                 first_seven=Substr(Upper('Application_Department'), 1, 7)).values('first_seven').distinct():
-                # print(i['first_seven'], Departments.objects.filter(Department_Code__contains=i['first_seven']).first())
+                print(i['first_seven'], Departments.objects.filter(Department_Code__contains=i['first_seven']).first())
                 CustomerToDepartmentSeven.append((Departments.objects.filter(Year=YearSearch,
                                                                              Department_Code__contains=i[
                                                                                  'first_seven']).first().Customer,
