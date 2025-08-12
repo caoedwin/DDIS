@@ -184,6 +184,7 @@ label{
                  <a href="/static/src/modelfiles/CapitalExpenditure.zip" style="color: orange;font-size: 16px">模板下载<img src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>
                  &nbsp;&nbsp;
                  <el-button @click="addDepartment()"  type="success" v-if="permission===1" v-cloak style="height:40px">部門代碼錄入</el-button>
+               <el-button @click="addBudgetExternal()" type="success" v-cloak style="margin-left: 20px;height:40px">新增預算外</el-button>
            </div>
 
     </div>
@@ -340,6 +341,131 @@ label{
         </template>
     </el-dialog>
 
+     <!-- 添加新增預算外对话框 -->
+    <el-dialog :visible.sync="budgetExternalVisible" :close-on-click-modal="false">
+        <template>
+            <el-form ref="budgetExternalForm" :model="budgetExternalForm" :label-position="labelPosition" label-width="180px">
+                <el-form-item label="PlanYear" prop="PlanYear" required>
+                    <el-select v-model="budgetExternalForm.PlanYear" placeholder="请选择" disabled>
+                        <el-option
+                            v-for="item in yearOptions"
+                            :key="item"
+                            :label="item"
+                            :value="item">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="預算編號" prop="BudgetCode">
+                    <el-input v-model="budgetExternalForm.BudgetCode" disabled></el-input>
+                </el-form-item>
+                <!-- 其他表单字段... -->
+                <el-form-item label="投資性質" prop="Investment_Nature">
+                    <el-input v-model="budgetExternalForm.Investment_Nature"></el-input>
+                </el-form-item>
+                <el-form-item label="屬性代碼" prop="Attribute_Code">
+                      <el-input  v-model="budgetExternalForm.Attribute_Code" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="申請部門" prop="Application_Department">
+                      <el-input  v-model="budgetExternalForm.Application_Department"></el-input>
+                  </el-form-item>
+                  <el-form-item label="設備或工程名稱" prop="Device_Name">
+                      <el-input  v-model="budgetExternalForm.Device_Name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="用途說明" prop="Usage_Description">
+                      <el-input  v-model="budgetExternalForm.Usage_Description"></el-input>
+                  </el-form-item>
+                  <el-form-item label="廠牌規格" prop="Specifications">
+                      <el-input  v-model="budgetExternalForm.Specifications"></el-input>
+                  </el-form-item>
+                  <el-form-item label="驗收月份" prop="Acceptance_Month">
+                      <el-input  v-model="budgetExternalForm.Acceptance_Month"></el-input>
+                  </el-form-item>
+                  <el-form-item label="預算數量" prop="Budget_Quantity">
+                      <el-input  v-model="budgetExternalForm.Budget_Quantity"></el-input>
+                  </el-form-item>
+                  <el-form-item label="幣別">
+                      <el-select  v-model="budgetExternalForm.Estimated_Original_Currency" placeholder="請選擇">
+                        <el-option label="CNY" value="CNY"></el-option>
+                        <el-option label="USD" value="USD"></el-option>
+                        <el-option label="NTD" value="NTD"></el-option>
+                      </el-select>
+                  </el-form-item>
+                  <el-form-item label="金額" prop="Estimated_Original_Price">
+                      <el-input  v-model="budgetExternalForm.Estimated_Original_Price"></el-input>
+                  </el-form-item>
+                  <el-form-item label="折合人民幣" prop="Equivalent_To_RMB">
+                      <el-input  v-model="budgetExternalForm.Equivalent_To_RMB"></el-input>
+                  </el-form-item>
+                  <el-form-item label="付款條件" prop="Payment_Terms">
+                      <el-input  v-model="budgetExternalForm.Payment_Terms"></el-input>
+                  </el-form-item>
+                  <el-form-item label="折舊月數" prop="Depreciation_Months">
+                      <el-input  v-model="budgetExternalForm.Depreciation_Months"></el-input>
+                  </el-form-item>
+                  <el-form-item label="會計科目" prop="Accounting_Subjects">
+                      <el-input  v-model="budgetExternalForm.Accounting_Subjects"></el-input>
+                  </el-form-item>
+                  <el-form-item label="是否自動化" prop="Automated_Or_Not">
+                      <el-input  v-model="budgetExternalForm.Automated_Or_Not"></el-input>
+                  </el-form-item>
+                  <el-form-item label="Project Code" prop="Project_Code">
+                      <el-input  v-model="budgetExternalForm.Project_Code"></el-input>
+                  </el-form-item>
+                  <el-form-item label="現狀說明" prop="Current_Situation">
+                      <el-input  v-model="budgetExternalForm.Current_Situation"></el-input>
+                  </el-form-item>
+                  <el-form-item label="適用範圍" prop="Applicable_Scope">
+                      <el-input  v-model="budgetExternalForm.Applicable_Scope"></el-input>
+                  </el-form-item>
+                  <el-form-item label="投資動機與目的" prop="Investment_Purpose">
+                      <el-input  v-model="budgetExternalForm.Investment_Purpose"></el-input>
+                  </el-form-item>
+                  <el-form-item label="投資動機與目的其他說明" prop="Investment_Purpose_Des">
+                      <el-input  v-model="budgetExternalForm.Investment_Purpose_Des"></el-input>
+                  </el-form-item>
+                  <el-form-item label="潛在問題" prop="Potential_Issues">
+                      <el-input  v-model="budgetExternalForm.Potential_Issues"></el-input>
+                  </el-form-item>
+                  <el-form-item label="潛在問題的其他說明" prop="Potential_Issues_Des">
+                      <el-input  v-model="budgetExternalForm.Potential_Issues_Des"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年節省支出" prop="Tighten_Expenses">
+                      <el-input  v-model="budgetExternalForm.Tighten_Expenses"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年增加收益" prop="Annual_Increase_PerYear">
+                      <el-input  v-model="budgetExternalForm.Annual_Increase_PerYear"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年投資效益" prop="Investment_Benefits_PerYear">
+                      <el-input  v-model="budgetExternalForm.Investment_Benefits_PerYear"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年淨現金流入" prop="Cash_Inflows_PerYear">
+                      <el-input  v-model="budgetExternalForm.Cash_Inflows_PerYear"></el-input>
+                  </el-form-item>
+                  <el-form-item label="回收年限(月數)" prop="Payback_Period">
+                      <el-input  v-model="budgetExternalForm.Payback_Period"></el-input>
+                  </el-form-item>
+                  <el-form-item label="申購狀況" prop="Subscription_Status">
+                      <el-input  v-model="budgetExternalForm.Subscription_Status" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="申購數量" prop="Subscription_Quantity">
+                      <el-input  v-model="budgetExternalForm.Subscription_Quantity" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="申購金額(CNY)" prop="Subscription_Amount">
+                      <el-input  v-model="budgetExternalForm.Subscription_Amount" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="入賬金額(CNY)" prop="Entry_Amount">
+                      <el-input  v-model="budgetExternalForm.Entry_Amount" ></el-input>
+                  </el-form-item>
+                <div class="el-form-item__content" style="margin-left: 220px;">
+                    <el-form-item>
+                        <el-button type="primary" @click="submitBudgetExternal">確定</el-button>
+                    </el-form-item>
+                </div>
+            </el-form>
+        </template>
+    </el-dialog>
+
+
     <div class="tableAround" v-cloak>
     <el-table
       :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
@@ -379,7 +505,7 @@ label{
               <el-table-column  prop="PlanYear" label="PlanYear" align="center" sortable='custom' width="auto" min-width="4%"></el-table-column>
               <el-table-column  prop="BudgetCode" label="預算編號" align="center" sortable='custom' width="auto" min-width="5%"></el-table-column>
               <el-table-column  prop="Investment_Nature" label="投資性質" align="center" sortable='custom' width="auto" min-width="3%"></el-table-column>
-              <el-table-column  prop="Attribute_Code" label="屬性代碼" align="center" sortable='custom' width="auto" min-width="3%"></el-table-column>
+              <el-table-column  prop="Attribute_Code" label="屬性代碼" align="center" sortable='custom' width="auto" min-width="4%"></el-table-column>
               <el-table-column  prop="Application_Department" label="申請部門" align="center" sortable='custom' width="auto" min-width="5%"></el-table-column>
               <el-table-column  prop="Device_Name" label="設備或工程名稱" align="center" sortable='custom' width="auto" min-width="5%"></el-table-column>
               <el-table-column  prop="Usage_Description" label="用途說明" header-align="center" sortable='custom' width="auto" min-width="11%"></el-table-column>
@@ -411,10 +537,11 @@ label{
 {#              <el-table-column  prop="Investment_Benefits_PerYear" label="年投資效益" class-name="hidden-column"></el-table-column>#}
 {#              <el-table-column  prop="Cash_Inflows_PerYear" label="年淨現金流入" class-name="hidden-column"></el-table-column>#}
 {#              <el-table-column  prop="Payback_Period" label="回收年限(月數)" class-name="hidden-column"></el-table-column>#}
-              <el-table-column  prop="Subscription_Status" label="申購狀況" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
+              <el-table-column  prop="Subscription_Status" label="申購狀況" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
               <el-table-column  prop="Subscription_Quantity" label="申購數量" align="center" width="auto" min-width="3%" sortable='custom'></el-table-column>
-              <el-table-column  prop="Subscription_Amount" label="申購金額(CNY)" align="center" width="auto" min-width="5%" sortable='custom'></el-table-column>
-              <el-table-column  prop="Entry_Amount" label="入賬金額(CNY)" align="center" width="auto" min-width="6%" sortable='custom'></el-table-column>
+              <el-table-column  prop="Subscription_Amount" label="申購金額(CNY)" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+              <el-table-column  prop="Entry_Amount" label="入賬金額(CNY)" align="center" width="auto" min-width="4%" sortable='custom'></el-table-column>
+              <el-table-column  prop="creator" label="创建人" width="auto" min-width="5%"></el-table-column>
               <el-table-column  prop="Equivalent_To_RMB" label="折合人民幣" class-name="hidden-column" width="-1"></el-table-column>
               <el-table-column  prop="Payment_Terms" label="付款條件" class-name="hidden-column" width="-1"></el-table-column>
               <el-table-column  prop="Depreciation_Months" label="折舊月數" class-name="hidden-column" width="-1"></el-table-column>
@@ -432,6 +559,7 @@ label{
               <el-table-column  prop="Investment_Benefits_PerYear" label="年投資效益" class-name="hidden-column" width="-1"></el-table-column>
               <el-table-column  prop="Cash_Inflows_PerYear" label="年淨現金流入" class-name="hidden-column" width="-1"></el-table-column>
               <el-table-column  prop="Payback_Period" label="回收年限(月數)" class-name="hidden-column" width="-1"></el-table-column>
+
     </el-table>
       <div class="block">
         <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
@@ -478,7 +606,6 @@ label{
                 customer:'',
                 editpermission: 0,
                 permission: 0,
-                customerOptions:{},
                 customerError:false,
                 yearError:false,
                 department:'',
@@ -555,6 +682,43 @@ label{
                 totalNum: null,
                 errMsg:null,
                 tables:[],
+                budgetExternalVisible: false, // 控制新增預算外对话框的显示
+                budgetExternalForm: { // 預算外表单数据
+                    PlanYear: '',
+                    BudgetCode: '預算外', // 固定为"預算外"
+                    // 其他字段初始化为空...
+                    Investment_Nature: '',
+                    Attribute_Code: '',
+                    Application_Department: '',
+                    Device_Name: '',
+                    Usage_Description: '',
+                    Specifications: '',
+                    Acceptance_Month: '',
+                    Budget_Quantity: '',
+                    Estimated_Original_Currency: '',
+                    Estimated_Original_Price: '',
+                    Subscription_Status: '',
+                    Subscription_Quantity: '',
+                    Subscription_Amount: '',
+                    Entry_Amount: '',
+                    Equivalent_To_RMB: '',
+                    Payment_Terms: '',
+                    Depreciation_Months: '',
+                    Accounting_Subjects: '',
+                    Automated_Or_Not: '',
+                    Project_Code: '',
+                    Current_Situation: '',
+                    Applicable_Scope: '',
+                    Investment_Purpose: '',
+                    Investment_Purpose_Des: '',
+                    Potential_Issues: '',
+                    Potential_Issues_Des: '',
+                    Tighten_Expenses: '',
+                    Annual_Increase_PerYear: '',
+                    Investment_Benefits_PerYear: '',
+                    Cash_Inflows_PerYear: '',
+                    Payback_Period: ''
+                }
 
             }
         },
@@ -1071,6 +1235,114 @@ label{
                         }
 
                     })
+            },
+
+            // 打开新增預算外对话框
+            addBudgetExternal() {
+                // 检查是否选择了年份
+                if (!this.year) {
+                    this.$message({
+                        type: 'warning',
+                        message: '請先選擇年份'
+                    });
+                    return;
+                }
+
+                // 初始化表单数据
+                this.budgetExternalForm = {
+                    PlanYear: this.year, // 使用当前选择的年份
+                    BudgetCode: '預算外', // 固定为"預算外"
+                    // 其他字段初始化为空...
+                    Investment_Nature: '',
+                    Attribute_Code: '',
+                    Application_Department: '',
+                    Device_Name: '',
+                    Usage_Description: '',
+                    Specifications: '',
+                    Acceptance_Month: '',
+                    Budget_Quantity: '',
+                    Estimated_Original_Currency: '',
+                    Estimated_Original_Price: '',
+                    Subscription_Status: '',
+                    Subscription_Quantity: '',
+                    Subscription_Amount: '',
+                    Entry_Amount: '',
+                    Equivalent_To_RMB: '',
+                    Payment_Terms: '',
+                    Depreciation_Months: '',
+                    Accounting_Subjects: '',
+                    Automated_Or_Not: '',
+                    Project_Code: '',
+                    Current_Situation: '',
+                    Applicable_Scope: '',
+                    Investment_Purpose: '',
+                    Investment_Purpose_Des: '',
+                    Potential_Issues: '',
+                    Potential_Issues_Des: '',
+                    Tighten_Expenses: '',
+                    Annual_Increase_PerYear: '',
+                    Investment_Benefits_PerYear: '',
+                    Cash_Inflows_PerYear: '',
+                    Payback_Period: ''
+                };
+
+                this.budgetExternalVisible = true;
+            },
+
+            // 提交新增預算外数据
+            submitBudgetExternal() {
+                // 验证必要字段
+                if (!this.budgetExternalForm.PlanYear) {
+                    this.$message({
+                        type: 'warning',
+                        message: '請選擇年份'
+                    });
+                    return;
+                }
+
+                // 创建FormData对象
+                const formData = new FormData();
+                formData.append('action', 'addBudgetExternal');
+                formData.append('searchYear', this.year);
+                formData.append('Customer', this.customer);
+
+                // 添加表单数据
+                for (const key in this.budgetExternalForm) {
+                    formData.append(key, this.budgetExternalForm[key]);
+                }
+
+                // 发送请求
+                axios.post("/CapitalExpenditure/CapitalExpenditure_Summary/", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    }
+                }).then((res) => {
+                    this.tableContent = res.data.content;
+                    this.totalNum = this.tableContent.length;
+                    this.tables = res.data.tables;
+                    this.$nextTick(() => {
+                        this.$refs.tableRef.doLayout()
+                    });
+
+                    if (res.data.errMsg) {
+                        this.$alert(res.data.errMsg, '提示', {
+                            type: 'warning',
+                        });
+                    } else {
+                        this.budgetExternalVisible = false;
+                        this.$message({
+                            message: '新增預算外成功',
+                            type: 'success'
+                        });
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    this.$message({
+                        message: '新增失敗',
+                        type: 'error'
+                    });
+                });
             },
 
             {% comment %}

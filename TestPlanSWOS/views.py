@@ -2532,53 +2532,7 @@ def TestPlanSW_Edit(request):
             phaselist = []
             dic = {'Customer': i['Customer'], 'Project': j['Project']}
             for m in TestProjectSW.objects.filter(**dic).values('Phase').distinct().order_by('Phase'):
-
-                if m['Phase'] == "B(FVT)":
-                    PhaseValue = 0
-                if m['Phase'] == "C(SIT)":
-                    PhaseValue = 1
-                if m['Phase'] == "SIT2":
-                    PhaseValue = 2
-                if m['Phase'] == "GSKU":
-                    PhaseValue = 3
-                if m['Phase'] == "Wave":
-                    PhaseValue = 4
-                if m['Phase'] == "Wave2":
-                    PhaseValue = 5
-                if m['Phase'] == "Wave3":
-                    PhaseValue = 6
-                if m['Phase'] == "Wave4":
-                    PhaseValue = 7
-                if m['Phase'] == "Wave5":
-                    PhaseValue = 8
-                if m['Phase'] == "OOC":
-                    PhaseValue = 9
-                if m['Phase'] == "OOC2":
-                    PhaseValue = 10
-                if m['Phase'] == "OOC3":
-                    PhaseValue = 11
-                if m['Phase'] == "OOC4":
-                    PhaseValue = 12
-                if m['Phase'] == "OOC5":
-                    PhaseValue = 13
-                if m['Phase'] == "OOC6":
-                    PhaseValue = 14
-                if m['Phase'] == "FFRT":
-                    PhaseValue = 15
-                if m['Phase'] == "FFRT2":
-                    PhaseValue = 16
-                if m['Phase'] == "FFRT3":
-                    PhaseValue = 17
-                if m['Phase'] == "FFRT4":
-                    PhaseValue = 18
-                if m['Phase'] == "FFRT5":
-                    PhaseValue = 19
-                if m['Phase'] == "FFRT6":
-                    PhaseValue = 20
-                if m['Phase'] == "Others":
-                    PhaseValue = 21
-                if m['Phase'] == "Downgrade":
-                    PhaseValue = 22
+                PhaseValue = phase_list.index(m['Phase'])
                 phaselist.append(PhaseValue)
             Projectinfo['phase'] = phaselist
             Projectinfo['project'] = j['Project']

@@ -38,6 +38,9 @@ class CapitalExpenditure(models.Model):
 (CNY)""", max_length=20, blank=True, null=True)
     Entry_Amount = models.FloatField("""入賬金額
 (CNY)""", max_length=20, blank=True, null=True)
+    creator = models.CharField("""创建人""", default='', max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
     class Meta:
