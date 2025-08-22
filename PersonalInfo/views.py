@@ -5353,7 +5353,7 @@ def Summary2(request):
                                                                                     RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
                                 OldCustomer=i["Customer"], transferDate__gte=DateNow, QuitDate__lte=DateNow).count()
                             # print(zaizhimounthTransefer)
-                            zaizhidic[j[0]] = zaizhimounth - zaizhimounthTransefer_Now + zaizhimounthTransefer_Old
+                            zaizhidic[j[0]] = zaizhimounth - zaizhimounthTransefer_Now + zaizhimounthTransefer_Old#今天之前所有在职人员-所有今天之后转入+今天之后内部的人（外部转出的算离职）
                             ruzhidic[j[0]] = PersonalInfo.objects.filter(Q(transferDate__isnull=True)).filter(
                                 Customer=i["Customer"],
                                 RegistrationDate__range=Test_Endperiod).count() + PersonalInfo.objects.exclude(
@@ -5398,7 +5398,11 @@ def Summary2(request):
                         zaizhimounth = PersonalInfo.objects.filter(
                             RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
                             QuitDate__lte=DateNow).count()
-                        totalzaizhidic[j[0]] = zaizhimounth
+                        zaizhi_out_to_in = PersonalInfo.objects.filter(Q(OldCustomer='')&Q(transferDate__isnull=False)).filter(transferDate__gte=DateNow,
+                            RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(Q(OldCustomer='')&Q(transferDate__isnull=False)).filter(transferDate__gte=DateNow,
+                            QuitDate__lte=DateNow).count()#原客户别为空但是有专职日期的就算外部转入的。
+                        print(zaizhi_out_to_in)
+                        totalzaizhidic[j[0]] = zaizhimounth - zaizhi_out_to_in#所有在职人员-外部转入人员，因为外部转入人员（原客户别为空，内部专职人员原客户别和先科湖北都不为空）报道日期不能算我们的人数，应该是专职日期后才算我们的人数
                         totalruzhidic[j[0]] = PersonalInfo.objects.filter(Q(transferDate__isnull=True)).filter(
                             RegistrationDate__range=Test_Endperiod).count() + PersonalInfo.objects.exclude(
                             Q(transferDate__isnull=True)).filter(OldCustomer='',
@@ -5533,7 +5537,13 @@ def Summary2(request):
                                                                             RegistrationDate__lte=DateNow).count() - PersonalInfoHisByYear.objects.filter(
                             Year=YearSearch,
                             QuitDate__lte=DateNow).count()
-                        totalzaizhidic[j[0]] = zaizhimounth
+                        zaizhi_out_to_in = PersonalInfo.objects.filter(
+                            Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(Year=YearSearch,transferDate__gte=DateNow,
+                            RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
+                            Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(Year=YearSearch,transferDate__gte=DateNow,
+                            QuitDate__lte=DateNow).count()  # 原客户别为空但是有专职日期的就算外部转入的。
+                        totalzaizhidic[j[
+                            0]] = zaizhimounth - zaizhi_out_to_in  # 所有在职人员-外部转入人员，因为外部转入人员（原客户别为空，内部专职人员原客户别和先科湖北都不为空）报道日期不能算我们的人数，应该是专职日期后才算我们的人数
                         totallizhidic[j[0]] = PersonalInfoHisByYear.objects.filter(Year=YearSearch,
                                                                                    QuitDate__range=Test_Endperiod).count()
                         if totalzaizhidic[j[0]]:
@@ -6224,7 +6234,13 @@ def Summary2(request):
                         zaizhimounth = PersonalInfo.objects.filter(
                             RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
                             QuitDate__lte=DateNow).count()
-                        totalzaizhidic[j[0]] = zaizhimounth
+                        zaizhi_out_to_in = PersonalInfo.objects.filter(
+                            Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(transferDate__gte=DateNow,
+                                                                                                RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
+                            Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(transferDate__gte=DateNow,
+                                                                                                QuitDate__lte=DateNow).count()  # 原客户别为空但是有专职日期的就算外部转入的。
+                        totalzaizhidic[j[
+                            0]] = zaizhimounth - zaizhi_out_to_in  # 所有在职人员-外部转入人员，因为外部转入人员（原客户别为空，内部专职人员原客户别和先科湖北都不为空）报道日期不能算我们的人数，应该是专职日期后才算我们的人数
                         totalruzhidic[j[0]] = PersonalInfo.objects.filter(Q(transferDate__isnull=True)).filter(
                             RegistrationDate__range=Test_Endperiod).count() + PersonalInfo.objects.exclude(
                             Q(transferDate__isnull=True)).filter(OldCustomer='',
@@ -6359,7 +6375,13 @@ def Summary2(request):
                                                                             RegistrationDate__lte=DateNow).count() - PersonalInfoHisByYear.objects.filter(
                             Year=YearSearch,
                             QuitDate__lte=DateNow).count()
-                        totalzaizhidic[j[0]] = zaizhimounth
+                        zaizhi_out_to_in = PersonalInfo.objects.filter(
+                            Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(Year=YearSearch,transferDate__gte=DateNow,
+                                                                                                RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
+                            Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(Year=YearSearch,transferDate__gte=DateNow,
+                                                                                                QuitDate__lte=DateNow).count()  # 原客户别为空但是有专职日期的就算外部转入的。
+                        totalzaizhidic[j[
+                            0]] = zaizhimounth - zaizhi_out_to_in  # 所有在职人员-外部转入人员，因为外部转入人员（原客户别为空，内部专职人员原客户别和先科湖北都不为空）报道日期不能算我们的人数，应该是专职日期后才算我们的人数
                         totalruzhidic[j[0]] = PersonalInfoHisByYear.objects.filter(Q(transferDate__isnull=True)).filter(
                             Year=YearSearch,
                             RegistrationDate__range=Test_Endperiod).count() + PersonalInfoHisByYear.objects.exclude(
