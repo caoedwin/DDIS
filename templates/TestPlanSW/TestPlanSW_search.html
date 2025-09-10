@@ -593,13 +593,14 @@ p a{
           <el-table-column width="120" label="Owner" prop="owner"></el-table-column>
           <el-table-column width="120" label="priority" prop="priority"></el-table-column>
           <!--:key="1" => 为了解决数据错位 （即前一列覆盖掉后一列）且使用Math.random()会产生抖动 ，换成固定值则正常 -->
-          <el-table-column width="120"  v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20"  label="TDMS Total Time"  :key="1" >
+          <el-table-column width="120"  v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20"  label="TDMS Leading Time (A+U)"  :key="1" >
               <template slot-scope="scope">
-                  <span v-if="scope.row.id " v-cloak >${ scope.row.basetime + scope.row.unattendedtime }</span>
+                  <span v-if="scope.row.id " v-cloak >${ scope.row.TDMSTotalTime }</span>
               </template>
-          </el-table-column>
-          <el-table-column width="120"  label="Base Time" prop="basetime"></el-table-column>
+          </el-table-column>{% comment %}#changeName{% endcomment %}
+          <el-table-column width="120"  label="TDMS Working time(Attended time)" prop="basetime"></el-table-column>{% comment %}#changeName{% endcomment %}
           <el-table-column width="120"  label="(TDMS)UnAttended Time" prop="unattendedtime"></el-table-column>
+          <el-table-column width="120"  label="Revised base time (Attended time)" prop="RevisedbasetimeorAttendedtime"></el-table-column>{% comment %}#New{% endcomment %}
           <el-table-column width="120"  label="Base Automation Time(1SKU)" prop="basetimeA"></el-table-column>
           <el-table-column width="120"  label="Chramshell" prop="chramshell"></el-table-column>
 
@@ -612,9 +613,14 @@ p a{
               <el-table-column label="W Dock Mode" prop="detach_W"></el-table-column>
           </el-table-column>
           <el-table-column width="120"  label="Phase">
-              <el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="FVT" prop="PhaseF"></el-table-column>
+              <el-table-column label="G/O" prop="PhaseGO"></el-table-column>{% comment %}#New{% endcomment %}
+              <el-table-column  label="EVT" prop="PhaseEVT"></el-table-column>{% comment %}#New{% endcomment %}
+              <el-table-column  label="FVT" prop="PhaseF"></el-table-column>
+              <el-table-column  label="SIT" prop="PhaseS"></el-table-column>
+              <el-table-column  label="FFRT" prop="PhaseFFRT"></el-table-column>
+              {% comment %}<el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="FVT" prop="PhaseF"></el-table-column>
               <el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="SIT" prop="PhaseS"></el-table-column>
-              <el-table-column v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" v-cloak label="FFRT" prop="PhaseFFRT"></el-table-column>
+              <el-table-column v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" v-cloak label="FFRT" prop="PhaseFFRT"></el-table-column>{% endcomment %}
           </el-table-column>
           <el-table-column width="120"  label="Coverage" prop="coverage"></el-table-column>
           <!--需編輯-->
@@ -622,9 +628,10 @@ p a{
 
           </el-table-column>
           <!--無需編輯-->
-          <el-table-column width="120"  label="Base Time-Support" prop="BTS">
+          <el-table-column width="120"  label="FeatureWeight" prop="FeatureWeight"></el-table-column>{% comment %}#new{% endcomment %}
+          <el-table-column width="120"  label="Base*Weight" prop="BTS"></el-table-column>{% comment %}#changeName{% endcomment %}
+          <el-table-column width="180"  label="Remark for Feature Weight adjust" prop="RemarkforFeatureWeightadjust"></el-table-column>{% comment %}#new{% endcomment %}
 
-          </el-table-column>
           <!--需編輯-->
           <el-table-column width="120" prop="TE">
               <template slot="header" slot-scope="scope">
@@ -779,12 +786,18 @@ p a{
           </el-table-column>
           <el-table-column width="160" prop="CRT">
               <template slot="header" slot-scope="scope">
-                  <el-tooltip content="更新專案過程中 retest的s時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <el-tooltip content="更新專案過程中 retest的時間" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
                       <span><i class="el-icon-info"></i>Config-Retest Time</span>
                   </el-tooltip>
               </template>
-
           </el-table-column>
+          <el-table-column width="180" prop="Remark">
+               <template slot="header" slot-scope="scope">
+                  <el-tooltip content="Remark" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                      <span><i class="el-icon-info"></i>Remark</span>
+                  </el-tooltip>
+              </template>
+          </el-table-column>{% comment %}#New{% endcomment %}
 
       </el-table>
 

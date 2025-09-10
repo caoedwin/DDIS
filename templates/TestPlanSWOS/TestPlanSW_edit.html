@@ -478,7 +478,7 @@
  <!--數據表-->
  <!--提示信息-->
   <span  class="selectItem" v-cloak  v-if="showCustomer&&showProject&&phaseName[showPhase]">當前表格信息：${ showCustomer }/${ showProject }/${ phaseName[showPhase]}/${ showCategory } <span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
-   <el-button v-cloak v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" style="height:40px;margin:0 20px 8px 10px;float:right;width:116px" type="success" @click="addMsg"> <i v-cloak class="el-icon-circle-plus-outline"></i> 添加信息</el-button>
+   <el-button v-cloak v-if="showPhase === 23||showPhase === 24||showPhase === 25||showPhase === 26||showPhase === 27||showPhase === 28" style="height:40px;margin:0 20px 8px 10px;float:right;width:116px" type="success" @click="addMsg"> <i v-cloak class="el-icon-circle-plus-outline"></i> 添加信息</el-button>
   <el-table v-cloak height="750" border :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize){% comment %}.slice(scrollArray[0],scrollArray[1]){% endcomment %}"
     ref="multipleTable"
     tooltip-effect="dark"
@@ -509,13 +509,14 @@
       <el-table-column width="120" label="Owner" prop="owner"></el-table-column>
       <el-table-column width="120" label="priority" prop="priority"></el-table-column>
       <!--:key="1" => 为了解决数据错位 （即前一列覆盖掉后一列）且使用Math.random()会产生抖动 ，换成固定值则正常 -->
-      <el-table-column width="120"  v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20"  label="TDMS Total Time"  :key="1" >
+      <el-table-column width="120"  v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20"  label="TDMS Leading Time (A+U)"  :key="1" >
           <template slot-scope="scope">
-              <span v-if="scope.row.id " v-cloak >${ scope.row.basetime + scope.row.unattendedtime }</span>
+              <span v-if="scope.row.id " v-cloak >${ scope.row.TDMSTotalTime }</span>
           </template>
-      </el-table-column>
-      <el-table-column width="120"  label="Base Time" prop="basetime"></el-table-column>
-      <el-table-column width="120"  label="(TDMS)Attended Time" prop="unattendedtime"></el-table-column>
+      </el-table-column>{% comment %}#changeName{% endcomment %}
+      <el-table-column width="120"  label="TDMS Working time(Attended time)" prop="basetime"></el-table-column>{% comment %}#changeName{% endcomment %}
+      <el-table-column width="120"  label="(TDMS)Unattended time" prop="unattendedtime"></el-table-column>
+      <el-table-column width="120"  label="Revised base time (Attended time)" prop="RevisedbasetimeorAttendedtime"></el-table-column>{% comment %}#New{% endcomment %}
       <el-table-column width="120"  label="Base Automation Time(1SKU)" prop="basetimeA"></el-table-column>
       <el-table-column width="120"  label="Chramshell" prop="chramshell"></el-table-column>
 
@@ -528,9 +529,15 @@
           <el-table-column label="W Dock Mode" prop="detach_W"></el-table-column>
       </el-table-column>
       <el-table-column width="120"  label="Phase">
-          <el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="FVT" prop="PhaseF"></el-table-column>
+          <el-table-column label="G/O" prop="PhaseGO"></el-table-column>{% comment %}#New{% endcomment %}
+          <el-table-column  label="EVT" prop="PhaseEVT"></el-table-column>{% comment %}#New{% endcomment %}
+          <el-table-column  label="FVT" prop="PhaseF"></el-table-column>
+          <el-table-column  label="SIT" prop="PhaseS"></el-table-column>
+          <el-table-column  label="FFRT" prop="PhaseFFRT"></el-table-column>
+{#          <el-table-column  label="Gsku" prop="PhaseGsku"></el-table-column>{% comment %}#New{% endcomment %}#}
+          {% comment %}<el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="FVT" prop="PhaseF"></el-table-column>
           <el-table-column v-if="showPhase !== 3&&showPhase !== 15&&showPhase !== 16&&showPhase !== 17&&showPhase !== 18&&showPhase !== 19&&showPhase !== 20" label="SIT" prop="PhaseS"></el-table-column>
-          <el-table-column v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" v-cloak label="FFRT" prop="PhaseFFRT"></el-table-column>
+          <el-table-column v-if="showPhase === 3||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19||showPhase === 20" v-cloak label="FFRT" prop="PhaseFFRT"></el-table-column>{% endcomment %}
       </el-table-column>
       <el-table-column width="120"  label="Coverage" prop="coverage"></el-table-column>
       <!--需編輯-->
@@ -545,14 +552,35 @@
                 </template>
       </el-table-column>
       <!--無需編輯-->
-      <el-table-column width="120"  label="Base Time-Support">
+      <el-table-column width="120"  label="FeatureWeight">
+           <template slot-scope="scope">
+                  <span v-if="scope.row.isSet && canEdit">${ (!FeatureWeight[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:FeatureWeight[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
+                  <span v-else="scope.row.isSet && canEdit" >
+                      ${ (!scope.row.FeatureWeight && scope.row.FeatureWeight !== 0)?0:scope.row.FeatureWeight }
+                  </span>
+                </template>
+      </el-table-column>{% comment %}#New{% endcomment %}
+      <el-table-column width="120"  label="Base*Weight">
            <template slot-scope="scope">
                   <span v-if="scope.row.isSet && canEdit">${ (!BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:BTS[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] }</span>
                   <span v-else="scope.row.isSet && canEdit" >
                       ${ (!scope.row.BTS && scope.row.BTS !== 0)?0:scope.row.BTS }
                   </span>
                 </template>
-      </el-table-column>
+      </el-table-column>{% comment %}#changeName{% endcomment %}
+      <!--需編輯-->
+      <el-table-column width="180" >
+           <template slot="header" slot-scope="scope">
+              <el-tooltip content="Leverage 的考量因素" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Remark for Feature Weight adjust</span>
+              </el-tooltip>
+          </template>
+           <template slot-scope="scope">
+                 <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="RemarkforFeatureWeightadjust[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(RemarkforFeatureWeightadjust, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':RemarkforFeatureWeightadjust[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                 </div>
+                <span v-else="scope.row.isSet && (canEdit)">${ scope.row.RemarkforFeatureWeightadjust }</span>
+                </template>
+      </el-table-column>{% comment %}#New{% endcomment %}
       <!--需編輯-->
       <el-table-column width="120" >
           <template slot="header" slot-scope="scope">
@@ -686,8 +714,12 @@
               </el-tooltip>
           </template>
            <template scope="scope">
-               <span v-if="scope.row.isSet && canEdit" >${ (!conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}].toFixed(2) }</span>
-               <span v-else="scope.row.isSet && canEdit">${ (!scope.row.conSitemInAll && scope.row.conSitemInAll !== 0)?0:scope.row.conSitemInAll.toFixed(2) }</span>
+               <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit" {% comment %}:class="{'invalidInput':starttime[scope.$index]!==undefined && starttime[scope.$index]!=='' && isNaN(starttime[scope.$index]/1)}"{% endcomment %}>
+                      <input placeholder="請輸入內容" type="text"   v-model="conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"  @input="initData(scope.row, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}, {'id':2})">
+                      <span @click="clear( starttime, scope.$index + (currentPage-1)*pagesize,'change',scope.row,{'id':2})" :class="{'clearShow':starttime[scope.$index + (currentPage-1)*pagesize] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                  </div>
+{#               <span v-if="scope.row.isSet && canEdit" >${ (!conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] && conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== 0)?0:conSitemInAll[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}].toFixed(2) }</span>#}
+               <span v-else="scope.row.isSet && canEdit">${ formatNumber(scope.row.conSitemInAll) }</span>
           </template>
       </el-table-column>
       <!--無需編輯-->
@@ -795,6 +827,20 @@
               </div>
                <span v-else="scope.row.isSet && canEdit">${ scope.row.CRT }</span>
                 </template>
+      </el-table-column>'
+      <!--需編輯-->
+      <el-table-column width="180"  label="Remark">
+          <template slot="header" slot-scope="scope" >
+              <el-tooltip content="Remark" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
+                  <span><i class="el-icon-info"></i>Remark</span>
+              </el-tooltip>
+          </template>
+
+           <template scope="scope">
+                <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(Remark, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
+                </div>
+               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remark }</span>
+                </template>{% comment %}#New{% endcomment %}
       </el-table-column>
       <el-table-column width="120" label="修改" fixed="right">
           <template slot-scope="scope">
@@ -901,6 +947,11 @@
       <el-input  autocomplete="off" v-model="form.BTS" readonly="true"></el-input>
     </el-form-item>
       </el-form-item>
+     <el-form-item style="width:100%;">
+         <el-form-item label="Remark for Feature Weight adjust" style="width:70%;" prop="RemarkforFeatureWeightadjust">
+          <el-input  type="textarea"  autocomplete="off" :row="4" v-model="form.RemarkforFeatureWeightadjust"></el-input>
+        </el-form-item>
+     </el-form-item>
 
        <el-form-item style="width:100%;">
           <el-form-item label="TE" style="width:35%;" prop="TE">
@@ -1150,6 +1201,7 @@
         conSitemInAll:[],
         comments1:[],
         comments2:[],
+        RemarkforFeatureWeightadjust:[],
         planOptimize:[],
         BTS:[],
         CRC:[],
@@ -1194,6 +1246,7 @@
             conSitemInAll:0,
             comments1:'',
             comments2:'',
+            RemarkforFeatureWeightadjust:'',
             planOptimize:[],
             BTS:0,
             CRC:'',
@@ -1233,6 +1286,11 @@
              })
      },
     methods: {
+        formatNumber(value) {
+            // 转换为数字，失败则返回0
+            const num = parseFloat(value);
+            return isNaN(num) ? 0 : num.toFixed(2);
+          },
        //获取数据的封装函数 ：引用了axios 和 qs 的js文件
       getdata:function(e){
                 let _this=this;
@@ -1333,6 +1391,7 @@
         this.conLitem=[];
         this.comments1=[];
         this.comments2=[];
+        this.RemarkforFeatureWeightadjust=[];
         this.TFC=[];
         this.conAtime=[];
         this.conSitem=[];
@@ -1372,9 +1431,11 @@
           Vue.set(this.conSitem,index,row.conSitem);
           Vue.set(this.comments1,index,row.comments1);
           Vue.set(this.comments2,index,row.comments2);
+          Vue.set(this.RemarkforFeatureWeightadjust,index,row.RemarkforFeatureWeightadjust);
           Vue.set(this.CRC,index,row.CRC);
           Vue.set(this.CRS,index,row.CRS);
           Vue.set(this.CRT,index,row.CRT);
+          Vue.set(this.conSitemInAll,index,row.conSitemInAll);
           Vue.set(this.planOptimize,index,[]);
           for(let i = 0 , length = row.planOptimize.length;i<length;i++){
               console.log(this.planOptimize[index]);
@@ -1388,7 +1449,7 @@
           Vue.set(this.CST,index,row.CST);
           Vue.set(this.proTS,index,row.proTS);
           Vue.set(this.ATO,index,row.ATO);
-          Vue.set(this.conSitemInAll,index,row.conSitemInAll);
+
           //打開修改框
           row.isSet = 1 ;
           console.log(this.tableData[index],index,row,row.isSet);
@@ -1451,6 +1512,9 @@
           if(this.comments2[index] !== row.comments2){
               changeFlag =1;
           }
+          if(this.RemarkforFeatureWeightadjust[index] !== row.RemarkforFeatureWeightadjust){
+              changeFlag =1;
+          }
           if(this.conAitem[index] !== row.conAitem){
               changeFlag =1;
           }
@@ -1458,6 +1522,9 @@
               changeFlag =1;
           }
           if(this.conSitem[index] !== row.conSitem){
+              changeFlag =1;
+          }
+          if(this.conSitemInAll[index] !== row.conSitemInAll){
               changeFlag =1;
           }
           for(let i = 0 , length =this.planOptimize[index].length;i<length;i++){
@@ -1470,7 +1537,7 @@
               alert("輸入值未發生改變");
               return false;
           }else{
-              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
+              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
               axios.post("/TestPlanSWOS/TestPlanSWOS-edit/" ,Qs.stringify(result, {indices:false}),{
                     headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                 }).then((res) => {
@@ -1487,6 +1554,7 @@
                          row.conSitem = this.conSitem[index] ;
                          row.comments1 = this.comments1[index] ;
                          row.comments2 = this.comments2[index] ;
+                         row.RemarkforFeatureWeightadjust = this.RemarkforFeatureWeightadjust[index] ;
                          row.CRC = this.CRC[index] ;
                          row.CRS = this.CRS[index] ;
                          row.CRT = this.CRT[index] ;
@@ -1567,8 +1635,10 @@
                    return false;
                }else{
                   //1.解析Excel
+
                    let outputResult;
                    let _this= this;
+                   _this.loading=true;
                    let files = this.uploadFile;
                    let undefined_to_null=function(value){
                        if(value == undefined){
@@ -1580,7 +1650,7 @@
                    var fileReader = new FileReader ();
                    fileReader.onload = function (ev) {
                              try {
-                                 _this.loading=true;
+
                                  var data = ev.target.result,
                                   workbook = XLSX.read(data, {
                                     type: 'binary'
@@ -1627,6 +1697,7 @@
                                 {
                                    console.log("错误异常"+e);
                                 }
+                                _this.fetchCategoryList();
                             }).catch(function (e) {
                                     _this.loading=false;
                                     _this.uploadFile=null;
@@ -1822,8 +1893,13 @@
            // U
            if(change.id === 1){
                //console.log("U");
-               if (this.FS[key] === 'Y' && caseid_temp !== 'PSA005_15') {
-                         this.BTS[key]= row.basetime;
+               //change
+               if (this.FS[key] === 'Y') {
+                   if (caseid_temp !== 'STAB118_EF'){
+                               this.BTS[key]= isNaN(row.RevisedbasetimeorAttendedtime * row.FeatureWeight)?0: row.RevisedbasetimeorAttendedtime * row.FeatureWeight;
+                           }else{
+                                this.BTS[key]= isNaN(row.RevisedbasetimeorAttendedtime * row.FeatureWeight / row.proTS)?0:row.RevisedbasetimeorAttendedtime * row.FeatureWeight / row.proTS;
+                           }
                       } else {
                           this.BTS[key] = 0;
                       }
@@ -1831,7 +1907,7 @@
            // Y
            if(change.id ===1 || change.id ===2){
                //console.log("Y");
-               if(caseid_temp.slice(0,3) ==='STA'){
+               {% comment %}if(caseid_temp.slice(0,3) ==='STA'){
                    if(caseid_temp === 'STA017'){
                        this.TFC[key]=this.BTS[key] * 5;
                    }else if(caseid_temp === 'STA018_EF'){
@@ -1851,7 +1927,9 @@
                else{
                     //console.log('other');
                     this.TFC[key]=isNaN(this.BTS[key] * this.starttime[key])?0:this.BTS[key] * this.starttime[key];
-               }
+               }{% endcomment %}
+           //change
+               this.TFC[key]=isNaN((this.BTS[key] + row.basetimeA) * this.starttime[key])?0:(this.BTS[key] + row.basetimeA) * this.starttime[key];
            }
            //AB
            if(change.id ===2 || change.id ===3){
@@ -1873,10 +1951,10 @@
              this.CLT[key]=(row.basetime - this.CAT[key]) * sum[3];
              }
            //AG
-          if(change.id ===4 || change.id ===1){
+          {% comment %}if(change.id ===4 || change.id ===1){
               //console.log("AG");
               this.conSitemInAll[key]=(isNaN(sum[4]/(sum[0]+sum[4]))?0:(sum[4]/(sum[0]+sum[4])));
-          }
+          }{% endcomment %}
            //AH
           //console.log("AH");
           console.log('TFC:',this.TFC[key],'CAT',this.CAT[key],'CLT',this.CLT[key],'CONSITEMALL',this.conSitemInAll[key]);
@@ -2057,6 +2135,21 @@
           });
 
       },
+      fetchCategoryList() {
+            if (this.customer !== '' && this.project !== '' && this.phase !== '') {
+                axios.get("/TestPlanSW/TestPlanSW-edit/?action=getCategory&customer=" +
+                          this.customer + "&project=" + this.project + "&phase=" + this.phase, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()
+                    }
+                }).then((res) => {
+                    this.categoryItem = res.data['MockData'];
+                }).catch(error => {
+                    console.error("获取类别列表失败:", error);
+                });
+            }
+        },
           //滚动加载
 {#      computedScroll(e){#}
 {#                 //显示高度#}
@@ -2139,19 +2232,7 @@
            this.categoryError= false;
            this.category='';
            if(newValue !== ''){
-               if(this.customer !== '' && this.project !== ''  && this.phase !== ''  ){
-                 let parameter = ""+this.customer+"&project="+this.project+"&phase="+this.phase;
-                 axios.get("/TestPlanSWOS/TestPlanSWOS-edit/?action=getCategory&customer="+this.customer+"&project="+this.project+"&phase="+this.phase ,{
-                    headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
-                }).then((res) => {
-                    this.categoryItem = res.data['MockData'];
-               })
-               }
-               else{
-                   alert("請選擇完整信息");
-                   return false;
-               }
-
+               this.fetchCategoryList();
            }else{
                return false
            }

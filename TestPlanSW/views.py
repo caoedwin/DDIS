@@ -2700,20 +2700,29 @@ def TestPlanSW_Edit(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
                                 "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS':i.BaseTimeSupport,'TFC':i.TimewConfigFollowmatrix,'conAtime':i.ConfigAutomationTime,'conLtime':i.ConfigLeverageTime,
                                 'conSitemInAll':i.ConfigSmartItemPer,'conStime':i.ConfigSmartTime,'proTS':i.ProjectTestSKUOptimize,'ATO':i.AttendTimeOptimize
@@ -2761,22 +2770,29 @@ def TestPlanSW_Edit(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
-                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT,
-                                'PhaseFFRT': i.PhaseFFRT,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
+                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                # plan
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
-                                'comments2': i.CommentsSmart, "planOptimize": planOptimize,
-                                'CRC': i.ConfigRetestCycle, 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
+                                'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
@@ -2926,20 +2942,29 @@ def TestPlanSW_Edit(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
                                 "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS':i.BaseTimeSupport,'TFC':i.TimewConfigFollowmatrix,'conAtime':i.ConfigAutomationTime,'conLtime':i.ConfigLeverageTime,
                                 'conSitemInAll':i.ConfigSmartItemPer,'conStime':i.ConfigSmartTime,'proTS':i.ProjectTestSKUOptimize,'ATO':i.AttendTimeOptimize
@@ -2987,22 +3012,29 @@ def TestPlanSW_Edit(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
-                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT,
-                                'PhaseFFRT': i.PhaseFFRT,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
+                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                # plan
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
-                                'comments2': i.CommentsSmart, "planOptimize": planOptimize,
-                                'CRC': i.ConfigRetestCycle, 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
+                                'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
@@ -3059,6 +3091,8 @@ def TestPlanSW_Edit(request):
                     updatedate['BaseTimeSupport'] = float(request.POST.get('BTS'))
                 else:
                     updatedate['BaseTimeSupport']=None
+            if 'RemarkforFeatureWeightadjust' in request.POST.keys():#new
+                updatedate['RemarkforFeatureWeightadjust'] = request.POST.get('RemarkforFeatureWeightadjust')
             if 'TE' in request.POST.keys():
                 updatedate['TE'] = request.POST.get('TE')
             if 'schedule' in request.POST.keys():
@@ -3130,6 +3164,8 @@ def TestPlanSW_Edit(request):
                     updatedate['ConfigRetestTime'] = float(request.POST.get('CRT'))
                 else:
                     updatedate['ConfigRetestTime'] =None
+            if 'Remark' in request.POST.keys():#new
+                updatedate['Remark'] = request.POST.get('Remark')
             updatedate['editor'] = request.session.get('user_name')
             updatedate['edit_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if 'planOptimize' in request.POST.keys():
@@ -3225,6 +3261,8 @@ def TestPlanSW_Edit(request):
                     adddic['BaseTime'] = float(request.POST.get('basetime'))
                 if request.POST.get('unattendedtime'):
                     adddic['TDMSUnattendedTime'] = float(request.POST.get('unattendedtime'))
+                if request.POST.get('RevisedbasetimeorAttendedtime'):#New
+                    adddic['RevisedbasetimeorAttendedtime'] = float(request.POST.get('RevisedbasetimeorAttendedtime'))
                 if request.POST.get('basetimeA'):
                     adddic['BaseAotomationTime1SKU'] = float(request.POST.get('basetimeA'))
                 adddic['Chramshell'] = request.POST.get('chramshell')
@@ -3237,8 +3275,11 @@ def TestPlanSW_Edit(request):
                 # print(projctcheck)
                 adddic['Projectinfo'] = TestProjectSW.objects.get(**projctcheck)
                 adddic['FeatureSupport'] = request.POST.get('FS')
+                if request.POST.get('FeatureWeight'):# New
+                    adddic['FeatureWeight'] = float(request.POST.get('FeatureWeight'))
                 if request.POST.get('BTS'):
                     adddic['BaseTimeSupport'] = float(request.POST.get('BTS'))
+                adddic['RemarkforFeatureWeightadjust'] = request.POST.get('RemarkforFeatureWeightadjust')# New
                 adddic['TE'] = request.POST.get('TE')
                 adddic['Schedule'] = request.POST.get('schedule')
                 if request.POST.get('starttime'):
@@ -3268,6 +3309,7 @@ def TestPlanSW_Edit(request):
                     adddic['ConfigRetestSKU'] = float(request.POST.get('CRS'))
                 if request.POST.get('CRT'):
                     adddic['ConfigRetestTime'] = float(request.POST.get('CRT'))
+                adddic['Remark'] = request.POST.get('Remark')# New
                 planOptimize = request.POST.getlist('planOptimize',[])
                 k=1
                 # print(planOptimize)
@@ -3347,7 +3389,7 @@ def TestPlanSW_Edit(request):
                                         editplan.Owner = i['Owner']
                                     if 'Priority' in i.keys():
                                         editplan.Priority = i['Priority']
-                                    if 'TDMSsTotalTime' in i.keys():
+                                    if 'TDMSTotalTime' in i.keys():
                                         if i['TDMSTotalTime']:
                                             editplan.TDMSTotalTime = float(i['TDMSTotalTime'])
                                         else:
@@ -3369,6 +3411,13 @@ def TestPlanSW_Edit(request):
                                             editplan.TDMSUnattendedTime = 0
                                     else:
                                         editplan.TDMSUnattendedTime =None
+                                    if 'RevisedbasetimeorAttendedtime' in i.keys():# New
+                                        if i['RevisedbasetimeorAttendedtime']:
+                                            editplan.RevisedbasetimeorAttendedtime = float(i['RevisedbasetimeorAttendedtime'])
+                                        else:
+                                            editplan.RevisedbasetimeorAttendedtime = 0
+                                    else:
+                                        editplan.RevisedbasetimeorAttendedtime =None
                                     if 'BaseAotomationTime1SKU' in i.keys():
                                         if i['BaseAotomationTime1SKU']:
                                             editplan.BaseAotomationTime1SKU = float(i['BaseAotomationTime1SKU'])
@@ -3386,22 +3435,35 @@ def TestPlanSW_Edit(request):
                                         editplan.DetachablePadMode = i['DetachablePadMode']
                                     if 'DetachableWDockmode' in i.keys():
                                         editplan.DetachableWDockmode = i['DetachableWDockmode']
+                                    if 'PhaseGO' in i.keys():# New
+                                        editplan.PhaseFVT = i['PhaseGO']
+                                    if 'PhaseEVT' in i.keys():# New
+                                        editplan.PhaseFVT = i['PhaseEVT']
                                     if 'PhaseFVT' in i.keys():
                                         editplan.PhaseFVT = i['PhaseFVT']
                                     if 'PhaseSIT' in i.keys():
                                         editplan.PhaseSIT = i['PhaseSIT']
                                     if 'PhaseFFRT' in i.keys():
                                         editplan.PhaseFFRT = i['PhaseFFRT']
+                                    if 'PhaseGsku' in i.keys():# New
+                                        editplan.PhaseFFRT = i['PhaseGsku']
                                     if 'Coverage' in i.keys():
                                         editplan.Coverage = i['Coverage']
 
                                     if 'FeatureSupport' in i.keys():
                                         editplan.FeatureSupport = i['FeatureSupport']
+                                    if 'FeatureWeight' in i.keys():# New
+                                        if i['FeatureWeight']:
+                                            editplan.FeatureWeight = float(i['FeatureWeight'])
+                                    else:
+                                        editplan.FeatureWeight = None
                                     if 'BaseTimeSupport' in i.keys():
                                         if i['BaseTimeSupport']:
                                             editplan.BaseTimeSupport = float(i['BaseTimeSupport'])
                                     else:
                                         editplan.BaseTimeSupport = None
+                                    if 'RemarkforFeatureWeightadjust' in i.keys():# New
+                                        editplan.RemarkforFeatureWeightadjust = i['RemarkforFeatureWeightadjust']
                                     if 'TE' in i.keys():
                                         editplan.TE = i['TE']
                                     if 'Schedule' in i.keys():
@@ -3551,6 +3613,8 @@ def TestPlanSW_Edit(request):
                                             editplan.ConfigRetestTime = float(i['ConfigRetestTime'])
                                     else:
                                         editplan.ConfigRetestTime =None
+                                    if 'Remark' in i.keys():# New
+                                        editplan.Remark = i['Remark']
                                     editplan.editor = request.session.get('user_name')
                                     editplan.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                     editplan.save()
@@ -3587,9 +3651,11 @@ def TestPlanSW_Edit(request):
                                         updatedic["Owner"] = i['Owner']
                                     if 'Priority' in i.keys():
                                         updatedic["Priority"] = i['Priority']
-                                    if 'TDMSsTotalTime' in i.keys():
+                                    if 'TDMSTotalTime' in i.keys():
                                         if i['TDMSTotalTime']:
                                             updatedic["TDMSTotalTime"] = float(i['TDMSTotalTime'])
+                                        else:
+                                            updatedic["TDMSTotalTime"] = 0
                                     else:
                                         updatedic["TDMSTotalTime"] = None
                                     # if 'BaseTime' in i.keys():
@@ -3608,11 +3674,20 @@ def TestPlanSW_Edit(request):
                                     if 'TDMSUnattendedTime' in i.keys():
                                         if i['TDMSUnattendedTime']:
                                             updatedic["TDMSUnattendedTime"] = float(i['TDMSUnattendedTime'])
+                                        else:
+                                            updatedic["TDMSUnattendedTime"] = 0
                                     else:
                                         updatedic["TDMSUnattendedTime"] =None
+                                    if 'RevisedbasetimeorAttendedtime' in i.keys():# New
+                                        if i['RevisedbasetimeorAttendedtime']:
+                                            updatedic["RevisedbasetimeorAttendedtime"] = float(i['RevisedbasetimeorAttendedtime'])
+                                    else:
+                                        updatedic["RevisedbasetimeorAttendedtime"] =None
                                     if 'BaseAotomationTime1SKU' in i.keys():
                                         if i['BaseAotomationTime1SKU']:
                                             updatedic["BaseAotomationTime1SKU"] = float(i['BaseAotomationTime1SKU'])
+                                        else:
+                                            updatedic["BaseAotomationTime1SKU"] = 0
                                     else:
                                         updatedic["BaseAotomationTime1SKU"] = None
                                     if 'Chramshell' in i.keys():
@@ -3625,22 +3700,35 @@ def TestPlanSW_Edit(request):
                                         updatedic["DetachablePadMode"] = i['DetachablePadMode']
                                     if 'DetachableWDockmode' in i.keys():
                                         updatedic["DetachableWDockmode"] = i['DetachableWDockmode']
+                                    if 'PhaseGO' in i.keys():#New
+                                        updatedic["PhaseGO"] = i['PhaseGO']
+                                    if 'PhaseEVT' in i.keys():#New
+                                        updatedic["PhaseEVT"] = i['PhaseEVT']
                                     if 'PhaseFVT' in i.keys():
                                         updatedic["PhaseFVT"] = i['PhaseFVT']
                                     if 'PhaseSIT' in i.keys():
                                         updatedic["PhaseSIT"] = i['PhaseSIT']
                                     if 'PhaseFFRT' in i.keys():
                                         updatedic["PhaseFFRT"] = i['PhaseFFRT']
+                                    if 'PhaseGsku' in i.keys():#New
+                                        updatedic["PhaseGsku"] = i['PhaseGsku']
                                     if 'Coverage' in i.keys():
                                         updatedic["Coverage"] = i['Coverage']
 
                                     if 'FeatureSupport' in i.keys():
                                         updatedic["FeatureSupport"] = i['FeatureSupport']
+                                    if 'FeatureWeight' in i.keys():# New
+                                        if i['FeatureWeight']:
+                                            updatedic["FeatureWeight"] = float(i['FeatureWeight'])
+                                    else:
+                                        updatedic["FeatureWeight"] = None
                                     if 'BaseTimeSupport' in i.keys():
                                         if i['BaseTimeSupport']:
                                             updatedic["BaseTimeSupport"] = float(i['BaseTimeSupport'])
                                     else:
                                         updatedic["BaseTimeSupport"] = None
+                                    if 'RemarkforFeatureWeightadjust' in i.keys():# New
+                                        updatedic["RemarkforFeatureWeightadjust"] = i['RemarkforFeatureWeightadjust']
                                     if 'TE' in i.keys():
                                         updatedic["TE"] = i['TE']
                                     if 'Schedule' in i.keys():
@@ -3793,6 +3881,8 @@ def TestPlanSW_Edit(request):
                                             updatedic["ConfigRetestTime"] = float(i['ConfigRetestTime'])
                                     else:
                                         updatedic["ConfigRetestTime"] =None
+                                    if 'Remark' in i.keys():# New
+                                        updatedic["Remark"] = i['Remark']
 
 
                                     # print(updatedic)
@@ -3884,6 +3974,13 @@ def TestPlanSW_Edit(request):
                                             editplan.TDMSUnattendedTime = 0
                                     else:
                                         editplan.TDMSUnattendedTime = None
+                                    if 'RevisedbasetimeorAttendedtime' in i.keys():# New
+                                        if i['RevisedbasetimeorAttendedtime']:
+                                            editplan.RevisedbasetimeorAttendedtime = float(i['RevisedbasetimeorAttendedtime'])
+                                        else:
+                                            editplan.RevisedbasetimeorAttendedtime = 0
+                                    else:
+                                        editplan.RevisedbasetimeorAttendedtime =None
                                     if 'BaseAotomationTime1SKU' in i.keys():
                                         if i['BaseAotomationTime1SKU']:
                                             # print(i['BaseAotomationTime1SKU'])
@@ -3902,22 +3999,35 @@ def TestPlanSW_Edit(request):
                                         editplan.DetachablePadMode = i['DetachablePadMode']
                                     if 'DetachableWDockmode' in i.keys():
                                         editplan.DetachableWDockmode = i['DetachableWDockmode']
+                                    if 'PhaseGO' in i.keys():# New
+                                        editplan.PhaseFVT = i['PhaseGO']
+                                    if 'PhaseEVT' in i.keys():# New
+                                        editplan.PhaseFVT = i['PhaseEVT']
                                     if 'PhaseFVT' in i.keys():
                                         editplan.PhaseFVT = i['PhaseFVT']
                                     if 'PhaseSIT' in i.keys():
                                         editplan.PhaseSIT = i['PhaseSIT']
                                     if 'PhaseFFRT' in i.keys():
                                         editplan.PhaseFFRT = i['PhaseFFRT']
+                                    if 'PhaseGsku' in i.keys():# New
+                                        editplan.PhaseFFRT = i['PhaseGsku']
                                     if 'Coverage' in i.keys():
                                         editplan.Coverage = i['Coverage']
 
                                     if 'FeatureSupport' in i.keys():
                                         editplan.FeatureSupport = i['FeatureSupport']
+                                    if 'FeatureWeight' in i.keys():# New
+                                        if i['FeatureWeight']:
+                                            editplan.FeatureWeight = float(i['FeatureWeight'])
+                                    else:
+                                        editplan.FeatureWeight = None
                                     if 'BaseTimeSupport' in i.keys():
                                         if i['BaseTimeSupport']:
                                             editplan.BaseTimeSupport = float(i['BaseTimeSupport'])
                                     else:
                                         editplan.BaseTimeSupport = None
+                                    if 'RemarkforFeatureWeightadjust' in i.keys():# New
+                                        editplan.RemarkforFeatureWeightadjust = i['RemarkforFeatureWeightadjust']
                                     if 'TE' in i.keys():
                                         editplan.TE = i['TE']
                                     if 'Schedule' in i.keys():
@@ -4070,6 +4180,8 @@ def TestPlanSW_Edit(request):
                                             editplan.ConfigRetestTime = float(i['ConfigRetestTime'])
                                     else:
                                         editplan.ConfigRetestTime = None
+                                    if 'Remark' in i.keys():# New
+                                        editplan.Remark = i['Remark']
                                     editplan.editor = request.session.get('user_name')
                                     editplan.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                     editplan.save()
@@ -4109,9 +4221,11 @@ def TestPlanSW_Edit(request):
                                     updatedic["Owner"] = i['Owner']
                                 if 'Priority' in i.keys():
                                     updatedic["Priority"] = i['Priority']
-                                if 'TDMSsTotalTime' in i.keys():
+                                if 'TDMSTotalTime' in i.keys():
                                     if i['TDMSTotalTime'] and not i['TDMSTotalTime'] == " ":
                                         updatedic["TDMSTotalTime"] = float(i['TDMSTotalTime'])
+                                    else:
+                                        updatedic["TDMSTotalTime"] = 0
                                 else:
                                     updatedic["TDMSTotalTime"] = None
                                 # if 'BaseTime' in i.keys():
@@ -4131,11 +4245,20 @@ def TestPlanSW_Edit(request):
                                 if 'TDMSUnattendedTime' in i.keys():
                                     if i['TDMSUnattendedTime'] and not i['TDMSUnattendedTime'] == " ":
                                         updatedic["TDMSUnattendedTime"] = float(i['TDMSUnattendedTime'])
+                                    else:
+                                        updatedic["TDMSUnattendedTime"] = 0
                                 else:
                                     updatedic["TDMSUnattendedTime"] = None
+                                if 'RevisedbasetimeorAttendedtime' in i.keys():  # New
+                                    if i['RevisedbasetimeorAttendedtime']:
+                                        updatedic["RevisedbasetimeorAttendedtime"] = float(i['RevisedbasetimeorAttendedtime'])
+                                else:
+                                    updatedic["RevisedbasetimeorAttendedtime"] = None
                                 if 'BaseAotomationTime1SKU' in i.keys():
                                     if i['BaseAotomationTime1SKU'] and not i['BaseAotomationTime1SKU'] == " ":
                                         updatedic["BaseAotomationTime1SKU"] = float(i['BaseAotomationTime1SKU'])
+                                    else:
+                                        updatedic["BaseAotomationTime1SKU"] = 0
                                 else:
                                     updatedic["BaseAotomationTime1SKU"] = None
                                 if 'Chramshell' in i.keys():
@@ -4148,22 +4271,35 @@ def TestPlanSW_Edit(request):
                                     updatedic["DetachablePadMode"] = i['DetachablePadMode']
                                 if 'DetachableWDockmode' in i.keys():
                                     updatedic["DetachableWDockmode"] = i['DetachableWDockmode']
+                                if 'PhaseGO' in i.keys():  # New
+                                    updatedic["PhaseGO"] = i['PhaseGO']
+                                if 'PhaseEVT' in i.keys():  # New
+                                    updatedic["PhaseEVT"] = i['PhaseEVT']
                                 if 'PhaseFVT' in i.keys():
                                     updatedic["PhaseFVT"] = i['PhaseFVT']
                                 if 'PhaseSIT' in i.keys():
                                     updatedic["PhaseSIT"] = i['PhaseSIT']
                                 if 'PhaseFFRT' in i.keys():
                                     updatedic["PhaseFFRT"] = i['PhaseFFRT']
+                                if 'PhaseGsku' in i.keys():  # New
+                                    updatedic["PhaseGsku"] = i['PhaseGsku']
                                 if 'Coverage' in i.keys():
                                     updatedic["Coverage"] = i['Coverage']
 
                                 if 'FeatureSupport' in i.keys():
                                     updatedic["FeatureSupport"] = i['FeatureSupport']
+                                if 'FeatureWeight' in i.keys():  # New
+                                    if i['FeatureWeight']:
+                                        updatedic["FeatureWeight"] = float(i['FeatureWeight'])
+                                else:
+                                    updatedic["FeatureWeight"] = None
                                 if 'BaseTimeSupport' in i.keys():
                                     if i['BaseTimeSupport'] and not i['BaseTimeSupport'] == " ":
                                         updatedic["BaseTimeSupport"] = float(i['BaseTimeSupport'])
                                 else:
                                     updatedic["BaseTimeSupport"] = None
+                                if 'RemarkforFeatureWeightadjust' in i.keys():  # New
+                                    updatedic["RemarkforFeatureWeightadjust"] = i['RemarkforFeatureWeightadjust']
                                 if 'TE' in i.keys():
                                     updatedic["TE"] = i['TE']
                                 if 'Schedule' in i.keys():
@@ -4318,6 +4454,8 @@ def TestPlanSW_Edit(request):
                                         updatedic["ConfigRetestTime"] = float(i['ConfigRetestTime'])
                                 else:
                                     updatedic["ConfigRetestTime"] = None
+                                if 'Remark' in i.keys():  # New
+                                    updatedic["Remark"] = i['Remark']
 
                                 # print(updatedic)
                                 # for m in updatedic:
@@ -5434,20 +5572,29 @@ def TestPlanSW_search(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
                                 "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'conAtime': i.ConfigAutomationTime, 'conLtime': i.ConfigLeverageTime,
@@ -5544,22 +5691,29 @@ def TestPlanSW_search(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
-                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT,
-                                'PhaseFFRT': i.PhaseFFRT,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
+                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                # plan
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
-                                'comments2': i.CommentsSmart, "planOptimize": planOptimize,
-                                'CRC': i.ConfigRetestCycle, 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
+                                'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
@@ -5710,20 +5864,29 @@ def TestPlanSW_search(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
+                                "PhaseGO": i.PhaseGO, # New
+                                'conSitem': i.ConfigSmartItem,
+                                "PhaseEVT": i.PhaseEVT, # New
                                 "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
-                                'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'conAtime': i.ConfigAutomationTime, 'conLtime': i.ConfigLeverageTime,
@@ -5776,22 +5939,29 @@ def TestPlanSW_search(request):
                                 "releasedate": i.ReleaseDate, "owner": i.Owner,
                                 "priority": i.Priority,
                                 # TDMSTotalTime前端直接后两项加总
+                                "TDMSTotalTime": i.TDMSTotalTime,
                                 "basetime": i.BaseTime,
                                 "unattendedtime": i.TDMSUnattendedTime,
+                                "RevisedbasetimeorAttendedtime": i.RevisedbasetimeorAttendedtime,# New
                                 "basetimeA": i.BaseAotomationTime1SKU,
                                 "chramshell": i.Chramshell, "conver_NB": i.ConvertibaleNBMode,
                                 "conver_Yoga": i.ConvertibaleYogaPadMode,
                                 "detach_Pad": i.DetachablePadMode, "detach_W": i.DetachableWDockmode,
-                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT,
-                                'PhaseFFRT': i.PhaseFFRT,
+                                "PhaseGO": i.PhaseGO, # New
+                                "PhaseEVT": i.PhaseEVT, # New
+                                "PhaseF": i.PhaseFVT, "PhaseS": i.PhaseSIT, 'PhaseFFRT': i.PhaseFFRT,
+                                'PhaseGsku': i.PhaseGsku,# New
                                 "coverage": i.Coverage,
-                                # plan
-                                'FS': i.FeatureSupport, 'TE': i.TE, 'schedule': i.Schedule,
+                                'FS': i.FeatureSupport,
+                                'FeatureWeight': i.FeatureWeight, # New
+                                'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
+                                'TE': i.TE, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
-                                'comments2': i.CommentsSmart, "planOptimize": planOptimize,
-                                'CRC': i.ConfigRetestCycle, 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
+                                'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,

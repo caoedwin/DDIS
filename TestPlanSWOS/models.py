@@ -256,19 +256,22 @@ class TestPlanSW(models.Model):
     )
     Customer = models.CharField('Customer', choices=Customer_choice, max_length=20, default='C38(NB)')
     Phase = models.CharField('Phase', choices=Phase_choice, max_length=20, default='', )
-    ItemNo_d = models.CharField('ItemNo', max_length=50,  blank=True, null=True)
-    Item_d = models.CharField('Item', max_length=150,  blank=True, null=True)
-    TestItems = models.CharField('TestItems', max_length=1000, blank=True, null=True, default='')
+    ItemNo_d = models.CharField('Case ID', max_length=50, blank=True, null=True)
+    Item_d = models.CharField('Case name', max_length=150, blank=True, null=True)
+    TestItems = models.CharField('Test Items', max_length=1000, blank=True, null=True, default='')
     Category = models.CharField('Category', max_length=250, blank=True, null=True)
     Category2 = models.CharField('Category2', max_length=250, blank=True, null=True)
     Version = models.CharField('Version', max_length=100, blank=True, null=True)
-    ReleaseDate = models.CharField('ReleaseDate', max_length=50, blank=True, null=True)
+    ReleaseDate = models.CharField('Release date', max_length=50, blank=True, null=True)
     Owner = models.CharField('Owner', max_length=30, blank=True, null=True)
     Priority = models.CharField('Priority', max_length=10, blank=True, null=True)
-    TDMSTotalTime = models.FloatField('TDMSTotalTime', max_length=20, blank=True, null=True)
-    BaseTime = models.FloatField('BaseTime', max_length=20, blank=True, null=True)
-    TDMSUnattendedTime = models.FloatField('TDMSUnattendedTime', max_length=20, blank=True, null=True)
-    BaseAotomationTime1SKU = models.FloatField('BaseAotomationTime1SKU', max_length=10, blank=True, null=True)
+    TDMSTotalTime = models.FloatField('TDMS Leading Time (A+U)', max_length=20, blank=True, null=True)  # changeName
+    BaseTime = models.FloatField('TDMS Working time(Attended time)', max_length=20, blank=True, null=True)  # changeName
+    TDMSUnattendedTime = models.FloatField('(TDMS) Unattended  time', max_length=20, blank=True, null=True)
+    RevisedbasetimeorAttendedtime = models.FloatField('Revised base time (Attended time)', max_length=20, blank=True,
+                                                      null=True)  # New
+    BaseAotomationTime1SKU = models.FloatField('Base time-Automation (1SKU)', max_length=10, blank=True, null=True)
+
     Chramshell = models.CharField('Chramshell', choices=Choose, max_length=10, default='', blank=True, null=True)
     ConvertibaleNBMode = models.CharField('ConvertibaleNBMode', choices=Choose, max_length=10, default='', blank=True,
                                           null=True)
@@ -278,31 +281,49 @@ class TestPlanSW(models.Model):
                                          null=True)
     DetachableWDockmode = models.CharField('DetachableWDockmode', choices=Choose, max_length=10, default='', blank=True,
                                            null=True)
-    PhaseFVT = models.CharField('PhaseFVT', choices=Choose, max_length=10, default='', blank=True, null=True)
-    PhaseSIT = models.CharField('PhaseSIT', choices=Choose, max_length=10, default='', blank=True, null=True)
-    PhaseFFRT = models.CharField('PhaseFFRT', choices=Choose, max_length=10, default='', blank=True, null=True)
+    PhaseGO = models.CharField('Develop phase(TPL) G/O', choices=Choose, max_length=10, default='', blank=True,
+                               null=True)  # New
+    PhaseEVT = models.CharField('Develop phase(TPL) EVT', choices=Choose, max_length=10, default='', blank=True,
+                                null=True)  # New
+    PhaseFVT = models.CharField('Develop phase(TPL) FVT', choices=Choose, max_length=10, default='', blank=True,
+                                null=True)
+    PhaseSIT = models.CharField('Develop phase(TPL) SIT', choices=Choose, max_length=10, default='', blank=True,
+                                null=True)
+    PhaseFFRT = models.CharField('Develop phase(TPL) FFRT', choices=Choose, max_length=10, default='', blank=True,
+                                 null=True)
+    PhaseGsku = models.CharField('Develop phase(TPL) Gsku', choices=Choose, max_length=10, default='', blank=True,
+                                 null=True)  # New
     Coverage = models.CharField('Coverage', max_length=500, blank=True, null=True)
 
     Items=models.ForeignKey(TestItemSW,on_delete=True, blank=True, null=True)
     # RetestItems = models.ForeignKey('RetestItemSW', on_delete=True)
     Projectinfo=models.ForeignKey(TestProjectSW,on_delete=True)
-    FeatureSupport=models.CharField('FeatureSupport', choices=ChoiceYN, max_length=5, blank=True, null=True, default='' )
-    BaseTimeSupport=models.FloatField('BaseTimeSupport', max_length=20, blank=True, null=True)
-    TE=models.CharField('TE',max_length=30, blank=True, null=True, default='')
-    Schedule=models.CharField('Schedule',max_length=40, blank=True, null=True, default='')
-    ProjectTestSKUfollowMatrix=models.FloatField('ProjectTestSKUfollowMatrix', max_length=10, blank=True, null=True,)
-    TimewConfigFollowmatrix=models.FloatField('TimewConfigFollowmatrix', max_length=20, blank=True, null=True,)
-    ConfigAutomationItem=models.CharField('ConfigAutomationItem',choices=ChoiceYN,max_length=5, blank=True, null=True, default='')
-    ConfigAutomationTime=models.FloatField('ConfigAutomationTime',max_length=20, blank=True, null=True, )
-    ConfigLeverageItem=models.CharField('ConfigLeverageItem',choices=ChoiceYN,max_length=5, blank=True, null=True, default='')
-    ConfigLeverageTime = models.FloatField('ConfigLeverageTime', max_length=20, blank=True, null=True, )
-    CommentsLeverage=models.CharField('Comment',max_length=1500,blank=True,null=True,default='')
-    ConfigSmartItem=models.CharField('ConfigSmartItem',choices=ChoiceYN,max_length=5, blank=True, null=True, default='')
-    ConfigSmartItemPer=models.FloatField('ConfigSmartItemPer', max_length=10, blank=True, null=True,)
-    ConfigSmartTime=models.FloatField('ConfigSmartTime', max_length=20, blank=True, null=True, )
-    CommentsSmart=models.CharField('Comment',max_length=1500,blank=True,null=True,default='')
-    ProjectTestSKUOptimize=models.FloatField('ProjectTestSKUOptimize', max_length=20, blank=True, null=True, )
-    AttendTimeOptimize=models.FloatField('AttendTimeOptimize', max_length=20, blank=True, null=True, )
+    FeatureSupport = models.CharField('FeatureSupport', choices=ChoiceYN, max_length=5, blank=True, null=True,
+                                      default='')
+    FeatureWeight = models.FloatField('FeatureWeight', max_length=20, blank=True, null=True)  # New
+    BaseTimeSupport = models.FloatField('Base*Weight', max_length=20, blank=True, null=True)  # changeName
+    RemarkforFeatureWeightadjust = models.CharField(
+        'Remark for Feature Weight adjust(TL僅可調整且只能根據定義進行調整 feature weight，定義外的測項不可自行調整)', max_length=1500, blank=True,
+        null=True, default='')  # New
+    TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
+    Schedule = models.CharField('Schedule', max_length=40, blank=True, null=True, default='')
+    ProjectTestSKUfollowMatrix = models.FloatField('Project test SKU-follow matrix', max_length=10, blank=True,
+                                                   null=True, )
+    TimewConfigFollowmatrix = models.FloatField('Time w/ Config-follow matrix', max_length=20, blank=True, null=True, )
+    ConfigAutomationItem = models.CharField('Config-Automation Item', choices=ChoiceYN, max_length=5, blank=True,
+                                            null=True, default='')
+    ConfigAutomationTime = models.FloatField('Config-Automation time', max_length=20, blank=True, null=True, )
+    ConfigLeverageItem = models.CharField('Config-Leverage Item', choices=ChoiceYN, max_length=5, blank=True, null=True,
+                                          default='')
+    ConfigLeverageTime = models.FloatField('Config-Leverage time', max_length=20, blank=True, null=True, )
+    CommentsLeverage = models.CharField('Comment', max_length=1500, blank=True, null=True, default='')
+    ConfigSmartItem = models.CharField('Config-Smart Item', choices=ChoiceYN, max_length=5, blank=True, null=True,
+                                       default='')
+    ConfigSmartItemPer = models.FloatField('Config-Smart Item占总case比例', max_length=10, blank=True, null=True, )
+    ConfigSmartTime = models.FloatField('Config-Smart time', max_length=20, blank=True, null=True, )
+    CommentsSmart = models.CharField('Comment', max_length=1500, blank=True, null=True, default='')
+    ProjectTestSKUOptimize = models.FloatField('Project test SKU-Optimize', max_length=20, blank=True, null=True, )
+    AttendTimeOptimize = models.FloatField('Attend time-Optimize', max_length=20, blank=True, null=True, )
     SKU1 = models.CharField('SKU1', choices=SKUResult, max_length=200, blank=True, null=True, default='')
     SKU2 = models.CharField('SKU2', choices=SKUResult, max_length=200, blank=True, null=True, default='')
     SKU3 = models.CharField('SKU3', choices=SKUResult, max_length=200, blank=True, null=True, default='')
@@ -343,10 +364,11 @@ class TestPlanSW(models.Model):
     SKU38 = models.CharField('SKU38', choices=SKUResult, max_length=200, blank=True, null=True, default='')
     SKU39 = models.CharField('SKU39', choices=SKUResult, max_length=200, blank=True, null=True, default='')
     SKU40 = models.CharField('SKU40', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    ConfigRetestCycle=models.FloatField('ConfigRetestCycle', max_length=20, blank=True, null=True,)
-    ConfigRetestSKU=models.FloatField('ConfigRetestSKU', max_length=20, blank=True, null=True,)
-    ConfigRetestTime=models.FloatField('ConfigRetestTime', max_length=20, blank=True, null=True,)
-    editor = models.CharField('editor',max_length=100, blank=True, null=True, default='')
+    ConfigRetestCycle = models.FloatField('Config-Retest Cycle', max_length=20, blank=True, null=True, )
+    ConfigRetestSKU = models.FloatField('Config-Retest SKU', max_length=20, blank=True, null=True, )
+    ConfigRetestTime = models.FloatField('Config-Retest time', max_length=20, blank=True, null=True, )
+    Remark = models.CharField('Remark', max_length=3500, blank=True, null=True, default='')
+    editor = models.CharField('editor', max_length=100, blank=True, null=True, default='')
     edit_time = models.CharField('edit_time', max_length=26, blank=True, null=True, default='')
     class Meta:
         verbose_name = 'TestPlanSW'#不写verbose_name, admin中默认的注册名会加s
@@ -357,6 +379,24 @@ class TestPlanSW(models.Model):
         return '{Project}--{Item}'.format(Project=self.Projectinfo,Item=self.Items)
 
 class RetestItemSW(models.Model):
+    ChoiceFeatureSupport = (
+        ('', ''),
+        ('V', 'V'),
+        ('X', 'X'),
+    )
+    ChoiceYN = (
+        ('', ''),
+        ('Y', 'Y'),
+        ('N', 'N'),
+    )
+    SKUResult = (
+        ('', ''),
+        ('V', 'V'),
+        ('X', 'X'),
+        ('A', 'A'),
+        ('L', 'L'),
+        ('S', 'S'),
+    )
     Customer_choice = (
         # ('Select Customer', 'Select Customer'),
         ('', ''),
@@ -418,117 +458,123 @@ class RetestItemSW(models.Model):
         ('X', 'X'),
         ('O', 'O'),
     )
-    Customer = models.CharField('Customer_R', choices=Customer_choice, max_length=20, default='C38(NB)')
-    Phase = models.CharField('Phase_R', choices=Phase_choice, max_length=20, default='', )
     Project=models.CharField('Project_R',max_length=20, )
-    ItemNo_d=models.CharField('ItemNo_d_R',max_length=50,)
-    Item_d=models.CharField('Item_d_R',max_length=150,)
-    TestItems= models.CharField('TestItems_R',max_length=1000,blank=True,null=True)
-    Category = models.CharField('Category_R', max_length=250,blank=True,null=True)
-    Category2 = models.CharField('Category2_R', max_length=250,blank=True,null=True)
-    Version=models.CharField('Version_R',max_length=100,blank=True,null=True)
-    ReleaseDate=models.CharField('ReleaseDate_R',max_length=50,blank=True,null=True)
-    Owner=models.CharField('Owner_R',max_length=30,blank=True,null=True)
-    Priority=models.CharField('Priority_R',max_length=10,blank=True,null=True)
-    TDMSTotalTime=models.FloatField('TDMSTotalTime_R',max_length=20,blank=True,null=True)
-    BaseTime=models.FloatField('BaseTime_R',max_length=20,blank=True,null=True)
-    TDMSUnattendedTime=models.FloatField('TDMSUnattendedTime_R',max_length=20,blank=True,null=True)
-    BaseAotomationTime1SKU=models.FloatField('BaseAotomationTime1SKU_R',max_length=10,blank=True,null=True)
-    Chramshell= models.CharField('Chramshell_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    ConvertibaleNBMode=models.CharField('ConvertibaleNBMode_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    ConvertibaleYogaPadMode=models.CharField('ConvertibaleYogaPadMode_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    DetachablePadMode=models.CharField('DetachablePadMode_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    DetachableWDockmode=models.CharField('DetachableWDockmode_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    PhaseFVT=models.CharField('PhaseFVT_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    PhaseSIT=models.CharField('PhaseSIT_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    PhaseFFRT=models.CharField('PhaseFFRT_R', choices=Choose, max_length=10,default='',blank=True,null=True)
-    Coverage=models.CharField('Category_R',max_length=500,blank=True,null=True)
-    ChoiceFeatureSupport = (
-        ('', ''),
-        ('V', 'V'),
-        ('X', 'X'),
-    )
-    ChoiceYN = (
-        ('', ''),
-        ('Y', 'Y'),
-        ('N', 'N'),
-    )
-    SKUResult = (
-        ('', ''),
-        ('V', 'V'),
-        ('X', 'X'),
-        ('A', 'A'),
-        ('L', 'L'),
-        ('S', 'S'),
-    )
+    Customer = models.CharField('Customer', choices=Customer_choice, max_length=20, default='C38(NB)')
+    Phase = models.CharField('Phase', choices=Phase_choice, max_length=20, default='', )
+    ItemNo_d = models.CharField('Case ID', max_length=50, blank=True, null=True)
+    Item_d = models.CharField('Case name', max_length=150, blank=True, null=True)
+    TestItems = models.CharField('Test Items', max_length=1000, blank=True, null=True, default='')
+    Category = models.CharField('Category', max_length=250, blank=True, null=True)
+    Category2 = models.CharField('Category2', max_length=250, blank=True, null=True)
+    Version = models.CharField('Version', max_length=100, blank=True, null=True)
+    ReleaseDate = models.CharField('Release date', max_length=50, blank=True, null=True)
+    Owner = models.CharField('Owner', max_length=30, blank=True, null=True)
+    Priority = models.CharField('Priority', max_length=10, blank=True, null=True)
+    TDMSTotalTime = models.FloatField('TDMS Leading Time (A+U)', max_length=20, blank=True, null=True)  # changeName
+    BaseTime = models.FloatField('TDMS Working time(Attended time)', max_length=20, blank=True, null=True)  # changeName
+    TDMSUnattendedTime = models.FloatField('(TDMS) Unattended  time', max_length=20, blank=True, null=True)
+    RevisedbasetimeorAttendedtime = models.FloatField('Revised base time (Attended time)', max_length=20, blank=True,
+                                                      null=True)  # New
+    BaseAotomationTime1SKU = models.FloatField('Base time-Automation (1SKU)', max_length=10, blank=True, null=True)
+
+    Chramshell = models.CharField('Chramshell', choices=Choose, max_length=10, default='', blank=True, null=True)
+    ConvertibaleNBMode = models.CharField('ConvertibaleNBMode', choices=Choose, max_length=10, default='', blank=True,
+                                          null=True)
+    ConvertibaleYogaPadMode = models.CharField('ConvertibaleYogaPadMode', choices=Choose, max_length=10, default='',
+                                               blank=True, null=True)
+    DetachablePadMode = models.CharField('DetachablePadMode', choices=Choose, max_length=10, default='', blank=True,
+                                         null=True)
+    DetachableWDockmode = models.CharField('DetachableWDockmode', choices=Choose, max_length=10, default='', blank=True,
+                                           null=True)
+    PhaseGO = models.CharField('Develop phase(TPL) G/O', choices=Choose, max_length=10, default='', blank=True,
+                               null=True)  # New
+    PhaseEVT = models.CharField('Develop phase(TPL) EVT', choices=Choose, max_length=10, default='', blank=True,
+                                null=True)  # New
+    PhaseFVT = models.CharField('Develop phase(TPL) FVT', choices=Choose, max_length=10, default='', blank=True,
+                                null=True)
+    PhaseSIT = models.CharField('Develop phase(TPL) SIT', choices=Choose, max_length=10, default='', blank=True,
+                                null=True)
+    PhaseFFRT = models.CharField('Develop phase(TPL) FFRT', choices=Choose, max_length=10, default='', blank=True,
+                                 null=True)
+    PhaseGsku = models.CharField('Develop phase(TPL) Gsku', choices=Choose, max_length=10, default='', blank=True,
+                                 null=True)  # New
+    Coverage = models.CharField('Coverage', max_length=500, blank=True, null=True)
+
+    # Items = models.ForeignKey(TestItemSW, on_delete=True, blank=True, null=True)
     # RetestItems = models.ForeignKey('RetestItemSW', on_delete=True)
-    Projectinfo = models.ForeignKey('TestProjectSW', on_delete=True)
-    FeatureSupport = models.CharField('FeatureSupport_R', choices=ChoiceFeatureSupport, max_length=5, blank=True,
-                                      null=True, default='')
-    BaseTimeSupport = models.FloatField('BaseTimeSupport_R', max_length=20, blank=True, null=True)
-    TE = models.CharField('TE_R', max_length=30, blank=True, null=True, default='')
-    Schedule = models.CharField('Schedule_R', max_length=40, blank=True, null=True, default='')
-    ProjectTestSKUfollowMatrix = models.FloatField('ProjectTestSKUfollowMatrix_R', max_length=10, blank=True, null=True)
-    TimewConfigFollowmatrix = models.FloatField('TimewConfigFollowmatrix_R', max_length=20, blank=True, null=True)
-    ConfigAutomationItem = models.CharField('ConfigAutomationItem_R', choices=ChoiceYN, max_length=5, blank=True,
+    Projectinfo = models.ForeignKey(TestProjectSW, on_delete=True)
+    FeatureSupport = models.CharField('FeatureSupport', choices=ChoiceYN, max_length=5, blank=True, null=True,
+                                      default='')
+    FeatureWeight = models.FloatField('FeatureWeight', max_length=20, blank=True, null=True)  # New
+    BaseTimeSupport = models.FloatField('Base*Weight', max_length=20, blank=True, null=True)  # changeName
+    RemarkforFeatureWeightadjust = models.CharField(
+        'Remark for Feature Weight adjust(TL僅可調整且只能根據定義進行調整 feature weight，定義外的測項不可自行調整)', max_length=1500, blank=True,
+        null=True, default='')  # New
+    TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
+    Schedule = models.CharField('Schedule', max_length=40, blank=True, null=True, default='')
+    ProjectTestSKUfollowMatrix = models.FloatField('Project test SKU-follow matrix', max_length=10, blank=True,
+                                                   null=True, )
+    TimewConfigFollowmatrix = models.FloatField('Time w/ Config-follow matrix', max_length=20, blank=True, null=True, )
+    ConfigAutomationItem = models.CharField('Config-Automation Item', choices=ChoiceYN, max_length=5, blank=True,
                                             null=True, default='')
-    ConfigAutomationTime = models.FloatField('ConfigAutomationTime_R', max_length=20, blank=True, null=True)
-    ConfigLeverageItem = models.CharField('ConfigLeverageItem_R', choices=ChoiceYN, max_length=5, blank=True, null=True,
+    ConfigAutomationTime = models.FloatField('Config-Automation time', max_length=20, blank=True, null=True, )
+    ConfigLeverageItem = models.CharField('Config-Leverage Item', choices=ChoiceYN, max_length=5, blank=True, null=True,
                                           default='')
-    ConfigLeverageTime = models.FloatField('ConfigLeverageTime_R', max_length=20, blank=True, null=True)
-    CommentsLeverage = models.CharField('Comment_R', max_length=1500, blank=True, null=True, default='')
-    ConfigSmartItem = models.CharField('ConfigSmartItem_R', choices=ChoiceYN, max_length=5, blank=True, null=True,
+    ConfigLeverageTime = models.FloatField('Config-Leverage time', max_length=20, blank=True, null=True, )
+    CommentsLeverage = models.CharField('Comment', max_length=1500, blank=True, null=True, default='')
+    ConfigSmartItem = models.CharField('Config-Smart Item', choices=ChoiceYN, max_length=5, blank=True, null=True,
                                        default='')
-    ConfigSmartItemPer = models.FloatField('ConfigSmartItemPer_R', max_length=10, blank=True, null=True)
-    ConfigSmartTime = models.FloatField('ConfigSmartTime_R', max_length=20, blank=True, null=True)
-    CommentsSmart = models.CharField('Comment_R', max_length=1500, blank=True, null=True, default='')
-    ProjectTestSKUOptimize = models.FloatField('ProjectTestSKUOptimize_R', max_length=20, blank=True, null=True)
-    AttendTimeOptimize = models.FloatField('AttendTimeOptimize_R', max_length=20, blank=True, null=True)
-    SKU1 = models.CharField('SKU1_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU2 = models.CharField('SKU2_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU3 = models.CharField('SKU3_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU4 = models.CharField('SKU4_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU5 = models.CharField('SKU5_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU6 = models.CharField('SKU6_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU7 = models.CharField('SKU7_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU8 = models.CharField('SKU8_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU9 = models.CharField('SKU9_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU10 = models.CharField('SKU10_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU11 = models.CharField('SKU11_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU12 = models.CharField('SKU12_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU13 = models.CharField('SKU13_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU14 = models.CharField('SKU14_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU15 = models.CharField('SKU15_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU16 = models.CharField('SKU16_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU17 = models.CharField('SKU17_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU18 = models.CharField('SKU18_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU19 = models.CharField('SKU19_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU20 = models.CharField('SKU20_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU21 = models.CharField('SKU21_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU22 = models.CharField('SKU22_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU23 = models.CharField('SKU23_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU24 = models.CharField('SKU24_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU25 = models.CharField('SKU25_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU26 = models.CharField('SKU26_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU27 = models.CharField('SKU27_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU28 = models.CharField('SKU28_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU29 = models.CharField('SKU29_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU30 = models.CharField('SKU30_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU31 = models.CharField('SKU31_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU32 = models.CharField('SKU32_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU33 = models.CharField('SKU33_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU34 = models.CharField('SKU34_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU35 = models.CharField('SKU35_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU36 = models.CharField('SKU36_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU37 = models.CharField('SKU37_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU38 = models.CharField('SKU38_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU39 = models.CharField('SKU39_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    SKU40 = models.CharField('SKU40_R', choices=SKUResult, max_length=200, blank=True, null=True, default='')
-    ConfigRetestCycle = models.FloatField('ConfigRetestCycle_R', max_length=20, blank=True, null=True)
-    ConfigRetestSKU = models.FloatField('ConfigRetestSKU_R', max_length=20, blank=True, null=True)
-    ConfigRetestTime = models.FloatField('ConfigRetestTime_R', max_length=20, blank=True, null=True)
-    editor = models.CharField('editor_R', max_length=100, blank=True, null=True, default='')
-    edit_time = models.CharField('edit_time_R', max_length=26, blank=True, null=True, default='')
+    ConfigSmartItemPer = models.FloatField('Config-Smart Item占总case比例', max_length=10, blank=True, null=True, )
+    ConfigSmartTime = models.FloatField('Config-Smart time', max_length=20, blank=True, null=True, )
+    CommentsSmart = models.CharField('Comment', max_length=1500, blank=True, null=True, default='')
+    ProjectTestSKUOptimize = models.FloatField('Project test SKU-Optimize', max_length=20, blank=True, null=True, )
+    AttendTimeOptimize = models.FloatField('Attend time-Optimize', max_length=20, blank=True, null=True, )
+    SKU1 = models.CharField('SKU1', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU2 = models.CharField('SKU2', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU3 = models.CharField('SKU3', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU4 = models.CharField('SKU4', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU5 = models.CharField('SKU5', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU6 = models.CharField('SKU6', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU7 = models.CharField('SKU7', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU8 = models.CharField('SKU8', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU9 = models.CharField('SKU9', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU10 = models.CharField('SKU10', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU11 = models.CharField('SKU11', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU12 = models.CharField('SKU12', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU13 = models.CharField('SKU13', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU14 = models.CharField('SKU14', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU15 = models.CharField('SKU15', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU16 = models.CharField('SKU16', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU17 = models.CharField('SKU17', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU18 = models.CharField('SKU18', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU19 = models.CharField('SKU19', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU20 = models.CharField('SKU20', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU21 = models.CharField('SKU21', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU22 = models.CharField('SKU22', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU23 = models.CharField('SKU23', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU24 = models.CharField('SKU24', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU25 = models.CharField('SKU25', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU26 = models.CharField('SKU26', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU27 = models.CharField('SKU27', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU28 = models.CharField('SKU28', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU29 = models.CharField('SKU29', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU30 = models.CharField('SKU30', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU31 = models.CharField('SKU31', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU32 = models.CharField('SKU32', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU33 = models.CharField('SKU33', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU34 = models.CharField('SKU34', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU35 = models.CharField('SKU35', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU36 = models.CharField('SKU36', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU37 = models.CharField('SKU37', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU38 = models.CharField('SKU38', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU39 = models.CharField('SKU39', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    SKU40 = models.CharField('SKU40', choices=SKUResult, max_length=200, blank=True, null=True, default='')
+    ConfigRetestCycle = models.FloatField('Config-Retest Cycle', max_length=20, blank=True, null=True, )
+    ConfigRetestSKU = models.FloatField('Config-Retest SKU', max_length=20, blank=True, null=True, )
+    ConfigRetestTime = models.FloatField('Config-Retest time', max_length=20, blank=True, null=True, )
+    Remark = models.CharField('Remark', max_length=1500, blank=True, null=True, default='')
+    editor = models.CharField('editor', max_length=100, blank=True, null=True, default='')
+    edit_time = models.CharField('edit_time', max_length=26, blank=True, null=True, default='')
     class Meta:
         verbose_name = 'RetestItemSW'#不写verbose_name, admin中默认的注册名会加s
         verbose_name_plural = verbose_name
