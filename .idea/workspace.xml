@@ -5,19 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49dc6e49-0cbb-4f1d-b6a9-9b615cad6699" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit20250909.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_edit20250909.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app01/templatetags/custom_tag20250912backup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base20250911backup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base20250915topmenu.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestPlanSW/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestPlanSW/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestPlanSW/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestPlanSW/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestPlanSWOS/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestPlanSWOS/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestPlanSWOS/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestPlanSWOS/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/all-2025-08-25.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/all-2025-08-25.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/info-2025-08-25.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/info-2025-08-25.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_search.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_search.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_search.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommonFiles/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CommonFiles/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app01/templatetags/custom_tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/templatetags/custom_tag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/all-2025-09-10.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/all-2025-09-10.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/error-2025-09-10.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error-2025-09-10.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/info-2025-09-10.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/info-2025-09-10.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,32 +52,34 @@
     <session id="-392701672">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="55" />
+          <entry key="project.closed" value="56" />
           <entry key="project.open.time.0" value="26" />
           <entry key="project.open.time.1" value="6" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.11" value="4" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.15" value="2" />
+          <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.2" value="6" />
           <entry key="project.open.time.3" value="10" />
           <entry key="project.open.time.4" value="17" />
-          <entry key="project.open.time.5" value="11" />
+          <entry key="project.open.time.5" value="12" />
           <entry key="project.open.time.6" value="8" />
           <entry key="project.open.time.7" value="7" />
           <entry key="project.open.time.8" value="4" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="106" />
+          <entry key="project.opened" value="108" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="16" />
-          <entry key="html" value="1173" />
+          <entry key="html" value="1187" />
+          <entry key="jpg" value="4" />
           <entry key="js" value="10" />
           <entry key="json" value="1" />
-          <entry key="py" value="1888" />
+          <entry key="py" value="1893" />
           <entry key="pyi" value="1" />
           <entry key="rnc" value="13" />
           <entry key="ts" value="4" />
@@ -91,11 +90,12 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="16" />
-          <entry key="HTML" value="1173" />
+          <entry key="HTML" value="1187" />
+          <entry key="Image" value="4" />
           <entry key="JSON" value="1" />
           <entry key="JavaScript" value="10" />
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="1888" />
+          <entry key="Python" value="1893" />
           <entry key="PythonStub" value="1" />
           <entry key="RNG Compact" value="13" />
           <entry key="TypeScript" value="4" />
@@ -107,31 +107,44 @@
           <entry key="ProjectComexcelTrans" value="109" />
           <entry key="css" value="845" />
           <entry key="dummy" value="5" />
-          <entry key="html" value="20646" />
-          <entry key="py" value="42778" />
+          <entry key="html" value="20686" />
+          <entry key="py" value="42832" />
           <entry key="txt" value="47" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="845" />
-          <entry key="HTML" value="20646" />
+          <entry key="HTML" value="20686" />
           <entry key="PLAIN_TEXT" value="52" />
-          <entry key="Python" value="42892" />
+          <entry key="Python" value="42946" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://C:/PythonProject/DDISExcel/excelTrans.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CommonFiles/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="616" column="47" selection-start-line="616" selection-start-column="47" selection-end-line="616" selection-end-column="47" />
+            <state relative-caret-position="248">
+              <caret line="745" column="27" selection-start-line="745" selection-start-column="13" selection-end-line="745" selection-end-column="27" />
               <folding>
-                <element signature="e#23#42#0" expanded="true" />
+                <element signature="e#0#35#0" expanded="true" />
+                <element signature="e#9028#9858#0" />
+                <element signature="e#9931#13575#0" />
+                <element signature="e#17681#30356#0" />
+                <element signature="e#30428#32456#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="903" column="62" lean-forward="true" selection-start-line="903" selection-start-column="62" selection-end-line="903" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -150,36 +163,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ConfigSmartItemPer</find>
-      <find>conSitemInAll</find>
-      <find>init</find>
-      <find>scope.row.conSitemInAll</find>
-      <find>toFixed</find>
-      <find>輸入值未發生改變</find>
-      <find>formatNumber</find>
-      <find>saveData</find>
-      <find>dialogFormVisible</find>
-      <find>addMsg</find>
-      <find>categoryItem</find>
-      <find>phase</find>
-      <find>newValue</find>
-      <find>phase(</find>
-      <find>fileUpload</find>
-      <find>fetchCategoryList</find>
-      <find>SEARCH</find>
-      <find>loading</find>
-      <find>comments1</find>
-      <find>if 'BaseAotomationTime1SKU' in i.keys():</find>
-      <find>comments2</find>
-      <find>tableData</find>
-      <find>comment</find>
-      <find>{% comment %}</find>
-      <find>RemarkforFeatureWeightadjust</find>
-      <find>TDMSUnattendedTime</find>
-      <find>{% comment %}#</find>
-      <find>TDMSTotalTime</find>
-      <find>#new</find>
-      <find>i.Remark</find>
+      <find>menu_html</find>
+      <find>rbac_me</find>
+      <find>class=&quot;sidebar sidebar-hide-to-small</find>
+      <find>get_rbac_menu_items</find>
+      <find>get_menu_html</find>
+      <find>&lt;!-- 顶部菜单栏 --&gt;</find>
+      <find>raw_menu_data</find>
+      <find>rbac_menu</find>
+      <find>rbac_men</find>
+      <find>body</find>
+      <find>Online</find>
+      <find>&lt;div class=&quot;header&quot;&gt;</find>
+      <find>import</find>
+      <find>rbac_m</find>
+      <find>from django import template</find>
+      <find>image</find>
+      <find>img</find>
+      <find>editID</find>
+      <find>submitForm</find>
+      <find>updateData</find>
+      <find>number</find>
+      <find>add</find>
+      <find>addData</find>
+      <find>isEdit</find>
+      <find>editData</find>
+      <find>handleAdd</find>
+      <find>admin</find>
+      <find>selectedKeys</find>
+      <find>rightChecked</find>
+      <find>currentUser</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -191,10 +204,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app01/models.py" />
-        <option value="$PROJECT_DIR$/PersonalExperience/views.py" />
-        <option value="$PROJECT_DIR$/MiscellaneousPurchases/views.py" />
-        <option value="$PROJECT_DIR$/templates/MiscellaneousPurchases/SubscriptionStatus.html" />
         <option value="$PROJECT_DIR$/extra_apps/DjangoUeditor/static/ueditor/dialogs/link/link.html" />
         <option value="$PROJECT_DIR$/A31LessonLProject/views.py" />
         <option value="$PROJECT_DIR$/ABOProjectLessonL/views.py" />
@@ -214,15 +223,12 @@
         <option value="$PROJECT_DIR$/CommonDevice/models.py" />
         <option value="$PROJECT_DIR$/CommonDevice/views.py" />
         <option value="$PROJECT_DIR$/templates/CommonDevice/CommonDevice.html" />
-        <option value="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" />
         <option value="$PROJECT_DIR$/CommonDevice/admin.py" />
         <option value="$PROJECT_DIR$/PersonalInfo/serializers.py" />
         <option value="$USER_HOME$/Desktop/test_smtp.py" />
         <option value="$PROJECT_DIR$/app01/tasks.py" />
-        <option value="$PROJECT_DIR$/CommonFiles/views.py" />
         <option value="$PROJECT_DIR$/PersonalInfo/authentication.py" />
         <option value="$PROJECT_DIR$/app01/views.py" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/CapitalExpenditure/models.py" />
         <option value="$PROJECT_DIR$/CapitalExpenditure/views.py" />
         <option value="$PROJECT_DIR$/templates/CapitalExpenditure/CapitalExpenditure_Summary.html" />
@@ -242,6 +248,13 @@
         <option value="$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_search.html" />
         <option value="$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans.py" />
         <option value="C:/PythonProject/DDISExcel/excelTrans.py" />
+        <option value="$PROJECT_DIR$/templates/base20250911backup.html" />
+        <option value="$PROJECT_DIR$/app01/templatetags/custom_tag.py" />
+        <option value="$PROJECT_DIR$/app01/templatetags/custom_tag20250912backup.py" />
+        <option value="$PROJECT_DIR$/templates/base20250915topmenu.html" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/CommonFiles/views.py" />
+        <option value="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" />
       </list>
     </option>
   </component>
@@ -267,9 +280,10 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="420" />
-    <option name="width" value="978" />
-    <option name="height" value="573" />
+    <option name="x" value="-12" />
+    <option name="y" value="-12" />
+    <option name="width" value="1944" />
+    <option name="height" value="447" />
   </component>
   <component name="ProjectId" id="1Td4In4Uk9cLegXCQfBqS8KHbx0" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -293,7 +307,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -304,19 +317,18 @@
             <path>
               <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
               <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
+              <item name="CommonFiles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
               <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="TestPlanSW" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="TestPlanSWOS" type="462c0819:PsiDirectoryNode" />
+              <item name="CommonFiles" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
@@ -327,6 +339,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -338,17 +351,17 @@
     <property name="SearchEverywhereHistoryKey" value="continue&#9;null&#9;null" />
     <property name="ToolWindowTerminal.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pyvue" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\djangoproject\Reliability_Row_data\templates" />
+      <recent name="C:\djangoproject\Reliability_Row_data\app01\templatetags" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates\TestPlanSWOS" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates\TestPlanSW" />
       <recent name="C:\djangoproject\Reliability_Row_data\CommonFiles" />
-      <recent name="C:\djangoproject\Reliability_Row_data\MiscellaneousPurchases" />
-      <recent name="C:\djangoproject\Reliability_Row_data\templates\Navigations" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\djangoproject\Reliability_Row_data\templates\Bouncing" />
@@ -370,7 +383,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.excelTrans">
+  <component name="RunManager" selected="Django server.DDIS">
     <configuration name="TestDeviceList" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DDIS" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -441,6 +454,9 @@
       <module name="DDIS" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop/rowdata/excelTrans" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -838,6 +854,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="767" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="top" id="SciView" order="0" sideWeight="0.4993395" side_tool="true" weight="0.39215687" />
       <window_info anchor="top" id="Favorites" order="1" sideWeight="0.5266084" weight="0.2761438" />
@@ -846,7 +863,7 @@
       <window_info anchor="bottom" id="Database Changes" order="1" show_stripe_button="false" />
       <window_info anchor="bottom" id="Docker" order="2" show_stripe_button="false" weight="0.3293944" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="4" sideWeight="0.8490866" visible="true" weight="0.35620916" />
+      <window_info anchor="bottom" id="Python Console" order="4" sideWeight="0.8490866" weight="0.35620916" />
       <window_info anchor="bottom" id="Find" order="5" sideWeight="0.49717057" weight="0.32352942" />
       <window_info anchor="bottom" id="Debug" order="6" weight="0.5980392" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
@@ -855,7 +872,7 @@
       <window_info anchor="bottom" id="TypeScript" order="10" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="bottom" content_ui="combo" x="606" y="354" width="202" height="56" id="TODO" order="12" type="WINDOWED" weight="0.32956153" />
-      <window_info anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="13" sideWeight="0.8649722" weight="0.30555555" />
+      <window_info anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="13" sideWeight="0.8649722" visible="true" weight="0.4003268" />
       <window_info anchor="bottom" id="Version Control" order="14" weight="0.3267974" />
       <window_info anchor="bottom" id="Event Log" order="15" sideWeight="0.50119144" weight="0.32843137" />
       <window_info anchor="bottom" id="Database" order="16" sideWeight="0.50277996" side_tool="true" weight="0.31862745" />
@@ -912,97 +929,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CQM/authentication.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="46" column="6" selection-start-line="46" selection-start-column="6" selection-end-line="46" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CQM/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-57">
-          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Reliability_Row_data/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="562" column="13" selection-start-line="562" selection-start-column="13" selection-end-line="562" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PersonalInfo/permissions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8">
-          <caret line="63" column="46" lean-forward="true" selection-start-line="63" selection-start-column="46" selection-end-line="63" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PersonalInfo/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="64" column="5" lean-forward="true" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CommonFiles/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="56" column="52" lean-forward="true" selection-start-line="55" selection-start-column="4" selection-end-line="56" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CapitalExpenditure/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CapitalExpenditure/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="630" column="79" selection-start-line="630" selection-start-column="79" selection-end-line="630" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/CapitalExpenditure/CapitalExpenditure_Summary.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="546" column="103" selection-start-line="546" selection-start-column="103" selection-end-line="546" selection-end-column="103" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python3129/mecheck/Lib/site-packages/django/db/models/query.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="838" column="8" selection-start-line="838" selection-start-column="8" selection-end-line="838" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PersonalInfo/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="74" column="18" selection-start-line="74" selection-start-column="18" selection-end-line="74" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PersonalInfo/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="5406" column="97" selection-start-line="5406" selection-start-column="97" selection-end-line="5406" selection-end-column="97" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Reliability_Row_data/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2052">
@@ -1076,15 +1002,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="174" column="31" selection-start-line="174" selection-start-column="31" selection-end-line="174" selection-end-column="31" />
-          <folding>
-            <element signature="e#127#3490#0" />
-            <element signature="e#3530#9646#0" />
-            <element signature="e#9683#23137#0" />
-            <element signature="e#23177#36675#0" />
-            <element signature="e#36710#38091#0" />
-            <element signature="e#38135#41629#0" />
-            <element signature="e#41669#49750#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1101,13 +1018,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans20250909.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2508">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans20250909.py" />
     <entry file="file://C:/PythonProject/DDISExcel/Progressyuanhuan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -1115,13 +1026,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="463" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/test.py" />
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/web-forms2.rnc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-212">
@@ -1182,13 +1087,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="842" column="60" selection-start-line="842" selection-start-column="60" selection-end-line="842" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/block.rnc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-19">
@@ -1217,16 +1115,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="531" column="51" lean-forward="true" selection-start-line="531" selection-start-column="51" selection-end-line="531" selection-end-column="51" />
-          <folding>
-            <element signature="e#23#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans.py" />
     <entry file="file://C:/PythonProject/DDISExcel/Progress.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="263">
@@ -1254,10 +1143,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
           <caret line="301" column="37" selection-start-line="301" selection-start-column="37" selection-end-line="301" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <element signature="e#127#3522#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1275,20 +1160,137 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit.html">
+    <entry file="file://C:/PythonProject/DDISExcel/excelTrans.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="848" column="27" selection-start-line="848" selection-start-column="27" selection-end-line="848" selection-end-column="60" />
+        <state relative-caret-position="8246">
+          <caret line="616" column="47" selection-start-line="616" selection-start-column="47" selection-end-line="616" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/PythonProject/DDISExcel/excelTrans.py">
+    <entry file="file://$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="616" column="47" selection-start-line="616" selection-start-column="47" selection-end-line="616" selection-end-column="47" />
+        <state relative-caret-position="162">
+          <caret line="2154" lean-forward="true" selection-start-line="2154" selection-end-line="2154" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app01/templatetags/custom_tag20250912backup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="16" column="56" lean-forward="true" selection-end-line="436" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app01/templatetags/custom_tag.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="345" column="41" selection-start-line="345" selection-start-column="41" selection-end-line="345" selection-end-column="41" />
           <folding>
-            <element signature="e#23#42#0" expanded="true" />
+            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#191#4424#0" />
+            <element signature="e#15525#17865#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/src/test20.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/src/test12.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Navigation.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="42" column="22" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/src/hero.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/images/c1.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Navigations.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="29" column="9" lean-forward="true" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base20250915topmenu.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="1158" column="7" selection-start-line="1158" selection-start-column="7" selection-end-line="1158" selection-end-column="7" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#1;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#2;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#3;n#ul#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#4;n#ul#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#button#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#2;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#li#0;n#ol#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base20250911backup.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="526" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="526" column="7" selection-start-line="526" selection-start-column="7" selection-end-line="526" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CommonFiles/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="745" column="27" selection-start-line="745" selection-start-column="13" selection-end-line="745" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#9028#9858#0" />
+            <element signature="e#9931#13575#0" />
+            <element signature="e#17681#30356#0" />
+            <element signature="e#30428#32456#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="903" column="62" lean-forward="true" selection-start-line="903" selection-start-column="62" selection-end-line="903" selection-end-column="62" />
         </state>
       </provider>
     </entry>

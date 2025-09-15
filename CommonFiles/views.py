@@ -743,6 +743,7 @@ def CommonFiles_edit(request):
             "categoryOptions": categoryOptions,
             "CGOptions": CGOptions,
             "SWHWOptions": SWHWOptions,
+            "CurrentAccount": onlineuser,
 
         }
         # print(data)

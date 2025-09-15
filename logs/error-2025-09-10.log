@@ -1,0 +1,106 @@
+[2025-09-10 14:41:56,321] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /.well-known/appspecific/com.chrome.devtools.json
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-09-10 14:41:56,325] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 500 [70.86, 127.0.0.1:52825]
+[2025-09-10 15:37:07,427] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-09-10 15:37:07,432] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /favicon.ico 500 [0.15, 127.0.0.1:57372]
+[2025-09-10 15:42:42,174] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /.well-known/appspecific/com.chrome.devtools.json
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-09-10 15:42:42,176] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 500 [0.09, 127.0.0.1:57785]
+[2025-09-10 15:42:42,741] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-09-10 15:42:42,744] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /favicon.ico 500 [0.20, 127.0.0.1:57789]
+[2025-09-10 15:42:48,376] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /favicon.ico
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 14, in __call__
+    response = self.process_request(request)
+  File "C:\djangoproject\Reliability_Row_data\middleware\checkper.py", line 80, in process_request
+    print(permission_url)
+OSError: [Errno 22] Invalid argument
+[2025-09-10 15:42:48,379] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /favicon.ico 500 [0.08, 127.0.0.1:57789]
+[2025-09-11 08:41:46,595] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 105, in login
+    print(Non_login_path, 'Non_login_path')
+OSError: [Errno 22] Invalid argument
+[2025-09-11 08:41:46,598] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /login/?next= 500 [0.07, 127.0.0.1:62500]
+[2025-09-11 08:42:10,153] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 105, in login
+    print(Non_login_path, 'Non_login_path')
+OSError: [Errno 22] Invalid argument
+[2025-09-11 08:42:10,158] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /login/?next= 500 [0.13, 127.0.0.1:62500]
+[2025-09-11 08:42:14,799] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 105, in login
+    print(Non_login_path, 'Non_login_path')
+OSError: [Errno 22] Invalid argument
+[2025-09-11 08:42:14,806] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /login/?next= 500 [0.36, 127.0.0.1:62500]
+[2025-09-11 08:43:36,288] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\views.py", line 105, in login
+    print(Non_login_path, 'Non_login_path')
+OSError: [Errno 22] Invalid argument
+[2025-09-11 08:43:36,294] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /login/?next= 500 [0.11, 127.0.0.1:62776]

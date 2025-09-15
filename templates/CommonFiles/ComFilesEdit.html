@@ -598,6 +598,7 @@ tbody tr td:last-child {
                 selectedKeys: [], //["C1010S3"] 初始已选到右侧的账户和传给后端的所有选中的人员（右侧默认显示 user003）
                 leftChecked: [],  //["C1010S3"] 左侧默认选中 user001（但未移动到右侧）
                 rightChecked: [], //["C1010S3"] 右侧默认选中 user003（已移动到右侧）
+                CurrentAccount: '',
                 search:'',
                 Owner: '',//搜索按钮前面的负责人绑定的值，用来记录搜索条件-负责人的值，是字符串
                 number: '',
@@ -709,6 +710,7 @@ tbody tr td:last-child {
                     this.allSubCategorys = res.data.allSubCategorys;
                     this.allCategorys = res.data.allCategorys;
                     this.tableContent=res.data.content;
+                    this.CurrentAccount=res.data.CurrentAccount;
                     this.totalNum = this.tableContent.length;
                     this.elbuttonloading = false;
                     this.tableloading = false;
@@ -893,6 +895,14 @@ tbody tr td:last-child {
                   this.resetForm();
                   this.fileList = [];
                   this.selectedKeys = [];
+                  // 默认选中当前用户
+                if (this.CurrentAccount) {
+                    // 设置右侧列表默认选中当前用户
+                    this.rightChecked = [this.CurrentAccount];
+
+                    // 同时添加到已选中的key值数组
+                    this.selectedKeys = [this.CurrentAccount];
+                }
                 this.dialogVisible=true;
             },
 
