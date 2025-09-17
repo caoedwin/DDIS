@@ -29,7 +29,8 @@ class A31lesson_learn(models.Model):
     choosecat = (
         ("", ""),
         ("Reliability", "Reliability"),
-        ("Compatibility", "Compatibility")
+        ("Compatibility", "Compatibility"),
+        ("Common", "Common")
     )
     choosestatus = (
         ("", ""),

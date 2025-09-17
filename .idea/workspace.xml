@@ -5,15 +5,543 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49dc6e49-0cbb-4f1d-b6a9-9b615cad6699" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app01/templatetags/custom_tag20250912backup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/base20250911backup.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/base20250915topmenu.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/jszip.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/pdf.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/pdf.worker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A31LessonLProject/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/A31LessonLProject/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommonFiles/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/CommonFiles/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommonFiles/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CommonFiles/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommonFiles/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CommonFiles/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app01/templatetags/custom_tag.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/templatetags/custom_tag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/all-2025-09-10.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/all-2025-09-10.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/error-2025-09-10.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/error-2025-09-10.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/info-2025-09-10.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/info-2025-09-10.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/all-2025-09-15.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/all-2025-09-15.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/info-2025-09-15.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/info-2025-09-15.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleware/checkper.py" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/checkper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/README_zh.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/csv/csv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/csv/csv.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/csv/line-buffer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/csv/line-buffer.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/csv/stream-converter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/csv/stream-converter.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/anchor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/anchor.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/cell.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/cell.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/column.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/column.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/data-validations.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/data-validations.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/defined-names.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/defined-names.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/enums.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/enums.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/image.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/modelcontainer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/modelcontainer.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/note.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/note.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/range.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/range.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/row.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/row.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/table.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/table.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/workbook.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/workbook.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/worksheet.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/doc/worksheet.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/exceljs.bare.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/exceljs.bare.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/exceljs.browser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/exceljs.browser.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/exceljs.nodejs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/exceljs.nodejs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/hyperlink-reader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/hyperlink-reader.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/sheet-comments-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/sheet-comments-writer.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/sheet-rels-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/sheet-rels-writer.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/workbook-reader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/workbook-reader.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/workbook-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/workbook-writer.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/worksheet-reader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/worksheet-reader.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/worksheet-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/stream/xlsx/worksheet-writer.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/auto-drain.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/auto-drain.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/browser-buffer-decode.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/browser-buffer-decode.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/browser-buffer-encode.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/browser-buffer-encode.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/cell-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/cell-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/col-cache.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/col-cache.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/copy-style.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/copy-style.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/encryptor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/encryptor.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/iterate-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/iterate-stream.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/parse-sax.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/parse-sax.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/shared-formula.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/shared-formula.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/shared-strings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/shared-strings.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/stream-base64.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/stream-base64.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/stream-buf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/stream-buf.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/string-buf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/string-buf.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/string-builder.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/string-builder.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/stuttered-pipe.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/stuttered-pipe.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/typed-stack.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/typed-stack.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/under-dash.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/under-dash.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/utils.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/xml-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/xml-stream.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/zip-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/utils/zip-stream.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/defaultnumformats.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/defaultnumformats.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/rel-type.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/rel-type.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/base-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/base-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/defined-name-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/defined-name-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/sheet-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/sheet-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-calc-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-calc-properties-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-properties-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-view-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-view-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/book/workbook-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/comment-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/comment-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/comments-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/comments-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/style/vml-position-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/style/vml-position-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/style/vml-protection-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/style/vml-protection-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-anchor-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-client-data-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-client-data-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-notes-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-notes-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-shape-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-shape-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-textbox-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/comment/vml-textbox-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/composite-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/composite-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/app-heading-pairs-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/app-heading-pairs-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/app-titles-of-parts-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/app-titles-of-parts-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/app-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/app-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/content-types-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/content-types-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/core-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/core-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/relationship-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/relationship-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/relationships-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/core/relationships-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/base-cell-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/base-cell-anchor-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/blip-fill-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/blip-fill-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/blip-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/blip-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/c-nv-pic-pr-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/c-nv-pic-pr-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/c-nv-pr-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/c-nv-pr-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/cell-position-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/cell-position-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/drawing-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/drawing-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/ext-lst-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/ext-lst-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/hlink-click-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/hlink-click-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/nv-pic-pr-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/nv-pic-pr-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/one-cell-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/one-cell-anchor-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/pic-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/pic-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/sp-pr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/sp-pr.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/two-cell-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/drawing/two-cell-anchor-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/list-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/list-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/auto-filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/auto-filter-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cell-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cell-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/cf-icon-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/cf-icon-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/cf-rule-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/cf-rule-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/cfvo-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/cfvo-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/conditional-formatting-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/conditional-formatting-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/conditional-formattings-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/conditional-formattings-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/databar-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/databar-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/f-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/f-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/icon-set-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/icon-set-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/sqref-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf-ext/sqref-ext-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/cf-rule-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/cf-rule-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/cfvo-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/cfvo-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/color-scale-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/color-scale-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/conditional-formatting-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/conditional-formatting-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/conditional-formattings-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/conditional-formattings-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/databar-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/databar-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/ext-lst-ref-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/ext-lst-ref-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/formula-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/formula-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/icon-set-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/cf/icon-set-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/col-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/col-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/data-validations-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/data-validations-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/dimension-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/dimension-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/drawing-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/drawing-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/ext-lst-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/ext-lst-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/header-footer-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/header-footer-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/hyperlink-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/hyperlink-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/merge-cell-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/merge-cell-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/merges.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/merges.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/outline-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/outline-properties-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-breaks-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-breaks-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-margins-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-margins-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-setup-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-setup-properties-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-setup-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/page-setup-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/picture-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/picture-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/print-options-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/print-options-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/row-breaks-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/row-breaks-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/row-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/row-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-format-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-format-properties-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-properties-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-protection-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-protection-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-view-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/sheet-view-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/table-part-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/table-part-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/worksheet-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/sheet/worksheet-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/boolean-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/boolean-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/date-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/date-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/float-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/float-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/integer-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/integer-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/string-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/simple/string-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/static-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/static-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/phonetic-text-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/phonetic-text-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/rich-text-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/rich-text-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/shared-string-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/shared-string-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/shared-strings-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/shared-strings-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/text-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/strings/text-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/alignment-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/alignment-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/border-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/border-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/color-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/color-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/dxf-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/dxf-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/fill-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/fill-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/font-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/font-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/numfmt-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/numfmt-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/protection-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/protection-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/style-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/style-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/styles-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/styles-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/underline-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/style/underline-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/auto-filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/auto-filter-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/custom-filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/custom-filter-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/filter-column-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/filter-column-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/filter-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/table-column-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/table-column-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/table-style-info-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/table-style-info-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/table-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xform/table/table-xform.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xlsx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xlsx.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xml/theme1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/es5/xlsx/xml/theme1.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.bare.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.bare.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.bare.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.bare.min.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/dist/exceljs.min.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/excel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/csv/csv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/csv/line-buffer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/csv/stream-converter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/anchor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/cell.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/column.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/data-validations.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/data/theme1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/defined-names.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/enums.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/modelcontainer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/note.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/range.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/row.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/table.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/workbook.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/doc/worksheet.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/exceljs.bare.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/exceljs.browser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/exceljs.nodejs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/hyperlink-reader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/sheet-comments-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/sheet-rels-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/workbook-reader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/workbook-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/worksheet-reader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/stream/xlsx/worksheet-writer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/auto-drain.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/browser-buffer-decode.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/browser-buffer-encode.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/cell-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/col-cache.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/copy-style.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/encryptor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/iterate-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/parse-sax.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/shared-formula.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/shared-strings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/stream-base64.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/stream-buf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/string-buf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/string-builder.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/stuttered-pipe.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/typed-stack.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/under-dash.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/xml-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/utils/zip-stream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/calcChain.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/core.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/defaultnumformats.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/rel-type.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/workbook.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/base-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/book/defined-name-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/book/sheet-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/book/workbook-calc-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/book/workbook-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/book/workbook-view-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/book/workbook-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/comment-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/comments-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/style/vml-position-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/style/vml-protection-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/vml-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/vml-client-data-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/vml-notes-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/vml-shape-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/comment/vml-textbox-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/composite-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/app-heading-pairs-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/app-titles-of-parts-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/app-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/content-types-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/core-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/relationship-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/core/relationships-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/base-cell-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/blip-fill-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/blip-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/c-nv-pic-pr-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/c-nv-pr-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/cell-position-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/drawing-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/ext-lst-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/hlink-click-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/nv-pic-pr-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/one-cell-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/pic-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/sp-pr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/drawing/two-cell-anchor-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/list-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/auto-filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cell-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/cf-icon-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/cf-rule-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/cfvo-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/conditional-formatting-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/conditional-formattings-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/databar-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/f-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/icon-set-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf-ext/sqref-ext-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/cf-rule-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/cfvo-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/color-scale-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/conditional-formatting-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/conditional-formattings-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/databar-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/ext-lst-ref-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/formula-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/cf/icon-set-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/col-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/data-validations-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/dimension-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/drawing-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/ext-lst-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/header-footer-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/hyperlink-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/merge-cell-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/merges.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/outline-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/page-breaks-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/page-margins-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/page-setup-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/page-setup-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/picture-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/print-options-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/row-breaks-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/row-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/sheet-format-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/sheet-properties-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/sheet-protection-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/sheet-view-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/table-part-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/sheet/worksheet-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/simple/boolean-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/simple/date-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/simple/float-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/simple/integer-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/simple/string-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/static-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/strings/phonetic-text-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/strings/rich-text-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/strings/shared-string-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/strings/shared-strings-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/strings/text-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/alignment-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/border-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/color-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/dxf-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/fill-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/font-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/numfmt-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/protection-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/style-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/styles-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/style/underline-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/auto-filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/custom-filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/filter-column-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/filter-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/table-column-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/table-style-info-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xform/table/table-xform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xlsx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xml/theme1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/lib/xlsx/xml/theme1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/exceljs/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/node_modules/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/A31LessonLProject/Lesson_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/A31LessonLProject/Lesson_edit.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
@@ -75,11 +603,11 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="16" />
-          <entry key="html" value="1187" />
+          <entry key="html" value="1197" />
           <entry key="jpg" value="4" />
-          <entry key="js" value="10" />
+          <entry key="js" value="15" />
           <entry key="json" value="1" />
-          <entry key="py" value="1893" />
+          <entry key="py" value="1904" />
           <entry key="pyi" value="1" />
           <entry key="rnc" value="13" />
           <entry key="ts" value="4" />
@@ -90,12 +618,12 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="16" />
-          <entry key="HTML" value="1187" />
+          <entry key="HTML" value="1197" />
           <entry key="Image" value="4" />
           <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="10" />
+          <entry key="JavaScript" value="15" />
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="1893" />
+          <entry key="Python" value="1904" />
           <entry key="PythonStub" value="1" />
           <entry key="RNG Compact" value="13" />
           <entry key="TypeScript" value="4" />
@@ -107,17 +635,17 @@
           <entry key="ProjectComexcelTrans" value="109" />
           <entry key="css" value="845" />
           <entry key="dummy" value="5" />
-          <entry key="html" value="20686" />
-          <entry key="py" value="42832" />
+          <entry key="html" value="20958" />
+          <entry key="py" value="42975" />
           <entry key="txt" value="47" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="845" />
-          <entry key="HTML" value="20686" />
+          <entry key="HTML" value="20958" />
           <entry key="PLAIN_TEXT" value="52" />
-          <entry key="Python" value="42946" />
+          <entry key="Python" value="43089" />
         </counts>
       </usages-collector>
     </session>
@@ -125,26 +653,34 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CommonFiles/views.py">
+        <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="745" column="27" selection-start-line="745" selection-start-column="13" selection-end-line="745" selection-end-column="27" />
-              <folding>
-                <element signature="e#0#35#0" expanded="true" />
-                <element signature="e#9028#9858#0" />
-                <element signature="e#9931#13575#0" />
-                <element signature="e#17681#30356#0" />
-                <element signature="e#30428#32456#0" />
-              </folding>
+            <state relative-caret-position="82">
+              <caret line="183" column="22" lean-forward="true" selection-start-line="183" selection-start-column="22" selection-end-line="183" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html">
+        <entry file="file://$PROJECT_DIR$/A31LessonLProject/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="903" column="62" lean-forward="true" selection-start-line="903" selection-start-column="62" selection-end-line="903" selection-end-column="62" />
+            <state relative-caret-position="228">
+              <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/A31LessonLProject/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="163">
+              <caret line="32" column="8" lean-forward="true" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -163,36 +699,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>menu_html</find>
-      <find>rbac_me</find>
-      <find>class=&quot;sidebar sidebar-hide-to-small</find>
-      <find>get_rbac_menu_items</find>
-      <find>get_menu_html</find>
-      <find>&lt;!-- 顶部菜单栏 --&gt;</find>
-      <find>raw_menu_data</find>
-      <find>rbac_menu</find>
-      <find>rbac_men</find>
-      <find>body</find>
-      <find>Online</find>
-      <find>&lt;div class=&quot;header&quot;&gt;</find>
-      <find>import</find>
-      <find>rbac_m</find>
-      <find>from django import template</find>
-      <find>image</find>
-      <find>img</find>
-      <find>editID</find>
-      <find>submitForm</find>
-      <find>updateData</find>
-      <find>number</find>
-      <find>add</find>
-      <find>addData</find>
-      <find>isEdit</find>
-      <find>editData</find>
-      <find>handleAdd</find>
-      <find>admin</find>
-      <find>selectedKeys</find>
-      <find>rightChecked</find>
-      <find>currentUser</find>
+      <find>video</find>
+      <find>isVideoFile</find>
+      <find>getFullUrl</find>
+      <find>photos</find>
+      <find>photos.map</find>
+      <find>getImagePreviewList</find>
+      <find>eltable-photo</find>
+      <find>pdf</find>
+      <find>pageNum</find>
+      <find>container</find>
+      <find>pdfTotalPages</find>
+      <find>previewPDF</find>
+      <find>openPre</find>
+      <find>previewType</find>
+      <find>?.</find>
+      <find>previewExcel</find>
+      <find>openP</find>
+      <find>previewPPT</find>
+      <find>innerHTML</find>
+      <find>previewContainerId</find>
+      <find>ppt_preview</find>
+      <find>file_obj</find>
+      <find>files = [f for f in os.listdir(temp_dir)</find>
+      <find>Pptx</find>
+      <find>getPreviewList</find>
+      <find>openPreview</find>
+      <find>previewPPTAsPDF</find>
+      <find>prevSlide</find>
+      <find>files</find>
+      <find>Compatibility</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -204,20 +740,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/extra_apps/DjangoUeditor/static/ueditor/dialogs/link/link.html" />
-        <option value="$PROJECT_DIR$/A31LessonLProject/views.py" />
-        <option value="$PROJECT_DIR$/ABOProjectLessonL/views.py" />
-        <option value="$PROJECT_DIR$/templates/CQM/CQM_search.html" />
-        <option value="$PROJECT_DIR$/templates/CQM/CQM_edit.html" />
-        <option value="$PROJECT_DIR$/A32LessonLProject/views.py" />
-        <option value="$PROJECT_DIR$/templates/CommonFiles/ComDevEdit.html" />
         <option value="$PROJECT_DIR$/Reliability_Row_data/urls.py" />
-        <option value="$PROJECT_DIR$/CommonFiles/urls.py" />
-        <option value="$PROJECT_DIR$/templates/A31LessonLProject/Lesson_edit.html" />
         <option value="$PROJECT_DIR$/templates/A32LessonLProject/Lesson_edit.html" />
         <option value="$PROJECT_DIR$/templates/ABOProjectLessonL/Lesson_edit.html" />
         <option value="$PROJECT_DIR$/templates/Lesson_edit.html" />
-        <option value="$PROJECT_DIR$/CommonFiles/models.py" />
         <option value="$PROJECT_DIR$/CommonFiles/admin.py" />
         <option value="$PROJECT_DIR$/Reliability_Row_data/settings.py" />
         <option value="$PROJECT_DIR$/CommonDevice/models.py" />
@@ -249,12 +775,22 @@
         <option value="$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans.py" />
         <option value="C:/PythonProject/DDISExcel/excelTrans.py" />
         <option value="$PROJECT_DIR$/templates/base20250911backup.html" />
-        <option value="$PROJECT_DIR$/app01/templatetags/custom_tag.py" />
         <option value="$PROJECT_DIR$/app01/templatetags/custom_tag20250912backup.py" />
         <option value="$PROJECT_DIR$/templates/base20250915topmenu.html" />
         <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/static/js/xlsx.full.min - 副本.js" />
+        <option value="$PROJECT_DIR$/static/js/pdf.js" />
+        <option value="$PROJECT_DIR$/static/js/pdf.worker.js" />
+        <option value="$PROJECT_DIR$/static/js/jszip.min.js" />
+        <option value="$PROJECT_DIR$/CommonFiles/urls.py" />
+        <option value="$PROJECT_DIR$/CommonFiles/models.py" />
+        <option value="$PROJECT_DIR$/app01/templatetags/custom_tag.py" />
+        <option value="$PROJECT_DIR$/middleware/checkper.py" />
         <option value="$PROJECT_DIR$/CommonFiles/views.py" />
         <option value="$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html" />
+        <option value="$PROJECT_DIR$/A31LessonLProject/models.py" />
+        <option value="$PROJECT_DIR$/templates/A31LessonLProject/Lesson_edit.html" />
+        <option value="$PROJECT_DIR$/A31LessonLProject/forms.py" />
       </list>
     </option>
   </component>
@@ -317,23 +853,7 @@
             <path>
               <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
               <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
-              <item name="CommonFiles" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="CommonFiles" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DDIS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Reliability_Row_data" type="462c0819:PsiDirectoryNode" />
-              <item name="TestPlanSWOS" type="462c0819:PsiDirectoryNode" />
+              <item name="A31LessonLProject" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -351,17 +871,17 @@
     <property name="SearchEverywhereHistoryKey" value="continue&#9;null&#9;null" />
     <property name="ToolWindowTerminal.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pyvue" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DMS" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\djangoproject\Reliability_Row_data\static\js" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates" />
       <recent name="C:\djangoproject\Reliability_Row_data\app01\templatetags" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates\TestPlanSWOS" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates\TestPlanSW" />
-      <recent name="C:\djangoproject\Reliability_Row_data\CommonFiles" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\djangoproject\Reliability_Row_data\templates\Bouncing" />
@@ -872,7 +1392,36 @@
       <window_info anchor="bottom" id="TypeScript" order="10" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="bottom" content_ui="combo" x="606" y="354" width="202" height="56" id="TODO" order="12" type="WINDOWED" weight="0.32956153" />
-      <window_info anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="13" sideWeight="0.8649722" visible="true" weight="0.4003268" />
+      <window_info anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="13" sideWeight="0.8649722" weight="0.0" />
+      <window_info anchor="bottom" id="Version Control" order="14" weight="0.3267974" />
+      <window_info anchor="bottom" id="Event Log" order="15" sideWeight="0.50119144" weight="0.32843137" />
+      <window_info anchor="bottom" id="Database" order="16" sideWeight="0.50277996" side_tool="true" weight="0.31862745" />
+      <window_info anchor="bottom" x="226" y="70" width="828" height="612" id="Terminal" order="17" sideWeight="0.4980143" visible="true" weight="0.2369281" />
+      <window_info anchor="bottom" id="Structure" order="18" sideWeight="0.1350278" side_tool="true" weight="0.31862745" />
+      <window_info anchor="right" id="Coverage" order="0" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+      <window_info anchor="right" x="0" y="0" width="337" height="637" id="Documentation" order="4" side_tool="true" weight="0.3293092" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="top" id="SciView" order="0" sideWeight="0.4993395" side_tool="true" weight="0.39215687" />
+      <window_info anchor="top" id="Favorites" order="1" sideWeight="0.5266084" weight="0.2761438" />
+      <window_info content_ui="combo" x="597" y="254" width="342" height="317" id="Project" order="0" sideWeight="0.4722689" type="SLIDING" weight="0.24146147" />
+      <window_info anchor="bottom" id="REST Client" order="0" sideWeight="0.49966466" weight="0.43281472" />
+      <window_info anchor="bottom" id="Database Changes" order="1" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Docker" order="2" show_stripe_button="false" weight="0.3293944" />
+      <window_info anchor="bottom" id="Message" order="3" />
+      <window_info anchor="bottom" id="Python Console" order="4" sideWeight="0.8490866" weight="0.35620916" />
+      <window_info anchor="bottom" id="Find" order="5" sideWeight="0.49717057" weight="0.32352942" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.5980392" />
+      <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
+      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="9" weight="0.32843137" />
+      <window_info anchor="bottom" id="TypeScript" order="10" />
+      <window_info anchor="bottom" id="Messages" order="11" />
+      <window_info anchor="bottom" content_ui="combo" x="606" y="354" width="202" height="56" id="TODO" order="12" type="WINDOWED" weight="0.32956153" />
+      <window_info active="true" anchor="bottom" x="29" y="228" width="1479" height="369" id="Run" order="13" sideWeight="0.8649722" visible="true" weight="0.40522876" />
       <window_info anchor="bottom" id="Version Control" order="14" weight="0.3267974" />
       <window_info anchor="bottom" id="Event Log" order="15" sideWeight="0.50119144" weight="0.32843137" />
       <window_info anchor="bottom" id="Database" order="16" sideWeight="0.50277996" side_tool="true" weight="0.31862745" />
@@ -883,7 +1432,7 @@
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
       <window_info anchor="right" x="0" y="0" width="337" height="637" id="Documentation" order="4" side_tool="true" weight="0.3293092" />
-    </layout>
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -929,125 +1478,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Reliability_Row_data/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2052">
-          <caret line="128" column="18" selection-start-line="128" selection-start-column="18" selection-end-line="128" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PersonalInfo/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="7" selection-start-line="7" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CDM/urls.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app01/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="62" column="26" selection-start-line="62" selection-start-column="12" selection-end-line="62" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CDM/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="40" column="39" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CQM/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="1242" column="25" selection-start-line="1242" selection-start-column="18" selection-end-line="1242" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python3129/mecheck/Lib/site-packages/django/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestPlanSW/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="28" lean-forward="true" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app01/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="607" column="16" selection-start-line="607" selection-start-column="16" selection-end-line="607" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python3129/mecheck/Lib/site-packages/pandas/core/indexes/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="59">
-          <caret line="3357" column="17" lean-forward="true" selection-start-line="3357" selection-start-column="17" selection-end-line="3357" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/PythonProject/DDISExcel/excelmain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="177" column="87" selection-start-line="177" selection-start-column="87" selection-end-line="177" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TestPlanSWOS/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="174" column="31" selection-start-line="174" selection-start-column="31" selection-end-line="174" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit20250909.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/TestPlanSWOS/TestPlanSW_edit20250909.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://C:/PythonProject/DDISExcel/Excel_InputNB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1777">
-          <caret line="71" column="56" lean-forward="true" selection-start-line="71" selection-start-column="56" selection-end-line="71" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/excelTrans20250909.py" />
-    <entry file="file://C:/PythonProject/DDISExcel/Progressyuanhuan.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Desktop/rowdata/excelTrans/test.py" />
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/web-forms2.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-212">
-          <caret line="71" column="18" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/phrase.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="345" column="16" selection-start-line="345" selection-start-column="16" selection-end-line="345" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/web-forms.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="380" column="22" selection-start-line="380" selection-start-column="22" selection-end-line="380" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.dom.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3">
@@ -1188,18 +1618,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app01/templatetags/custom_tag.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="345" column="41" selection-start-line="345" selection-start-column="41" selection-end-line="345" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-            <element signature="e#191#4424#0" />
-            <element signature="e#15525#17865#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/src/test20.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -1273,24 +1691,245 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CommonFiles/views.py">
+    <entry file="file://$PROJECT_DIR$/static/js/mammoth.browser.min.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="745" column="27" selection-start-line="745" selection-start-column="13" selection-end-line="745" selection-end-column="27" />
+        <state relative-caret-position="261">
+          <caret line="21" column="3270" selection-start-line="21" selection-start-column="3270" selection-end-line="21" selection-end-column="3270" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/pdf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="21" column="280719" selection-start-line="21" selection-start-column="280719" selection-end-line="21" selection-end-column="280719" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/pdf.worker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="21" column="1068847" selection-start-line="21" selection-start-column="1068847" selection-end-line="21" selection-end-column="1068847" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A32LessonLProject/Lesson_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="252" column="34" selection-start-line="252" selection-start-column="29" selection-end-line="252" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/jszip.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="12" column="95391" selection-start-line="12" selection-start-column="95391" selection-end-line="12" selection-end-column="95391" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#9028#9858#0" />
-            <element signature="e#9931#13575#0" />
-            <element signature="e#17681#30356#0" />
-            <element signature="e#30428#32456#0" />
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/service/init_permission.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/middleware/checkper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-346">
+          <caret line="80" column="39" lean-forward="true" selection-start-line="80" selection-start-column="39" selection-end-line="80" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/middleware/UserIP.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1539">
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app01/templatetags/custom_tag.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1406">
+          <caret line="346" column="25" lean-forward="true" selection-start-line="346" selection-start-column="25" selection-end-line="346" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#191#4424#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CommonFiles/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="9" lean-forward="true" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/pptxjs.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="12" column="41" lean-forward="true" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
+          <folding>
+            <element signature="e#779240#779537#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CommonFiles/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Lesson_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="305" column="44" lean-forward="true" selection-start-line="305" selection-start-column="44" selection-end-line="305" selection-end-column="44" />
+          <folding>
+            <element signature="e#12431#12467#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/CommonFiles/ComFilesEdit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="903" column="62" lean-forward="true" selection-start-line="903" selection-start-column="62" selection-end-line="903" selection-end-column="62" />
+        <state relative-caret-position="5">
+          <caret line="1801" column="21" lean-forward="true" selection-start-line="1801" selection-start-column="21" selection-end-line="1801" selection-end-column="21" />
+          <folding>
+            <element signature="n#el-dialog#0;n#div#0;n#!!top" />
+            <element signature="n#style#0;n#div#0;n#el-dialog#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#div#0;n#el-dialog#1;n#div#0;n#!!top" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#el-dialog#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#el-dialog#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#2;n#el-dialog#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-image#0;n#div#0;n#div#0;n#template#0;n#el-table-column#11;n#el-table#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#el-button#1;n#template#0;n#div#0;n#template#0;n#el-table-column#11;n#el-table#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#28242#30323#0#HTML" />
+            <element signature="e#30387#30981#0#HTML" />
+            <element signature="e#31029#33550#0#HTML" />
+            <element signature="e#33588#34228#0#HTML" />
+            <element signature="e#34328#35224#0#HTML" />
+            <element signature="e#35277#35578#0#HTML" />
+            <element signature="e#35633#35712#0#HTML" />
+            <element signature="e#35751#36067#0#HTML" />
+            <element signature="e#36106#36257#0#HTML" />
+            <element signature="e#36298#36597#0#HTML" />
+            <element signature="e#36629#36738#0#HTML" />
+            <element signature="e#36787#37336#0#HTML" />
+            <element signature="e#37351#39074#0#DjangoTemplate" />
+            <element signature="e#39119#42548#0#HTML" />
+            <element signature="e#42596#42916#0#HTML" />
+            <element signature="e#42964#43516#0#HTML" />
+            <element signature="e#43547#47257#0#HTML" />
+            <element signature="e#47293#51032#0#HTML" />
+            <element signature="e#51079#51540#0#HTML" />
+            <element signature="e#51580#53652#0#HTML" />
+            <element signature="e#53709#53900#0#HTML" />
+            <element signature="e#53924#57652#0#HTML" />
+            <element signature="e#57717#59533#0#HTML" />
+            <element signature="e#59568#59618#0#HTML" />
+            <element signature="e#59661#59723#0#HTML" />
+            <element signature="e#59755#59798#0#HTML" />
+            <element signature="e#59836#60787#0#HTML" />
+            <element signature="e#60822#66464#0#HTML" />
+            <element signature="e#66519#66623#0#HTML" />
+            <element signature="e#66662#66890#0#HTML" />
+            <element signature="e#75005#75755#0#HTML" />
+            <element signature="e#70074#70574#0#HTML" />
+            <element signature="e#70592#70739#0#HTML" />
+            <element signature="e#70757#70921#0#HTML" />
+            <element signature="e#71276#71325#0#HTML" />
+            <element signature="e#67250#68004#0#HTML" />
+            <element signature="e#74107#76260#0#HTML" />
+            <element signature="e#68778#69460#0#HTML" />
+            <element signature="e#69517#69752#0#HTML" />
+            <element signature="e#81788#82714#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CommonFiles/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="808" column="20" selection-start-line="808" selection-start-column="20" selection-end-line="808" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_result_search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="6" column="11" lean-forward="true" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_upload.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2108">
+          <caret line="7" column="43" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_export.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_result.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-31" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/A31LessonLProject/Lesson_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="183" column="22" lean-forward="true" selection-start-line="183" selection-start-column="22" selection-end-line="183" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/A31LessonLProject/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="32" column="8" lean-forward="true" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/A31LessonLProject/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

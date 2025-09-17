@@ -4,6 +4,41 @@ from app01.models import UserInfo
 class files(models.Model):
     files = models.FileField(upload_to="CommonFiles/", null=True, blank=True, verbose_name="文件内容")
     single = models.CharField(max_length=100, null=True, blank=True, verbose_name='文件名称')
+
+    def save(self, *args, **kwargs):
+        # 处理 single 字段可能为文件对象的情况
+        if hasattr(self.single, 'name'):
+            # 如果是文件对象，获取文件名
+            self.single = self.single.name
+
+        # 自动设置文件类型
+        if self.single:
+            # 确保 single 是字符串
+            if isinstance(self.single, str):
+                ext = self.single.split('.')[-1].lower()
+            else:
+                # 如果不是字符串，尝试转换为字符串
+                ext = str(self.single).split('.')[-1].lower()
+
+            if ext in ['jpg', 'jpeg', 'png', 'gif']:
+                self.file_type = 'image'
+            elif ext in ['mp4', 'avi', 'mov']:
+                self.file_type = 'video'
+            elif ext in ['pdf']:
+                self.file_type = 'pdf'
+            elif ext in ['ppt', 'pptx']:
+                self.file_type = 'ppt'
+            elif ext in ['xls', 'xlsx']:
+                self.file_type = 'excel'
+            elif ext in ['doc', 'docx']:
+                self.file_type = 'word'
+            else:
+                self.file_type = 'other'
+        else:
+            self.file_type = 'other'
+
+        super().save(*args, **kwargs)
+
     def __unicode__(self):  # __str__ on Python 3
         return (self.id,self.single)
 from django.db.models.signals import pre_delete

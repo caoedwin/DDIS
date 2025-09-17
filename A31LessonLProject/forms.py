@@ -9,7 +9,8 @@ class A31lessonlearn(forms.Form):
     choosecat = (
         ("", ""),
         ("Reliability", "Reliability"),
-        ("Compatibility", "Compatibility")
+        ("Compatibility", "Compatibility"),
+        ("Common", "Common")
     )
     choosestatus = [
         # ("", ""),

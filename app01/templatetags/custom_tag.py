@@ -343,7 +343,7 @@ def get_rbac_menu_items(request):
                     })
 
         top_menu_items.append(menu_item)
-    print("top_menu_items",top_menu_items)
+    # print("top_menu_items",top_menu_items)
     return top_menu_items
 
 

@@ -11,6 +11,12 @@ from operator import itemgetter, attrgetter
 from collections import Counter
 from .models import CommonFiles, Category, SubCategory, files
 from django.db.models.functions import ExtractYear
+import os
+import mimetypes, shutil,base64
+import subprocess
+import tempfile
+from django.http import JsonResponse, FileResponse
+from django.conf import settings
 
 from django.db import models
 
@@ -749,3 +755,56 @@ def CommonFiles_edit(request):
         # print(data)
         return HttpResponse(json.dumps(data), content_type="application/json")
     return render(request, 'CommonFiles/ComFilesEdit.html', locals())
+
+
+@csrf_exempt
+#没成功，感觉需要服务器安装libreoffice
+def ppt_preview(request, file_id):
+    try:
+        # 根据文件ID获取文件对象
+        print(file_id,'file_id')
+        file_obj = files.objects.get(id=file_id)
+        file_path = file_obj.files  # 假设attachment是FileField
+        print(file_obj,file_path)
+
+        # 创建临时目录存放转换后的文件
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # 定义输出PDF路径
+            pdf_path = os.path.join(temp_dir, f"converted_{file_id}.pdf")
+
+            # 使用LibreOffice进行转换
+            cmd = [
+                'libreoffice', '--headless', '--convert-to', 'pdf',
+                file_path, '--outdir', temp_dir
+            ]
+
+            result = subprocess.run(cmd, capture_output=True, text=True)
+
+            if result.returncode != 0:
+                return JsonResponse({
+                    'error': '转换失败',
+                    'details': result.stderr
+                }, status=500)
+
+            # 检查转换后的文件是否存在
+            if not os.path.exists(pdf_path):
+                # 尝试查找实际生成的文件名
+                fileslist = [f for f in os.listdir(temp_dir) if f.endswith('.pdf')]
+                if fileslist:
+                    pdf_path = os.path.join(temp_dir, fileslist[0])
+                else:
+                    return JsonResponse({
+                        'error': '转换后的文件未找到'
+                    }, status=500)
+
+            # 返回PDF文件
+            response = FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
+            response['Content-Disposition'] = f'inline; filename="converted_{file_id}.pdf"'
+            print('response',response)
+            return response
+
+    except CommonFiles.DoesNotExist:
+        return JsonResponse({'error': '文件不存在'}, status=404)
+    except Exception as e:
+        print(str(e))
+        return JsonResponse({'error': str(e)}, status=500)

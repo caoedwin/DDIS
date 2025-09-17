@@ -77,7 +77,7 @@ class RbacMiddleware(MiddlewareMixin):
         else:
             # 如果是调试模式，显示可访问url
             if settings.DEBUG:
-                print(permission_url)
+                # print(permission_url)
                 info = '<br/>' + ('<br/>'.join(permission_url))
                 # return HttpResponse('无权限，请尝试访问以下地址：%s' %info)
                 # return HttpResponse('您的账户无权限访问')
