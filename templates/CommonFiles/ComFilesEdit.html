@@ -586,6 +586,8 @@ tbody tr td:last-child {
                           <div slot="file" slot-scope="{file}">
                             <!-- 视频文件显示预览 -->
                             <video v-if="isVideoFile(file)" controls width="320" height="180" :src="file.url"></video>
+                            <el-image  v-else-if="getFileType(file)=='image'" :src="file.url" style="width: 100px; height: 100px;"></el-image>
+
 
                             <!-- 非视频文件显示下载链接 -->
                             <div v-else>
