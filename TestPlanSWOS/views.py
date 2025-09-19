@@ -5179,6 +5179,7 @@ def TestPlanSW_Edit(request):
         #update
     return render(request, 'TestPlanSWOS/TestPlanSW_edit.html', locals())
 #TestPlan_ME search
+@csrf_exempt
 def TestPlanSW_search(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
