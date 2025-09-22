@@ -146,3 +146,172 @@
 [2025-09-19 09:38:08,017] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [0.20, 127.0.0.1:61841]
 [2025-09-19 09:38:08,031] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:08: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
 [2025-09-19 09:38:08,048] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.22, 127.0.0.1:59935]
+[2025-09-19 09:38:55,634] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:55: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-09-19 09:38:55,656] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.04, 127.0.0.1:59935]
+[2025-09-19 09:38:55,664] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.04, 127.0.0.1:61841]
+[2025-09-19 09:38:55,672] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.04, 127.0.0.1:55045]
+[2025-09-19 09:38:55,681] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.05, 127.0.0.1:61139]
+[2025-09-19 09:38:55,742] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:61139]
+[2025-09-19 09:38:57,087] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:57: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:38:57,101] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.09, 127.0.0.1:61139]
+[2025-09-19 09:38:57,117] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:64529]
+[2025-09-19 09:38:57,157] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:57: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-09-19 09:38:57,175] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.03, 127.0.0.1:61139]
+[2025-09-19 09:38:57,208] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:61139]
+[2025-09-19 09:38:57,219] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.00, 127.0.0.1:61139]
+[2025-09-19 09:38:57,258] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:55911]
+[2025-09-19 09:38:57,265] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:55911]
+[2025-09-19 09:38:57,331] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:61139]
+[2025-09-19 09:38:57,342] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.02, 127.0.0.1:55045]
+[2025-09-19 09:38:57,536] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:57: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:38:57,547] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.07, 127.0.0.1:55045]
+[2025-09-19 09:38:57,603] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:57: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/?action=first'>
+[2025-09-19 09:38:57,615] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/?action=first 200 [0.13, 127.0.0.1:61139]
+[2025-09-19 09:38:57,657] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:38:57: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-19 09:38:57,679] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.19, 127.0.0.1:61841]
+[2025-09-19 09:56:28,576] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:28: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:56:28,592] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.11, 127.0.0.1:60293]
+[2025-09-19 09:56:28,605] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:55911]
+[2025-09-19 09:56:28,683] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:28: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-09-19 09:56:28,710] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.06, 127.0.0.1:60293]
+[2025-09-19 09:56:28,823] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:60293]
+[2025-09-19 09:56:28,868] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.01, 127.0.0.1:60293]
+[2025-09-19 09:56:28,954] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:65248]
+[2025-09-19 09:56:28,957] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:65248]
+[2025-09-19 09:56:29,070] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:60293]
+[2025-09-19 09:56:29,078] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.02, 127.0.0.1:50446]
+[2025-09-19 09:56:29,421] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:29: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/?action=first'>
+[2025-09-19 09:56:29,432] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/?action=first 200 [0.07, 127.0.0.1:50446]
+[2025-09-19 09:56:29,485] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:29: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:56:29,497] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.13, 127.0.0.1:60293]
+[2025-09-19 09:56:29,508] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:29: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-19 09:56:29,527] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.15, 127.0.0.1:59452]
+[2025-09-19 09:56:40,239] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:40: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:56:40,253] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.37, 127.0.0.1:59452]
+[2025-09-19 09:56:42,792] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:42: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:56:42,807] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.34, 127.0.0.1:59452]
+[2025-09-19 09:56:43,048] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 09:56:43: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-19 09:56:43,071] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.31, 127.0.0.1:60293]
+[2025-09-19 10:30:51,753] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:65248]
+[2025-09-19 10:30:51,768] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:61954]
+[2025-09-19 15:27:58,634] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:27:58: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:27:58,665] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [2.79, 127.0.0.1:52801]
+[2025-09-19 15:28:01,634] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:01: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:28:01,650] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [0.43, 127.0.0.1:52801]
+[2025-09-19 15:28:05,098] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:05: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/?action=getCategory&customer=C38(NB)&project=ILYE3&phase=0'>
+[2025-09-19 15:28:05,113] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=getCategory&customer=C38(NB)&project=ILYE3&phase=0 200 [0.23, 127.0.0.1:52801]
+[2025-09-19 15:28:08,254] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-search/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 5390, in TestPlanSW_search
+    allSum.append({'category': i['Category2'], 'basetime': round(i['BaseTime__sum'] / 60, 0), 'BTS': BTS1,
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'int'
+[2025-09-19 15:28:08,279] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:08: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/?action=getContent&customer=C38(NB)&project=ILYE3&phase=0&category='>
+[2025-09-19 15:28:08,283] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=getContent&customer=C38(NB)&project=ILYE3&phase=0&category= 500 [2.28, 127.0.0.1:52801]
+[2025-09-19 15:28:32,168] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:28:32,185] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/ 200 [0.14, 127.0.0.1:52801]
+[2025-09-19 15:28:32,284] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-09-19 15:28:32,307] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.04, 127.0.0.1:52801]
+[2025-09-19 15:28:32,363] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:52801]
+[2025-09-19 15:28:32,390] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.01, 127.0.0.1:52801]
+[2025-09-19 15:28:32,466] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:60919]
+[2025-09-19 15:28:32,490] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:60919]
+[2025-09-19 15:28:32,565] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:52801]
+[2025-09-19 15:28:32,568] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:58796]
+[2025-09-19 15:28:32,851] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/?action=first'>
+[2025-09-19 15:28:32,860] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=first 200 [0.09, 127.0.0.1:58796]
+[2025-09-19 15:28:32,935] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:28:32,943] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [0.17, 127.0.0.1:52801]
+[2025-09-19 15:28:32,971] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-19 15:28:32,984] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.19, 127.0.0.1:62486]
+[2025-09-19 15:28:39,591] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:39: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:28:39,604] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [2.49, 127.0.0.1:62486]
+[2025-09-19 15:28:41,919] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:41: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:28:41,932] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [0.39, 127.0.0.1:62486]
+[2025-09-19 15:28:44,631] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:44: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/?action=getCategory&customer=C38(NB)&project=GLC3A&phase=0'>
+[2025-09-19 15:28:44,644] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=getCategory&customer=C38(NB)&project=GLC3A&phase=0 200 [0.22, 127.0.0.1:62486]
+[2025-09-19 15:28:46,542] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:28:46: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/?action=getContent&customer=C38(NB)&project=GLC3A&phase=0&category='>
+[2025-09-19 15:28:46,555] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=getContent&customer=C38(NB)&project=GLC3A&phase=0&category= 200 [0.95, 127.0.0.1:62486]
+[2025-09-19 15:29:06,505] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 15:29:06: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 15:29:06,518] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [0.18, 127.0.0.1:62486]
+[2025-09-19 16:14:28,790] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:60919]
+[2025-09-19 17:02:06,059] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 17:02:06: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 17:02:06,083] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/ 200 [0.14, 127.0.0.1:60965]
+[2025-09-19 17:02:06,194] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 17:02:06: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2025-09-19 17:02:06,213] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.03, 127.0.0.1:60965]
+[2025-09-19 17:02:06,302] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:60965]
+[2025-09-19 17:02:06,322] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.01, 127.0.0.1:60965]
+[2025-09-19 17:02:06,401] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51540]
+[2025-09-19 17:02:06,406] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51540]
+[2025-09-19 17:02:06,491] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:60965]
+[2025-09-19 17:02:06,495] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:52321]
+[2025-09-19 17:02:06,842] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 17:02:06: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-search/?action=first'>
+[2025-09-19 17:02:06,856] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=first 200 [0.13, 127.0.0.1:52321]
+[2025-09-19 17:02:06,945] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 17:02:06: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/TestPlanSW-search/'>
+[2025-09-19 17:02:06,955] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/TestPlanSW-search/ 200 [0.23, 127.0.0.1:60965]
+[2025-09-19 17:02:06,986] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-19 17:02:06: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-19 17:02:07,000] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.26, 127.0.0.1:55550]
+[2025-09-19 17:04:17,501] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51540]
+[2025-09-22 08:25:32,714] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:32: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-22 08:25:32,730] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/ 302 [0.25, 127.0.0.1:52959]
+[2025-09-22 08:25:32,760] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:32: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2025-09-22 08:25:32,765] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.02, 127.0.0.1:52959]
+[2025-09-22 08:25:32,888] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:32: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-22 08:25:32,891] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.02, 127.0.0.1:52959]
+[2025-09-22 08:25:32,902] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:32: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2025-09-22 08:25:32,905] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:52959]
+[2025-09-22 08:25:39,724] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:39: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/login/?next='>
+[2025-09-22 08:25:39,761] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /login/?next= 302 [0.23, 127.0.0.1:52959]
+[2025-09-22 08:25:39,776] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:39: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2025-09-22 08:25:39,791] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /login/ 302 [0.03, 127.0.0.1:52959]
+[2025-09-22 08:25:39,827] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:39: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2025-09-22 08:25:39,842] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.05, 127.0.0.1:52959]
+[2025-09-22 08:25:40,034] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:61231]
+[2025-09-22 08:25:40,048] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:61231]
+[2025-09-22 08:25:40,155] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/src/hero.jpg 304 [0.02, 127.0.0.1:52959]
+[2025-09-22 08:25:40,259] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 08:25:40: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-22 08:25:40,282] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.04, 127.0.0.1:52959]
+[2025-09-22 08:49:57,521] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:61231]
+[2025-09-22 10:28:58,926] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:28:58: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-22 10:28:58,941] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.10, 127.0.0.1:56212]
+[2025-09-22 10:28:59,136] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:57185]
+[2025-09-22 10:28:59,140] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:57185]
+[2025-09-22 10:28:59,448] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:28:59: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-search/?action=first'>
+[2025-09-22 10:28:59,459] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-search/?action=first 200 [0.05, 127.0.0.1:56212]
+[2025-09-22 10:28:59,498] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:28:59: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSWOS/TestPlanSWOS-search/'>
+[2025-09-22 10:28:59,507] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSWOS/TestPlanSWOS-search/ 200 [0.10, 127.0.0.1:49912]
+[2025-09-22 10:28:59,519] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:28:59: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-22 10:28:59,537] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:56212]
+[2025-09-22 10:29:10,464] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:10: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-edit/'>
+[2025-09-22 10:29:10,473] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-edit/ 200 [0.06, 127.0.0.1:56212]
+[2025-09-22 10:29:10,527] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:56439]
+[2025-09-22 10:29:10,529] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:56439]
+[2025-09-22 10:29:10,544] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:57185]
+[2025-09-22 10:29:10,712] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:10: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/TestPlanSWOS-edit/?action=first'>
+[2025-09-22 10:29:10,722] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/TestPlanSWOS-edit/?action=first 200 [0.06, 127.0.0.1:56212]
+[2025-09-22 10:29:10,748] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:10: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-22 10:29:10,766] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.07, 127.0.0.1:49912]
+[2025-09-22 10:29:37,808] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:37: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-edit/'>
+[2025-09-22 10:29:37,819] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-edit/ 200 [0.08, 127.0.0.1:49912]
+[2025-09-22 10:29:37,856] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:61992]
+[2025-09-22 10:29:37,860] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:61992]
+[2025-09-22 10:29:37,869] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:56439]
+[2025-09-22 10:29:38,069] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:38: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-edit/?action=first'>
+[2025-09-22 10:29:38,079] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-edit/?action=first 200 [0.09, 127.0.0.1:49912]
+[2025-09-22 10:29:38,087] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:38: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-09-22 10:29:38,100] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.08, 127.0.0.1:56212]
+[2025-09-22 10:29:49,942] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:29:49: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-edit/?action=getCategory&customer=C38(NB)&project=Debug&phase=4'>
+[2025-09-22 10:29:49,952] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-edit/?action=getCategory&customer=C38(NB)&project=Debug&phase=4 200 [0.63, 127.0.0.1:56212]
+[2025-09-22 10:30:05,164] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:30:05: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-edit/?action=getContent&customer=C38(NB)&project=Debug&phase=4&category=System%20Test-Platform'>
+[2025-09-22 10:30:05,183] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-edit/?action=getContent&customer=C38(NB)&project=Debug&phase=4&category=System%20Test-Platform 200 [0.19, 127.0.0.1:56212]
+[2025-09-22 10:30:16,558] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:30:16: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-edit/?action=getCategory&customer=C38(NB)&project=Debug&phase=24'>
+[2025-09-22 10:30:16,570] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-edit/?action=getCategory&customer=C38(NB)&project=Debug&phase=24 200 [0.76, 127.0.0.1:56212]
+[2025-09-22 10:30:19,794] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-09-22 10:30:19: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/TestPlanSW-edit/?action=getContent&customer=C38(NB)&project=Debug&phase=24&category=System%20Test-Platform'>
+[2025-09-22 10:30:19,809] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/TestPlanSW-edit/?action=getContent&customer=C38(NB)&project=Debug&phase=24&category=System%20Test-Platform 200 [0.15, 127.0.0.1:56212]

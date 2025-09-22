@@ -3257,6 +3257,8 @@ def TestPlanSW_Edit(request):
                 adddic['ReleaseDate'] = request.POST.get('releasedate')
                 adddic['Owner'] = request.POST.get('owner')
                 adddic['Priority'] = request.POST.get('priority')
+                if request.POST.get('TDMSTotalTime'):
+                    adddic['TDMSTotalTime'] = float(request.POST.get('TDMSTotalTime'))
                 if request.POST.get('basetime'):
                     adddic['BaseTime'] = float(request.POST.get('basetime'))
                 if request.POST.get('unattendedtime'):

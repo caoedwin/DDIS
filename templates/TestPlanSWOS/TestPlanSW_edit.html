@@ -900,18 +900,24 @@
       </el-form-item>
 
       <el-form-item style="width:100%;">
-          <el-form-item label="Base time"  style="width:25%;" prop="basetime">
-      <el-input  autocomplete="off" v-model="form.basetime" clearable></el-input>
-    </el-form-item>
-          <el-form-item label="Unattended time" style="width:25%;" prop="unattendedtime">
-      <el-input  autocomplete="off" v-model="form.unattendedtime" clearable></el-input>
-    </el-form-item>
-          <el-form-item label="Base Automation time" style="width:25%;" prop="basetimeA">
-      <el-input  autocomplete="off" v-model="form.basetimeA" clearable></el-input>
-    </el-form-item>
+          <el-form-item label="TDMS Leading Time (A+U)"  style="width:25%;" prop="TDMSTotalTime">
+              <el-input  autocomplete="off" v-model="form.TDMSTotalTime" clearable></el-input>
+            </el-form-item>
+              <el-form-item label="TDMS Working time(Attended time)"  style="width:25%;" prop="basetime">
+          <el-input  autocomplete="off" v-model="form.basetime" clearable></el-input>
+        </el-form-item>
+              <el-form-item label="Unattended time" style="width:25%;" prop="unattendedtime">
+          <el-input  autocomplete="off" v-model="form.unattendedtime" clearable></el-input>
+        </el-form-item>
+              <el-form-item label="Revised base time (Attended time)" style="width:25%;" prop="RevisedbasetimeorAttendedtime">
+          <el-input  autocomplete="off" v-model="form.RevisedbasetimeorAttendedtime" clearable></el-input>
+        </el-form-item>
       </el-form-item>
 
       <el-form-item style="width:100%;">
+           <el-form-item label="Base Automation time" style="width:25%;" prop="basetimeA">
+          <el-input  autocomplete="off" v-model="form.basetimeA" clearable @change="initDataForFFRT({'id':2})" ></el-input>
+        </el-form-item>
            <el-form-item label="chramshell" style="width:25%;" prop="chramshell">
       <el-input  autocomplete="off" v-model="form.chramshell" clearable></el-input>
     </el-form-item>
@@ -943,8 +949,11 @@
           <el-option label="N" value="N"></el-option>
       </el-select>
     </el-form-item>
-          <el-form-item label="Base Time Support" style="width:35%;" prop="BTS">
-      <el-input  autocomplete="off" v-model="form.BTS" readonly="true"></el-input>
+          <el-form-item label="FeatureWeight" style="width:25%;" prop="FeatureWeight">
+          <el-input  autocomplete="off" v-model="form.FeatureWeight" clearable @change="initDataForFFRT({'id':1})"></el-input>
+        </el-form-item>
+          <el-form-item label="Base*Weight" style="width:35%;" prop="BTS">
+      <el-input  autocomplete="off" v-model="form.BTS" readonly="true" @change="initDataForFFRT({'id':2})" ></el-input>
     </el-form-item>
       </el-form-item>
      <el-form-item style="width:100%;">
@@ -1012,7 +1021,7 @@
              </el-select>
     </el-form-item>
            <el-form-item label="Config Smart Item 占總 Case 比例" style="width:25%;" prop="conSitemInAll">
-      <el-input  autocomplete="off" v-model="form.conSitemInAll" readonly="true"></el-input>
+      <el-input  autocomplete="off" v-model="form.conSitemInAll"  @change="initDataForFFRT({'id':4})"></el-input>
     </el-form-item>
            <el-form-item label="Config Smart Time" style="width:25%;" prop="CST">
       <el-input  autocomplete="off" v-model="form.CST" readonly="true"></el-input>
@@ -1027,7 +1036,7 @@
 
       <el-form-item style="width:100%;">
           <el-form-item label="Project Test SKU-Optimize" style="width:35%;" prop="proTS">
-             <el-input  autocomplete="off" v-model="form.proTS" readonly="true"></el-input>
+             <el-input  autocomplete="off" v-model="form.proTS" readonly="true"  @change="initDataForFFRT({'id':3})" ></el-input>
           </el-form-item>
           <el-form-item label="Attend Time Optimize" style="width:35%;" prop="ATO">
               <el-input  autocomplete="off" v-model="form.ATO" readonly="true"></el-input>
@@ -1057,9 +1066,14 @@
       <el-input  autocomplete="off" v-model.number="form.CRS" clearable></el-input>
     </el-form-item>
          <el-form-item label="Config Retest Time" style="width:25%;" prop="CRT">
-      <el-input  autocomplete="off" v-model="form.CRT" clearable></el-input>
-    </el-form-item>
+              <el-input  autocomplete="off" v-model="form.CRT" clearable></el-input>
+            </el-form-item>
       </el-form-item>
+         <el-form-item style="width:100%;">
+             <el-form-item label="Remark" style="width:70%;" prop="Remark">
+              <el-input  type="textarea"  autocomplete="off" :row="4" v-model="form.Remark"></el-input>
+            </el-form-item>
+         </el-form-item>
         </el-form>
       <div slot="footer" class="dialog-footer">
     <el-button @click="cancelSubmit('form',handleClose)">取 消</el-button>
@@ -1223,7 +1237,9 @@
             version:'',
             owner:'',
             priority:'',
+            TDMSTotalTime:'',
             basetime:'',
+            RevisedbasetimeorAttendedtime:'',
             basetimeA:'',
             unattendedtime:'',
             chramshell:'',
@@ -1248,10 +1264,12 @@
             comments2:'',
             RemarkforFeatureWeightadjust:'',
             planOptimize:[],
+            FeatureWeight :0,
             BTS:0,
             CRC:'',
             CRS:'',
             CRT:0,
+            Remark :'',
             proTS:0,
             ATO:0,
         },
@@ -1941,7 +1959,7 @@
                this.CAT[key]=row.basetimeA * 5;
            }
               else{
-                  this.CAT[key]=row.basetimeA * this.proTS[key];
+                  this.CAT[key]=isNaN(row.basetimeA * this.proTS[key])?0:row.basetimeA * this.proTS[key];
                {#this.CAT[key]=isNaN(row.basetimeA * this.conAitem[key])?0:row.basetimeA * this.conAitem[key];#}
            }
            }
@@ -1990,8 +2008,17 @@
            // U
            if(change.id === 1){
                //console.log("U");
-               if (this.form.FS === "Y" && caseid_temp !== 'PSA005_15') {
+               {% comment %}if (this.form.FS === "Y" && caseid_temp !== 'PSA005_15') {
                          this.form.BTS= this.form.basetime;
+                      } else {
+                          this.form.BTS = 0;
+                      }{% endcomment %}
+               if (this.form.FS === "Y") {
+                   if (caseid_temp !== 'STAB118_EF'){
+                               this.form.BTS= isNaN(this.form.RevisedbasetimeorAttendedtime * this.form.FeatureWeight)?0: this.form.RevisedbasetimeorAttendedtime * this.form.FeatureWeight;
+                           }else{
+                                this.form.BTS= isNaN(this.form.RevisedbasetimeorAttendedtime * this.form.FeatureWeight / this.form.proTS)?0:this.form.RevisedbasetimeorAttendedtime * this.form.FeatureWeight / this.form.proTS;
+                           }
                       } else {
                           this.form.BTS = 0;
                       }
@@ -1999,7 +2026,7 @@
            // Y
            if(change.id ===1 || change.id ===2){
                //console.log("Y");
-               if(caseid_temp.slice(0,3) ==='STA'){
+               {% comment %}if(caseid_temp.slice(0,3) ==='STA'){
                    if(caseid_temp === 'STA017'){
                        this.form.TFC=this.form.BTS * 5;
                    }else if(caseid_temp === 'STA018_EF') {
@@ -2019,7 +2046,8 @@
                else{
                     //console.log('other');
                     this.form.TFC=isNaN(this.form.BTS * this.form.starttime)?0:this.form.BTS * this.form.starttime;
-               }
+               }{% endcomment %}
+               this.form.TFC=isNaN((this.form.BTS + this.form.basetimeA) * this.form.starttime)?0:(this.form.BTS + this.form.basetimeA) * this.form.starttime;
            }
            //AB
            if(change.id ===2 || change.id ===3){
@@ -2031,23 +2059,25 @@
                this.form.CAT=this.form.basetimeA * 5;
            }
               else{
-                  this.form.CAT=this.form.basetimeA * this.form.proTS;
+                  this.form.CAT=isNaN(this.form.basetimeA * this.form.proTS)?0:this.form.basetimeA * this.form.proTS;
                {#this.form.CAT=isNaN(this.form.basetimeA * this.form.conAitem)?0:this.form.basetimeA * this.form.conAitem;#}
            }
            }
            //AD
            if(change.id ===2 || change.id ===3 || change.id ===4){
              //console.log("AD");
-             this.form.CLT=(this.form.basetime - this.form.CAT) * sum[3];
+             {% comment %}this.form.CLT=(this.form.basetime - this.form.CAT) * sum[3];{% endcomment %}
+               this.form.CLT=(this.form.BTS + this.form.basetimeA) * sum[3];
              }
            //AG
-          if(change.id ===4 || change.id ===1){
+          {% comment %}if(change.id ===4 || change.id ===1){
               //console.log("AG");
               this.form.conSitemInAll=(isNaN(sum[4]/(sum[0]+sum[4]))?0:sum[4]/(sum[0]+sum[4]))>0.5?1:0;
-          }
+          }{% endcomment %}
            //AH
           //console.log("AH");
-          this.form.CST=(this.form.TFC - this.form.CAT - this.form.CLT) * this.form.conSitemInAll;
+          {% comment %}this.form.CST=(this.form.TFC - this.form.CAT - this.form.CLT) * this.form.conSitemInAll;{% endcomment %}
+          this.form.CST=isNaN(this.form.BTS * this.form.conSitemInAll * sum[4])?0: this.form.BTS * this.form.conSitemInAll * sum[4];
           //AK
           //console.log("AK");
           this.form.ATO=((this.form.TFC - this.form.CAT - this.form.CLT)-this.form.CST);

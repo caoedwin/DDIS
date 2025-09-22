@@ -1,0 +1,14 @@
+[2025-09-19 15:28:08,254] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-search/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 5390, in TestPlanSW_search
+    allSum.append({'category': i['Category2'], 'basetime': round(i['BaseTime__sum'] / 60, 0), 'BTS': BTS1,
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'int'
+[2025-09-19 15:28:08,283] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSW/TestPlanSW-search/?action=getContent&customer=C38(NB)&project=ILYE3&phase=0&category= 500 [2.28, 127.0.0.1:52801]
