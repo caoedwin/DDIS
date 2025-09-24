@@ -1212,11 +1212,13 @@
         CAT:[],
         CLT:[],
         CST:[],
+        Remark :[],
         conSitemInAll:[],
         comments1:[],
         comments2:[],
         RemarkforFeatureWeightadjust:[],
         planOptimize:[],
+        FeatureWeight :[],
         BTS:[],
         CRC:[],
         CRS:[],
@@ -1423,6 +1425,7 @@
         this.CRT=[];
         this.proTS=[];
         this.ATO=[];
+        this.Remark=[];
         for(let i = 0,length=this.planOptimize.length;i<length;i++){
             this.planOptimize[i]=[];
         }
@@ -1453,6 +1456,7 @@
           Vue.set(this.CRC,index,row.CRC);
           Vue.set(this.CRS,index,row.CRS);
           Vue.set(this.CRT,index,row.CRT);
+          Vue.set(this.Remark,index,row.Remark);
           Vue.set(this.conSitemInAll,index,row.conSitemInAll);
           Vue.set(this.planOptimize,index,[]);
           for(let i = 0 , length = row.planOptimize.length;i<length;i++){
@@ -1545,6 +1549,9 @@
           if(this.conSitemInAll[index] !== row.conSitemInAll){
               changeFlag =1;
           }
+          if(this.Remark[index] !== row.Remark){
+              changeFlag =1;
+          }
           for(let i = 0 , length =this.planOptimize[index].length;i<length;i++){
               console.log("planOptimize",this.planOptimize[index][i],row.planOptimize[i]);
               if(this.planOptimize[index][i] !== row.planOptimize[i]){
@@ -1555,7 +1562,7 @@
               alert("輸入值未發生改變");
               return false;
           }else{
-              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
+              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index],'Remark':this.Remark[index]}
               axios.post("/TestPlanSWOS/TestPlanSWOS-edit/" ,Qs.stringify(result, {indices:false}),{
                     headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                 }).then((res) => {
@@ -1572,6 +1579,7 @@
                          row.conSitem = this.conSitem[index] ;
                          row.comments1 = this.comments1[index] ;
                          row.comments2 = this.comments2[index] ;
+                         row.Remark = this.Remark[index] ;
                          row.RemarkforFeatureWeightadjust = this.RemarkforFeatureWeightadjust[index] ;
                          row.CRC = this.CRC[index] ;
                          row.CRS = this.CRS[index] ;

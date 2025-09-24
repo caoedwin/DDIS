@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import local_identity, Departments, Positions, MajorIfo, Portraits, PersonalInfo, PersonalInfoHisByPer, PersonalInfoHisByYear, MainPower, WorkOvertime, LeaveInfo
+from .models import local_identity, Departments, Positions, MajorIfo, Portraits, PersonalInfo, PersonalInfoHisByPer, PersonalInfoHisByYear, MainPower, WorkOvertime, LeaveInfo, PublicAreaM
+
 
 @admin.register(local_identity)
 class local_identityAdmin(admin.ModelAdmin):
@@ -315,4 +316,30 @@ class LeaveInfoAdmin(admin.ModelAdmin):
                     'GroupNum', 'CNName', 'Year', 'Mounth', 'PublicHoliday', 'WorkInjury', 'Matters', 'MattersContinuation', 'Sick',
                     'SickContinuation', 'Marriage', 'Bereavement', 'Special','OffDuty','Compensatory','EpidemicPrevention','NoScheduling',
                     'PaternityLeave', 'Absenteeism', 'Maternity', 'PregnancyExamination', 'Lactation', 'Others', 'Total',)  # 搜索字段
+    # date_hierarchy = 'Start_time'  # 详细时间分层筛选
+
+@admin.register(PublicAreaM)
+class PublicAreaMAdmin(admin.ModelAdmin):
+
+    list_display = ('Category',
+                    'XX', 'FZR', 'CHU', 'DEPARTMENT', 'MAIL', 'LXFS',
+                    )
+    # 列表里显示想要显示的字段
+    list_per_page = 500
+    # 满50条数据就自动分页
+    ordering = ('-Category',)
+    #后台数据列表排序方式
+    list_display_links = ('Category',
+                    'XX', 'FZR', 'CHU', 'DEPARTMENT', 'MAIL', 'LXFS',)
+    # 设置哪些字段可以点击进入编辑界面
+    # list_editable = ('Object',)
+    # 筛选器
+    list_filter = (
+        'Category',
+        'XX', 'DEPARTMENT', 'FZR',
+        # ('Customer', UnionFieldListFilter),
+        # ('Phase', UnionFieldListFilter),
+    )
+    search_fields = ('Category',
+        'XX', 'DEPARTMENT', 'FZR',)  # 搜索字段
     # date_hierarchy = 'Start_time'  # 详细时间分层筛选

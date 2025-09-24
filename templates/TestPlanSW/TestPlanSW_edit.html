@@ -802,12 +802,6 @@
                </div>
                <span v-else="scope.row.isSet && (canEdit)">${ scope.row.CRC }</span>
                 </template>
-          <template scope="scope">
-                <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit" {% comment %}:class="{'invalidInput':CRC[scope.$index]!==undefined && CRC[scope.$index]!=='' && isNaN(CRC[scope.$index]/1)}"{% endcomment %}><input placeholder="請輸入內容" type="text"  v-model.lazy="CRC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(CRC, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':CRC[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
-                {% comment %} <el-date-picker size="small" v-if="showinput(scope.row,scope.$index) && canEdit" v-model="CRT[scope.row.id]" type="date" placeholder="选择日期" clearable></el-date-picker>{% endcomment %}
-               </div>
-               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remark }</span>
-                </template>
       </el-table-column>
       <el-table-column width="160" >
           <template slot="header" slot-scope="scope">
@@ -1571,7 +1565,7 @@
               alert("輸入值未發生改變");
               return false;
           }else{
-              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'FeatureWeight ':this.FeatureWeight [index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'Remark':this.Remark[index],'conSitemInAll':this.conSitemInAll[index]}
+              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'FeatureWeight ':this.FeatureWeight [index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'Remark':this.Remark[index],'conSitemInAll':this.conSitemInAll[index]}
               axios.post("/TestPlanSW/TestPlanSW-edit/" ,Qs.stringify(result, {indices:false}),{
                     headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                 }).then((res) => {

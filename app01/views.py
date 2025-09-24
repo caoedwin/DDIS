@@ -1416,7 +1416,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalInfo/PersonalInfo-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "/PersonalInfo/PersonalInfo-search/", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "/PersonalInfo/PersonalInfo-search/", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "/PersonalInfo/PersonalInfo-search/", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/PersonalInfo/PersonalInfo-search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1436,7 +1436,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalExperience/Summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1456,7 +1456,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/PersonalInfo/PublicArea/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1476,7 +1476,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/CommonDevice/CommonDevice_edit/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1496,7 +1496,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/CommonFiles/CommonFiles_edit/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1518,7 +1518,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/ProjectInfoSearch/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "/ProjectInfoSearch/", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "/ProjectInfoSearch/", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "/ProjectInfoSearch/", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1538,7 +1538,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/TestPlanME/TestPlanME-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1558,7 +1558,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/TestPlanSW/TestPlanSW-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABOTestPlan/ABOTestPlan_summary/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1578,7 +1578,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/TestPlanSWOS/TestPlanSWOS-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1598,7 +1598,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/INVGantt/INVGantt-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1618,7 +1618,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/CQM/CQM_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1638,7 +1638,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/MQM/MQM_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1658,7 +1658,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/DriverTool/DriverList_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABODriverTool/ABODriverList_search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1678,7 +1678,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/DriverTool/ToolList_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1701,7 +1701,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryMateria/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1722,7 +1722,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/AdapterPowerCode/BorrowedAdapter/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1743,7 +1743,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/ComputerMS/BorrowedComputer/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1764,7 +1764,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/ChairCabinetMS/BorrowedChairCabinet/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1784,7 +1784,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": DDMS_add + "/Summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
         #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
         #      "name4": 'ABO', "url4": DDMS_add + "/Summary_ABO/", "Comment4": "", "CustomerFlag4": 0,  # ABO
         #      },
         #     {"Comment": "",
@@ -1805,7 +1805,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": DDMS_add + "/DeviceLNV/BorrowedDeviceLNV/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": DDMS_add + "/DeviceABO/BorrowedDeviceABO/", "Comment4": "", "CustomerFlag4": 0,
              # ABO
              },
@@ -1831,7 +1831,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/QIL/QIL_searchbyproject/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABOQIL/ABOQIL_searchbyproject/", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1851,7 +1851,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/LessonProjectME/Lesson_SearchByProject/", "Comment1": "",  # C38
              "name2": "A31", "url2": "/A31LessonLProject/Lesson_SearchByProject/", "Comment2": "",  # A31
-             "name3": "", "url3": "/LessonLProject/Lesson_SearchByProject/", "Comment3": "",  #
+             "name3": "A32", "url3": "/LessonLProject/Lesson_SearchByProject/", "Comment3": "",  #
              "name4": 'ABO', "url4": "/ABOProjectLessonL/Lesson_SearchByProject/", "Comment4": "",  # ABO
              },
             {"Comment": "",
@@ -1871,7 +1871,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/LowLightList/LowLightList_edit/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1892,7 +1892,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": "/IssuesBreakdown/IssuesBreakdown_Summary/", "Comment1": "", "CustomerFlag1": 0,
              # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1912,7 +1912,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": "/Issue_Notes/Issue_Notes-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
         #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
         #      "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
         #      },
         #     {"Comment": "",
@@ -1932,7 +1932,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": "/KnowIssue/KnowIssue-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
         #      "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-        #      "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+        #      "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
         #      "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
         #      },
         #     {"Comment": "",
@@ -1952,7 +1952,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -1974,7 +1974,7 @@ def Navigations_system_axios(request):
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment2": "",
              "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment3": "",
+             "name3": "A32", "url3": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment3": "",
              "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/", "Comment4": "",
              "CustomerFlag4": 0,  # ABO
@@ -1999,7 +1999,7 @@ def Navigations_system_axios(request):
              "name1": "C38", "url1": "/CapitalExpenditure/CapitalExpenditure_Summary/", "Comment1": "",
              "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFla3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFla3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2019,7 +2019,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/ProjectComparison/ProjectComparison_Summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2039,7 +2039,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryTUM/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2059,7 +2059,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/MiscellaneousPurchases/SubscriptionStatus/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2081,7 +2081,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/SpecDownload/SpecDownload-summary/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2121,7 +2121,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/OBIDeviceResult/OBIDeviceResult_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2141,7 +2141,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/Package/Package-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2161,7 +2161,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/CDM/CDM-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2181,7 +2181,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/Bouncing/Bouncing-search/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2203,7 +2203,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": "/AutoResult/AutoResult_search/", "Comment1": "",  "CustomerFlag1": 0, # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,# A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,#
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,#
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,# ABO
              },
             {"Comment": "",
@@ -2224,7 +2224,7 @@ def Navigations_system_axios(request):
             {"Comment": "",
              "name1": "C38", "url1": Discussing_add + "/index/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",
@@ -2246,7 +2246,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": RTMS_add + "/index/", "Comment1": "",  # C38
         #      "name2": "A31", "url2": "", "Comment2": "",  # A31
-        #      "name3": "", "url3": "", "Comment3": "",  #
+        #      "name3": "A32", "url3": "", "Comment3": "",  #
         #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
         #      },
         #     {"Comment": "",
@@ -2266,7 +2266,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": DCT_add + "/DCT/RealTime/Index", "Comment1": "",  # C38
         #      "name2": "A31", "url2": "", "Comment2": "",  # A31
-        #      "name3": "", "url3": "", "Comment3": "",  #
+        #      "name3": "A32", "url3": "", "Comment3": "",  #
         #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
         #      },
         #     {"Comment": "",
@@ -2286,7 +2286,7 @@ def Navigations_system_axios(request):
         #     {"Comment": "",
         #      "name1": "C38", "url1": EQUIP_add + "/DQA_ELR/index.html", "Comment1": "",  # C38
         #      "name2": "A31", "url2": "", "Comment2": "",  # A31
-        #      "name3": "", "url3": "", "Comment3": "",  #
+        #      "name3": "A32", "url3": "", "Comment3": "",  #
         #      "name4": 'ABO', "url4": "", "Comment4": "",  # ABO
         #      },
         #     {"Comment": "",
