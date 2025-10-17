@@ -2,221 +2,241 @@
 {% load staticfiles %}
 {% block title %}CommonFiles_edit{% endblock %}
 {% block css %}
-<link rel="stylesheet" href="/static/css/index.css">
-<style>
-.toolbar-container {
-  display: flex;           /* 使用flex布局 */
-  width: 100%;             /* 填充容器宽度 */
-  overflow: hidden;        /* 隐藏溢出部分 */
-}
+    <link rel="stylesheet" href="/static/css/index.css">
+    <style>
+        .toolbar-container {
+            display: flex; /* 使用flex布局 */
+            width: 100%; /* 填充容器宽度 */
+            overflow: hidden; /* 隐藏溢出部分 */
+        }
 
-.search-conditions {
-  flex: 1;                 /* 占据剩余空间 */
-  display: flex;
-  overflow-x: auto;        /* 允许水平滚动 */
-  gap: 8px;                /* 元素间隙 */
-  padding: 8px 0;          /* 垂直内边距 */
-  scrollbar-width: none;   /* 隐藏滚动条（兼容Firefox） */
-}
+        .search-conditions {
+            flex: 1; /* 占据剩余空间 */
+            display: flex;
+            overflow-x: auto; /* 允许水平滚动 */
+            gap: 8px; /* 元素间隙 */
+            padding: 8px 0; /* 垂直内边距 */
+            scrollbar-width: none; /* 隐藏滚动条（兼容Firefox） */
+        }
 
-/* 隐藏搜索区域的滚动条（WebKit浏览器） */
-.search-conditions::-webkit-scrollbar {
-  display: none;
-}
+        /* 隐藏搜索区域的滚动条（WebKit浏览器） */
+        .search-conditions::-webkit-scrollbar {
+            display: none;
+        }
 
-.condition-item {
-  min-width: 150px;        /* 最小宽度 */
-  flex-shrink: 0;          /* 禁止宽度缩小 */
-}
+        .condition-item {
+            min-width: 150px; /* 最小宽度 */
+            flex-shrink: 0; /* 禁止宽度缩小 */
+        }
 
-.action-buttons {
-  margin-top: 8px;          /* 设置元素距离上方的距离 */
-  flex-shrink: 0;          /* 禁止宽度缩小 */
-  white-space: nowrap;      /* 按钮不换行 */
-  padding-left: 12px;       /* 与搜索区域的间距 */
-}
-.el-table th .gutter{
-    display: table-cell!important;
-}
+        .action-buttons {
+            margin-top: 8px; /* 设置元素距离上方的距离 */
+            flex-shrink: 0; /* 禁止宽度缩小 */
+            white-space: nowrap; /* 按钮不换行 */
+            padding-left: 12px; /* 与搜索区域的间距 */
+        }
 
-.transfer-footer {
-    margin-left: 20px;
-    padding: 6px 5px;
-}
+        .el-table th .gutter {
+            display: table-cell !important;
+        }
 
-label{
-    color:white;
-}
+        .transfer-footer {
+            margin-left: 20px;
+            padding: 6px 5px;
+        }
 
- .selectMsg{
-     font-size:16px;
-      padding: 15px;
-      display: flex;
-      flex-wrap: wrap;
-  }
+        label {
+            color: white;
+        }
 
-  .selectMsg label{
-      font-weight: 800;
-      margin-right: 10px;
-      color:aliceblue;
-  }
+        .selectMsg {
+            font-size: 16px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+        }
 
-  .customerContent,.departmentContent,.lessonContent,.groupemployeesContent{
-     margin-left: 2px;
-      font-size: 8px;
-  }
+        .selectMsg label {
+            font-weight: 800;
+            margin-right: 10px;
+            color: aliceblue;
+        }
 
-.inputError{
-    text-align: center;
-    color: crimson;
-    background-color: beige;
-    width: 50%;
-    margin-left: 80px;
-    margin-top: 20px;
-    position: relative;
-}
+        .customerContent, .departmentContent, .lessonContent, .groupemployeesContent {
+            margin-left: 2px;
+            font-size: 8px;
+        }
 
-    /*.el-table .cell {
-      white-space: pre-line;
-      text-align: left;
-    }
+        .inputError {
+            text-align: center;
+            color: crimson;
+            background-color: beige;
+            width: 50%;
+            margin-left: 80px;
+            margin-top: 20px;
+            position: relative;
+        }
 
-     */
+        /*.el-table .cell {
+          white-space: pre-line;
+          text-align: left;
+        }
+    
+         */
 
-  .inputError:before{
-    display:block;
-    content:'';
-    border-width:8px 8px 8px 8px;
-    border-style:solid;
-    border-color:transparent transparent beige transparent;
+        .inputError:before {
+            display: block;
+            content: '';
+            border-width: 8px 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent beige transparent;
 
-    /* 定位 */
-    position:absolute;
-    left:50%;
-    top:-16px;
-}
-  .fileUploadContent{
-    display: inline-flex;
-    display: -webkit-inline-flex;
-}
-  .fileUploadContent label{
-    display: inline-block;
-    word-break: keep-all;
-    line-height: 30px;
-}
-.el-checkbox__label{
-    font-size: 18px;
-}
- .fileUploadContent{
-    padding-left: 15px;
-    margin-bottom: 10px;
-  }
-  .inputPackage{
-    background: #2980b9;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    display: block;
-    position: relative;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
-  .inputPackage span{
-    position: absolute;
-    line-height: 100%;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    color: aliceblue;
-  }
-  .fileUploadContent .showFileName{
-     line-height: 40px;
-     margin-left: 20px;
-     font-size: 18px;
-     color: aliceblue;
-   }
-  .inputPackage input{
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-  }
- .selectItem{
-    font-size: 20px;
-    font-weight: bold;
-    color: aliceblue;
-}
-  .tableAround{
-    padding: 20px;
-    -moz-box-shadow: 0px 0px 10px #333333;
-    -webkit-box-shadow: 0px 0px 10px #333333;
-    box-shadow: 0px 0px 10px #333333;
-    border-radius: 10px;
-    background-color: rgba(255,255,255,0.1);
-}
-.el-pagination__total,.el-pagination__jump{
-        color:white;
-    }
-.gutter{
-    display:block!important;
-    width:17px!important;
-}
+            /* 定位 */
+            position: absolute;
+            left: 50%;
+            top: -16px;
+        }
 
-[v-cloak]{
-    display: none;
-}
+        .fileUploadContent {
+            display: inline-flex;
+            display: -webkit-inline-flex;
+        }
 
-#sh {
-    font-size:18px;
-    font-family:微软雅黑;
-    border: 2px solid #9f9ca1;
-}
+        .fileUploadContent label {
+            display: inline-block;
+            word-break: keep-all;
+            line-height: 30px;
+        }
 
-#sh::-webkit-input-placeholder{
-        color:#2f97a8;
-    font-family:微软雅黑;
-}
-#sh::-moz-placeholder{
-        color:#2f97a8;
-    font-family:微软雅黑;
-}
-#sh:-ms-input-placeholder{
-        color:#2f97a8;
-    font-family:微软雅黑;
-}
+        .el-checkbox__label {
+            font-size: 18px;
+        }
 
-.transfer-footer {
-    margin-left: 20px;
-    padding: 6px 5px;
-  }
-/*穿梭框宽度等样式*/
-.el-transfer-panel {
-    border: 1px solid #EBEEF5;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #FFF;
-    display: inline-block;
-    vertical-align: middle;
-    width: 300px;
-    max-height: 100%;
-    box-sizing: border-box;
-    position: relative;
-}
-/*穿梭框字体大小样式*/
-.el-checkbox__label {
-    font-size: 16px;
-}
-tbody tr td:last-child {
-   text-align:left;
-}
-/*表格内容换行显示*/
-  .el-table  .cell{
-     {#text-align: left;#}
-      white-space: pre-line;
- }
-.el-icon-question:before {
+        .fileUploadContent {
+            padding-left: 15px;
+            margin-bottom: 10px;
+        }
+
+        .inputPackage {
+            background: #2980b9; /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, rgb(41, 128, 185), rgb(109, 213, 250)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            display: block;
+            position: relative;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .inputPackage span {
+            position: absolute;
+            line-height: 100%;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            color: aliceblue;
+        }
+
+        .fileUploadContent .showFileName {
+            line-height: 40px;
+            margin-left: 20px;
+            font-size: 18px;
+            color: aliceblue;
+        }
+
+        .inputPackage input {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .selectItem {
+            font-size: 20px;
+            font-weight: bold;
+            color: aliceblue;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .el-pagination__total, .el-pagination__jump {
+            color: white;
+        }
+
+        .gutter {
+            display: block !important;
+            width: 17px !important;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        #sh {
+            font-size: 18px;
+            font-family: 微软雅黑;
+            border: 2px solid #9f9ca1;
+        }
+
+        #sh::-webkit-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh::-moz-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        #sh:-ms-input-placeholder {
+            color: #2f97a8;
+            font-family: 微软雅黑;
+        }
+
+        .transfer-footer {
+            margin-left: 20px;
+            padding: 6px 5px;
+        }
+
+        /*穿梭框宽度等样式*/
+        .el-transfer-panel {
+            border: 1px solid #EBEEF5;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #FFF;
+            display: inline-block;
+            vertical-align: middle;
+            width: 300px;
+            max-height: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /*穿梭框字体大小样式*/
+        .el-checkbox__label {
+            font-size: 16px;
+        }
+
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        /*表格内容换行显示*/
+        .el-table .cell {
+        {#text-align: left;#} white-space: pre-line;
+        }
+
+        .el-icon-question:before {
             color: yellowgreen;
             font-size: xx-large;
         }
-{% comment %}解决点击事件出现 current_row class对上面的样式的影响{% endcomment %}
+
+        {% comment %}解决点击事件出现 current_row class对上面的样式的影响{% endcomment %}
         .el-table__body tr.current-row > td {
             background-color: transparent !important;
         }
@@ -224,7 +244,8 @@ tbody tr td:last-child {
         .el-table .el-select .el-input__inner {
             height: 50px;
         }
-.eltable-photo {
+
+        .eltable-photo {
             white-space: nowrap;
             overflow-x: auto;
             text-overflow: clip
@@ -255,283 +276,302 @@ tbody tr td:last-child {
         .eltable-photo .el-image:first-child {
             margin-left: 0px;
         }
-/* 添加预览对话框样式 */
-    .preview-dialog {
-        height: 90vh;
-    }
-    .preview-dialog .el-dialog__body {
-        max-height: calc(90vh - 100px);
-        overflow-y: auto;
-    }
 
-/* Excel预览美化样式 */
-.excel-sheet {
-  margin-bottom: 30px;
-  overflow: auto;
-}
+        /* 添加预览对话框样式 */
+        .preview-dialog {
+            height: 90vh;
+        }
 
-.excel-sheet h4 {
-  background-color: #409EFF;
-  color: white;
-  padding: 8px 12px;
-  margin: 0 0 10px 0;
-  border-radius: 4px;
-  font-size: 16px;
-}
+        .preview-dialog .el-dialog__body {
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+        }
 
-.excel-table {
-  width: 100%;
-  overflow: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
+        /* Excel预览美化样式 */
+        .excel-sheet {
+            margin-bottom: 30px;
+            overflow: auto;
+        }
 
-.excel-table table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 100%;
-  font-size: 14px;
-}
+        .excel-sheet h4 {
+            background-color: #409EFF;
+            color: white;
+            padding: 8px 12px;
+            margin: 0 0 10px 0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
 
-.excel-table td, .excel-table th {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
+        .excel-table {
+            width: 100%;
+            overflow: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
 
-.excel-table th {
-  background-color: #f5f7fa;
-  font-weight: bold;
-  color: #606266;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+        .excel-table table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 100%;
+            font-size: 14px;
+        }
 
-.excel-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
+        .excel-table td, .excel-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-.excel-table tr:hover {
-  background-color: #f5f5f5;
-}
+        .excel-table th {
+            background-color: #f5f7fa;
+            font-weight: bold;
+            color: #606266;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-/* 确保预览对话框中的内容可以滚动 */
-.preview-dialog .el-dialog__body {
-  max-height: calc(90vh - 100px);
-  overflow-y: auto;
-}
+        .excel-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
 
-/* PPT预览样式 */
-  .ppt-preview-container {
-      width: 100%;
-      height: 70vh;
-      overflow: auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f5f5f5;
-  }
-  .ppt-image {
-      max-width: 100%;
-      max-height: 100%;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  }
-  .ppt-controls {
-      text-align: center;
-      margin: 15px 0;
-  }
-  .ppt-loading {
-      text-align: center;
-      padding: 50px;
-      font-size: 16px;
-      color: #666;
-  }
-  .ppt-error {
-      text-align: center;
-      padding: 50px;
-      color: #f56c6c;
-      font-size: 16px;
-  }
-</style>
+        .excel-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* 确保预览对话框中的内容可以滚动 */
+        .preview-dialog .el-dialog__body {
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+        }
+
+        /* PPT预览样式 */
+        .ppt-preview-container {
+            width: 100%;
+            height: 70vh;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .ppt-image {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .ppt-controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .ppt-loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .ppt-error {
+            text-align: center;
+            padding: 50px;
+            color: #f56c6c;
+            font-size: 16px;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-<div id="app">
-      <!--搜索框-->
-    <div class="selectMsg" >
+    <div id="app">
+        <!--搜索框-->
+        <div class="selectMsg">
 
-           <div class="toolbar-container">
-               <div class="search-conditions">
-                   <label for="customer" style="font-size: 12px">CG</label>
-                 <el-select  ref="CG" clearable v-model="CG" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <el-option v-for="item in CGOptions"
-                    :key="item"
-                    :label="item"
-                    :value="item"></el-option>
-                 </el-select>
+            <div class="toolbar-container">
+                <div class="search-conditions">
+                    <label for="customer" style="font-size: 12px">CG</label>
+                    <el-select ref="CG" clearable v-model="CG"
+                               style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                        <el-option v-for="item in CGOptions"
+                                   :key="item"
+                                   :label="item"
+                                   :value="item"></el-option>
+                    </el-select>
 
-                   <label for="customer" style="font-size: 12px">HW/SW</label>
-                 <el-select  ref="SWHW" clearable v-model="SWHW" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <el-option v-for="item in SWHWOptions"
-                    :key="item"
-                    :label="item"
-                    :value="item"></el-option>
-                 </el-select>
+                    <label for="customer" style="font-size: 12px">HW/SW</label>
+                    <el-select ref="SWHW" clearable v-model="SWHW"
+                               style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                        <el-option v-for="item in SWHWOptions"
+                                   :key="item"
+                                   :label="item"
+                                   :value="item"></el-option>
+                    </el-select>
 
-                 <label for="customer" style="font-size: 12px">C-L1</label>
-                 <el-select  ref="Category_L1" @change="changeCategory_L1" clearable v-model="category1" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <el-option v-for="(item,key,index) in Categorys"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"></el-option>
-                 </el-select>
+                    <label for="customer" style="font-size: 12px">C-L1</label>
+                    <el-select ref="Category_L1" @change="changeCategory_L1" clearable v-model="category1"
+                               style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                        <el-option v-for="(item,key,index) in Categorys"
+                                   :key="item.id"
+                                   :label="item.name"
+                                   :value="item.id"></el-option>
+                    </el-select>
 
-               <label for="customer1" style="font-size: 12px">C-L2</label>
-                 <el-select  ref="Category_L2" value-key="id" clearable v-model="category2" style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <el-option v-for="(item,key,index) in Category_L2Options"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"></el-option>
-                 </el-select>
+                    <label for="customer1" style="font-size: 12px">C-L2</label>
+                    <el-select ref="Category_L2" value-key="id" clearable v-model="category2"
+                               style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
+                        <el-option v-for="(item,key,index) in Category_L2Options"
+                                   :key="item.id"
+                                   :label="item.name"
+                                   :value="item.id"></el-option>
+                    </el-select>
 
-               <label style="font-size: 12px;font-weight: bold;margin-left: 6px;" for="Owner">负责人</label>
-                 <el-autocomplete
-                          class="inline-input"
-                          v-model="Owner"
-                          ref="Owner"
-                          clearable
-                          :fetch-suggestions="querySearch"
-                          placeholder="请输入负责人名称筛选"
-                          @select="handleSelect"
-                        >
-                     <template slot-scope="{ item }">
-                         <div style="text-align: center">${ item.value }&nbsp;(${ item.number })</div>
-                     </template>
-                 </el-autocomplete>
-               </div>
+                    <label style="font-size: 12px;font-weight: bold;margin-left: 6px;" for="Owner">负责人</label>
+                    <el-autocomplete
+                            class="inline-input"
+                            v-model="Owner"
+                            ref="Owner"
+                            clearable
+                            :fetch-suggestions="querySearch"
+                            placeholder="请输入负责人名称筛选"
+                            @select="handleSelect"
+                    >
+                        <template slot-scope="{ item }">
+                            <div style="text-align: center">${ item.value }&nbsp;(${ item.number })</div>
+                        </template>
+                    </el-autocomplete>
+                </div>
 
-               <div class="action-buttons">
-                 <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">搜索</el-button>
-                 <el-button :loading="elbuttonloading" @click="handleAdd" type="success" >Add</el-button>
-                 <el-button :loading="elbuttonloading" @click="editData()" type="success" v-cloak style="margin-left: 20px;">Edit</el-button>
-                 <el-button :loading="elbuttonloading" type="danger"  style="height:40px;float: right;" @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除</el-button>
-                 <el-button @click="exportExcel" v-if="SSVIP_users===1" type="info" v-cloak style="height:40px">導出</el-button>
-               </div>
-           </div>
+                <div class="action-buttons">
+                    <el-button :loading="elbuttonloading" @click="find" v-cloak type="primary" style="height:40px">
+                        搜索
+                    </el-button>
+                    <el-button :loading="elbuttonloading" @click="handleAdd" type="success">Add</el-button>
+                    <el-button :loading="elbuttonloading" @click="editData()" type="success" v-cloak
+                               style="margin-left: 20px;">Edit
+                    </el-button>
+                    <el-button :loading="elbuttonloading" type="danger" style="height:40px;float: right;"
+                               @click="Delete"><i class="el-icon-remove-outline el-icon--left"></i>刪除
+                    </el-button>
+                    <el-button @click="exportExcel" v-if="SSVIP_users===1" type="info" v-cloak style="height:40px">
+                        導出
+                    </el-button>
+                </div>
+            </div>
 
-    </div>
+        </div>
 
-    <div v-cloak class="fileUploadContent" v-if="SSVIP_users===1">
-         <div class="inputPackage" v-cloak>
-             <span v-cloak>請選擇文件</span>
-             <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
-         </div>
-         <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳清单</el-button>
-         <span class="showFileName" v-cloak >${ fileName }</span>
-        <el-tooltip class="item" effect="dark" placement="right" raw-content >
-              <div slot="content">
-                1.excel上传无法上传附件，只能上传清单，附件还需各owner编辑上传。清单不要重复上传。<br>
-                2.附件名稱不要有中文和特殊符號。<br>
-                3.附件可以是視頻，非視頻文件最好打包在一起
-              </div>
-              <i class="el-icon-question"></i>
+        <div v-cloak class="fileUploadContent" v-if="SSVIP_users===1">
+            <div class="inputPackage" v-cloak>
+                <span v-cloak>請選擇文件</span>
+                <input v-cloak type="file" id="upload" ref="file" @change="updateFile(event)" v-model="excelFile">
+            </div>
+            <el-button @click="fileUpload" type="warning" style="height:40px" v-cloak> Excel上傳清单</el-button>
+            <span class="showFileName" v-cloak>${ fileName }</span>
+            <el-tooltip class="item" effect="dark" placement="right" raw-content>
+                <div slot="content">
+                    1.excel上传无法上传附件，只能上传清单，附件还需各owner编辑上传。清单不要重复上传。<br>
+                    2.附件名稱不要有中文和特殊符號。<br>
+                    3.附件可以是視頻，非視頻文件最好打包在一起
+                </div>
+                <i class="el-icon-question"></i>
             </el-tooltip>
-                <span class="showFileName" v-cloak>${ fileName }</span>
-                <a style="margin-top: 10px;margin-left: 20px;color: #FFFFFF"
-                   href="/static/src/modelfiles/CommonFiles.xlsx" style="color: orange;font-size: 16px"><img
-                        src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="...">模板下载</a>
-    </div>
+            <span class="showFileName" v-cloak>${ fileName }</span>
+            <a style="margin-top: 10px;margin-left: 20px;color: #FFFFFF"
+               href="/static/src/modelfiles/CommonFiles.xlsx" style="color: orange;font-size: 16px"><img
+                    src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="...">模板下载</a>
+        </div>
 
-     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="80%">
-         <el-radio-group v-model="labelPosition" size="small">
-          <el-radio-button label="left">左对齐</el-radio-button>
-          <el-radio-button label="right">右对齐</el-radio-button>
-          <el-radio-button label="top">顶部对齐</el-radio-button>
-        </el-radio-group>
-        <template>
-            <el-form :label-position="labelPosition" ref="form"  :model="form" :rules="rules" label-width="100px" style="width: 100%">
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                      <el-form-item label="CG" prop="CG" style="width: 100%;">
-                          <el-select v-model="form.CG" placeholder="请选择">
-                                <el-option
-                                    v-for="item in CGOptions"
-                                    :key="item"
-                                    :label="item"
-                                    :value="item">
-                                </el-option>
-                          </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="SWHW" prop="SWHW" style="width: 100%;">
-                          <el-select v-model="form.SWHW" placeholder="请选择">
-                                <el-option
-                                    v-for="item in SWHWOptions"
-                                    :key="item"
-                                    :label="item"
-                                    :value="item">
-                                </el-option>
-                          </el-select>
-                        </el-form-item>
-                    </el-col>
-                 </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                          <!-- 大项选择 -->
-                            <el-form-item label="Category-L1" prop="Category_L1" style="width: 100%;">
-                              <el-select
-                                v-model="form.Category_L1"
-                                placeholder="请选择Category-L1"
-                                @change="handleCategoryChange"
-                              >
-                                <el-option
-                                  v-for="item in Categorys"
-                                  :key="item.id"
-                                  :label="item.name"
-                                  :value="item.id"
-                                />
-                              </el-select>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="80%">
+            <el-radio-group v-model="labelPosition" size="small">
+                <el-radio-button label="left">左对齐</el-radio-button>
+                <el-radio-button label="right">右对齐</el-radio-button>
+                <el-radio-button label="top">顶部对齐</el-radio-button>
+            </el-radio-group>
+            <template>
+                <el-form :label-position="labelPosition" ref="form" :model="form" :rules="rules" label-width="100px"
+                         style="width: 100%">
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="CG" prop="CG" style="width: 100%;">
+                                <el-select v-model="form.CG" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in CGOptions"
+                                            :key="item"
+                                            :label="item"
+                                            :value="item">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
-                    <el-col :span="12">
+                        <el-col :span="12">
+                            <el-form-item label="SWHW" prop="SWHW" style="width: 100%;">
+                                <el-select v-model="form.SWHW" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in SWHWOptions"
+                                            :key="item"
+                                            :label="item"
+                                            :value="item">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <!-- 大项选择 -->
+                            <el-form-item label="Category-L1" prop="Category_L1" style="width: 100%;">
+                                <el-select
+                                        v-model="form.Category_L1"
+                                        placeholder="请选择Category-L1"
+                                        @change="handleCategoryChange"
+                                >
+                                    <el-option
+                                            v-for="item in Categorys"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
 
                             <!-- 细项选择 -->
                             <el-form-item label="Category-L2" prop="Category_L2" style="width: 100%;">
-                              <el-select
-                                v-model="form.Category_L2"
-                                placeholder="请先选择Category-L2"
-                                :disabled="!SubCategorys.length"
-                              >
-                                <el-option
-                                  v-for="item in SubCategorys"
-                                  :key="item.id"
-                                  :label="item.name"
-                                  :value="item.id"
-                                />
-                              </el-select>
+                                <el-select
+                                        v-model="form.Category_L2"
+                                        placeholder="请先选择Category-L2"
+                                        :disabled="!SubCategorys.length"
+                                >
+                                    <el-option
+                                            v-for="item in SubCategorys"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id"
+                                    />
+                                </el-select>
                             </el-form-item>
-                         </el-col>
-                 </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                      <el-form-item label="Item" prop="Item" style="width: 100%;">
-                          <el-input  v-model="form.Item" ></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="Description" prop="Description" style="width: 100%;">
-                          <el-input  v-model="form.Description" type="textarea"></el-input>
-                      </el-form-item>
-                    </el-col>
-                 </el-row>
-                 <el-row :gutter="20">
-                    <el-col :span="12">
-                      <el-form-item label="Version" prop="Version" style="width: 100%;">
-                          <el-input  v-model="form.Version" ></el-input>
-                      </el-form-item>
-                    </el-col>
-                    {% comment %}<el-col :span="12">
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="Item" prop="Item" style="width: 100%;">
+                                <el-input v-model="form.Item"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="Description" prop="Description" style="width: 100%;">
+                                <el-input v-model="form.Description" type="textarea"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="Version" prop="Version" style="width: 100%;">
+                                <el-input v-model="form.Version"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        {% comment %}<el-col :span="12">
                       <el-form-item label="updated_at" prop="updated_at" style="width: 100%;">
                           <el-date-picker
                              v-model="form.updated_at"
@@ -541,437 +581,450 @@ tbody tr td:last-child {
                           </el-date-picker>
                       </el-form-item>
                     </el-col>{% endcomment %}
-                 </el-row>
-                <el-form-item label="负责人" prop="Owner" style="width: 100%;">
-                    <el-transfer
-                      style="text-align: left; display: inline-block"
-                      v-model="selectedKeys"
-                      filterable
-                      filter-placeholder="请输入名字筛选"
-                      :left-default-checked="leftChecked"
-                      :right-default-checked="rightChecked"
-                      :titles="['人员名单', '负责人']"
-                      :button-texts="['到左边', '到右边']"
-                      :format="{
+                    </el-row>
+                    <el-form-item label="负责人" prop="Owner" style="width: 100%;">
+                        <el-transfer
+                                style="text-align: left; display: inline-block"
+                                v-model="selectedKeys"
+                                filterable
+                                filter-placeholder="请输入名字筛选"
+                                :left-default-checked="leftChecked"
+                                :right-default-checked="rightChecked"
+                                :titles="['人员名单', '负责人']"
+                                :button-texts="['到左边', '到右边']"
+                                :format="{
                         noChecked: '${total}',
                         hasChecked: '${checked}/${total}'
                       }"
-                      @change="handleChange"
-                      :data="this.OwnersOptions"
-                    :props="{
+                                @change="handleChange"
+                                :data="this.OwnersOptions"
+                                :props="{
                         key: 'account',
                         label: 'username',
-                        {% comment %}disabled:'isdisabled',{% endcomment %}{% comment %}后端返回的字段中是diabled，与原来的Transfer 仅能识别数据项中的 key、label 和 disabled 字段，中同名，就不需要写在:props中了{% endcomment %}
+                        
+                                        {% comment %}disabled:'isdisabled',{% endcomment %}{% comment %}后端返回的字段中是diabled，与原来的Transfer 仅能识别数据项中的 key、label 和 disabled 字段，中同名，就不需要写在:props中了{% endcomment %}
                       }"
-                      {% comment %}:list-style="{
+                                {% comment %}:list-style="{
                     width: '300px',  // 增大宽度
                     height: '400px'
                   }"{% endcomment %}
-                    >
-                        <span slot-scope="{ option }">${ option.username } - ${ option.account }</span>
-                      {% comment %}<el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
-                      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>{% endcomment %}
-                    </el-transfer>
-                  </el-form-item>
-                <el-row :gutter="20">
-                    <el-form-item label="Attachment">
-                        <el-upload
-                          action="#"
-                          :auto-upload="false"
-                          :file-list="fileList"
-                          :on-change="handleVideoChange"
-                          :on-remove="handleVideoRemove"
                         >
-                          <el-button type="primary">点击上传附件</el-button>
-                          <div slot="file" slot-scope="{file}">
-                            <!-- 视频文件显示预览 -->
-                            <video v-if="isVideoFile(file)" controls width="320" height="180" :src="file.url"></video>
-                            <el-image  v-else-if="getFileType(file)=='image'" :src="file.url" style="width: 100px; height: 100px;"></el-image>
-
-
-                            <!-- 非视频文件显示下载链接 -->
-                            <div v-else>
-                              <a :href="file.url" :download="file.name" style="margin-bottom: 10px; display: block;">
-                                <el-button type="primary" size="mini">下载文件</el-button>
-                              </a>
-                              <div style="font-size: 12px; color: #999;">{{ file.name }}</div>
-                            </div>
-
-                            <div style="margin-top: 10px">
-                              <el-button size="mini" type="danger" @click="handleVideoRemove(file)">删除</el-button>
-                            </div>
-                          </div>
-                        </el-upload>
+                            <span slot-scope="{ option }">${ option.username } - ${ option.account }</span>
+                            {% comment %}<el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
+                      <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>{% endcomment %}
+                        </el-transfer>
                     </el-form-item>
-                </el-row>
+                    <el-row :gutter="20">
+                        <el-form-item label="Attachment">
+                            <el-upload
+                                    action="#"
+                                    :auto-upload="false"
+                                    :file-list="fileList"
+                                    :on-change="handleVideoChange"
+                                    :on-remove="handleVideoRemove"
+                            >
+                                <el-button type="primary">点击上传附件</el-button>
+                                <div slot="file" slot-scope="{file}">
+                                    <!-- 视频文件显示预览 -->
+                                    <video v-if="isVideoFile(file)" controls width="320" height="180"
+                                           :src="file.url"></video>
+                                    <el-image v-else-if="getFileType(file)=='image'" :src="file.url"
+                                              style="width: 100px; height: 100px;"></el-image>
 
-                <div class="el-form-item__content" style="display: flex;justify-content: center;align-items: center;">
-                  <el-form-item>
-                        <el-button type="primary" @click="submitForm('form')">確定</el-button>
-                  </el-form-item>
+
+                                    <!-- 非视频文件显示下载链接 -->
+                                    <div v-else>
+                                        <a :href="file.url" :download="file.name"
+                                           style="margin-bottom: 10px; display: block;">
+                                            <el-button type="primary" size="mini">下载文件</el-button>
+                                        </a>
+                                        <div style="font-size: 12px; color: #999;">{{ file.name }}</div>
+                                    </div>
+
+                                    <div style="margin-top: 10px">
+                                        <el-button size="mini" type="danger" @click="handleVideoRemove(file)">删除
+                                        </el-button>
+                                    </div>
+                                </div>
+                            </el-upload>
+                        </el-form-item>
+                    </el-row>
+
+                    <div class="el-form-item__content"
+                         style="display: flex;justify-content: center;align-items: center;">
+                        <el-form-item>
+                            <el-button type="primary" @click="submitForm('form')">確定</el-button>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </template>
+        </el-dialog>
+        <el-dialog :visible.sync="previewDialogVisible" width="90%" top="5vh" custom-class="preview-dialog">
+            <div v-if="previewType === 'pdf'" style="overflow: auto">
+                <div style="text-align: center; margin-bottom: 20px">
+                    <el-button @click="prevPage" :disabled="currentPageNum<=1">上一页</el-button>
+                    <span>第 ${ currentPageNum } 页 / 共 ${ pdfTotalPages } 页</span>
+                    <el-button @click="nextPage" :disabled="currentPageNum>=pdfTotalPages">下一页</el-button>
                 </div>
-             </el-form>
-        </template>
-    </el-dialog>
-     <el-dialog :visible.sync="previewDialogVisible" width="90%" top="5vh" custom-class="preview-dialog">
-        <div v-if="previewType === 'pdf'" style="overflow: auto">
-          <div style="text-align: center; margin-bottom: 20px">
-            <el-button @click="prevPage" :disabled="currentPageNum<=1">上一页</el-button>
-            <span>第 ${ currentPageNum } 页 / 共 ${ pdfTotalPages } 页</span>
-            <el-button @click="nextPage" :disabled="currentPageNum>=pdfTotalPages">下一页</el-button>
-          </div>
-          <div :id="previewContainerId"></div>
-        </div>
-
-         <div v-else-if="previewType === 'excel' || previewType === 'word'" style="overflow: auto">
-          <div :id="previewContainerId"></div>
-        </div>
-
-         <div v-else-if="previewType === 'ppt'">
-            <div class="ppt-controls">
-                <el-button @click="prevSlide" :disabled="currentSlideNum <= 1">上一页</el-button>
-                <span style="margin: 0 15px">第 ${ currentSlideNum } 页 / 共 ${ pptTotalSlides } 页</span>
-                <el-button @click="nextSlide" :disabled="currentSlideNum >= pptTotalSlides">下一页</el-button>
-                <el-button type="primary" @click="downloadPreviewFile">下载原文件</el-button>
+                <div :id="previewContainerId"></div>
             </div>
-            <div class="ppt-preview-container">
-                <div v-if="pptLoading" class="ppt-loading">
-                    <i class="el-icon-loading"></i>
-                    <p>正在解析PPT文件，请稍候...</p>
+
+            <div v-else-if="previewType === 'excel' || previewType === 'word'" style="overflow: auto">
+                <div :id="previewContainerId"></div>
+            </div>
+
+            <div v-else-if="previewType === 'ppt'">
+                <div class="ppt-controls">
+                    <el-button @click="prevSlide" :disabled="currentSlideNum <= 1">上一页</el-button>
+                    <span style="margin: 0 15px">第 ${ currentSlideNum } 页 / 共 ${ pptTotalSlides } 页</span>
+                    <el-button @click="nextSlide" :disabled="currentSlideNum >= pptTotalSlides">下一页</el-button>
+                    <el-button type="primary" @click="downloadPreviewFile">下载原文件</el-button>
                 </div>
-                <div v-else-if="pptError" class="ppt-error">
-                    <i class="el-icon-error"></i>
-                    <p>${ pptError }</p>
-                </div>
-                <div v-else>
-                    <canvas :id="'ppt-canvas-'+currentSlideNum" class="ppt-image"></canvas>
+                <div class="ppt-preview-container">
+                    <div v-if="pptLoading" class="ppt-loading">
+                        <i class="el-icon-loading"></i>
+                        <p>正在解析PPT文件，请稍候...</p>
+                    </div>
+                    <div v-else-if="pptError" class="ppt-error">
+                        <i class="el-icon-error"></i>
+                        <p>${ pptError }</p>
+                    </div>
+                    <div v-else>
+                        <canvas :id="'ppt-canvas-'+currentSlideNum" class="ppt-image"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div v-else>
-          <p>该文件类型不支持预览</p>
-          <el-button type="primary" @click="downloadPreviewFile">下载文件</el-button>
-        </div>
-      </el-dialog>
+            <div v-else>
+                <p>该文件类型不支持预览</p>
+                <el-button type="primary" @click="downloadPreviewFile">下载文件</el-button>
+            </div>
+        </el-dialog>
 
-  <div class="tableAround">
+        <div class="tableAround">
 
-    <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input><br>
-{#    <span  class="selectItem" v-cloak  v-if="showCustomer&&showDepartment&&showLesson">當前表格信息：${ showYear }/${ showCustomer }/${ showDepartment }/${ showLesson }/${ showGroupEmployees } </span>#}
-    <el-table id="out-table"  ref="tableRef" height="700" border stripe :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
-        style="min-width: 100%;border-radius: 10px"  @selection-change="handleSelectionChange" :row-key="getRowKeys"
-        :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
-        v-loading="tableloading"
-        element-loading-text="數據更新中，請稍後"
-        border>
-{#              <el-table-column type="selection" width="50" align="center" fixed></el-table-column>#}
-              <el-table-column type="selection" :selectable="selectable" min-width="7%" align="center"></el-table-column>
+            <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input>
+            <br>
+            {#    <span  class="selectItem" v-cloak  v-if="showCustomer&&showDepartment&&showLesson">當前表格信息：${ showYear }/${ showCustomer }/${ showDepartment }/${ showLesson }/${ showGroupEmployees } </span>#}
+            <el-table id="out-table" ref="tableRef" height="700" border stripe
+                      :data="datas.slice((currentPage -1 )*pageSize,(currentPage)*pageSize)"
+                      style="min-width: 100%;border-radius: 10px" @selection-change="handleSelectionChange"
+                      :row-key="getRowKeys"
+                      :header-cell-style="{'background-color':'#fafafa','font-weight':'800','border-bottom':'1px solid rgb(103, 194, 58)'}"
+                      v-loading="tableloading"
+                      element-loading-text="數據更新中，請稍後"
+                      border>
+                {#              <el-table-column type="selection" width="50" align="center" fixed></el-table-column>#}
+                <el-table-column type="selection" :selectable="selectable" min-width="7%"
+                                 align="center"></el-table-column>
                 {% comment %}用右上角的编辑按钮了，有删除时，又有多选框，又有每一条的删除功能页面很拥挤{% endcomment %}
-              {% comment %}<el-table-column  v-if="this.permission == 1" label="Edit" align="center">
+                {% comment %}<el-table-column  v-if="this.permission == 1" label="Edit" align="center">
                   <template slot-scope="scope">
                       <el-button v-if="scope.row.Ownerflag" style="border:0;color: #D9B300" type="i" class="ti-pencil-alt"  @click="handleEdit(scope.row.id,scope.row)"></el-button>
                   </template>
               </el-table-column>{% endcomment %}
-              <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
-              <el-table-column  prop="CG" label="CG" width="100" align="center"></el-table-column>
-              <el-table-column  prop="SWHW" label="SW/HW" width="100" align="center"></el-table-column>
-              <el-table-column  prop="Category_L1" label="Category-L1" width="90" align="center">
-                  <template slot-scope="scope">
-                      <span  >${ allCategorys[scope.row.Category_L1] }</span>
-                  </template>
-              </el-table-column>
-              <el-table-column  prop="Category_L2" label="Category-L2" width="100" align="center">
-                  <template slot-scope="scope">
-                      <span  >${ allSubCategorys[scope.row.Category_L2] }</span>
-                  </template>
-              </el-table-column>
-              <el-table-column  prop="Item" label="Item" width="120" align="center"></el-table-column>
-              <el-table-column  prop="Version" label="Version" width="80" align="center"></el-table-column>
-              <el-table-column  prop="Description" label="Description" width="280" align="left"></el-table-column>
+                <el-table-column type="index" :index="indexMethod" align="center"></el-table-column>
+                <el-table-column prop="CG" label="CG" width="100" align="center"></el-table-column>
+                <el-table-column prop="SWHW" label="SW/HW" width="100" align="center"></el-table-column>
+                <el-table-column prop="Category_L1" label="Category-L1" width="90" align="center">
+                    <template slot-scope="scope">
+                        <span>${ allCategorys[scope.row.Category_L1] }</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="Category_L2" label="Category-L2" width="100" align="center">
+                    <template slot-scope="scope">
+                        <span>${ allSubCategorys[scope.row.Category_L2] }</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="Item" label="Item" width="120" align="center"></el-table-column>
+                <el-table-column prop="Version" label="Version" width="80" align="center"></el-table-column>
+                <el-table-column prop="Description" label="Description" width="280" align="left"></el-table-column>
 
-              {% comment %}<el-table-column  prop="PW" label="密碼" width="110" align="center">
+                {% comment %}<el-table-column  prop="PW" label="密碼" width="110" align="center">
                   <template slot-scope="scope">
                      <span  v-if="scope.row.Ownerflag || permission===1 && SSVIP_users===1">${ scope.row.PW }</span>
                      <span  v-else="scope.row.Ownerflag || permission===1 && SSVIP_users===1">******</span>
                   </template>
               </el-table-column>{% endcomment %}
-              <el-table-column  prop="updated_at" label="updated_at" width="120" align="center"></el-table-column>
-{#              <el-table-column  prop="Creator" label="创建人" width="100" align="center"></el-table-column>#}
-              <el-table-column  prop="Owner" label="负责人" width="100" align="center">
-                  <template slot-scope="scope">
-                    <!-- 使用 div 循环，每个元素自然换行 -->
-                    <div
-                      v-for="(item, index) in scope.row.Owner"
-                      :key="index"
-                    >
-                      ${ item.username } (${ item.account })
-                    </div>
-                  </template>
-              </el-table-column>
-              <el-table-column prop="Attachment" label="Attachment" width="300" sortable>
-                  <template scope="scope">
-                    <div v-for="(item, index) in scope.row.Attachment" :key="item.id">
-                      <!-- 视频预览 -->
-                      <video v-if="isVideoFile(item)" width="200" height="100" controls>
-                        <source :src="getFullUrl(item.url)" type="video/mp4">
-                        您的浏览器不支持 video 标签。
-                      </video>
-                      <div class="eltable-photo" v-else-if="getFileType(item)=='image'">
-                        <el-image :src="item.url" style="width: 100px; height: 100px;"
-                                  :preview-src-list="getPreviewList(item.url)" lazy="true"></el-image>
-                      </div>
-
-                      <!-- 非视频文件显示预览按钮 -->
-                      <template v-else>
-                        <el-button @click="openPreview(item)" size="mini">预览</el-button>
-                        <el-button type="primary" size="mini">
-                          <a :href="getFullUrl(item.url)" download style="color: white; text-decoration: none">下载</a>
-                        </el-button>
-                      </template>
-                    </div>
-                  </template>
+                <el-table-column prop="updated_at" label="updated_at" width="120" align="center"></el-table-column>
+                {#              <el-table-column  prop="Creator" label="创建人" width="100" align="center"></el-table-column>#}
+                <el-table-column prop="Owner" label="负责人" width="100" align="center">
+                    <template slot-scope="scope">
+                        <!-- 使用 div 循环，每个元素自然换行 -->
+                        <div
+                                v-for="(item, index) in scope.row.Owner"
+                                :key="index"
+                        >
+                            ${ item.username } (${ item.account })
+                        </div>
+                    </template>
                 </el-table-column>
-    </el-table>
-      <div class="block">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
-        </el-pagination>
-      </div>
-  </div>
-  </div>
+                <el-table-column prop="Attachment" label="Attachment" width="300" sortable>
+                    <template scope="scope">
+                        <div v-for="(item, index) in scope.row.Attachment" :key="item.id">
+                            <!-- 视频预览 -->
+                            <video v-if="isVideoFile(item)" width="200" height="100" controls>
+                                <source :src="getFullUrl(item.url)" type="video/mp4">
+                                您的浏览器不支持 video 标签。
+                            </video>
+                            <div class="eltable-photo" v-else-if="getFileType(item)=='image'">
+                                <el-image :src="item.url" style="width: 100px; height: 100px;"
+                                          :preview-src-list="getPreviewList(item.url)" lazy="true"></el-image>
+                            </div>
+
+                            <!-- 非视频文件显示预览按钮 -->
+                            <template v-else>
+                                <el-button @click="openPreview(item)" size="mini">预览</el-button>
+                                <el-button type="primary" size="mini">
+                                    <a :href="getFullUrl(item.url)" download
+                                       style="color: white; text-decoration: none">下载</a>
+                                </el-button>
+                            </template>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                               :current-page="currentPage" :page-sizes="[20, 50, 100, 200]" :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper" :total="total_computed">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block scripts %}
-<script>
-  // 修复Array.prototype污染问题
-  Object.defineProperty(Array.prototype, 'Push', {
-    value: undefined,
-    enumerable: false,
-    configurable: false,
-    writable: false
-  });
-</script>
-<script src="/static/js/es6/polyfill.min.js"></script>
-<script src="/static/js/es6/babel.min.js"></script>
-<script src="/static/js/axios.min.js"></script>
-<script src="/static/js/vue.min.js"></script>
-<script src="/static/js/qs.js"></script>
-<script src="/static/js/Element/index.js"></script>
-<script src="/static/js/xlsx/FileSaver.min.js"></script>
-<script src="/static/js/Element/table.js"></script>
-<script src="/static/js/Element/main.js"></script>
-<script src="/static/js/Element/input.js"></script>
-<script src="/static/js/Element/table-column.js"></script>
-<script src="/static/js/Element/icon.js"></script>
-<script src="/static/js/Element/image.js"></script>
-<script src="/static/js/Element/message.js"></script>
-<script src="/static/js/jszip.min.js"></script>
-<script src="/static/js/pdf.js"></script>
-<script src="/static/js/pdf.worker.js"></script>
-<script>
-  // 添加PDF worker配置
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
-</script>
-<script src="/static/js/xlsx.full.min.js"></script>
-<script src="/static/js/mammoth.browser.min.js"></script>
-<script src="/static/js/pptxgen.min.js"></script>
-{#<script src="/static/js/pptxgen.cmaps.js"></script>#}
-<script src="/static/js/pptxjs.min.js"></script>
-<script src="/static/js/pptxjs.js"></script>
-{#<script src="/static/js/pptxgen.cmaps.js"></script>#}
-<script type="text/babel">
-    new Vue({
-        el: '#app',
-        delimiters: ['${', '}'],
-        data: function () {
-            // 自定义浮点数验证规则
+    <script>
+        // 修复Array.prototype污染问题
+        Object.defineProperty(Array.prototype, 'Push', {
+            value: undefined,
+            enumerable: false,
+            configurable: false,
+            writable: false
+        });
+    </script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script src="/static/js/jszip.min.js"></script>
+    <script src="/static/js/pdf.js"></script>
+    <script src="/static/js/pdf.worker.js"></script>
+    <script>
+        // 添加PDF worker配置
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
+    </script>
+    <script src="/static/js/xlsx.full.min.js"></script>
+    <script src="/static/js/mammoth.browser.min.js"></script>
+    <script src="/static/js/pptxgen.min.js"></script>
+    {#<script src="/static/js/pptxgen.cmaps.js"></script>#}
+    <script src="/static/js/pptxjs.min.js"></script>
+    <script src="/static/js/pptxjs.js"></script>
+    {#<script src="/static/js/pptxgen.cmaps.js"></script>#}
+    <script type="text/babel">
+        new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: function () {
+                // 自定义浮点数验证规则
                 const validateFloat = (rule, value, callback) => {
-                  if (value === '') {
-                    callback(new Error('请输入浮点数'));
-                  } else if (!/^-?\d*\.?\d+$/.test(value)) {
-                    callback(new Error('请输入有效的浮点数'));
-                  } else {
-                    callback();
-                  }
+                    if (value === '') {
+                        callback(new Error('请输入浮点数'));
+                    } else if (!/^-?\d*\.?\d+$/.test(value)) {
+                        callback(new Error('请输入有效的浮点数'));
+                    } else {
+                        callback();
+                    }
                 };
-            return {
-                fileList: [],  // 视频显示列表
-                newFiles: [],    // 新上传的视频
-                FilesToDelete: [], // 待删除的视频
-                originalFiles: [], // 原始视频URL
+                return {
+                    fileList: [],  // 视频显示列表
+                    newFiles: [],    // 新上传的视频
+                    FilesToDelete: [], // 待删除的视频
+                    originalFiles: [], // 原始视频URL
 
-                labelPosition: 'right',
-                allCategorys:{}, //将表格中的大类的id映射显示为name
-                allSubCategorys:{},//将表格中的细项的id映射显示为name
-                Categorys: [],  //级联下拉选项的所有值
-                SubCategorys: [], // 动态细项列表
-                selectedKeys: [], //["C1010S3"] 初始已选到右侧的账户和传给后端的所有选中的人员（右侧默认显示 user003）
-                leftChecked: [],  //["C1010S3"] 左侧默认选中 user001（但未移动到右侧）
-                rightChecked: [], //["C1010S3"] 右侧默认选中 user003（已移动到右侧）
-                CurrentAccount: '',
-                search:'',
-                Owner: '',//搜索按钮前面的负责人绑定的值，用来记录搜索条件-负责人的值，是字符串
-                number: '',
-                sectionOwner: [],//以onwer为条件搜索的全部下拉选项
-                OwnersOptions: [],//穿梭框绑定的数据，所有数据内容
-                excelFile: '',
-                fileName: '',
-                loading:false,
-                CGOptions:[],
-                SWHWOptions:[],
-                categoryOptions:[],
-                Category_L2Options:[],
-                ProductTypeOptions:[],
-                StatusOptions:[],
-                datatype:'',
-                CG:'',
-                SWHW:'',
-                category1:'',
-                category2 :'',
-                editpermission: 0,
-                permission: 0,
-                SSVIP_users: 0,
-                tableContent:[],
-                update:false,
-                dialogVisible:false,
-                dialogTitle: '添加数据',
-                isEdit: false, // 标识当前是编辑还是新增
-                ID:"",
-                tableloading: false,
-                elbuttonloading: false,
-                form: {
+                    labelPosition: 'right',
+                    allCategorys: {}, //将表格中的大类的id映射显示为name
+                    allSubCategorys: {},//将表格中的细项的id映射显示为name
+                    Categorys: [],  //级联下拉选项的所有值
+                    SubCategorys: [], // 动态细项列表
+                    selectedKeys: [], //["C1010S3"] 初始已选到右侧的账户和传给后端的所有选中的人员（右侧默认显示 user003）
+                    leftChecked: [],  //["C1010S3"] 左侧默认选中 user001（但未移动到右侧）
+                    rightChecked: [], //["C1010S3"] 右侧默认选中 user003（已移动到右侧）
+                    CurrentAccount: '',
+                    search: '',
+                    Owner: '',//搜索按钮前面的负责人绑定的值，用来记录搜索条件-负责人的值，是字符串
+                    number: '',
+                    sectionOwner: [],//以onwer为条件搜索的全部下拉选项
+                    OwnersOptions: [],//穿梭框绑定的数据，所有数据内容
+                    excelFile: '',
+                    fileName: '',
+                    loading: false,
+                    CGOptions: [],
+                    SWHWOptions: [],
+                    categoryOptions: [],
+                    Category_L2Options: [],
+                    ProductTypeOptions: [],
+                    StatusOptions: [],
+                    datatype: '',
                     CG: '',
-                    Category_L1: '',
-                    Category_L2: '',
-                    Item: '',
-                    Description: '',
-                    Version: '',
-                    Owner: [],//用来记录form表单中的负责人列表最后交给后端存入数据库的，是数组结构，不要跟前面的Owner字符串混淆了
+                    SWHW: '',
+                    category1: '',
+                    category2: '',
+                    editpermission: 0,
+                    permission: 0,
+                    SSVIP_users: 0,
+                    tableContent: [],
+                    update: false,
+                    dialogVisible: false,
+                    dialogTitle: '添加数据',
+                    isEdit: false, // 标识当前是编辑还是新增
+                    ID: "",
+                    tableloading: false,
+                    elbuttonloading: false,
+                    form: {
+                        CG: '',
+                        Category_L1: '',
+                        Category_L2: '',
+                        Item: '',
+                        Description: '',
+                        Version: '',
+                        Owner: [],//用来记录form表单中的负责人列表最后交给后端存入数据库的，是数组结构，不要跟前面的Owner字符串混淆了
 
-                },
+                    },
 
-                formData:[],
-                editID: '',
-                multiDeleteVisible:false,
-                multipleSelection: [],
-                //表格信息顯示
-                showCustomer:'',
-                showDepartment:'',
-                //新增信息
-                appendss:false,
-                //分页
-                currentPage: 1,//默认显示第一页
-                pageSize:20,//默认每页显示100条
-                totalNum: null,
-                errMsg:null,
+                    formData: [],
+                    editID: '',
+                    multiDeleteVisible: false,
+                    multipleSelection: [],
+                    //表格信息顯示
+                    showCustomer: '',
+                    showDepartment: '',
+                    //新增信息
+                    appendss: false,
+                    //分页
+                    currentPage: 1,//默认显示第一页
+                    pageSize: 20,//默认每页显示100条
+                    totalNum: null,
+                    errMsg: null,
 
-                // 预览相关数据
-                previewDialogVisible: false,
-                previewType: '',
-                previewUrl: '',
-                previewItem: null,
-                previewContainerId: '',
-                // PDF预览相关
-                pdfDoc: null,
-                currentPageNum: 1,
-                pdfTotalPages: 0,
-                // PPT预览相关数据 - 修改为纯前端实现
-                pptSlides: [],          // 存储解析后的PPT幻灯片数据
-                currentSlideNum: 1,     // 当前幻灯片页码
-                pptTotalSlides: 0,      // 总幻灯片数
-                pptLoading: false,      // 加载状态
-                pptError: null,         // 错误信息
-                currentPptImage: null,  // 当前幻灯片图像
-                 rules: {
+                    // 预览相关数据
+                    previewDialogVisible: false,
+                    previewType: '',
+                    previewUrl: '',
+                    previewItem: null,
+                    previewContainerId: '',
+                    // PDF预览相关
+                    pdfDoc: null,
+                    currentPageNum: 1,
+                    pdfTotalPages: 0,
+                    // PPT预览相关数据 - 修改为纯前端实现
+                    pptSlides: [],          // 存储解析后的PPT幻灯片数据
+                    currentSlideNum: 1,     // 当前幻灯片页码
+                    pptTotalSlides: 0,      // 总幻灯片数
+                    pptLoading: false,      // 加载状态
+                    pptError: null,         // 错误信息
+                    currentPptImage: null,  // 当前幻灯片图像
+                    rules: {
                         {% comment %}Cost: [
                           { required: true, validator: validateFloat, trigger: 'blur' }
                         ],{% endcomment %}
-                     CG: [
-                         { required: true, message: "不能為空", trigger:['blur','change'] }
-                      ],
-                     {% comment %}SWHW: [
-                         { required: true, message: "不能為空", trigger:['blur','change'] }
-                      ],{% endcomment %}
-                      Category_L1: [
-                         { required: true, message: "不能為空", trigger:['blur','change'] }
-                      ],
-                      {% comment %}Category_L2: [
-                         { required: true, message: "不能為空", trigger:['blur','change'] }
-                      ],{% endcomment %}
-                      Item: [
-                         { required: true, message: "不能為空", trigger:['blur','blur'] }
-                      ],
-                     {% comment %}Version: [
-                         { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
-                      ],{% endcomment %}
+                        CG: [
+                            {required: true, message: "不能為空", trigger: ['blur', 'change']}
+                        ],
+                        {% comment %}SWHW: [
+                            { required: true, message: "不能為空", trigger:['blur','change'] }
+                         ],{% endcomment %}
+                        Category_L1: [
+                            {required: true, message: "不能為空", trigger: ['blur', 'change']}
+                        ],
+                        {% comment %}Category_L2: [
+                           { required: true, message: "不能為空", trigger:['blur','change'] }
+                        ],{% endcomment %}
+                        Item: [
+                            {required: true, message: "不能為空", trigger: ['blur', 'blur']}
+                        ],
+                        {% comment %}Version: [
+                            { required: true, message: "不能為空,可以用NA", trigger:['blur','blur'] }
+                         ],{% endcomment %}
 
                     },
 
 
-            }
-        },
-        mounted(){        // 页面渲染后触发该区域内容 即页面初始化
-            this.getdata("first");
-        },
-        methods: {
-            //获取数据
-            getdata: function (e) {
-                this.elbuttonloading = true;
-                this.tableloading = true;
-                let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
-                axios.post("/CommonFiles/CommonFiles_edit/", Qs.stringify(data), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
-                }).then((res) => {
-                    this.yearOptions = res.data.yearOptions;
-                    this.CGOptions=res.data.CGOptions;
-                    this.SWHWOptions=res.data.SWHWOptions;
-                    this.sectionOwner=res.data.sectionOwner;
-                    this.categoryOptions = res.data.categoryOptions;
-                    this.ProductTypeOptions = res.data.ProductTypeOptions;
-                    this.StatusOptions = res.data.StatusOptions;
-                    this.classOptions = res.data.classOptions;
-                    this.selectDevice = res.data.DeviceOptions;
-                    this.OwnersOptions = res.data.OwnersOptions;//人员名单
-                    this.permission = res.data.permission;
-                    this.SSVIP_users = res.data.SSVIP_users;
-                    this.Categorys = res.data.selectItem;
-                    this.allSubCategorys = res.data.allSubCategorys;
-                    this.allCategorys = res.data.allCategorys;
-                    this.tableContent=res.data.content;
-                    this.CurrentAccount=res.data.CurrentAccount;
-                    this.totalNum = this.tableContent.length;
-                    this.elbuttonloading = false;
-                    this.tableloading = false;
-                    //console.log(this.$refs.tableRef);
-                    this.$nextTick(() => {
+                }
+            },
+            mounted() {        // 页面渲染后触发该区域内容 即页面初始化
+                this.getdata("first");
+            },
+            methods: {
+                //获取数据
+                getdata: function (e) {
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
+                    let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};
+                    axios.post("/CommonFiles/CommonFiles_edit/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.yearOptions = res.data.yearOptions;
+                        this.CGOptions = res.data.CGOptions;
+                        this.SWHWOptions = res.data.SWHWOptions;
+                        this.sectionOwner = res.data.sectionOwner;
+                        this.categoryOptions = res.data.categoryOptions;
+                        this.ProductTypeOptions = res.data.ProductTypeOptions;
+                        this.StatusOptions = res.data.StatusOptions;
+                        this.classOptions = res.data.classOptions;
+                        this.selectDevice = res.data.DeviceOptions;
+                        this.OwnersOptions = res.data.OwnersOptions;//人员名单
+                        this.permission = res.data.permission;
+                        this.SSVIP_users = res.data.SSVIP_users;
+                        this.Categorys = res.data.selectItem;
+                        this.allSubCategorys = res.data.allSubCategorys;
+                        this.allCategorys = res.data.allCategorys;
+                        this.tableContent = res.data.content;
+                        this.CurrentAccount = res.data.CurrentAccount;
+                        this.totalNum = this.tableContent.length;
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
                         //console.log(this.$refs.tableRef);
-                       if (this.$refs.tableRef) {
-                            this.$refs.tableRef.doLayout();//使用this.$nextTick确保DOM更新，在axios请求的‘then‘回调中添加‘this.nextTick()`，确保表格数据更新后DOM已经渲染完成。
-                        }
-                    })
-                 });
-            },
+                        this.$nextTick(() => {
+                            //console.log(this.$refs.tableRef);
+                            if (this.$refs.tableRef) {
+                                this.$refs.tableRef.doLayout();//使用this.$nextTick确保DOM更新，在axios请求的‘then‘回调中添加‘this.nextTick()`，确保表格数据更新后DOM已经渲染完成。
+                            }
+                        })
+                    });
+                },
 
-            //级联
-             changeCategory_L1 : function() {
-              // 直接使用 v-model 绑定的值，而不是通过 ref
-              const CategoryId = this.category1;
+                //级联
+                changeCategory_L1: function () {
+                    // 直接使用 v-model 绑定的值，而不是通过 ref
+                    const CategoryId = this.category1;
 
-              if (!CategoryId) {
-                this.Category_L2Options = [""];
-                this.category2 = null; // 清空细项选择
-                return;
-              }
+                    if (!CategoryId) {
+                        this.Category_L2Options = [""];
+                        this.category2 = null; // 清空细项选择
+                        return;
+                    }
 
-              // 查找对应大项
-              const selectedCategory = this.Categorys.find(
-                item => item.id === CategoryId
-              );
+                    // 查找对应大项
+                    const selectedCategory = this.Categorys.find(
+                        item => item.id === CategoryId
+                    );
 
-              // 更新细项选项
-              this.Category_L2Options = selectedCategory ? selectedCategory.SubCategorys : [];
-              this.category2 = ""; // 重置细项选择
-            },
-            handleVideoChange(file, fileList) {
+                    // 更新细项选项
+                    this.Category_L2Options = selectedCategory ? selectedCategory.SubCategorys : [];
+                    this.category2 = ""; // 重置细项选择
+                },
+                handleVideoChange(file, fileList) {
                     //这里检查是否重复只检查了文件的大小和名称，不是很准确，要准确判断需要用hash，前端需要安装npm install crypto-js第三方库，后端存储时也要存储hash
                     {% comment %}后端：
                         import hashlib
@@ -1030,246 +1083,246 @@ tbody tr td:last-child {
                     // 添加到待上传列表
                     this.newFiles.push(file.raw);
                 },
-            handleVideoRemove(file) {
-                // 如果删除的是原始视频，添加到待删除列表
-                if (file.isOld) {
-                    this.FilesToDelete.push(file.id);
-                } else {
-                    // 从新上传列表中移除
-                    const newIndex = this.newFiles.findIndex(f => f.uid === file.uid);
-                    if (newIndex > -1) {
-                        this.newFiles.splice(newIndex, 1);
+                handleVideoRemove(file) {
+                    // 如果删除的是原始视频，添加到待删除列表
+                    if (file.isOld) {
+                        this.FilesToDelete.push(file.id);
+                    } else {
+                        // 从新上传列表中移除
+                        const newIndex = this.newFiles.findIndex(f => f.uid === file.uid);
+                        if (newIndex > -1) {
+                            this.newFiles.splice(newIndex, 1);
+                        }
                     }
-                }
 
-                // 从显示列表中移除
-                const index = this.fileList.findIndex(f => f.uid === file.uid);
-                if (index > -1) {
-                    this.fileList.splice(index, 1);
-                }
-            },
-            // 判断是否为视频文件
-            // 增强的 isVideoFile 方法，支持多种参数类型
-            isVideoFile(item) {
-                // 1. 处理文件对象（编辑弹框中使用）
-                if (item && item.raw) {
-                    // 新上传的文件
-                    return item.raw.type.startsWith('video/');
-                }
+                    // 从显示列表中移除
+                    const index = this.fileList.findIndex(f => f.uid === file.uid);
+                    if (index > -1) {
+                        this.fileList.splice(index, 1);
+                    }
+                },
+                // 判断是否为视频文件
+                // 增强的 isVideoFile 方法，支持多种参数类型
+                isVideoFile(item) {
+                    // 1. 处理文件对象（编辑弹框中使用）
+                    if (item && item.raw) {
+                        // 新上传的文件
+                        return item.raw.type.startsWith('video/');
+                    }
 
-                // 2. 处理包含 url 属性的对象（表格中使用）
-                if (item && item.url) {
-                    const url = item.url.toLowerCase();
-                    const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
-                    return videoExts.some(ext => url.endsWith(`.${ext}`));
-                }
+                    // 2. 处理包含 url 属性的对象（表格中使用）
+                    if (item && item.url) {
+                        const url = item.url.toLowerCase();
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        return videoExts.some(ext => url.endsWith(`.${ext}`));
+                    }
 
-                // 3. 处理纯字符串 URL（备用方案）
-                if (typeof item === 'string') {
-                    const url = item.toLowerCase();
-                    const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
-                    return videoExts.some(ext => url.endsWith(`.${ext}`));
-                }
+                    // 3. 处理纯字符串 URL（备用方案）
+                    if (typeof item === 'string') {
+                        const url = item.toLowerCase();
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        return videoExts.some(ext => url.endsWith(`.${ext}`));
+                    }
 
-                return false;
-            },
-            // 获取完整URL
-            getFullUrl(url) {
-                if (!url) return '';
-                // 如果是blob临时URL或完整URL直接返回
-                if (url.startsWith('blob:') || url.startsWith('http')) {
-                    return url;
-                }
-                // 相对路径转换为绝对路径
-                return window.location.origin + url;
-            },
+                    return false;
+                },
+                // 获取完整URL
+                getFullUrl(url) {
+                    if (!url) return '';
+                    // 如果是blob临时URL或完整URL直接返回
+                    if (url.startsWith('blob:') || url.startsWith('http')) {
+                        return url;
+                    }
+                    // 相对路径转换为绝对路径
+                    return window.location.origin + url;
+                },
 
-          handleChange(value, direction, movedKeys) {
-            console.log(value, direction, movedKeys,'movedKeys');
-          },
+                handleChange(value, direction, movedKeys) {
+                    console.log(value, direction, movedKeys, 'movedKeys');
+                },
 
-            handleFloatInput(value) {
-              this.form.Cost = value
-                .replace(/[^0-9.-]/g, '')           // 保留数字、小数点和负号
-                .replace(/(\..*)\./g, '$1')          // 禁止多个小数点
-                .replace(/(?!^)-/g, '')              // 只能有一个负号且在开头
-                .replace(/^(-)?0+(\d)/, '$1$2');    // 禁止前导零（可选）
-            },
+                handleFloatInput(value) {
+                    this.form.Cost = value
+                        .replace(/[^0-9.-]/g, '')           // 保留数字、小数点和负号
+                        .replace(/(\..*)\./g, '$1')          // 禁止多个小数点
+                        .replace(/(?!^)-/g, '')              // 只能有一个负号且在开头
+                        .replace(/^(-)?0+(\d)/, '$1$2');    // 禁止前导零（可选）
+                },
 
-          createFilter(queryString) {
-            return (state) => {
-              return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-            };
-          },
+                createFilter(queryString) {
+                    return (state) => {
+                        return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                    };
+                },
 
-          querySearch(queryString,cb) {
-                var sectionOwner = this.sectionOwner;
-                //console.log(queryString,'p1');
-                var results = queryString ? sectionOwner.filter(this.createFilter(queryString)) : sectionOwner;
-                // 调用 callback 返回建议列表的数据
-                cb(results);
-           },
+                querySearch(queryString, cb) {
+                    var sectionOwner = this.sectionOwner;
+                    //console.log(queryString,'p1');
+                    var results = queryString ? sectionOwner.filter(this.createFilter(queryString)) : sectionOwner;
+                    // 调用 callback 返回建议列表的数据
+                    cb(results);
+                },
 
-          handleSelect(item) {
-            this.number = item.number;
-            {#console.log(this.number, 'this.number');#}
-          },
+                handleSelect(item) {
+                    this.number = item.number;
+                    {#console.log(this.number, 'this.number');#}
+                },
 
-            // 添加按钮点击
-            handleAdd() {
-                this.isEdit = false;
-                  this.dialogTitle = '添加数据';
-                  this.resetForm();
-                  this.fileList = [];
-                  this.selectedKeys = [];
-                  // 默认选中当前用户
-                if (this.CurrentAccount) {
-                    // 设置右侧列表默认选中当前用户
-                    this.rightChecked = [this.CurrentAccount];
+                // 添加按钮点击
+                handleAdd() {
+                    this.isEdit = false;
+                    this.dialogTitle = '添加数据';
+                    this.resetForm();
+                    this.fileList = [];
+                    this.selectedKeys = [];
+                    // 默认选中当前用户
+                    if (this.CurrentAccount) {
+                        // 设置右侧列表默认选中当前用户
+                        this.rightChecked = [this.CurrentAccount];
 
-                    // 同时添加到已选中的key值数组
-                    this.selectedKeys = [this.CurrentAccount];
-                }
-                this.dialogVisible=true;
-            },
+                        // 同时添加到已选中的key值数组
+                        this.selectedKeys = [this.CurrentAccount];
+                    }
+                    this.dialogVisible = true;
+                },
 
-            {% comment %}// 每条数据的编辑按钮点击
-            handleEdit:function(id,row){
-                this.resetForm();
-                this.selectedKeys = row.Owner.map(item => item.account);
-                //console.log(this.selectedKeys,'this.selectedKeys');
-                this.isEdit = true;
-                  this.dialogTitle = '编辑数据';
-                  this.dialogVisible = true;
-                 this.form.Category=row.Category;
-                 this.form.Category_L2=row.Category_L2;
-                // 先设置大项
-                  this.form.Category = row.Category;
+                {% comment %}// 每条数据的编辑按钮点击
+                handleEdit:function(id,row){
+                    this.resetForm();
+                    this.selectedKeys = row.Owner.map(item => item.account);
+                    //console.log(this.selectedKeys,'this.selectedKeys');
+                    this.isEdit = true;
+                      this.dialogTitle = '编辑数据';
+                      this.dialogVisible = true;
+                     this.form.Category=row.Category;
+                     this.form.Category_L2=row.Category_L2;
+                    // 先设置大项
+                      this.form.Category = row.Category;
+    
+                      // 手动触发分类变化来加载对应的细项
+                      this.handleCategoryChange(row.Category);
+    
+                      // 短暂延迟确保SubCategorys已更新
+                      this.$nextTick(() => {
+                          this.form.Category_L2 = row.Category_L2;
+                          this.form.Item = row.Item;
+                          this.form.Description = row.Description;
+                          this.form.Version = row.Version;
+                          this.form.Cost = row.Cost;
+                          this.form.Account = row.Account;
+                          this.form.PW = row.PW;
+                          this.form.updated_at = row.updated_at;
+                          this.form.Department = row.Department;
+                          this.form.Location = row.Location;
+                          this.form.Asset_Num = row.Asset_Num;
+                          this.form.Status = row.Status;
+                          //this.form.Owner=row.Owner;
+                          this.form.Mail = row.Mail;
+                          this.form.Contact_info = row.Contact_info;
+                          this.form.Comments = row.Comments;
+                          this.editID = id;
+                      })
+    
+                },{% endcomment %}
 
-                  // 手动触发分类变化来加载对应的细项
-                  this.handleCategoryChange(row.Category);
-
-                  // 短暂延迟确保SubCategorys已更新
-                  this.$nextTick(() => {
-                      this.form.Category_L2 = row.Category_L2;
-                      this.form.Item = row.Item;
-                      this.form.Description = row.Description;
-                      this.form.Version = row.Version;
-                      this.form.Cost = row.Cost;
-                      this.form.Account = row.Account;
-                      this.form.PW = row.PW;
-                      this.form.updated_at = row.updated_at;
-                      this.form.Department = row.Department;
-                      this.form.Location = row.Location;
-                      this.form.Asset_Num = row.Asset_Num;
-                      this.form.Status = row.Status;
-                      //this.form.Owner=row.Owner;
-                      this.form.Mail = row.Mail;
-                      this.form.Contact_info = row.Contact_info;
-                      this.form.Comments = row.Comments;
-                      this.editID = id;
-                  })
-
-            },{% endcomment %}
-
-            //编辑按钮点击
-            editData(){
-                if(this.multipleSelection.length < 1){
-                      this.$alert("请选择一条数据！", '提示', {
+                //编辑按钮点击
+                editData() {
+                    if (this.multipleSelection.length < 1) {
+                        this.$alert("请选择一条数据！", '提示', {
                             type: 'warning',
-                      });
-                }else if(this.multipleSelection.length === 1){
-                    if(this.permission === 1){
-                        //console.log(this.multipleSelection[0],'this.multipleSelection[0]')
-                        this.resetForm();
-                        this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
-                        this.fileList = [];
-                        //console.log(this.selectedKeys,'this.selectedKeys');
-                        this.isEdit = true;
-                          this.dialogTitle = '编辑数据';
-                          this.dialogVisible = true;
-                         {% comment %}this.form.Category=row.Category;
-                         this.form.Category_L2=row.Category_L2;{% endcomment %}
-                        // 先设置大项
+                        });
+                    } else if (this.multipleSelection.length === 1) {
+                        if (this.permission === 1) {
+                            //console.log(this.multipleSelection[0],'this.multipleSelection[0]')
+                            this.resetForm();
+                            this.selectedKeys = this.multipleSelection[0].Owner.map(item => item.account);
+                            this.fileList = [];
+                            //console.log(this.selectedKeys,'this.selectedKeys');
+                            this.isEdit = true;
+                            this.dialogTitle = '编辑数据';
+                            this.dialogVisible = true;
+                            {% comment %}this.form.Category=row.Category;
+                            this.form.Category_L2=row.Category_L2;{% endcomment %}
+                            // 先设置大项
                             this.form.CG = this.multipleSelection[0].CG;
                             this.form.SWHW = this.multipleSelection[0].SWHW;
-                          this.form.Category_L1 = this.multipleSelection[0].Category_L1;
+                            this.form.Category_L1 = this.multipleSelection[0].Category_L1;
 
-                          // 手动触发分类变化来加载对应的细项
-                          this.handleCategoryChange(this.multipleSelection[0].Category_L1);
-                          //console.log(this.multipleSelection[0], this.form.Category_L2,'this.form.Category_L2')
-                          // 短暂延迟确保SubCategorys已更新
-                          //this.$nextTick(() => {延迟后this.multipleSelection[0]就变成undefine了。
-                              //console.log(this.multipleSelection[0], this.form.Category_L2,'this.form.Category_L2')
-                              this.form.Category_L2 = this.multipleSelection[0].Category_L2;
-                              this.form.Item = this.multipleSelection[0].Item;
-                              this.form.Description = this.multipleSelection[0].Description;
-                              this.form.Version = this.multipleSelection[0].Version;
+                            // 手动触发分类变化来加载对应的细项
+                            this.handleCategoryChange(this.multipleSelection[0].Category_L1);
+                            //console.log(this.multipleSelection[0], this.form.Category_L2,'this.form.Category_L2')
+                            // 短暂延迟确保SubCategorys已更新
+                            //this.$nextTick(() => {延迟后this.multipleSelection[0]就变成undefine了。
+                            //console.log(this.multipleSelection[0], this.form.Category_L2,'this.form.Category_L2')
+                            this.form.Category_L2 = this.multipleSelection[0].Category_L2;
+                            this.form.Item = this.multipleSelection[0].Item;
+                            this.form.Description = this.multipleSelection[0].Description;
+                            this.form.Version = this.multipleSelection[0].Version;
 
-                              this.editID = this.multipleSelection[0].id;
-                              // 保存原始文件URL
-                                this.originalFiles = [...(this.multipleSelection[0].Attachment.url || [])];
+                            this.editID = this.multipleSelection[0].id;
+                            // 保存原始文件URL
+                            this.originalFiles = [...(this.multipleSelection[0].Attachment.url || [])];
 
-                                // 初始化图片显示列表
+                            // 初始化图片显示列表
 
-                                // 初始化视频显示列表
-                                if (this.multipleSelection[0].Attachment && this.multipleSelection[0].Attachment.length > 0) {
-                                    this.multipleSelection[0].Attachment.forEach(u => {
-                                        this.fileList.push({
-                                            name: u.url.split('/').pop(),
-                                            url: u.url,
-                                            id: u.id,
-                                            isOld: true
-                                        });
+                            // 初始化视频显示列表
+                            if (this.multipleSelection[0].Attachment && this.multipleSelection[0].Attachment.length > 0) {
+                                this.multipleSelection[0].Attachment.forEach(u => {
+                                    this.fileList.push({
+                                        name: u.url.split('/').pop(),
+                                        url: u.url,
+                                        id: u.id,
+                                        isOld: true
                                     });
-                                }
+                                });
+                            }
 
-                          //})
-                    }else {
-                      this.$alert("无编辑权限！", '提示', {
+                            //})
+                        } else {
+                            this.$alert("无编辑权限！", '提示', {
+                                type: 'warning',
+                            });
+                        }
+
+                    } else {
+                        this.$alert("只能选择一条数据！", '提示', {
                             type: 'warning',
-                      });
+                        });
                     }
 
-                }else {
-                      this.$alert("只能选择一条数据！", '提示', {
-                            type: 'warning',
-                      });
-                }
+                },
 
-            },
+                handleCategoryChange(CategoryId) {
+                    // 清空已选细项
+                    this.form.Category_L2 = ''
+                    // 查找对应大项的细项列表
+                    const selectedCategory = this.Categorys.find(
+                        item => item.id === CategoryId
+                    )
+                    this.SubCategorys = selectedCategory ? selectedCategory.SubCategorys : []
+                },
 
-            handleCategoryChange(CategoryId) {
-              // 清空已选细项
-              this.form.Category_L2 = ''
-              // 查找对应大项的细项列表
-              const selectedCategory = this.Categorys.find(
-                item => item.id === CategoryId
-              )
-              this.SubCategorys = selectedCategory ? selectedCategory.SubCategorys : []
-            },
+                // 提交表单
+                submitForm() {
+                    this.$refs.form.validate(valid => {
+                        if (valid) {
+                            if (this.selectedKeys.length === 0) {
+                                this.$message.error('请至少选择一个负责人');
+                                return;
+                            }
+                            if (this.isEdit) {
+                                // 执行编辑操作
+                                this.updateData()
+                            } else {
+                                // 执行新增操作
+                                this.addData()
+                            }
+                            this.dialogVisible = false
+                        }
+                    })
+                },
 
-            // 提交表单
-            submitForm() {
-              this.$refs.form.validate(valid => {
-                if (valid) {
-                    if (this.selectedKeys.length === 0) {
-                    this.$message.error('请至少选择一个负责人');
-                    return;
-                  }
-                  if (this.isEdit) {
-                    // 执行编辑操作
-                    this.updateData()
-                  } else {
-                    // 执行新增操作
-                    this.addData()
-                  }
-                  this.dialogVisible = false
-                }
-              })
-            },
-
-            async  addData(){
+                async addData() {
                     this.elbuttonloading = true;
                     this.tableloading = true;
                     // 每次创建新的 FormData 实例
@@ -1305,33 +1358,33 @@ tbody tr td:last-child {
                         this.tableContent = res.data.content;
                         this.totalNum = this.tableContent.length;
                         this.$nextTick(() => {
-                           if (this.$refs.tableRef) {
+                            if (this.$refs.tableRef) {
                                 this.$refs.tableRef.doLayout();
                             }
                         })
-                        this.errMsg=res.data.errMsg;
+                        this.errMsg = res.data.errMsg;
                         this.formData = new FormData();
-                        if(this.errMsg){
-                          this.$alert(this.errMsg, '提示', {
+                        if (this.errMsg) {
+                            this.$alert(this.errMsg, '提示', {
                                 type: 'warning',
-                          });
-                          this.dialogVisible = true;
-                        }else{
-                          try {
-                                  this.$refs.form.resetFields();
-                          } catch (e) {
+                            });
+                            this.dialogVisible = true;
+                        } else {
+                            try {
+                                this.$refs.form.resetFields();
+                            } catch (e) {
 
-                          }
-                          this.dialogVisible = false;
-                          this.$nextTick(() => {
+                            }
+                            this.dialogVisible = false;
+                            this.$nextTick(() => {
                                 if (this.$refs.tableRef) {
                                     this.$refs.tableRef.doLayout();
                                 }
-                          })
+                            })
                             this.$message({
-                                  message:'上传成功',
-                                  type:'success',
-                              })
+                                message: '上传成功',
+                                type: 'success',
+                            })
                             // 清空文件列表
                             this.fileList = [];
                             this.newFiles = [];
@@ -1342,10 +1395,10 @@ tbody tr td:last-child {
 
 
                     })
-            },
+                },
 
 
-            async  updateData() {
+                async updateData() {
                     this.elbuttonloading = true;
                     this.tableloading = true;
                     // 每次创建新的 FormData 实例
@@ -1381,34 +1434,34 @@ tbody tr td:last-child {
                         this.tableContent = res.data.content;
                         this.totalNum = this.tableContent.length;
                         this.$nextTick(() => {
-                           if (this.$refs.tableRef) {
+                            if (this.$refs.tableRef) {
                                 this.$refs.tableRef.doLayout();
                             }
                         })
-                        this.errMsg=res.data.errMsg;
+                        this.errMsg = res.data.errMsg;
                         this.resetForm();
-                        if(this.errMsg){
-                          this.$alert(this.errMsg, '提示', {
+                        if (this.errMsg) {
+                            this.$alert(this.errMsg, '提示', {
                                 type: 'warning',
-                          });
-                          this.update = true;
-                        }else{
-                          try {
-                                  this.$refs.form1.resetFields();
-                          } catch (e) {
+                            });
+                            this.update = true;
+                        } else {
+                            try {
+                                this.$refs.form1.resetFields();
+                            } catch (e) {
 
-                          }
-                          this.update = false;
-                          this.$nextTick(() => {
+                            }
+                            this.update = false;
+                            this.$nextTick(() => {
                                 if (this.$refs.tableRef) {
                                     this.$refs.tableRef.doLayout();
                                 }
-                          })
+                            })
                             this.$message({
-                                  message:'修改成功',
-                                  type:'success',
-                              })
-                                // 清空文件列表
+                                message: '修改成功',
+                                type: 'success',
+                            })
+                            // 清空文件列表
                             this.fileList = [];
                             this.newFiles = [];
                             this.FilesToDelete = [];
@@ -1417,491 +1470,512 @@ tbody tr td:last-child {
                         this.tableloading = false;
 
                     })
-            },
+                },
 
-            // 重置表单
-            resetForm() {
-              this.form = {
-                    CG: '',
-                    SWHW: '',
-                    Category_L1: '',
-                    Category_L2: '',
-                    Item: '',
-                    Description: '',
-                    Version: '',
-                    updated_at: '',
-                    Owner: [],
+                // 重置表单
+                resetForm() {
+                    this.form = {
+                        CG: '',
+                        SWHW: '',
+                        Category_L1: '',
+                        Category_L2: '',
+                        Item: '',
+                        Description: '',
+                        Version: '',
+                        updated_at: '',
+                        Owner: [],
 
-                };
-              if (this.$refs.form) {
-                this.$refs.form.resetFields()
-              }
-            },
+                    };
+                    if (this.$refs.form) {
+                        this.$refs.form.resetFields()
+                    }
+                },
 
-            exportExcel: function () {
-             /* 从表生成工作簿对象 */
-             {#console.log(document.querySelector("#out-table"));#}
-             let temp = [];
-             temp.push(Number(this.currentPage));
-             temp.push(Number(this.pageSize));
-             {#console.log(temp);#}
-             this.currentPage = 1;
-             this.pageSize = this.tableContent.length;
-             {#console.log(temp, this.defaultPage1, this.pageSize);#}
-             setTimeout(() => {
-                 let table = document.querySelector("#out-table").cloneNode(true);
-                 let fix = table.querySelector(".el-table__fixed");
-                 let wb;
-                 if(fix){
-                    wb = XLSX.utils.table_to_book(table.removeChild(fix),{raw: true});
-                    table.appendChild(fix);
-                 }else{
-                    wb = XLSX.utils.table_to_book(table,{raw: true});
-                 }
-                 //console.log("wb", wb);
-                 /* 获取二进制字符串作为输出 */
-                 var wbout = XLSX.write(wb, {
-                     bookType: "xlsx",
-                     bookSST: true,
-                     type: "array"
-                 });
-                 //console.log("wbout", wbout);
-                 try {
-                     saveAs(
-                         //Blob 对象表示一个不可变、原始数据的类文件对象。
-                         //Blob 表示的不一定是JavaScript原生格式的数据。
-                         //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
-                         //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
-                         new Blob([wbout], {type: "application/octet-stream"}),
-                         //设置导出文件名称
-                         "sheetjs.xlsx"
-                     );
+                exportExcel: function () {
+                    /* 从表生成工作簿对象 */
+                    {#console.log(document.querySelector("#out-table"));#}
+                    let temp = [];
+                    temp.push(Number(this.currentPage));
+                    temp.push(Number(this.pageSize));
+                    {#console.log(temp);#}
+                    this.currentPage = 1;
+                    this.pageSize = this.tableContent.length;
+                    {#console.log(temp, this.defaultPage1, this.pageSize);#}
+                    setTimeout(() => {
+                        let table = document.querySelector("#out-table").cloneNode(true);
+                        let fix = table.querySelector(".el-table__fixed");
+                        let wb;
+                        if (fix) {
+                            wb = XLSX.utils.table_to_book(table.removeChild(fix), {raw: true});
+                            table.appendChild(fix);
+                        } else {
+                            wb = XLSX.utils.table_to_book(table, {raw: true});
+                        }
+                        //console.log("wb", wb);
+                        /* 获取二进制字符串作为输出 */
+                        var wbout = XLSX.write(wb, {
+                            bookType: "xlsx",
+                            bookSST: true,
+                            type: "array"
+                        });
+                        //console.log("wbout", wbout);
+                        try {
+                            saveAs(
+                                //Blob 对象表示一个不可变、原始数据的类文件对象。
+                                //Blob 表示的不一定是JavaScript原生格式的数据。
+                                //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                                //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                                new Blob([wbout], {type: "application/octet-stream"}),
+                                //设置导出文件名称
+                                "sheetjs.xlsx"
+                            );
 
-                 } catch (e) {
-                     if (typeof console !== "undefined") console.log(e, wbout);
-                 }
-                 this.currentPage = temp[0];
-                 this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
-                 temp = [];
-                 return wbout;
-             }, 100);
-         },
+                        } catch (e) {
+                            if (typeof console !== "undefined") console.log(e, wbout);
+                        }
+                        this.currentPage = temp[0];
+                        this.pageSize = temp[1];//edwin:要想导出后回到当前页而不是第一页，<el-pagination里面的:page-size="100"，而不能是:page-size="pageSize"
+                        temp = [];
+                        return wbout;
+                    }, 100);
+                },
 
-            //判断勾选
-            selectable(row, index) {
-                if (row.Ownerflag == 1 && this.permission == 1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
+                //判断勾选
+                selectable(row, index) {
+                    if (row.Ownerflag == 1 && this.permission == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
 
-            Delete() {
-                    if(this.multipleSelection.length == 0){
-                             this.$message({
-                                     message: '請至少選擇一條數據！',
-                                     type: 'warning'
-                             });
+                Delete() {
+                    if (this.multipleSelection.length == 0) {
+                        this.$message({
+                            message: '請至少選擇一條數據！',
+                            type: 'warning'
+                        });
 
-                    }else{
+                    } else {
                         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                          confirmButtonText: '确定',
-                          cancelButtonText: '取消',
-                          type: 'warning'
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
                         }).then(() => {
-                                    this.elbuttonloading = true;
-                                    this.tableloading = true;
-                                    {#this.multiDeleteVisible = false;#}
-                                     let checkArr = this.multipleSelection;
-                                     let params = [];
-                                     let self = this;
-                                     let CG = this.$refs.CG.value;
-                                     let SWHW = this.$refs.SWHW.value;
-                                     let Category_L1 = this.$refs.Category_L1.value;
-                                     let Category_L2 = this.$refs.Category_L2.value;
-                                     let Owner = this.$refs.Owner.value;
-                                     let OwnerNumber = this.number;
-                                     checkArr.forEach(function (item) {
-                                         params.push(item.id);
+                            this.elbuttonloading = true;
+                            this.tableloading = true;
+                            {#this.multiDeleteVisible = false;#}
+                            let checkArr = this.multipleSelection;
+                            let params = [];
+                            let self = this;
+                            let CG = this.$refs.CG.value;
+                            let SWHW = this.$refs.SWHW.value;
+                            let Category_L1 = this.$refs.Category_L1.value;
+                            let Category_L2 = this.$refs.Category_L2.value;
+                            let Owner = this.$refs.Owner.value;
+                            let OwnerNumber = this.number;
+                            checkArr.forEach(function (item) {
+                                params.push(item.id);
+                            });
+                            let data = {
+                                "isGetData": "delete",
+                                "searchCG": CG,
+                                "searchSWHW": SWHW,
+                                "searchCategory_L1": Category_L1,
+                                "searchCategory_L2": Category_L2,
+                                "searchOwner": Owner,
+                                "searchOwnerNumber": OwnerNumber,
+                                "params": params,
+                                "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                            };
+                            axios.post('/CommonFiles/CommonFiles_edit/', data).then((res) => {
+                                // 正确更新绑定到表格的数据源
+                                this.tableContent = res.data.content;
+
+                                // 更新总条数
+                                this.totalNum = this.tableContent.length;
+
+                                // 重置分页到第一页
+                                this.currentPage = 1;
+
+                                // 清空多选状态
+                                this.multipleSelection = [];
+
+                                // 确保表格重新渲染
+                                this.$nextTick(() => {
+                                    if (this.$refs.tableRef) {
+                                        this.$refs.tableRef.doLayout();
+                                    }
                                 });
-                                   let data = {
-                                       "isGetData": "delete",
-                                       "searchCG":CG,"searchSWHW":SWHW,"searchCategory_L1":Category_L1,"searchCategory_L2":Category_L2,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,
-                                       "params": params,
-                                       "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
-                                   };
-                                   axios.post('/CommonFiles/CommonFiles_edit/', data).then((res) =>{
-                                         // 正确更新绑定到表格的数据源
-                                        this.tableContent = res.data.content;
-
-                                        // 更新总条数
-                                        this.totalNum = this.tableContent.length;
-
-                                        // 重置分页到第一页
-                                        this.currentPage = 1;
-
-                                        // 清空多选状态
-                                        this.multipleSelection = [];
-
-                                        // 确保表格重新渲染
-                                        this.$nextTick(() => {
-                                            if (this.$refs.tableRef) {
-                                                this.$refs.tableRef.doLayout();
-                                            }
-                                        });
-                                         self.$message({
-                                             message: '删除成功',
-                                             type: 'success'
-                                         });
-                                 //this.tableData2 = res.data.content2;
-                                        this.elbuttonloading = false;
-                                        this.tableloading = false;
-                             });
+                                self.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                });
+                                //this.tableData2 = res.data.content2;
+                                this.elbuttonloading = false;
+                                this.tableloading = false;
+                            });
                         }).catch(() => {
-                          this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                          });
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
                         });
                     }
-                 },
+                },
 
 
-            //上传搜索项：以此选项搜索符合条件的内容
-            find:function(){
+                //上传搜索项：以此选项搜索符合条件的内容
+                find: function () {
 
-                this.elbuttonloading = true;
-                this.tableloading = true;
-                let CG = this.$refs.CG.value;
-                let SWHW = this.$refs.SWHW.value;
-                let Category_L1 = this.$refs.Category_L1.value;
-                let Category_L2 = this.$refs.Category_L2.value;
-                let Owner = this.$refs.Owner.value;
-                let OwnerNumber = this.number;
-                let data ={"isGetData":"SEARCH","CG":CG,"SWHW":SWHW,"Category_L1":Category_L1,"Category_L2":Category_L2,"Owner":Owner,"OwnerNumber": OwnerNumber,"csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()}
-                axios.post("/CommonFiles/CommonFiles_edit/",Qs.stringify(data), {
-                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
-                }).then((res) => {
-                  this.tableContent=res.data.content;
-                  this.totalNum=this.tableContent.length;
-                  this.permission=res.data.permission;
-                  this.SSVIP_users=res.data.SSVIP_users;
-                  this.Categorys=res.data.selectItem;
-                  this.elbuttonloading = false;
-                  this.tableloading = false;
-                  this.CGOptions=res.data.CGOptions;
-                  this.SWHWOptions=res.data.SWHWOptions;
-                  this.yearOptions = res.data.yearOptions;
-                  this.OwnersOptions = res.data.OwnersOptions;//人员名单
-                  this.categoryOptions = res.data.categoryOptions;
-                  this.classOptions = res.data.classOptions;
-                  this.$nextTick(() => {
-                       if (this.$refs.tableRef) {
-                            this.$refs.tableRef.doLayout();
-                        }
-                  })
-                })
-
-             },
-
-
-            indexMethod(index) {
-                  return index +1;
-            },
-
-            handleSelectionChange(rows) {
-                this.multipleSelection = rows;
-            },
-
-            getRowKeys (row) {
-              return row.id
-            },
-
-
-            updateFile:function(e){
-                const first="未選擇文件";
-                let newValue= e.target.files;
-                if(newValue){
-                 let file=document.getElementById('upload');
-                 let filename= file.files[0].name;
-                 let fileType=filename.substr(filename.lastIndexOf(".")+1);
-                 //console.log(fileType.toLowerCase());
-                 if((fileType.toLowerCase() === 'xlsx')||(fileType.toLowerCase() === 'xls')){
-                      //console.log(this.excelFile);
-                     this.fileName=filename;
-                     this.uploadFile=file.files[0];
-                 }else{
-                     alert("上傳類型不為'xlsx'或'xls'");
-                       try{
-                         }catch(e){
-                             console.log(e);
-                         }
-                 }
-             }else{
-                 this.uploadFile=null;
-                 this.fileName=first;
-             }
-      },
-            fileUpload:function(){
-              const first="未選擇文件";
-              if(this.uploadFile){
-                  //1.解析Excel
-                   let outputResult;
-                   let _this= this;
-                   let files = this.uploadFile;
-                   let undefined_to_null=function(value){
-                       if(value === undefined){
-                           value=null;
-                       }
-                       //console.log(value,value === undefined,value == undefined);
-                       return value;
-                   }
-                   var fileReader = new FileReader ();
-                   const loading = this.$loading({
-                              lock: true,
-                              text: 'Loading',
-                              spinner: 'el-icon-loading',
-                              background: 'rgba(0,0,0,0.7)'
-                   });
-                   fileReader.onload = function (ev) {
-                     try {
-                    // _this.loading=true;
-                     var data = ev.target.result,
-                      workbook = XLSX.read(data, {
-                        type: 'binary'
-                     }), // 以二进制流方式读取得到整份excel表格对象
-                      persons = []; // 存储获取到的数据
-                   } catch (e) {
-                     //_this.loading=false;
-                         loading.close();
-                     return;
-                  }
-                  for (var sheet in workbook.Sheets) {
-                    if (workbook.Sheets.hasOwnProperty(sheet)) {
-                        var fromTo = workbook.Sheets[sheet]['!ref'];
-                        // console.log(fromTo);
-                        var datas = workbook.Sheets[sheet];
-                        // 如果有不规范数据可以在这里进行处理datas
-                        persons = persons.concat(XLSX.utils.sheet_to_json(datas));
-                        //break; // 只读了第一张表
+                    this.elbuttonloading = true;
+                    this.tableloading = true;
+                    let CG = this.$refs.CG.value;
+                    let SWHW = this.$refs.SWHW.value;
+                    let Category_L1 = this.$refs.Category_L1.value;
+                    let Category_L2 = this.$refs.Category_L2.value;
+                    let Owner = this.$refs.Owner.value;
+                    let OwnerNumber = this.number;
+                    let data = {
+                        "isGetData": "SEARCH",
+                        "CG": CG,
+                        "SWHW": SWHW,
+                        "Category_L1": Category_L1,
+                        "Category_L2": Category_L2,
+                        "Owner": Owner,
+                        "OwnerNumber": OwnerNumber,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
                     }
-            }
-                 // 数据保存在result
-                  let result=JSON.stringify(persons);
-                   //将之前张开的树形结构收起
-                      //_this.reset();
-                   //2.上errMsg傳數據
-                  let CG = _this.$refs.CG.value;
-                  let SWHW = _this.$refs.SWHW.value;
-                  let Category_L1 = _this.$refs.Category_L1.value;
-                  let Category_L2 = _this.$refs.Category_L2.value;
-                  let Owner = _this.$refs.Owner.value;
-                  let OwnerNumber = _this.number;
-                  axios.post("/CommonFiles/CommonFiles_edit/" ,{"isGetData":"upload","searchCG":CG,"searchSWHW":SWHW,"searchCategory_L1":Category_L1,"searchCategory_L2":Category_L2,"searchOwner":Owner,"searchOwnerNumber": OwnerNumber,"ExcelData":result},{
-                  headers:{ 'X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                }).then((res) => {
-                    //console.log(res.data,"first");//上传成功的操作
-                        _this.tableContent=res.data.content;
-                        _this.totalNum=_this.tableContent.length;
-                        _this.$nextTick(() => {
-                           if (_this.$refs.tableRef) {
-                                _this.$refs.tableRef.doLayout();
+                    axios.post("/CommonFiles/CommonFiles_edit/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.tableContent = res.data.content;
+                        this.totalNum = this.tableContent.length;
+                        this.permission = res.data.permission;
+                        this.SSVIP_users = res.data.SSVIP_users;
+                        this.Categorys = res.data.selectItem;
+                        this.elbuttonloading = false;
+                        this.tableloading = false;
+                        this.CGOptions = res.data.CGOptions;
+                        this.SWHWOptions = res.data.SWHWOptions;
+                        this.yearOptions = res.data.yearOptions;
+                        this.OwnersOptions = res.data.OwnersOptions;//人员名单
+                        this.categoryOptions = res.data.categoryOptions;
+                        this.classOptions = res.data.classOptions;
+                        this.$nextTick(() => {
+                            if (this.$refs.tableRef) {
+                                this.$refs.tableRef.doLayout();
                             }
                         })
-                        _this.errMsg=res.data.errMsg;
-                        //console.log(_this.errMsg);
-                        _this.tableContent = res.data.content;
-                        _this.totalNum = _this.tableContent.length;
-                        _this.$nextTick(() => {
-                           if (_this.$refs.tableRef) {
-                                _this.$refs.tableRef.doLayout();
+                    })
+
+                },
+
+
+                indexMethod(index) {
+                    return index + 1;
+                },
+
+                handleSelectionChange(rows) {
+                    this.multipleSelection = rows;
+                },
+
+                getRowKeys(row) {
+                    return row.id
+                },
+
+
+                updateFile: function (e) {
+                    const first = "未選擇文件";
+                    let newValue = e.target.files;
+                    if (newValue) {
+                        let file = document.getElementById('upload');
+                        let filename = file.files[0].name;
+                        let fileType = filename.substr(filename.lastIndexOf(".") + 1);
+                        //console.log(fileType.toLowerCase());
+                        if ((fileType.toLowerCase() === 'xlsx') || (fileType.toLowerCase() === 'xls')) {
+                            //console.log(this.excelFile);
+                            this.fileName = filename;
+                            this.uploadFile = file.files[0];
+                        } else {
+                            alert("上傳類型不為'xlsx'或'xls'");
+                            try {
+                            } catch (e) {
+                                console.log(e);
                             }
-                        })
-                        _this.uploadFile=null;
-                        _this.fileName=first;
-                   //_this.loading=false;
-                        loading.close();
-                    //上传成功的操作
-                        if(_this.errMsg){
-                            _this.$alert(_this.errMsg, '提示', {
-                                  type: 'warning',
+                        }
+                    } else {
+                        this.uploadFile = null;
+                        this.fileName = first;
+                    }
+                },
+                fileUpload: function () {
+                    const first = "未選擇文件";
+                    if (this.uploadFile) {
+                        //1.解析Excel
+                        let outputResult;
+                        let _this = this;
+                        let files = this.uploadFile;
+                        let undefined_to_null = function (value) {
+                            if (value === undefined) {
+                                value = null;
+                            }
+                            //console.log(value,value === undefined,value == undefined);
+                            return value;
+                        }
+                        var fileReader = new FileReader();
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0,0,0,0.7)'
+                        });
+                        fileReader.onload = function (ev) {
+                            try {
+                                // _this.loading=true;
+                                var data = ev.target.result,
+                                    workbook = XLSX.read(data, {
+                                        type: 'binary'
+                                    }), // 以二进制流方式读取得到整份excel表格对象
+                                    persons = []; // 存储获取到的数据
+                            } catch (e) {
+                                //_this.loading=false;
+                                loading.close();
+                                return;
+                            }
+                            for (var sheet in workbook.Sheets) {
+                                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                                    var fromTo = workbook.Sheets[sheet]['!ref'];
+                                    // console.log(fromTo);
+                                    var datas = workbook.Sheets[sheet];
+                                    // 如果有不规范数据可以在这里进行处理datas
+                                    persons = persons.concat(XLSX.utils.sheet_to_json(datas));
+                                    //break; // 只读了第一张表
+                                }
+                            }
+                            // 数据保存在result
+                            let result = JSON.stringify(persons);
+                            //将之前张开的树形结构收起
+                            //_this.reset();
+                            //2.上errMsg傳數據
+                            let CG = _this.$refs.CG.value;
+                            let SWHW = _this.$refs.SWHW.value;
+                            let Category_L1 = _this.$refs.Category_L1.value;
+                            let Category_L2 = _this.$refs.Category_L2.value;
+                            let Owner = _this.$refs.Owner.value;
+                            let OwnerNumber = _this.number;
+                            axios.post("/CommonFiles/CommonFiles_edit/", {
+                                "isGetData": "upload",
+                                "searchCG": CG,
+                                "searchSWHW": SWHW,
+                                "searchCategory_L1": Category_L1,
+                                "searchCategory_L2": Category_L2,
+                                "searchOwner": Owner,
+                                "searchOwnerNumber": OwnerNumber,
+                                "ExcelData": result
+                            }, {
+                                headers: {'X-CSRFToken': $("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式 ==>'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                            }).then((res) => {
+                                //console.log(res.data,"first");//上传成功的操作
+                                _this.tableContent = res.data.content;
+                                _this.totalNum = _this.tableContent.length;
+                                _this.$nextTick(() => {
+                                    if (_this.$refs.tableRef) {
+                                        _this.$refs.tableRef.doLayout();
+                                    }
                                 })
-                        }else {
-                            _this.$message({
-                                message: '上傳成功',
-                                type: 'success',
-                            })
+                                _this.errMsg = res.data.errMsg;
+                                //console.log(_this.errMsg);
+                                _this.tableContent = res.data.content;
+                                _this.totalNum = _this.tableContent.length;
+                                _this.$nextTick(() => {
+                                    if (_this.$refs.tableRef) {
+                                        _this.$refs.tableRef.doLayout();
+                                    }
+                                })
+                                _this.uploadFile = null;
+                                _this.fileName = first;
+                                //_this.loading=false;
+                                loading.close();
+                                //上传成功的操作
+                                if (_this.errMsg) {
+                                    _this.$alert(_this.errMsg, '提示', {
+                                        type: 'warning',
+                                    })
+                                } else {
+                                    _this.$message({
+                                        message: '上傳成功',
+                                        type: 'success',
+                                    })
+                                }
+                                //接受数据的初始化
+                                try {
+                                } catch (e) {
+                                    console.log("错误异常" + e);
+                                }
+                            }).catch(function (e) {
+                                //_this.loading=false;
+                                loading.close();
+                                _this.uploadFile = null;
+                                var warning = confirm("上傳異常");
+                                console.log("上傳錯誤信息" + e);
+                            });
+                        };
+                        try {
+                            //console.log(fileReader.onload());
+                            fileReader.readAsBinaryString(files);
+                            //console.log(fileReader.readAsBinaryString(files));
+                        } catch (e) {
+                            //this.loading=false;
+                            loading.close();
+                            console.log(e);
+                            alert("文件上傳異常");
+                            return;
                         }
-                    //接受数据的初始化
-                    try{
-                    }catch(e)
-                    {
-                       console.log("错误异常"+e);
-                    }
-                }).catch(function (e) {
-                        //_this.loading=false;
+                        //console.log(outputResult);
+
+                    } else {
+                        //this.loading=false;
                         loading.close();
-                        _this.uploadFile=null;
-                        var warning =confirm("上傳異常");
-                        console.log("上傳錯誤信息"+e);
-                    });
-           };
-                   try{
-                   //console.log(fileReader.onload());
-                   fileReader.readAsBinaryString(files);
-                   //console.log(fileReader.readAsBinaryString(files));
-                   }
-                   catch(e){
-                         //this.loading=false;
-                       loading.close();
-                         console.log(e);
-                         alert("文件上傳異常");
-                         return;
+                        alert("未選擇文件");
+                        return false;
                     }
-                  //console.log(outputResult);
-
-             }else{
-              //this.loading=false;
-                  loading.close();
-              alert("未選擇文件");
-              return false;
-          }
-              this.excelFile='';
-      },
+                    this.excelFile = '';
+                },
 
 
-            //分页
-            handleSizeChange(val) {
-                  //console.log(`每页 ${val} 条`);
+                //分页
+                handleSizeChange(val) {
+                    //console.log(`每页 ${val} 条`);
                     this.pageSize = val;
-            },
-            handleCurrentChange(val) {
-                //console.log(`当前页: ${val}`);
-                  this.currentPage = val;
-                  //console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
-            },
+                },
+                handleCurrentChange(val) {
+                    //console.log(`当前页: ${val}`);
+                    this.currentPage = val;
+                    //console.log(this.tableContent.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize));
+                },
 
-            // 生成预览列表
+                // 生成预览列表
                 getPreviewList(photos) {
                     return [photos];
                 },
 
-            // 打开预览弹窗
-            openPreview(item) {
-                // 重置所有预览相关状态
-                this.resetPreviewState();
+                // 打开预览弹窗
+                openPreview(item) {
+                    // 重置所有预览相关状态
+                    this.resetPreviewState();
 
-                // 设置新的预览状态
-                this.previewItem = item;
-                this.previewUrl = this.getFullUrl(item.url);
-                this.previewType = this.getFileType(item);
-                this.previewContainerId = 'preview-container-' + Date.now();
+                    // 设置新的预览状态
+                    this.previewItem = item;
+                    this.previewUrl = this.getFullUrl(item.url);
+                    this.previewType = this.getFileType(item);
+                    this.previewContainerId = 'preview-container-' + Date.now();
 
-                this.$nextTick(() => {
-                    const container = document.getElementById(this.previewContainerId);
-                    if (container) {
-                        container.innerHTML = '';
-                    }
+                    this.$nextTick(() => {
+                        const container = document.getElementById(this.previewContainerId);
+                        if (container) {
+                            container.innerHTML = '';
+                        }
 
-                    if (this.previewType === 'pdf') {
-                        this.previewPDF(this.previewUrl, this.previewContainerId);
-                    } {% comment %}else if (this.previewType === 'ppt') {
+                        if (this.previewType === 'pdf') {
+                            this.previewPDF(this.previewUrl, this.previewContainerId);
+                        } {% comment %}else if (this.previewType === 'ppt') {
                         this.previewPPTAsPDF(this.previewUrl, this.previewContainerId, item.id);
-                    } {% endcomment %}else if (this.previewType === 'excel') {
-                        this.previewExcel(this.previewUrl, this.previewContainerId);
-                    } else if (this.previewType === 'word') {
-                        this.previewWord(this.previewUrl, this.previewContainerId);
-                    } else if (this.previewType === 'image') {
-                        // 图片预览
+                    } {% endcomment %} else if (this.previewType === 'excel') {
+                            this.previewExcel(this.previewUrl, this.previewContainerId);
+                        } else if (this.previewType === 'word') {
+                            this.previewWord(this.previewUrl, this.previewContainerId);
+                        } else if (this.previewType === 'image') {
+                            // 图片预览
+                        }
+
+                        this.previewDialogVisible = true;
+                    });
+                },
+
+                // 新增方法：重置预览状态
+                resetPreviewState() {
+                    // 重置PDF预览状态
+                    if (this.pdfDoc) {
+                        this.pdfDoc.destroy();
+                        this.pdfDoc = null;
+                    }
+                    this.pdfTotalPages = 0;
+                    this.currentPageNum = 1;
+
+                    // 重置Excel预览状态
+                    const excelContainer = document.getElementById(this.previewContainerId);
+                    if (excelContainer) {
+                        excelContainer.innerHTML = '';
                     }
 
-                    this.previewDialogVisible = true;
-                });
-            },
+                    // 重置PPT预览状态
+                    this.pptImages = [];
+                    this.pptTotalSlides = 0;
+                    this.currentSlideNum = 1;
+                    this.pptLoading = false;
+                    this.pptError = null;
+                },
 
-            // 新增方法：重置预览状态
-            resetPreviewState() {
-                // 重置PDF预览状态
-                if (this.pdfDoc) {
-                    this.pdfDoc.destroy();
-                    this.pdfDoc = null;
-                }
-                this.pdfTotalPages = 0;
-                this.currentPageNum = 1;
+                async renderPDFPage(pageNum, containerId) {
+                    const page = await this.pdfDoc.getPage(pageNum);
+                    const viewport = page.getViewport({scale: 1.5});
 
-                // 重置Excel预览状态
-                const excelContainer = document.getElementById(this.previewContainerId);
-                if (excelContainer) {
-                    excelContainer.innerHTML = '';
-                }
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
 
-                // 重置PPT预览状态
-                this.pptImages = [];
-                this.pptTotalSlides = 0;
-                this.currentSlideNum = 1;
-                this.pptLoading = false;
-                this.pptError = null;
-            },
+                    await page.render({canvasContext: context, viewport}).promise;
 
-              async renderPDFPage(pageNum, containerId) {
-                const page = await this.pdfDoc.getPage(pageNum);
-                const viewport = page.getViewport({ scale: 1.5 });
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = ''; // 清空容器
+                    container.appendChild(canvas);
+                },
 
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+                prevPage() {
+                    if (this.currentPageNum > 1) {
+                        this.currentPageNum--;
+                        this.renderPDFPage(this.currentPageNum, this.previewContainerId);
+                    }
+                },
 
-                await page.render({ canvasContext: context, viewport }).promise;
+                nextPage() {
+                    if (this.currentPageNum < this.pdfTotalPages) {
+                        this.currentPageNum++;
+                        this.renderPDFPage(this.currentPageNum, this.previewContainerId);
+                    }
+                },
 
-                const container = document.getElementById(containerId);
-                container.innerHTML = ''; // 清空容器
-                container.appendChild(canvas);
-              },
+                // 下载预览文件
+                downloadPreviewFile() {
+                    window.location.href = this.previewUrl;
+                },
 
-              prevPage() {
-                if (this.currentPageNum > 1) {
-                  this.currentPageNum--;
-                  this.renderPDFPage(this.currentPageNum, this.previewContainerId);
-                }
-              },
+                // 获取文件类型
+                getFileType(item) {
+                    if (item && item.url) {
+                        const url = item.url.toLowerCase();
+                        const ext = url.split('.').pop();
 
-              nextPage() {
-                if (this.currentPageNum < this.pdfTotalPages) {
-                  this.currentPageNum++;
-                  this.renderPDFPage(this.currentPageNum, this.previewContainerId);
-                }
-              },
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'];
+                        const pdfExts = ['pdf'];
+                        const excelExts = ['xls', 'xlsx'];
+                        const pptExts = ['ppt', 'pptx'];
+                        const wordExts = ['doc', 'docx'];
 
-              // 下载预览文件
-              downloadPreviewFile() {
-                window.location.href = this.previewUrl;
-              },
+                        if (videoExts.includes(ext)) return 'video';
+                        if (imageExts.includes(ext)) return 'image';
+                        if (pdfExts.includes(ext)) return 'pdf';
+                        if (excelExts.includes(ext)) return 'excel';
+                        if (pptExts.includes(ext)) return 'ppt';
+                        if (wordExts.includes(ext)) return 'word';
+                    }
+                    return 'other';
+                },
 
-            // 获取文件类型
-              getFileType(item) {
-                if (item && item.url) {
-                  const url = item.url.toLowerCase();
-                  const ext = url.split('.').pop();
-
-                  const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
-                  const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'];
-                  const pdfExts = ['pdf'];
-                  const excelExts = ['xls', 'xlsx'];
-                  const pptExts = ['ppt', 'pptx'];
-                  const wordExts = ['doc', 'docx'];
-
-                  if (videoExts.includes(ext)) return 'video';
-                  if (imageExts.includes(ext)) return 'image';
-                  if (pdfExts.includes(ext)) return 'pdf';
-                  if (excelExts.includes(ext)) return 'excel';
-                  if (pptExts.includes(ext)) return 'ppt';
-                  if (wordExts.includes(ext)) return 'word';
-                }
-                return 'other';
-              },
-
-              // 预览PDF文件 - 修改为渲染所有页面
+                // 预览PDF文件 - 修改为渲染所有页面
                 async previewPDF(url, containerId) {
                     try {
                         // 如果已有pdfDoc，先销毁
@@ -1926,7 +2000,7 @@ tbody tr td:last-child {
                         // 渲染所有页面
                         for (let pageNum = 1; pageNum <= this.pdfTotalPages; pageNum++) {
                             const page = await this.pdfDoc.getPage(pageNum);
-                            const viewport = page.getViewport({ scale: 1.5 });
+                            const viewport = page.getViewport({scale: 1.5});
 
                             const canvas = document.createElement('canvas');
                             const context = canvas.getContext('2d');
@@ -1950,41 +2024,41 @@ tbody tr td:last-child {
                     }
                 },
 
-              // 预览Excel文件
-              async previewExcel(url, containerId) {
-                const response = await fetch(url);
-                const buffer = await response.arrayBuffer();
-                const workbook = XLSX.read(buffer, { type: 'array' });
+                // 预览Excel文件
+                async previewExcel(url, containerId) {
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                    const workbook = XLSX.read(buffer, {type: 'array'});
 
-                const container = document.getElementById(containerId);
-                container.innerHTML = '';
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
 
-                workbook.SheetNames.forEach(sheetName => {
-                  const sheet = workbook.Sheets[sheetName];
-                  const html = XLSX.utils.sheet_to_html(sheet);
+                    workbook.SheetNames.forEach(sheetName => {
+                        const sheet = workbook.Sheets[sheetName];
+                        const html = XLSX.utils.sheet_to_html(sheet);
 
-                  const sheetDiv = document.createElement('div');
-                  sheetDiv.innerHTML = `
+                        const sheetDiv = document.createElement('div');
+                        sheetDiv.innerHTML = `
                     <div class="excel-sheet">
                       <h4>${sheetName}</h4>
                       <div class="excel-table">${html}</div>
                     </div>
                   `;
 
-                  container.appendChild(sheetDiv);
-                });
-              },
+                        container.appendChild(sheetDiv);
+                    });
+                },
 
-              // 预览Word文档
-              async previewWord(url, containerId) {
-                const response = await fetch(url);
-                const arrayBuffer = await response.arrayBuffer();
+                // 预览Word文档
+                async previewWord(url, containerId) {
+                    const response = await fetch(url);
+                    const arrayBuffer = await response.arrayBuffer();
 
-                const result = await mammoth.convertToHtml({ arrayBuffer });
-                document.getElementById(containerId).innerHTML = result.value;
-              },
+                    const result = await mammoth.convertToHtml({arrayBuffer});
+                    document.getElementById(containerId).innerHTML = result.value;
+                },
 
-            // 添加新的预览方法
+                // 添加新的预览方法
                 async previewPPTAsPDF(url, containerId, fileid) {
                     this.pptLoading = true;
 
@@ -1992,56 +2066,56 @@ tbody tr td:last-child {
                     axios.get(`/CommonFiles/ppt_preview/${fileid}/`, {
                         responseType: 'blob' // 重要：因为后端返回的是文件流，所以需要指定responseType为blob
                     })
-                    .then(response => {
-                        // 创建 blob URL
-                        const blob = new Blob([response.data], { type: 'application/pdf' });
-                        const blobUrl = URL.createObjectURL(blob);
+                        .then(response => {
+                            // 创建 blob URL
+                            const blob = new Blob([response.data], {type: 'application/pdf'});
+                            const blobUrl = URL.createObjectURL(blob);
 
-                        // 使用 PDF.js 预览
-                        this.previewPDF(blobUrl, containerId);
-                        this.pptLoading = false;
-                    })
-                    .catch(error => {
-                        this.pptLoading = false;
-                        this.pptError = "转换失败: " + error.message;
-                        console.error('转换错误:', error);
-                    });
+                            // 使用 PDF.js 预览
+                            this.previewPDF(blobUrl, containerId);
+                            this.pptLoading = false;
+                        })
+                        .catch(error => {
+                            this.pptLoading = false;
+                            this.pptError = "转换失败: " + error.message;
+                            console.error('转换错误:', error);
+                        });
                 },
-            async nextSlide() {
-                if (this.currentSlideNum < this.pptTotalSlides) {
-                    this.currentSlideNum++;
-                    await this.renderCurrentSlide();
-                }
-            },
+                async nextSlide() {
+                    if (this.currentSlideNum < this.pptTotalSlides) {
+                        this.currentSlideNum++;
+                        await this.renderCurrentSlide();
+                    }
+                },
 
-            async prevSlide() {
-                if (this.currentSlideNum > 1) {
-                    this.currentSlideNum--;
-                    await this.renderCurrentSlide();
-                }
-            },
+                async prevSlide() {
+                    if (this.currentSlideNum > 1) {
+                        this.currentSlideNum--;
+                        await this.renderCurrentSlide();
+                    }
+                },
 
-        },
-        computed:{
-                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+            },
+            computed: {
+                datas() {//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
                     //console.log(111)
-                    const search=this.search;
-                    if(search){
-                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
-                            return Object.keys(data).some(key=>{
-                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                    const search = this.search;
+                    if (search) {
+                        return this.tableContent.filter(data => {//axios返回时接受数据的变量
+                            return Object.keys(data).some(key => {
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
                             })
                         })
                     }
                     return this.tableContent//axios返回时接受数据的变量
                 },
-                total_computed () {
+                total_computed() {
                     this.Totalsize = this.datas.length;//edwin:export数据的个数
                     console.log(this.Totalsize);
                     return this.datas.length//必须是el-table里面绑定的数据变量
                 }
             },
-    })
+        })
     </script>
 {% endblock %}
 

@@ -6,7 +6,7 @@ from .models import AutoItems, AutoProject, AutoResult
 @admin.register(AutoItems)
 class AutoItemsAdmin(admin.ModelAdmin):
     list_display = ('Number', 'Customer', 'ValueIf', "BaseIncome", "CaseID", "CaseName", "Item", "Owner", "Status",
-                    "FunDescription", "Comment")
+                    "Owner", "proposer", "Import_Date", "Ver", "FunDescription", "Comment")
     # 列表里显示想要显示的字段
     list_per_page = 500
     # 满50条数据就自动分页
@@ -50,7 +50,7 @@ class AutoProjectAdmin(admin.ModelAdmin):
 @admin.register(AutoResult)
 class AutoResultAdmin(admin.ModelAdmin):
     list_display = ('Number', 'Customer', 'ValueIf', "BaseIncome", "CaseID", "CaseName", "Item", "Owner",
-                    "FunDescription", "Comment", "AutoItem", "Projectinfo", "ProjectinfoCQM", "ProjectName", "Year", "Cycles", "Comments",
+                    "Owner", "proposer", "Import_Date", "Ver", "FunDescription", "Comment", "AutoItem", "Projectinfo", "ProjectinfoCQM", "ProjectName", "Year", "Cycles", "Comments",
                     "editor", "edit_time")
     # 列表里显示想要显示的字段
     list_per_page = 500

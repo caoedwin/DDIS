@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime, os
 from django.http import HttpResponse
 import datetime, json, simplejson
-from .models import AutoItems, AutoResult, AutoProject
+from .models import AutoItems, AutoResult, AutoProject, files
 from CQM.models import CQM, CQMProject, CQM_history
 from CQM.models import CQM as CQMtest
 from app01.models import UserInfo, ProjectinfoinDCT
@@ -18,6 +18,10 @@ headermodel_auto = {
     'Base效益': 'BaseIncome',
     'Case ID': 'CaseID', 'Case Name': 'CaseName', 'Item': 'Item', '功能簡介': 'FunDescription',
     'Status': 'Status',
+    '開發者': 'Owner',
+    '提案者': 'proposer',
+    '導入日期': 'Import_Date',
+    '工具版本': 'Ver',
     # 'Owner': 'Owner', 'Comment': 'Comment',
 
 }
@@ -81,29 +85,32 @@ def AutoItem_edit(request):
     ]
     errMsg = ''  # 上傳errmsg
     errMsgNumber = ''
-    canEdit = 1  # 增、刪、改、上傳
+    canEdit = 0  # 增、刪、改、上傳
+    roles = []
+    onlineuser = request.session.get('account')
+    if UserInfo.objects.filter(account=onlineuser).first():
+        for i in UserInfo.objects.filter(account=onlineuser).first().role.all():
+            roles.append(i.name)
+    # print(roles)
+    for i in roles:
+        if i == 'admin' or i == 'Auto_C38_admin':
+            canEdit = 1
+    # 附加SQL查询，先以Customer，在一Number最后2位排序
+    mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by("Customer",
+                                                                                                 "Lennum")
 
     if request.method == "POST":
         if request.POST:
             if request.POST.get('isGetData') == 'first':
                 # mock_datalist = AutoItems.objects.all().annotate(type=Value('p', output_field=CharField(max_length=1)))
-                # 附加SQL查询，先以Customer，在一Number最后2位排序
-                mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by("Customer",
-                                                                                                             "Lennum")
-                for i in mock_datalist:
-                    mock_data.append(
-                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
-                         "BaseBenfit": i.BaseIncome,
-                         "CaseID": i.CaseID,
-                         "CaseName": i.CaseName,
-                         "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment,
-                         }
-                    )
+
+                pass
+
             if request.POST.get('isGetData') == 'SEARCH':
                 ckeck_dic = {}
                 Customer = request.POST.get('Customer')
                 ValueIf = request.POST.get('VA_NVA')
+
                 if Customer and Customer != "All":
                     ckeck_dic["Customer"] = Customer
                 if ValueIf and ValueIf != "All":
@@ -114,17 +121,11 @@ def AutoItem_edit(request):
                     mock_datalist = AutoItems.objects.filter(**ckeck_dic)
                 else:
                     mock_datalist = AutoItems.objects.all()
-                for i in mock_datalist:
-                    mock_data.append(
-                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
-                         "BaseBenfit": i.BaseIncome,
-                         "CaseID": i.CaseID,
-                         "CaseName": i.CaseName,
-                         "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment,
-                         }
-                    )
+
             if request.POST.get('action') == 'addsubmit':
+                new_files = request.FILES.getlist("new_files", "")
+                # print(new_files)
+                files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
                 add_dic = {
                     "Number": request.POST.get('Number'),
                     "Customer": request.POST.get('Customer'),
@@ -134,6 +135,10 @@ def AutoItem_edit(request):
                     "CaseName": request.POST.get('CaseName'),
                     "Item": request.POST.get('Item'),
                     "Status": request.POST.get('Status'),
+                    "proposer": request.POST.get('proposer'),
+                    "Import_Date": request.POST.get('Import_Date'),
+                    "Ver": request.POST.get('Ver'),
+                    "Owner": request.POST.get('Owner'),
                     "FunDescription": request.POST.get('FunctionInt'),
                 }
                 # print(add_dic)
@@ -141,7 +146,24 @@ def AutoItem_edit(request):
                     errMsgNumber = "No.已经存在"
                 else:
                     # print("create")
-                    AutoItems.objects.create(**add_dic)
+                    with transaction.atomic():
+                        AutoItems_object = AutoItems.objects.create(**add_dic)
+                        if new_files:
+                            for f in new_files:
+                                # print(f)
+                                empt = files()
+                                # 增加其他字段应分别对应填写
+                                empt.single = f
+                                empt.files = f
+                                empt.save()
+                                AutoItems_object.Attachment.add(empt)
+                        fileslist = files.objects.filter(id__in=files_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                        # print(vedios)
+
+                        # 解除关联
+                        AutoItems_object.Attachment.remove(*fileslist)  # 使用 * 解包列表
+                        fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                        AutoItems_object.save()
 
                 # mock_data
                 ckeck_dic = {}
@@ -157,17 +179,10 @@ def AutoItem_edit(request):
                     mock_datalist = AutoItems.objects.filter(**ckeck_dic)
                 else:
                     mock_datalist = AutoItems.objects.all()
-                for i in mock_datalist:
-                    mock_data.append(
-                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
-                         "BaseBenfit": i.BaseIncome,
-                         "CaseID": i.CaseID,
-                         "CaseName": i.CaseName,
-                         "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment,
-                         }
-                    )
+
             if request.POST.get('action') == 'updateSubmit':
+                new_files = request.FILES.getlist("new_files", "")
+                files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
                 add_dic = {
                     "Number": request.POST.get('Number'),
                     "Customer": request.POST.get('Customer'),
@@ -177,6 +192,10 @@ def AutoItem_edit(request):
                     "CaseName": request.POST.get('CaseName'),
                     "Item": request.POST.get('Item'),
                     "Status": request.POST.get('Status'),
+                    "proposer": request.POST.get('proposer'),
+                    "Import_Date": request.POST.get('Import_Date'),
+                    "Ver": request.POST.get('Ver'),
+                    "Owner": request.POST.get('Owner'),
                     "FunDescription": request.POST.get('FunctionInt'),
                 }
                 # print(add_dic)
@@ -186,7 +205,28 @@ def AutoItem_edit(request):
                     errMsgNumber = "No.已经存在"
                 else:
                     # print("create")
-                    AutoItems.objects.filter(id=request.POST.get('id')).update(**add_dic)
+                    ID = request.POST.get('id')
+                    AutoItems.objects.filter(id=ID).update(**add_dic)
+                    AutoItems_object = AutoItems.objects.filter(id=ID).first()
+                    if new_files:
+                        for f in new_files:
+                            # print(f)
+                            empt = files()
+                            # 增加其他字段应分别对应填写
+                            empt.single = f
+                            empt.files = f
+                            empt.save()
+                            AutoItems_object.Attachment.add(empt)
+                    fileslist = files.objects.filter(id__in=files_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                    # print(vedios)
+
+                    # 解除关联
+                    AutoItems_object.Attachment.remove(*fileslist)  # 使用 * 解包列表
+                    fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+
+                    AutoItems_object = AutoItems.objects.get(id=ID)
+
+                    AutoItems_object.save()
 
                 # mock_data
                 ckeck_dic = {}
@@ -202,16 +242,7 @@ def AutoItem_edit(request):
                     mock_datalist = AutoItems.objects.filter(**ckeck_dic)
                 else:
                     mock_datalist = AutoItems.objects.all()
-                for i in mock_datalist:
-                    mock_data.append(
-                        {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
-                         "BaseBenfit": i.BaseIncome,
-                         "CaseID": i.CaseID,
-                         "CaseName": i.CaseName,
-                         "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment,
-                         }
-                    )
+
         else:
             try:
                 request.body
@@ -300,6 +331,71 @@ def AutoItem_edit(request):
                                                         第"%s"條數據，Item不能爲空
                                                                             """ % rownum
                             break
+                        if 'Status' in modeldata.keys():
+                            startupload = 1
+                        else:
+                            # canEdit = 0
+                            startupload = 0
+                            err_ok = 2
+                            errMsg = err_msg = """
+                                                        第"%s"條數據，Status不能爲空
+                                                                            """ % rownum
+                            break
+                        if 'Owner' in modeldata.keys():
+                            startupload = 1
+                        else:
+                            # canEdit = 0
+                            startupload = 0
+                            err_ok = 2
+                            errMsg = err_msg = """
+                                                        第"%s"條數據，開發者不能爲空
+                                                                            """ % rownum
+                            break
+                        if 'proposer' in modeldata.keys():
+                            startupload = 1
+                        else:
+                            # canEdit = 0
+                            startupload = 0
+                            err_ok = 2
+                            errMsg = err_msg = """
+                                                        第"%s"條數據，提案者不能爲空
+                                                                            """ % rownum
+                            break
+                        if 'Import_Date' in modeldata.keys():
+                            startupload = 1
+                            if len(modeldata['Import_Date']) >= 8 and len(modeldata['Import_Date']) <= 10:
+                                # modeldata['Pchsdate'].replace('/', '-')
+                                # print(modeldata['Pchsdate'].replace('/', '-'))
+                                modeldata['Pchsdate'] = modeldata['Pchsdate'].replace('/', '-')
+                                modeldata['Pchsdate'] = modeldata['Pchsdate'].replace('.', '-')
+                                # print(modeldata['Pchsdate'])
+                                startupload = 1
+                            else:
+                                # canEdit = 0
+                                startupload = 0
+                                err_ok = 2
+                                errMsg = err_msg = """
+                                                            第"%s"條數據，導入日期式不對，請確認是否是文字格式YYYY-MM-DD,并且存储格格式为文字格式
+                                                                                """ % rownum
+                                break
+                        else:
+                            # canEdit = 0
+                            startupload = 0
+                            err_ok = 2
+                            errMsg = err_msg = """
+                                                        第"%s"條數據，導入日期不能爲空
+                                                                            """ % rownum
+                            break
+                        if 'Ver' in modeldata.keys():
+                            startupload = 1
+                        else:
+                            # canEdit = 0
+                            startupload = 0
+                            err_ok = 2
+                            errMsg = err_msg = """
+                                                        第"%s"條數據，工具版本不能爲空
+                                                                            """ % rownum
+                            break
 
                         # if 'Pchsdate' in modeldata.keys():
                         #     # modeldata['Pchsdate'] = modeldata['Pchsdate'].replace('/', '-')
@@ -374,24 +470,23 @@ def AutoItem_edit(request):
 
                     else:
                         mock_datalist = AutoItems.objects.all()
-                    for i in mock_datalist:
-                        mock_data.append(
-                            {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
-                             "BaseBenfit": i.BaseIncome,
-                             "CaseID": i.CaseID,
-                             "CaseName": i.CaseName,
-                             "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                             "Owner": i.Owner, "Comment": i.Comment,
-                             }
-                        )
+
                     # print(mock_data)
                 if 'MUTICANCEL' in str(request.body):
                     responseData = json.loads(request.body)
                     # print(responseData)
                     # print(responseData['historyYear'],type(responseData['historyYear']))
                     for i in responseData["params"]:
-                        # print(i,AutoItems.objects.filter(id=i))
-                        AutoItems.objects.filter(id=i).delete()
+                        files_to_delete = []
+                        for j in AutoItems.objects.get(id=i).Attachment.all():
+                            files_to_delete.append(j.id)
+                        fileslist = files.objects.filter(id__in=files_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                        # print(vedios)
+
+                        # 解除关联
+                        AutoItems.objects.get(id=i).Attachment.remove(*fileslist)  # 使用 * 解包列表
+                        fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                        AutoItems.objects.get(id=i).delete()
 
                     ckeck_dic = {}
                     Customer = responseData['Customer']
@@ -408,17 +503,29 @@ def AutoItem_edit(request):
 
                     else:
                         mock_datalist = AutoItems.objects.all()
-                    for i in mock_datalist:
-                        mock_data.append(
-                            {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
-                             "BaseBenfit": i.BaseIncome,
-                             "CaseID": i.CaseID,
-                             "CaseName": i.CaseName,
-                             "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
-                             "Owner": i.Owner, "Comment": i.Comment,
-                             }
-                        )
+
                     # print(mock_data)
+
+        for i in mock_datalist:
+            Attachmentlist = []
+            for h in i.Attachment.all():
+                Attachmentlist.append({"id": h.id, "url": "/media/" + str(h.files)})
+
+            mock_data.append(
+                {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
+                 "BaseBenfit": i.BaseIncome,
+                 "CaseID": i.CaseID,
+                 "CaseName": i.CaseName,
+                 "Item": i.Item, "Status": i.Status,
+                 "proposer": i.proposer,
+                 "Import_Date": str(i.Import_Date) if i.Import_Date else "",
+                 "Ver": i.Ver,
+                 "FunctionInt": i.FunDescription,
+                 "Owner": i.Owner,
+                 "Comment": i.Comment,
+                 "Attachment": Attachmentlist,
+                 }
+            )
 
         data = {
             'canEdit': canEdit,
@@ -581,7 +688,11 @@ def AutoResult_edit(request):
                          "BaseBenfit": i.BaseIncome,
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
-                         "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
+                         "Item": i.Item, "Status": i.Status,
+                         "proposer": i.proposer,
+                         "Import_Date": str(i.Import_Date) if i.Import_Date else '',
+                         "Ver": i.Ver,
+                         "FunctionInt": i.FunDescription,
                          "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
                          }
                     )
@@ -657,7 +768,11 @@ def AutoResult_edit(request):
                          "BaseBenfit": i.BaseIncome,
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
-                         "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
+                         "Item": i.Item, "Status": i.Status,
+                         "proposer": i.proposer,
+                         "Import_Date": str(i.Import_Date) if i.Import_Date else '',
+                         "Ver": i.Ver,
+                         "FunctionInt": i.FunDescription,
                          "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
                          }
                     )
@@ -833,7 +948,11 @@ def AutoResult_edit(request):
                              "BaseBenfit": i.BaseIncome,
                              "CaseID": i.CaseID,
                              "CaseName": i.CaseName,
-                             "Item": i.Item, "Status": i.Status, "FunctionInt": i.FunDescription,
+                             "Item": i.Item, "Status": i.Status,
+                             "proposer": i.proposer,
+                             "Import_Date": str(i.Import_Date) if i.Import_Date else '',
+                             "Ver": i.Ver,
+                             "FunctionInt": i.FunDescription,
                              "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
                              }
                         )
@@ -1086,7 +1205,11 @@ def AutoResult_search(request):
                      "BaseBenfit": i.BaseIncome,
                      "SummaryBenfit": SummaryBenfit, "NPIBenfit": NPIBenfit,
                      "CaseID": i.CaseID, "CaseName": i.CaseName,
-                     "Item": i.Item, "Status": i.Status, "Owner": i.Owner, "FunctionInt": i.FunDescription,
+                     "Item": i.Item, "Status": i.Status, "Owner": i.Owner,
+                     "proposer": i.proposer,
+                     "Import_Date": str(i.Import_Date) if i.Import_Date else '',
+                     "Ver": i.Ver,
+                     "FunctionInt": i.FunDescription,
                      "Comments": i.Comment}
                 )
         data = {

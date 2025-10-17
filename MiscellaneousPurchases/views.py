@@ -448,19 +448,20 @@ def ReceiptAmount_view(request):
             # Ledger = request.POST.get('Ledger')
             print(request.POST.get('Dec'), type(request.POST.get('Dec')))
             update_dic = {
-                "Jan": request.POST.get('Jan') if request.POST.get('Jan') else None,
-                "Feb": request.POST.get('Feb') if request.POST.get('Feb') else None,
-                "Mar": request.POST.get('Mar') if request.POST.get('Mar') else None,
-                "Apr": request.POST.get('Apr') if request.POST.get('Apr') else None,
-                "May": request.POST.get('May') if request.POST.get('May') else None,
-                "Jun": request.POST.get('Jun') if request.POST.get('Jun') else None,
-                "Jul": request.POST.get('July') if request.POST.get('July') else None,
-                "Aug": request.POST.get('Aug') if request.POST.get('Aug') else None,
-                "Sep": request.POST.get('Sep') if request.POST.get('Sep') else None,
-                "Oct": request.POST.get('Oct') if request.POST.get('Oct') else None,
-                "Nov": request.POST.get('Nov') if request.POST.get('Nov') else None,
-                "Dec": request.POST.get('Dec') if request.POST.get('Dec') else None,
+                "Jan": request.POST.get('Jan') if request.POST.get('Jan') and request.POST.get('Jan') != 'null' else None,
+                "Feb": request.POST.get('Feb') if request.POST.get('Feb') and request.POST.get('Feb') != 'null' else None,
+                "Mar": request.POST.get('Mar') if request.POST.get('Mar') and request.POST.get('Mar') != 'null' else None,
+                "Apr": request.POST.get('Apr') if request.POST.get('Apr') and request.POST.get('Apr') != 'null' else None,
+                "May": request.POST.get('May') if request.POST.get('May') and request.POST.get('May') != 'null' else None,
+                "Jun": request.POST.get('Jun') if request.POST.get('Jun') and request.POST.get('Jun') != 'null' else None,
+                "Jul": request.POST.get('July') if request.POST.get('July') and request.POST.get('July') != 'null' else None,
+                "Aug": request.POST.get('Aug') if request.POST.get('Aug') and request.POST.get('Aug') != 'null' else None,
+                "Sep": request.POST.get('Sep') if request.POST.get('Sep') and request.POST.get('Sep') != 'null' else None,
+                "Oct": request.POST.get('Oct') if request.POST.get('Oct') and request.POST.get('Oct') != 'null' else None,
+                "Nov": request.POST.get('Nov') if request.POST.get('Nov') and request.POST.get('Nov') != 'null' else None,
+                "Dec": request.POST.get('Dec') if request.POST.get('Dec') and request.POST.get('Dec') != 'null' else None,
             }
+            print(update_dic)
             ReceiptAmount.objects.filter(id=ID).update(**update_dic)
             if YearSearch:
                 mock_data_obj = ReceiptAmount.objects.filter(Year=YearSearch)
