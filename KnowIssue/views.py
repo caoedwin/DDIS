@@ -26,7 +26,9 @@ def KnowIssue_upload(request):
     # print(request.method)
     if request.method == 'POST':
         # print(request.POST)
+        # print('Upload' in request.POST.keys())
         if 'Upload' in request.POST.keys():
+            # print(KnowIssue.is_valid())
             if KnowIssue.is_valid():
                 Customer = request.POST.get('Customer')
                 Project_Code = request.POST.get('Project_Code')
@@ -49,6 +51,7 @@ def KnowIssue_upload(request):
                               "Root_Cause": Root_Cause, "Issue_Status": Issue_Status, "PL": PL,
                               "Editor": Editor, "Edittime": Edittime
                              }
+                print(Create_dic)
                 if KnowIssue_M.objects.filter(**Check_dic).first():
                     UpdateResult = "数据已存在数据库中"
                     # print(UpdateResult)
@@ -60,7 +63,8 @@ def KnowIssue_upload(request):
                     result = 0
             else:
                 cleandata=KnowIssue.errors
-    print(locals())
+                showErrResult=KnowIssue.errors
+    # print(locals())
     return render(request, 'KnowIssue/Known_Issue_upload.html', locals())
 
 @csrf_exempt

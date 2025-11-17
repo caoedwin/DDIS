@@ -1517,8 +1517,8 @@ def Navigations_system_axios(request):
         "ProjectInfo": [
             {"Comment": "",
              "name1": "C38", "url1": "/ProjectInfoSearch/", "Comment1": "", "CustomerFlag1": 0,  # C38
-             "name2": "A31", "url2": "/ProjectInfoSearch/", "Comment2": "", "CustomerFlag2": 0,  # A31
-             "name3": "A32", "url3": "/ProjectInfoSearch/", "Comment3": "", "CustomerFlag3": 0,  #
+             "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "", "Comment4": "", "CustomerFlag4": 0,  # ABO
              },
             {"Comment": "",

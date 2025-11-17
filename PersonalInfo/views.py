@@ -605,8 +605,11 @@ def PersonalInfo_search(request):
                     # print(type(datetime.datetime.now().date()),datetime.datetime.now().date(), type(i.RegistrationDate), i.RegistrationDate)
                     # print(type((datetime.datetime.now().date() - i.RegistrationDate)/365),(datetime.datetime.now().date() - i.RegistrationDate)/365)
                     # print(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0])
-                    Seniority = round(
-                        float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+                    if datetime.datetime.now().date() > i.RegistrationDate:
+                        Seniority = round(
+                            float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+                    else:
+                        Seniority = 0
                 else:
                     if i.QuitDate:
                         if i.QuitDate != i.RegistrationDate:
@@ -687,8 +690,12 @@ def PersonalInfo_search(request):
                         # print(type(datetime.datetime.now().date()),datetime.datetime.now().date(), type(i.RegistrationDate), i.RegistrationDate)
                         # print(type((datetime.datetime.now().date() - i.RegistrationDate)/365),(datetime.datetime.now().date() - i.RegistrationDate)/365)
                         # print(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0])
-                        Seniority = round(
-                            float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+                        if datetime.datetime.now().date() > i.RegistrationDate:
+                            Seniority = round(
+                                float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365,
+                                1)
+                        else:
+                            Seniority = 0
                     else:
                         if i.QuitDate:
                             if i.QuitDate != i.RegistrationDate:
@@ -737,8 +744,12 @@ def PersonalInfo_search(request):
                         # print(type(datetime.datetime.now().date()),datetime.datetime.now().date(), type(i.RegistrationDate), i.RegistrationDate)
                         # print(type((datetime.datetime.now().date() - i.RegistrationDate)/365),(datetime.datetime.now().date() - i.RegistrationDate)/365)
                         # print(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0])
-                        Seniority = round(
-                            float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+                        if datetime.datetime.now().date() > i.RegistrationDate:
+                            Seniority = round(
+                                float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365,
+                                1)
+                        else:
+                            Seniority = 0
                     else:
                         if i.QuitDate:
                             if i.QuitDate != i.RegistrationDate:
@@ -995,8 +1006,12 @@ def PersonalInfo_edit(request):
                         # print(type(datetime.datetime.now().date()),datetime.datetime.now().date(), type(i.RegistrationDate), i.RegistrationDate)
                         # print(type((datetime.datetime.now().date() - i.RegistrationDate)/365),(datetime.datetime.now().date() - i.RegistrationDate)/365)
                         # print(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0])
-                        Seniority = round(
-                            float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365, 1)
+                        if datetime.datetime.now().date() > i.RegistrationDate:
+                            Seniority = round(
+                                float(str((datetime.datetime.now().date() - i.RegistrationDate)).split(' ')[0]) / 365,
+                                1)
+                        else:
+                            Seniority = 0
                     else:
                         if i.QuitDate:
                             if i.QuitDate != i.RegistrationDate:
