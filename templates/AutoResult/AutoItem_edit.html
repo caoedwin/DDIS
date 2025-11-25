@@ -250,9 +250,9 @@
                           :data="datas.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                           :header-cell-style="{background:'white',fontWeight:900,'border-bottom':'1px solid rgb(103, 194, 58)'}"
                           style="border-radius: 10px;word-break: keep-all">
-                    <el-table-column type="selection" :reserve-selection="true" width="50"></el-table-column>
-                    <el-table-column type="index" :index="indexMethod"></el-table-column>
-                    <el-table-column prop="Number" label="No." align="center" width="100">
+                    <el-table-column type="selection" :reserve-selection="true" width="50" fixed></el-table-column>
+                    <el-table-column type="index" :index="indexMethod" fixed></el-table-column>
+                    <el-table-column prop="Number" label="No." align="center" width="100" fixed>
                     </el-table-column>
                     <el-table-column prop="CG" label="CG" align="center" width="90">
                     </el-table-column>
@@ -527,12 +527,29 @@
     </div>
 {% endblock %}
 {% block scripts %}
+    <script>
+        // 修复Array.prototype污染问题
+        Object.defineProperty(Array.prototype, 'Push', {
+            value: undefined,
+            enumerable: false,
+            configurable: false,
+            writable: false
+        });
+    </script>
     <script src="/static/js/es6/polyfill.min.js"></script>
     <script src="/static/js/es6/babel.min.js"></script>
     <script src="/static/js/axios.min.js"></script>
     <script src="/static/js/vue.min.js"></script>
     <script src="/static/js/qs.js"></script>
     <script src="/static/js/xlsx/FileSaver.min.js"></script>
+    <script src="/static/js/pdf.js"></script>
+    <script src="/static/js/pdf.worker.js"></script>
+    <script>
+        // 添加PDF worker配置
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
+    </script>
+    <script src="/static/js/xlsx.full.min.js"></script>
+    <script src="/static/js/mammoth.browser.min.js"></script>
     <script src="/static/js/Element/index.js"></script>
     <script type="text/babel">
         new Vue({
@@ -647,6 +664,120 @@
                 // 下载预览文件
                 downloadPreviewFile() {
                     window.location.href = this.previewUrl;
+                },
+                // 预览PDF文件 - 修改为渲染所有页面
+                async previewPDF(url, containerId) {
+                    try {
+                        // 如果已有pdfDoc，先销毁
+                        if (this.pdfDoc) {
+                            this.pdfDoc.destroy();
+                            this.pdfDoc = null;
+                        }
+
+                        const loadingTask = pdfjsLib.getDocument(url);
+                        this.pdfDoc = await loadingTask.promise;
+                        this.pdfTotalPages = this.pdfDoc.numPages;
+
+                        // 清空容器
+                        const container = document.getElementById(containerId);
+                        container.innerHTML = '';
+
+                        // 创建外层容器
+                        const pdfContainer = document.createElement('div');
+                        pdfContainer.style.width = '100%';
+                        container.appendChild(pdfContainer);
+
+                        // 渲染所有页面
+                        for (let pageNum = 1; pageNum <= this.pdfTotalPages; pageNum++) {
+                            const page = await this.pdfDoc.getPage(pageNum);
+                            const viewport = page.getViewport({scale: 1.5});
+
+                            const canvas = document.createElement('canvas');
+                            const context = canvas.getContext('2d');
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+                            canvas.style.display = 'block';
+                            canvas.style.margin = '0 auto 20px';
+                            canvas.style.border = '1px solid #ddd';
+
+                            await page.render({
+                                canvasContext: context,
+                                viewport
+                            }).promise;
+
+                            pdfContainer.appendChild(canvas);
+                        }
+                    } catch (error) {
+                        console.error('PDF预览错误:', error);
+                        const container = document.getElementById(containerId);
+                        container.innerHTML = '<p>PDF预览失败: ' + error.message + '</p>';
+                    }
+                },
+                // 预览Excel文件
+                async previewExcel(url, containerId) {
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                    const workbook = XLSX.read(buffer, {type: 'array'});
+
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
+
+                    workbook.SheetNames.forEach(sheetName => {
+                        const sheet = workbook.Sheets[sheetName];
+                        const html = XLSX.utils.sheet_to_html(sheet);
+
+                        const sheetDiv = document.createElement('div');
+                        sheetDiv.innerHTML = `
+                    <div class="excel-sheet">
+                      <h4>${sheetName}</h4>
+                      <div class="excel-table">${html}</div>
+                    </div>
+                  `;
+
+                        container.appendChild(sheetDiv);
+                    });
+                },
+
+                // 预览Word文档
+                async previewWord(url, containerId) {
+                    const response = await fetch(url);
+                    const arrayBuffer = await response.arrayBuffer();
+
+                    const result = await mammoth.convertToHtml({arrayBuffer});
+                    document.getElementById(containerId).innerHTML = result.value;
+                },
+                // 预览Excel文件
+                async previewExcel(url, containerId) {
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                    const workbook = XLSX.read(buffer, {type: 'array'});
+
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
+
+                    workbook.SheetNames.forEach(sheetName => {
+                        const sheet = workbook.Sheets[sheetName];
+                        const html = XLSX.utils.sheet_to_html(sheet);
+
+                        const sheetDiv = document.createElement('div');
+                        sheetDiv.innerHTML = `
+                    <div class="excel-sheet">
+                      <h4>${sheetName}</h4>
+                      <div class="excel-table">${html}</div>
+                    </div>
+                  `;
+
+                        container.appendChild(sheetDiv);
+                    });
+                },
+
+                // 预览Word文档
+                async previewWord(url, containerId) {
+                    const response = await fetch(url);
+                    const arrayBuffer = await response.arrayBuffer();
+
+                    const result = await mammoth.convertToHtml({arrayBuffer});
+                    document.getElementById(containerId).innerHTML = result.value;
                 },
                 //获取数据
                 getdata: function (e) {
@@ -1197,6 +1328,14 @@
 
                                     }
                                     this.dialogVisible = false;
+                                    this.$message({
+                                        message: '修改成功',
+                                        type: 'success',
+                                    })
+                                    // 清空文件列表
+                                    this.fileList = [];
+                                    this.newFiles = [];
+                                    this.FilesToDelete = [];
                                 }
                             })
                         } else {
@@ -1209,6 +1348,7 @@
                 onSubmit1() {
                     this.elbuttonloading = true;
                     this.tableloading = true;
+                    //console.log(this.formData1.length)
                     if (this.formData1.length == 0) {
                         this.formData1 = new FormData();
                     }
@@ -1259,6 +1399,14 @@
 
                             }
                             this.update = false;
+                            this.$message({
+                                message: '修改成功',
+                                type: 'success',
+                            })
+                            // 清空文件列表
+                            this.fileList = [];
+                            this.newFiles = [];
+                            this.FilesToDelete = [];
                         }
                     })
                 },
@@ -1341,6 +1489,20 @@
                     this.currentSlideNum = 1;
                     this.pptLoading = false;
                     this.pptError = null;
+                },
+                
+                prevPage() {
+                    if (this.currentPageNum > 1) {
+                        this.currentPageNum--;
+                        this.renderPDFPage(this.currentPageNum, this.previewContainerId);
+                    }
+                },
+                
+                nextPage() {
+                    if (this.currentPageNum < this.pdfTotalPages) {
+                        this.currentPageNum++;
+                        this.renderPDFPage(this.currentPageNum, this.previewContainerId);
+                    }
                 },
 
                 ToBreak(val) {

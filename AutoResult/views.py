@@ -120,7 +120,9 @@ def AutoItem_edit(request):
                 if ckeck_dic:
                     mock_datalist = AutoItems.objects.filter(**ckeck_dic)
                 else:
-                    mock_datalist = AutoItems.objects.all()
+                    mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by(
+                        "Customer",
+                        "Lennum")
 
             if request.POST.get('action') == 'addsubmit':
                 new_files = request.FILES.getlist("new_files", "")
@@ -178,70 +180,76 @@ def AutoItem_edit(request):
                 if ckeck_dic:
                     mock_datalist = AutoItems.objects.filter(**ckeck_dic)
                 else:
-                    mock_datalist = AutoItems.objects.all()
+                    mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by(
+                        "Customer",
+                        "Lennum")
+            try:
+                if request.POST.get('action') == 'updateSubmit':
+                    new_files = request.FILES.getlist("new_files", "")
+                    files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
+                    add_dic = {
+                        "Number": request.POST.get('Number'),
+                        "Customer": request.POST.get('Customer'),
+                        "ValueIf": request.POST.get('VA_NVA'),
+                        "BaseIncome": request.POST.get('BaseBenfit'),
+                        "CaseID": request.POST.get('CaseID'),
+                        "CaseName": request.POST.get('CaseName'),
+                        "Item": request.POST.get('Item'),
+                        "Status": request.POST.get('Status'),
+                        "proposer": request.POST.get('proposer'),
+                        "Import_Date": request.POST.get('Import_Date'),
+                        "Ver": request.POST.get('Ver'),
+                        "Owner": request.POST.get('Owner'),
+                        "FunDescription": request.POST.get('FunctionInt'),
+                    }
+                    # print(add_dic)
+                    # print(AutoItems.objects.filter(Number=request.POST.get('Number')).first().id,request.POST.get('id'),AutoItems.objects.filter(Number=request.POST.get('Number')).first().id != request.POST.get('id'))
+                    if AutoItems.objects.filter(Number=request.POST.get('Number')).first() and AutoItems.objects.filter(
+                            Number=request.POST.get('Number')).first().id != int(request.POST.get('id')):
+                        errMsgNumber = "No.已经存在"
+                    else:
+                        # print("create")
+                        ID = request.POST.get('id')
+                        AutoItems.objects.filter(id=ID).update(**add_dic)
+                        AutoItems_object = AutoItems.objects.filter(id=ID).first()
+                        if new_files:
+                            for f in new_files:
+                                # print(f)
+                                empt = files()
+                                # 增加其他字段应分别对应填写
+                                empt.single = f
+                                empt.files = f
+                                empt.save()
+                                AutoItems_object.Attachment.add(empt)
+                        fileslist = files.objects.filter(id__in=files_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
+                        # print(vedios)
 
-            if request.POST.get('action') == 'updateSubmit':
-                new_files = request.FILES.getlist("new_files", "")
-                files_to_delete = json.loads(request.POST.get('files_to_delete', '[]'))
-                add_dic = {
-                    "Number": request.POST.get('Number'),
-                    "Customer": request.POST.get('Customer'),
-                    "ValueIf": request.POST.get('VA_NVA'),
-                    "BaseIncome": request.POST.get('BaseBenfit'),
-                    "CaseID": request.POST.get('CaseID'),
-                    "CaseName": request.POST.get('CaseName'),
-                    "Item": request.POST.get('Item'),
-                    "Status": request.POST.get('Status'),
-                    "proposer": request.POST.get('proposer'),
-                    "Import_Date": request.POST.get('Import_Date'),
-                    "Ver": request.POST.get('Ver'),
-                    "Owner": request.POST.get('Owner'),
-                    "FunDescription": request.POST.get('FunctionInt'),
-                }
-                # print(add_dic)
-                # print(AutoItems.objects.filter(Number=request.POST.get('Number')).first().id,request.POST.get('id'),AutoItems.objects.filter(Number=request.POST.get('Number')).first().id != request.POST.get('id'))
-                if AutoItems.objects.filter(Number=request.POST.get('Number')).first() and AutoItems.objects.filter(
-                        Number=request.POST.get('Number')).first().id != int(request.POST.get('id')):
-                    errMsgNumber = "No.已经存在"
-                else:
-                    # print("create")
-                    ID = request.POST.get('id')
-                    AutoItems.objects.filter(id=ID).update(**add_dic)
-                    AutoItems_object = AutoItems.objects.filter(id=ID).first()
-                    if new_files:
-                        for f in new_files:
-                            # print(f)
-                            empt = files()
-                            # 增加其他字段应分别对应填写
-                            empt.single = f
-                            empt.files = f
-                            empt.save()
-                            AutoItems_object.Attachment.add(empt)
-                    fileslist = files.objects.filter(id__in=files_to_delete)  # 最好是用id，这样搜索时就需要返回带id的信息
-                    # print(vedios)
+                        # 解除关联
+                        AutoItems_object.Attachment.remove(*fileslist)  # 使用 * 解包列表
+                        fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
 
-                    # 解除关联
-                    AutoItems_object.Attachment.remove(*fileslist)  # 使用 * 解包列表
-                    fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
+                        AutoItems_object = AutoItems.objects.get(id=ID)
 
-                    AutoItems_object = AutoItems.objects.get(id=ID)
+                        AutoItems_object.save()
 
-                    AutoItems_object.save()
+                    # mock_data
+                    ckeck_dic = {}
+                    Customer = request.POST.get('CustomerSearch')
+                    ValueIf = request.POST.get('VA_NVASearch')
+                    if Customer and Customer != "All":
+                        ckeck_dic["Customer"] = Customer
+                    if ValueIf and ValueIf != "All":
+                        ckeck_dic["ValueIf"] = ValueIf
 
-                # mock_data
-                ckeck_dic = {}
-                Customer = request.POST.get('CustomerSearch')
-                ValueIf = request.POST.get('VA_NVASearch')
-                if Customer and Customer != "All":
-                    ckeck_dic["Customer"] = Customer
-                if ValueIf and ValueIf != "All":
-                    ckeck_dic["ValueIf"] = ValueIf
-
-                # mock_data
-                if ckeck_dic:
-                    mock_datalist = AutoItems.objects.filter(**ckeck_dic)
-                else:
-                    mock_datalist = AutoItems.objects.all()
+                    # mock_data
+                    if ckeck_dic:
+                        mock_datalist = AutoItems.objects.filter(**ckeck_dic)
+                    else:
+                        mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by(
+                            "Customer",
+                            "Lennum")
+            except Exception as e:
+                errMsg = str(e)
 
         else:
             try:
@@ -469,7 +477,9 @@ def AutoItem_edit(request):
                         mock_datalist = AutoItems.objects.filter(**ckeck_dic)
 
                     else:
-                        mock_datalist = AutoItems.objects.all()
+                        mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by(
+                            "Customer",
+                            "Lennum")
 
                     # print(mock_data)
                 if 'MUTICANCEL' in str(request.body):
@@ -502,7 +512,9 @@ def AutoItem_edit(request):
                         mock_datalist = AutoItems.objects.filter(**ckeck_dic)
 
                     else:
-                        mock_datalist = AutoItems.objects.all()
+                        mock_datalist = AutoItems.objects.all().extra(select={'Lennum': "right(Number,2)"}).order_by(
+                            "Customer",
+                            "Lennum")
 
                     # print(mock_data)
 
