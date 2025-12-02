@@ -292,6 +292,30 @@ height: 100% !important; //设置高优先，以覆盖内联样式
                 <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ comments[scope.$index+(currentPage-1)*pageSize] }</span>
             </template>
         </el-table-column>
+        <el-table-column prop="Attachment" label="Attachment" width="300">
+                        <template scope="scope">
+                            <div v-for="(item, index) in scope.row.Attachment" :key="item.id">
+                                <!-- 视频预览 -->
+                                <video v-if="isVideoFile(item)" width="200" height="100" controls>
+                                    <source :src="getFullUrl(item.url)" type="video/mp4">
+                                    您的浏览器不支持 video 标签。
+                                </video>
+                                <div class="eltable-photo" v-else-if="getFileType(item)=='image'">
+                                    <el-image :src="item.url" style="width: 100px; height: 100px;"
+                                              :preview-src-list="getPreviewList(item.url)" lazy="true"></el-image>
+                                </div>
+
+                                <!-- 非视频文件显示预览按钮 -->
+                                <template v-else>
+                                    <el-button @click="openPreview(item)" size="mini">预览</el-button>
+                                    <el-button type="primary" size="mini">
+                                        <a :href="getFullUrl(item.url)" download
+                                           style="color: white; text-decoration: none">下载</a>
+                                    </el-button>
+                                </template>
+                            </div>
+                        </template>
+                    </el-table-column>
         <el-table-column v-if="showName" :key="Math.random()" prop="ProjectData" label="Cycles"{% comment %}:label="this.tableProject"{% endcomment %} width="140" align="center" fixed="right">
             <template slot-scope="scope">
 {#                <el-input-number size="small" v-if="showEdit[scope.$index]" v-model="table_content[scope.$index+(currentPage-1)*pageSize]" @change="handleChange" :min="0" :max="100" label="描述文字"></el-input-number>#}
@@ -312,11 +336,61 @@ height: 100% !important; //设置高优先，以覆盖内联样式
         </el-pagination>
     </div>
     </template>
+    <el-dialog :visible.sync="previewDialogVisible" width="90%" top="5vh" custom-class="preview-dialog">
+            <div v-if="previewType === 'pdf'" style="overflow: auto">
+                <div style="text-align: center; margin-bottom: 20px">
+                    <el-button @click="prevPage" :disabled="currentPageNum<=1">上一页</el-button>
+                    <span>第 ${ currentPageNum } 页 / 共 ${ pdfTotalPages } 页</span>
+                    <el-button @click="nextPage" :disabled="currentPageNum>=pdfTotalPages">下一页</el-button>
+                </div>
+                <div :id="previewContainerId"></div>
+            </div>
+
+            <div v-else-if="previewType === 'excel' || previewType === 'word'" style="overflow: auto">
+                <div :id="previewContainerId"></div>
+            </div>
+
+            <div v-else-if="previewType === 'ppt'">
+                <div class="ppt-controls">
+                    <el-button @click="prevSlide" :disabled="currentSlideNum <= 1">上一页</el-button>
+                    <span style="margin: 0 15px">第 ${ currentSlideNum } 页 / 共 ${ pptTotalSlides } 页</span>
+                    <el-button @click="nextSlide" :disabled="currentSlideNum >= pptTotalSlides">下一页</el-button>
+                    <el-button type="primary" @click="downloadPreviewFile">下载原文件</el-button>
+                </div>
+                <div class="ppt-preview-container">
+                    <div v-if="pptLoading" class="ppt-loading">
+                        <i class="el-icon-loading"></i>
+                        <p>正在解析PPT文件，请稍候...</p>
+                    </div>
+                    <div v-else-if="pptError" class="ppt-error">
+                        <i class="el-icon-error"></i>
+                        <p>${ pptError }</p>
+                    </div>
+                    <div v-else>
+                        <canvas :id="'ppt-canvas-'+currentSlideNum" class="ppt-image"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else>
+                <p>该文件类型不支持预览</p>
+                <el-button type="primary" @click="downloadPreviewFile">下载文件</el-button>
+            </div>
+        </el-dialog>
 </div>
 
 </div>
 {% endblock %}
 {% block scripts %}
+<script>
+        // 修复Array.prototype污染问题
+        Object.defineProperty(Array.prototype, 'Push', {
+            value: undefined,
+            enumerable: false,
+            configurable: false,
+            writable: false
+        });
+    </script>
 <script src="/static/js/es6/polyfill.min.js"></script>
 <script src="/static/js/es6/babel.min.js"></script>
 <script src="/static/js/axios.min.js"></script>
@@ -324,12 +398,33 @@ height: 100% !important; //设置高优先，以覆盖内联样式
 <script src="/static/js/qs.js"></script>
 <script src="/static/js/Element/index.js"></script>
 <script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/pdf.js"></script>
+<script src="/static/js/pdf.worker.js"></script>
+<script>
+    // 添加PDF worker配置
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
+</script>
 <script type="text/babel">
  new Vue({
      el: '#app',
      delimiters: ['${', '}'],
      data: function () {
          return {
+             // 预览相关状态变量
+            previewDialogVisible: false,
+            previewUrl: '',
+            previewType: '',
+            previewItem: null,
+            previewContainerId: '',
+            pdfDoc: null,
+            pdfTotalPages: 0,
+            currentPageNum: 1,
+            pptImages: [],
+            pptTotalSlides: 0,
+            currentSlideNum: 1,
+            pptLoading: false,
+            pptError: null,
+                    
              showCustomer:'',
              showProject:'',
              showEdit: [], //显示编辑框
@@ -376,6 +471,255 @@ height: 100% !important; //设置高优先，以覆盖内联样式
                 {#this.canEdit = res.data.canEdit;#}
          });
 
+        },
+         
+         isVideoFile(item) {
+                    // 1. 处理文件对象（编辑弹框中使用）
+                    if (item && item.raw) {
+                        // 新上传的文件
+                        return item.raw.type.startsWith('video/');
+                    }
+
+                    // 2. 处理包含 url 属性的对象（表格中使用）
+                    if (item && item.url) {
+                        const url = item.url.toLowerCase();
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        return videoExts.some(ext => url.endsWith(`.${ext}`));
+                    }
+
+                    // 3. 处理纯字符串 URL（备用方案）
+                    if (typeof item === 'string') {
+                        const url = item.toLowerCase();
+                        const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                        return videoExts.some(ext => url.endsWith(`.${ext}`));
+                    }
+
+                    return false;
+                },
+         // 获取文件类型
+        getFileType(item) {
+            if (item && item.url) {
+                const url = item.url.toLowerCase();
+                const ext = url.split('.').pop();
+
+                const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'];
+                const pdfExts = ['pdf'];
+                const excelExts = ['xls', 'xlsx'];
+                const pptExts = ['ppt', 'pptx'];
+                const wordExts = ['doc', 'docx'];
+
+                if (videoExts.includes(ext)) return 'video';
+                if (imageExts.includes(ext)) return 'image';
+                if (pdfExts.includes(ext)) return 'pdf';
+                if (excelExts.includes(ext)) return 'excel';
+                if (pptExts.includes(ext)) return 'ppt';
+                if (wordExts.includes(ext)) return 'word';
+            }
+            return 'other';
+        },
+         // 获取完整URL
+        getFullUrl(url) {
+            if (!url) return '';
+            // 如果是blob临时URL或完整URL直接返回
+            if (url.startsWith('blob:') || url.startsWith('http')) {
+                return url;
+            }
+            // 相对路径转换为绝对路径
+            return window.location.origin + url;
+        },
+         // 获取文件类型
+        getFileType(item) {
+            if (item && item.url) {
+                const url = item.url.toLowerCase();
+                const ext = url.split('.').pop();
+
+                const videoExts = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv'];
+                const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'];
+                const pdfExts = ['pdf'];
+                const excelExts = ['xls', 'xlsx'];
+                const pptExts = ['ppt', 'pptx'];
+                const wordExts = ['doc', 'docx'];
+
+                if (videoExts.includes(ext)) return 'video';
+                if (imageExts.includes(ext)) return 'image';
+                if (pdfExts.includes(ext)) return 'pdf';
+                if (excelExts.includes(ext)) return 'excel';
+                if (pptExts.includes(ext)) return 'ppt';
+                if (wordExts.includes(ext)) return 'word';
+            }
+            return 'other';
+        },
+        
+        // 打开预览弹窗
+        openPreview(item) {
+            // 重置所有预览相关状态
+            this.resetPreviewState();
+
+            // 设置新的预览状态
+            this.previewItem = item;
+            this.previewUrl = this.getFullUrl(item.url);
+            this.previewType = this.getFileType(item);
+            this.previewContainerId = 'preview-container-' + Date.now();
+
+            this.$nextTick(() => {
+                const container = document.getElementById(this.previewContainerId);
+                if (container) {
+                    container.innerHTML = '';
+                }
+
+                if (this.previewType === 'pdf') {
+                    this.previewPDF(this.previewUrl, this.previewContainerId);
+                } {% comment %}else if (this.previewType === 'ppt') {
+                this.previewPPTAsPDF(this.previewUrl, this.previewContainerId, item.id);
+            } {% endcomment %} else if (this.previewType === 'excel') {
+                    this.previewExcel(this.previewUrl, this.previewContainerId);
+                } else if (this.previewType === 'word') {
+                    this.previewWord(this.previewUrl, this.previewContainerId);
+                } else if (this.previewType === 'image') {
+                    // 图片预览
+                }
+
+                this.previewDialogVisible = true;
+            });
+        },
+         // 下载预览文件
+        downloadPreviewFile() {
+            window.location.href = this.previewUrl;
+        },
+        // 预览PDF文件 - 修改为渲染所有页面
+        async previewPDF(url, containerId) {
+            try {
+                // 如果已有pdfDoc，先销毁
+                if (this.pdfDoc) {
+                    this.pdfDoc.destroy();
+                    this.pdfDoc = null;
+                }
+
+                const loadingTask = pdfjsLib.getDocument(url);
+                this.pdfDoc = await loadingTask.promise;
+                this.pdfTotalPages = this.pdfDoc.numPages;
+
+                // 清空容器
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+
+                // 创建外层容器
+                const pdfContainer = document.createElement('div');
+                pdfContainer.style.width = '100%';
+                container.appendChild(pdfContainer);
+
+                // 渲染所有页面
+                for (let pageNum = 1; pageNum <= this.pdfTotalPages; pageNum++) {
+                    const page = await this.pdfDoc.getPage(pageNum);
+                    const viewport = page.getViewport({scale: 1.5});
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    canvas.style.display = 'block';
+                    canvas.style.margin = '0 auto 20px';
+                    canvas.style.border = '1px solid #ddd';
+
+                    await page.render({
+                        canvasContext: context,
+                        viewport
+                    }).promise;
+
+                    pdfContainer.appendChild(canvas);
+                }
+            } catch (error) {
+                console.error('PDF预览错误:', error);
+                const container = document.getElementById(containerId);
+                container.innerHTML = '<p>PDF预览失败: ' + error.message + '</p>';
+            }
+        },
+        // 预览Excel文件
+        async previewExcel(url, containerId) {
+            const response = await fetch(url);
+            const buffer = await response.arrayBuffer();
+            const workbook = XLSX.read(buffer, {type: 'array'});
+
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            workbook.SheetNames.forEach(sheetName => {
+                const sheet = workbook.Sheets[sheetName];
+                const html = XLSX.utils.sheet_to_html(sheet);
+
+                const sheetDiv = document.createElement('div');
+                sheetDiv.innerHTML = `
+            <div class="excel-sheet">
+              <h4>${sheetName}</h4>
+              <div class="excel-table">${html}</div>
+            </div>
+          `;
+
+                container.appendChild(sheetDiv);
+            });
+        },
+
+        // 预览Word文档
+        async previewWord(url, containerId) {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+
+            const result = await mammoth.convertToHtml({arrayBuffer});
+            document.getElementById(containerId).innerHTML = result.value;
+        },
+         async renderPDFPage(pageNum, containerId) {
+                    const page = await this.pdfDoc.getPage(pageNum);
+                    const viewport = page.getViewport({scale: 1.5});
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    await page.render({canvasContext: context, viewport}).promise;
+
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = ''; // 清空容器
+                    container.appendChild(canvas);
+                },
+
+        // 新增方法：重置预览状态
+        resetPreviewState() {
+            // 重置PDF预览状态
+            if (this.pdfDoc) {
+                this.pdfDoc.destroy();
+                this.pdfDoc = null;
+            }
+            this.pdfTotalPages = 0;
+            this.currentPageNum = 1;
+
+            // 重置Excel预览状态
+            const excelContainer = document.getElementById(this.previewContainerId);
+            if (excelContainer) {
+                excelContainer.innerHTML = '';
+            }
+
+            // 重置PPT预览状态
+            this.pptImages = [];
+            this.pptTotalSlides = 0;
+            this.currentSlideNum = 1;
+            this.pptLoading = false;
+            this.pptError = null;
+        },
+        
+        prevPage() {
+            if (this.currentPageNum > 1) {
+                this.currentPageNum--;
+                this.renderPDFPage(this.currentPageNum, this.previewContainerId);
+            }
+        },
+        
+        nextPage() {
+            if (this.currentPageNum < this.pdfTotalPages) {
+                this.currentPageNum++;
+                this.renderPDFPage(this.currentPageNum, this.previewContainerId);
+            }
         },
          //索引
          indexMethod(index) {

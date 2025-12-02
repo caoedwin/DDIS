@@ -746,38 +746,20 @@
                     const result = await mammoth.convertToHtml({arrayBuffer});
                     document.getElementById(containerId).innerHTML = result.value;
                 },
-                // 预览Excel文件
-                async previewExcel(url, containerId) {
-                    const response = await fetch(url);
-                    const buffer = await response.arrayBuffer();
-                    const workbook = XLSX.read(buffer, {type: 'array'});
+                async renderPDFPage(pageNum, containerId) {
+                    const page = await this.pdfDoc.getPage(pageNum);
+                    const viewport = page.getViewport({scale: 1.5});
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    await page.render({canvasContext: context, viewport}).promise;
 
                     const container = document.getElementById(containerId);
-                    container.innerHTML = '';
-
-                    workbook.SheetNames.forEach(sheetName => {
-                        const sheet = workbook.Sheets[sheetName];
-                        const html = XLSX.utils.sheet_to_html(sheet);
-
-                        const sheetDiv = document.createElement('div');
-                        sheetDiv.innerHTML = `
-                    <div class="excel-sheet">
-                      <h4>${sheetName}</h4>
-                      <div class="excel-table">${html}</div>
-                    </div>
-                  `;
-
-                        container.appendChild(sheetDiv);
-                    });
-                },
-
-                // 预览Word文档
-                async previewWord(url, containerId) {
-                    const response = await fetch(url);
-                    const arrayBuffer = await response.arrayBuffer();
-
-                    const result = await mammoth.convertToHtml({arrayBuffer});
-                    document.getElementById(containerId).innerHTML = result.value;
+                    container.innerHTML = ''; // 清空容器
+                    container.appendChild(canvas);
                 },
                 //获取数据
                 getdata: function (e) {
@@ -1332,11 +1314,12 @@
                                         message: '修改成功',
                                         type: 'success',
                                     })
-                                    // 清空文件列表
+                                    
+                                }
+                                // 清空文件列表
                                     this.fileList = [];
                                     this.newFiles = [];
                                     this.FilesToDelete = [];
-                                }
                             })
                         } else {
                             console.log('error submit!!');
@@ -1403,11 +1386,12 @@
                                 message: '修改成功',
                                 type: 'success',
                             })
-                            // 清空文件列表
+                            
+                        }
+                        // 清空文件列表
                             this.fileList = [];
                             this.newFiles = [];
                             this.FilesToDelete = [];
-                        }
                     })
                 },
                 
