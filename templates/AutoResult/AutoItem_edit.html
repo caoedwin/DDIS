@@ -209,7 +209,7 @@
                 <el-button size="small" style="border-color:white;" @click="exportExcel" type="info" v-if="canEdit==1">
                     Export
                 </el-button>
-                <a style="margin-top: 10px;margin-left: 40px;color: white"
+                <a style="margin-top: 10px;margin-left: 40px;color: white" v-if="canEdit==1"
                    href="/static/src/modelfiles/DQA3AutoResult.xlsx">模板下载<img
                         src="/static/src/back/document_save_2_24px_539656_easyicon.net.png" alt="..."></a>
             </div>
