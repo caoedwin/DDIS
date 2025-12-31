@@ -143,3 +143,51 @@
 [2025-12-18 14:48:32,283] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.02, 127.0.0.1:65407]
 [2025-12-18 14:48:32,293] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-18 14:48:32: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
 [2025-12-18 14:48:32,297] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:65407]
+[2025-12-22 10:25:59,121] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:25:59: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2025-12-22 10:25:59,123] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:51488]
+[2025-12-22 10:25:59,177] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:25:59: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-12-22 10:25:59,180] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.02, 127.0.0.1:51488]
+[2025-12-22 10:25:59,188] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:25:59: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2025-12-22 10:25:59,190] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:51488]
+[2025-12-22 10:26:00,307] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:26:00: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/login/?next='>
+[2025-12-22 10:26:00,320] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /login/?next= 302 [0.04, 127.0.0.1:51488]
+[2025-12-22 10:26:00,348] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:26:00: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2025-12-22 10:26:00,362] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /login/ 302 [0.04, 127.0.0.1:51488]
+[2025-12-22 10:26:00,380] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:26:00: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2025-12-22 10:26:00,393] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.03, 127.0.0.1:51488]
+[2025-12-22 10:26:00,551] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:55974]
+[2025-12-22 10:26:00,567] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:55974]
+[2025-12-22 10:26:00,728] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:26:00: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-12-22 10:26:00,752] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.05, 127.0.0.1:51488]
+[2025-12-22 10:27:18,149] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:27:18: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/AutoResult/AutoItem_edit/'>
+[2025-12-22 10:27:18,163] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /AutoResult/AutoItem_edit/ 200 [0.06, 127.0.0.1:56487]
+[2025-12-22 10:27:18,182] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:55974]
+[2025-12-22 10:27:18,188] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/js/xlsx.full.min.js 304 [0.00, 127.0.0.1:56487]
+[2025-12-22 10:27:18,194] [runserver.py:145] [runserver:log_action] [INFO]- HTTP GET /static/js/mammoth.browser.min.js 304 [0.01, 127.0.0.1:61192]
+[2025-12-22 10:27:18,294] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:56609]
+[2025-12-22 10:27:18,297] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:56609]
+[2025-12-22 10:27:18,864] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:27:18: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/AutoResult/AutoItem_edit/'>
+[2025-12-22 10:27:18,874] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /AutoResult/AutoItem_edit/ 200 [0.39, 127.0.0.1:61192]
+[2025-12-22 10:27:18,891] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-22 10:27:18: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2025-12-22 10:27:18,908] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.41, 127.0.0.1:56487]
+[2025-12-22 13:47:03,553] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:56609]
+[2025-12-29 16:18:22,866] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:22: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/api_Per/login/'>
+[2025-12-29 16:18:22,872] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/api_Per/login/ 200 [0.27, 127.0.0.1:53825]
+[2025-12-29 16:18:22,903] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:22: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/api_Per/login/'>
+[2025-12-29 16:18:22,905] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/api_Per/login/ 200 [0.26, 127.0.0.1:58883]
+[2025-12-29 16:18:24,137] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:24: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode='>
+[2025-12-29 16:18:24,142] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode= 200 [1.26, 127.0.0.1:58886]
+[2025-12-29 16:18:25,331] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:25: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode='>
+[2025-12-29 16:18:25,335] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode= 200 [2.42, 127.0.0.1:58887]
+[2025-12-29 16:18:25,349] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:25: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/api_Per/login/'>
+[2025-12-29 16:18:25,352] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/api_Per/login/ 200 [1.21, 127.0.0.1:60705]
+[2025-12-29 16:18:26,704] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:26: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode='>
+[2025-12-29 16:18:26,707] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode= 200 [1.26, 127.0.0.1:60709]
+[2025-12-29 16:18:27,283] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:27: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/api_Per/login/'>
+[2025-12-29 16:18:27,285] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/api_Per/login/ 200 [0.02, 127.0.0.1:64431]
+[2025-12-29 16:18:28,511] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:18:28: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode='>
+[2025-12-29 16:18:28,515] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode= 200 [1.22, 127.0.0.1:64433]
+[2025-12-29 16:19:29,222] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:19:29: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/api_Per/login/'>
+[2025-12-29 16:19:29,223] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/api_Per/login/ 200 [0.04, 127.0.0.1:52695]
+[2025-12-29 16:19:30,452] [UserIP.py:93] [UserIP:process_response] [INFO]- 2025-12-29 16:19:30: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode='>
+[2025-12-29 16:19:30,458] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/Perapi/?Customer=&SAPNum=&GroupNum=&Status=&DepartmentCode= 200 [1.23, 127.0.0.1:52697]
