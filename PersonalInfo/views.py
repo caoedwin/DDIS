@@ -6390,9 +6390,9 @@ def Summary2(request):
                                                                             RegistrationDate__lte=DateNow).count() - PersonalInfoHisByYear.objects.filter(
                             Year=YearSearch,
                             QuitDate__lte=DateNow).count()
-                        zaizhi_out_to_in = PersonalInfo.objects.filter(
+                        zaizhi_out_to_in = PersonalInfoHisByYear.objects.filter(
                             Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(Year=YearSearch,transferDate__gte=DateNow,
-                                                                                                RegistrationDate__lte=DateNow).count() - PersonalInfo.objects.filter(
+                                                                                                RegistrationDate__lte=DateNow).count() - PersonalInfoHisByYear.objects.filter(
                             Q(OldCustomer='') & Q(transferDate__isnull=False)).filter(Year=YearSearch,transferDate__gte=DateNow,
                                                                                                 QuitDate__lte=DateNow).count()  # 原客户别为空但是有专职日期的就算外部转入的。
                         totalzaizhidic[j[
