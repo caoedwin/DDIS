@@ -2216,18 +2216,33 @@ def INVGantt_top(request):
                             "Project_Name").distinct().order_by("Project_Name"):
                         Projectlist.append(i["Project_Name"])
             mock_data4_all = []
-            for i in Projectlist:
-                PassNo = INVGantt.objects.filter(Project_Name=i,
-                                                 Status__in=["Pass", 'Conditional Pass']).count()
-                FailNo = INVGantt.objects.filter(Project_Name=i, Status="Fail").count()
-                OngoingNo = INVGantt.objects.filter(Project_Name=i,
-                                                    Status__in=["Testing", 'Pending']).count()
-                PlanningNo = INVGantt.objects.filter(Project_Name=i, Status="Planning").count()
-                mock_data4_all.append({
-                    "Project": i, "Pass": PassNo, "Fail": FailNo, "Ongoing": OngoingNo, "Planning": PlanningNo,
-                    # "Total": PassNo + FailNo + OngoingNo + PlanningNo
-                    "Total": OngoingNo + PlanningNo
-                })
+            mock_data4_all = []
+            if Year:
+                for i in Projectlist:
+                    PassNo = INVGantt.objects.filter(Project_Name=i, Year=Year,
+                                                     Status__in=["Pass", 'Conditional Pass']).count()
+                    FailNo = INVGantt.objects.filter(Project_Name=i, Year=Year, Status="Fail").count()
+                    OngoingNo = INVGantt.objects.filter(Project_Name=i, Year=Year,
+                                                        Status__in=["Testing", 'Pending']).count()
+                    PlanningNo = INVGantt.objects.filter(Project_Name=i, Year=Year, Status="Planning").count()
+                    mock_data4_all.append({
+                        "Project": i, "Pass": PassNo, "Fail": FailNo, "Ongoing": OngoingNo, "Planning": PlanningNo,
+                        # "Total": PassNo + FailNo + OngoingNo + PlanningNo
+                        "Total": OngoingNo + PlanningNo
+                    })
+            else:
+                for i in Projectlist:
+                    PassNo = INVGantt.objects.filter(Project_Name=i,
+                                                     Status__in=["Pass", 'Conditional Pass']).count()
+                    FailNo = INVGantt.objects.filter(Project_Name=i, Status="Fail").count()
+                    OngoingNo = INVGantt.objects.filter(Project_Name=i,
+                                                        Status__in=["Testing", 'Pending']).count()
+                    PlanningNo = INVGantt.objects.filter(Project_Name=i, Status="Planning").count()
+                    mock_data4_all.append({
+                        "Project": i, "Pass": PassNo, "Fail": FailNo, "Ongoing": OngoingNo, "Planning": PlanningNo,
+                        # "Total": PassNo + FailNo + OngoingNo + PlanningNo
+                        "Total": OngoingNo + PlanningNo
+                    })
             mock_data4_all.sort(key=lambda x: x["Total"], reverse=True)
             Projnumber = 1
             Projkey = []
@@ -2493,18 +2508,32 @@ def INVGantt_top(request):
                             "Project_Name").distinct().order_by("Project_Name"):
                         Projectlist.append(i["Project_Name"])
             mock_data4_all = []
-            for i in Projectlist:
-                PassNo = INVGantt.objects.filter(Project_Name=i,
-                                                 Status__in=["Pass", 'Conditional Pass']).count()
-                FailNo = INVGantt.objects.filter(Project_Name=i, Status="Fail").count()
-                OngoingNo = INVGantt.objects.filter(Project_Name=i,
-                                                    Status__in=["Testing", 'Pending']).count()
-                PlanningNo = INVGantt.objects.filter(Project_Name=i, Status="Planning").count()
-                mock_data4_all.append({
-                                        "Project": i, "Pass": PassNo, "Fail": FailNo, "Ongoing": OngoingNo, "Planning": PlanningNo,
-                                       # "Total": PassNo + FailNo + OngoingNo + PlanningNo
-                                        "Total": OngoingNo + PlanningNo
-                                       })
+            if Year:
+                for i in Projectlist:
+                    PassNo = INVGantt.objects.filter(Project_Name=i, Year=Year,
+                                                     Status__in=["Pass", 'Conditional Pass']).count()
+                    FailNo = INVGantt.objects.filter(Project_Name=i, Year=Year, Status="Fail").count()
+                    OngoingNo = INVGantt.objects.filter(Project_Name=i, Year=Year,
+                                                        Status__in=["Testing", 'Pending']).count()
+                    PlanningNo = INVGantt.objects.filter(Project_Name=i, Year=Year, Status="Planning").count()
+                    mock_data4_all.append({
+                        "Project": i, "Pass": PassNo, "Fail": FailNo, "Ongoing": OngoingNo, "Planning": PlanningNo,
+                        # "Total": PassNo + FailNo + OngoingNo + PlanningNo
+                        "Total": OngoingNo + PlanningNo
+                    })
+            else:
+                for i in Projectlist:
+                    PassNo = INVGantt.objects.filter(Project_Name=i,
+                                                     Status__in=["Pass", 'Conditional Pass']).count()
+                    FailNo = INVGantt.objects.filter(Project_Name=i, Status="Fail").count()
+                    OngoingNo = INVGantt.objects.filter(Project_Name=i,
+                                                        Status__in=["Testing", 'Pending']).count()
+                    PlanningNo = INVGantt.objects.filter(Project_Name=i, Status="Planning").count()
+                    mock_data4_all.append({
+                                            "Project": i, "Pass": PassNo, "Fail": FailNo, "Ongoing": OngoingNo, "Planning": PlanningNo,
+                                           # "Total": PassNo + FailNo + OngoingNo + PlanningNo
+                                            "Total": OngoingNo + PlanningNo
+                                           })
             mock_data4_all.sort(key=lambda x: x["Total"], reverse=True)
             Projnumber = 1
             Projkey = []
