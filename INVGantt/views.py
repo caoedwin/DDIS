@@ -2243,7 +2243,7 @@ def INVGantt_top(request):
                         # "Total": PassNo + FailNo + OngoingNo + PlanningNo
                         "Total": OngoingNo + PlanningNo
                     })
-            mock_data4_all.sort(key=lambda x: x["Total"], reverse=True)
+            mock_data4_all.sort(key=lambda x: (x["Total"], x["Pass"]), reverse=True)
             Projnumber = 1
             Projkey = []
             for i in mock_data4_all:
@@ -2534,7 +2534,7 @@ def INVGantt_top(request):
                                            # "Total": PassNo + FailNo + OngoingNo + PlanningNo
                                             "Total": OngoingNo + PlanningNo
                                            })
-            mock_data4_all.sort(key=lambda x: x["Total"], reverse=True)
+            mock_data4_all.sort(key=lambda x: (x["Total"], x["Pass"]), reverse=True)
             Projnumber = 1
             Projkey = []
             for i in mock_data4_all:
