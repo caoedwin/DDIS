@@ -1,0 +1,659 @@
+<!-- UEItems_edit.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}UE检查项目管理{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .selectMsg {
+        padding: 15px;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .selectMsg .el-form-item {
+        margin-bottom: 10px;
+    }
+
+    .tableAround {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .el-table .cell {
+        text-align: left;
+        white-space: pre-line;
+    }
+
+    .el-table .warning-row {
+        background: oldlace !important;
+    }
+
+    .el-table .warning-row:hover {
+        background: oldlace !important;
+    }
+
+    .el-table .success-row {
+        background: #f0f9eb !important;
+    }
+
+    .el-table .success-row:hover {
+        background-color: #f0f9eb !important;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .upload-area {
+        margin: 10px 0;
+        padding: 15px;
+        border: 2px dashed #409EFF;
+        border-radius: 8px;
+        text-align: center;
+        background: rgba(64, 158, 255, 0.05);
+    }
+
+    .statistics {
+        margin: 15px 0;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+
+    .statistics span {
+        margin-right: 20px;
+        color: #FFF;
+    }
+
+    .el-form--inline .el-form-item__label {
+        float: none;
+        display: inline-block;
+        color: white;
+    }
+    .el-pagination button, .el-pagination span:not([class*=suffix]) {
+        display: inline-block;
+        font-size: 13px;
+        min-width: 35.5px;
+        height: 28px;
+        line-height: 28px;
+        vertical-align: top;
+        color: white;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <el-backtop></el-backtop>
+
+    <!-- 搜索区域 -->
+    <div class="selectMsg">
+        <el-form :inline="true" :model="searchForm">
+            <!-- Item 下拉筛选 -->
+            <el-form-item label="Item">
+                <el-select
+                    v-model="searchForm.Item"
+                    filterable
+                    clearable
+                    placeholder="输入或选择Item"
+                    style="width: 180px;">
+                    <el-option
+                        v-for="item in itemOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <!-- Function 下拉筛选 -->
+            <el-form-item label="Function">
+                <el-select
+                    v-model="searchForm.Function"
+                    filterable
+                    clearable
+                    placeholder="选择Function"
+                    style="width: 180px;">
+                    <el-option
+                        v-for="opt in functionOptions"
+                        :key="opt.value"
+                        :label="opt.label"
+                        :value="opt.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <!-- Category 下拉筛选 -->
+            <el-form-item label="Category">
+                <el-select
+                    v-model="searchForm.Category"
+                    filterable
+                    clearable
+                    placeholder="输入或选择Category"
+                    style="width: 180px;">
+                    <el-option
+                        v-for="cat in categoryOptions"
+                        :key="cat.value"
+                        :label="cat.label"
+                        :value="cat.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="handleSearch" icon="el-icon-search">搜索</el-button>
+                <el-button @click="resetSearch" icon="el-icon-refresh">重置</el-button>
+                <el-button type="success" @click="handleAdd" icon="el-icon-plus" v-if="canEdit">新增</el-button>
+                <el-button type="warning" @click="showUpload = true" icon="el-icon-upload" v-if="canEdit">Excel上传</el-button>
+                <el-button type="info" @click="exportExcel" icon="el-icon-download" v-if="canEdit">导出Excel</el-button>
+            </el-form-item>
+        </el-form>
+
+        <!-- 统计信息 -->
+        <div class="statistics" v-if="tableData.length > 0">
+            <span>总记录数: ${ totalCount }</span>
+            <span>Reliability: ${ reliabilityCount }</span>
+            <span>Compatibility: ${ compatibilityCount }</span>
+        </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="tableAround">
+        <el-table
+             id="out-table"
+            :data="tableData"
+            border
+            height="650"
+            style="width: 100%"
+            :header-cell-style="{'background-color': '#fafafa', 'font-weight': '800'}">
+
+            <el-table-column type="index" width="50" label="序号"></el-table-column>
+            <el-table-column prop="Item" label="Item" width="120" sortable></el-table-column>
+            <el-table-column prop="Function" label="Function" width="120" sortable>
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.Function === 'Reliability' ? 'success' : 'warning'">
+                        ${ scope.row.Function }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="Category" label="Category" width="150" sortable></el-table-column>
+            <el-table-column prop="characteristic" label="Characteristic" min-width="200"></el-table-column>
+            <el-table-column prop="detailed_description" label="詳細說明（Detailed Description）" min-width="350"></el-table-column>
+            <el-table-column prop="inspect_method" label="Inspect Methord" min-width="300"></el-table-column>
+
+            <el-table-column label="操作" width="150" fixed="right">
+                <template slot-scope="scope">
+                    <div class="action-buttons">
+                        <el-button
+                            type="primary"
+                            size="mini"
+                            icon="el-icon-edit"
+                            @click="handleEdit(scope.row)"></el-button>
+                        <el-button
+                            type="danger"
+                            size="mini"
+                            icon="el-icon-delete"
+                            @click="handleDelete(scope.row)"></el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <!-- 分页 -->
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[20, 50, 100, 200]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+            style="margin-top: 20px; text-align: right;">
+        </el-pagination>
+    </div>
+
+    <!-- 新增/编辑弹窗 -->
+    <el-dialog
+        :title="dialogTitle"
+        :visible.sync="dialogVisible"
+        width="600px"
+        @close="resetForm">
+
+        <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+            <el-form-item label="Item" prop="Item">
+                <el-input v-model="form.Item" placeholder="请输入Item"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Function" prop="Function">
+                <el-select v-model="form.Function" placeholder="请选择Function">
+                    <el-option
+                        v-for="opt in functionOptions"
+                        :key="opt.value"
+                        :label="opt.label"
+                        :value="opt.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="Category" prop="Category">
+                <el-select
+                    v-model="form.Category"
+                    filterable
+                    allow-create
+                    default-first-option
+                    placeholder="请选择或输入Category"
+                    style="width: 100%;">
+                    <el-option
+                        v-for="cat in categoryOptions"
+                        :key="cat.value"
+                        :label="cat.label"
+                        :value="cat.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="Characteristic" prop="characteristic">
+                <el-input v-model="form.characteristic" type="textarea" :rows="2" placeholder="请输入Characteristic"></el-input>
+            </el-form-item>
+
+            <el-form-item label="詳細說明（Detailed Description）">
+                <el-input v-model="form.detailed_description" type="textarea" :rows="3" placeholder="请输入详细说明"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Inspect Methord">
+                <el-input v-model="form.inspect_method" type="textarea" :rows="3" placeholder="请输入检查方法"></el-input>
+            </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submitForm" :loading="submitting">确定</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- Excel上传弹窗 -->
+    <el-dialog
+        title="Excel上传"
+        :visible.sync="showUpload"
+        width="500px">
+
+        <div class="upload-area">
+            <el-upload
+                class="upload-demo"
+                drag
+                :action="''"
+                :auto-upload="false"
+                :on-change="handleExcelChange"
+                :show-file-list="true"
+                :file-list="excelFiles">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">支持.xlsx, .xls格式，请确保包含Item, Function, Category, Characteristic列</div>
+            </el-upload>
+
+            <div v-if="uploadErrors.length > 0" style="margin-top: 15px; color: #F56C6C;">
+                <div v-for="(error, index) in uploadErrors" :key="index">
+                    ${ error }
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="showUpload = false">取消</el-button>
+            <el-button type="primary" @click="uploadExcel" :loading="uploading">上传</el-button>
+            <el-button type="info" @click="downloadTemplate">下载模板</el-button>
+        </div>
+    </el-dialog>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/Element/table.js"></script>
+<script src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/javascript">
+new Vue({
+    el: "#app",
+    delimiters: ['${', '}'],
+    data() {
+        return {
+            canEdit: {{ canEdit|yesno:"true,false" }},   // 注入权限
+            functionOptions: [],      // Function 下拉选项
+            categoryOptions: [],     // Category 下拉选项（用于搜索和弹窗）
+            itemOptions: [],        // Item 下拉选项（用于搜索）
+            tableData_view: [],
+            searchForm: {
+                Item: '',
+                Function: '',
+                Category: ''
+            },
+            form: {
+                id: '',
+                Item: '',
+                Function: '',
+                Category: '',
+                characteristic: '',
+                detailed_description: '',
+                inspect_method: ''
+            },
+            rules: {
+                Item: [{ required: true, message: '请输入Item', trigger: 'blur' }],
+                Function: [{ required: true, message: '请选择Function', trigger: 'change' }],
+                Category: [{ required: true, message: '请输入Category', trigger: 'blur' }],
+                characteristic: [{ required: true, message: '请输入Characteristic', trigger: 'blur' }]
+            },
+            dialogVisible: false,
+            showUpload: false,
+            dialogTitle: '新增检查项',
+            currentPage: 1,
+            pageSize: 20,
+            submitting: false,
+            uploading: false,
+            excelFiles: [],
+            uploadErrors: [],
+            reliabilityCount: 0,
+            compatibilityCount: 0,
+
+            // 从后端获取的选项数据
+            selectCategory: {{ addselect|safe }} || []
+        }
+    },
+    computed: {
+        tableData(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableData_view.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableData_view//axios返回时接受数据的变量
+                },
+        total_computed () {
+            this.Totalsize = this.tableData.length;//edwin:export数据的个数
+            console.log(this.Totalsize);
+            return this.tableData.length//必须是el-table里面绑定的数据变量
+        },
+        totalCount() {
+            return this.tableData.length;
+        }
+    },
+    mounted() {
+        this.fetchOptions();   // 先加载下拉选项
+        this.fetchData();      // 再加载表格数据
+    },
+    watch: {
+                datas() {
+                        this.currentPage = 1;
+                },
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                }
+
+        },
+    methods: {
+        // 新增方法：获取所有下拉选项
+        fetchOptions() {
+            axios.post('/UElist/UEItems_edit/', Qs.stringify({
+                isGetData: 'first',
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                if (response.data) {
+                    this.functionOptions = response.data.function_choices || [];
+                    this.categoryOptions = response.data.category_options || [];
+                    this.itemOptions = response.data.item_options || [];
+                }
+            }).catch(error => {
+                console.error('获取选项失败', error);
+            });
+        },
+        fetchData() {
+            axios.post('/UElist/UEItems_edit/', Qs.stringify({
+                isGetData: 'Search',
+                ...this.searchForm,
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                if (response.data && response.data.content) {
+                    this.tableData_view = response.data.content;
+                    this.calculateStatistics();
+
+                    if (response.data.errMsg) {
+                        this.$message.error(response.data.errMsg);
+                    }
+                } else {
+                    this.$message.error('获取数据失败');
+                }
+            }).catch(error => {
+                this.$message.error('加载数据失败: ' + error.message);
+                console.error(error);
+            });
+        },
+
+        handleSearch() {
+            this.currentPage = 1;
+            this.fetchData();
+        },
+
+        resetSearch() {
+            this.searchForm = {
+                Item: '',
+                Function: '',
+                Category: ''
+            };
+            this.currentPage = 1;
+            this.fetchData();
+        },
+
+        handleAdd() {
+            if (!this.canEdit) {
+                this.$message.error('无权限操作');
+                return;
+            }
+            this.dialogTitle = '新增检查项';
+            this.dialogVisible = true;
+        },
+
+        handleEdit(row) {
+            if (!this.canEdit) {
+                this.$message.error('无权限操作');
+                return;
+            }
+            this.dialogTitle = '编辑检查项';
+            this.form = { ...row };
+            this.dialogVisible = true;
+        },
+
+        handleDelete(row) {
+            if (!this.canEdit) {
+                this.$message.error('无权限操作');
+                return;
+            }
+            this.$confirm('确定删除该检查项吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                axios.post('/UElist/UEItems_edit/', Qs.stringify({
+                    isGetData: 'delete',
+                    id: row.id,
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                }), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).then(response => {
+                    if (response.data.errMsg) {
+                        this.$message.error(response.data.errMsg);
+                    } else {
+                        this.$message.success('删除成功');
+                        this.fetchData();
+                        this.fetchOptions();   // <--- 新增此行
+                    }
+                }).catch(error => {
+                    this.$message.error('删除失败');
+                });
+            }).catch(() => {});
+        },
+
+        submitForm() {
+            if (!this.canEdit) {
+                this.$message.error('无权限操作');
+                return;
+            }
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    this.submitting = true;
+
+                    axios.post('/UElist/UEItems_edit/', Qs.stringify({
+                        isGetData: 'submit',
+                        ...this.form,
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                    }), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(response => {
+                        if (response.data.errMsg) {
+                            this.$message.error(response.data.errMsg);
+                        } else {
+                            this.$message.success('保存成功');
+                            this.dialogVisible = false;
+                            this.fetchData();
+                            this.fetchOptions();   // <--- 新增此行
+                        }
+                        this.submitting = false;
+                    }).catch(error => {
+                        this.$message.error('保存失败');
+                        this.submitting = false;
+                    });
+                }
+            });
+        },
+
+        resetForm() {
+            this.form = {
+                id: '',
+                Item: '',
+                Function: '',
+                Category: '',
+                characteristic: '',
+                detailed_description: '',
+                inspect_method: ''
+            };
+            if (this.$refs.form) {
+                this.$refs.form.clearValidate();
+            }
+        },
+
+        handleExcelChange(file, fileList) {
+            this.excelFiles = fileList.slice(-1);
+        },
+
+        uploadExcel() {
+            if (!this.canEdit) {
+                this.$message.error('无权限操作');
+                return;
+            }
+            if (this.excelFiles.length === 0) {
+                this.$message.warning('请选择Excel文件');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('isGetData', 'upload_excel');
+            formData.append('excel_file', this.excelFiles[0].raw);
+            formData.append('csrfmiddlewaretoken', $("[name='csrfmiddlewaretoken']").val());
+
+            this.uploading = true;
+            this.uploadErrors = [];
+
+            axios.post('/UElist/UEItems_edit/', formData, {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then(response => {
+                if (response.data.errMsg) {
+                    this.$message.error(response.data.errMsg);
+                } else {
+                    this.$message.success(response.data.message);
+                    if (response.data.errors && response.data.errors.length > 0) {
+                        this.uploadErrors = response.data.errors;
+                    }
+                    this.showUpload = false;
+                    this.excelFiles = [];
+                    this.fetchData();
+                    this.fetchOptions();   // <--- 新增此行
+                }
+                this.uploading = false;
+            }).catch(error => {
+                this.$message.error('上传失败');
+                this.uploading = false;
+            });
+        },
+
+        downloadTemplate() {
+            window.open('/static/src/modelfiles/UE list.xlsx', '_blank');
+        },
+        calculateStatistics() {
+            // 统计 Reliability 数量
+            this.reliabilityCount = this.tableData_view.filter(item => item.Function === 'Reliability').length;
+            // 统计 Compatibility 数量
+            this.compatibilityCount = this.tableData_view.filter(item => item.Function === 'Compatibility').length;
+            // 如果不需要在data中维护totalCount，可以删除data中的totalCount属性，直接用计算属性
+        },
+
+        exportExcel() {
+            if (!this.canEdit) {
+                this.$message.error('无权限操作');
+                return;
+            }
+            // 1. 将数据转换为导出格式（字段名可自定义）
+            const exportData = this.tableData_view.map(item => ({
+                'Item': item.Item,
+                'Function': item.Function,
+                'Category': item.Category,
+                'Characteristic': item.characteristic,
+                '詳細說明（Detailed Description）': item.detailed_description,
+                'Inspect Methord': item.inspect_method   // 注意拼写
+            }));
+
+            // 2. 创建工作簿和工作表
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            XLSX.utils.book_append_sheet(wb, ws, 'UE检查项目');
+
+            // 3. 导出文件
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'UE_Inspection_Items.xlsx');
+        },
+
+        handleSizeChange(val) {
+            this.pageSize = val;
+        },
+
+        handleCurrentChange(val) {
+            this.currentPage = val;
+        }
+    }
+});
+</script>
+{% endblock %}

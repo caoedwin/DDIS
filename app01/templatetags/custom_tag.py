@@ -200,7 +200,7 @@ def get_menu_html(menu_data):
                         Class = "ti-layout-width-default"
                     if item['title'] == 'SW-OR':
                         Class = "ti-layout-width-default"
-                    if item['title'] == 'INV':
+                    if item['title'] == 'INV' or item['title'] == 'UElist':
                         Class = "ti-layout-list-large-image"
                     if item['title'] == 'SpecDownload' or item['title'] == 'RD/PE/JQE-Lesson':
                         Class = "ti-layout-accordion-list"

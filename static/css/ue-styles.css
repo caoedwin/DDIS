@@ -1,0 +1,264 @@
+/* UE系统专用样式，避免与其他系统冲突 */
+
+.ue-container {
+    padding: 20px;
+    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 搜索区域样式 */
+.ue-search-area {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.ue-search-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.ue-search-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ue-search-item label {
+    font-weight: 500;
+    color: #495057;
+    white-space: nowrap;
+}
+
+/* 表格区域 */
+.ue-table-container {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 统计卡片 */
+.ue-stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.ue-stat-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.ue-stat-card .title {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.ue-stat-card .value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.ue-stat-card .sub-value {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* 按钮样式 */
+.ue-button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.ue-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.ue-button-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.ue-button-primary:hover {
+    background-color: #0056b3;
+}
+
+.ue-button-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.ue-button-success:hover {
+    background-color: #1e7e34;
+}
+
+.ue-button-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.ue-button-warning:hover {
+    background-color: #e0a800;
+}
+
+.ue-button-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.ue-button-danger:hover {
+    background-color: #c82333;
+}
+
+/* 表格样式 */
+.ue-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ue-table th,
+.ue-table td {
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    text-align: left;
+}
+
+.ue-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.ue-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* 表单样式 */
+.ue-form-group {
+    margin-bottom: 15px;
+}
+
+.ue-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.ue-form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.ue-form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+}
+
+/* 弹窗样式 */
+.ue-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.ue-modal-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.ue-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ue-modal-body {
+    padding: 20px;
+}
+
+.ue-modal-footer {
+    padding: 20px;
+    border-top: 1px solid #dee2e6;
+    text-align: right;
+}
+
+/* 评分单元格样式 */
+.score-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.score-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .ue-search-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ue-search-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ue-stat-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ue-table {
+        font-size: 12px;
+    }
+
+    .ue-table th,
+    .ue-table td {
+        padding: 8px;
+    }
+}

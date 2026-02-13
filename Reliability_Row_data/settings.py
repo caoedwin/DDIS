@@ -213,6 +213,7 @@ INSTALLED_APPS = [
     'MiscellaneousPurchases',
     'CommonDevice',
     'CommonFiles',
+    'UElist',
 ]
 
 MIDDLEWARE = [

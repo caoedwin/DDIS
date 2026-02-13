@@ -1,0 +1,905 @@
+<!-- UE_ProjectResult.html （修改版）-->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}UE专案打分{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .selectMsg {
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .selectMsg .el-form-item {
+        margin-bottom: 10px;
+    }
+
+    .tableAround {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .el-table .cell {
+        text-align: left;
+        white-space: pre-line;
+    }
+
+    .score-cell {
+        text-align: center !important;
+        cursor: pointer;
+    }
+    .score-cell.disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    .score-cell:hover:not(.disabled) {
+        background-color: #f5f7fa;
+    }
+
+    .score-selected {
+        background-color: #409EFF !important;
+        color: white !important;
+    }
+
+    .score-V {
+        background-color: #67C23A !important;
+        color: white !important;
+    }
+
+    .score-NS {
+        background-color: #909399 !important;
+        color: white !important;
+    }
+
+    .batch-info {
+        margin: 10px 0;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: white;
+    }
+
+    .batch-info span {
+        margin-right: 20px;
+    }
+
+    .upload-area {
+        margin: 10px 0;
+        padding: 15px;
+        border: 2px dashed #409EFF;
+        border-radius: 8px;
+        text-align: center;
+        background: rgba(64, 158, 255, 0.05);
+    }
+
+    .statistics-card {
+        display: flex;
+        margin: 15px 0;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        flex: 1 1 150px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        text-align: center;
+        color: white;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 5px 0;
+    }
+
+    .stat-label {
+        font-size: 14px;
+    }
+
+    .one-star { color: #FFD700; }
+    .two-star { color: #FFD700; }
+    .three-star { color: #FFD700; }
+    .not-sup { color: #909399; }
+    .el-form--inline .el-form-item__label {
+        float: none;
+        display: inline-block;
+        color: white;
+    }
+    /* 修改标记样式 */
+    .modified-row {
+        background-color: #fff3e0 !important;
+    }
+    .save-btn {
+        margin-left: 5px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <el-backtop></el-backtop>
+
+    <!-- 项目选择区域 -->
+    <div class="selectMsg">
+        <el-form :inline="true" :model="searchForm">
+            <el-form-item label="机种">
+                <el-select
+                    v-model="searchForm.project_id"
+                    placeholder="选择或输入机种"
+                    filterable
+                    clearable
+                    @change="handleProjectChange"
+                    style="width: 200px;">
+                    <el-option
+                        v-for="project in projects"
+                        :key="project.id"
+                        :label="project.Project"
+                        :value="project.id">
+                        <span style="float: left">${ project.Project }</span>
+                        <span style="float: right; color: #8492a6; font-size: 13px">${ project.Customer }</span>
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="批次">
+                <el-select
+                    v-model="searchForm.batch_id"
+                    placeholder="选择批次"
+                    clearable
+                    @change="handleBatchChange"
+                    style="width: 180px;"
+                    :disabled="!searchForm.project_id">
+                    <el-option
+                        v-for="batch in batches"
+                        :key="batch.batch_id"
+                        :label="batch.batch_name"
+                        :value="batch.batch_id">
+                        ${ batch.batch_name } (${ batch.test_date })
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button
+                    type="primary"
+                    @click="loadScores"
+                    :disabled="!searchForm.batch_id"
+                    icon="el-icon-search">
+                    加载数据
+                </el-button>
+
+                <el-button
+                    type="success"
+                    @click="openCreateBatchDialog"
+                    :disabled="!isProjectOwner"
+                    icon="el-icon-plus">
+                    创建批次
+                </el-button>
+
+                <el-button
+                    type="warning"
+                    @click="showUploadExcel = true"
+                    :disabled="!isTester || !searchForm.batch_id"
+                    icon="el-icon-upload">
+                    Excel上传
+                </el-button>
+
+                <el-button
+                    type="info"
+                    @click="exportExcel"
+                    :disabled="!searchForm.batch_id"
+                    icon="el-icon-download">
+                    导出Excel
+                </el-button>
+            </el-form-item>
+        </el-form>
+
+        <!-- 批次信息 -->
+        <div class="batch-info" v-if="currentBatch">
+            <span>机种: ${ currentProject?.Project || '' }</span>
+            <span>批次: ${ currentBatch.batch_name }</span>
+            <span>测试日期: ${ currentBatch.test_date }</span>
+            <span>创建人: ${ currentBatch.created_by }</span>
+            <span>测试人员: ${ currentBatch.tester_names ? currentBatch.tester_names.join(', ') : '' }</span>
+            <span v-if="isTester" style="color: #67C23A;">(你有编辑权限)</span>
+            <span v-else style="color: #909399;">(只读)</span>
+        </div>
+
+        <!-- 统计信息 - 修改为包含总得分和好评率 -->
+        <div class="statistics-card" v-if="scoreData.length > 0">
+            <div class="stat-item" style="background: rgba(103, 194, 58, 0.2);">
+                <div class="stat-value">${ statistics.OneStar }</div>
+                <div class="stat-label">★ 数量</div>
+            </div>
+            <div class="stat-item" style="background: rgba(230, 162, 60, 0.2);">
+                <div class="stat-value">${ statistics.TwoStar }</div>
+                <div class="stat-label">★★ 数量</div>
+            </div>
+            <div class="stat-item" style="background: rgba(245, 108, 108, 0.2);">
+                <div class="stat-value">${ statistics.ThreeStar }</div>
+                <div class="stat-label">★★★ 数量</div>
+            </div>
+            <div class="stat-item" style="background: rgba(144, 147, 153, 0.2);">
+                <div class="stat-value">${ statistics.NotSup }</div>
+                <div class="stat-label">Not Support</div>
+            </div>
+            <div class="stat-item" style="background: rgba(64, 158, 255, 0.2);">
+                <div class="stat-value">${ statistics.totalScore }</div>
+                <div class="stat-label">总得分</div>
+            </div>
+            <div class="stat-item" style="background: rgba(255, 153, 0, 0.2);">
+                <div class="stat-value">${ statistics.rate }</div>
+                <div class="stat-label">好评率</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="tableAround" v-if="scoreData.length > 0">
+        <el-table
+            :data="scoreData"
+            border
+            height="650"
+            style="width: 100%"
+            :header-cell-style="{'background-color': '#fafafa', 'font-weight': '800'}"
+            :row-class-name="rowClassName">
+
+            <el-table-column type="index" width="50" label="序号" fixed></el-table-column>
+            <el-table-column prop="Item" label="Item" width="100" fixed></el-table-column>
+            <el-table-column prop="Function" label="Function" width="120">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.Function === 'Reliability' ? 'success' : 'warning'">
+                        ${ scope.row.Function }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="Category" label="Category" width="150"></el-table-column>
+            <el-table-column prop="characteristic" label="Characteristic" min-width="200"></el-table-column>
+
+            <!-- 打分列 - 只有tester可点击 -->
+            <el-table-column label="★" width="80" align="center">
+                <template slot-scope="scope">
+                    <div
+                        class="score-cell"
+                        :class="{
+                            'score-V': scope.row.OneStar === 'V',
+                            'disabled': !isTester
+                        }"
+                        @click="isTester && toggleScore(scope.row, 'OneStar')">
+                        ${ scope.row.OneStar }
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="★★" width="80" align="center">
+                <template slot-scope="scope">
+                    <div
+                        class="score-cell"
+                        :class="{
+                            'score-V': scope.row.TwoStar === 'V',
+                            'disabled': !isTester
+                        }"
+                        @click="isTester && toggleScore(scope.row, 'TwoStar')">
+                        ${ scope.row.TwoStar }
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="★★★" width="80" align="center">
+                <template slot-scope="scope">
+                    <div
+                        class="score-cell"
+                        :class="{
+                            'score-V': scope.row.ThreeStar === 'V',
+                            'disabled': !isTester
+                        }"
+                        @click="isTester && toggleScore(scope.row, 'ThreeStar')">
+                        ${ scope.row.ThreeStar }
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="Not Support" width="120" align="center">
+                <template slot-scope="scope">
+                    <div
+                        class="score-cell"
+                        :class="{
+                            'score-NS': scope.row.NotSup === 'N/S',
+                            'disabled': !isTester
+                        }"
+                        @click="isTester && toggleScore(scope.row, 'NotSup')">
+                        ${ scope.row.NotSup }
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="remark" label="备注" min-width="200">
+                <template slot-scope="scope">
+                    <el-input
+                        v-model="scope.row.remark"
+                        :disabled="!isTester"
+                        placeholder="输入备注"
+                        @input="markModified(scope.row)"
+                        size="small"></el-input>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="scorer" label="评分人" width="120"></el-table-column>
+            <el-table-column prop="scored_date" label="评分时间" width="160"></el-table-column>
+
+            <!-- 操作列：保存按钮，仅tester且行已修改时显示 -->
+            <el-table-column label="操作" width="100" fixed="right">
+                <template slot-scope="scope">
+                    <el-button
+                        v-if="isTester && scope.row._modified"
+                        type="primary"
+                        size="mini"
+                        @click="saveRow(scope.row)"
+                        icon="el-icon-check"
+                        circle>
+                    </el-button>
+                    <span v-else-if="isTester && !scope.row._modified" style="color: #909399;">已保存</span>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+
+    <!-- 创建批次弹窗 -->
+    <el-dialog
+        title="创建批次"
+        :visible.sync="showCreateBatch"
+        width="600px"
+        @open="loadUsers">
+
+        <el-form ref="batchForm" :model="batchForm" :rules="batchRules" label-width="100px">
+            <el-form-item label="机种" prop="project_id">
+                <el-input
+                    :value="getProjectName(batchForm.project_id)"
+                    disabled
+                    placeholder="已选机种">
+                </el-input>
+            </el-form-item>
+
+            <el-form-item label="批次名称" prop="batch_name">
+                <el-input v-model="batchForm.batch_name" placeholder="请输入批次名称"></el-input>
+            </el-form-item>
+
+            <el-form-item label="测试日期" prop="test_date">
+                <el-date-picker
+                    v-model="batchForm.test_date"
+                    type="date"
+                    placeholder="选择测试日期"
+                    value-format="yyyy-MM-dd"
+                    style="width: 100%;">
+                </el-date-picker>
+            </el-form-item>
+
+            <!-- 新增：测试人员多选下拉，格式：姓名（工号） -->
+            <el-form-item label="测试人员" prop="tester_ids">
+                <el-select
+                    v-model="batchForm.tester_ids"
+                    multiple
+                    filterable
+                    placeholder="请选择测试人员（可搜索）"
+                    style="width: 100%;">
+                    <el-option
+                        v-for="user in userOptions"
+                        :key="user.user_id"
+                        :label="`${user.name}（${user.employee_id}）`"
+                        :value="user.user_id">
+                    </el-option>
+                </el-select>
+                <div class="el-upload__tip" style="color: #aaa;">支持输入姓名或工号过滤</div>
+            </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="showCreateBatch = false">取消</el-button>
+            <el-button type="primary" @click="createBatch" :loading="creatingBatch">创建</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- Excel上传弹窗 -->
+    <el-dialog
+        title="Excel上传评分"
+        :visible.sync="showUploadExcel"
+        width="500px">
+
+        <div class="upload-area">
+            <p style="margin-bottom: 15px; color: #FFF;">当前批次: ${ currentBatch?.batch_name || '' }</p>
+
+            <el-upload
+                class="upload-demo"
+                drag
+                :action="''"
+                :auto-upload="false"
+                :on-change="handleScoreExcelChange"
+                :show-file-list="true"
+                :file-list="scoreExcelFiles">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">支持.xlsx, .xls格式，请确保包含Item, OneStar, TwoStar, ThreeStar, NotSup列</div>
+            </el-upload>
+
+            <div v-if="scoreUploadErrors.length > 0" style="margin-top: 15px; color: #F56C6C;">
+                <div v-for="(error, index) in scoreUploadErrors" :key="index">
+                    ${ error }
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="showUploadExcel = false">取消</el-button>
+            <el-button type="primary" @click="uploadScoreExcel" :loading="uploadingScores">上传</el-button>
+            <el-button type="info" @click="downloadScoreTemplate">下载模板</el-button>
+        </div>
+    </el-dialog>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/es6/polyfill.min.js"></script>
+<script src="/static/js/es6/babel.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/Element/table.js"></script>
+<script src="/static/js/Element/main.js"></script>
+<script src="/static/js/Element/input.js"></script>
+<script src="/static/js/Element/table-column.js"></script>
+<script src="/static/js/Element/icon.js"></script>
+<script src="/static/js/Element/image.js"></script>
+<script src="/static/js/Element/message.js"></script>
+<script type="text/javascript">
+new Vue({
+    el: "#app",
+    delimiters: ['${', '}'],
+    data() {
+        return {
+            searchForm: {
+                project_id: '',
+                batch_id: ''
+            },
+            batchForm: {
+                project_id: '',
+                batch_name: '',
+                test_date: new Date().toISOString().split('T')[0],
+                tester_ids: []   // 新增：测试人员ID数组
+            },
+            batchRules: {
+                project_id: [{ required: true, message: '请选择机种', trigger: 'change' }],
+                batch_name: [{ required: true, message: '请输入批次名称', trigger: 'blur' }],
+                test_date: [{ required: true, message: '请选择测试日期', trigger: 'change' }],
+                tester_ids: [{ required: true, message: '请至少选择一名测试人员', trigger: 'change' }]
+            },
+
+            projects: [],
+            batches: [],
+            scoreData: [],
+            userOptions: [],      // 用户列表，用于创建批次
+
+            currentProject: null,
+            currentBatch: null,
+            isTester: false,      // 当前用户是否为当前批次的测试人员
+            statistics: {
+                OneStar: 0,
+                TwoStar: 0,
+                ThreeStar: 0,
+                NotSup: 0,
+                totalScore: 0,    // 总得分
+                rate: '0%'        // 好评率
+            },
+
+            showCreateBatch: false,
+            showUploadExcel: false,
+            creatingBatch: false,
+            uploadingScores: false,
+            isProjectOwner: false,
+
+            scoreExcelFiles: [],
+            scoreUploadErrors: [],
+        }
+    },
+    mounted() {
+        console.log('UE Project Result mounted');
+        this.loadProjects();
+    },
+    methods: {
+        // ---------- 基础数据加载 ----------
+        loadProjects() {
+            axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                action: 'get_projects',
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                if (response.data && response.data.projects) {
+                    this.projects = response.data.projects;
+                } else {
+                    this.$message.error('获取机种列表失败');
+                }
+            }).catch(error => {
+                console.error('Error loading projects:', error);
+                this.$message.error('加载机种失败: ' + (error.message || '请检查网络连接'));
+            });
+        },
+
+        // 加载用户列表（用于创建批次时选择测试人员）
+        // 后端需实现 action=get_users，返回 [{user_id, name, employee_id}, ...]
+        loadUsers() {
+            axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                action: 'get_users',
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                if (response.data && response.data.users) {
+                    this.userOptions = response.data.users;
+                }
+            }).catch(error => {
+                console.error('Error loading users:', error);
+                this.$message.error('加载用户列表失败');
+            });
+        },
+
+        // ---------- 项目与批次处理 ----------
+        handleProjectChange(projectId) {
+            if (projectId) {
+                this.currentProject = this.projects.find(p => p.id == projectId);
+                this.isProjectOwner = this.currentProject.owner_flag;
+                this.loadBatches(projectId);
+            } else {
+                this.currentProject = null;
+                this.batches = [];
+                this.searchForm.batch_id = '';
+                this.currentBatch = null;
+                this.isTester = false;
+            }
+        },
+
+        loadBatches(projectId) {
+            axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                action: 'get_batches',
+                project_id: projectId,
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                this.batches = response.data.batches || [];
+                // 批次列表应包含 batch_id, batch_name, test_date, created_by, tester_ids, tester_names, current_user_is_tester
+            }).catch(error => {
+                this.$message.error('加载批次失败');
+                console.error(error);
+            });
+        },
+
+        handleBatchChange(batchId) {
+            if (batchId) {
+                // 从批次列表中找到当前批次，并更新权限
+                const batch = this.batches.find(b => b.batch_id == batchId);
+                if (batch) {
+                    this.currentBatch = batch;
+                    this.isTester = batch.current_user_is_tester || false;   // 后端返回当前用户是否是测试人员
+                } else {
+                    // 如果列表中没有（比如直接URL访问），则单独获取详情
+                    this.getBatchDetail(batchId);
+                }
+            } else {
+                this.currentBatch = null;
+                this.isTester = false;
+                this.scoreData = [];
+            }
+        },
+
+        // 获取批次详情（用于权限判断及显示）
+        getBatchDetail(batchId) {
+            axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                action: 'get_batch_detail',
+                batch_id: batchId,
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                if (response.data.batch) {
+                    this.currentBatch = response.data.batch;
+                    this.isTester = response.data.batch.current_user_is_tester || false;
+                }
+            }).catch(error => {
+                console.error('Error loading batch detail:', error);
+            });
+        },
+
+        // ---------- 评分数据加载与统计 ----------
+        loadScores() {
+            if (!this.searchForm.batch_id) {
+                this.$message.warning('请选择批次');
+                return;
+            }
+
+            axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                action: 'get_scores',
+                batch_id: this.searchForm.batch_id,
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                // 为每条记录添加 _modified 标记
+                this.scoreData = (response.data.scores || []).map(item => ({
+                    ...item,
+                    _modified: false
+                }));
+                this.calculateStatistics();
+            }).catch(error => {
+                this.$message.error('加载评分数据失败');
+                console.error(error);
+            });
+        },
+
+        calculateStatistics() {
+            const oneStar = this.scoreData.filter(item => item.OneStar === 'V').length;
+            const twoStar = this.scoreData.filter(item => item.TwoStar === 'V').length;
+            const threeStar = this.scoreData.filter(item => item.ThreeStar === 'V').length;
+            const notSup = this.scoreData.filter(item => item.NotSup === 'N/S').length;
+            const total = this.scoreData.length;
+            const totalScore = oneStar * 1 + twoStar * 2 + threeStar * 3;
+            const fullScore = (oneStar + twoStar + threeStar) * 3;
+            const rate = total ? ((totalScore / fullScore) * 100).toFixed(2) + '%' : '0%';
+
+            this.statistics = {
+                OneStar: oneStar,
+                TwoStar: twoStar,
+                ThreeStar: threeStar,
+                NotSup: notSup,
+                totalScore: totalScore,
+                rate: rate
+            };
+        },
+
+        // 行样式：标记已修改的行
+        rowClassName({ row }) {
+            return row._modified ? 'modified-row' : '';
+        },
+
+        // ---------- 打分交互（仅本地修改，不提交）----------
+        toggleScore(row, field) {
+            if (!this.isTester) return;
+        
+            // ----- Not Support 互斥 -----
+            if (field === 'NotSup') {
+                // 如果当前已经是 N/S，则清空；否则设为 N/S 并清空所有星级
+                if (row[field] === 'N/S') {
+                    row[field] = '';
+                } else {
+                    row[field] = 'N/S';
+                    row.OneStar = '';
+                    row.TwoStar = '';
+                    row.ThreeStar = '';
+                }
+            }
+            // ----- 星级互斥 -----
+            else {
+                // 先清除其他所有星级及 Not Support
+                row.OneStar = '';
+                row.TwoStar = '';
+                row.ThreeStar = '';
+                row.NotSup = '';
+        
+                // 切换当前星级：若已为 V 则取消，否则设为 V
+                if (row[field] === 'V') {
+                    row[field] = '';   // 取消打分
+                } else {
+                    row[field] = 'V';   // 设为 V
+                }
+            }
+        
+            // 标记该行已修改
+            this.markModified(row);
+        },
+
+        markModified(row) {
+            if (this.isTester) {
+                row._modified = true;
+            }
+        },
+
+        // ---------- 保存单行修改 ----------
+        saveRow(row) {
+            if (!this.isTester) return;
+
+            axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                action: 'update_score',
+                record_id: row.record_id,
+                OneStar: row.OneStar,
+                TwoStar: row.TwoStar,
+                ThreeStar: row.ThreeStar,
+                NotSup: row.NotSup,
+                remark: row.remark,
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            }), {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => {
+                if (response.data.success) {
+                    this.$message.success('保存成功');
+                    row._modified = false;
+                    this.calculateStatistics();
+                    // 可选：更新评分人和评分时间
+                    if (response.data.record) {
+                        row.scorer = response.data.record.scorer;
+                        row.scored_date = response.data.record.scored_date;
+                    }
+                } else {
+                    this.$message.error(response.data.message || '保存失败');
+                }
+            }).catch(error => {
+                this.$message.error('保存失败：' + (error.message || '网络错误'));
+                console.error(error);
+            });
+        },
+
+        // ---------- 创建批次 ----------
+        createBatch() {
+            this.$refs.batchForm.validate(valid => {
+                if (valid) {
+                    this.creatingBatch = true;
+
+                    axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
+                        action: 'create_batch',
+                        project_id: this.batchForm.project_id,
+                        batch_name: this.batchForm.batch_name,
+                        test_date: this.batchForm.test_date,
+                        tester_ids: this.batchForm.tester_ids.join(','), // 转为逗号分隔字符串或数组，后端需支持
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                    }), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(response => {
+                        if (response.data.success) {
+                            this.$message.success('批次创建成功');
+                            this.showCreateBatch = false;
+                            this.$refs.batchForm.resetFields();
+                            this.loadBatches(this.batchForm.project_id);
+                            // 自动选中新创建的批次
+                            if (response.data.batch_id) {
+                                this.searchForm.batch_id = response.data.batch_id;
+                                this.handleBatchChange(response.data.batch_id);
+                            }
+                        } else {
+                            this.$message.error(response.data.message || '创建失败');
+                        }
+                        this.creatingBatch = false;
+                    }).catch(error => {
+                        this.$message.error('创建失败：' + (error.message || '网络错误'));
+                        this.creatingBatch = false;
+                    });
+                }
+            });
+        },
+
+        openCreateBatchDialog() {
+            if (!this.searchForm.project_id) {
+                this.$message.warning('请先选择机种');
+                return;
+            }
+            this.batchForm.project_id = this.searchForm.project_id;
+            this.batchForm.batch_name = '';
+            this.batchForm.test_date = new Date().toISOString().split('T')[0];
+            this.batchForm.tester_ids = [];   // 清空已选
+            this.showCreateBatch = true;
+        },
+
+        getProjectName(projectId) {
+            if (!projectId) return '';
+            const project = this.projects.find(p => p.id == projectId);
+            return project ? project.Project : '';
+        },
+
+        // ---------- Excel上传 ----------
+        handleScoreExcelChange(file, fileList) {
+            this.scoreExcelFiles = fileList.slice(-1);
+        },
+
+        uploadScoreExcel() {
+            if (this.scoreExcelFiles.length === 0) {
+                this.$message.warning('请选择Excel文件');
+                return;
+            }
+            if (!this.searchForm.batch_id) {
+                this.$message.warning('请先选择批次');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'upload_excel_score');
+            formData.append('batch_id', this.searchForm.batch_id);
+            formData.append('excel_file', this.scoreExcelFiles[0].raw);
+            formData.append('csrfmiddlewaretoken', $("[name='csrfmiddlewaretoken']").val());
+
+            this.uploadingScores = true;
+            this.scoreUploadErrors = [];
+
+            axios.post('/UElist/UE_ProjectResult/', formData, {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then(response => {
+                if (response.data.success) {
+                    this.$message.success(response.data.message);
+                    if (response.data.errors && response.data.errors.length > 0) {
+                        this.scoreUploadErrors = response.data.errors;
+                    }
+                    this.showUploadExcel = false;
+                    this.scoreExcelFiles = [];
+                    this.loadScores();  // 重新加载数据
+                } else {
+                    this.$message.error(response.data.message || '上传失败');
+                }
+                this.uploadingScores = false;
+            }).catch(error => {
+                this.$message.error('上传失败：' + (error.message || '网络错误'));
+                this.uploadingScores = false;
+            });
+        },
+
+        downloadScoreTemplate() {
+            window.open('/static/src/modelfiles/UE list.xlsx', '_blank');
+        },
+
+        exportScores() {
+            if (!this.searchForm.batch_id) {
+                this.$message.warning('请先选择批次');
+                return;
+            }
+            window.location.href = `/UElist/UE_ProjectResult/?action=export_scores&batch_id=${this.searchForm.batch_id}`;
+        },
+        exportExcel () {
+            if (!this.scoreData || this.scoreData.length === 0) {
+                this.$message.warning('没有数据可导出');
+                return;
+            }
+        
+            // ----- 1. 准备导出的数据（包含标题行，字段映射为中文友好名称）-----
+            const exportRows = this.scoreData.map(item => ({
+                '序号': this.scoreData.indexOf(item) + 1,
+                'Item': item.Item,
+                'Function': item.Function,
+                'Category': item.Category,
+                'Characteristic': item.characteristic,
+                '★': item.OneStar || '',
+                '★★': item.TwoStar || '',
+                '★★★': item.ThreeStar || '',
+                'Not Support': item.NotSup || '',
+                '备注': item.remark || '',
+                '评分人': item.scorer || '',
+                '评分时间': item.scored_date || ''
+            }));
+        
+            // ----- 2. 创建工作簿与工作表 -----
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(exportRows, { header: Object.keys(exportRows[0]) });
+        
+            // ----- 3. 可选：添加批次信息作为工作簿元数据或单独区域 -----
+            // 在表头前插入两行描述信息
+            XLSX.utils.sheet_add_aoa(ws, [
+                [`机种: ${this.currentProject?.Project || ''}`, `批次: ${this.currentBatch?.batch_name || ''}`],
+                [`测试日期: ${this.currentBatch?.test_date || ''}`, `导出时间: ${new Date().toLocaleString()}`]
+            ], { origin: 'A1' });
+        
+            XLSX.utils.book_append_sheet(wb, ws, 'UE评分明细');
+        
+            // ----- 4. 生成文件名（批次名称_日期.xlsx）-----
+            const fileName = `UE评分_${this.currentBatch?.batch_name || '未命名'}_${new Date().getTime()}.xlsx`;
+        
+            // ----- 5. 导出文件 -----
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            saveAs(new Blob([wbout], { type: 'application/octet-stream' }), fileName);
+        }
+    }
+});
+</script>
+{% endblock %}
