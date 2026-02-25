@@ -336,16 +336,26 @@
             <el-table-column prop="scored_date" label="评分时间" width="160"></el-table-column>
 
             <!-- 操作列：保存按钮，仅tester且行已修改时显示 -->
-            <el-table-column label="操作" width="100" fixed="right">
+            <el-table-column label="操作" width="120" fixed="right">
                 <template slot-scope="scope">
-                    <el-button
-                        v-if="isTester && scope.row._modified"
-                        type="primary"
-                        size="mini"
-                        @click="saveRow(scope.row)"
-                        icon="el-icon-check"
-                        circle>
-                    </el-button>
+                    <div v-if="isTester && scope.row._modified">
+                        <el-button-group>
+                            <el-button
+                                type="primary"
+                                size="mini"
+                                @click="saveRow(scope.row)"
+                                icon="el-icon-check"
+                                circle>
+                            </el-button>
+                            <el-button
+                                type="danger"
+                                size="mini"
+                                @click="cancelRow(scope.row)"
+                                icon="el-icon-close"
+                                circle>
+                            </el-button>
+                        </el-button-group>
+                    </div>
                     <span v-else-if="isTester && !scope.row._modified" style="color: #909399;">已保存</span>
                 </template>
             </el-table-column>
@@ -553,16 +563,21 @@ new Vue({
 
         // ---------- 项目与批次处理 ----------
         handleProjectChange(projectId) {
+            // 立即清空批次相关状态
+            this.batches = [];
+            this.searchForm.batch_id = '';
+            this.currentBatch = null;
+            this.isTester = false;
+            this.scoreData = [];                // 可选：清空表格数据
+            this.statistics = { OneStar:0, TwoStar:0, ThreeStar:0, NotSup:0, totalScore:0, rate:'0%' };
+        
             if (projectId) {
                 this.currentProject = this.projects.find(p => p.id == projectId);
                 this.isProjectOwner = this.currentProject.owner_flag;
-                this.loadBatches(projectId);
+                this.loadBatches(projectId);    // 异步加载新批次
             } else {
                 this.currentProject = null;
-                this.batches = [];
-                this.searchForm.batch_id = '';
-                this.currentBatch = null;
-                this.isTester = false;
+                this.isProjectOwner = false;
             }
         },
 
@@ -582,21 +597,22 @@ new Vue({
             });
         },
 
-        handleBatchChange(batchId) {
+       handleBatchChange(batchId) {
+            // 清空当前显示的数据，避免与权限错位
+            this.scoreData = [];
+            this.statistics = { OneStar:0, TwoStar:0, ThreeStar:0, NotSup:0, totalScore:0, rate:'0%' };
+        
             if (batchId) {
-                // 从批次列表中找到当前批次，并更新权限
                 const batch = this.batches.find(b => b.batch_id == batchId);
                 if (batch) {
                     this.currentBatch = batch;
-                    this.isTester = batch.current_user_is_tester || false;   // 后端返回当前用户是否是测试人员
+                    this.isTester = batch.current_user_is_tester || false;
                 } else {
-                    // 如果列表中没有（比如直接URL访问），则单独获取详情
                     this.getBatchDetail(batchId);
                 }
             } else {
                 this.currentBatch = null;
                 this.isTester = false;
-                this.scoreData = [];
             }
         },
 
@@ -624,7 +640,7 @@ new Vue({
                 this.$message.warning('请选择批次');
                 return;
             }
-
+        
             axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
                 action: 'get_scores',
                 batch_id: this.searchForm.batch_id,
@@ -632,16 +648,45 @@ new Vue({
             }), {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(response => {
-                // 为每条记录添加 _modified 标记
-                this.scoreData = (response.data.scores || []).map(item => ({
-                    ...item,
-                    _modified: false
-                }));
+                this.scoreData = (response.data.scores || []).map(item => {
+                    // 保存原始值（用于取消修改）
+                    const original = {
+                        OneStar: item.OneStar,
+                        TwoStar: item.TwoStar,
+                        ThreeStar: item.ThreeStar,
+                        NotSup: item.NotSup,
+                        remark: item.remark
+                    };
+                    return {
+                        ...item,
+                        _modified: false,
+                        _original: original
+                    };
+                });
                 this.calculateStatistics();
             }).catch(error => {
                 this.$message.error('加载评分数据失败');
                 console.error(error);
             });
+        },
+        
+        cancelRow(row) {
+            if (!this.isTester) return;
+        
+            // 从 _original 恢复可编辑字段
+            row.OneStar = row._original.OneStar;
+            row.TwoStar = row._original.TwoStar;
+            row.ThreeStar = row._original.ThreeStar;
+            row.NotSup = row._original.NotSup;
+            row.remark = row._original.remark;
+        
+            // 重置修改标记
+            row._modified = false;
+        
+            // 可选：重新计算统计（如果统计依赖于该行）
+            this.calculateStatistics();
+        
+            this.$message.info('已取消修改');
         },
 
         calculateStatistics() {
@@ -714,7 +759,7 @@ new Vue({
         // ---------- 保存单行修改 ----------
         saveRow(row) {
             if (!this.isTester) return;
-
+        
             axios.post('/UElist/UE_ProjectResult/', Qs.stringify({
                 action: 'update_score',
                 record_id: row.record_id,
@@ -730,8 +775,18 @@ new Vue({
                 if (response.data.success) {
                     this.$message.success('保存成功');
                     row._modified = false;
+        
+                    // 更新原始值（以便后续取消能回退到保存后的状态）
+                    row._original = {
+                        OneStar: row.OneStar,
+                        TwoStar: row.TwoStar,
+                        ThreeStar: row.ThreeStar,
+                        NotSup: row.NotSup,
+                        remark: row.remark
+                    };
+        
                     this.calculateStatistics();
-                    // 可选：更新评分人和评分时间
+        
                     if (response.data.record) {
                         row.scorer = response.data.record.scorer;
                         row.scored_date = response.data.record.scored_date;
