@@ -870,29 +870,51 @@ new Vue({
                 this.$message.warning('请先选择批次');
                 return;
             }
-
+        
             const formData = new FormData();
             formData.append('action', 'upload_excel_score');
             formData.append('batch_id', this.searchForm.batch_id);
             formData.append('excel_file', this.scoreExcelFiles[0].raw);
             formData.append('csrfmiddlewaretoken', $("[name='csrfmiddlewaretoken']").val());
-
+        
             this.uploadingScores = true;
             this.scoreUploadErrors = [];
-
+        
             axios.post('/UElist/UE_ProjectResult/', formData, {
                 headers: {'Content-Type': 'multipart/form-data'}
             }).then(response => {
                 if (response.data.success) {
-                    this.$message.success(response.data.message);
+                    // 上传成功
                     if (response.data.errors && response.data.errors.length > 0) {
-                        this.scoreUploadErrors = response.data.errors;
+                        // 存在警告（如不存在的Item），用弹窗显示
+                        let errorMsg = response.data.errors.join('\n');
+                        this.$alert(errorMsg, '上传成功但有警告', {
+                            type: 'warning',
+                            confirmButtonText: '确定',
+                            callback: () => {
+                                // 用户确认后关闭上传弹窗并刷新数据
+                                this.showUploadExcel = false;
+                                this.scoreExcelFiles = [];
+                                this.loadScores();
+                            }
+                        });
+                    } else {
+                        // 完全成功
+                        this.$message.success(response.data.message);
+                        this.showUploadExcel = false;
+                        this.scoreExcelFiles = [];
+                        this.loadScores();
                     }
-                    this.showUploadExcel = false;
-                    this.scoreExcelFiles = [];
-                    this.loadScores();  // 重新加载数据
                 } else {
-                    this.$message.error(response.data.message || '上传失败');
+                    // 上传失败（如互斥冲突），弹窗提示，不关闭上传对话框
+                    this.$alert(response.data.message, '上传失败', {
+                        type: 'error',
+                        confirmButtonText: '确定',
+                        callback: () => {
+                            // 仅关闭弹窗，保持上传界面，让用户修改Excel
+                            // 无需额外操作
+                        }
+                    });
                 }
                 this.uploadingScores = false;
             }).catch(error => {

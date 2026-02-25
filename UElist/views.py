@@ -721,12 +721,13 @@ def UE_ProjectResult(request):
                     batch = UEBatch.objects.get(batch_id=batch_id)
 
                     # 权限验证：仅批次测试人员可上传
+
                     if not batch.testers.filter(account=onlineuser).exists():
                         return JsonResponse({'success': False, 'message': '您不是该批次的测试人员，无权上传'})
 
                     try:
 
-                        user_info = UserInfo.objects.get(account=onlineuser)  # 注意：如字段为username则调整
+                        user_info = UserInfo.objects.get(account=onlineuser)
 
                     except UserInfo.DoesNotExist:
 
@@ -755,6 +756,7 @@ def UE_ProjectResult(request):
 
                     if header_row_idx is None:
                         return JsonResponse(
+
                             {'success': False, 'message': '未找到包含Item,Function,Category,Characteristic的表头行'})
 
                     df.columns = df.iloc[header_row_idx].astype(str).str.strip()
@@ -775,14 +777,6 @@ def UE_ProjectResult(request):
 
                     }
 
-                    # 受保护的评分字段（已有值不允许覆盖为空）
-
-                    PROTECTED_SCORE_FIELDS = ['OneStar', 'TwoStar', 'ThreeStar', 'NotSup']
-
-                    # 允许覆盖为空的字段（如备注）
-
-                    ALLOW_OVERWRITE_EMPTY = ['remark']  # 可根据业务调整
-
                     if 'Item' not in df.columns:
                         return JsonResponse({'success': False, 'message': 'Excel缺少必要的"Item"列'})
 
@@ -793,27 +787,38 @@ def UE_ProjectResult(request):
                         col_lower = col.lower().strip()
 
                         if col_lower in SCORE_FIELD_MAP:
-                            
                             actual_score_columns[col] = SCORE_FIELD_MAP[col_lower]
 
                     if not actual_score_columns:
                         return JsonResponse(
+
                             {'success': False, 'message': 'Excel中未找到任何评分列（★, ★★, ★★★, Not Support, Remark等）'})
 
                     # ---------- 3. 解析数据，按Item去重（后出现覆盖前）----------
+
                     data_dict = {}
+
                     for idx, row in df.iterrows():
+
                         item_code = str(row['Item']).strip()
+
                         if pd.isna(item_code) or item_code == '' or item_code.lower() == 'nan':
                             continue
 
                         score_values = {}
+
                         for excel_col, db_field in actual_score_columns.items():
+
                             val = row.get(excel_col)
+
                             if pd.isna(val):
+
                                 val = ''
+
                             else:
+
                                 val = str(val).strip()
+
                             score_values[db_field] = val
 
                         data_dict[item_code] = score_values
@@ -821,134 +826,153 @@ def UE_ProjectResult(request):
                     if not data_dict:
                         return JsonResponse({'success': False, 'message': 'Excel中没有有效的Item数据'})
 
-                    # ========== 新增：互斥校验 ==========
-                    conflict_items = []  # 记录有互斥冲突的Item
-                    valid_data_dict = {}  # 存放通过互斥检查的数据
+                    # ========== 互斥校验（新增） ==========
 
-                    for item_code, score_values in data_dict.items():
-                        one = score_values.get('OneStar', '')
-                        two = score_values.get('TwoStar', '')
-                        three = score_values.get('ThreeStar', '')
-                        notsup = score_values.get('NotSup', '')
+                    conflict_items = []
 
-                        # 统计星级中为'V'的数量
+                    for item_code, sv in data_dict.items():
+
+                        one = sv.get('OneStar', '')
+
+                        two = sv.get('TwoStar', '')
+
+                        three = sv.get('ThreeStar', '')
+
+                        notsup = sv.get('NotSup', '')
+
                         star_count = sum([1 for v in [one, two, three] if v == 'V'])
+
                         notsup_flag = (notsup == 'N/S')
 
-                        # 互斥条件：星级数量>1 或 (有星级且同时有 Not Support)
                         if star_count > 1 or (star_count >= 1 and notsup_flag):
                             conflict_items.append(item_code)
-                            continue  # 跳过该行，不处理
 
-                        # 可选：检查值合法性（如星级只能是'V'或空，NotSup只能是'N/S'或空）
-                        # 此处可自行添加校验，若发现非法值也可记录错误
+                    if conflict_items:
 
-                        valid_data_dict[item_code] = score_values
+                        error_msg = f'Excel中存在互斥冲突的行，请修改后重新上传。冲突的Item: {", ".join(conflict_items[:10])}'
 
-                    # 用校验后的数据替换原 data_dict
-                    data_dict = valid_data_dict
+                        if len(conflict_items) > 10:
+                            error_msg += f' 等共{len(conflict_items)}条'
+
+                        return JsonResponse({'success': False, 'message': error_msg})
 
                     # ---------- 4. 查询系统中存在的检查项 ----------
+
                     items_in_excel = list(data_dict.keys())
+
                     existing_items = UEInspectionItem.objects.filter(Item__in=items_in_excel).only('id', 'Item')
+
                     item_map = {item.Item: item for item in existing_items}
+
                     missing_items = [item for item in items_in_excel if item not in item_map]
 
                     for missing in missing_items:
                         data_dict.pop(missing, None)
 
                     if not data_dict:
-                        # 所有Item都不存在或全部冲突，返回错误
-                        msg = 'Excel中的所有Item在系统中均不存在'
-                        if conflict_items:
-                            msg += f'，另有 {len(conflict_items)} 条记录存在互斥冲突'
-                        return JsonResponse({'success': False, 'message': msg})
+                        return JsonResponse({'success': False, 'message': 'Excel中的所有Item在系统中均不存在'})
 
                     # ---------- 5. 获取该批次下现有评分记录 ----------
+
                     existing_records = UEScoreRecord.objects.filter(
+
                         batch=batch,
+
                         inspection_item__in=item_map.values()
+
                     ).select_related('inspection_item')
+
                     record_map = {record.inspection_item.Item: record for record in existing_records}
 
-                    # ---------- 6. 分离需要更新/创建的记录，并实施保护规则 ----------
-                    to_create = []
-                    to_update = []
-                    skipped_no_change = 0
+                    # ---------- 6. 准备新增/更新（完全覆盖）----------
 
-                    for item_code, score_values in data_dict.items():
+                    to_create = []
+
+                    to_update = []
+
+                    for item_code, sv in data_dict.items():
+
                         inspection_item = item_map.get(item_code)
+
                         if not inspection_item:
                             continue
 
                         if item_code in record_map:
-                            # 更新
+
                             record = record_map[item_code]
-                            update_needed = False
 
-                            for db_field, new_val in score_values.items():
-                                if db_field in PROTECTED_SCORE_FIELDS:
-                                    current_val = getattr(record, db_field, '')
-                                    if new_val == '' and current_val != '':
-                                        continue  # 保留原值
-                                setattr(record, db_field, new_val)
-                                update_needed = True
+                            for db_field, new_val in sv.items():
+                                setattr(record, db_field, new_val)  # 直接覆盖
 
-                            if update_needed:
-                                record.scorer = user_info
-                                to_update.append(record)
-                            else:
-                                skipped_no_change += 1
+                            record.scorer = user_info
+
+                            to_update.append(record)
+
                         else:
-                            # 新增
+
                             to_create.append(
+
                                 UEScoreRecord(
+
                                     batch=batch,
+
                                     inspection_item=inspection_item,
+
                                     scorer=user_info,
-                                    **score_values
+
+                                    **sv
+
                                 )
+
                             )
 
                     # ---------- 7. 执行数据库操作 ----------
+
                     created_count = 0
+
                     updated_count = 0
+
                     with transaction.atomic():
+
                         if to_create:
                             created_objs = UEScoreRecord.objects.bulk_create(to_create, batch_size=500)
+
                             created_count = len(created_objs)
+
                         if to_update:
+
                             for record in to_update:
                                 record.save()
+
                             updated_count = len(to_update)
 
                     # ---------- 8. 返回结果 ----------
+
                     message = f'成功处理 {len(data_dict)} 条记录'
+
                     if created_count:
                         message += f'，新增 {created_count} 条'
+
                     if updated_count:
                         message += f'，更新 {updated_count} 条'
-                    if skipped_no_change:
-                        message += f'，{skipped_no_change} 条记录无变化（已有分数未被空值覆盖）'
+
                     if missing_items:
                         message += f'，忽略不存在的Item: {len(missing_items)} 个'
-                    if conflict_items:
-                        message += f'，因互斥冲突跳过 {len(conflict_items)} 条记录'
 
-                    # 构造错误列表（供前端显示）
                     errors = []
+
                     if missing_items:
                         errors.append(
                             f'Item不存在: {", ".join(missing_items[:5])}' + ('...' if len(missing_items) > 5 else ''))
-                    if conflict_items:
-                        errors.append(
-                            f'互斥冲突（同一Item有多个星级或星级与Not Support共存）: {", ".join(conflict_items[:5])}' + (
-                                '...' if len(conflict_items) > 5 else ''))
 
                     return JsonResponse({
+
                         'success': True,
+
                         'message': message,
+
                         'errors': errors
+
                     })
 
 
@@ -961,7 +985,6 @@ def UE_ProjectResult(request):
                     traceback.print_exc()
 
                     return JsonResponse({'success': False, 'message': f'Excel处理失败: {str(e)}'})
-
 
         except Exception as e:
             traceback.print_exc()
