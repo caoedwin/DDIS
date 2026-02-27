@@ -9,6 +9,10 @@ class UEInspectionItem(models.Model):
         ('Reliability', 'Reliability'),
         ('Compatibility', 'Compatibility'),
     ]
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
 
 
     Item = models.CharField(max_length=20, verbose_name='Item')
@@ -17,6 +21,12 @@ class UEInspectionItem(models.Model):
     characteristic = models.CharField(max_length=200, verbose_name='Characteristic')
     detailed_description = models.TextField(verbose_name='詳細說明（Detailed Description）')
     inspect_method = models.TextField(verbose_name='pect Methord')
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='active',
+        verbose_name='状态'
+    )
 
     class Meta:
         verbose_name = 'UE检查项目'

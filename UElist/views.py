@@ -135,6 +135,7 @@ def UEItems_edit(request):
                         'characteristic': item.characteristic,
                         'detailed_description': item.detailed_description,
                         'inspect_method': item.inspect_method,
+                        'status': item.status,
                     })
 
                 data = {
@@ -161,6 +162,7 @@ def UEItems_edit(request):
                 characteristic = request.POST.get('characteristic', '').strip()
                 detailed_description = request.POST.get('detailed_description', '').strip()
                 inspect_method = request.POST.get('inspect_method', '').strip()
+                status = request.POST.get('status', 'active')  # 默认 active
 
                 # 验证必填字段
                 if not all([item_code, function, category, characteristic]):
@@ -175,6 +177,7 @@ def UEItems_edit(request):
                         item_obj.characteristic = characteristic
                         item_obj.detailed_description = detailed_description
                         item_obj.inspect_method = inspect_method
+                        item_obj.status = status
                         item_obj.save()
 
                         return JsonResponse({'success': True})
@@ -194,24 +197,40 @@ def UEItems_edit(request):
                             Category=category,
                             characteristic=characteristic,
                             detailed_description=detailed_description,
-                            inspect_method=inspect_method
+                            inspect_method=inspect_method,
+                            status=status,
                         )
                         return JsonResponse({'success': True})
                     except Exception as e:
                         return JsonResponse({'errMsg': f'创建失败: {str(e)}'})
 
+
             elif isGetData == 'delete':
+
                 if canEdit != 1:
                     return JsonResponse({'errMsg': '您没有权限执行此操作'})
-                # 删除检查项
+
                 item_id = request.POST.get('id', '')
+
                 try:
+
                     item = UEInspectionItem.objects.get(id=item_id)
+
+                    # 检查是否已被评分记录引用
+
+                    if UEScoreRecord.objects.filter(inspection_item=item).exists():
+                        return JsonResponse({'errMsg': '该检查项已被评分记录引用，无法删除'})
+
                     item.delete()
+
                     return JsonResponse({'success': True})
+
                 except UEInspectionItem.DoesNotExist:
+
                     return JsonResponse({'errMsg': '项目不存在'})
+
                 except Exception as e:
+
                     return JsonResponse({'errMsg': f'删除失败: {str(e)}'})
 
             elif isGetData == 'upload_excel':
@@ -334,7 +353,7 @@ def UEItems_edit(request):
 
                             # 新增：直接使用Excel值（空就是空）
 
-                            to_create.append(UEInspectionItem(Item=item, **fields))
+                            to_create.append(UEInspectionItem(Item=item, status='active', **fields))
 
                         else:
 
@@ -599,7 +618,7 @@ def UE_ProjectResult(request):
                     batch.testers.set(testers)
 
                     # 为该批次创建所有检查项的空评分记录
-                    inspection_items = UEInspectionItem.objects.all()
+                    inspection_items = UEInspectionItem.objects.filter(status='active')
                     for item in inspection_items:
                         UEScoreRecord.objects.create(
                             batch=batch,

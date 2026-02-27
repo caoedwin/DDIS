@@ -189,6 +189,13 @@
             <el-table-column prop="characteristic" label="Characteristic" min-width="200"></el-table-column>
             <el-table-column prop="detailed_description" label="詳細說明（Detailed Description）" min-width="350"></el-table-column>
             <el-table-column prop="inspect_method" label="Inspect Methord" min-width="300"></el-table-column>
+            <el-table-column prop="status" label="状态" width="100" align="center">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.status === 'active' ? 'success' : 'info'">
+                        ${ scope.row.status === 'active' ? 'Active' : 'Inactive' }
+                    </el-tag>
+                </template>
+            </el-table-column>
 
             <el-table-column label="操作" width="150" fixed="right">
                 <template slot-scope="scope">
@@ -271,6 +278,12 @@
 
             <el-form-item label="Inspect Methord">
                 <el-input v-model="form.inspect_method" type="textarea" :rows="3" placeholder="请输入检查方法"></el-input>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+                <el-select v-model="form.status" placeholder="请选择状态">
+                    <el-option label="Active" value="active"></el-option>
+                    <el-option label="Inactive" value="inactive"></el-option>
+                </el-select>
             </el-form-item>
         </el-form>
 
@@ -359,7 +372,8 @@ new Vue({
                 Item: [{ required: true, message: '请输入Item', trigger: 'blur' }],
                 Function: [{ required: true, message: '请选择Function', trigger: 'change' }],
                 Category: [{ required: true, message: '请输入Category', trigger: 'blur' }],
-                characteristic: [{ required: true, message: '请输入Characteristic', trigger: 'blur' }]
+                characteristic: [{ required: true, message: '请输入Characteristic', trigger: 'blur' }],
+                status: [{ required: true, message: '请选择状态', trigger: 'change' }]
             },
             dialogVisible: false,
             showUpload: false,
@@ -475,6 +489,16 @@ new Vue({
                 return;
             }
             this.dialogTitle = '新增检查项';
+            this.form = {
+                id: '',
+                Item: '',
+                Function: '',
+                Category: '',
+                characteristic: '',
+                detailed_description: '',
+                inspect_method: '',
+                status: 'active'   // 默认 active
+            };
             this.dialogVisible = true;
         },
 
@@ -506,11 +530,15 @@ new Vue({
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).then(response => {
                     if (response.data.errMsg) {
-                        this.$message.error(response.data.errMsg);
+                        // 使用 alert 弹窗显示错误
+                        this.$alert(response.data.errMsg, '删除失败', {
+                            type: 'error',
+                            confirmButtonText: '确定'
+                        });
                     } else {
                         this.$message.success('删除成功');
                         this.fetchData();
-                        this.fetchOptions();   // <--- 新增此行
+                        this.fetchOptions();
                     }
                 }).catch(error => {
                     this.$message.error('删除失败');
@@ -559,7 +587,8 @@ new Vue({
                 Category: '',
                 characteristic: '',
                 detailed_description: '',
-                inspect_method: ''
+                inspect_method: '',
+                status: 'active'   // 默认
             };
             if (this.$refs.form) {
                 this.$refs.form.clearValidate();
