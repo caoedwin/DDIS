@@ -968,7 +968,8 @@ def Navigations_Category_axios(request):
                 'Key': 'Tool',
                 'address': "",
                 'Comment': "",
-                'name2': '',
+                'name2': 'UEList',
+                'Key2': 'UEList',
                 'address2': "",
                 'Comment2': "",
                 'name3': '',
@@ -1677,6 +1678,26 @@ def Navigations_system_axios(request):
         "Tool": [
             {"Comment": "",
              "name1": "C38", "url1": "/DriverTool/ToolList_search/", "Comment1": "", "CustomerFlag1": 0,  # C38
+             "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
+             "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
+             },
+            {"Comment": "",
+             "name1": "T88", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # T88
+             "name2": "T89", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # T89
+             "name3": 'T99', "url3": "", "Comment3": "", "CustomerFlag3": 0,  # T99
+             "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0,  # A39
+             },
+            {"Comment": "",
+             "name1": "", "url1": "", "Comment1": "", "CustomerFlag1": 0,  # CQT88
+             "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # AIO
+             "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
+             "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0,  #
+             },
+        ],
+        "UEList": [
+            {"Comment": "",
+             "name1": "C38", "url1": "/UElist/UE_ProjectResult/", "Comment1": "", "CustomerFlag1": 0,  # C38
              "name2": "A31", "url2": "", "Comment2": "", "CustomerFlag2": 0,  # A31
              "name3": "A32", "url3": "", "Comment3": "", "CustomerFlag3": 0,  #
              "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "", "CustomerFlag4": 0,  # ABO
