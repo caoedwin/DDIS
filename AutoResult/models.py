@@ -77,6 +77,7 @@ class AutoItems(models.Model):
         ('C85', 'C85'),
         ('A39', 'A39'),
         ('T89(NB)', 'T89(NB)'),
+        ('A08(NB)', 'A08(NB)'),
         ('Common', 'Common'),
         ('網絡', '網絡'),
     )
@@ -126,6 +127,7 @@ class AutoProject(models.Model):
         ('A39', 'A39'),
         ('T89(NB)', 'T89(NB)'),
         ('C85', 'C85'),
+        ('A08(NB)', 'A08(NB)'),
         ('Others', 'Others'),
     )
     # Phase_choice =(
@@ -155,6 +157,7 @@ class AutoResult(models.Model):
         ('C85', 'C85'),
         ('A39', 'A39'),
         ('T89(NB)', 'T89(NB)'),
+        ('A08(NB)', 'A08(NB)'),
         ('Common', 'Common'),
         ('網絡', '網絡'),
     )

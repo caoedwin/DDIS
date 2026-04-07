@@ -375,8 +375,8 @@ def AutoItem_edit(request):
                             if len(modeldata['Import_Date']) >= 8 and len(modeldata['Import_Date']) <= 10:
                                 # modeldata['Pchsdate'].replace('/', '-')
                                 # print(modeldata['Pchsdate'].replace('/', '-'))
-                                modeldata['Pchsdate'] = modeldata['Pchsdate'].replace('/', '-')
-                                modeldata['Pchsdate'] = modeldata['Pchsdate'].replace('.', '-')
+                                modeldata['Import_Date'] = modeldata['Import_Date'].replace('/', '-')
+                                modeldata['Import_Date'] = modeldata['Import_Date'].replace('.', '-')
                                 # print(modeldata['Pchsdate'])
                                 startupload = 1
                             else:
