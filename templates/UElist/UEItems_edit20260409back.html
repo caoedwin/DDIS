@@ -158,9 +158,9 @@
             </el-form-item>
         </el-form>
 
-        <!-- 统计信息 (基于过滤后的数据) -->
-        <div class="statistics" v-if="filteredData.length > 0">
-            <span>总记录数: ${ filteredData.length }</span>
+        <!-- 统计信息 -->
+        <div class="statistics" v-if="tableData.length > 0">
+            <span>总记录数: ${ totalCount }</span>
             <span>Reliability: ${ reliabilityCount }</span>
             <span>Compatibility: ${ compatibilityCount }</span>
         </div>
@@ -168,20 +168,10 @@
 
     <!-- 数据表格 -->
     <div class="tableAround">
-        <!-- 前端全局搜索框 (模糊搜索) -->
-        <el-input 
-            type="text" 
-            v-model="search" 
-            id="sh" 
-            placeholder="请输入关键字搜索（前端过滤）..."
-            clearable>
-        </el-input>
-        <br>
-
-        <!-- 表格绑定分页后的数据 -->
+        <el-input type="text" v-model="search" id="sh" placeholder="請輸入關鍵字搜索..."></el-input><br>
         <el-table
-            id="out-table"
-            :data="paginatedData"
+             id="out-table"
+            :data="tableData"
             border
             height="650"
             style="width: 100%"
@@ -226,7 +216,7 @@
             </el-table-column>
         </el-table>
 
-        <!-- 分页组件 -->
+        <!-- 分页 -->
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -234,7 +224,7 @@
             :page-sizes="[20, 50, 100, 200]"
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="filteredData.length"
+            :total="totalCount"
             style="margin-top: 20px; text-align: right;">
         </el-pagination>
     </div>
@@ -360,12 +350,12 @@ new Vue({
     delimiters: ['${', '}'],
     data() {
         return {
-            canEdit: {{ canEdit|yesno:"true,false" }},
-            search: '',                     // 前端模糊搜索关键字
-            functionOptions: [],
-            categoryOptions: [],
-            itemOptions: [],
-            tableData_view: [],             // 后端返回的原始数据（未过滤）
+            canEdit: {{ canEdit|yesno:"true,false" }},   // 注入权限
+            search:'',
+            functionOptions: [],      // Function 下拉选项
+            categoryOptions: [],     // Category 下拉选项（用于搜索和弹窗）
+            itemOptions: [],        // Item 下拉选项（用于搜索）
+            tableData_view: [],
             searchForm: {
                 Item: '',
                 Function: '',
@@ -378,8 +368,7 @@ new Vue({
                 Category: '',
                 characteristic: '',
                 detailed_description: '',
-                inspect_method: '',
-                status: 'active'
+                inspect_method: ''
             },
             rules: {
                 Item: [{ required: true, message: '请输入Item', trigger: 'blur' }],
@@ -397,58 +386,50 @@ new Vue({
             uploading: false,
             excelFiles: [],
             uploadErrors: [],
+            reliabilityCount: 0,
+            compatibilityCount: 0,
+
+            // 从后端获取的选项数据
             selectCategory: {{ addselect|safe }} || []
         }
     },
     computed: {
-        // 1. 前端模糊搜索过滤（保留原功能）
-        filteredData() {
-            const searchTerm = this.search.trim().toLowerCase();
-            if (!searchTerm) {
-                return this.tableData_view;
-            }
-            return this.tableData_view.filter(item => {
-                return Object.keys(item).some(key => {
-                    const val = item[key];
-                    return val && String(val).toLowerCase().indexOf(searchTerm) > -1;
-                });
-            });
+        tableData(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
+                    //console.log(111)
+                    const search=this.search;
+                    if(search){
+                        return this.tableData_view.filter(data=>{//axios返回时接受数据的变量
+                            return Object.keys(data).some(key=>{
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
+                            })
+                        })
+                    }
+                    return this.tableData_view//axios返回时接受数据的变量
+                },
+        total_computed () {
+            this.Totalsize = this.tableData.length;//edwin:export数据的个数
+            console.log(this.Totalsize);
+            return this.tableData_view.length//必须是el-table里面绑定的数据变量
         },
-        // 2. 分页数据
-        paginatedData() {
-            const start = (this.currentPage - 1) * this.pageSize;
-            const end = start + this.pageSize;
-            return this.filteredData.slice(start, end);
-        },
-        // 3. 统计信息（基于过滤后数据）
-        reliabilityCount() {
-            return this.filteredData.filter(item => item.Function === 'Reliability').length;
-        },
-        compatibilityCount() {
-            return this.filteredData.filter(item => item.Function === 'Compatibility').length;
-        }
-    },
-    watch: {
-        // 前端搜索时重置到第一页
-        search() {
-            this.currentPage = 1;
-        },
-        // 过滤后数据变化时，修正当前页码（防止超出范围）
-        filteredData: {
-            handler(newVal) {
-                const maxPage = Math.ceil(newVal.length / this.pageSize) || 1;
-                if (this.currentPage > maxPage) {
-                    this.currentPage = maxPage;
-                }
-            },
-            immediate: true
+        totalCount() {
+            return this.tableData_view.length;
         }
     },
     mounted() {
-        this.fetchOptions();
-        this.fetchData();
+        this.fetchOptions();   // 先加载下拉选项
+        this.fetchData();      // 再加载表格数据
     },
+    watch: {
+                datas() {
+                        this.currentPage = 1;
+                },
+                dataList() {
+                    this.showed_data = this.tableContent.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                }
+
+        },
     methods: {
+        // 新增方法：获取所有下拉选项
         fetchOptions() {
             axios.post('/UElist/UEItems_edit/', Qs.stringify({
                 isGetData: 'first',
@@ -475,8 +456,8 @@ new Vue({
             }).then(response => {
                 if (response.data && response.data.content) {
                     this.tableData_view = response.data.content;
-                    // 数据刷新后重置页码
-                    this.currentPage = 1;
+                    this.calculateStatistics();
+
                     if (response.data.errMsg) {
                         this.$message.error(response.data.errMsg);
                     }
@@ -488,10 +469,12 @@ new Vue({
                 console.error(error);
             });
         },
+
         handleSearch() {
             this.currentPage = 1;
             this.fetchData();
         },
+
         resetSearch() {
             this.searchForm = {
                 Item: '',
@@ -501,6 +484,7 @@ new Vue({
             this.currentPage = 1;
             this.fetchData();
         },
+
         handleAdd() {
             if (!this.canEdit) {
                 this.$message.error('无权限操作');
@@ -515,10 +499,11 @@ new Vue({
                 characteristic: '',
                 detailed_description: '',
                 inspect_method: '',
-                status: 'active'
+                status: 'active'   // 默认 active
             };
             this.dialogVisible = true;
         },
+
         handleEdit(row) {
             if (!this.canEdit) {
                 this.$message.error('无权限操作');
@@ -528,6 +513,7 @@ new Vue({
             this.form = { ...row };
             this.dialogVisible = true;
         },
+
         handleDelete(row) {
             if (!this.canEdit) {
                 this.$message.error('无权限操作');
@@ -546,6 +532,7 @@ new Vue({
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).then(response => {
                     if (response.data.errMsg) {
+                        // 使用 alert 弹窗显示错误
                         this.$alert(response.data.errMsg, '删除失败', {
                             type: 'error',
                             confirmButtonText: '确定'
@@ -560,6 +547,7 @@ new Vue({
                 });
             }).catch(() => {});
         },
+
         submitForm() {
             if (!this.canEdit) {
                 this.$message.error('无权限操作');
@@ -568,6 +556,7 @@ new Vue({
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.submitting = true;
+
                     axios.post('/UElist/UEItems_edit/', Qs.stringify({
                         isGetData: 'submit',
                         ...this.form,
@@ -581,7 +570,7 @@ new Vue({
                             this.$message.success('保存成功');
                             this.dialogVisible = false;
                             this.fetchData();
-                            this.fetchOptions();
+                            this.fetchOptions();   // <--- 新增此行
                         }
                         this.submitting = false;
                     }).catch(error => {
@@ -591,6 +580,7 @@ new Vue({
                 }
             });
         },
+
         resetForm() {
             this.form = {
                 id: '',
@@ -600,15 +590,17 @@ new Vue({
                 characteristic: '',
                 detailed_description: '',
                 inspect_method: '',
-                status: 'active'
+                status: 'active'   // 默认
             };
             if (this.$refs.form) {
                 this.$refs.form.clearValidate();
             }
         },
+
         handleExcelChange(file, fileList) {
             this.excelFiles = fileList.slice(-1);
         },
+
         uploadExcel() {
             if (!this.canEdit) {
                 this.$message.error('无权限操作');
@@ -618,6 +610,7 @@ new Vue({
                 this.$message.warning('请选择Excel文件');
                 return;
             }
+
             const formData = new FormData();
             formData.append('isGetData', 'upload_excel');
             formData.append('excel_file', this.excelFiles[0].raw);
@@ -639,7 +632,7 @@ new Vue({
                     this.showUpload = false;
                     this.excelFiles = [];
                     this.fetchData();
-                    this.fetchOptions();
+                    this.fetchOptions();   // <--- 新增此行
                 }
                 this.uploading = false;
             }).catch(error => {
@@ -647,34 +640,47 @@ new Vue({
                 this.uploading = false;
             });
         },
+
         downloadTemplate() {
             window.open('/static/src/modelfiles/UE list.xlsx', '_blank');
         },
+        calculateStatistics() {
+            // 统计 Reliability 数量
+            this.reliabilityCount = this.tableData_view.filter(item => item.Function === 'Reliability').length;
+            // 统计 Compatibility 数量
+            this.compatibilityCount = this.tableData_view.filter(item => item.Function === 'Compatibility').length;
+            // 如果不需要在data中维护totalCount，可以删除data中的totalCount属性，直接用计算属性
+        },
+
         exportExcel() {
             if (!this.canEdit) {
                 this.$message.error('无权限操作');
                 return;
             }
-            // 导出当前过滤后的数据（与表格显示一致）
-            const exportData = this.filteredData.map(item => ({
+            // 1. 将数据转换为导出格式（字段名可自定义）
+            const exportData = this.tableData_view.map(item => ({
                 'Item': item.Item,
                 'Function': item.Function,
                 'Category': item.Category,
                 'Characteristic': item.characteristic,
                 '詳細說明（Detailed Description）': item.detailed_description,
-                'Inspect Methord': item.inspect_method
+                'Inspect Methord': item.inspect_method   // 注意拼写
             }));
 
+            // 2. 创建工作簿和工作表
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.json_to_sheet(exportData);
             XLSX.utils.book_append_sheet(wb, ws, 'UE检查项目');
+
+            // 3. 导出文件
             const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
             saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'UE_Inspection_Items.xlsx');
         },
+
         handleSizeChange(val) {
             this.pageSize = val;
-            this.currentPage = 1;   // 每页条数变化时重置到第一页
         },
+
         handleCurrentChange(val) {
             this.currentPage = val;
         }
