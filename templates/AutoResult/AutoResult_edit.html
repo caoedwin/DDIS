@@ -267,6 +267,13 @@ height: 100% !important; //设置高优先，以覆盖内联样式
         </el-table-column>
         <el-table-column prop="BaseBenfit" label="Base效益" align="center" width="80" fixed>
         </el-table-column>
+        <!-- 新增 單臺效益(min) 列 -->
+        <el-table-column prop="SingleBenefit" label="單臺效益(min)" align="center" width="120">
+            <template scope="scope">
+                <span v-if="scope.row.SingleBenefit !== null">${ scope.row.SingleBenefit }</span>
+                <span v-else>--</span>
+            </template>
+        </el-table-column>
         <el-table-column prop="CaseID" label="Case ID" align="center" width="100" fixed>
         </el-table-column>
         <el-table-column prop="CaseName" label="Case Name" align="center" width="260">
@@ -292,7 +299,7 @@ height: 100% !important; //设置高优先，以覆盖内联样式
                 <span v-else="showEdit[scope.$index]" style="white-space: pre-line">${ comments[scope.$index+(currentPage-1)*pageSize] }</span>
             </template>
         </el-table-column>
-        <el-table-column prop="Attachment" label="Attachment" width="300">
+        {% comment %}<el-table-column prop="Attachment" label="Attachment" width="300">
                         <template scope="scope">
                             <div v-for="(item, index) in scope.row.Attachment" :key="item.id">
                                 <!-- 视频预览 -->
@@ -315,7 +322,12 @@ height: 100% !important; //设置高优先，以覆盖内联样式
                                 </template>
                             </div>
                         </template>
-                    </el-table-column>
+                    </el-table-column>{% endcomment %}
+        <el-table-column label="附件" width="120" align="center">
+            <template scope="scope">
+                <el-button type="primary" size="mini" @click="downloadAttachment(scope.row)">下载附件</el-button>
+            </template>
+        </el-table-column>
         <el-table-column v-if="showName" :key="Math.random()" prop="ProjectData" label="Cycles"{% comment %}:label="this.tableProject"{% endcomment %} width="140" align="center" fixed="right">
             <template slot-scope="scope">
 {#                <el-input-number size="small" v-if="showEdit[scope.$index]" v-model="table_content[scope.$index+(currentPage-1)*pageSize]" @change="handleChange" :min="0" :max="100" label="描述文字"></el-input-number>#}
@@ -458,6 +470,12 @@ height: 100% !important; //设置高优先，以覆盖内联样式
             this.getdata("first");
         },
      methods: {
+         downloadAttachment(row) {
+            const no = row.Number;
+            if (!no) return;
+            const url = `/media/Autotool/${no}.zip`;  // 统一扩展名
+            window.open(url, '_blank');
+        },
         //获取数据
         getdata: function (e) {
             let data = {"isGetData": e, "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()};

@@ -22,6 +22,7 @@ headermodel_auto = {
     '提案者': 'proposer',
     '導入日期': 'Import_Date',
     '工具版本': 'Ver',
+    '單臺效益(min)': 'SingleBenefit',   # 新增
     # 'Owner': 'Owner', 'Comment': 'Comment',
 
 }
@@ -134,6 +135,7 @@ def AutoItem_edit(request):
                         "Customer": request.POST.get('Customer'),
                         "ValueIf": request.POST.get('VA_NVA'),
                         "BaseIncome": request.POST.get('BaseBenfit'),
+                        "SingleBenefit": request.POST.get('SingleBenefit') if request.POST.get('SingleBenefit') != '' else None,
                         "CaseID": request.POST.get('CaseID'),
                         "CaseName": request.POST.get('CaseName'),
                         "Item": request.POST.get('Item'),
@@ -193,6 +195,7 @@ def AutoItem_edit(request):
                         "Customer": request.POST.get('Customer'),
                         "ValueIf": request.POST.get('VA_NVA'),
                         "BaseIncome": request.POST.get('BaseBenfit'),
+                        "SingleBenefit": request.POST.get('SingleBenefit') if request.POST.get('SingleBenefit') != '' else None,
                         "CaseID": request.POST.get('CaseID'),
                         "CaseName": request.POST.get('CaseName'),
                         "Item": request.POST.get('Item'),
@@ -330,6 +333,7 @@ def AutoItem_edit(request):
                                                         第"%s"條數據，Base效益不能爲空
                                                                             """ % rownum
                             break
+                        # 将 SingleBenefit 转换为 float，空值设为 None
                         if 'Item' in modeldata.keys():
                             startupload = 1
                         else:
@@ -426,7 +430,14 @@ def AutoItem_edit(request):
                         #         break
                         # else:
                         #     modeldata['Pchsdate'] = None  # 日期爲空
-
+                        # 转换 SingleBenefit 为 float 或 None
+                        if 'SingleBenefit' in modeldata and modeldata['SingleBenefit'] not in (None, ''):
+                            try:
+                                modeldata['SingleBenefit'] = float(modeldata['SingleBenefit'])
+                            except ValueError:
+                                modeldata['SingleBenefit'] = None
+                        else:
+                            modeldata['SingleBenefit'] = None
                         uploadxlsxlist.append(modeldata)
                     # print(startupload)
                     # 让数据可以从有值更新为无值
@@ -527,6 +538,7 @@ def AutoItem_edit(request):
             mock_data.append(
                 {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                  "BaseBenfit": i.BaseIncome,
+                 "SingleBenefit": i.SingleBenefit,  # 新增
                  "CaseID": i.CaseID,
                  "CaseName": i.CaseName,
                  "Item": i.Item, "Status": i.Status,
@@ -702,6 +714,7 @@ def AutoResult_edit(request):
                     mock_data.append(
                         {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                          "BaseBenfit": i.BaseIncome,
+                         "SingleBenefit": i.SingleBenefit,  # 新增
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
                          "Item": i.Item, "Status": i.Status,
@@ -783,6 +796,7 @@ def AutoResult_edit(request):
                     mock_data.append(
                         {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                          "BaseBenfit": i.BaseIncome,
+                         "SingleBenefit": i.SingleBenefit,  # 新增
                          "CaseID": i.CaseID,
                          "CaseName": i.CaseName,
                          "Item": i.Item, "Status": i.Status,
@@ -963,6 +977,7 @@ def AutoResult_edit(request):
                         mock_data.append(
                             {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                              "BaseBenfit": i.BaseIncome,
+                             "SingleBenefit": i.SingleBenefit,  # 新增
                              "CaseID": i.CaseID,
                              "CaseName": i.CaseName,
                              "Item": i.Item, "Status": i.Status,
@@ -1220,6 +1235,7 @@ def AutoResult_search(request):
                     {"id": i.id, "ProjectResult": ProjectResult, "Number": i.Number, "CG": i.Customer,
                      "VA_NVA": i.ValueIf,
                      "BaseBenfit": i.BaseIncome,
+                     "SingleBenefit": i.SingleBenefit,  # 新增
                      "SummaryBenfit": SummaryBenfit, "NPIBenfit": NPIBenfit,
                      "CaseID": i.CaseID, "CaseName": i.CaseName,
                      "Item": i.Item, "Status": i.Status, "Owner": i.Owner,

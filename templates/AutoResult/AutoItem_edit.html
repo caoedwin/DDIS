@@ -258,7 +258,13 @@
                     </el-table-column>
                     <el-table-column prop="VA_NVA" label="VA/N-VA" align="center" width="80">
                     </el-table-column>
-                    <el-table-column prop="BaseBenfit" label="Base效益" align="center" width="85">
+                    <el-table-column prop="BaseBenfit" label="Base效益(h)" align="center" width="85">
+                    </el-table-column>
+                    <el-table-column prop="SingleBenefit" label="單臺效益(min)" align="center" width="120">
+                        <template scope="scope">
+                            <span v-if="scope.row.SingleBenefit !== null">${ scope.row.SingleBenefit }</span>
+                            <span v-else>--</span>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="CaseID" label="Case ID" align="center" width="120">
                     </el-table-column>
@@ -278,7 +284,7 @@
                     </el-table-column>
                     <el-table-column prop="FunctionInt" label="功能簡介" align="center">
                     </el-table-column>
-                    <el-table-column prop="Attachment" label="Attachment" width="300">
+                    {% comment %}<el-table-column prop="Attachment" label="Attachment" width="300">
                         <template scope="scope">
                             <div v-for="(item, index) in scope.row.Attachment" :key="item.id">
                                 <!-- 视频预览 -->
@@ -300,6 +306,12 @@
                                     </el-button>
                                 </template>
                             </div>
+                        </template>
+                    </el-table-column>{% endcomment %}
+                    <!-- 修改后的附件列：仅提供下载按钮 -->
+                    <el-table-column label="附件" width="120" align="center">
+                        <template scope="scope">
+                            <el-button type="primary" size="mini" @click="downloadAttachment(scope.row)">下载附件</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -401,6 +413,9 @@
                     </el-form-item>
                     <el-form-item label="Base效益" prop="BaseBenfit">
                         <el-input v-model="form1.BaseBenfit"></el-input>
+                    </el-form-item>
+                    <el-form-item label="單臺效益(min)" prop="SingleBenefit">
+                        <el-input-number v-model="form1.SingleBenefit" :precision="2" :step="0.1" controls-position="right"></el-input-number>
                     </el-form-item>
                     <el-form-item label="Case ID" prop="CaseID">
                         <el-input v-model="form1.CaseID"></el-input>
@@ -645,6 +660,7 @@
                         CG: '',
                         VA_NVA: '',
                         BaseBenfit: '',
+                        SingleBenefit: '',   // 新增
                         CaseID: '',
                         CaseName: '',
                         Item: '',
@@ -661,6 +677,14 @@
                 this.getdata("first");
             },
             methods: {
+                // 下载附件：根据 No. 向后端请求文件
+                downloadAttachment(row) {
+                    const no = row.Number;
+                    if (!no) return;
+                    const url = `/media/Autotool/${no}.zip`;  // 统一扩展名
+                    window.open(url, '_blank');
+                },
+
                 // 下载预览文件
                 downloadPreviewFile() {
                     window.location.href = this.previewUrl;
@@ -1003,6 +1027,7 @@
                         CG: '',
                         VA_NVA: '',
                         BaseBenfit: '',
+                        SingleBenefit: '',
                         CaseID: '',
                         CaseName: '',
                         Item: '',
@@ -1047,6 +1072,7 @@
                             this.form1.CG = datas[0].CG;
                             this.form1.VA_NVA = datas[0].VA_NVA;
                             this.form1.BaseBenfit = datas[0].BaseBenfit;
+                            this.form1.SingleBenefit = datas[0].SingleBenefit;
                             this.form1.CaseID = datas[0].CaseID;
                             this.form1.CaseName = datas[0].CaseName;
                             this.form1.Item = datas[0].Item;
@@ -1270,6 +1296,7 @@
                             this.formData1.append('Customer', this.$refs.form1.model.CG);
                             this.formData1.append('VA_NVA', this.$refs.form1.model.VA_NVA);
                             this.formData1.append('BaseBenfit', this.$refs.form1.model.BaseBenfit);
+                            this.formData1.append('SingleBenefit', this.$refs.form1.model.SingleBenefit);
                             this.formData1.append('CaseID', this.$refs.form1.model.CaseID);
                             this.formData1.append('CaseName', this.$refs.form1.model.CaseName);
                             this.formData1.append('Item', this.$refs.form1.model.Item);
@@ -1342,6 +1369,7 @@
                     this.formData1.append('Customer', this.$refs.form1.model.CG);
                     this.formData1.append('VA_NVA', this.$refs.form1.model.VA_NVA);
                     this.formData1.append('BaseBenfit', this.$refs.form1.model.BaseBenfit);
+                    this.formData1.append('SingleBenefit', this.$refs.form1.model.SingleBenefit);
                     this.formData1.append('CaseID', this.$refs.form1.model.CaseID);
                     this.formData1.append('CaseName', this.$refs.form1.model.CaseName);
                     this.formData1.append('Item', this.$refs.form1.model.Item);

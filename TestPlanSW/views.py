@@ -10,7 +10,7 @@ from django.db.models import Max,Min,Sum,Count,Q
 from django.views.decorators.csrf import csrf_exempt
 
 # phase list 需要与TestPlanSW额edit, search里面的phaseName一样,斌且需要是C38和AIO的phase的并集， Summary里的coloroder需要添加ui应的颜色
-phase_list = ["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',]
+phase_list = ["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',]
 
 # Create your views here.
 def TestPlanSW_summary(request):
@@ -2372,7 +2372,8 @@ def TestPlanSW_Edit(request):
         if request.GET.get("action") == "first":
             return HttpResponse(json.dumps(combine), content_type="application/json")
         elif request.GET.get("action") == "getCategory":
-            Customer = request.GET.get('customer')
+            # Customer = request.GET.get('customer')
+            Customer = 'C38(NB)'
             Project = request.GET.get('project')
             Phase = request.GET.get('phase')
             # print(type(Phase))
@@ -5170,7 +5171,8 @@ def TestPlanSW_search(request):
         if request.GET.get("action") == "first":
             return HttpResponse(json.dumps(combine), content_type="application/json")
         elif request.GET.get("action") == "getCategory":
-            Customer = request.GET.get('customer')
+            # Customer = request.GET.get('customer')
+            Customer = 'C38(NB)'
             Project = request.GET.get('project')
             Phase = request.GET.get('phase')
             # print(type(Phase))
