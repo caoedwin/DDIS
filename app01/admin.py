@@ -513,7 +513,7 @@ class TestPlanSWAIOAdmin(admin.ModelAdmin):
     #     #     'fields' : ('Start_time', 'End_time', 'Result_time','Result','Comments')
     #     # }),
     # )
-    list_display = ( 'Projectinfo', 'Customer','Phase', 'Category', 'TestTitle', 'Subtesttitle','TestItem','Priority',
+    list_display = ( 'Projectinfo', 'Customer','Phase', 'Case_ID', 'Category', 'TestTitle', 'Subtesttitle','TestItem','Priority',
                      'ReleaseDate','Owner','AT_Totaltime','AT_AttendTime','AT_UnattendTime',
                      'AT_Automation','DQMS_AttendTime','DQMS_UnattendTime','TestUnitsConfig',
                      'SmartItem','Cusumer','Commercial','SDV','SIT','Coverage', 'editor', 'edit_time')

@@ -457,6 +457,7 @@
         border>
       <!--無需編輯-->
       <el-table-column width="45" label="No."  prop="index"  fixed></el-table-column>
+      <el-table-column width="120"  label="Case ID" prop="Case_ID" fixed></el-table-column>{% comment %}#New{% endcomment %}
       <el-table-column width="100" label="Category"  prop="Category" align="left" fixed></el-table-column>
       <el-table-column width="160" label="Test Title" prop="Test_Title" fixed></el-table-column>
       <el-table-column width="160" label="Sub Test Title" prop="Sub_Test_Title" fixed></el-table-column>
@@ -509,6 +510,32 @@
                   </span>
                 </template>
       </el-table-column>
+      <!--需編輯-->
+      <el-table-column width="120" label="Weight">
+            <template slot-scope="scope">
+                <!-- 编辑状态：显示输入框 -->
+                <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit">
+                    <input type="number" step="any" 
+                           v-model="FeatureWeight[scope.$index + (currentPage-1)*pagesize]"
+                           @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize, {'id': 3})"
+                           class="el-input__inner" placeholder="请输入权重">
+                </div>
+                <!-- 非编辑状态：显示纯文本 -->
+                <span v-else>
+                    ${ (!scope.row.FeatureWeight && scope.row.FeatureWeight !== 0) ? 0 : scope.row.FeatureWeight }
+                </span>
+            </template>
+        </el-table-column>
+      <el-table-column width="120" label="Base Time*Weight">
+            <template slot-scope="scope">
+                <span v-if="showEdit[scope.$index] && canEdit">
+                    ${ (!BTWeight[scope.$index + (currentPage-1)*pagesize] && BTWeight[scope.$index + (currentPage-1)*pagesize] !== 0) ? 0 : BTWeight[scope.$index + (currentPage-1)*pagesize] }
+                </span>
+                <span v-else>
+                    ${ (!scope.row.BTWeight && scope.row.BTWeight !== 0) ? 0 : scope.row.BTWeight }
+                </span>
+            </template>
+        </el-table-column>
       <!--需編輯-->
       <el-table-column width="120" >
           <template slot="header" slot-scope="scope">
@@ -818,7 +845,7 @@
             "value":"T88(AIO)",
         }
       ],
-      phaseName:["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',],
+      phaseName:["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',],
       canEdit:false,
       showTips:false,
       fileName:"未選擇文件",
@@ -834,6 +861,8 @@
       SKUNum:null,
 
         FS:[],
+        FeatureWeight :[],
+        BTWeight:[],
         TE:[],
         schedule:[],
         NUMX:[],
@@ -935,6 +964,8 @@
                       Vue.set(this.planOptimize[index],i,row.planOptimize[i]);
                   }
                   //無需修改項
+                  Vue.set(this.FeatureWeight ,index,row.FeatureWeight );
+                  Vue.set(this.BTWeight,index,row.BTWeight);
                   Vue.set(this.NUMX,index,row.NUMX);
                   Vue.set(this.NUMX_TIME,index,row.NUMX_TIME);
                   Vue.set(this.NUMA,index,row.NUMA);
@@ -944,6 +975,8 @@
                   Vue.set(this.CST,index,row.CST);
                   Vue.set(this.proTS,index,row.proTS);
                   Vue.set(this.ATO,index,row.ATO);
+                  Vue.set(this.BTS, index, row.BTS);
+                  Vue.set(this.FeatureWeight ,index,row.FeatureWeight );
                   Vue.set(this.conSitemInAll,index,row.conSitemInAll);
                   //打開修改框
                   this.$set(this.showEdit,index,true);
@@ -990,6 +1023,9 @@
               if(this.comments[index] !== row.comments){
                   changeFlag =1;
               }
+              if (this.FeatureWeight[index] !== row.FeatureWeight) {
+                    changeFlag = 1;
+                }
               for(let i = 0 , length =this.planOptimize[index].length;i<length;i++){
                   console.log("planOptimize",this.planOptimize[index][i],row.planOptimize[i]);
                   if(this.planOptimize[index][i] !== row.planOptimize[i]){
@@ -1000,7 +1036,7 @@
                   alert("輸入值未發生改變");
                   return false;
               }else{
-                  let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'NUMX_TIME':this.NUMX_TIME[index],'NUMX':this.NUMX[index],'TE':this.TE[index],'schedule':this.schedule[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments':this.comments[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
+                  let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'NUMX_TIME':this.NUMX_TIME[index],'NUMX':this.NUMX[index],'FeatureWeight':this.FeatureWeight [index],'BTWeight':this.BTWeight[index],'TE':this.TE[index],'schedule':this.schedule[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'comments':this.comments[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index]}
                   axios.post("/TestPlanSW/TestPlanSW-edit-AIO/" ,Qs.stringify(result, {indices:false}),{
                         headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                     }).then((res) => {
@@ -1018,6 +1054,8 @@
                              row.CRS = this.CRS[index] ;
                              row.CRT = this.CRT[index] ;
                               //無需修改項
+                             row.FeatureWeight  = this.FeatureWeight [index] ;
+                             row.BTWeight = this.BTWeight[index] ;
                              row.NUMX = this.NUMX[index] ;
                              row.BTS = this.BTS[index] ;
                              row.NUMX_TIME = this.NUMX_TIME[index] ;
@@ -1062,55 +1100,117 @@
               this.$message('取消編輯');
           },
            //局部初始化公式
-      initData:function(row, key, change){
-          if(!row){
-              return false;
-          }
-          console.log(change.id,"changed");
-           let sum =[0,0,0,0,0];
-           //计算数量
-           //[0:未选择,1:V, 2:X, 3:A, 4:L, 5:X]
-           let pl = this.planOptimize[key].length;
-             for(let num=0;num<pl;num++){
-                   switch(this.planOptimize[key][num]){
-                       case "V": sum[0]++;break;
-                       case "X": sum[1]++;break;
-                       case "A": sum[2]++;break;
-                       case "L": sum[3]++;break;
-                       case "S": sum[4]++;break;
-                   }
-               }
-           //AJ
-           this.proTS[key]=sum[0];
-           this.NUMX[key]=sum[0]+sum[2]+sum[3]+sum[4];
-           {#this.NUMA[key]=sum[2];#}
-           if (row.Automation > 0) {
-                  this.NUMA[key] = sum[0];
-              } else {
-                  this.NUMA[key] = 0;
-              }
-           this.NUML[key]=sum[3];
-          if(change.id === 1) {
-              if (this.FS[key] === 'Y') {
-                  this.BTS[key] = row.Attend_Time;
-              }
-          }
-          if(change.id === 2) {
-              this.NUMX_TIME[key] = row.Attend_Time * this.NUMX[key] * row.TUC;
-              {% comment %}this.CAT[key] = this.NUMA[key] * row.TUC * row.Automation;
-              this.CLT[key] = this.NUML[key] * row.TUC * row.Attend_Time;
-              if (row.Smart_Item == 'Y') {
-                  this.conSitemInAll[key] = 1;
-                  this.CST[key] = this.NUMX * row.Attend_Time * row.TUC / 2;
-              } else {
-                  this.conSitemInAll[key] = 0;
-                  this.CST[key] = 0;
-              }{% endcomment %}
-          }
-          console.log('NUMX_TIME:',this.NUMX_TIME[key],'CAT',this.CAT[key],'CLT',this.CLT[key],'CONSITEMALL',this.conSitemInAll[key]);
-          this.ATO[key]=((this.NUMX_TIME[key] - this.CAT[key] - this.CLT[key])-this.CST[key]);
-          {#this.CRT[key]=this.CRC[key]*this.CRS[key]*this.BTS[key];#}
-      },
+      //局部初始化公式
+        initData: function (row, key, change) {
+            if (!row) return false;
+        
+            // ---------- 安全转换辅助函数 ----------
+            const toNumber = (val, defaultVal = 0) => {
+                let num = parseFloat(val);
+                return isNaN(num) ? defaultVal : num;
+            };
+        
+            // 获取响应式 BTS（优先使用 this.BTS，否则用 row.BTS）
+            let currentBTS = (this.BTS[key] !== undefined && this.BTS[key] !== null)
+                ? toNumber(this.BTS[key])
+                : toNumber(row.BTS);
+            // 如果 Feature Support 选择了 Y，则 BTS 固定等于 Attend_Time
+            if (this.FS[key] === 'Y') {
+                currentBTS = toNumber(row.Attend_Time);
+                this.BTS[key] = currentBTS;
+            }
+        
+            // 优先使用编辑中的 FeatureWeight，否则使用原始行数据
+            const featureWeight = (this.FeatureWeight[key] !== undefined && this.FeatureWeight[key] !== null)
+                ? toNumber(this.FeatureWeight[key])
+                : toNumber(row.FeatureWeight);
+            
+            // ------------------- 新增：计算 BTWeight -------------------
+            let btWeight = currentBTS * featureWeight;
+            this.BTWeight[key] = isNaN(btWeight) ? 0 : btWeight;
+        
+            
+            const automation = toNumber(row.Automation);
+            const attendTime = toNumber(row.Attend_Time);
+            let tuc = row.TUC;
+            // TUC 可能是字符串 'N' 或数字
+            const isTUC_N = (tuc === 'N' || tuc === 'n');
+        
+            // 计算 planOptimize 中各选项数量
+            let sum = [0, 0, 0, 0, 0]; // V, X, A, L, S
+            let pl = this.planOptimize[key] ? this.planOptimize[key].length : 0;
+            for (let num = 0; num < pl; num++) {
+                let val = this.planOptimize[key][num];
+                if (!val) continue;
+                switch (val) {
+                    case "V": sum[0]++; break;
+                    case "X": sum[1]++; break;
+                    case "A": sum[2]++; break;
+                    case "L": sum[3]++; break;
+                    case "S": sum[4]++; break;
+                }
+            }
+        
+            // 计算 NUMX (非 X 的个数)
+            let planArr = this.planOptimize[key] || [];
+            let numX = planArr.filter(i => i && i.trim() !== '' && i !== 'X').length;
+            this.NUMX[key] = numX;
+        
+            // NUMA (自动化项数量)
+            let numa = (automation > 0) ? sum[0] : 0;   // 需要测试则计为自动化项数量
+            this.NUMA[key] = numa;
+        
+            // NUML (Leverage 项数量)
+            this.NUML[key] = sum[3];
+        
+            // ------------------- NUMX_TIME 计算 -------------------
+            let part1 = isTUC_N ? (this.NUMX[key] === 0 ? 0 : 1) : this.NUMX[key];
+            let part2 = isTUC_N ? 1 : toNumber(tuc);
+            let numxTime = part1 * part2 * currentBTS * featureWeight;
+            this.NUMX_TIME[key] = isNaN(numxTime) ? 0 : numxTime;
+        
+            // ------------------- CAT 计算 -------------------
+            let cat1 = isTUC_N ? (this.NUMA[key] === 0 ? 0 : 1) : this.NUMA[key];
+            let cat2 = isTUC_N ? 1 : toNumber(tuc);
+            let cat3 = (this.FS[key] !== 'Y') ? 0 : automation;
+            let cat = cat1 * cat2 * cat3 * featureWeight;
+            this.CAT[key] = isNaN(cat) ? 0 : cat;
+        
+            // ------------------- CLT 计算 -------------------
+            let clt1 = isTUC_N ? 0 : this.NUML[key];
+            let clt2 = isTUC_N ? 1 : toNumber(tuc);
+            let clt = clt1 * clt2 * currentBTS * featureWeight;
+            this.CLT[key] = isNaN(clt) ? 0 : clt;
+        
+            // Smart Item 相关
+            let isSmart = (row.Smart_Item === 'Y');
+            let conSitem = isSmart ? 1 : 0;
+            this.conSitemInAll[key] = conSitem;
+            let cst = isSmart ? (this.NUMX[key] * attendTime * toNumber(tuc) / 2) : 0;
+            this.CST[key] = isNaN(cst) ? 0 : cst;
+        
+            // ATO (Attend Time Optimize)
+            let ato = (this.NUMX_TIME[key] - this.CAT[key] - this.CLT[key]) - this.CST[key];
+            this.ATO[key] = isNaN(ato) ? 0 : ato;
+        
+            // proTS (测试 SKU 数量)
+            this.proTS[key] = sum[0];
+        
+            // ------------------- 同步到表格行 row (实时更新界面) -------------------
+            this.$set(row, 'NUMX', this.NUMX[key]);
+            this.$set(row, 'NUMX_TIME', this.NUMX_TIME[key]);
+            this.$set(row, 'NUMA', this.NUMA[key]);
+            this.$set(row, 'NUML', this.NUML[key]);
+            this.$set(row, 'FeatureWeight', featureWeight);
+            this.$set(row, 'BTWeight', this.BTWeight[key]);   // 新增
+            this.$set(row, 'CAT', this.CAT[key]);
+            this.$set(row, 'CLT', this.CLT[key]);
+            this.$set(row, 'CST', this.CST[key]);
+            this.$set(row, 'conSitemInAll', this.conSitemInAll[key]);
+            this.$set(row, 'ATO', this.ATO[key]);
+            this.$set(row, 'proTS', this.proTS[key]);
+            this.$set(row, 'BTS', currentBTS);
+        },
           //查找表格
           find:function(){
               //customer和project和phase未填

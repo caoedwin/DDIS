@@ -551,6 +551,7 @@ p a{
         border>
       <!--無需編輯-->
       <el-table-column width="45" label="No."  prop="index"  fixed></el-table-column>
+      <el-table-column width="120"  label="Case ID" prop="Case_ID" fixed></el-table-column>{% comment %}#New{% endcomment %}
       <el-table-column width="120" label="Category" prop="Category" fixed></el-table-column>
       <!--:key="Math.random()" => 为了解决数据错位 即前一列覆盖掉后一列 -->
       <el-table-column width="120" label="Test Title" prop="Test_Title" fixed   :key="Math.random()" v-cloak></el-table-column>
@@ -585,6 +586,9 @@ p a{
       </el-table-column>
       <el-table-column width="120"  label="Feature Support" prop="FS"></el-table-column>
       <el-table-column width="120"  label="Base Time-Support" prop="BTS"></el-table-column>
+      <el-table-column width="120"  label="Weight" prop="FeatureWeight"></el-table-column>
+      <el-table-column width="120"  label="Base Time*Weight" prop="BTWeight"></el-table-column>
+      
       <el-table-column width="120" prop="TE">
           <template slot="header" slot-scope="scope">
               <el-tooltip content="填寫工程師名" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
@@ -834,7 +838,7 @@ p a{
           tableloading2:false,
           elbuttonloading:false,
           elbuttonloading1:false,
-        phaseName:["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',],
+        phaseName:["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',],
         columnName:[],
         fileName:"未選擇文件",
         //權限flag

@@ -818,6 +818,8 @@ class TestPlanSWAIO(models.Model):
     )
     Customer = models.CharField('Customer', choices=Customer_choice, max_length=20,)
     Phase = models.CharField('Phase', choices=Phase_choice, max_length=20, default='', )
+
+    Case_ID = models.CharField('Case ID', max_length=50, blank=True, null=True) #新增2026-05
     Category = models.CharField('Category', max_length=50,  blank=True, null=True)
     TestTitle = models.CharField('TestTitle', max_length=500,  blank=True, null=True)
     Subtesttitle = models.CharField('Subtesttitle', max_length=500, blank=True, null=True,)
@@ -846,6 +848,8 @@ class TestPlanSWAIO(models.Model):
     Projectinfo=models.ForeignKey(TestProjectSWAIO,on_delete=True)
     FeatureSupport=models.CharField('FeatureSupport', choices=ChoiceYN, max_length=5, blank=True, null=True, default='' )
     Basetimesupport=models.CharField('Basetimesupport', max_length=20, blank=True, null=True)
+    Weight = models.FloatField('Weight', max_length=20, blank=True, null=True)  # New 2026-05
+    BaseTimeWeight = models.FloatField('Base Time*Weight', max_length=20, blank=True, null=True)  # New 2026-05
     TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
     Schedule=models.CharField('Schedule',max_length=40, blank=True, null=True, default='')
     Configalltestunits=models.CharField('Configalltestunits', max_length=10, blank=True, null=True,)

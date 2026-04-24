@@ -7435,13 +7435,17 @@ def TestPlanSW_Edit_AIO(request):
                     # print(planOptimize)
                     # print(i.ConfigSmartItemPer,i.ConfigSmartTime)
                     newContents.append(
-                        {"id": i.id, "Category": i.Category, "Test_Title": i.TestTitle,
+                        {"id": i.id,
+                         "Case_ID": i.Case_ID, # New
+                         "Category": i.Category, "Test_Title": i.TestTitle,
                          "Sub_Test_Title": i.Subtesttitle, "Test_Item": i.TestItem, "Priority": i.Priority,
                          "Release_Date": i.ReleaseDate, "Owner": i.Owner, "Attend_Time": i.AT_AttendTime, "Unattend_Time": i.AT_UnattendTime,
                          "Automation": i.AT_Automation, "Attend_Time_hrs": i.DQMS_AttendTime,
                          "Unattend_Time_hrs": i.DQMS_UnattendTime, "TUC": i.TestUnitsConfig, "Smart_Item": i.SmartItem,
                          "Cusumer": i.Cusumer, "Commercial": i.Commercial,
                          "SDV": i.SDV, "SIT": i.SIT, "Coverage": i.Coverage, "FS": i.FeatureSupport, "BTS": i.Basetimesupport,
+                         'FeatureWeight': i.Weight,  # New
+                         'BTWeight': i.BaseTimeWeight,  # New
                          "TE": i.TE, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
@@ -7541,13 +7545,17 @@ def TestPlanSW_Edit_AIO(request):
                     # print(planOptimize)
                     # print(i.ConfigSmartItemPer,i.ConfigSmartTime)
                     newContents.append(
-                        {"id": i.id, "Category": i.Category, "Test_Title": i.TestTitle,
+                        {"id": i.id,
+                         "Case_ID": i.Case_ID, # New
+                         "Category": i.Category, "Test_Title": i.TestTitle,
                          "Sub_Test_Title": i.Subtesttitle, "Test_Item": i.TestItem, "Priority": i.Priority,
                          "Release_Date": i.ReleaseDate, "Owner": i.Owner, "Attend_Time": i.AT_AttendTime, "Unattend_Time": i.AT_UnattendTime,
                          "Automation": i.AT_Automation, "Attend_Time_hrs": i.DQMS_AttendTime,
                          "Unattend_Time_hrs": i.DQMS_UnattendTime, "TUC": i.TestUnitsConfig, "Smart_Item": i.SmartItem,
                          "Cusumer": i.Cusumer, "Commercial": i.Commercial,
                          "SDV": i.SDV, "SIT": i.SIT, "Coverage": i.Coverage, "FS": i.FeatureSupport, "BTS": i.Basetimesupport,
+                         'FeatureWeight': i.Weight,  # New
+                         'BTWeight': i.BaseTimeWeight,  # New
                          "TE": i.TE, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
@@ -7611,6 +7619,11 @@ def TestPlanSW_Edit_AIO(request):
                 updatedate['FeatureSupport']=request.POST.get('FS')
             if 'BTS' in request.POST.keys():
                 updatedate['Basetimesupport'] = request.POST.get('BTS')
+            if 'FeatureWeight' in request.POST.keys():
+                try:
+                    updatedate['Weight'] = float(request.POST.get('FeatureWeight'))
+                except (TypeError, ValueError):
+                    updatedate['Weight'] = None
             if 'TE' in request.POST.keys():
                 updatedate['TE'] = request.POST.get('TE')
             if 'NUMX_TIME' in request.POST.keys():
@@ -7711,6 +7724,7 @@ def TestPlanSW_Edit_AIO(request):
                             # print(i.name)
                             if j.name != "Projectinfo" and j.name != "id":
                                 keywords.append(j.name)
+                        # print(keywords)
 
                         if check_list_plan:
                             # print(check_dic_inplan)
@@ -7741,11 +7755,24 @@ def TestPlanSW_Edit_AIO(request):
                             updatedic["Customer"] = responseData['customer']
                             updatedic["Phase"] = Phase
                             # updatedic["Project"] = responseData['project']#TestPlan中没有这个key，只有Projectinfo，RetestItem里面才有
+                            # print(list(i.keys()))
                             for m in keywords:
+                                # print(m,m in i.keys())
                                 if m in i.keys():
-                                    updatedic[m] = i[m]
+                                    # print(m == 'Weight')
+                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                        # print(m)
+                                        if i[m]:
+                                            updatedic[m] = i[m]
+                                        else:
+                                            updatedic[m] = None
+                                    else:
+                                        updatedic[m] = i[m]
                                 else:
-                                    updatedic[m] = ""
+                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                        updatedic[m] = None
+                                    else:
+                                        updatedic[m] = ""
                                 # if j =='DQMS_AttendTime':
                                 #     print(i[j])
                             # print("C", updatedic)
@@ -7809,7 +7836,9 @@ def TestPlanSW_Edit_AIO(request):
                     # print(planOptimize)
                     # print(i.ConfigSmartItemPer,i.ConfigSmartTime)
                     newContents.append(
-                        {"id": i.id, "Category": i.Category, "Test_Title": i.TestTitle,
+                        {"id": i.id,
+                         "Case_ID": i.Case_ID,  # New
+                         "Category": i.Category, "Test_Title": i.TestTitle,
                          "Sub_Test_Title": i.Subtesttitle, "Test_Item": i.TestItem, "Priority": i.Priority,
                          "Release_Date": i.ReleaseDate, "Owner": i.Owner, "Attend_Time": i.AT_AttendTime,
                          "Unattend_Time": i.AT_UnattendTime,
@@ -7818,6 +7847,8 @@ def TestPlanSW_Edit_AIO(request):
                          "Cusumer": i.Cusumer, "Commercial": i.Commercial,
                          "SDV": i.SDV, "SIT": i.SIT, "Coverage": i.Coverage, "FS": i.FeatureSupport,
                          "BTS": i.Basetimesupport,
+                         'FeatureWeight': i.Weight,  # New
+                         'BTWeight': i.BaseTimeWeight,  # New
                          "TE": i.TE, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
@@ -8429,7 +8460,9 @@ def TestPlanSW_search_AIO(request):
                     # print(planOptimize)
                     # print(i.ConfigSmartItemPer,i.ConfigSmartTime)
                     newContents.append(
-                        {"id": i.id, "Category": i.Category, "Test_Title": i.TestTitle,
+                        {"id": i.id,
+                         "Case_ID": i.Case_ID,  # New
+                         "Category": i.Category, "Test_Title": i.TestTitle,
                          "Sub_Test_Title": i.Subtesttitle, "Test_Item": i.TestItem, "Priority": i.Priority,
                          "Release_Date": i.ReleaseDate, "Owner": i.Owner, "Attend_Time": i.AT_AttendTime,
                          "Unattend_Time": i.AT_UnattendTime,
@@ -8438,6 +8471,8 @@ def TestPlanSW_search_AIO(request):
                          "Cusumer": i.Cusumer, "Commercial": i.Commercial,
                          "SDV": i.SDV, "SIT": i.SIT, "Coverage": i.Coverage, "FS": i.FeatureSupport,
                          "BTS": i.Basetimesupport,
+                         'FeatureWeight': i.Weight,  # New
+                         'BTWeight': i.BaseTimeWeight,  # New
                          "TE": i.TE, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,

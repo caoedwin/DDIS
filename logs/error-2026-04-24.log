@@ -1,0 +1,428 @@
+[2026-04-24 13:33:08,465] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7760, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 13:33:08,522] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [4.03, 127.0.0.1:62374]
+[2026-04-24 13:40:56,458] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7760, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 13:40:56,470] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [1.21, 127.0.0.1:56584]
+[2026-04-24 14:17:21,760] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7766, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:17:21,805] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [2.13, 127.0.0.1:56670]
+[2026-04-24 14:24:27,160] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7766, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:24:27,198] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [2.52, 127.0.0.1:62559]
+[2026-04-24 14:26:44,256] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7767, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:26:44,283] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [2.37, 127.0.0.1:50059]
+[2026-04-24 14:33:04,292] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7768, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:33:04,340] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [2.64, 127.0.0.1:62167]
+[2026-04-24 14:39:09,206] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7770, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:39:09,261] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [3.79, 127.0.0.1:61414]
+[2026-04-24 14:41:17,150] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7771, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:41:17,170] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [1.86, 127.0.0.1:51498]
+[2026-04-24 14:44:13,530] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7753, in TestPlanSW_Edit_AIO
+    print(list(i.keys))
+TypeError: 'builtin_function_or_method' object is not iterable
+[2026-04-24 14:44:13,558] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [2.35, 127.0.0.1:56041]
+[2026-04-24 14:45:52,900] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSW/TestPlanSW-edit-AIO/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSW\views.py", line 7771, in TestPlanSW_Edit_AIO
+    TestPlanSWAIO.objects.create(**updatedic)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 413, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 718, in save
+    force_update=force_update, update_fields=update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 748, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 831, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\base.py", line 869, in _do_insert
+    using=using, raw=raw)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\query.py", line 1136, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1288, in execute_sql
+    for sql, params in self.as_sql():
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in as_sql
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1241, in <listcomp>
+    for obj in self.query.objs
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1240, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\sql\compiler.py", line 1182, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 790, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 785, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Python3129\mecheck\lib\site-packages\django\db\models\fields\__init__.py", line 1737, in get_prep_value
+    return float(value)
+ValueError: could not convert string to float: 
+[2026-04-24 14:45:52,948] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /TestPlanSW/TestPlanSW-edit-AIO/ 500 [2.46, 127.0.0.1:63094]

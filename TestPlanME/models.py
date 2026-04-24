@@ -14,6 +14,7 @@ class TestItemME(models.Model):
         ('C85', 'C85'),
         ('T88(AIO)', 'T88(AIO)'),
         ('T89(NB)', 'T89(NB)'),
+        ('030(NB)', '030(NB)'),
         ('Others', 'Others'),
     )
     Phase_choice = (
@@ -55,6 +56,7 @@ class TestProjectME(models.Model):
         ('C85', 'C85'),
         ('T88(AIO)', 'T88(AIO)'),
         ('T89(NB)', 'T89(NB)'),
+        ('030(NB)', '030(NB)'),
         ('Others', 'Others'),
     )
     Phase_choice = (
@@ -114,6 +116,7 @@ class KeypartAIO(models.Model):
         ('A39', 'A39'),
         ('T88(AIO)', 'T88(AIO)'),
         ('T89(NB)', 'T89(NB)'),
+        ('030(NB)', '030(NB)'),
         ('Others', 'Others'),
     )
     Customer = models.CharField('Customer_R', choices=Customer_choice, max_length=20, default='C38(NB)')
@@ -154,6 +157,7 @@ class KeypartC38NB(models.Model):
         ('C85', 'C85'),
         ('T88(AIO)', 'T88(AIO)'),
         ('T89(NB)', 'T89(NB)'),
+        ('030(NB)', '030(NB)'),
         ('Others', 'Others'),
     )
     Customer = models.CharField('Customer_R', choices=Customer_choice, max_length=20, default='C38(NB)')

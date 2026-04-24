@@ -1154,6 +1154,7 @@
         this.RTP = value;
         return value;
       },
+        //公式数量：2
        NewNTP(){
          let value = [];
          for(let i= 0;i<this.tableData.length;i++){
@@ -1171,6 +1172,7 @@
               value[i]= isNaN(value[i])?0:value[i];*/
              switch (this.tableData[i].ItemNo) {
                  {% comment %}case "H1-33" : value[i]=isNaN((this.NTU[i] * this.tableData[i].TTF)/20)?0:((this.NTU[i] * this.tableData[i].TTF)/20); break;{% endcomment %}
+                 //030customer
                  case "E1.1" :
                  case "E1.2" :
                  case "E1.3-1" :
@@ -1180,6 +1182,7 @@
                  case "E1.4" :
                  case "E1.6" :
                  case "M1.8-1" :
+                     //C38(NB)
                  case "H1-16-1" :
                  case "H1-3" :
                  case "H1-4" :
@@ -1192,6 +1195,8 @@
                  case "H1-5 #2-2" :
                  case "H1-5 #3-1" :
                  case "H1-5 #3-2" :
+                 case "H3-12" :
+                     //C38(AIO)
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1204,8 +1209,7 @@
                  case "EELP+ 02":
                  case "EELP+ 03":
                  case "EELP+ 04":
-                 case "EELP+ 05":
-                 case "H3-12" : value[i]=(this.NTU[i] == 0||isNaN(this.NTU[i]/1))?0:this.tableData[i].TTF; break;
+                 case "EELP+ 05": value[i]=(this.NTU[i] == 0||isNaN(this.NTU[i]/1))?0:this.tableData[i].TTF; break;
                  default : value[i] =isNaN(this.NTU[i] * this.tableData[i].TTF)?0:this.NTU[i] * this.tableData[i].TTF;
              }
 
@@ -1214,7 +1218,7 @@
          //console.log(value);
          return value;
       },
-        //公式数量：3
+        //公式数量：4
        NewNTA(){
          let value = [];
          for(let i= 0;i<this.tableData.length;i++){
@@ -1228,6 +1232,7 @@
                  case "H1-5 #2-2" :
                  case "H1-5 #3-1" :
                  case "H1-5 #3-2" :{% endcomment %}
+                      //C38(AIO)
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1258,15 +1263,8 @@
               value[i]= isNaN(value[i])?0:value[i];{% endcomment %}
            switch (this.tableData[i].ItemNo) {
                  {% comment %}case "H1-33" : value[i]=isNaN((this.RTU[i] * this.tableData[i].TTF)/20)?0:((this.RTU[i] * this.tableData[i].TTF)/20); break;{% endcomment %}
-                 case "E1.1" :
-                 case "E1.2" :
-                 case "E1.3-1" :
-                 case "E1.3-2" :
-                 case "E1.3-3" :
-                 case "E1.3-4" :
-                 case "E1.4" :
-                 case "E1.6" :
-                 case "M1.8-1" :
+                 
+                     //C38(NB)
                  case "H1-34" : value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:this.tableData[i].TTF; break;
                  case "H1-16-1" :
                  case "H1-3" :
@@ -1280,6 +1278,18 @@
                  case "H1-5 #2-2" :
                  case "H1-5 #3-1" :
                  case "H1-5 #3-2" :
+                 case "H3-12" : 
+                     //030(NB)
+                 case "E1.1" :
+                 case "E1.2" :
+                 case "E1.3-1" :
+                 case "E1.3-2" :
+                 case "E1.3-3" :
+                 case "E1.3-4" :
+                 case "E1.4" :
+                 case "E1.6" :
+                 case "M1.8-1" :
+                     //C38(AIO)
                  case "REL_CLM_201" :
                  case "REL_CLM_202":
                  case "REL_CLM_203":
@@ -1292,8 +1302,7 @@
                  case "EELP+ 02":
                  case "EELP+ 03":
                  case "EELP+ 04":
-                 case "EELP+ 05":
-                 case "H3-12" : value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:(isNaN(this.tableData[i].TTF *this.RTR[i])?0:(this.tableData[i].TTF *this.RTR[i])); break;
+                 case "EELP+ 05":value[i]=(this.RTU[i] == 0||this.RTU[i] == null)?0:(isNaN(this.tableData[i].TTF *this.RTR[i])?0:(this.tableData[i].TTF *this.RTR[i])); break;
                  default : value[i] =isNaN(this.RTU[i] * this.tableData[i].TTF)?0:this.RTU[i] * this.tableData[i].TTF;
              }
          }
