@@ -10,7 +10,9 @@ from django.db.models import Max,Min,Sum,Count,Q
 from django.views.decorators.csrf import csrf_exempt
 
 # phase list 需要与TestPlanSW额edit, search里面的phaseName一样,斌且需要是C38和AIO的phase的并集， Summary里的coloroder需要添加ui应的颜色
-phase_list = ["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',]
+phase_list = [
+    "A(EVT)", "EVT Regression1", "EVT Regression2", "EVT Regression3", "EVT Regression4", "EVT Regression5", "EVT Regression6", "B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',
+]
 
 # Create your views here.
 def TestPlanSW_summary(request):
@@ -7386,7 +7388,7 @@ def TestPlanSW_Edit_AIO(request):
             current_user = request.session.get('user_name')
             if Projectinfos:
                 for i in Projectinfos.Owner.all():
-                    # print(i.username,current_user)
+                    print(i.username,current_user)
                     # print(type(i.username),type(current_user))
                     if i.username == current_user:
                         canEdit = 1
@@ -7732,9 +7734,20 @@ def TestPlanSW_Edit_AIO(request):
                             editplan = TestPlanSWAIO.objects.filter(**check_dic_inplan).first()
                             for m in keywords:
                                 if m in i.keys():
-                                    updatedic[m] = i[m]
+                                    # print(m == 'Weight')
+                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                        # print(m)
+                                        if i[m]:
+                                            updatedic[m] = i[m]
+                                        else:
+                                            updatedic[m] = None
+                                    else:
+                                        updatedic[m] = i[m]
                                 else:
-                                    updatedic[m] = ""
+                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                        updatedic[m] = None
+                                    else:
+                                        updatedic[m] = ""
                             # if i['Category'] == "01 System Unit For Test Perpare ":
                             #     print("U",updatedic)
                             #     print(TestPlanSWAIO.objects.filter(**check_dic_inplan))

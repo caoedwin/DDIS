@@ -434,7 +434,7 @@
  <!--數據表-->
  <!--提示信息-->
   <span  class="selectItem" v-cloak  v-if="showCustomer&&showProject&&phaseName[showPhase]">當前表格信息：${ showCustomer }/${ showProject }/${ phaseName[showPhase]}/${ showCategory } <span v-if="showTips" v-cloak class="tips">(您所使用的賬號沒有編輯此表單的權限)</span></span>
-   <el-button v-cloak v-if="showPhase === 14||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19" style="height:40px;margin:0 20px 8px 10px;float:right;width:116px" type="success" @click="addMsg"> <i v-cloak class="el-icon-circle-plus-outline"></i> 添加信息</el-button>
+   {% comment %}<el-button v-cloak v-if="showPhase === 14||showPhase === 15||showPhase === 16||showPhase === 17||showPhase === 18||showPhase === 19" style="height:40px;margin:0 20px 8px 10px;float:right;width:116px" type="success" @click="addMsg"> <i v-cloak class="el-icon-circle-plus-outline"></i> 添加信息</el-button>{% endcomment %}
   <el-table v-cloak height="750" border :data="tableData.slice((currentPage -1 )*pagesize,(currentPage)*pagesize){% comment %}.slice(scrollArray[0],scrollArray[1]){% endcomment %}"
     ref="multipleTable"
     tooltip-effect="dark"
@@ -515,7 +515,7 @@
             <template slot-scope="scope">
                 <!-- 编辑状态：显示输入框 -->
                 <div class="el-input el-input--suffix" v-if="showEdit[scope.$index] && canEdit">
-                    <input type="number" step="any" 
+                    <input type="number" step="any"
                            v-model="FeatureWeight[scope.$index + (currentPage-1)*pagesize]"
                            @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize, {'id': 3})"
                            class="el-input__inner" placeholder="请输入权重">
@@ -845,7 +845,9 @@
             "value":"T88(AIO)",
         }
       ],
-      phaseName:["B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',],
+      phaseName:[
+    "A(EVT)", "EVT Regression1", "EVT Regression2", "EVT Regression3", "EVT Regression4", "EVT Regression5", "EVT Regression6", "B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regerssion1', 'SIT Regerssion2', 'SIT Regerssion3', 'SIT Regerssion4', 'SIT Regerssion5', 'SIT Regerssion6', 'SIT Regerssion7', 'SIT Regerssion8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',
+],
       canEdit:false,
       showTips:false,
       fileName:"未選擇文件",
@@ -1103,13 +1105,13 @@
       //局部初始化公式
         initData: function (row, key, change) {
             if (!row) return false;
-        
+
             // ---------- 安全转换辅助函数 ----------
             const toNumber = (val, defaultVal = 0) => {
                 let num = parseFloat(val);
                 return isNaN(num) ? defaultVal : num;
             };
-        
+
             // 获取响应式 BTS（优先使用 this.BTS，否则用 row.BTS）
             let currentBTS = (this.BTS[key] !== undefined && this.BTS[key] !== null)
                 ? toNumber(this.BTS[key])
@@ -1119,23 +1121,23 @@
                 currentBTS = toNumber(row.Attend_Time);
                 this.BTS[key] = currentBTS;
             }
-        
+
             // 优先使用编辑中的 FeatureWeight，否则使用原始行数据
             const featureWeight = (this.FeatureWeight[key] !== undefined && this.FeatureWeight[key] !== null)
                 ? toNumber(this.FeatureWeight[key])
                 : toNumber(row.FeatureWeight);
-            
+
             // ------------------- 新增：计算 BTWeight -------------------
             let btWeight = currentBTS * featureWeight;
             this.BTWeight[key] = isNaN(btWeight) ? 0 : btWeight;
-        
-            
+
+
             const automation = toNumber(row.Automation);
             const attendTime = toNumber(row.Attend_Time);
             let tuc = row.TUC;
             // TUC 可能是字符串 'N' 或数字
             const isTUC_N = (tuc === 'N' || tuc === 'n');
-        
+
             // 计算 planOptimize 中各选项数量
             let sum = [0, 0, 0, 0, 0]; // V, X, A, L, S
             let pl = this.planOptimize[key] ? this.planOptimize[key].length : 0;
@@ -1150,52 +1152,52 @@
                     case "S": sum[4]++; break;
                 }
             }
-        
+
             // 计算 NUMX (非 X 的个数)
             let planArr = this.planOptimize[key] || [];
             let numX = planArr.filter(i => i && i.trim() !== '' && i !== 'X').length;
             this.NUMX[key] = numX;
-        
+
             // NUMA (自动化项数量)
             let numa = (automation > 0) ? sum[0] : 0;   // 需要测试则计为自动化项数量
             this.NUMA[key] = numa;
-        
+
             // NUML (Leverage 项数量)
             this.NUML[key] = sum[3];
-        
+
             // ------------------- NUMX_TIME 计算 -------------------
             let part1 = isTUC_N ? (this.NUMX[key] === 0 ? 0 : 1) : this.NUMX[key];
             let part2 = isTUC_N ? 1 : toNumber(tuc);
             let numxTime = part1 * part2 * currentBTS * featureWeight;
             this.NUMX_TIME[key] = isNaN(numxTime) ? 0 : numxTime;
-        
+
             // ------------------- CAT 计算 -------------------
             let cat1 = isTUC_N ? (this.NUMA[key] === 0 ? 0 : 1) : this.NUMA[key];
             let cat2 = isTUC_N ? 1 : toNumber(tuc);
             let cat3 = (this.FS[key] !== 'Y') ? 0 : automation;
             let cat = cat1 * cat2 * cat3 * featureWeight;
             this.CAT[key] = isNaN(cat) ? 0 : cat;
-        
+
             // ------------------- CLT 计算 -------------------
             let clt1 = isTUC_N ? 0 : this.NUML[key];
             let clt2 = isTUC_N ? 1 : toNumber(tuc);
             let clt = clt1 * clt2 * currentBTS * featureWeight;
             this.CLT[key] = isNaN(clt) ? 0 : clt;
-        
+
             // Smart Item 相关
             let isSmart = (row.Smart_Item === 'Y');
             let conSitem = isSmart ? 1 : 0;
             this.conSitemInAll[key] = conSitem;
             let cst = isSmart ? (this.NUMX[key] * attendTime * toNumber(tuc) / 2) : 0;
             this.CST[key] = isNaN(cst) ? 0 : cst;
-        
+
             // ATO (Attend Time Optimize)
             let ato = (this.NUMX_TIME[key] - this.CAT[key] - this.CLT[key]) - this.CST[key];
             this.ATO[key] = isNaN(ato) ? 0 : ato;
-        
+
             // proTS (测试 SKU 数量)
             this.proTS[key] = sum[0];
-        
+
             // ------------------- 同步到表格行 row (实时更新界面) -------------------
             this.$set(row, 'NUMX', this.NUMX[key]);
             this.$set(row, 'NUMX_TIME', this.NUMX_TIME[key]);
