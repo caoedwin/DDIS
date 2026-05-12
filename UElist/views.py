@@ -113,7 +113,8 @@ def UEItems_edit(request):
 
                 query = Q()
                 if search_item:
-                    query &= Q(Item__icontains=search_item)
+                    # query &= Q(Item__icontains=search_item)
+                    query &= Q(Item=search_item)
                 if search_function:
                     query &= Q(Function=search_function)
                 if search_category:
