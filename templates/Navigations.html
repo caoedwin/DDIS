@@ -15,10 +15,9 @@
         }
 
         body {
-            background: linear-gradient(145deg, #f0f4fa 0%, #e6edf4 100%);
-            font-family: "Inter", "Helvetica Neue", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-            padding: 0;
-            min-height: 100vh;
+            background: radial-gradient(circle at 10% 20%, rgba(235, 245, 255, 0.9), rgba(220, 235, 250, 0.95)),
+                        repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 2px, transparent 2px, transparent 8px);
+            background-blend-mode: overlay;
         }
 
         [v-cloak] {
@@ -117,22 +116,57 @@
             gap: 24px;
         }
 
-        /* 单个子系统卡片 - 时尚玻璃质感 */
+        /* 🎨 优化卡片样式：增加细腻渐变背景 + 纹理背景图片，同时保留玻璃质感 */
         .system-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 252, 255, 0.96));
             backdrop-filter: blur(2px);
             border-radius: 28px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             overflow: hidden;
+            position: relative;
+            /* 添加微妙的纹理背景图片：极浅的网格点阵 + 斜纹光感 */
+            background-image:
+                repeating-linear-gradient(45deg, rgba(64, 158, 255, 0.02) 0px, rgba(64, 158, 255, 0.02) 2px, transparent 2px, transparent 8px),
+                radial-gradient(circle at 20% 30%, rgba(100, 150, 200, 0.05) 1.5px, transparent 1.5px);
+            background-size: 16px 16px, 28px 28px;
+            background-blend-mode: overlay;
+        }
+
+        /* 根据分组类型微调卡片顶部装饰线 (优雅区分) */
+        .category-group:nth-child(1) .system-card {
+            border-top: 3px solid rgba(64, 158, 255, 0.3);
+        }
+        .category-group:nth-child(2) .system-card {
+            border-top: 3px solid rgba(24, 160, 88, 0.3);
+        }
+        .category-group:nth-child(3) .system-card {
+            border-top: 3px solid rgba(245, 108, 108, 0.3);
+        }
+        .category-group:nth-child(4) .system-card {
+            border-top: 3px solid rgba(230, 162, 60, 0.3);
+        }
+        .category-group:nth-child(5) .system-card {
+            border-top: 3px solid rgba(128, 100, 162, 0.3);
+        }
+        .category-group:nth-child(6) .system-card {
+            border-top: 3px solid rgba(30, 159, 210, 0.3);
+        }
+        .category-group:nth-child(7) .system-card {
+            border-top: 3px solid rgba(88, 184, 150, 0.3);
+        }
+        .category-group:nth-child(8) .system-card {
+            border-top: 3px solid rgba(240, 147, 43, 0.3);
         }
 
         .system-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12);
-            background: rgba(255, 255, 255, 0.96);
-            border-color: rgba(64, 158, 255, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 254, 255, 0.99));
+            border-color: rgba(64, 158, 255, 0.5);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
         }
 
         .card-title {
@@ -142,24 +176,27 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #eff2f6;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .card-title .sys-name {
-            background: linear-gradient(120deg, #2c3e50, #2c3e50);
+            background: linear-gradient(120deg, #1f2d3d, #2c3e50);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             letter-spacing: -0.2px;
+            font-weight: 600;
         }
 
         .badge-count {
-            background: #f0f2f5;
+            background: rgba(64, 158, 255, 0.12);
             border-radius: 40px;
-            padding: 2px 12px;
+            padding: 4px 12px;
             font-size: 0.7rem;
-            font-weight: 500;
-            color: #2c3e50;
+            font-weight: 600;
+            color: #2c6b9e;
+            backdrop-filter: blur(2px);
         }
 
         .card-links {
@@ -175,16 +212,17 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #f8fafd;
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 40px;
             padding: 6px 16px;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #2c3e50;
+            color: #1f2d3d;
             text-decoration: none;
-            transition: all 0.2s;
-            border: 1px solid #e9edf2;
+            transition: all 0.25s;
+            border: 1px solid #e2e9f2;
             backdrop-filter: blur(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
 
         .nav-link i {
@@ -196,8 +234,8 @@
             background: #409EFF;
             color: white;
             border-color: #409EFF;
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
+            transform: scale(1.02) translateY(-1px);
+            box-shadow: 0 6px 12px rgba(64, 158, 255, 0.25);
         }
 
         .nav-link:hover i {
@@ -243,21 +281,49 @@
                 align-items: flex-start;
             }
         }
+        /* 覆盖浅色模式的卡片背景（加高特异性） */
+        body.theme-light .nav-container .system-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 252, 255, 0.98));
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(64, 158, 255, 0.05) 0px, rgba(64, 158, 255, 0.05) 2px, transparent 2px, transparent 8px),
+                radial-gradient(circle at 20% 30%, rgba(100, 150, 200, 0.08) 1.5px, transparent 1.5px);
+            background-blend-mode: overlay;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 覆盖深色模式的卡片背景（保留渐变+纹理，但颜色更深沉） */
+        body.theme-dark .nav-container .system-card {
+            background: linear-gradient(135deg, rgba(30, 40, 55, 0.92), rgba(20, 30, 45, 0.96));
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(100, 180, 250, 0.08) 0px, rgba(100, 180, 250, 0.08) 2px, transparent 2px, transparent 8px),
+                radial-gradient(circle at 30% 40%, rgba(64, 158, 255, 0.12) 2px, transparent 2px);
+            background-blend-mode: overlay;
+            border: 1px solid rgba(72, 99, 128, 0.5);
+        }
+        
+        /* 卡片悬浮效果同样需要提权 */
+        body.theme-light .nav-container .system-card:hover,
+        body.theme-dark .nav-container .system-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.2);
+            background-blend-mode: normal; /* 保持背景清晰 */
+        }
     </style>
 {% endblock %}
 {% block content %}
 <div id="app" v-cloak>
+<el-backtop ></el-backtop>
     <div class="nav-container">
         <!-- 头部区域 -->
         <div class="hero-section">
             <div class="title-area">
-                <h1>✨ 智能导航枢纽</h1>
+                <h1>✨ 导航枢纽</h1>
                 <p>快速访问各子系统 · 一站式协作平台</p>
             </div>
             <div class="search-wrap">
                 <el-input
                         v-model="searchKeyword"
-                        placeholder="搜索系统、模块或客户名称"
+                        placeholder="搜索系统、模块"
                         prefix-icon="el-icon-search"
                         clearable
                         size="medium"
@@ -636,7 +702,6 @@
                         if (links.length > 0) {
                             systems.push({
                                 id: key,
-                                //displayName: SYS_NAME_CN[key] || key,
                                 displayName: key,   // 直接显示原始系统标识符
                                 links: links
                             });
