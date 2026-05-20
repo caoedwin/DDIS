@@ -557,13 +557,13 @@
     // 分组映射 (大类 -> 包含的子系统key列表)
     const GROUP_MAP = {
         "部门管理": ["PersonalInfo", "PersonalExperience", "PublicArea", "ComDev", "ComFile"],
-        "專案管理": ["ProjectInfo", "TestPlanME", "TestPlanSW", "TestPlanSW-OSR", "TestPlanINV", "CQM", "MQM", "Driver", "Tool", "UEList"],
-        "資產管理": ["Materia", "Adapter", "Computer", "ChairCabine", "Device"],
-        "品質管控": ["QIL", "LessonLearn", "LowLight", "IssueBreakdown", "NonDQA-Lesson", "CriticalIssue"],
-        "預算管理": ["CapitalExpenditure", "ProjectComparison", "TestUnits", "MiscellaneousPurchases"],
-        "測試數據": ["SpecDownload", "ManagementSop", "OBIResult", "PackageGValue", "CDM", "Bouncing"],
-        "智能測試": ["Automation"],
-        "討論交流": ["Discussing"]
+        "专案管理": ["ProjectInfo", "TestPlanME", "TestPlanSW", "TestPlanSW-OSR", "TestPlanINV", "CQM", "MQM", "Driver", "Tool", "UEList"],
+        "资产管理": ["Materia", "Adapter", "Computer", "ChairCabine", "Device"],
+        "品质管控": ["QIL", "LessonLearn", "LowLight", "IssueBreakdown", "NonDQA-Lesson", "CriticalIssue"],
+        "预算管理": ["CapitalExpenditure", "ProjectComparison", "TestUnits", "MiscellaneousPurchases"],
+        "测试数据": ["SpecDownload", "ManagementSop", "OBIResult", "PackageGValue", "CDM", "Bouncing"],
+        "智能测试": ["Automation"],
+        "讨论交流": ["Discussing"]
     };
 
     // 子系统中文映射
@@ -636,8 +636,7 @@
                         if (links.length > 0) {
                             systems.push({
                                 id: key,
-                                //displayName: SYS_NAME_CN[key] || key,
-                                displayName: key,   // 直接显示原始系统标识符
+                                displayName: SYS_NAME_CN[key] || key,
                                 links: links
                             });
                         }

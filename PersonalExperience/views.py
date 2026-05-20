@@ -347,7 +347,12 @@ def My_application(request):
         # {"value": "GLMS1", "SS_Date": "2021/02/03"}, {"value": "HLS4I", "SS_Date": "2021/02/04"},
     ]
     for i in ProjectinfoinDCT.objects.all():
-        datastr = i.SS.split(' ')[0].split('/')
+        datastr = []
+        if '/' in str(i.SS):
+            datastr = i.SS.split(' ')[0].split('/')
+        if '-' in str(i.SS):
+            datastr = i.SS.split(' ')[0].split('-')
+        # print(i.SS,datastr,'/' in str(i.SS))
         sectionProject.append({"value": i.ComPrjCode, "SS_Date": datastr[2] + "-" + datastr[0] + "-" + datastr[1]})
 
     sectionPhase = [

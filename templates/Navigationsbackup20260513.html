@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Navigations{% endblock %}
+{% block css %}
+    {#    <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_style.css">#}
+    {#	<link rel="stylesheet" href="/static/css/home_menu.css">#}
+    <style>
+        /*style.css：2714中设置最后一列是right*/
+        tbody tr td:last-child {
+            text-align: left;
+        }
+
+        .tableAround {
+            padding: 20px;
+            -moz-box-shadow: 0px 0px 10px #333333;
+            -webkit-box-shadow: 0px 0px 10px #333333;
+            box-shadow: 0px 0px 10px #333333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .my-table {
+            background-image: url("/static/src/hero.jpg"); /* 替换为你的图片路径 */
+            background-size: cover; /* 背景图片覆盖整个表格 */
+            background-repeat: no-repeat; /* 背景图片不重复 */
+            background-position: center; /* 背景图片居中 */
+            opacity: 1;
+        }
+
+        /* 设置行的背景色 */
+        .el-table .row-bg-color {
+        {% comment %}background-color: #f7e1b5;{% endcomment %} background-color: rgba(255, 255, 255, 0);
+        }
+
+        .el-table th, .el-table tr {
+            /* background-color: #FFF; */
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        /* 如果需要中空线，可以通过边框样式来实现 */
+        .el-table .cell {
+        }
+
+        {% comment %}.el-table__header {
+            table-layout: fixed;
+            border-collapse: separate;
+        }{% endcomment %}
+
+        .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+            border-right: 1px solid #EBEEF5;
+        {#border-radius: 20px;#}
+        }
+
+        .el-table td, .el-table th.is-leaf {
+        {#border-bottom: 10px solid #EBEEF5;#}
+
+        }
+
+        /* 最后一个单元格的右边界不显示 */
+        .el-table .cell:last-child {
+            border-right: none;
+        }
+
+        {% comment %}.table > thead > tr > th {
+            border-bottom: 1px solid #e7e7e7;
+            font-weight: 600;
+            border-top: 0;
+            color: #FFFFFF;
+        }{% endcomment %}
+
+        /*朴素按钮的样式*/
+        .el-button--warning.is-plain {
+            color: #E6A23C;
+            background: #fdf6ec;
+            border-color: #f5dab1;
+            font-size: 22px;
+        }
+
+        /*正常按钮的样式*/
+        .el-button--warning {
+            color: #FFF;
+            background-color: #E6A23C;
+            font-size: 22px;
+            border-color: #FFFFFF;
+        }
+
+        .wrap-text:hover {
+            background-image: url("/static/images/c1.jpg");
+            color: #fff; /* 悬浮时的文字颜色 */
+            font-size: 30px;
+        }
+
+        /*butoon 内容转换*/
+        @font-face {
+            font-family: "MicrosoftvistaKaiti";
+            font-weight: normal;
+            font-style: normal;
+            src: url("/static/fonts/microsoftfont/MicrosoftvistaKaiti.ttf") format('truetype');
+        }
+
+        .wrap-text {
+            border-color: rgba(255, 255, 255, 0.0);
+            background-color: rgba(255, 255, 255, 0.7) !important;
+            color: #0b0b0b;
+            font-family: 'MicrosoftvistaKaiti', sans-serif;
+            font-size: 25px;
+            white-space: normal;
+            word-break: break-all;
+            height: 40px;
+            padding: 10px 20px; /* 根据需要调整内边距以保持按钮的点击区域大小 */
+        }
+
+        /* 英文字体样式 */
+        .wrap-text .eng-font {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .my-table .el-table__row {
+            height: 160px; /* 单元格的高度 */
+        }
+
+        /* 去掉鼠标悬浮效果 */
+        .my-table tbody tr:hover > td {
+            background-color: transparent !important
+        }
+    </style>
+{% endblock %}
+{% block content1 %}
+    <div class="row" style="height: 30px">
+        <div class="col-lg-6 p-r-0 title-margin-right" style="height: 100%">
+            <div class="page-header" style="height: 100%;margin: 0.2px">
+                <div class="page-title" style="height: 100%">
+                    <h1 style="color: #FFF;height: 100%;padding: 1px">Hello {{ request.session.user_name }}, Welcome
+                        Here</h1>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+        <div class="col-lg-5 p-l-0 title-margin-left" style="height: 100%">
+            <div class="page-header" style="height: 100%;margin: 0.2px">
+                <div class="page-title" style="height: 100%">
+                    <ol class="breadcrumb" style="height: 100%;padding: 1px">
+                        <li class="breadcrumb-item"><a style="color: #FFF;height: 40px;padding: 1px"
+                                                       href="/Navigations/">{{ weizhi }}</a></li>
+                        {% comment %}<li class="breadcrumb-item active" style="color: #FFF"></li>{% endcomment %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+    </div>
+{% endblock %}
+{% block content %}
+    <div id="app" {% comment %}v-pre{% endcomment %}>
+        <template>
+            <el-table
+                    :data="this.tableData"
+                    class="my-table"
+                    show-header="false"
+                    style="width: 100%">
+                <el-table-column prop="lie1" label="" min-width="20%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{width: '80%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key1)"
+                            >
+                                ${ scope.row.lie1 }
+                            </el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="lie2" label="" min-width="20%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{width: '80%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key2)"
+                            >
+                                ${ scope.row.lie2 }
+                            </el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="lie3" label="" min-width="20%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{width: '80%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key3)"
+                            >
+                                ${ scope.row.lie3 }
+                            </el-button>
+                        </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="lie4" label="" min-width="20%">
+                    <template scope="scope">
+                        <div slot="reference" class="name-wrapper" style="text-align: center">
+                            <el-button
+                                    :style="{width: '80%', height: '120px'}"
+                                    class="wrap-text"
+                                    type="warning"
+                                    {% comment %}plain{% endcomment %}
+                                    @click="fetchData(scope.row.Key4)"
+                            >
+                                ${ scope.row.lie4 }
+                            </el-button>
+                        </div>
+                        {% comment %}</el-popover>{% endcomment %}
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="/static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/qs.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/image.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    {#<script src="/static/js/vue-router.min.js"></script>#}
+    {% comment %}<script src="/static/js/vue-router.js"></script>{% endcomment %}
+    <script type="text/babel">
+        new Vue({
+            el: "#app",
+            delimiters: ['${', '}'],
+            data() {
+                return {
+                    tableData: [{
+                        lie1: '部門管理',
+                        Key1: 'DepartMent',
+                        lie2: '資產管理',
+                        Key2: 'Property',
+                        lie3: '預算管理',
+                        Key3: 'Budget',
+                        lie4: '管理辦法',
+                        Key4: 'SOPManager',
+
+                    }, {
+                        lie1: '專案管理',
+                        Key1: 'Project',
+                        lie2: '測試規範',
+                        Key2: 'TestSpec',
+                        lie3: '智能測試',
+                        Key3: 'Automation',
+                        lie4: '測試數據',
+                        Key4: 'TestData',
+                    }, {
+                        lie1: '品質管理',
+                        Key1: 'Quality',
+                        lie2: '公共事務',
+                        Key2: 'Common',
+                        lie3: '討論交流',
+                        Key3: 'Discussing',
+                        lie4: '其他',
+                        Key4: 'Others'
+                    }
+                    ]
+                }
+            },
+            mounted() {
+                {#this.getdata("first")#}
+            },
+            methods: {
+                getdata: function (e) {
+                    let data = {
+                        "isGetData": e,
+                        "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
+                    };
+                    axios.post("/Navigations/", Qs.stringify(data), {
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+                    }).then((res) => {
+                        this.tableData = res.data.tableData;
+                    });
+                },
+                fetchData(param) {
+                    axios.get(`/Navigations_Category/${param}/`)
+                        .then(response => {
+                            // 处理响应数据
+                            window.location.href = "/Navigations_Category/" + param + '/';
+
+                            // 当前页面不会关闭，新页面会在新标签页中打开
+                            {#window.open("/Navigations_Category/" + param + '/', '_blank');#}
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            // 处理错误情况
+                            console.error(error);
+                        });
+                }
+            }
+        })
+    </script>
+{% endblock %}

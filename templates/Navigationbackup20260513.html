@@ -1,0 +1,2119 @@
+{% extends 'base.html' %}
+{#{% load custom_tag %}#}
+{% load staticfiles %}
+{% block title %}Index{% endblock %}
+{% block css %}
+{# <link rel="stylesheet" href="/static/css/ElementUI.css">#}
+ <link rel="stylesheet" href="/static/css/down_base.css">
+ <link rel="stylesheet" href="/static/css/down_index.css">
+ <link rel="stylesheet" href="/static/css/index.css">
+ <link rel="stylesheet" href="/static/download_UPK/element-ui@2.12.0/lib/theme-chalk/index.css">
+{# <link rel="stylesheet" href="/static/css/home_zerogrid.css">#}
+{# <link rel="stylesheet" href="/static/css/home_style.css">#}
+{# <link rel="stylesheet" href="/static/css/home_menu.css">#}
+{# <link href="/static/css/bootstrap.min.css" rel="stylesheet">#}
+ <link href="/static/node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+
+
+.el-tooltip__popper {
+    {#left: 1000px;#}
+    border: 0px!important;
+}
+
+
+.el-tooltip__popper[x-placement^="left"] .popper__arrow {
+	border-left-color: white!important;
+}
+
+.el-tooltip__popper[x-placement^="left"] .popper__arrow:after {
+	border-left-color: white !important;
+}
+
+.el-tooltip__popper[x-placement^="right"] .popper__arrow {
+	border-right-color: white!important;
+}
+
+.el-tooltip__popper[x-placement^="right"] .popper__arrow:after {
+	border-right-color: white !important;
+}
+
+
+  .ColorSet{
+      background-image: linear-gradient(to right, rgba(145,212,194,0.58), rgba(145,212,194, 1));
+      text-align: right;
+      cursor: pointer;
+      color: #595d60;
+  }
+  .ColorSet1{
+      background-image: linear-gradient(to left, rgba(145,212,194,0.58), rgba(145,212,194,0.1));
+      text-align: right;
+      line-height: 10px!important;
+  }
+  .ColorSetXQM{
+      background-image: linear-gradient(to right, rgba(69,187,137,0.46), rgba(69,187,137, 1));
+      text-align: right;
+      color: #595d60;
+  }
+
+
+  .ColorSetXQM1{
+      background-image: linear-gradient(to left, rgba(69,187,137,0.46), rgba(69,187,137, 0.15));
+      text-align: right;
+      line-height: 10px!important;
+  }
+  .ColorSetLesson{
+      text-align: left!important;
+      color: #595d60;
+      background-image: linear-gradient(to left, rgba(204,238,255,0.5), rgba(204,238,255, 1));
+  }
+  .ColorSetLesson1{
+      background-image: linear-gradient(to right, rgba(204,238,255,0.5), rgba(204,238,255,0.26));
+      text-align: right;
+      line-height: 10px!important;
+  }
+
+  .ColorSetIssue1{
+      background-image: linear-gradient(to left, rgba(0,170,85,0.2), rgba(0,170,85,0.2));
+      text-align: left;
+      line-height: 10px!important;
+  }
+
+  .ColorSetIssue{
+      background-image: linear-gradient(to left, rgba(0,170,85,0.8), rgba(0,170,85,1));
+      text-align: right!important;
+      color: #595d60;
+  }
+
+  .ColorSetProjectComparison{
+      background-image: linear-gradient(to right, rgba(132, 187, 220,0.58), rgba(132, 187, 220,0.1));
+      text-align: left!important;
+      line-height: 10px!important;
+  }
+  .ColorSetDep{
+      background-image: linear-gradient(to left, rgba(148, 194, 222,0.54), rgba(61,130,171, 1));
+      text-align: left!important;
+      color: #595d60;
+      {#text-shadow:0.1px 0.1px 0.1px #FFFFFF;#}
+  }
+  .ColorSetDep1{
+      background-image: linear-gradient(to right, rgba(148, 194, 222,0.54), rgba(148, 194, 222, 0.16));
+      text-align: left!important;
+      line-height: 10px!important;
+  }
+
+  .ColorSetRea{
+      background-image: linear-gradient(to left, rgba(132, 187, 220,0.6), rgba(132, 187, 220, 1));
+      text-align: left!important;
+      color: #595d60;
+  }
+  .ColorSetRea1{
+      background-image: linear-gradient(to right, rgba(132, 187, 220,0.6), rgba(132, 187, 220, 0.26));
+      text-align: left!important;
+      line-height: 10px!important;
+  }
+  .ColorSetPro{
+      background-image: linear-gradient(to left, rgba(107,171,210,0.66), rgba(63,119,153, 1));
+      {#text-align: center;#}
+      text-align: left!important;
+      color: #595d60;
+  }
+  .FontStyle{
+     font-size: 15px;
+     color: #595d60!important;
+  }
+
+
+  .backgroundStyle{
+      background-image: url("/static/src/test20.jpg"),url("/static/src/test12.jpg");
+      background-repeat: no-repeat,no-repeat;
+      /*图片从左往右移动的百分比大小，从上往下百分比大小，重复方式 换成数值同样如此，在这里没有调整大小的方法*!*/
+      background-position: 0% 26%, 50% 18%;
+      /*从左到右，从上到下的缩放比例，单位px则为px缩放*/
+      background-size: 46% 94.8%,100% 95%;
+  }
+
+
+
+
+ td>div>a{
+     font-size: 15px;
+     color: #e7e7e7!important;
+ }
+
+
+/*.table-bordered tr,.table-bordered td{
+    border: 1px solid #FFFFFF !important;
+}*/
+</style>
+{% endblock %}
+{% block content1 %}
+{% endblock %}
+{% block content %}
+<div id="app" class="backgroundStyle" style="height: 693px">
+{#<div class="container-fluid">#}
+<div class="container-fluid">
+{#   <section class="content-box box-5 boxstyle-1" style="background-position: center;background-size:cover">#}
+    <div class="row">
+
+        <div class="col-md-3">
+            <div id="testME" style="display: none;margin-left: 60px;">
+                <table id="tableME" class="table table-bordered" style="margin-left: 29px;margin-top: 101px;">
+{#                <table style="width: 50px;">#}
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">機構專案TestPlan<br />的編輯，搜索，<br />Summary，上傳</div>
+                        <div>
+                            <a href="/TestPlanME/TestPlanME-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">機構專案TestPlan<br />的編輯，搜索，<br />Summary，上傳</div>
+                        <div>
+                            <a href="/TestPlanME/TestPlanME-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">機構專案TestPlan<br />的編輯，搜索，<br />Summary，上傳</div>
+                        <div>
+                        <a href="/TestPlanME/TestPlanME-summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">機構專案TestPlan<br />的編輯，搜索，<br />Summary，上傳</div>
+                        <div>
+                        <a href="/TestPlanME/ItemME-upload/" target="_blank">UploadCase</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testAuto" style="margin-left: 60px;display: none">
+                <table id="tableAuto" class="table table-bordered" style="margin-left: 29px;margin-top: 50px;">
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">管理員維護信息</div>
+                        <div>
+                        <a href="/AutoResult/AutoItem_edit/" target="_blank">AutoItem</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Automation<br />效益的編輯，搜<br />索，Summary</div>
+                        <div>
+                        <a href="/AutoResult/AutoResult_edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Automation<br />效益的編輯，搜<br />索，Summary</div>
+                        <div>
+                        <a href="/AutoResult/AutoResult_search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Automation<br />效益的編輯，搜<br />索，Summary</div>
+                        <div>
+                        <a href="/AutoResult/AutoResult_summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testINV" style="margin-left: 60px;display: none">
+                <table id="tableINV" class="table table-bordered" style="margin-left: 29px;margin-top: 253px;">
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">各專案INV<br />測試結果的<br/>上傳，編輯，<br />搜索，Summ</br>ary，Top信息</div>
+                        <div>
+                        <a href="/INVGantt/INVGantt-upload/" target="_blank">Upload</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">各專案INV<br />測試結果的<br/>上傳，編輯，<br />搜索，Summ</br>ary，Top信息</div>
+                        <div>
+                        <a href="/INVGantt/INVGantt-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">各專案INV<br />測試結果的<br/>上傳，編輯，<br />搜索，Summ</br>ary，Top信息</div>
+                        <div>
+                        <a href="/INVGantt/INVGantt-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">各專案INV<br />測試結果的<br/>上傳，編輯，<br />搜索，Summ</br>ary，Top信息</div>
+                        <div>
+                        <a href="/INVGantt/INVGantt-summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">各專案INV<br />測試結果的<br/>上傳，編輯，<br />搜索，Summ</br>ary，Top信息</div>
+                        <div>
+                        <a href="/INVGantt/INVGantt-top/" target="_blank">Top</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testSWOR" style="margin-left: 60px;display: none">
+                <table id="tableSWOR" class="table table-bordered" style="margin-left: 29px;margin-top: 202px;">
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">OR C38(NB)專<br />案TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSWOS/TestPlanSWOS-edit/" target="_blank">Edit-NB</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">OR C38(NB)專<br />案TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSWOS/TestPlanSWOS-search/" target="_blank">Search-NB</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">OR C38(AIO)專<br />案TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSWOS/TestPlanSWOS-edit-AIO/" target="_blank">Edit-AIO</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">OR C38(AIO)專<br />案TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSWOS/TestPlanSWOS-search-AIO/" target="_blank">Search-AIO</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">OR專案數據統計</div>
+                        <div>
+                        <a href="/TestPlanSWOS/TestPlanSWOS-summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testSW" style="margin-left: 60px;display: none">
+                <table id="tableSW" class="table table-bordered" style="margin-left: 29px;margin-top: 151px;">
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">C38(NB)專案<br />TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSW/TestPlanSW-edit/" target="_blank">Edit-NB</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">C38(NB)專案<br />TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSW/TestPlanSW-search/" target="_blank">Search-NB</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">C38(AIO)專案<br />TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSW/TestPlanSW-edit-AIO/" target="_blank">Edit-AIO</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">C38(AIO)專案<br />TestPlan的上<br />傳編輯，搜索</div>
+                        <div>
+                        <a href="/TestPlanSW/TestPlanSW-search-AIO/" target="_blank">Search-AIO</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案數據統計<br /></div>
+                        <div>
+                        <a href="/TestPlanSW/TestPlanSW-summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSet1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">上傳<br /></div>
+                        <div>
+                        <a href="/TestPlanSW/ItemSW-upload/" target="_blank">UploadCase</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testMQM" style="margin-left: 60px;display: none">
+                <table id="tableMQM" class="table table-bordered" style="margin-left: 29px;margin-top: 304px;">
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">MQM的編<br />輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/MQM/MQM_edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">MQM的編<br />輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/MQM/MQM_search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">MQM的編<br />輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/MQM/MQM_upload/" target="_blank">Upload</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testCQM" style="margin-left: 60px;display: none">
+                <table id="tableCQM" class="table table-bordered" style="margin-left: 29px;margin-top: 355px;">
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">CQM的編<br />輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/CQM/CQM_edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">CQM的編<br />輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/CQM/CQM_search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">CQM的編<br />輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/CQM/CQM_upload/" target="_blank">Upload</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testOBI" style="margin-left: 60px;display: none">
+                <table id="tableOBI" class="table table-bordered" style="margin-left: 29px;margin-top: 406px;">
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">管理員維護<br/>信息</div>
+                        <div>
+                        <a href="/OBIDeviceResult/OBIDeviceResult_options/" target="_blank">Options</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案的OBI設<br />備結果的編<br />輯，搜索</div>
+                        <div>
+                        <a href="/OBIDeviceResult/OBIDeviceResult_edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案的OBI設<br />備結果的編<br />輯，搜索</div>
+                        <div>
+                        <a href="/OBIDeviceResult/OBIDeviceResult_search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testDriver" style="margin-left: 60px;display: none">
+                <table id="tableDriver" class="table table-bordered" style="margin-left: 29px;margin-top: 430px;">
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Driver的<br />編輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/DriverTool/DriverList_edit/" target="_blank">DriverEdit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Driver的<br />編輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/DriverTool/DriverList_search/" target="_blank">DriverSearch</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Driver的<br />編輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/DriverTool/DriverList_upload/" target="_blank">DriverUpload</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Tool的<br />編輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/DriverTool/ToolList_edit/" target="_blank">ToolEdit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Tool的<br />編輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/DriverTool/ToolList_search/" target="_blank">ToolSearch</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">專案Tool的<br />編輯，搜索，<br />上傳</div>
+                        <div>
+                        <a href="/DriverTool/ToolList_upload/" target="_blank">ToolUpload</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testIN" style="margin-left: 60px;display: none">
+                <table id="tableIN" class="table table-bordered" style="margin-left: 29px;margin-top: 555px;">
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/Issue_Notes/Issue_Notes-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/Issue_Notes/Issue_Notes-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Issue Notes<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/Issue_Notes/Issue_Notes-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testKI" style="margin-left: 60px;display: none;">
+                <table id="tableKI" class="table table-bordered" style="margin-left: 29px;margin-top: 574px;">
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/KnowIssue/KnowIssue-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/KnowIssue/KnowIssue-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetIssue1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">Known Issue<br />的新增，編<br />輯，搜索</div>
+                        <div>
+                        <a href="/KnowIssue/KnowIssue-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+
+            <div id="testLow" style="margin-left: 60px;display: none">
+                <table id="tableLow" class="table table-bordered" style="margin-left: 29px;margin-top: 530px;">
+                    <tr><td class="ColorSetXQM1">
+                      <el-tooltip placement="left" effect="light">
+                        <div slot="content">LowLight編輯</div>
+                        <div>
+                        <a href="/LowLight/LowLight_edit" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div style="margin: 0 auto;height: 524px;">
+{#            <div style="margin: 0 auto;height: 510px;">#}
+            <table class="table table-bordered">
+                <tr>
+                    <td class="ColorSet">
+                        <a style="color: #595d60;font-size: 16px;" href="/SpecDownload/SpecDownload-summary/" target="_blank">SpecDownload</a>
+                    </td>
+                    <td style="text-align: center;background-color: #91D4C2;vertical-align:middle;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="6">
+                        Test Plan
+                    </td>
+{#                    <td style="text-align: center;vertical-align:middle;background: url('/static/src/3.jpg') no-repeat top;background-size:100% 100%" rowspan="6">Test Plan</td>#}
+                    <td style="text-align: center;vertical-align:middle;background-color: #CCEEFF;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="3">Lesson Learn</td>
+                    <td id="QILStyle" class="ColorSetLesson" onclick="alertQIL()">QIL</td>
+                </tr>
+                <tr>
+
+                    <td id="AutoStyle" class="ColorSet" onclick="alertAuto()">Automation</td>
+                    <td id="SMStyle" class="ColorSetLesson" onclick="alertSM()">SW&ME</td>
+                </tr>
+                <tr>
+                    <td id="MEStyle" class="ColorSet" onclick="alertME()">
+                        ME
+{#                        <el-tooltip placement="left" effect="light">#}
+{#                        <div slot="content">機構專案TestPlan的編輯，<br/>搜索，Summary，上傳</div>#}
+{#                        <div>ME</div></el-tooltip>#}
+                    </td>
+                    <td class="ColorSetLesson">
+                        <a style="color: #595d60;font-size: 16px;" href="/NonDQALesson/NonDQALesson-summary/" target="_blank">RD/PE/JQE-Lesson</a>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td id="SWStyle" class="ColorSet" onclick="alertSW()">SW</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #3D82AB;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="5">Department</td>
+{#                    <td style="text-align: center;vertical-align:middle;background-color: #84bbdc;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="2">Issue List</td>#}
+                    <td id="ProjectComparisonStyle" class="ColorSetDep" onclick="alertProjectComparison()">ProjectComparison</td>
+                </tr>
+                <tr>
+                    <td id="SWORStyle" class="ColorSet" onclick="alertSWOR()">SW-OR</td>
+
+{#                    <td id="KIStyle" class="ColorSetIssue" onclick="alertKI()">Known Issue</td>#}
+{#                    <td id="KIStyle" class="ColorSetDep" onclick="alertKI()">Capital Expenditure</td>#}
+                    <td class="ColorSetDep">
+                        <a style="color: #595d60;font-size: 16px;" href="/CapitalExpenditure/CapitalExpenditure_Summary/" target="_blank">CapitalExpenditure</a>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td id="INVStyle" class="ColorSet" onclick="alertINV()">INV</td>
+{#                    <td style="text-align: center;vertical-align:middle;background-color: #3D82AB;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="3">Department</td>#}
+                    <td class="ColorSetDep">
+                        <a style="color: #595d60;font-size: 16px;" href="/PersonalInfo/PublicArea/" target="_blank">Public Area</a>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td id="MQMStyle" class="ColorSetXQM" onclick="alertMQM()">MQM</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #45BB89;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="5">XQM</td>
+
+                    <td id="InfoStyle" class="ColorSetDep" onclick="alertInfo()">PersonalInfo</td>
+
+                </tr>
+                <tr>
+                    <td id="CQMStyle" class="ColorSetXQM" onclick="alertCQM()">CQM</td>
+                    <td id="ExpStyle" class="ColorSetDep" onclick="alertExp()">PersonalExperience</td>
+
+
+                </tr>
+                <tr>
+                    <td id="OBIStyle" class="ColorSetXQM" onclick="alertOBI()">OBIResult</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #84bbdc;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="3">Reliability Data</td>
+                    <td id="PGVStyle" class="ColorSetRea" onclick="alertPGV()">PackageGValue</td>
+
+
+                </tr>
+                <tr>
+                    <td id="DriverStyle" class="ColorSetXQM" onclick="alertDriver()">DriverTool</td>
+                    <td id="CDMStyle" class="ColorSetRea" onclick="alertCDM()">CDM</td>
+
+                </tr>
+                <tr>
+                    <td class="ColorSetXQM">
+                        <a style="color: #595d60;font-size: 16px;" href="/LowLightList/LowLightList_edit/" target="_blank">LowLight</a>
+                    </td>
+                    <td id="BougStyle" class="ColorSetRea" onclick="alertBoug()">Bouncing</td>
+
+                </tr>
+
+                <tr>
+                    <td id="INStyle" class="ColorSetIssue" onclick="alertIN()">Issue Notes</td>
+                    <td style="text-align: center;vertical-align:middle;background-color: #00AA55;font-family: Calibri;font-size: 24px;color: #FFFFFF;text-shadow:3px 3px 3px #080808" rowspan="2">Issue List</td>
+                    <td style="text-align: center;background-color: #3f7799;">
+                        <a style="color: black;font-size: 24px;color: #FFFFFF!important;font-family: Calibri;text-shadow:3px 3px 3px #080808;" {% comment %}href="/ProjectInfoSearch/"{% endcomment %} target="_blank">ProjectInfo</a>
+                    </td>
+                    <td class="ColorSetPro">
+                        <a style="color: #465158;font-size: 17px;" href="/ProjectInfoSearch/" target="_blank">Search</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="KIStyle" class="ColorSetIssue" onclick="alertKI()">Known Issue</td>
+                    <td class="ColorSetPro">
+                    </td>
+                    <td class="ColorSetPro">
+                    </td>
+                </tr>
+
+            </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div id="testQIL" style="margin-right: 70px;display: none">
+                <table id="tableQIL" class="table table-bordered" style="margin-left: -30px;">
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">QIL的新增，<br/>修改，搜索</div>
+                        <div>
+                            <a href="/QIL/QIL_add/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">QIL的新增，<br/>修改，搜索</div>
+                        <div>
+                        <a href="/QIL/QIL_edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">QIL的新增，<br/>修改，搜索</div>
+                        <div>
+                        <a href="/QIL/QIL_search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+{#                    <tr><td class="ColorSetLesson1" style="text-align: left">#}
+{#                        <a style="color: black" href="/TestPlanME/TestPlanME-edit/" target="_blank">Export</a>#}
+{#                    </td></tr>#}
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">更新每個專<br>案的QIL結果</div>
+                        <div>
+                        <a href="/QIL/QIL_projectresult/" target="_blank">ProjectResult</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">搜索專案的<br>QIL結果</div>
+                        <div>
+                        <a href="/QIL/QIL_searchbyproject/" target="_blank">SearchByProject</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testSM" style="margin-right: 70px;display: none">
+                <table id="tableSM" class="table table-bordered" style="margin-left: -30px;margin-top: 50px;">
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Lesson Learn<br/>的新增，修<br>改，搜索，導<br>出菜單</div>
+                        <div>
+                        <a href="/Lesson_upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Lesson Learn<br/>的新增，修<br>改，搜索，導<br>出菜單</div>
+                        <div>
+                        <a href="/Lesson_edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Lesson Learn<br/>的新增，修<br>改，搜索，導<br>出菜單</div>
+                        <div>
+                        <a href="/Lesson_search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Lesson Learn<br/>的新增，修<br>改，搜索，導<br>出菜單</div>
+                        <div>
+                        <a href="/Lesson_export/" target="_blank">Export</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">更新每個專案<br>Lesson Learn<br>的結果</div>
+                        <div>
+                        <a href="/LessonProjectME/Lesson_ProjectResult/" target="_blank">ProjectResult</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetLesson1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">搜索專案的<br>Lesson Learn<br>的結果</div>
+                        <div>
+                        <a href="/LessonProjectME/Lesson_SearchByProject/" target="_blank">SearchByProject</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testProjectComparison" style="margin-right: 70px;display: none">
+                <table id="tableProjectComparison" class="table table-bordered" style="margin-left: -29px;margin-top: 152px;">
+                    <tr><td class="ColorSetProjectComparison" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Project<br>Comparison<br>Summary</div>
+                        <div>
+                        <a href="/ProjectComparison/ProjectComparison_Summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetProjectComparison" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Project<br>Comparison<br>的編輯</div>
+                        <div>
+                        <a href="/ProjectComparison/ProjectComparison_Edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testInfo" style="margin-right: 70px;display: none;">
+                <table id="tableInfo" class="table table-bordered" style="margin-left: -30px;margin-top: 301px;">
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">管理員維護</div>
+                        <div>
+                        <a href="/PersonalInfo/Infos-upload/" target="_blank">信息上傳</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">管理員維護</div>
+                        <div>
+                        <a href="/PersonalInfo/PersonalInfo-edit/" target="_blank">人員維護</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">管理員維護</div>
+                        <div>
+                        <a href="/PersonalInfo/ManPower-edit/" target="_blank">人力維護</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">信息查詢</div>
+                        <div>
+                        <a href="/PersonalInfo/PersonalInfo-search/" target="_blank">人員搜索</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">信息查詢</div>
+                        <div>
+                        <a href="/PersonalInfo/ManPower-search/" target="_blank">人力搜索</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">信息查詢</div>
+                        <div>
+                        <a href="/PersonalInfo/Summary1/" target="_blank">加班概況</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">信息查詢</div>
+                        <div>
+                        <a href="/PersonalInfo/Summary2/" target="_blank">在職概況</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">信息查詢</div>
+                        <div>
+                        <a href="/PersonalInfo/Summary3/" target="_blank">離職概況</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testExp" style="margin-right: 70px;display: none;">
+                <table id="tableExp" class="table table-bordered" style="margin-left: -30px;margin-top: 351px;">
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">人員測試履<br />歷Summary</div>
+                        <div>
+                        <a href="/PersonalExperience/Summary/" target="_blank">Summary</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">我的簽核</div>
+                        <div>
+                        <a href="/PersonalExperience/My-approve/" target="_blank">我的簽核</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">我的申請</div>
+                        <div>
+                        <a href="/PersonalExperience/My-application/" target="_blank">我的申請</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">OS Refresh<br />錄入</div>
+                        <div>
+                        <a href="/PersonalExperience/OSR-upload/" target="_blank">OSR-Input</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">NPI錄入</div>
+                        <div>
+                        <a href="/PersonalExperience/NPI-upload/" target="_blank">NPI-Input</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetDep1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">INV錄入</div>
+                        <div>
+                        <a href="/PersonalExperience/INV-upload/" target="_blank">INV-Input</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testPGV" style="margin-right: 70px;display: none;">
+                <table id="tablePGV" class="table table-bordered" style="margin-left: -30px;margin-top: 402px;">
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Package G<br>Value的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Package/Package-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Package G<br>Value的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Package/Package-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Package G<br>Value的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Package/Package-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Package G<br>Value的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Package/Package-export/" target="_blank">Export</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testCDM" style="margin-right: 70px;display: none;">
+                <table id="tableCDM" class="table table-bordered" style="margin-left: -30px;margin-top: 452px;">
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">CDM的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/CDM/CDM-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">CDM的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/CDM/CDM-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">CDM的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/CDM/CDM-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">CDM的新<br>增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/CDM/CDM-export/" target="_blank">Export</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+            <div id="testBoug" style="margin-right: 70px;display: none;">
+                <table id="tableBoug" class="table table-bordered" style="margin-left: -30px;margin-top: 489px;">
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Bouncing的<br>新增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Bouncing/Bouncing-upload/" target="_blank">Add</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Bouncing的<br>新增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Bouncing/Bouncing-edit/" target="_blank">Edit</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Bouncing的<br>新增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Bouncing/Bouncing-search/" target="_blank">Search</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                    <tr><td class="ColorSetRea1" style="text-align: left">
+                      <el-tooltip placement="right" effect="light">
+                        <div slot="content">Bouncing的<br>新增，修改，<br>搜索，導出</div>
+                        <div>
+                        <a href="/Bouncing/Bouncing-export/" target="_blank">Export</a>
+                        </div>
+                      </el-tooltip>
+                    </td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{#   </section>#}
+
+</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+
+    <script src="../static/js/lib/calendar-2/moment.latest.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/semantic.ui.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/prism.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/calendar-2/pignose.init.js"></script>
+    <!-- scripit init-->
+    <script src="../static/js/lib/bootstrap.min.js"></script>
+    <script src="../static/js/scripts.js"></script>
+    <script src="/static/js/es6/polyfill.min.js"></script>
+    <script src="/static/js/es6/babel.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/Element/index.js"></script>
+    <script src="/static/js/Element/table.js"></script>
+    <script src="/static/js/Element/main.js"></script>
+    <script src="/static/js/Element/input.js"></script>
+    <script src="/static/js/Element/table-column.js"></script>
+    <script src="/static/js/Element/icon.js"></script>
+    <script src="/static/js/Element/date-picker.js"></script>
+    <script src="/static/js/Element/dialog.js"></script>
+    <script src="/static/js/Element/message.js"></script>
+    <script src="/static/js/Element/tooltip.js"></script>
+    <script src="/static/js/Element/pagination.js"></script>
+    <script type="text/javascript">
+       /*ME*/
+        function alertME() {
+            {#var MEState = document.getElementById("MEStyle").style.boxShadow;#}
+            var showState = document.getElementById("testME").style.display;
+            if(showState == 'none'){
+               $("#testME").css('display','block');
+               $("#MEStyle").css('box-shadow','0px 4px 20px 0px #888888');
+               $("#tableME").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+               $("#testME").css('display','none');
+               document.getElementById("MEStyle").style.cssText = "";
+               {#document.getElementById("testME").style.cssText = "";#}
+            }
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*Automation*/
+        function alertAuto() {
+            var showState = document.getElementById("testAuto").style.display;
+            if(showState == 'none'){
+                $("#testAuto").css('display','block');
+                $("#AutoStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableAuto").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testAuto").css('display','none');
+                document.getElementById("AutoStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*INV*/
+        function alertINV() {
+            var showState = document.getElementById("testINV").style.display;
+            if(showState == 'none'){
+                $("#testINV").css('display','block');
+                $("#INVStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableINV").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testINV").css('display','none');
+                document.getElementById("INVStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*SW-OR*/
+        function alertSWOR() {
+            var showState = document.getElementById("testSWOR").style.display;
+            if(showState == 'none'){
+                $("#testSWOR").css('display','block');
+                $("#SWORStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableSWOR").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testSWOR").css('display','none');
+                document.getElementById("SWORStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*SW*/
+        function alertSW() {
+            var showState = document.getElementById("testSW").style.display;
+            if(showState == 'none'){
+                $("#testSW").css('display','block');
+                $("#SWStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableSW").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testSW").css('display','none');
+                document.getElementById("SWStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*MQM*/
+        function alertMQM() {
+            var showState = document.getElementById("testMQM").style.display;
+            if(showState == 'none'){
+                $("#testMQM").css('display','block');
+                $("#MQMStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableMQM").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testMQM").css('display','none');
+                document.getElementById("MQMStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*CQM*/
+        function alertCQM() {
+            var showState = document.getElementById("testCQM").style.display;
+            if(showState == 'none'){
+                $("#testCQM").css('display','block');
+                $("#CQMStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableCQM").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testCQM").css('display','none');
+                document.getElementById("CQMStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*OBIDevice*/
+        function alertOBI() {
+            var showState = document.getElementById("testOBI").style.display;
+            if(showState == 'none'){
+                $("#testOBI").css('display','block');
+                $("#OBIStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableOBI").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testOBI").css('display','none');
+                document.getElementById("OBIStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*DriverTool*/
+        function alertDriver() {
+            var showState = document.getElementById("testDriver").style.display;
+            if(showState == 'none'){
+                $("#testDriver").css('display','block');
+                $("#DriverStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableDriver").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testDriver").css('display','none');
+                document.getElementById("DriverStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*LowLight*/
+        function alertLow() {
+            var showState = document.getElementById("testLow").style.display;
+            if(showState == 'none'){
+                $("#testLow").css('display','block');
+                $("#LowStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableLow").css('box-shadow','-2px 3px 9px 0px #888888');
+            }else{
+                $("#testLow").css('display','none');
+                document.getElementById("LowStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*QIL*/
+        function alertQIL() {
+            var showState = document.getElementById("testQIL").style.display;
+            if(showState == 'none'){
+                $("#testQIL").css('display','block');
+                $("#QILStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableQIL").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testQIL").css('display','none');
+                document.getElementById("QILStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*SW&ME*/
+        function alertSM() {
+            var showState = document.getElementById("testSM").style.display;
+            if(showState == 'none'){
+                $("#testSM").css('display','block');
+                $("#SMStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableSM").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testSM").css('display','none');
+                document.getElementById("SMStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*Project Comparison*/
+        function alertProjectComparison() {
+            var showState = document.getElementById("testProjectComparison").style.display;
+            if(showState == 'none'){
+                $("#testProjectComparison").css('display','block');
+                $("#ProjectComparisonStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableProjectComparison").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testProjectComparison").css('display','none');
+                document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*Issue Notes*/
+        function alertIN() {
+            var showState = document.getElementById("testIN").style.display;
+            if(showState == 'none'){
+                $("#testIN").css('display','block');
+                $("#INStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableIN").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testIN").css('display','none');
+                document.getElementById("INStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*Know Issue*/
+        function alertKI() {
+            var showState = document.getElementById("testKI").style.display;
+            if(showState == 'none'){
+                $("#testKI").css('display','block');
+                $("#KIStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableKI").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testKI").css('display','none');
+                document.getElementById("KIStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*PersonalInfo*/
+        function alertInfo() {
+            var showState = document.getElementById("testInfo").style.display;
+            if(showState == 'none'){
+                $("#testInfo").css('display','block');
+                $("#InfoStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableInfo").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testInfo").css('display','none');
+                document.getElementById("InfoStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*PersonalTestExperience*/
+        function alertExp() {
+            var showState = document.getElementById("testExp").style.display;
+            if(showState == 'none'){
+                $("#testExp").css('display','block');
+                $("#ExpStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableExp").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testExp").css('display','none');
+                document.getElementById("ExpStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*Package G Value*/
+        function alertPGV() {
+            var showState = document.getElementById("testPGV").style.display;
+            if(showState == 'none'){
+                $("#testPGV").css('display','block');
+                $("#PGVStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tablePGV").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testPGV").css('display','none');
+                document.getElementById("PGVStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*CDM*/
+        function alertCDM() {
+            var showState = document.getElementById("testCDM").style.display;
+            if(showState == 'none'){
+                $("#testCDM").css('display','block');
+                $("#CDMStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableCDM").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testCDM").css('display','none');
+                document.getElementById("CDMStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testBoug").css('display','none');
+            document.getElementById("BougStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+        /*Bouncing*/
+        function alertBoug() {
+            var showState = document.getElementById("testBoug").style.display;
+            if(showState == 'none'){
+                $("#testBoug").css('display','block');
+                $("#BougStyle").css('box-shadow','0px 4px 20px 0px #888888');
+                $("#tableBoug").css('box-shadow','4px 4px 12px 0px #888888');
+            }else{
+                $("#testBoug").css('display','none');
+                document.getElementById("BougStyle").style.cssText = "";
+            }
+            $("#testME").css('display','none');
+            document.getElementById("MEStyle").style.cssText = "";
+            $("#testAuto").css('display','none');
+            document.getElementById("AutoStyle").style.cssText = "";
+            $("#testINV").css('display','none');
+            document.getElementById("INVStyle").style.cssText = "";
+            $("#testSWOR").css('display','none');
+            document.getElementById("SWORStyle").style.cssText = "";
+            $("#testSW").css('display','none');
+            document.getElementById("SWStyle").style.cssText = "";
+            $("#testMQM").css('display','none');
+            document.getElementById("MQMStyle").style.cssText = "";
+            $("#testCQM").css('display','none');
+            document.getElementById("CQMStyle").style.cssText = "";
+            $("#testOBI").css('display','none');
+            document.getElementById("OBIStyle").style.cssText = "";
+            $("#testDriver").css('display','none');
+            document.getElementById("DriverStyle").style.cssText = "";
+            $("#testQIL").css('display','none');
+            document.getElementById("QILStyle").style.cssText = "";
+            $("#testSM").css('display','none');
+            document.getElementById("SMStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("ProjectComparisonStyle").style.cssText = "";
+            $("#testKI").css('display','none');
+            document.getElementById("KIStyle").style.cssText = "";
+            $("#testIN").css('display','none');
+            document.getElementById("INStyle").style.cssText = "";
+            $("#testInfo").css('display','none');
+            document.getElementById("InfoStyle").style.cssText = "";
+            $("#testPGV").css('display','none');
+            document.getElementById("PGVStyle").style.cssText = "";
+            $("#testCDM").css('display','none');
+            document.getElementById("CDMStyle").style.cssText = "";
+            $("#testExp").css('display','none');
+            document.getElementById("ExpStyle").style.cssText = "";
+            $("#testLow").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+            $("#testProjectComparison").css('display','none');
+            document.getElementById("LowStyle").style.cssText = "";
+        };
+      new Vue ({
+          el: "#app",
+          delimiters: ['${', '}'],
+      })
+
+    $("#showUp").css('display','none');
+    </script>
+{% endblock %}

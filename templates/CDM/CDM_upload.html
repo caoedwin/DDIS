@@ -30,7 +30,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-          <span style="color: #FFF;">Load Excel</span>
+          <span>Load Excel</span>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
             <div class="row" style="background-color:rgba(255,255,255,0.4)">
                 <div class="col-lg-12">
                   <div class="fileUpload">
-                       <input style="color: #FFF" type="file" id="xlsxUpload" accept=".xlsx"/>
+                      <input type="file" name="files" id="xlsxUpload" accept=".xlsx" />
                        <input type="button" id="xlsxSubmit" onclick="Upload(this)" VALUE="Submit">
                     </div>
                 </div>
@@ -51,7 +51,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-          <span style="color: #FFF;">Add Manually</span>
+          <span>Add Manually</span>
         </div>
     </div>
 
@@ -63,34 +63,34 @@
         <!-- Breadcrumbs-->
         <form class='form-Test' action="." method="POST" οnsubmit="return submitCheck();" id="index" enctype="multipart/form-data">
                <!-- <div class="container-fluid"> -->
-            <div style="color:#FFF;font-weight: bolder;">{{ message_CDM }}</div>
+            <div style=";font-weight: bolder;">{{ message_CDM }}</div>
                 <div style="background-color:rgba(255,255,255,0.4)" class="row">
                     <div class="col-md-3">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.Customer.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.Customer.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.Customer}}
                           </div>
                     </div>
                     {% comment %}<div class="col-md-2">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.Phase.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.Phase.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.Phase}}
                           </div>
                     </div>{% endcomment %}
                     <div class="col-md-3">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.Project.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.Project.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.Project }}
                           </div>
                     </div>
                     <div class="col-md-3">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.SKU_NO.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.SKU_NO.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.SKU_NO}}
                           </div>
                     </div>
                     <div class="col-md-3">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.SS_Data.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.SS_Data.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.SS_Data}}
                           </div>
@@ -98,7 +98,7 @@
 
                     </div>
                     {% comment %}<div class="col-md-2">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.SS_Data_1.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.SS_Data_1.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.SS_Data_1}}
                           </div>
@@ -108,13 +108,13 @@
                 </div>
                 {% comment %}<div style="background-color:rgba(255,255,255,0.2)" class="row">
                     <div class="col-md-6">
-                        <span style="color:#FFF">{{ CDMforms.Project.label_tag }}</span>
+                        <span >{{ CDMforms.Project.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.Project }}
                           </div>
                     </div>
                     <div class="col-md-6">
-                        <span style="color:#FFF">{{ CDMforms.SKU_NO.label_tag }}</span>
+                        <span >{{ CDMforms.SKU_NO.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.SKU_NO}}
                           </div>
@@ -122,19 +122,19 @@
                 </div>{% endcomment %}
                 <div style="background-color:rgba(255,255,255,0.2)" class="row">
                     <div class="col-md-4">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.A_cover_Material.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.A_cover_Material.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.A_cover_Material}}
                           </div>
                     </div>
                     <div class="col-md-4">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.C_cover_Material.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.C_cover_Material.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.C_cover_Material}}
                           </div>
                     </div>
                     <div class="col-md-4">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.D_cover_Material.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.D_cover_Material.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.D_cover_Material}}
                           </div>
@@ -143,49 +143,49 @@
 
                 <div id="Ave" style="background-color:rgba(255,255,255,0.4)" class="row">
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L1.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L1.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L1}}
                               </div>
                         </div>
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L2.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L2.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L2}}
                               </div>
                         </div>
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L3.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L3.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L3}}
                               </div>
                         </div>
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L4.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L4.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L4}}
                               </div>
                         </div>
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L5.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L5.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L5}}
                               </div>
                         </div>
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L6.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L6.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L6}}
                               </div>
                         </div>
                         <div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.L7.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.L7.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.L7}}
                               </div>
                         </div>
                         {% comment %}<div class="col-md-1">
-                            <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.Ave.label_tag }}</span>
+                            <span ><span style="color: red;">*</span>{{ CDMforms.Ave.label_tag }}</span>
                               <div class="form-group">
                                 {{ CDMforms.Ave}}
     {#                              <span class="error pull-right">{{ CDMforms.Ave.errors.as_text }}</span>#}
@@ -200,7 +200,7 @@
                 </div>{% endcomment %}
                 <div style="background-color:rgba(255,255,255,0.2)" class="row">
                     <div class="col-md-10">
-                        <span style="color:#FFF"><span style="color: red;">*</span>{{ CDMforms.Conclusion.label_tag }}</span>
+                        <span ><span style="color: red;">*</span>{{ CDMforms.Conclusion.label_tag }}</span>
                           <div class="form-group">
                             {{ CDMforms.Conclusion}}
                           </div>
