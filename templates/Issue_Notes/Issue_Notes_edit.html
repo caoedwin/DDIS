@@ -93,7 +93,7 @@
     <el-backtop ></el-backtop>
 <div class="row" style="white-space: nowrap;">
                     <div class="col-md-4">
-                    <label style="color: #FFF" for="Customer">Customer</label>
+                    <label  for="Customer">Customer</label>
            <select id="Customer" ref="Customer"   v-model="selectedCustomer" style="height:30px;width:100px;border-radius:5px 5px 5px 5px;">
                <option value=""> </option>
                <option v-for="(item,key,index) in selectItem" >${ item }</option>
@@ -101,7 +101,7 @@
                         <div class="inputError" v-cloak v-show="customerError">客戶別未選擇</div>
                     </div>
                     <div class="col-md-1">
-                        <el-button size="small" style="background:#428bca;color:#fff;" value="Search" name="Search" @click="SEARCHALERT()">Search</el-button>
+                        <el-button size="small" style="background:#428bca;" value="Search" name="Search" @click="SEARCHALERT()">Search</el-button>
                     </div>
 </div>
         <el-dialog :visible.sync="settable" >

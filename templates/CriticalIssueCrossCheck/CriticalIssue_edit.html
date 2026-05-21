@@ -480,16 +480,17 @@ tbody tr td:last-child {
                 axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/", Qs.stringify(data), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
-                    this.tableContent1=res.data.content1;
-                    this.tableContent2=res.data.content2;
-                    this.tableContent3=res.data.content3;
-                    this.totalNum1=this.tableContent3.length;
-                    this.tableContent4=res.data.content4;
-                    this.tableContent5=res.data.content5;
-                    this.totalNum2=this.tableContent5.length;
-                    this.tableContent6=res.data.content6;
-                    this.tableContent7=res.data.content7;
-                    this.totalNum3=this.tableContent7.length;
+                    this.tableContent1 = res.data.content1 || [];
+                    this.tableContent2 = res.data.content2 || [];
+                    this.tableContent3 = res.data.content3 || [];
+                    this.tableContent4 = res.data.content4 || [];
+                    this.tableContent5 = res.data.content5 || [];
+                    this.tableContent6 = res.data.content6 || [];
+                    this.tableContent7 = res.data.content7 || [];
+                    
+                    this.totalNum1 = this.tableContent3.length;
+                    this.totalNum2 = this.tableContent5.length;
+                    this.totalNum3 = this.tableContent7.length;
                     this.elbuttonloading = false;
                     this.tableloading = false;
                     this.customerError= false;
@@ -513,13 +514,17 @@ tbody tr td:last-child {
                axios.post("/CriticalIssueCrossCheck/CriticalIssue_edit/",Qs.stringify(data), {
                headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
                 }).then((res) => {
-                    this.tableContent1=res.data.content1;
-                    this.tableContent2=res.data.content2;
-                    this.tableContent3=res.data.content3;
-                    this.tableContent4=res.data.content4;
-                    this.tableContent5=res.data.content5;
-                    this.tableContent6=res.data.content6;
-                    this.tableContent7=res.data.content7;
+                    this.tableContent1 = res.data.content1 || [];
+                    this.tableContent2 = res.data.content2 || [];
+                    this.tableContent3 = res.data.content3 || [];
+                    this.tableContent4 = res.data.content4 || [];
+                    this.tableContent5 = res.data.content5 || [];
+                    this.tableContent6 = res.data.content6 || [];
+                    this.tableContent7 = res.data.content7 || [];
+                    
+                    this.totalNum1 = this.tableContent3.length;
+                    this.totalNum2 = this.tableContent5.length;
+                    this.totalNum3 = this.tableContent7.length;
                     this.elbuttonloading = false;
                     this.tableloading = false;
                     this.customerError= false;

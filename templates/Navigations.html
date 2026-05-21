@@ -49,7 +49,7 @@
 
         /* 顶部欢迎栏 */
         .hero-section {
-            margin-bottom: 40px;
+            margin-bottom: 28px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
@@ -78,6 +78,94 @@
 
         .search-wrap {
             min-width: 260px;
+        }
+
+        /* ========= 标签栏样式 (书签风格) ========= */
+        .tabs-filter {
+            margin-bottom: 36px;
+            padding: 6px 0 0 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: flex-end;
+        }
+        .tab-item {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 10px 10px 0 0;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(6px);
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: none;
+            box-shadow: 0 -1px 3px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+        /* 折角伪元素 */
+        .tab-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 18px 18px 0;
+            border-color: transparent rgba(0, 0, 0, 0.08) transparent transparent;
+            transition: border-color 0.2s ease;
+            pointer-events: none;
+        }
+        .tab-item:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-2px);
+            border-color: rgba(64, 158, 255, 0.3);
+        }
+        .tab-item:hover::after {
+            border-color: transparent rgba(0, 0, 0, 0.15) transparent transparent;
+        }
+        .tab-item.active {
+            background: #409EFF;
+            color: white;
+            border-color: #409EFF;
+            box-shadow: 0 -2px 6px rgba(64, 158, 255, 0.2), 0 4px 8px -2px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        .tab-item.active::after {
+            border-color: transparent rgba(0, 0, 0, 0.2) transparent transparent;
+        }
+        .tab-item .tab-count {
+            font-size: 0.7rem;
+            background: rgba(64, 158, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 30px;
+            color: #2c6b9e;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .tab-item.active .tab-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+        @media (max-width: 640px) {
+            .tab-item {
+                padding: 5px 14px;
+                font-size: 0.8rem;
+                gap: 5px;
+            }
+            .tab-item::after {
+                border-width: 0 12px 12px 0;
+            }
+            .tabs-filter {
+                gap: 4px;
+            }
         }
 
         /* 分类卡片区块 */
@@ -116,7 +204,7 @@
             gap: 24px;
         }
 
-        /* 🎨 优化卡片样式：增加细腻渐变背景 + 纹理背景图片，同时保留玻璃质感 */
+        /* 卡片样式：细腻渐变背景 + 纹理背景图片，玻璃质感 */
         .system-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 252, 255, 0.96));
             backdrop-filter: blur(2px);
@@ -126,7 +214,6 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
             overflow: hidden;
             position: relative;
-            /* 添加微妙的纹理背景图片：极浅的网格点阵 + 斜纹光感 */
             background-image:
                 repeating-linear-gradient(45deg, rgba(64, 158, 255, 0.02) 0px, rgba(64, 158, 255, 0.02) 2px, transparent 2px, transparent 8px),
                 radial-gradient(circle at 20% 30%, rgba(100, 150, 200, 0.05) 1.5px, transparent 1.5px);
@@ -134,31 +221,15 @@
             background-blend-mode: overlay;
         }
 
-        /* 根据分组类型微调卡片顶部装饰线 (优雅区分) */
-        .category-group:nth-child(1) .system-card {
-            border-top: 3px solid rgba(64, 158, 255, 0.3);
-        }
-        .category-group:nth-child(2) .system-card {
-            border-top: 3px solid rgba(24, 160, 88, 0.3);
-        }
-        .category-group:nth-child(3) .system-card {
-            border-top: 3px solid rgba(245, 108, 108, 0.3);
-        }
-        .category-group:nth-child(4) .system-card {
-            border-top: 3px solid rgba(230, 162, 60, 0.3);
-        }
-        .category-group:nth-child(5) .system-card {
-            border-top: 3px solid rgba(128, 100, 162, 0.3);
-        }
-        .category-group:nth-child(6) .system-card {
-            border-top: 3px solid rgba(30, 159, 210, 0.3);
-        }
-        .category-group:nth-child(7) .system-card {
-            border-top: 3px solid rgba(88, 184, 150, 0.3);
-        }
-        .category-group:nth-child(8) .system-card {
-            border-top: 3px solid rgba(240, 147, 43, 0.3);
-        }
+        /* 分组顶部装饰线 */
+        .category-group:nth-child(1) .system-card { border-top: 3px solid rgba(64, 158, 255, 0.3); }
+        .category-group:nth-child(2) .system-card { border-top: 3px solid rgba(24, 160, 88, 0.3); }
+        .category-group:nth-child(3) .system-card { border-top: 3px solid rgba(245, 108, 108, 0.3); }
+        .category-group:nth-child(4) .system-card { border-top: 3px solid rgba(230, 162, 60, 0.3); }
+        .category-group:nth-child(5) .system-card { border-top: 3px solid rgba(128, 100, 162, 0.3); }
+        .category-group:nth-child(6) .system-card { border-top: 3px solid rgba(30, 159, 210, 0.3); }
+        .category-group:nth-child(7) .system-card { border-top: 3px solid rgba(88, 184, 150, 0.3); }
+        .category-group:nth-child(8) .system-card { border-top: 3px solid rgba(240, 147, 43, 0.3); }
 
         .system-card:hover {
             transform: translateY(-6px);
@@ -166,7 +237,6 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 254, 255, 0.99));
             border-color: rgba(64, 158, 255, 0.5);
             backdrop-filter: blur(4px);
-            transition: all 0.3s ease;
         }
 
         .card-title {
@@ -207,7 +277,6 @@
             align-items: center;
         }
 
-        /* 优雅的链接按钮样式 */
         .nav-link {
             display: inline-flex;
             align-items: center;
@@ -237,7 +306,6 @@
             transform: scale(1.02) translateY(-1px);
             box-shadow: 0 6px 12px rgba(64, 158, 255, 0.25);
         }
-
         .nav-link:hover i {
             color: white;
         }
@@ -249,7 +317,6 @@
             font-style: italic;
         }
 
-        /* 底部装饰 */
         .footer-note {
             text-align: center;
             margin-top: 60px;
@@ -259,7 +326,6 @@
             color: #7b8a9b;
         }
 
-        /* 无结果提示 */
         .no-match {
             text-align: center;
             background: rgba(255,255,240,0.6);
@@ -270,18 +336,11 @@
         }
 
         @media (max-width: 760px) {
-            .nav-container {
-                padding: 16px;
-            }
-            .systems-grid {
-                grid-template-columns: 1fr;
-            }
-            .hero-section {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            .nav-container { padding: 16px; }
+            .systems-grid { grid-template-columns: 1fr; }
+            .hero-section { flex-direction: column; align-items: flex-start; }
         }
-        /* 覆盖浅色模式的卡片背景（加高特异性） */
+
         body.theme-light .nav-container .system-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 252, 255, 0.98));
             background-image: 
@@ -290,8 +349,6 @@
             background-blend-mode: overlay;
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
-        
-        /* 覆盖深色模式的卡片背景（保留渐变+纹理，但颜色更深沉） */
         body.theme-dark .nav-container .system-card {
             background: linear-gradient(135deg, rgba(30, 40, 55, 0.92), rgba(20, 30, 45, 0.96));
             background-image: 
@@ -300,21 +357,18 @@
             background-blend-mode: overlay;
             border: 1px solid rgba(72, 99, 128, 0.5);
         }
-        
-        /* 卡片悬浮效果同样需要提权 */
         body.theme-light .nav-container .system-card:hover,
         body.theme-dark .nav-container .system-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.2);
-            background-blend-mode: normal; /* 保持背景清晰 */
+            background-blend-mode: normal;
         }
     </style>
 {% endblock %}
 {% block content %}
 <div id="app" v-cloak>
-<el-backtop ></el-backtop>
+<el-backtop></el-backtop>
     <div class="nav-container">
-        <!-- 头部区域 -->
         <div class="hero-section">
             <div class="title-area">
                 <h1>✨ 导航枢纽</h1>
@@ -332,7 +386,19 @@
             </div>
         </div>
 
-        <!-- 动态渲染归类分组，时尚网格布局 -->
+        <!-- 书签风格标签分组筛选栏 -->
+        <div class="tabs-filter" v-if="groupTabs.length">
+            <div v-for="tab in groupTabs"
+                 :key="tab.key"
+                 class="tab-item"
+                 :class="{ active: activeGroupKey === tab.key }"
+                 @click="activeGroupKey = tab.key">
+                <span>${ tab.name }</span>
+                <span class="tab-count">${ tab.count }</span>
+            </div>
+        </div>
+
+        <!-- 动态渲染归类分组 -->
         <div v-for="group in filteredGroups" :key="group.groupKey" class="category-group">
             <div class="category-header">
                 <h2>${ group.groupName }</h2>
@@ -363,7 +429,6 @@
             </div>
         </div>
 
-        <!-- 无匹配数据 -->
         <div v-if="filteredGroups.length === 0" class="no-match">
             <i class="el-icon-warning-outline" style="font-size: 32px; margin-bottom: 8px; display: block;"></i>
             没有找到相关子系统，试试其他关键词吧~
@@ -376,7 +441,6 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<!-- 引入依赖库 (与原有项目保持一致) -->
 <script src="/static/js/es6/polyfill.min.js"></script>
 <script src="/static/js/axios.min.js"></script>
 <script src="/static/js/vue.min.js"></script>
@@ -384,21 +448,15 @@
 <script src="/static/js/Element/icon.js"></script>
 <script src="/static/js/Element/message.js"></script>
 <script>
-    // --------------------------------------------------------------
-    // 基于原始 All_system_dic 重构导航数据，保持完整且结构优雅
-    // 定义常量前缀 (根据原系统常见的路径映射，避免变量未定义)
     const PATH_PREFIX = {
-        DDMS_add: '/DDMS',            // 资产相关模块基础路径
-        Discussing_add: '/Discussing',// 讨论区基础路径
+        DDMS_add: '/DDMS',
+        Discussing_add: '/Discussing',
         RTMS_add: '/RTMS',
         DCT_add: '/DCT',
         EQUIP_add: '/EQUIP'
     };
 
-    // ----- 原始系统字典 (根据用户提供完整录入，并修正部分缺失前缀，确保所有有效链接可访问) -----
-    // 注：保留所有有意义条目，url为空的不展示；对变量前缀进行动态填充。
     const All_system_dic_raw = {
-        // 部门管理相关
         "PersonalInfo": [
             {"Comment": "", "name1": "C38", "url1": "/PersonalInfo/PersonalInfo-search/", "Comment1": "", "CustomerFlag1": 0,
              "name2": "T88", "url2": "", "Comment2": "", "CustomerFlag2": 0,
@@ -469,7 +527,6 @@
              "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,
              "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0},
         ],
-        // 專案管理
         "ProjectInfo": [
             {"Comment": "", "name1": "C38", "url1": "/ProjectInfoSearch/", "Comment1": "", "CustomerFlag1": 0,
              "name2": "T88", "url2": "", "Comment2": "", "CustomerFlag2": 0,
@@ -590,37 +647,31 @@
              "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,
              "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0},
         ],
-        // 资产模块（只展示关键带有效链接的条目）
         "Materia": [{"Comment": "", "name1": "C38", "url1": "/DDMS/TUMHistory/SummaryMateria/", "Comment1": "", "CustomerFlag1": 0, "name2": "", "url2": ""}],
         "Adapter": [{"Comment": "", "name1": "C38", "url1": "/DDMS/AdapterPowerCode/BorrowedAdapter/", "Comment1": "", "CustomerFlag1": 0}],
         "Computer": [{"Comment": "", "name1": "C38", "url1": "/DDMS/ComputerMS/BorrowedComputer/", "Comment1": "", "CustomerFlag1": 0}],
         "ChairCabine": [{"Comment": "", "name1": "C38", "url1": "/DDMS/ChairCabinetMS/BorrowedChairCabinet/", "Comment1": "", "CustomerFlag1": 0}],
         "Device": [{"Comment": "", "name1": "C38", "url1": "/DDMS/DeviceLNV/BorrowedDeviceLNV/", "Comment1": "", "CustomerFlag1": 0, "name4": "ABO", "url4": "/DDMS/DeviceABO/BorrowedDeviceABO/"}],
-        // 品质管控
         "QIL": [{"Comment": "", "name1": "C38", "url1": "/QIL/QIL_searchbyproject/", "Comment1": "", "CustomerFlag1": 0, "name4": "ABO", "url4": "/ABOQIL/ABOQIL_searchbyproject/"}],
         "LessonLearn": [{"Comment": "", "name1": "C38", "url1": "/LessonProjectME/Lesson_SearchByProject/", "Comment1": "", "CustomerFlag1": 0, "name4": "ABO", "url4": "/ABOProjectLessonL/Lesson_SearchByProject/"}],
         "LowLight": [{"Comment": "", "name1": "C38", "url1": "/LowLightList/LowLightList_edit/"}],
         "IssueBreakdown": [{"Comment": "", "name1": "C38", "url1": "/IssuesBreakdown/IssuesBreakdown_Summary/"}],
         "NonDQA-Lesson": [{"Comment": "", "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/"}],
         "CriticalIssue": [{"Comment": "", "name1": "C38", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/"}],
-        // 预算管理
         "CapitalExpenditure": [{"Comment": "", "name1": "C38", "url1": "/CapitalExpenditure/CapitalExpenditure_Summary/"}],
         "ProjectComparison": [{"Comment": "", "name1": "C38", "url1": "/ProjectComparison/ProjectComparison_Summary/"}],
         "TestUnits": [{"Comment": "", "name1": "C38", "url1": "/DDMS/TUMHistory/SummaryTUM/"}],
         "MiscellaneousPurchases": [{"Comment": "", "name1": "C38", "url1": "/MiscellaneousPurchases/SubscriptionStatus/"}],
-        // 测试数据
         "SpecDownload": [{"Comment": "", "name1": "C38", "url1": "/SpecDownload/SpecDownload-summary/"}],
         "ManagementSop": [{"Comment": "", "name1": "管理規範", "url1": "/SpecDownload/ManagementSop-summary/"}],
         "OBIResult": [{"Comment": "", "name1": "C38", "url1": "/OBIDeviceResult/OBIDeviceResult_search/"}],
         "PackageGValue": [{"Comment": "", "name1": "C38", "url1": "/Package/Package-search/"}],
         "CDM": [{"Comment": "", "name1": "C38", "url1": "/CDM/CDM-search/"}],
         "Bouncing": [{"Comment": "", "name1": "C38", "url1": "/Bouncing/Bouncing-search/"}],
-        // 智能测试
         "Automation": [{"Comment": "", "name1": "C38", "url1": "/AutoResult/AutoResult_search/"}],
         "Discussing": [{"Comment": "", "name1": "C38", "url1": "/Discussing/index/"}]
     };
 
-    // 分组映射 (大类 -> 包含的子系统key列表)
     const GROUP_MAP = {
         "部门管理": ["PersonalInfo", "PersonalExperience", "PublicArea", "ComDev", "ComFile"],
         "專案管理": ["ProjectInfo", "TestPlanME", "TestPlanSW", "TestPlanSW-OSR", "TestPlanINV", "CQM", "MQM", "Driver", "Tool", "UEList"],
@@ -632,32 +683,41 @@
         "討論交流": ["Discussing"]
     };
 
-    // 子系统中文映射
-    const SYS_NAME_CN = {
-        "PersonalInfo": "个人信息", "PersonalExperience": "个人履历", "PublicArea": "公共区域", "ComDev": "共用设备", "ComFile": "通用文件",
-        "ProjectInfo": "项目信息", "TestPlanME": "测试计划(ME)", "TestPlanSW": "测试计划(SW)", "TestPlanSW-OSR": "测试计划(OSR)", "TestPlanINV": "创新项目",
-        "CQM": "CQM管理", "MQM": "MQM管理", "Driver": "驱动工具", "Tool": "工具库", "UEList": "UE专案",
-        "Materia": "物料资产", "Adapter": "适配器管理", "Computer": "计算机设备", "ChairCabine": "座椅柜管理", "Device": "设备借用",
-        "QIL": "品质问题追踪", "LessonLearn": "经验学习", "LowLight": "低光清单", "IssueBreakdown": "问题分解", "NonDQA-Lesson": "非DQA经验", "CriticalIssue": "关键问题",
-        "CapitalExpenditure": "资本支出", "ProjectComparison": "项目对比", "TestUnits": "测试单元", "MiscellaneousPurchases": "杂项采购",
-        "SpecDownload": "规范下载", "ManagementSop": "管理SOP", "OBIResult": "OBI结果", "PackageGValue": "封装参数", "CDM": "CDM数据", "Bouncing": "弹跳测试",
-        "Automation": "自动化测试", "Discussing": "技术讨论"
-    };
-
     new Vue({
         el: "#app",
         delimiters: ['${', '}'],
         data() {
             return {
                 searchKeyword: '',
-                groupsData: []   // 存储处理后的分组数据
+                activeGroupKey: null,
+                groupsData: []
             };
         },
         computed: {
+            groupTabs() {
+                const tabs = [{ name: '全部', key: null, count: 0 }];
+                if (!this.groupsData.length) return tabs;
+                let totalSys = 0;
+                for (const group of this.groupsData) {
+                    const sysCount = group.systems.length;
+                    totalSys += sysCount;
+                    tabs.push({
+                        name: group.groupName,
+                        key: group.groupKey,
+                        count: sysCount
+                    });
+                }
+                tabs[0].count = totalSys;
+                return tabs;
+            },
             filteredGroups() {
-                if (!this.searchKeyword) return this.groupsData;
+                let baseGroups = this.groupsData;
+                if (this.activeGroupKey !== null) {
+                    baseGroups = this.groupsData.filter(g => g.groupKey === this.activeGroupKey);
+                }
+                if (!this.searchKeyword) return baseGroups;
                 const kw = this.searchKeyword.trim().toLowerCase();
-                return this.groupsData.map(group => {
+                return baseGroups.map(group => {
                     const filteredSys = group.systems.filter(sys =>
                         sys.displayName.toLowerCase().includes(kw) ||
                         sys.links.some(link => link.label.toLowerCase().includes(kw))
@@ -670,7 +730,6 @@
             this.buildNavigation();
         },
         methods: {
-            // 解析原始字典生成结构化导航数据
             buildNavigation() {
                 const groups = [];
                 for (const [groupName, sysKeys] of Object.entries(GROUP_MAP)) {
@@ -679,7 +738,6 @@
                         const rawItems = All_system_dic_raw[key];
                         if (!rawItems || !rawItems.length) continue;
                         const links = [];
-                        // 遍历每个对象中的 name/url 字段 (name1~name4, url1~url4)
                         rawItems.forEach(item => {
                             for (let i = 1; i <= 4; i++) {
                                 const nameKey = `name${i}`;
@@ -687,22 +745,19 @@
                                 const custName = item[nameKey];
                                 let url = item[urlKey];
                                 if (custName && url && typeof url === 'string' && url.trim() !== '') {
-                                    // 处理可能残留的变量前缀替换
                                     let finalUrl = url;
                                     if (url.includes('DDMS_add')) finalUrl = url.replace('DDMS_add', PATH_PREFIX.DDMS_add);
                                     if (url.includes('Discussing_add')) finalUrl = url.replace('Discussing_add', PATH_PREFIX.Discussing_add);
                                     if (!finalUrl.startsWith('http') && !finalUrl.startsWith('/')) finalUrl = '/' + finalUrl;
-                                    links.push({
-                                        label: `${custName}`,
-                                        url: finalUrl
-                                    });
+                                    links.push({ label: `${custName}`, url: finalUrl });
                                 }
                             }
                         });
                         if (links.length > 0) {
+                            // 直接使用原始 key 作为显示名称，不做任何翻译
                             systems.push({
                                 id: key,
-                                displayName: key,   // 直接显示原始系统标识符
+                                displayName: key,
                                 links: links
                             });
                         }
