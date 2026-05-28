@@ -122,6 +122,7 @@ urlpatterns = [
     path('CommonDevice/', include('CommonDevice.urls', namespace='CommonDevice')),
     path('CommonFiles/', include('CommonFiles.urls', namespace='CommonFiles')),
     path('UElist/', include('UElist.urls', namespace='UElist')),
+    path('PCRList/', include('PCRList.urls', namespace='PCRList')),
 ]#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

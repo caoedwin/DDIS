@@ -343,7 +343,7 @@
 
         body.theme-light .nav-container .system-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 252, 255, 0.98));
-            background-image: 
+            background-image:
                 repeating-linear-gradient(45deg, rgba(64, 158, 255, 0.05) 0px, rgba(64, 158, 255, 0.05) 2px, transparent 2px, transparent 8px),
                 radial-gradient(circle at 20% 30%, rgba(100, 150, 200, 0.08) 1.5px, transparent 1.5px);
             background-blend-mode: overlay;
@@ -351,7 +351,7 @@
         }
         body.theme-dark .nav-container .system-card {
             background: linear-gradient(135deg, rgba(30, 40, 55, 0.92), rgba(20, 30, 45, 0.96));
-            background-image: 
+            background-image:
                 repeating-linear-gradient(45deg, rgba(100, 180, 250, 0.08) 0px, rgba(100, 180, 250, 0.08) 2px, transparent 2px, transparent 8px),
                 radial-gradient(circle at 30% 40%, rgba(64, 158, 255, 0.12) 2px, transparent 2px);
             background-blend-mode: overlay;
@@ -455,6 +455,11 @@
         DCT_add: '/DCT',
         EQUIP_add: '/EQUIP'
     };
+    const DDMS_add = 'http://10.129.83.21:8004'
+    const Discussing_add = 'http://10.129.83.21:8003'
+    const RTMS_add = 'http://10.129.83.21:8001'
+    const DCT_add = 'http://10.128.82.23'
+    const EQUIP_add = 'http://kspqiswww'
 
     const All_system_dic_raw = {
         "PersonalInfo": [
@@ -641,35 +646,35 @@
             {"Comment": "", "name1": "C38", "url1": "/UElist/UE_ProjectResult/", "Comment1": "", "CustomerFlag1": 0,
              "name2": "T88", "url2": "", "Comment2": "", "CustomerFlag2": 0,
              "name3": 'T89', "url3": "", "Comment3": "", "CustomerFlag3": 0,
-             "name4": 'ABO', "url4": "/ABODriverTool/ABOToolList_search/", "Comment4": "", "CustomerFlag4": 0},
+             "name4": '', "url4": "", "Comment4": "", "CustomerFlag4": 0},
             {"Comment": "", "name1": "T99", "url1": "", "Comment1": "", "CustomerFlag1": 0,
              "name2": "", "url2": "", "Comment2": "", "CustomerFlag2": 0,
              "name3": "", "url3": "", "Comment3": "", "CustomerFlag3": 0,
              "name4": "", "url4": "", "Comment4": "", "CustomerFlag4": 0},
         ],
-        "Materia": [{"Comment": "", "name1": "C38", "url1": "/DDMS/TUMHistory/SummaryMateria/", "Comment1": "", "CustomerFlag1": 0, "name2": "", "url2": ""}],
-        "Adapter": [{"Comment": "", "name1": "C38", "url1": "/DDMS/AdapterPowerCode/BorrowedAdapter/", "Comment1": "", "CustomerFlag1": 0}],
-        "Computer": [{"Comment": "", "name1": "C38", "url1": "/DDMS/ComputerMS/BorrowedComputer/", "Comment1": "", "CustomerFlag1": 0}],
-        "ChairCabine": [{"Comment": "", "name1": "C38", "url1": "/DDMS/ChairCabinetMS/BorrowedChairCabinet/", "Comment1": "", "CustomerFlag1": 0}],
-        "Device": [{"Comment": "", "name1": "C38", "url1": "/DDMS/DeviceLNV/BorrowedDeviceLNV/", "Comment1": "", "CustomerFlag1": 0, "name4": "ABO", "url4": "/DDMS/DeviceABO/BorrowedDeviceABO/"}],
+        "Materia": [{"Comment": "", "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryMateria/", "Comment1": "", "CustomerFlag1": 0, "name2": "", "url2": ""}],
+        "Adapter": [{"Comment": "", "name1": "C38", "url1": DDMS_add + "/AdapterPowerCode/BorrowedAdapter/", "Comment1": "", "CustomerFlag1": 0}],
+        "Computer": [{"Comment": "", "name1": "C38", "url1": DDMS_add + "/ComputerMS/BorrowedComputer/", "Comment1": "", "CustomerFlag1": 0}],
+        "ChairCabine": [{"Comment": "", "name1": "C38", "url1": DDMS_add + "/ChairCabinetMS/BorrowedChairCabinet/", "Comment1": "", "CustomerFlag1": 0}],
+        "Device": [{"Comment": "", "name1": "C38", "url1": DDMS_add + "/DeviceLNV/BorrowedDeviceLNV/", "Comment1": "", "CustomerFlag1": 0, "name3": "ABO", "url3": DDMS_add + "/DeviceABO/BorrowedDeviceABO/","name4": "A39", "url4": DDMS_add + "/DeviceA39/BorrowedDeviceA39/", "Comment4": "", "CustomerFlag4": 0,}],
         "QIL": [{"Comment": "", "name1": "C38", "url1": "/QIL/QIL_searchbyproject/", "Comment1": "", "CustomerFlag1": 0, "name4": "ABO", "url4": "/ABOQIL/ABOQIL_searchbyproject/"}],
-        "LessonLearn": [{"Comment": "", "name1": "C38", "url1": "/LessonProjectME/Lesson_SearchByProject/", "Comment1": "", "CustomerFlag1": 0, "name4": "ABO", "url4": "/ABOProjectLessonL/Lesson_SearchByProject/"}],
+        "LessonLearn": [{"Comment": "", "name1": "C38", "url1": "/LessonProjectME/Lesson_SearchByProject/", "Comment1": "", "CustomerFlag1": 0, "name2": "A31", "url2": "/A31LessonLProject/Lesson_SearchByProject/", "Comment2": "", "CustomerFlag2": 0, "name3": "A32", "url3": "/A32LessonLProject/Lesson_SearchByProject/", "Comment3": "", "CustomerFlag3": 0, "name4": "ABO", "url4": "/ABOProjectLessonL/Lesson_SearchByProject/"}],
         "LowLight": [{"Comment": "", "name1": "C38", "url1": "/LowLightList/LowLightList_edit/"}],
         "IssueBreakdown": [{"Comment": "", "name1": "C38", "url1": "/IssuesBreakdown/IssuesBreakdown_Summary/"}],
         "NonDQA-Lesson": [{"Comment": "", "name1": "C38", "url1": "/NonDQALesson/NonDQALesson-summary/"}],
         "CriticalIssue": [{"Comment": "", "name1": "C38", "url1": "/CriticalIssueCrossCheck/CriticalIssue_SearchByIssue/"}],
         "CapitalExpenditure": [{"Comment": "", "name1": "C38", "url1": "/CapitalExpenditure/CapitalExpenditure_Summary/"}],
         "ProjectComparison": [{"Comment": "", "name1": "C38", "url1": "/ProjectComparison/ProjectComparison_Summary/"}],
-        "TestUnits": [{"Comment": "", "name1": "C38", "url1": "/DDMS/TUMHistory/SummaryTUM/"}],
+        "TestUnits": [{"Comment": "", "name1": "C38", "url1": DDMS_add + "/TUMHistory/SummaryTUM/"}],
         "MiscellaneousPurchases": [{"Comment": "", "name1": "C38", "url1": "/MiscellaneousPurchases/SubscriptionStatus/"}],
         "SpecDownload": [{"Comment": "", "name1": "C38", "url1": "/SpecDownload/SpecDownload-summary/"}],
-        "ManagementSop": [{"Comment": "", "name1": "管理規範", "url1": "/SpecDownload/ManagementSop-summary/"}],
+        "ManagementSop": [{"Comment": "", "name1": "C38", "url1": "/SpecDownload/ManagementSop-summary/"}],
         "OBIResult": [{"Comment": "", "name1": "C38", "url1": "/OBIDeviceResult/OBIDeviceResult_search/"}],
         "PackageGValue": [{"Comment": "", "name1": "C38", "url1": "/Package/Package-search/"}],
         "CDM": [{"Comment": "", "name1": "C38", "url1": "/CDM/CDM-search/"}],
         "Bouncing": [{"Comment": "", "name1": "C38", "url1": "/Bouncing/Bouncing-search/"}],
         "Automation": [{"Comment": "", "name1": "C38", "url1": "/AutoResult/AutoResult_search/"}],
-        "Discussing": [{"Comment": "", "name1": "C38", "url1": "/Discussing/index/"}]
+        "Discussing": [{"Comment": "", "name1": "C38", "url1": Discussing_add + "/index/"}]
     };
 
     const GROUP_MAP = {

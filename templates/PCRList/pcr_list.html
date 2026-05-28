@@ -1,0 +1,786 @@
+<!-- templates/PCRList/pcr_list.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}PCR 管理系统{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .search-card, .stats-card, .table-card {
+        padding: 0px;
+        margin-bottom: 0px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 0px;
+    }
+    /* 修复统计表格最后一行显示不全的问题 */
+    .stats-card {
+        margin-bottom: 20px;
+        overflow: visible;
+    }
+    .stats-table {
+        overflow: visible;
+    }
+    .stats-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 15px;
+    }
+    .stat-box {
+        background: rgba(64,158,255,0.2);
+        border-radius: 8px;
+        padding: 10px 15px;
+        min-width: 180px;
+        flex: 1;
+    }
+    .stat-title {
+        font-weight: bold;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 8px;
+        padding-bottom: 5px;
+    }
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin: 5px 0;
+    }
+    .el-form-item__label { color: white; }
+    .el-table .cell { text-align: left; }
+    .action-buttons { display: flex; gap: 5px; }
+    .stats-table {
+        width: 100%;
+        font-size: 13px;
+    }
+    .stats-table th, .stats-table td {
+        text-align: center;
+        padding: 6px 0;
+    }
+    .stats-header {
+        margin: 0 0 12px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #409EFF;
+        border-left: 4px solid #409EFF;
+        padding-left: 12px;
+    }
+    .el-table__header-wrapper .el-table__header th {
+        background-color: #f5f7fa;
+    }
+    /* 列设置弹窗样式 */
+    .column-group {
+        margin-bottom: 16px;
+        border-bottom: 1px solid #EBEEF5;
+        padding-bottom: 8px;
+    }
+    .column-group-title {
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #409EFF;
+        font-size: 14px;
+    }
+    .column-checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .column-checkbox-group .el-checkbox {
+        width: 120px;
+        margin-right: 0;
+    }
+    /* 表格工具栏样式 */
+    .table-toolbar {
+        margin-bottom: 12px;
+        text-align: right;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <el-backtop></el-backtop>
+
+    <!-- 搜索条件 -->
+    <div class="search-card">
+        <el-form :inline="true" :model="searchForm" label-width="120px">
+            <el-form-item label="时间范围（重叠）">
+                <el-date-picker
+                    v-model="searchForm.dateRange"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="yyyy-MM-dd"
+                    :clearable="true">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
+                <el-button type="success" @click="openCreateDialog" icon="el-icon-plus">新增PCR</el-button>
+                <el-button type="warning" @click="showUploadDialog = true" icon="el-icon-upload">Excel上传</el-button>
+                <el-button type="info" @click="exportToExcel" icon="el-icon-download">导出Excel</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+
+    <!-- 统计数据表格 -->
+    <div class="stats-card" v-if="statsLoaded">
+        <div class="stats-header">DQA NRE to PM</div>
+        <el-table :data="statsRows" border stripe class="stats-table">
+            <el-table-column prop="dimension" label="维度" width="200" {% comment %}fixed="left"{% endcomment %}></el-table-column>
+            <el-table-column label="DQA NRE mail to PM" align="center">
+                <el-table-column prop="sample_qty" label="Sample Q'ty" width="130">
+                    <template slot-scope="scope">${ scope.row.sample_qty }</template>
+                </el-table-column>
+                <el-table-column prop="hc_qty" label="HC Q'ty" width="120">
+                    <template slot-scope="scope">${ scope.row.hc_qty }</template>
+                </el-table-column>
+                <el-table-column prop="hc_days" label="HC Days" width="120">
+                    <template slot-scope="scope">${ scope.row.hc_days }</template>
+                </el-table-column>
+                <el-table-column prop="pd" label="PD" width="100">
+                    <template slot-scope="scope">${ scope.row.pd }</template>
+                </el-table-column>
+                <el-table-column prop="device_fee_usd" label="Device fee (USD)" width="150">
+                    <template slot-scope="scope">${ scope.row.device_fee_usd }</template>
+                </el-table-column>
+            </el-table-column>
+        </el-table>
+    </div>
+
+    <!-- 数据表格 - 支持列显隐，增加表格工具栏（列设置按钮） -->
+    <div class="table-card">
+        <!-- 表格工具栏：列设置按钮放在表格右上角，与表格标题行融合 -->
+        <div class="table-toolbar">
+            <el-button type="default" size="small" @click="openColumnSettings" icon="el-icon-setting">列设置</el-button>
+        </div>
+        <el-table :data="tableData" border stripe v-loading="loading">
+            <!-- 序号列，固定显示，不可隐藏 -->
+            <el-table-column type="index" width="50" label="No" fixed="left"></el-table-column>
+            
+            <!-- PCR No -->
+            <el-table-column v-if="colVisible.pcr_no" prop="pcr_no" label="PCR No" width="150" fixed="left"></el-table-column>
+            <!-- PCR Title -->
+            <el-table-column v-if="colVisible.pcr_title" prop="pcr_title" label="PCR Title" min-width="200" fixed="left"></el-table-column>
+            <!-- Customer -->
+            <el-table-column v-if="colVisible.Customer" prop="Customer" label="Customer" width="80"></el-table-column>
+            <!-- Project -->
+            <el-table-column v-if="colVisible.Project" prop="Project" label="Project" width="150"></el-table-column>
+            <!-- phase -->
+            <el-table-column v-if="colVisible.phase" prop="phase" label="NPI or INV" width="100"></el-table-column>
+            <!-- category -->
+            <el-table-column v-if="colVisible.category" prop="category" label="Category" width="120"></el-table-column>
+            <!-- Receive Date -->
+            <el-table-column v-if="colVisible.receive_date" prop="receive_date" label="Receive Date" width="110"></el-table-column>
+            <!-- Status -->
+            <el-table-column v-if="colVisible.status" prop="status" label="Status" width="100"></el-table-column>
+
+            <!-- 一级表头：DQA NRE mail to PM，仅当至少有一个子列可见时显示 -->
+            <el-table-column v-if="showNreGroup" label="DQA NRE mail to PM" align="center">
+                <el-table-column v-if="colVisible.sample_qty" prop="sample_qty" label="Sample Q'ty" width="100">
+                    <template slot-scope="scope">${ scope.row.sample_qty }</template>
+                </el-table-column>
+                <el-table-column v-if="colVisible.hc_qty" prop="hc_qty" label="HC Q'ty" width="100">
+                    <template slot-scope="scope">${ scope.row.hc_qty }</template>
+                </el-table-column>
+                <el-table-column v-if="colVisible.hc_days" prop="hc_days" label="HC Days" width="100">
+                    <template slot-scope="scope">${ scope.row.hc_days }</template>
+                </el-table-column>
+                <el-table-column v-if="colVisible.pd" prop="pd" label="PD" width="80">
+                    <template slot-scope="scope">${ scope.row.pd }</template>
+                </el-table-column>
+                <el-table-column v-if="colVisible.device_fee_usd" prop="device_fee_usd" label="Device fee (USD)" width="130">
+                    <template slot-scope="scope">${ scope.row.device_fee_usd ? scope.row.device_fee_usd.toFixed(2) : '0.00' }</template>
+                </el-table-column>
+            </el-table-column>
+
+            <!-- PM send NRE to Sales -->
+            <el-table-column v-if="colVisible.pm_send_nre_to_sales" prop="pm_send_nre_to_sales" label="PM send NRE to Sales" width="130">
+                <template slot-scope="scope">${ scope.row.pm_send_nre_to_sales ? 'Yes' : 'No' }</template>
+            </el-table-column>
+            <!-- Execution Start -->
+            <el-table-column v-if="colVisible.execution_start" prop="execution_start" label="Execution Start" width="110"></el-table-column>
+            <!-- Execution End -->
+            <el-table-column v-if="colVisible.execution_end" prop="execution_end" label="Execution End" width="110"></el-table-column>
+            <!-- Whether In Budget -->
+            <el-table-column v-if="colVisible.whether_in_budget" prop="whether_in_budget" label="Whether In Budget" width="120">
+                <template slot-scope="scope">${ scope.row.whether_in_budget ? 'Yes' : 'No' }</template>
+            </el-table-column>
+            <!-- In budget but cost add -->
+            <el-table-column v-if="colVisible.in_budget_but_cost_add" prop="in_budget_but_cost_add" label="In budget but cost add" width="140">
+                <template slot-scope="scope">${ scope.row.in_budget_but_cost_add ? 'Yes' : 'No' }</template>
+            </el-table-column>
+            <!-- Remark -->
+            <el-table-column v-if="colVisible.remark" prop="remark" label="Remark" min-width="200" show-overflow-tooltip></el-table-column>
+            <!-- 報NRE郵件附件列 -->
+            <el-table-column v-if="colVisible.attachment" label="報NRE郵件" width="100">
+                <template slot-scope="scope">
+                    <a v-if="scope.row.attachment" :href="getFullUrl(scope.row.attachment)" target="_blank">下载</a>
+                    <span v-else>-</span>
+                </template>
+            </el-table-column>
+            <!-- 操作列，始终显示不可隐藏 -->
+            <el-table-column label="操作" width="150" fixed="right">
+                <template slot-scope="scope">
+                    <div class="action-buttons">
+                        <el-button type="primary" size="mini" icon="el-icon-edit" @click="openEditDialog(scope.row)"></el-button>
+                        <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteRow(scope.row)"></el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[20,50,100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
+    </div>
+
+    <!-- 新增/编辑弹窗 -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="70%" @close="resetForm">
+        <el-form ref="pcrForm" :model="form" :rules="rules" label-width="140px">
+            <el-row :gutter="20">
+                <el-col :span="12"><el-form-item label="PCR No" prop="pcr_no"><el-input v-model="form.pcr_no"></el-input></el-form-item></el-col>
+                <el-col :span="12"><el-form-item label="PCR Title" prop="pcr_title"><el-input v-model="form.pcr_title"></el-input></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Customer" prop="Customer"><el-select v-model="form.Customer"><el-option label="NB" value="NB"></el-option><el-option label="AIO" value="AIO"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Project" prop="Project"><el-input v-model="form.Project"></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Compal Project" prop="Compalproject"><el-input v-model="form.Compalproject"></el-input></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Phase" prop="phase"><el-select v-model="form.phase"><el-option label="NPI" value="NPI"></el-option><el-option label="INV" value="INV"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Category" prop="category"><el-input v-model="form.category"></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Receive Date" prop="receive_date"><el-date-picker v-model="form.receive_date" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Sample Qty" prop="sample_qty"><el-input-number v-model="form.sample_qty" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="HC Qty" prop="hc_qty"><el-input-number v-model="form.hc_qty" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="HC Days" prop="hc_days"><el-input-number v-model="form.hc_days" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Device Fee (USD)" prop="device_fee_usd"><el-input-number v-model="form.device_fee_usd" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="PM send NRE to Sales"><el-switch v-model="form.pm_send_nre_to_sales"></el-switch></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Status" prop="status"><el-select v-model="form.status"><el-option label="Perform" value="Perform"></el-option><el-option label="Plan" value="Plan"></el-option><el-option label="On going" value="On going"></el-option></el-select></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12"><el-form-item label="Execution Start"><el-date-picker v-model="form.execution_start" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
+                <el-col :span="12"><el-form-item label="Execution End"><el-date-picker v-model="form.execution_end" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12"><el-form-item label="Whether In Budget"><el-switch v-model="form.whether_in_budget"></el-switch></el-form-item></el-col>
+                <el-col :span="12"><el-form-item label="In budget but cost add"><el-switch v-model="form.in_budget_but_cost_add"></el-switch></el-form-item></el-col>
+            </el-row>
+            <el-form-item label="Remark"><el-input type="textarea" v-model="form.remark" rows="2"></el-input></el-form-item>
+            <el-form-item label="附件">
+                <el-upload action="#" :auto-upload="false" :on-change="handleAttachmentChange" :file-list="attachmentFileList" :limit="1">
+                    <el-button size="small" type="primary">选择文件</el-button>
+                </el-upload>
+                <div v-if="form.attachment_url && !attachmentChanged"><a :href="form.attachment_url" target="_blank">当前附件</a> <el-button type="text" @click="clearAttachment">清除</el-button></div>
+            </el-form-item>
+        </el-form>
+        <div slot="footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submitForm" :loading="submitting">保存</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- Excel上传弹窗 -->
+    <el-dialog title="Excel批量上传" :visible.sync="showUploadDialog" width="500px">
+        <el-upload drag action="#" :auto-upload="false" :on-change="handleExcelChange" :file-list="excelFileList" :limit="1">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">支持.xlsx, .xls格式，表头需包含英文列名</div>
+        </el-upload>
+        <div slot="footer">
+            <el-button @click="showUploadDialog = false">取消</el-button>
+            <el-button type="primary" @click="uploadExcel" :loading="uploading">上传</el-button>
+            <el-button type="info" @click="downloadTemplate">下载模板</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 重复数据展示弹窗 -->
+    <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
+        <el-table :data="duplicateTableData" border stripe>
+            <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
+            <el-table-column prop="pcr_no" label="PCR No" width="180"></el-table-column>
+            <el-table-column prop="project" label="Project" width="200"></el-table-column>
+            <el-table-column prop="pcr_title" label="PCR Title" min-width="250"></el-table-column>
+        </el-table>
+        <div slot="footer">
+            <el-button type="primary" @click="duplicateDialogVisible = false">关 闭</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 错误信息展示弹窗 -->
+    <el-dialog title="错误信息（未导入）" :visible.sync="errorDialogVisible" width="70%">
+        <el-table :data="errorTableData" border stripe>
+            <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
+            <el-table-column prop="message" label="错误详情" min-width="400"></el-table-column>
+        </el-table>
+        <div slot="footer">
+            <el-button type="primary" @click="errorDialogVisible = false">关 闭</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 列设置弹窗 -->
+    <el-dialog title="选择显示的列" :visible.sync="columnSettingsVisible" width="700px">
+        <div class="column-group">
+            <div class="column-group-title">基本信息</div>
+            <div class="column-checkbox-group">
+                <el-checkbox v-model="colVisible.pcr_no">PCR No</el-checkbox>
+                <el-checkbox v-model="colVisible.pcr_title">PCR Title</el-checkbox>
+                <el-checkbox v-model="colVisible.Customer">Customer</el-checkbox>
+                <el-checkbox v-model="colVisible.Project">Project</el-checkbox>
+                <el-checkbox v-model="colVisible.phase">NPI or INV</el-checkbox>
+                <el-checkbox v-model="colVisible.category">Category</el-checkbox>
+                <el-checkbox v-model="colVisible.receive_date">Receive Date</el-checkbox>
+                <el-checkbox v-model="colVisible.status">Status</el-checkbox>
+            </div>
+        </div>
+        <div class="column-group">
+            <div class="column-group-title">DQA NRE指标</div>
+            <div class="column-checkbox-group">
+                <el-checkbox v-model="colVisible.sample_qty">Sample Q'ty</el-checkbox>
+                <el-checkbox v-model="colVisible.hc_qty">HC Q'ty</el-checkbox>
+                <el-checkbox v-model="colVisible.hc_days">HC Days</el-checkbox>
+                <el-checkbox v-model="colVisible.pd">PD</el-checkbox>
+                <el-checkbox v-model="colVisible.device_fee_usd">Device fee (USD)</el-checkbox>
+            </div>
+        </div>
+        <div class="column-group">
+            <div class="column-group-title">其他信息</div>
+            <div class="column-checkbox-group">
+                <el-checkbox v-model="colVisible.pm_send_nre_to_sales">PM send NRE to Sales</el-checkbox>
+                <el-checkbox v-model="colVisible.execution_start">Execution Start</el-checkbox>
+                <el-checkbox v-model="colVisible.execution_end">Execution End</el-checkbox>
+                <el-checkbox v-model="colVisible.whether_in_budget">Whether In Budget</el-checkbox>
+                <el-checkbox v-model="colVisible.in_budget_but_cost_add">In budget but cost add</el-checkbox>
+                <el-checkbox v-model="colVisible.remark">Remark</el-checkbox>
+                <el-checkbox v-model="colVisible.attachment">報NRE郵件</el-checkbox>
+            </div>
+        </div>
+        <div class="column-group">
+            <div class="column-group-title">说明</div>
+            <div class="column-checkbox-group" style="color:#909399; font-size:12px;">
+                <span>序号列和操作列固定显示，不可隐藏</span>
+            </div>
+        </div>
+        <div slot="footer">
+            <el-button @click="resetColumnSettings">重置</el-button>
+            <el-button type="primary" @click="saveColumnSettings">保 存</el-button>
+        </div>
+    </el-dialog>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/xlsx/xlsx.js"></script>
+<script>
+new Vue({
+    el: "#app",
+    delimiters: ['${', '}'],
+    data() {
+        return {
+            searchForm: { dateRange: [] },
+            stats: {
+                total: { perform: {}, plan: {}, total: {} },
+                NB: { perform: {}, plan: {}, total: {} },
+                AIO: { perform: {}, plan: {}, total: {} },
+                NB_NPI: { perform: {}, plan: {} },
+                NB_INV: { perform: {}, plan: {} },
+                AIO_NPI: { perform: {}, plan: {} },
+                AIO_INV: { perform: {}, plan: {} }
+            },
+            statsLoaded: false,
+            statsRows: [],
+            tableData: [],
+            total: 0,
+            currentPage: 1,
+            pageSize: 100,
+            loading: false,
+            dialogVisible: false,
+            dialogTitle: '新增PCR',
+            form: this.getEmptyForm(),
+            rules: {
+                pcr_no: [{ required: true, message: '请输入PCR No' }],
+                pcr_title: [{ required: true, message: '请输入PCR Title' }],
+                Customer: [{ required: true }],
+                Project: [{ required: true }],
+                Compalproject: [{ required: true }],
+                phase: [{ required: true }],
+                category: [{ required: true }],
+                receive_date: [],
+                status: [{ required: true }],
+            },
+            attachmentFileList: [],
+            attachmentChanged: false,
+            submitting: false,
+            showUploadDialog: false,
+            excelFileList: [],
+            uploading: false,
+            duplicateDialogVisible: false,
+            duplicateTableData: [],
+            errorDialogVisible: false,
+            errorTableData: [],
+            // 列设置相关
+            columnSettingsVisible: false,
+            colVisible: {
+                pcr_no: true,
+                pcr_title: true,
+                Customer: true,
+                Project: true,
+                phase: true,
+                category: true,
+                receive_date: true,
+                status: true,
+                sample_qty: true,
+                hc_qty: true,
+                hc_days: true,
+                pd: true,
+                device_fee_usd: true,
+                pm_send_nre_to_sales: true,
+                execution_start: true,
+                execution_end: true,
+                whether_in_budget: true,
+                in_budget_but_cost_add: true,
+                remark: true,
+                attachment: true,
+            },
+        }
+    },
+    computed: {
+        // 判断DQA NRE组是否至少有一个子列可见
+        showNreGroup() {
+            return this.colVisible.sample_qty || this.colVisible.hc_qty || this.colVisible.hc_days || this.colVisible.pd || this.colVisible.device_fee_usd;
+        }
+    },
+    mounted() {
+        this.loadColumnSettings();
+        this.searchData();
+    },
+    methods: {
+        // 构建符合图片格式的17行统计数据
+        buildStatsRows() {
+            const getVal = (obj, field) => {
+                if (obj && typeof obj[field] !== 'undefined' && obj[field] !== null) {
+                    let num = parseFloat(obj[field]);
+                    return isNaN(num) ? 0 : num;
+                }
+                return 0;
+            };
+            const formatSample = (val) => { let n = getVal(val, 'sample_qty'); return n.toFixed(1); };
+            const formatHcQty = (val) => { let n = getVal(val, 'hc_qty'); return n.toFixed(1); };
+            const formatHcDays = (val) => { let n = getVal(val, 'hc_days'); return n.toFixed(1); };
+            const formatPd = (val) => { let n = getVal(val, 'pd'); return n.toFixed(1); };
+            const formatDevice = (val) => { let n = getVal(val, 'device_fee_usd'); return n.toFixed(2); };
+            
+            const rows = [];
+            const totalData = this.stats.total;
+            rows.push({ dimension: 'Total (Perform+Plan)', sample_qty: formatSample(totalData.total), hc_qty: formatHcQty(totalData.total), hc_days: formatHcDays(totalData.total), pd: formatPd(totalData.total), device_fee_usd: formatDevice(totalData.total) });
+            rows.push({ dimension: 'Total (Perform)', sample_qty: formatSample(totalData.perform), hc_qty: formatHcQty(totalData.perform), hc_days: formatHcDays(totalData.perform), pd: formatPd(totalData.perform), device_fee_usd: formatDevice(totalData.perform) });
+            rows.push({ dimension: 'Total (Plan)', sample_qty: formatSample(totalData.plan), hc_qty: formatHcQty(totalData.plan), hc_days: formatHcDays(totalData.plan), pd: formatPd(totalData.plan), device_fee_usd: formatDevice(totalData.plan) });
+            
+            const nbData = this.stats.NB;
+            rows.push({ dimension: 'NB Total (Perform+Plan)', sample_qty: formatSample(nbData.total), hc_qty: formatHcQty(nbData.total), hc_days: formatHcDays(nbData.total), pd: formatPd(nbData.total), device_fee_usd: formatDevice(nbData.total) });
+            rows.push({ dimension: 'NB Total (Perform)', sample_qty: formatSample(nbData.perform), hc_qty: formatHcQty(nbData.perform), hc_days: formatHcDays(nbData.perform), pd: formatPd(nbData.perform), device_fee_usd: formatDevice(nbData.perform) });
+            rows.push({ dimension: 'NB Total (Plan)', sample_qty: formatSample(nbData.plan), hc_qty: formatHcQty(nbData.plan), hc_days: formatHcDays(nbData.plan), pd: formatPd(nbData.plan), device_fee_usd: formatDevice(nbData.plan) });
+            
+            const aioData = this.stats.AIO;
+            rows.push({ dimension: 'AIO total (Perform+Plan)', sample_qty: formatSample(aioData.total), hc_qty: formatHcQty(aioData.total), hc_days: formatHcDays(aioData.total), pd: formatPd(aioData.total), device_fee_usd: formatDevice(aioData.total) });
+            rows.push({ dimension: 'AIO total (Perform)', sample_qty: formatSample(aioData.perform), hc_qty: formatHcQty(aioData.perform), hc_days: formatHcDays(aioData.perform), pd: formatPd(aioData.perform), device_fee_usd: formatDevice(aioData.perform) });
+            rows.push({ dimension: 'AIO total (Plan)', sample_qty: formatSample(aioData.plan), hc_qty: formatHcQty(aioData.plan), hc_days: formatHcDays(aioData.plan), pd: formatPd(aioData.plan), device_fee_usd: formatDevice(aioData.plan) });
+            
+            const nbNpi = this.stats.NB_NPI;
+            rows.push({ dimension: 'NB NPI (Perform)', sample_qty: formatSample(nbNpi.perform), hc_qty: formatHcQty(nbNpi.perform), hc_days: formatHcDays(nbNpi.perform), pd: formatPd(nbNpi.perform), device_fee_usd: formatDevice(nbNpi.perform) });
+            rows.push({ dimension: 'NB NPI (Plan)', sample_qty: formatSample(nbNpi.plan), hc_qty: formatHcQty(nbNpi.plan), hc_days: formatHcDays(nbNpi.plan), pd: formatPd(nbNpi.plan), device_fee_usd: formatDevice(nbNpi.plan) });
+            
+            const nbInv = this.stats.NB_INV;
+            rows.push({ dimension: 'NB INV (Perform)', sample_qty: formatSample(nbInv.perform), hc_qty: formatHcQty(nbInv.perform), hc_days: formatHcDays(nbInv.perform), pd: formatPd(nbInv.perform), device_fee_usd: formatDevice(nbInv.perform) });
+            rows.push({ dimension: 'NB INV (Plan)', sample_qty: formatSample(nbInv.plan), hc_qty: formatHcQty(nbInv.plan), hc_days: formatHcDays(nbInv.plan), pd: formatPd(nbInv.plan), device_fee_usd: formatDevice(nbInv.plan) });
+            
+            const aioNpi = this.stats.AIO_NPI;
+            rows.push({ dimension: 'AIO NPI (Perform)', sample_qty: formatSample(aioNpi.perform), hc_qty: formatHcQty(aioNpi.perform), hc_days: formatHcDays(aioNpi.perform), pd: formatPd(aioNpi.perform), device_fee_usd: formatDevice(aioNpi.perform) });
+            rows.push({ dimension: 'AIO NPI (Plan)', sample_qty: formatSample(aioNpi.plan), hc_qty: formatHcQty(aioNpi.plan), hc_days: formatHcDays(aioNpi.plan), pd: formatPd(aioNpi.plan), device_fee_usd: formatDevice(aioNpi.plan) });
+            
+            const aioInv = this.stats.AIO_INV;
+            rows.push({ dimension: 'AIO INV (Perform)', sample_qty: formatSample(aioInv.perform), hc_qty: formatHcQty(aioInv.perform), hc_days: formatHcDays(aioInv.perform), pd: formatPd(aioInv.perform), device_fee_usd: formatDevice(aioInv.perform) });
+            rows.push({ dimension: 'AIO INV (Plan)', sample_qty: formatSample(aioInv.plan), hc_qty: formatHcQty(aioInv.plan), hc_days: formatHcDays(aioInv.plan), pd: formatPd(aioInv.plan), device_fee_usd: formatDevice(aioInv.plan) });
+            
+            this.statsRows = rows;
+        },
+        
+        exportToExcel() {
+            if (!this.statsLoaded || !this.tableData.length) {
+                this.$message.warning('暂无数据可导出');
+                return;
+            }
+            
+            const statsHeaders = ['维度', 'Sample Qty', 'HC Qty', 'HC Days', 'PD', 'Device fee (USD)'];
+            const statsRowsData = this.statsRows.map(row => [
+                row.dimension, row.sample_qty, row.hc_qty, row.hc_days, row.pd, row.device_fee_usd
+            ]);
+            
+            const mainHeaders = [
+                'No', 'PCR No', 'PCR Title', 'Customer', 'Project', 'Phase', 'Category',
+                'Receive Date', 'Status', 'Sample Qty', 'HC Qty', 'HC Days', 'PD',
+                'Device Fee (USD)', 'PM send NRE to Sales', 'Execution Start', 'Execution End',
+                'Whether In Budget', 'In budget but cost add', 'Remark', '報NRE郵件'
+            ];
+            const mainRows = this.tableData.map((row, index) => [
+                index + 1, row.pcr_no, row.pcr_title, row.Customer, row.Project, row.phase, row.category,
+                row.receive_date, row.status, row.sample_qty, row.hc_qty, row.hc_days, row.pd,
+                row.device_fee_usd, row.pm_send_nre_to_sales ? 'Yes' : 'No', row.execution_start, row.execution_end,
+                row.whether_in_budget ? 'Yes' : 'No', row.in_budget_but_cost_add ? 'Yes' : 'No', row.remark,
+                row.attachment ? 'Yes' : 'No'
+            ]);
+        
+            const titleRowExtended = ['DQA NRE to PM', '', '', '', '', ''];
+            const emptyRow = [''];
+            const worksheetData = [titleRowExtended, statsHeaders, ...statsRowsData, emptyRow, mainHeaders, ...mainRows];
+            const ws = XLSX.utils.aoa_to_sheet(worksheetData);
+            ws['!cols'] = [{wch:22},{wch:14},{wch:12},{wch:12},{wch:10},{wch:15},{wch:5},{wch:8},{wch:16},{wch:30},{wch:12},{wch:18},{wch:12},{wch:12},{wch:8},{wch:12},{wch:18},{wch:15},{wch:18},{wch:18},{wch:20},{wch:12}];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'PCR_Statistics_and_List');
+            XLSX.writeFile(wb, `PCR_Export_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.xlsx`);
+            this.$message.success('导出成功');
+        },
+        
+        getFullUrl(url) {
+            if (!url) return '';
+            if (url.startsWith('blob:') || url.startsWith('http')) return url;
+            return window.location.origin + url;
+        },
+        
+        getEmptyForm() {
+            return {
+                id: null, pcr_no: '', pcr_title: '', Customer: 'NB', Project: '', Compalproject: '',
+                phase: 'NPI', category: '', receive_date: '', status: 'Plan',
+                sample_qty: 0, hc_qty: 0, hc_days: 0, device_fee_usd: 0,
+                pm_send_nre_to_sales: false, execution_start: '', execution_end: '',
+                whether_in_budget: true, in_budget_but_cost_add: false, remark: '',
+                attachment_url: '', attachment_base64: null,
+            };
+        },
+        
+        resetForm() {
+            this.form = this.getEmptyForm();
+            this.attachmentFileList = [];
+            this.attachmentChanged = false;
+            if (this.$refs.pcrForm) this.$refs.pcrForm.clearValidate();
+        },
+        
+        async searchData() {
+            this.loading = true;
+            try {
+                const params = {
+                    start_date: this.searchForm.dateRange ? this.searchForm.dateRange[0] : '',
+                    end_date: this.searchForm.dateRange ? this.searchForm.dateRange[1] : '',
+                    page: this.currentPage,
+                    page_size: this.pageSize,
+                };
+                const listRes = await axios.post('/PCRList/api/list/', params);
+                this.tableData = listRes.data.data;
+                this.total = listRes.data.total;
+                const statsRes = await axios.post('/PCRList/api/statistics/', {
+                    start_date: this.searchForm.dateRange ? this.searchForm.dateRange[0] : '',
+                    end_date: this.searchForm.dateRange ? this.searchForm.dateRange[1] : '',
+                });
+                this.stats = statsRes.data;
+                this.statsLoaded = true;
+                this.buildStatsRows();
+            } catch(e) {
+                this.$message.error('加载失败');
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        handleSizeChange(val) { this.pageSize = val; this.currentPage = 1; this.searchData(); },
+        handleCurrentChange(val) { this.currentPage = val; this.searchData(); },
+        openCreateDialog() { this.dialogTitle = '新增PCR'; this.resetForm(); this.dialogVisible = true; },
+        
+        async openEditDialog(row) {
+            this.dialogTitle = '编辑PCR';
+            this.resetForm();
+            this.form = { ...row };
+            this.form.receive_date = row.receive_date || '';
+            this.form.execution_start = row.execution_start || '';
+            this.form.execution_end = row.execution_end || '';
+            this.form.attachment_url = row.attachment;
+            if (row.attachment) {
+                this.attachmentFileList = [{ name: row.attachment.split('/').pop(), url: row.attachment }];
+            }
+            this.dialogVisible = true;
+        },
+        
+        handleAttachmentChange(file, fileList) {
+            this.attachmentChanged = true;
+            this.attachmentFileList = fileList;
+            if (file && file.raw) {
+                const reader = new FileReader();
+                reader.onload = e => { this.form.attachment_base64 = e.target.result; };
+                reader.readAsDataURL(file.raw);
+            }
+        },
+        
+        clearAttachment() {
+            this.form.attachment_url = '';
+            this.form.attachment_base64 = null;
+            this.attachmentFileList = [];
+            this.attachmentChanged = true;
+        },
+        
+        async submitForm() {
+            this.$refs.pcrForm.validate(async (valid) => {
+                if (!valid) return;
+                this.submitting = true;
+                try {
+                    const url = this.form.id ? '/PCRList/api/update/' : '/PCRList/api/create/';
+                    const formData = new FormData();
+                    for (let key in this.form) {
+                        if (key === 'attachment_base64') continue;
+                        if (this.form[key] !== undefined && this.form[key] !== null) {
+                            formData.append(key, this.form[key]);
+                        }
+                    }
+                    if (this.attachmentChanged && this.attachmentFileList.length > 0) {
+                        formData.append('attachment_file', this.attachmentFileList[0].raw);
+                    }
+                    if (this.attachmentChanged && this.form.attachment_url && !this.attachmentFileList.length) {
+                        formData.append('attachment_clear', 'true');
+                    }
+                    const res = await axios.post(url, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+                    if (res.data.success) {
+                        this.$message.success('保存成功');
+                        this.dialogVisible = false;
+                        this.searchData();
+                    } else {
+                        this.$message.error(res.data.message);
+                    }
+                } catch(e) {
+                    this.$message.error(e.response?.data?.message || '保存失败');
+                } finally {
+                    this.submitting = false;
+                }
+            });
+        },
+        
+        async deleteRow(row) {
+            this.$confirm('确定删除该记录吗？', '提示', { type: 'warning' }).then(async () => {
+                try {
+                    const res = await axios.post('/PCRList/api/delete/', { id: row.id });
+                    if (res.data.success) {
+                        this.$message.success('删除成功');
+                        this.searchData();
+                    } else {
+                        this.$message.error(res.data.message);
+                    }
+                } catch(e) {
+                    this.$message.error('删除失败');
+                }
+            }).catch(() => {});
+        },
+        
+        handleExcelChange(file, fileList) { this.excelFileList = [file]; },
+        
+        async uploadExcel() {
+            if (!this.excelFileList.length) { this.$message.warning('请选择文件'); return; }
+            const formData = new FormData();
+            formData.append('excel_file', this.excelFileList[0].raw);
+            this.uploading = true;
+            try {
+                const res = await axios.post('/PCRList/api/upload_excel/', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                if (res.data.success) {
+                    let msg = `成功上传 ${res.data.success_count} 条。`;
+                    if (res.data.duplicates && res.data.duplicates.length) {
+                        this.duplicateTableData = this.parseDuplicates(res.data.duplicates);
+                        this.duplicateDialogVisible = true;
+                    }
+                    if (res.data.errors && res.data.errors.length) {
+                        this.errorTableData = this.parseErrors(res.data.errors);
+                        this.errorDialogVisible = true;
+                    }
+                    this.$message.success(msg);
+                    this.showUploadDialog = false;
+                    this.searchData();
+                } else {
+                    this.$message.error(res.data.message);
+                }
+            } catch(e) {
+                this.$message.error('上传失败');
+            } finally {
+                this.uploading = false;
+            }
+        },
+        
+        downloadTemplate() {
+            window.open('/static/PCR_Template.xlsx', '_blank');
+        },
+
+        parseDuplicates(duplicates) {
+            return duplicates.map(item => {
+                const match = item.match(/第(\d+)行:\s*(.+?)\s*-\s*(.+?)\s*-\s*(.+)/);
+                if (match) {
+                    return { row: match[1], pcr_no: match[2], project: match[3], pcr_title: match[4] };
+                } else {
+                    return { row: '?', pcr_no: '解析失败', project: '', pcr_title: item };
+                }
+            });
+        },
+
+        parseErrors(errors) {
+            return errors.map(item => {
+                const match = item.match(/第(\d+)行:\s*(.+)/);
+                if (match) {
+                    return { row: match[1], message: match[2] };
+                } else {
+                    return { row: '?', message: item };
+                }
+            });
+        },
+
+        // 列设置相关方法
+        openColumnSettings() {
+            this.columnSettingsVisible = true;
+        },
+        saveColumnSettings() {
+            localStorage.setItem('pcr_column_settings', JSON.stringify(this.colVisible));
+            this.columnSettingsVisible = false;
+            this.$message.success('列显示设置已保存');
+        },
+        resetColumnSettings() {
+            for (let key in this.colVisible) {
+                this.colVisible[key] = true;
+            }
+            localStorage.setItem('pcr_column_settings', JSON.stringify(this.colVisible));
+            this.$message.success('已重置为全部显示');
+        },
+        loadColumnSettings() {
+            const saved = localStorage.getItem('pcr_column_settings');
+            if (saved) {
+                try {
+                    const settings = JSON.parse(saved);
+                    for (let key in settings) {
+                        if (this.colVisible.hasOwnProperty(key)) {
+                            this.colVisible[key] = settings[key];
+                        }
+                    }
+                } catch(e) {}
+            }
+        },
+    }
+});
+</script>
+{% endblock %}

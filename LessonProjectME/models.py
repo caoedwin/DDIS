@@ -11,6 +11,7 @@ class TestProjectLL(models.Model):
         ('C38(NB)-SMB', 'C38(NB)-SMB'),
         ('C38(AIO)', 'C38(AIO)'),
         ('T88(AIO)', 'T88(AIO)'),
+        ('A08(NB)', 'A08(NB)'),
         ('T89', 'T89'),
         ('A39', 'A39'),
         ('C85', 'C85'),
@@ -19,6 +20,7 @@ class TestProjectLL(models.Model):
     Phase_choice =(
         # ('Select Phase', 'Select Phase'),
         ('', ''),
+        ('A(EVT)', 'A(EVT)'),
         ('B(FVT)', 'B(FVT)'),
         ('C(SIT)', 'C(SIT)'),
         ('INV', 'INV'),

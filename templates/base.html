@@ -450,14 +450,9 @@
                     <div class="float-left">
                         <li class="nav-item" style="padding-top: 12px;color: #0c0c0c"><div><span id="time"></span></div></li>
                     </div>
-                    <div class="float-right">
-                        <ul class="navbar-nav carousel" style="margin-bottom: 0px;position: relative;">
-                            <!-- 新增主题切换按钮 -->
-                            <li class="nav-item dropdown" style="margin-right: 10px;">
-                                <a class="nav-link" href="#" id="themeToggleBtn" style="color:#0c0c0c; background: rgba(0,0,0,0.05); border-radius: 30px; padding: 6px 12px;">
-                                    <i class="bi bi-brightness-high-fill"></i> 切换主题
-                                </a>
-                            </li>
+                    <div class="float-right" style="display: flex; align-items: center; gap: 16px;">
+                        <!-- 用户名信息（靠左） -->
+                        <ul class="navbar-nav carousel" style="margin-bottom: 0px; display: flex; align-items: center;">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-header" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#0c0c0c">
                                     {% if unread_count %}
@@ -474,6 +469,11 @@
                                 </div>
                             </li>
                         </ul>
+                        <!-- 主题切换按钮（靠右） -->
+                        <a class="nav-link" href="#" id="themeToggleBtn" style="color:#0c0c0c; background: rgba(0,0,0,0.05); border-radius: 30px; padding: 6px 12px;">
+                            <i id="themeIcon" class="bi bi-moon-fill"></i>
+                            <span id="themeText">切换主题</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -500,7 +500,7 @@
     <div class="content-wrap">
         <div class="main">
             <div class="container-fluid">
-                {% block content1 %}
+                {% comment %}{% block content1 %}
                 <div class="row">
                     <div class="col-lg-6 p-r-0 title-margin-right">
                         <div class="page-header">
@@ -518,7 +518,7 @@
                             </div>
                         </div>
                     </div>
-                </div>{% endblock %}
+                </div>{% endblock %}{% endcomment %}
                 <div id="main-content">
                     {% block content %}{% endblock %}
                     <div class="row" style="text-align: right">
@@ -573,9 +573,25 @@
     </script>
 
     <!-- 全局主题切换脚本（原生JS，不依赖Vue） -->
+    <!-- 全局主题切换脚本（原生JS，不依赖Vue） -->
     <script>
         (function() {
-            // 初始化主题：从 localStorage 读取，默认为 light
+            // 更新按钮图标和文字
+            function updateThemeUI() {
+                const body = document.body;
+                const isDark = body.classList.contains('theme-dark');
+                const themeIcon = document.getElementById('themeIcon');
+                const themeText = document.getElementById('themeText');
+                if (themeIcon) {
+                    // 深色模式显示太阳（点击后切换到白天），浅色模式显示月亮（点击后切换到夜晚）
+                    themeIcon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+                }
+                if (themeText) {
+                    themeText.innerText = isDark ? '浅色模式' : '深色模式';
+                }
+            }
+    
+            // 初始化主题
             const savedTheme = localStorage.getItem('ddis_theme');
             const body = document.body;
             if (savedTheme === 'dark') {
@@ -585,8 +601,9 @@
                 body.classList.add('theme-light');
                 body.classList.remove('theme-dark');
             }
-
-            // 切换主题的函数
+            updateThemeUI();
+    
+            // 切换主题函数
             window.toggleGlobalTheme = function() {
                 if (body.classList.contains('theme-light')) {
                     body.classList.remove('theme-light');
@@ -597,9 +614,10 @@
                     body.classList.add('theme-light');
                     localStorage.setItem('ddis_theme', 'light');
                 }
+                updateThemeUI();
             };
-
-            // 绑定切换按钮（确保 DOM 加载完成后）
+    
+            // 绑定按钮事件
             document.addEventListener('DOMContentLoaded', function() {
                 const themeBtn = document.getElementById('themeToggleBtn');
                 if (themeBtn) {

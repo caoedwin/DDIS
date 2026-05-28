@@ -214,6 +214,7 @@ INSTALLED_APPS = [
     'CommonDevice',
     'CommonFiles',
     'UElist',
+    'PCRList',
 ]
 
 MIDDLEWARE = [
