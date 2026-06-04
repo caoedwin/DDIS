@@ -391,6 +391,8 @@ class TestPlanSW(models.Model):
     ConfigRetestCycle=models.FloatField('Config-Retest Cycle', max_length=20, blank=True, null=True,)
     ConfigRetestSKU=models.FloatField('Config-Retest SKU', max_length=20, blank=True, null=True,)
     ConfigRetestTime=models.FloatField('Config-Retest time', max_length=20, blank=True, null=True,)
+    # 在 TestPlanSW 类中添加
+    Attention = models.TextField('Attention', blank=True, null=True, default='')
     Remark = models.CharField('Remark', max_length=3500, blank=True, null=True, default='')# New
     editor = models.CharField('editor',max_length=100, blank=True, null=True, default='')
     edit_time = models.CharField('edit_time', max_length=26, blank=True, null=True, default='')
@@ -614,6 +616,8 @@ class RetestItemSW(models.Model):
     ConfigRetestSKU = models.FloatField('Config-Retest SKU', max_length=20, blank=True, null=True, )
     ConfigRetestTime = models.FloatField('Config-Retest time', max_length=20, blank=True, null=True, )
     Remark = models.CharField('Remark', max_length=1500, blank=True, null=True, default='')
+    # 在 TestPlanSW 类中添加
+    Attention = models.TextField('Attention', blank=True, null=True, default='')
     editor = models.CharField('editor', max_length=100, blank=True, null=True, default='')
     edit_time = models.CharField('edit_time', max_length=26, blank=True, null=True, default='')
     class Meta:

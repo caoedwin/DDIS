@@ -579,6 +579,7 @@
                 <span v-else="scope.row.isSet && (canEdit)">${ scope.row.RemarkforFeatureWeightadjust }</span>
                 </template>
       </el-table-column>{% comment %}#New{% endcomment %}
+
       <!--需編輯-->
       <el-table-column width="120" >
           <template slot="header" slot-scope="scope">
@@ -827,6 +828,19 @@
                 </template>
       </el-table-column>
       <!--需編輯-->
+      <el-table-column width="200" label="Attention">
+          <template slot-scope="scope">
+                <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                    <input type="text" v-model="Attention[scope.$index + (currentPage-1)*pagesize]"
+                           class="el-input__inner" @change="initData(scope.row, scope.$index + (currentPage-1)*pagesize, {'id':5})">
+                    <span @click="clear(Attention, scope.$index + (currentPage-1)*pagesize)"
+                          :class="{'clearShow': Attention[scope.$index + (currentPage-1)*pagesize] !== ''}"
+                          class="inputClear"><i class="el-icon-circle-close"></i></span>
+                </div>
+                <span v-else>${ scope.row.Attention }</span>
+            </template>
+      </el-table-column>
+      <!--需編輯-->
       <el-table-column width="180"  label="Remark">
           <template slot="header" slot-scope="scope" >
               <el-tooltip content="Remark" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
@@ -837,7 +851,7 @@
            <template scope="scope">
                 <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(Remark, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
                 </div>
-               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remark }</span>
+               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remarkrow.Remark }</span>
                 </template>{% comment %}#New{% endcomment %}
       </el-table-column>
       <el-table-column width="120" label="修改" fixed="right">
@@ -1069,6 +1083,9 @@
       <el-input  autocomplete="off" v-model="form.CRT" clearable></el-input>
     </el-form-item>
       </el-form-item>
+         <el-form-item label="Attention" style="width:70%;" prop="Attention">
+        <el-input type="textarea" :row="4" v-model="form.Attention"></el-input>
+    </el-form-item>
          <el-form-item style="width:100%;">
          <el-form-item label="Remark" style="width:70%;" prop="Remark">
           <el-input  type="textarea"  autocomplete="off" :row="4" v-model="form.Remark"></el-input>
@@ -1224,6 +1241,7 @@
         CRC:[],
         CRS:[],
         CRT:[],
+        Attention: [],   // 用于编辑时临时存储 Attention 值
         Remark :[],
         proTS:[],
         ATO:[],
@@ -1273,6 +1291,7 @@
             CRC:'',
             CRS:'',
             CRT:0,
+            Attention: '',
             Remark :'',
             proTS:0,
             ATO:0,
@@ -1420,6 +1439,7 @@
         this.CAT=[];
         this.CLT=[];
         this.CST=[];
+        this.Attention = [];
         this.Remark =[];
         this.conSitemInAll=[];
         this.FeatureWeight =[];
@@ -1459,6 +1479,7 @@
           Vue.set(this.CRC,index,row.CRC);
           Vue.set(this.CRS,index,row.CRS);
           Vue.set(this.CRT,index,row.CRT);
+          Vue.set(this.Attention, index, row.Attention);
           Vue.set(this.Remark ,index,row.Remark );
           Vue.set(this.planOptimize,index,[]);
           for(let i = 0 , length = row.planOptimize.length;i<length;i++){
@@ -1534,6 +1555,9 @@
           if(this.comments1[index] !== row.comments1){
               changeFlag =1;
           }
+          if (this.Attention[index] !== row.Attention) {
+                changeFlag = 1;
+            }
           if(this.Remark[index] !== row.Remark){
               changeFlag =1;
           }
@@ -1565,7 +1589,7 @@
               alert("輸入值未發生改變");
               return false;
           }else{
-              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'FeatureWeight ':this.FeatureWeight [index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'Remark':this.Remark[index],'conSitemInAll':this.conSitemInAll[index]}
+              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'FeatureWeight ':this.FeatureWeight [index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'Attention': this.Attention[index],'Remark':this.Remark[index],'conSitemInAll':this.conSitemInAll[index]}
               axios.post("/TestPlanSW/TestPlanSW-edit/" ,Qs.stringify(result, {indices:false}),{
                     headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                 }).then((res) => {
@@ -1586,6 +1610,7 @@
                          row.CRC = this.CRC[index] ;
                          row.CRS = this.CRS[index] ;
                          row.CRT = this.CRT[index] ;
+                         row.Attention = this.Attention[index];
                          row.Remark = this.Remark[index] ;
                           //無需修改項
                          row.FeatureWeight  = this.FeatureWeight [index] ;

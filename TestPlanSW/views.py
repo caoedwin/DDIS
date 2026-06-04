@@ -2725,6 +2725,7 @@ def TestPlanSW_Edit(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS':i.BaseTimeSupport,'TFC':i.TimewConfigFollowmatrix,'conAtime':i.ConfigAutomationTime,'conLtime':i.ConfigLeverageTime,
@@ -2795,6 +2796,7 @@ def TestPlanSW_Edit(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
@@ -2967,6 +2969,7 @@ def TestPlanSW_Edit(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS':i.BaseTimeSupport,'TFC':i.TimewConfigFollowmatrix,'conAtime':i.ConfigAutomationTime,'conLtime':i.ConfigLeverageTime,
@@ -3037,6 +3040,7 @@ def TestPlanSW_Edit(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
@@ -3167,10 +3171,13 @@ def TestPlanSW_Edit(request):
                     updatedate['ConfigRetestTime'] = float(request.POST.get('CRT'))
                 else:
                     updatedate['ConfigRetestTime'] =None
+            if 'Attention' in request.POST.keys():
+                updatedate['Attention'] = request.POST.get('Attention')
             if 'Remark' in request.POST.keys():#new
                 updatedate['Remark'] = request.POST.get('Remark')
             updatedate['editor'] = request.session.get('user_name')
             updatedate['edit_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
             if 'planOptimize' in request.POST.keys():
                 # print('ppp')
                 planOptimize = request.POST.getlist('planOptimize',[])
@@ -3618,6 +3625,7 @@ def TestPlanSW_Edit(request):
                                             editplan.ConfigRetestTime = float(i['ConfigRetestTime'])
                                     else:
                                         editplan.ConfigRetestTime =None
+                                    editplan.Attention = i.get('Attention', '')
                                     if 'Remark' in i.keys():# New
                                         editplan.Remark = i['Remark']
                                     editplan.editor = request.session.get('user_name')
@@ -3886,6 +3894,7 @@ def TestPlanSW_Edit(request):
                                             updatedic["ConfigRetestTime"] = float(i['ConfigRetestTime'])
                                     else:
                                         updatedic["ConfigRetestTime"] =None
+                                    updatedic["Attention"] = i.get('Attention', '')
                                     if 'Remark' in i.keys():# New
                                         updatedic["Remark"] = i['Remark']
 
@@ -4185,6 +4194,7 @@ def TestPlanSW_Edit(request):
                                             editplan.ConfigRetestTime = float(i['ConfigRetestTime'])
                                     else:
                                         editplan.ConfigRetestTime = None
+                                    editplan.Attention = i.get('Attention', '')
                                     if 'Remark' in i.keys():# New
                                         editplan.Remark = i['Remark']
                                     editplan.editor = request.session.get('user_name')
@@ -4459,6 +4469,7 @@ def TestPlanSW_Edit(request):
                                         updatedic["ConfigRetestTime"] = float(i['ConfigRetestTime'])
                                 else:
                                     updatedic["ConfigRetestTime"] = None
+                                updatedic["Attention"] = i.get('Attention', '')
                                 if 'Remark' in i.keys():  # New
                                     updatedic["Remark"] = i['Remark']
 
@@ -5600,6 +5611,7 @@ def TestPlanSW_search(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
@@ -5719,6 +5731,7 @@ def TestPlanSW_search(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
@@ -5892,6 +5905,7 @@ def TestPlanSW_search(request):
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
@@ -5967,6 +5981,7 @@ def TestPlanSW_search(request):
                                 'conSitem': i.ConfigSmartItem,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
                                 'CRS': i.ConfigRetestSKU, 'CRT': i.ConfigRetestTime,
+                                'Attention': i.Attention,  # 新增
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
