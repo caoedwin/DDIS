@@ -592,7 +592,56 @@
     body.theme-dark .el-pagination__sizes .el-select .el-input__inner {
         color: #eef2ff !important;
     }
+    /* ========= 表单输入框（input/textarea/select）文本颜色主题适配 ========= */
+    /* 浅色模式：输入框文字深色，背景白色 */
+    body.theme-light input,
+    body.theme-light textarea,
+    body.theme-light select,
+    body.theme-light .form-control,
+    body.theme-light .form-control-new,
+    body.theme-light .el-input__inner {
+        color: #1f2d3d !important;
+        background-color: #ffffff !important;
+        border-color: #dcdfe6 !important;
+    }
     
+    /* 深色模式：输入框文字亮色，背景深色 */
+    body.theme-dark input,
+    body.theme-dark textarea,
+    body.theme-dark select,
+    body.theme-dark .form-control,
+    body.theme-dark .form-control-new,
+    body.theme-dark .el-input__inner {
+        color: #eef2ff !important;
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+    }
+    
+    /* 针对输入框前的标签（.input-group-text） */
+    body.theme-light .input-group-text {
+        color: #1f2d3d !important;
+        background-color: #f8fafc !important;
+        border-color: #eef2f6 !important;
+    }
+    body.theme-dark .input-group-text {
+        color: #eef2ff !important;
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+    }
+    
+    /* 占位符颜色适配 */
+    body.theme-light ::-webkit-input-placeholder { color: #9aaebf; }
+    body.theme-light ::-moz-placeholder { color: #9aaebf; }
+    body.theme-light :-ms-input-placeholder { color: #9aaebf; }
+    
+    body.theme-dark ::-webkit-input-placeholder { color: #8ea3b9; }
+    body.theme-dark ::-moz-placeholder { color: #8ea3b9; }
+    body.theme-dark :-ms-input-placeholder { color: #8ea3b9; }
+    /* 主题切换时临时禁用过渡，减少卡顿 */
+    body.disable-theme-transition,
+    body.disable-theme-transition * {
+        transition: none !important;
+    }
 </style>
 <body class="sidebar-collapse pace-done theme-light">
     <!-- 侧边栏、头部等原有内容... (保持不变，仅增加主题切换按钮) -->

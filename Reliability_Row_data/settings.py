@@ -215,6 +215,7 @@ INSTALLED_APPS = [
     'CommonFiles',
     'UElist',
     'PCRList',
+    'Sustain',
 ]
 
 MIDDLEWARE = [

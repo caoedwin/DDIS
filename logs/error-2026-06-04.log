@@ -1,0 +1,105 @@
+[2026-06-04 16:31:32,963] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Sustain/edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\Sustain\views.py", line 42, in sustain_edit
+    'user_role': get_user_role(request.user),
+  File "C:\djangoproject\Reliability_Row_data\Sustain\views.py", line 17, in get_user_role
+    roles = user.role.all()
+  File "C:\Python3129\mecheck\lib\site-packages\django\utils\functional.py", line 214, in inner
+    return func(self._wrapped, *args)
+AttributeError: 'AnonymousUser' object has no attribute 'role'
+[2026-06-04 16:31:32,991] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /Sustain/edit/ 500 [0.50, 127.0.0.1:55277]
+[2026-06-04 16:42:28,216] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Sustain/api/upload_excel/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\Sustain\views.py", line 231, in upload_excel
+    wb = openpyxl.load_workbook(excel_file, data_only=True)
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\reader\excel.py", line 317, in load_workbook
+    reader.read()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\reader\excel.py", line 279, in read
+    self.read_worksheets()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\reader\excel.py", line 227, in read_worksheets
+    ws_parser.bind_all()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\worksheet\_reader.py", line 410, in bind_all
+    self.bind_hyperlinks()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\worksheet\_reader.py", line 378, in bind_hyperlinks
+    self.ws[link.ref].hyperlink = link
+AttributeError: 'MergedCell' object attribute 'hyperlink' is read-only
+[2026-06-04 16:42:28,226] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Sustain/api/upload_excel/ 500 [5.91, 127.0.0.1:62718]
+[2026-06-04 16:42:36,772] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Sustain/api/upload_excel/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\Sustain\views.py", line 231, in upload_excel
+    wb = openpyxl.load_workbook(excel_file, data_only=True)
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\reader\excel.py", line 317, in load_workbook
+    reader.read()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\reader\excel.py", line 279, in read
+    self.read_worksheets()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\reader\excel.py", line 227, in read_worksheets
+    ws_parser.bind_all()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\worksheet\_reader.py", line 410, in bind_all
+    self.bind_hyperlinks()
+  File "C:\Python3129\mecheck\lib\site-packages\openpyxl\worksheet\_reader.py", line 378, in bind_hyperlinks
+    self.ws[link.ref].hyperlink = link
+AttributeError: 'MergedCell' object attribute 'hyperlink' is read-only
+[2026-06-04 16:42:36,777] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /Sustain/api/upload_excel/ 500 [6.14, 127.0.0.1:62718]
+[2026-06-05 08:36:35,100] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /Sustain/edit/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\Sustain\views.py", line 61, in sustain_edit
+    'user_projects': user_projects,
+  File "C:\Python3129\mecheck\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\base.py", line 904, in render_annotated
+    return self.render(context)
+  File "C:\Python3129\mecheck\lib\site-packages\django\template\library.py", line 192, in render
+    output = self.func(*resolved_args, **resolved_kwargs)
+  File "C:\djangoproject\Reliability_Row_data\app01\templatetags\custom_tag.py", line 258, in rbac_menu
+    menu_data = get_structure_data(request)
+  File "C:\djangoproject\Reliability_Row_data\app01\templatetags\custom_tag.py", line 11, in get_structure_data
+    menu = request.session[settings.SESSION_MENU_KEY]
+  File "C:\Python3129\mecheck\lib\site-packages\django\contrib\sessions\backends\base.py", line 55, in __getitem__
+    return self._session[key]
+KeyError: 'awesome'

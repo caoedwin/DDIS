@@ -1,0 +1,799 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Sustain 任务管理{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .selectMsg { padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 20px; }
+    /* 移除外层 overflow-x 避免双滚动条 */
+    .tableAround { padding: 20px; border-radius: 10px; background-color: rgba(255,255,255,0.1); }
+    .el-table { min-width: 1100px; }
+    .el-table .cell { white-space: pre-line; }
+    .upload-area { margin: 10px 0; padding: 15px; border: 2px dashed #409EFF; border-radius: 8px; text-align: center; background: rgba(64,158,255,0.05); }
+    .readonly-field .el-input__inner,
+    .readonly-field .el-textarea__inner {
+        background-color: #f5f7fa;
+        color: #909399;
+        cursor: not-allowed;
+    }
+    .el-form-item__label {
+        font-weight: 500;
+    }
+
+    /* 深色模式适配（配合 base.html 的 theme-dark 类） */
+    body.theme-dark .selectMsg {
+        background: rgba(255,255,255,0.08);
+    }
+    body.theme-dark .tableAround {
+        background-color: rgba(255,255,255,0.05);
+    }
+    body.theme-dark .upload-area {
+        background: rgba(64,158,255,0.1);
+    }
+    body.theme-dark .readonly-field .el-input__inner,
+    body.theme-dark .readonly-field .el-textarea__inner {
+        background-color: #2c3e50;
+        color: #a0c0e0;
+    }
+    /* 表格深色样式 */
+    body.theme-dark .el-table__body td,
+    body.theme-dark .el-table__body tr {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table--striped .el-table__body tr.el-table__row--striped td {
+        background-color: #2a3a48 !important;
+    }
+    body.theme-dark .el-table__body tr:hover > td {
+        background-color: #3a5a78 !important;
+    }
+    body.theme-dark .el-table__header th {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+    }
+
+    /* 主题切换时临时禁用过渡，减少卡顿 */
+    body.disable-theme-transition,
+    body.disable-theme-transition * {
+        transition: none !important;
+    }
+    /* 新增紧凑布局 */
+    .selectMsg .el-form {
+        display: flex;
+        flex-wrap: nowrap;      /* 强制不换行 */
+        align-items: center;
+        gap: 8px;               /* 统一间距 */
+        overflow-x: auto;       /* 如果整体宽度不够，整个搜索区域可滚动（用户可接受整体滚动，而非按钮区单独滚动） */
+    }
+    .selectMsg .el-form-item {
+        margin-bottom: 0 !important;
+        flex-shrink: 0;         /* 防止被压缩 */
+    }
+    /* 缩小下拉框宽度 */
+    .selectMsg .el-select {
+        width: 130px !important;
+    }
+    /* 按钮间距紧凑 */
+    .selectMsg .el-button {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 8px 12px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <el-backtop></el-backtop>
+
+    <div class="selectMsg">
+        <el-form :inline="true" :model="searchForm" style="display: flex; flex-wrap: nowrap; align-items: center; gap: 8px;">
+            <el-form-item label="客户">
+                <el-select v-model="searchForm.customer" filterable clearable @change="onCustomerChange" style="width:130px;">
+                    <el-option v-for="c in customers" :key="c" :label="c" :value="c"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="项目代码">
+                <el-select v-model="searchForm.project_code" filterable clearable style="width:130px;">
+                    <el-option v-for="p in projects" :key="p" :label="p" :value="p"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item style="flex-shrink: 0;">   <!-- 移除 overflow 相关样式 -->
+                <div style="display: flex; gap: 6px;">
+                    <el-button type="primary" size="small" @click="searchTasks" icon="el-icon-search">搜索</el-button>
+                    <el-button type="success" size="small" @click="openAddDialog" icon="el-icon-plus" v-if="canEdit">新增任务</el-button>
+                    <el-button type="warning" size="small" @click="showUploadDialog = true" icon="el-icon-upload" v-if="canEdit">Excel上传</el-button>
+                    <el-button type="info" size="small" @click="downloadTemplate" icon="el-icon-download">下载模板</el-button>
+                    <el-button type="info" size="small" @click="exportToExcel" icon="el-icon-document">导出Excel</el-button>
+                    <el-button type="danger" size="small" @click="batchDelete" icon="el-icon-delete" v-if="canEdit && selectedRows.length > 0">批量删除</el-button>
+                </div>
+            </el-form-item>
+        </el-form>
+    </div>
+
+    <div class="tableAround">
+        <el-table @selection-change="handleSelectionChange" :data="paginatedData" border stripe v-loading="loading" height="550" style="width: 100%" :row-class-name="rowClassName">
+            <el-table-column type="selection" width="35" fixed="left"></el-table-column>
+            <el-table-column prop="task_no" label="Task No" width="150" fixed="left"></el-table-column>
+            <el-table-column prop="year" label="Year" width="80"></el-table-column>
+            <el-table-column prop="month" label="Month" width="80"></el-table-column>
+            <el-table-column prop="customer" label="Customer" width="140"></el-table-column>
+            <el-table-column prop="series" label="Series" width="120"></el-table-column>
+            <el-table-column prop="project_code" label="Project Code" width="150"></el-table-column>
+            <el-table-column prop="project_name" label="Project Name" width="200"></el-table-column>
+            <el-table-column prop="mp_date" label="MP Date" width="110"></el-table-column>
+            <el-table-column prop="eop_or_not" label="EOP Or Not" width="110"></el-table-column>
+            <el-table-column prop="eop_date" label="EOP Date" width="110"></el-table-column>
+            <el-table-column prop="eos_date" label="EOS Date" width="110"></el-table-column>
+            <el-table-column prop="project_status" label="Project Status" width="120"></el-table-column>
+            <el-table-column prop="mp_year" label="MP Year" width="100"></el-table-column>
+            <el-table-column prop="eop_year" label="EOP Year" width="100"></el-table-column>
+            <el-table-column prop="eos_year" label="EOS Year" width="100"></el-table-column>
+            <el-table-column prop="leverage_project" label="Leverage Project" width="140"></el-table-column>
+            <el-table-column prop="test_units_status" label="Test Units status" width="180"></el-table-column>
+            <el-table-column prop="unit_qty" label="Unit_Qty" width="100"></el-table-column>
+            <el-table-column prop="total_test_resource" label="Total Test Resource" width="160"></el-table-column>
+            <el-table-column prop="total_actual_workload" label="Total Actual Workload(Hrs)" width="180"></el-table-column>
+            <el-table-column prop="total_leverage_workload" label="Total Leverage Workload(Hrs)" width="190"></el-table-column>
+            <el-table-column prop="final_test_status" label="Final Test Status" width="140"></el-table-column>
+            <el-table-column prop="task_closure_date" label="Task Closure Date" width="140"></el-table-column>
+            <el-table-column prop="task_leading_time" label="Task Leading Time (Days)" width="180"></el-table-column>
+            <el-table-column prop="total_planning_workload" label="Total Planning Workload(Hrs)" width="210"></el-table-column>
+            <el-table-column prop="total_waste_time" label="Total waste time (Hrs)" width="180"></el-table-column>
+
+            <template v-for="stage in dynamicStages">
+                <el-table-column :label="stage" :key="stage">
+                    <el-table-column :prop="`${stage}_test_stage`" label="Test Stage" width="140"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_status`" label="Test Status" width="130"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_category`" label="Test Category" width="130"></el-table-column>
+                    <el-table-column :prop="`${stage}_category_info`" label="Category Info" width="150"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_version`" label="Test Version" width="140"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_condition`" label="Test Condition" width="180"></el-table-column>
+                    <el-table-column :prop="`${stage}_driver_cut_in_format`" label="Driver cut in format" width="180"></el-table-column>
+                    <el-table-column :prop="`${stage}_issue_link`" label="Issue Link" width="140"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_resource`" label="Test Resource" width="120"></el-table-column>
+                    <el-table-column :prop="`${stage}_actual_workload`" label="Actual Workload(Hrs)" width="160"></el-table-column>
+                    <el-table-column :prop="`${stage}_leverage_workload`" label="Leverage Workload(Hrs)" width="170"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_team`" label="Test Team" width="150"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_owner`" label="Test_Owner" width="130"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_start`" label="Test_Start" width="120"></el-table-column>
+                    <el-table-column :prop="`${stage}_test_end`" label="Test_End" width="120"></el-table-column>
+                    <el-table-column :prop="`${stage}_working_day`" label="Working Day" width="110"></el-table-column>
+                    <el-table-column :prop="`${stage}_change_list`" label="Change list" width="200"></el-table-column>
+                    <el-table-column :prop="`${stage}_remark`" label="Remark" width="200"></el-table-column>
+                </el-table-column>
+            </template>
+
+            <el-table-column label="操作" width="70" align="center" fixed="right">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" icon="el-icon-edit" @click="editTask(scope.row)" v-if="canEdit" title="编辑"></el-button>
+                    <el-button type="text" size="small" style="color:red" icon="el-icon-delete" @click="deleteTask(scope.row)" v-if="canEdit" title="删除"></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[20, 50, 100, 200]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
+    </div>
+
+    <!-- 编辑弹窗 -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="90%" @close="resetForm" top="5vh">
+        <el-form :model="form" :rules="rules" ref="taskForm" label-width="140px" label-position="right">
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Task No" prop="task_no"><el-input v-model="form.task_no"></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Year" prop="year"><el-select v-model="form.year"><el-option v-for="y in 10" :key="2020+y-1" :label="2020+y-1" :value="2020+y-1"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Month" prop="month"><el-select v-model="form.month"><el-option v-for="m in months" :key="m" :label="m" :value="m"></el-option></el-select></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Customer" prop="customer"><el-select v-model="form.customer" filterable><el-option v-for="c in customers" :key="c" :label="c" :value="c"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Series"><el-input v-model="form.series"></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Project Code" prop="project_code"><el-input v-model="form.project_code"></el-input></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12"><el-form-item label="Project Name"><el-input v-model="form.project_name"></el-input></el-form-item></el-col>
+                <el-col :span="12"><el-form-item label="Test Units status"><el-input v-model="form.test_units_status" type="textarea" :rows="2"></el-input></el-form-item></el-col>
+            </el-row>
+
+            <el-divider>项目里程碑</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="MP Date"><el-date-picker v-model="form.mp_date" type="date" value-format="yyyy-MM-dd" style="width:100%" @change="recalcFormulas"></el-date-picker></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="EOP Or Not"><el-select v-model="form.eop_or_not" clearable @change="recalcFormulas"><el-option value="Y" label="Yes"></el-option><el-option value="N" label="No"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="EOP Date"><el-date-picker v-model="form.eop_date" type="date" value-format="yyyy-MM-dd" style="width:100%" @change="recalcFormulas"></el-date-picker></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="EOS Date"><el-date-picker v-model="form.eos_date" type="date" value-format="yyyy-MM-dd" style="width:100%" @change="recalcFormulas"></el-date-picker></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Leverage Project"><el-input v-model="form.leverage_project"></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Unit_Qty"><el-input-number v-model="form.unit_qty" :min="0" style="width:100%"></el-input-number></el-form-item></el-col>
+            </el-row>
+
+            <el-divider>系统计算字段（自动计算）</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Project Status" class="readonly-field"><el-input v-model="form.project_status" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="MP Year" class="readonly-field"><el-input v-model="form.mp_year" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="EOP Year" class="readonly-field"><el-input v-model="form.eop_year" readonly></el-input></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="EOS Year" class="readonly-field"><el-input v-model="form.eos_year" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Total Test Resource" class="readonly-field"><el-input v-model="form.total_test_resource" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Total Actual Workload(Hrs)" class="readonly-field"><el-input v-model="form.total_actual_workload" readonly></el-input></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Total Leverage Workload(Hrs)" class="readonly-field"><el-input v-model="form.total_leverage_workload" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Final Test Status" class="readonly-field"><el-input v-model="form.final_test_status" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Task Closure Date"><el-date-picker v-model="form.task_closure_date" type="date" value-format="yyyy-MM-dd" style="width:100%" @change="recalcFormulas"></el-date-picker></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Task Leading Time (Days)" class="readonly-field"><el-input v-model="form.task_leading_time" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Total Planning Workload(Hrs)" class="readonly-field"><el-input v-model="form.total_planning_workload" readonly></el-input></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Total waste time (Hrs)" class="readonly-field"><el-input v-model="form.total_waste_time" readonly></el-input></el-form-item></el-col>
+            </el-row>
+
+            <el-divider>测试详情</el-divider>
+            <div v-for="(detail, idx) in form.details" :key="idx" style="border:1px solid #EBEEF5; border-radius:6px; padding:15px; margin-bottom:20px;">
+                <el-row :gutter="16">
+                    <el-col :span="6"><el-form-item label="阶段"><el-select v-model="detail.test_stage" clearable @change="recalcFormulas"><el-option value="New Test"></el-option><el-option value="Regression1"></el-option><el-option value="Regression2"></el-option><el-option value="Regression3"></el-option><el-option value="Regression4"></el-option><el-option value="Regression5"></el-option></el-select></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="状态"><el-select v-model="detail.test_status" clearable @change="recalcFormulas"><el-option value="Pass"></el-option><el-option value="Fail"></el-option><el-option value="Conditional Pass"></el-option><el-option value="Testing"></el-option><el-option value="Pending"></el-option><el-option value="Planning"></el-option></el-select></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="类别"><el-input v-model="detail.test_category"></el-input></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="版本"><el-input v-model="detail.test_version"></el-input></el-form-item></el-col>
+                </el-row>
+                <el-row :gutter="16">
+                    <el-col :span="6"><el-form-item label="Category Info"><el-input v-model="detail.category_info"></el-input></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Test Condition"><el-input v-model="detail.test_condition" type="textarea" :rows="1"></el-input></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Driver cut in format"><el-input v-model="detail.driver_cut_in_format"></el-input></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Issue Link"><el-input v-model="detail.issue_link"></el-input></el-form-item></el-col>
+                </el-row>
+                <el-row :gutter="16">
+                    <el-col :span="6"><el-form-item label="Test Resource"><el-input-number v-model="detail.test_resource" :precision="2" :step="0.5" style="width:100%" @change="recalcFormulas"></el-input-number></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Actual Workload(Hrs)"><el-input-number v-model="detail.actual_workload" :precision="2" :step="0.5" style="width:100%" @change="recalcFormulas"></el-input-number></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Leverage Workload(Hrs)"><el-input-number v-model="detail.leverage_workload" :precision="2" :step="0.5" style="width:100%" @change="recalcFormulas"></el-input-number></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Test Team"><el-input v-model="detail.test_team"></el-input></el-form-item></el-col>
+                </el-row>
+                <el-row :gutter="16">
+                    <el-col :span="6"><el-form-item label="Test_Owner"><el-input v-model="detail.test_owner"></el-input></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Test_Start"><el-date-picker v-model="detail.test_start" type="date" value-format="yyyy-MM-dd" style="width:100%" @change="() => { recalcWorkingDay(detail); recalcFormulas(); }"></el-date-picker></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Test_End"><el-date-picker v-model="detail.test_end" type="date" value-format="yyyy-MM-dd" style="width:100%" @change="() => { recalcWorkingDay(detail); recalcFormulas(); }"></el-date-picker></el-form-item></el-col>
+                    <el-col :span="6"><el-form-item label="Working Day" class="readonly-field"><el-input v-model="detail.working_day" readonly></el-input></el-form-item></el-col>
+                </el-row>
+                <el-row :gutter="16">
+                    <el-col :span="12"><el-form-item label="Change list"><el-input v-model="detail.change_list" type="textarea" :rows="2"></el-input></el-form-item></el-col>
+                    <el-col :span="12"><el-form-item label="Remark"><el-input v-model="detail.remark" type="textarea" :rows="2"></el-input></el-form-item></el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24" style="text-align:right">
+                        <el-button type="danger" size="small" @click="removeDetail(idx)">删除此测试详情</el-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-button type="primary" size="small" @click="addDetail">添加测试详情</el-button>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="dialogVisible=false">取消</el-button>
+            <el-button type="primary" @click="saveTask" :loading="saving">保存</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- Excel上传弹窗 -->
+    <el-dialog title="Excel上传" :visible.sync="showUploadDialog" width="500px">
+        <div v-loading="uploadLoading" element-loading-text="上传中，请稍候...">
+            <div class="upload-area">
+                <el-upload
+                    drag
+                    :action="uploadUrl"
+                    :headers="{'X-CSRFToken': csrf_token}"
+                    :on-success="handleUploadSuccess"
+                    :on-error="handleUploadError"
+                    :before-upload="beforeUpload"
+                    :show-file-list="false"
+                    :disabled="uploadLoading"
+                    accept=".xlsx">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">支持.xlsx格式，请确保包含"SW Sustain Tracking"工作表</div>
+                </el-upload>
+            </div>
+            <div v-if="uploadErrors.length > 0" style="margin-top:15px; color:#F56C6C; max-height:200px; overflow:auto;">
+                <div v-for="(err, idx) in uploadErrors" :key="idx">${ err }</div>
+            </div>
+        </div>
+        <span slot="footer">
+            <el-button @click="showUploadDialog=false" :disabled="uploadLoading">关闭</el-button>
+        </span>
+    </el-dialog>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/qs.js"></script>
+<script src="/static/js/xlsx/FileSaver.min.js"></script>
+<script src="/static/js/xlsx/xlsx.core.min.js"></script>
+<script>
+    // 主题切换优化：临时禁用过渡动画，避免卡顿感
+    (function() {
+        const originalToggle = window.toggleGlobalTheme;
+        if (originalToggle) {
+            window.toggleGlobalTheme = function() {
+                document.body.classList.add('disable-theme-transition');
+                originalToggle();
+                setTimeout(() => {
+                    document.body.classList.remove('disable-theme-transition');
+                }, 50);
+            };
+        }
+    })();
+
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            uploadLoading: false,
+            selectedRows: [],
+            customers: [],
+            projects: [],
+            searchForm: { customer: '', project_code: '' },
+            rawData: [],
+            tableData: [],
+            loading: false,
+            currentPage: 1,
+            pageSize: 100,
+            total: 0,
+            dialogVisible: false,
+            dialogTitle: '新增任务',
+            form: {
+                id: null,
+                task_no: '', year: 2026, month: 'Jan', customer: '', series: '', project_code: '', project_name: '',
+                mp_date: '', eop_or_not: '', eop_date: '', eos_date: '', project_status: '', mp_year: '', eop_year: '', eos_year: '',
+                leverage_project: '', test_units_status: '', unit_qty: 0,
+                total_test_resource: '', total_actual_workload: '', total_leverage_workload: '',
+                final_test_status: '', task_closure_date: '', task_leading_time: 0,
+                total_planning_workload: '', total_waste_time: '',
+                details: []
+            },
+            rules: {
+                task_no: [{ required: true, message: '请输入Task No', trigger: 'blur' }],
+                year: [{ required: true, message: '请选择年份', trigger: 'change' }],
+                month: [{ required: true, message: '请选择月份', trigger: 'change' }],
+                customer: [{ required: true, message: '请选择客户', trigger: 'change' }],
+                project_code: [{ required: true, message: '请输入项目代码', trigger: 'blur' }],
+            },
+            months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            showUploadDialog: false,
+            uploadUrl: '/Sustain/api/upload_excel/',
+            csrf_token: '{{ csrf_token }}',
+            uploadErrors: [],
+            saving: false,
+            canEdit: true,
+        },
+        computed: {
+            dynamicStages() {
+                const stagesSet = new Set();
+                if (!this.rawData || !this.rawData.length) return [];
+                this.rawData.forEach(task => {
+                    if (task.details && task.details.length) {
+                        task.details.forEach(d => {
+                            if (d.test_stage) stagesSet.add(d.test_stage);
+                        });
+                    }
+                });
+                const order = ['New Test', 'Regression1', 'Regression2', 'Regression3', 'Regression4', 'Regression5'];
+                const stages = Array.from(stagesSet);
+                stages.sort((a, b) => {
+                    let ia = order.indexOf(a);
+                    let ib = order.indexOf(b);
+                    if (ia === -1) ia = 999;
+                    if (ib === -1) ib = 999;
+                    return ia - ib;
+                });
+                return stages;
+            },
+            paginatedData() {
+                const start = (this.currentPage - 1) * this.pageSize;
+                return this.tableData.slice(start, start + this.pageSize);
+            }
+        },
+        mounted() {
+            this.loadCustomers();
+            this.searchTasks();
+        },
+        methods: {
+            loadCustomers() {
+                axios.get('/Sustain/api/get_customers/').then(res => { this.customers = res.data; }).catch(() => { this.$message.error('加载客户列表失败'); });
+            },
+            onCustomerChange(val) {
+                if (val) {
+                    axios.get('/Sustain/api/get_projects_by_customer/', { params: { customer: val } }).then(res => { this.projects = res.data; }).catch(() => { this.$message.error('加载项目列表失败'); });
+                } else { this.projects = []; }
+            },
+            recalcWorkingDay(detail) {
+                if (detail.test_start && detail.test_end) {
+                    const start = new Date(detail.test_start);
+                    const end = new Date(detail.test_end);
+                    const diffTime = Math.abs(end - start);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                    detail.working_day = diffDays > 0 ? diffDays : 0;
+                } else {
+                    detail.working_day = 0;
+                }
+            },
+            recalcFormulas() {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const mpDate = this.form.mp_date ? new Date(this.form.mp_date) : null;
+                const eopDate = this.form.eop_date ? new Date(this.form.eop_date) : null;
+                const eosDate = this.form.eos_date ? new Date(this.form.eos_date) : null;
+                let projectStatus = '';
+                if (mpDate || eopDate || eosDate) {
+                    if (!mpDate || today < mpDate) projectStatus = 'NPI';
+                    else if (!eopDate || today < eopDate) projectStatus = 'MP';
+                    else if (!eosDate || today < eosDate) projectStatus = 'EOP';
+                    else projectStatus = 'EOS';
+                } else {
+                    projectStatus = '';
+                }
+                this.form.project_status = projectStatus;
+
+                const yearDiff = (date) => {
+                    if (!date) return 'NA';
+                    const diff = (today - date) / (1000 * 60 * 60 * 24 * 365.25);
+                    return diff.toFixed(2);
+                };
+                this.form.mp_year = (projectStatus === 'MP' && mpDate) ? yearDiff(mpDate) : 'NA';
+                this.form.eop_year = (projectStatus === 'EOP' && eopDate) ? yearDiff(eopDate) : 'NA';
+                this.form.eos_year = (projectStatus === 'EOS' && eosDate) ? yearDiff(eosDate) : 'NA';
+
+                let totalTestRes = 0, totalActual = 0, totalLeverage = 0;
+                (this.form.details || []).forEach(d => {
+                    totalTestRes += Number(d.test_resource) || 0;
+                    totalActual += Number(d.actual_workload) || 0;
+                    totalLeverage += Number(d.leverage_workload) || 0;
+                });
+                this.form.total_test_resource = totalTestRes.toFixed(2);
+                this.form.total_actual_workload = totalActual.toFixed(2);
+                this.form.total_leverage_workload = totalLeverage.toFixed(2);
+
+                let hasFail = false, hasTesting = false, hasCondPass = false, hasPlanning = false, hasPass = false;
+                (this.form.details || []).forEach(d => {
+                    const status = d.test_status;
+                    if (status === 'Fail') hasFail = true;
+                    else if (status === 'Testing' || status === 'Pending') hasTesting = true;
+                    else if (status === 'Conditional Pass') hasCondPass = true;
+                    else if (status === 'Planning') hasPlanning = true;
+                    else if (status === 'Pass') hasPass = true;
+                });
+                if (hasFail) this.form.final_test_status = 'Fail';
+                else if (hasTesting) this.form.final_test_status = 'Testing';
+                else if (hasCondPass) this.form.final_test_status = 'Conditional Pass';
+                else if (hasPlanning) this.form.final_test_status = 'Planning';
+                else if (hasPass) this.form.final_test_status = 'Pass';
+                else this.form.final_test_status = '';
+
+                let firstTestStart = null;
+                for (let d of (this.form.details || [])) {
+                    if (d.test_start) {
+                        firstTestStart = new Date(d.test_start);
+                        break;
+                    }
+                }
+                if (this.form.task_closure_date && firstTestStart) {
+                    const closure = new Date(this.form.task_closure_date);
+                    const diff = Math.ceil((closure - firstTestStart) / (1000 * 60 * 60 * 24));
+                    this.form.task_leading_time = diff > 0 ? diff : 0;
+                } else {
+                    this.form.task_leading_time = 0;
+                }
+
+                if (!this.form.total_planning_workload) this.form.total_planning_workload = '0';
+                if (!this.form.total_waste_time) this.form.total_waste_time = '0';
+            },
+            flattenTask(task, allStages) {
+                let flat = {
+                    id: task.id, task_no: task.task_no || '', year: task.year || '', month: task.month || '', customer: task.customer || '',
+                    series: task.series || '', project_code: task.project_code || '', project_name: task.project_name || '',
+                    mp_date: task.mp_date || '', eop_or_not: task.eop_or_not || '', eop_date: task.eop_date || '', eos_date: task.eos_date || '',
+                    project_status: task.project_status || '', mp_year: task.mp_year || '', eop_year: task.eop_year || '', eos_year: task.eos_year || '',
+                    leverage_project: task.leverage_project || '', test_units_status: task.test_units_status || '', unit_qty: task.unit_qty || 0,
+                    total_test_resource: task.total_test_resource || '', total_actual_workload: task.total_actual_workload || '',
+                    total_leverage_workload: task.total_leverage_workload || '', final_test_status: task.final_test_status || '',
+                    task_closure_date: task.task_closure_date || '', task_leading_time: task.task_leading_time || 0,
+                    total_planning_workload: task.total_planning_workload || '', total_waste_time: task.total_waste_time || '',
+                };
+                allStages.forEach(stage => {
+                    flat[`${stage}_test_stage`] = '';
+                    flat[`${stage}_test_status`] = '';
+                    flat[`${stage}_test_category`] = '';
+                    flat[`${stage}_category_info`] = '';
+                    flat[`${stage}_test_version`] = '';
+                    flat[`${stage}_test_condition`] = '';
+                    flat[`${stage}_driver_cut_in_format`] = '';
+                    flat[`${stage}_issue_link`] = '';
+                    flat[`${stage}_test_resource`] = '';
+                    flat[`${stage}_actual_workload`] = '';
+                    flat[`${stage}_leverage_workload`] = '';
+                    flat[`${stage}_test_team`] = '';
+                    flat[`${stage}_test_owner`] = '';
+                    flat[`${stage}_test_start`] = '';
+                    flat[`${stage}_test_end`] = '';
+                    flat[`${stage}_working_day`] = '';
+                    flat[`${stage}_change_list`] = '';
+                    flat[`${stage}_remark`] = '';
+                });
+                if (task.details && task.details.length) {
+                    task.details.forEach(detail => {
+                        const stage = detail.test_stage;
+                        if (!stage) return;
+                        flat[`${stage}_test_stage`] = detail.test_stage || '';
+                        flat[`${stage}_test_status`] = detail.test_status || '';
+                        flat[`${stage}_test_category`] = detail.test_category || '';
+                        flat[`${stage}_category_info`] = detail.category_info || '';
+                        flat[`${stage}_test_version`] = detail.test_version || '';
+                        flat[`${stage}_test_condition`] = detail.test_condition || '';
+                        flat[`${stage}_driver_cut_in_format`] = detail.driver_cut_in_format || '';
+                        flat[`${stage}_issue_link`] = detail.issue_link || '';
+                        flat[`${stage}_test_resource`] = detail.test_resource || '';
+                        flat[`${stage}_actual_workload`] = detail.actual_workload || '';
+                        flat[`${stage}_leverage_workload`] = detail.leverage_workload || '';
+                        flat[`${stage}_test_team`] = detail.test_team || '';
+                        flat[`${stage}_test_owner`] = detail.test_owner || '';
+                        flat[`${stage}_test_start`] = detail.test_start || '';
+                        flat[`${stage}_test_end`] = detail.test_end || '';
+                        flat[`${stage}_working_day`] = detail.working_day || '';
+                        flat[`${stage}_change_list`] = detail.change_list || '';
+                        flat[`${stage}_remark`] = detail.remark || '';
+                    });
+                }
+                return flat;
+            },
+            searchTasks() {
+                this.loading = true;
+                axios.get('/Sustain/api/search_tasks/', { params: { customer: this.searchForm.customer, project_code: this.searchForm.project_code } }).then(res => {
+                    this.rawData = res.data.data || [];
+                    const stagesSet = new Set();
+                    this.rawData.forEach(task => {
+                        if (task.details && task.details.length) {
+                            task.details.forEach(d => { if (d.test_stage) stagesSet.add(d.test_stage); });
+                        }
+                    });
+                    const order = ['New Test', 'Regression1', 'Regression2', 'Regression3', 'Regression4', 'Regression5'];
+                    const stages = Array.from(stagesSet).sort((a,b) => { let ia=order.indexOf(a), ib=order.indexOf(b); if(ia===-1) ia=999; if(ib===-1) ib=999; return ia-ib; });
+                    this.tableData = this.rawData.map(task => this.flattenTask(task, stages));
+                    this.total = this.tableData.length;
+                    this.currentPage = 1;
+                    this.loading = false;
+                }).catch(() => { this.loading = false; this.$message.error('搜索失败'); });
+            },
+            handleSizeChange(val) { this.pageSize = val; this.currentPage = 1; },
+            handleCurrentChange(val) { this.currentPage = val; },
+            openAddDialog() {
+                this.form = {
+                    id: null, task_no: '', year: 2026, month: 'Jan', customer: '', series: '', project_code: '', project_name: '',
+                    mp_date: '', eop_or_not: '', eop_date: '', eos_date: '', project_status: '', mp_year: '', eop_year: '', eos_year: '',
+                    leverage_project: '', test_units_status: '', unit_qty: 0,
+                    total_test_resource: '', total_actual_workload: '', total_leverage_workload: '',
+                    final_test_status: '', task_closure_date: '', task_leading_time: 0,
+                    total_planning_workload: '', total_waste_time: '',
+                    details: []
+                };
+                this.dialogTitle = '新增任务';
+                this.dialogVisible = true;
+                this.$nextTick(() => { this.recalcFormulas(); });
+            },
+            editTask(row) {
+                const original = this.rawData.find(item => item.id === row.id);
+                if (!original) { this.$message.error('数据异常，请刷新重试'); return; }
+                this.form = JSON.parse(JSON.stringify(original));
+                if (!this.form.details) this.form.details = [];
+                this.dialogTitle = '编辑任务';
+                this.dialogVisible = true;
+                this.$nextTick(() => { this.recalcFormulas(); });
+            },
+            addDetail() {
+                this.form.details.push({
+                    test_stage: 'New Test', test_status: '', test_category: '', category_info: '', test_version: '',
+                    test_condition: '', driver_cut_in_format: '', issue_link: '', test_resource: 0, actual_workload: 0,
+                    leverage_workload: 0, test_team: '', test_owner: '', test_start: '', test_end: '', working_day: 0,
+                    change_list: '', remark: ''
+                });
+                this.recalcFormulas();
+            },
+            removeDetail(idx) {
+                this.$confirm('确定删除此测试详情吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.form.details.splice(idx, 1);
+                    this.$message.success('已删除');
+                }).catch(() => {});
+            },
+            handleSelectionChange(selection) {
+                this.selectedRows = selection;
+            },
+            async batchDelete() {
+                if (this.selectedRows.length === 0) {
+                    this.$message.warning('请先选择要删除的任务');
+                    return;
+                }
+                const ids = this.selectedRows.map(row => row.id);
+                try {
+                    await this.$confirm(`确定删除选中的 ${ids.length} 个任务吗？`, '提示', { type: 'warning' });
+                    const res = await axios.post('/Sustain/api/batch_delete_tasks/', { ids }, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    });
+                    if (res.data.success) {
+                        this.$message.success(`成功删除 ${res.data.deleted_count} 个任务`);
+                        if (res.data.errors && res.data.errors.length) {
+                            this.$alert(res.data.errors.join('\n'), '部分删除失败', { type: 'warning' });
+                        }
+                        this.searchTasks();
+                    } else {
+                        this.$message.error(res.data.error || '批量删除失败');
+                    }
+                } catch (err) {
+                    if (err !== 'cancel') {
+                        this.$message.error('批量删除请求失败');
+                    }
+                }
+            },
+            saveTask() {
+                this.$refs.taskForm.validate(valid => {
+                    if (!valid) return;
+                    this.saving = true;
+                    axios.post('/Sustain/api/save_task/', this.form, { headers: { 'X-CSRFToken': this.csrf_token } }).then(res => {
+                        if (res.data.success) { this.$message.success('保存成功'); this.dialogVisible = false; this.searchTasks(); }
+                        else { this.$message.error(res.data.error); }
+                        this.saving = false;
+                    }).catch(() => { this.saving = false; this.$message.error('保存失败'); });
+                });
+            },
+            deleteTask(row) {
+                this.$confirm('确定删除该任务吗？', '提示', { type: 'warning' }).then(() => {
+                    axios.post('/Sustain/api/delete_task/', { id: row.id }, { headers: { 'X-CSRFToken': this.csrf_token } }).then(res => {
+                        if (res.data.success) { this.$message.success('删除成功'); this.searchTasks(); }
+                        else { this.$message.error(res.data.error); }
+                    }).catch(() => { this.$message.error('删除失败'); });
+                });
+            },
+            beforeUpload(file) {
+                this.uploadLoading = true;
+                this.uploadErrors = [];
+                return true;
+            },
+            handleUploadSuccess(res) {
+                this.uploadLoading = false;
+                if (res.success_count !== undefined) {
+                    if (res.errors && res.errors.length) {
+                        this.uploadErrors = res.errors.slice(0, 50);
+                        this.$alert(`成功 ${res.success_count} 条，失败 ${res.errors.length} 条`, '上传完成', { type: 'warning' });
+                        this.searchForm.customer = '';
+                        this.searchForm.project_code = '';
+                        this.projects = [];
+                        // 刷新数据（显示全部）
+                        this.searchTasks();
+                    } else {
+                        this.$message.success(`上传成功 ${res.success_count} 条`);
+                        this.showUploadDialog = false;
+                        // 清空搜索条件
+                        this.searchForm.customer = '';
+                        this.searchForm.project_code = '';
+                        this.projects = [];
+                        // 刷新数据（显示全部）
+                        this.searchTasks();
+                    }
+                } else {
+                    this.$message.error(res.error || '上传失败');
+                }
+            },
+            handleUploadError(err) {
+                this.uploadLoading = false;
+                let errorMsg = '上传失败，请检查网络或文件格式';
+                if (err.response && err.response.data && err.response.data.error) {
+                    errorMsg = err.response.data.error;
+                } else if (err.message) {
+                    errorMsg = err.message;
+                }
+                this.$message.error(errorMsg);
+            },
+            resetForm() { if (this.$refs.taskForm) this.$refs.taskForm.resetFields(); },
+            rowClassName({ row }) { return ''; },
+            exportToExcel() {
+                if (!this.tableData.length) { this.$message.warning('没有数据可导出'); return; }
+                const baseColumns = [
+                    'Task No', 'Year', 'Month', 'Customer', 'Series', 'Project Code', 'Project Name',
+                    'MP Date', 'EOP Or Not', 'EOP Date', 'EOS Date', 'Project Status', 'MP Year',
+                    'EOP Year', 'EOS Year', 'Leverage Project', 'Test Units status', 'Unit_Qty',
+                    'Total Test Resource', 'Total Actual Workload(Hrs)', 'Total Leverage Workload(Hrs)',
+                    'Final Test Status', 'Task Closure Date', 'Task Leading Time (Days)',
+                    'Total Planning Workload(Hrs)', 'Total waste time (Hrs)'
+                ];
+                const stageSubColumns = [
+                    'Test Stage', 'Test Status', 'Test Category', 'Category Info', 'Test Version',
+                    'Test Condition', 'Driver cut in format', 'Issue Link', 'Test Resource',
+                    'Actual Workload(Hrs)', 'Leverage Workload(Hrs)', 'Test Team', 'Test_Owner',
+                    'Test_Start', 'Test_End', 'Working Day', 'Change list', 'Remark'
+                ];
+                const allColumns = [...baseColumns];
+                const stages = this.dynamicStages;
+                stages.forEach(stage => { stageSubColumns.forEach(sub => { allColumns.push(`${stage}_${sub}`); }); });
+                const exportRows = this.tableData.map(row => {
+                    const rowData = {};
+                    baseColumns.forEach(col => { rowData[col] = row[col] || ''; });
+                    stages.forEach(stage => {
+                        stageSubColumns.forEach(sub => { rowData[`${stage}_${sub}`] = row[`${stage}_${sub}`] || ''; });
+                    });
+                    return rowData;
+                });
+                const ws = XLSX.utils.json_to_sheet(exportRows, { header: allColumns });
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'SW Sustain Tracking');
+                XLSX.writeFile(wb, `SW_Sustain_Tracking_${Date.now()}.xlsx`);
+            },
+            downloadTemplate() {
+                const baseColumns = [
+                    'Task No', 'Year', 'Month', 'Customer', 'Series', 'Project Code', 'Project Name',
+                    'MP Date', 'EOP Or Not', 'EOP Date', 'EOS Date', 'Project Status', 'MP Year',
+                    'EOP Year', 'EOS Year', 'Leverage Project', 'Test Units status', 'Unit_Qty',
+                    'Total Test Resource', 'Total Actual Workload(Hrs)', 'Total Leverage Workload(Hrs)',
+                    'Final Test Status', 'Task Closure Date', 'Task Leading Time (Days)',
+                    'Total Planning Workload(Hrs)', 'Total waste time (Hrs)'
+                ];
+                const presetStages = ['New Test', 'Regression1', 'Regression2', 'Regression3', 'Regression4', 'Regression5'];
+                const stageSubColumns = [
+                    'Test Stage', 'Test Status', 'Test Category', 'Category Info', 'Test Version',
+                    'Test Condition', 'Driver cut in format', 'Issue Link', 'Test Resource',
+                    'Actual Workload(Hrs)', 'Leverage Workload(Hrs)', 'Test Team', 'Test_Owner',
+                    'Test_Start', 'Test_End', 'Working Day', 'Change list', 'Remark'
+                ];
+                const sheetData = [];
+                const groupRow = [];
+                for (let i = 0; i < baseColumns.length; i++) groupRow.push('');
+                for (let s = 0; s < presetStages.length; s++) {
+                    for (let j = 0; j < stageSubColumns.length; j++) {
+                        if (j === 0) groupRow.push(presetStages[s]);
+                        else groupRow.push('');
+                    }
+                }
+                sheetData.push(groupRow);
+                const subRow = [...baseColumns];
+                for (let s = 0; s < presetStages.length; s++) {
+                    for (let j = 0; j < stageSubColumns.length; j++) {
+                        subRow.push(stageSubColumns[j]);
+                    }
+                }
+                sheetData.push(subRow);
+                const emptyRow = new Array(subRow.length).fill('');
+                emptyRow[0] = '例: C38 NB_202605_01';
+                emptyRow[1] = '2026';
+                emptyRow[2] = 'May';
+                emptyRow[3] = 'C38 NB';
+                emptyRow[4] = 'Gaming';
+                emptyRow[5] = 'KLG10';
+                sheetData.push(emptyRow);
+                sheetData.push(new Array(subRow.length).fill(''));
+                sheetData.push(new Array(subRow.length).fill(''));
+                const ws = XLSX.utils.aoa_to_sheet(sheetData);
+                ws['!cols'] = [{wch:15},{wch:8},{wch:8},{wch:12},{wch:10},{wch:12},{wch:20},
+                    {wch:12},{wch:12},{wch:12},{wch:12},{wch:14},{wch:10},{wch:10},{wch:10},{wch:14},
+                    {wch:20},{wch:10},{wch:16},{wch:18},{wch:19},{wch:16},{wch:14},{wch:18},{wch:21},{wch:18}];
+                for (let i = 0; i < presetStages.length * stageSubColumns.length; i++) {
+                    ws['!cols'].push({wch:14});
+                }
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'SW Sustain Tracking');
+                XLSX.writeFile(wb, `Sustain_Template.xlsx`);
+            },
+            {% comment %}downloadTemplate() {
+                window.open('/static/src/modelfiles/sustain.xlsx', '_blank');
+            },{% endcomment %}
+        }
+    });
+</script>
+{% endblock %}

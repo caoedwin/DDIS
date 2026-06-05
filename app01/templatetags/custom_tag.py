@@ -168,7 +168,7 @@ def get_menu_html(menu_data):
                         Class = "ti-agenda"
                     if item['title'] == 'Compatibility':
                         Class = "ti-layout-grid4-alt"
-                    if item['title'] == 'QIL' or item['title'] == 'QIL-ABO' or item['title'] == 'Critical Issue':
+                    if item['title'] == 'QIL' or item['title'] == 'QIL-ABO' or item['title'] == 'Critical Issue' or item['title'] == 'PCRList' or item['title'] == 'Sustain':
                         Class = "ti-layout-grid2-alt"
                     if item['title'] == 'Reliability Test Data':
                         Class = "ti-archive"

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Sustain Dashboard{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+    .dashboard-container { padding: 20px; }
+    .chart-box { background: #F5F7FA; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+    .el-table { margin-top: 10px; }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app">
+    <el-backtop></el-backtop>
+    <div class="dashboard-container">
+        <div class="row">
+            <div class="col-md-3">
+                <label>Year:</label>
+                <el-date-picker v-model="selectedYear" type="year" value-format="yyyy" placeholder="选择年份" clearable></el-date-picker>
+            </div>
+            <div class="col-md-3">
+                <label>Customer:</label>
+                <el-select v-model="selectedCustomer" placeholder="全部客户" clearable>
+                    <el-option v-for="c in customers" :key="c" :label="c" :value="c"></el-option>
+                </el-select>
+            </div>
+            <div class="col-md-2">
+                <el-button type="primary" @click="loadData" :loading="loading">查询</el-button>
+            </div>
+        </div>
+
+        <!-- 客户统计表格 -->
+        <div class="chart-box">
+            <h4>按客户统计</h4>
+            <el-table :data="customerTable" border stripe v-loading="loading">
+                <el-table-column prop="Customer" label="Customer" width="150"></el-table-column>
+                <el-table-column prop="Pass" label="Pass" width="100"></el-table-column>
+                <el-table-column prop="Fail" label="Fail" width="100"></el-table-column>
+                <el-table-column prop="Ongoing" label="Ongoing" width="100"></el-table-column>
+                <el-table-column prop="Planning" label="Planning" width="100"></el-table-column>
+                <el-table-column prop="Total" label="Total"></el-table-column>
+            </el-table>
+        </div>
+
+        <!-- 柱状图：客户维度 -->
+        <div class="chart-box">
+            <h4>客户任务分布柱状图</h4>
+            <div id="customerChart" style="height:400px;"></div>
+        </div>
+
+        <!-- 月度趋势图 -->
+        <div class="chart-box">
+            <h4>月度任务趋势</h4>
+            <div id="monthTrendChart" style="height:400px;"></div>
+        </div>
+
+        <!-- Top10 项目 -->
+        <div class="chart-box">
+            <h4>Top10 项目任务数</h4>
+            <div id="projectTopChart" style="height:400px;"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/echart/echart.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            selectedYear: '',
+            selectedCustomer: '',
+            customers: [],
+            customerTable: [],
+            loading: false,
+        },
+        mounted() {
+            this.loadCustomers();
+            this.loadData();
+        },
+        methods: {
+            loadCustomers() {
+                axios.get('/Sustain/api/get_customers/').then(res => { this.customers = res.data; });
+            },
+            loadData() {
+                this.loading = true;
+                axios.get('/Sustain/api/dashboard_data/', {
+                    params: { year: this.selectedYear, customer: this.selectedCustomer }
+                }).then(res => {
+                    this.customerTable = res.data.customer_table;
+                    this.renderCustomerChart(res.data.customer_series);
+                    this.renderMonthTrend(res.data.month_labels, res.data.pass_series, res.data.total_series);
+                    this.renderProjectTop(res.data.project_top10);
+                    this.loading = false;
+                }).catch(() => this.loading = false);
+            },
+            renderCustomerChart(seriesData) {
+                let chart = echarts.init(document.getElementById('customerChart'));
+                chart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: ['Pass', 'Fail', 'Ongoing', 'Planning'] },
+                    xAxis: { type: 'category', data: this.customerTable.map(item => item.Customer) },
+                    yAxis: { type: 'value' },
+                    series: [
+                        { name: 'Pass', type: 'bar', data: this.customerTable.map(item => item.Pass) },
+                        { name: 'Fail', type: 'bar', data: this.customerTable.map(item => item.Fail) },
+                        { name: 'Ongoing', type: 'bar', data: this.customerTable.map(item => item.Ongoing) },
+                        { name: 'Planning', type: 'bar', data: this.customerTable.map(item => item.Planning) }
+                    ]
+                });
+                window.addEventListener('resize', () => chart.resize());
+            },
+            renderMonthTrend(labels, passSeries, totalSeries) {
+                let chart = echarts.init(document.getElementById('monthTrendChart'));
+                chart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: [passSeries.name, totalSeries.name] },
+                    xAxis: { type: 'category', data: labels },
+                    yAxis: { type: 'value' },
+                    series: [
+                        { name: passSeries.name, type: 'line', data: passSeries.data },
+                        { name: totalSeries.name, type: 'line', data: totalSeries.data }
+                    ]
+                });
+            },
+            renderProjectTop(projects) {
+                let chart = echarts.init(document.getElementById('projectTopChart'));
+                chart.setOption({
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                    xAxis: { type: 'category', data: projects.map(p => p.project_code) },
+                    yAxis: { type: 'value' },
+                    series: [{ name: '任务数', type: 'bar', data: projects.map(p => p.total) }]
+                });
+            }
+        }
+    })
+</script>
+{% endblock %}
