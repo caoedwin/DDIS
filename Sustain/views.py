@@ -361,16 +361,27 @@ def upload_excel(request):
     # 建立列名到索引的映射（使用包含匹配）
     col_positions = {}
     for idx, cell in enumerate(header_cells):
+        # 去除前后空白和换行符
+        cell_clean = str(cell).strip().replace('\n', '')
         for col_name in base_field_map.keys():
-            if col_name in cell:   # 关键修改：包含匹配，例如 "Test Units status" 能匹配到包含该字符串的单元格
+            # 精确匹配（忽略大小写，可选）
+            if cell_clean == col_name:
                 col_positions[col_name] = idx
                 break
+
+
 
     # 检查必需的几个关键列是否存在
     required_present = ['Task No', 'Year', 'Month', 'Customer', 'Project Code']
     missing = [c for c in required_present if c not in col_positions]
     if missing:
         return JsonResponse({'error': f'表头行缺少必需列: {", ".join(missing)}'}, status=400)
+    # 在确定 col_positions 后立即打印
+    print("表头列名及索引:")
+    for name, idx in col_positions.items():
+        print(f"  {name} -> 索引 {idx}, 实际列名: {header_cells[idx] if idx < len(header_cells) else '超出'}")
+
+
 
     # 测试详情字段映射
     detail_field_map = {
@@ -495,7 +506,6 @@ def upload_excel(request):
         # 跳过全空行
         if all(cell == '' or pd.isna(cell) for cell in row):
             continue
-
         task_no_col = col_positions.get('Task No')
         if task_no_col is None or task_no_col >= len(row):
             continue
@@ -505,6 +515,12 @@ def upload_excel(request):
             continue
 
         try:
+            # ========== 第二段打印（每行 Year） ==========
+            year_col_idx = col_positions.get('Year')
+            if year_col_idx is not None:
+                raw_year_val = row[year_col_idx] if year_col_idx < len(row) else ''
+                print(f"行 {row_idx + header_row_idx + 2}, Year原始值: {raw_year_val!r}, 类型: {type(raw_year_val)}")
+                print(f"  整行前5列: {row[:5]}")
             task_data = {}
             for col_name, model_field in base_field_map.items():
                 if col_name not in col_positions:
@@ -512,6 +528,7 @@ def upload_excel(request):
                 col_idx = col_positions[col_name]
                 raw_val = row[col_idx] if col_idx < len(row) else ''
                 if model_field == 'year':
+                    print(f"行号: {row_idx + header_row_idx + 2}, Year原始值: {raw_val!r}, 类型: {type(raw_val)}")
                     task_data[model_field] = to_int(raw_val, 0)
                 elif model_field in ('unit_qty', 'task_leading_time'):
                     task_data[model_field] = to_int(raw_val, 0)
@@ -620,54 +637,195 @@ def upload_excel(request):
             errors.append(f'第{row_idx+header_row_idx+2}行处理出错: {str(e)}')
 
     return JsonResponse({'success_count': success_count, 'errors': errors})
+
+
+
 @csrf_exempt
-def dashboard_data(request):
-    year = request.GET.get('year')
-    customer = request.GET.get('customer')
-    qs = SustainTask.objects.all()
+def summary_data(request):
+    """Dashboard 统计数据接口"""
+    year = request.GET.get('year', datetime.datetime.now().year)
+    if not year:
+        year = datetime.datetime.now().year
+    customer_filter = request.GET.get('customer')  # 可选的客户筛选
+    # print(year,datetime.datetime.now().year)
+
+    # 基础查询集
+    tasks = SustainTask.objects.all()
     if year:
-        qs = qs.filter(year=year)
-    if customer:
-        qs = qs.filter(customer=customer)
+        tasks = tasks.filter(year=year)
+    if customer_filter:
+        tasks = tasks.filter(customer=customer_filter)
 
-    customer_stats = qs.values('customer').annotate(
-        pass_count=Count(Case(When(final_test_status='Pass', then=1), output_field=IntegerField())),
-        conditional_pass_count=Count(Case(When(final_test_status='Conditional Pass', then=1), output_field=IntegerField())),
-        fail_count=Count(Case(When(final_test_status='Fail', then=1), output_field=IntegerField())),
-        ongoing_count=Count(Case(When(final_test_status__in=['Testing','Pending'], then=1), output_field=IntegerField())),
-        planning_count=Count(Case(When(final_test_status='Planning', then=1), output_field=IntegerField())),
-    ).order_by('customer')
+    # ==================== 1. Customer & Series 统计 ====================
+    from django.db.models import Count, Case, When, IntegerField, Q
+    customer_series_stats = []
+    group_fields = ['customer', 'series']
+    customer_series_qs = tasks.values(*group_fields).annotate(
+        pass_cnt=Count(Case(When(final_test_status='Pass', then=1), output_field=IntegerField())),
+        cond_pass_cnt=Count(Case(When(final_test_status='Conditional Pass', then=1), output_field=IntegerField())),
+        fail_cnt=Count(Case(When(final_test_status='Fail', then=1), output_field=IntegerField())),
+        ongoing_cnt=Count(
+            Case(When(final_test_status__in=['Testing', 'Pending'], then=1), output_field=IntegerField())),
+        planning_cnt=Count(Case(When(final_test_status='Planning', then=1), output_field=IntegerField())),
+    ).order_by('customer', 'series')
 
-    customer_table = []
-    for item in customer_stats:
-        total = item['pass_count'] + item['conditional_pass_count'] + item['fail_count'] + item['ongoing_count'] + item['planning_count']
-        customer_table.append({
+    for item in customer_series_qs:
+        total = item['pass_cnt'] + item['cond_pass_cnt'] + item['fail_cnt'] + item['ongoing_cnt'] + item['planning_cnt']
+        customer_series_stats.append({
             'Customer': item['customer'],
-            'Pass': item['pass_count'] + item['conditional_pass_count'],
-            'Fail': item['fail_count'],
-            'Ongoing': item['ongoing_count'],
-            'Planning': item['planning_count'],
+            'Series': item['series'],
+            'Pass': item['pass_cnt'] + item['cond_pass_cnt'],
+            'Fail': item['fail_cnt'],
+            'Ongoing': item['ongoing_cnt'],
+            'Planning': item['planning_cnt'],
             'Total': total,
         })
 
-    from django.db.models.functions import ExtractMonth
-    month_stats = qs.values('year', 'month').annotate(
-        total=Count('id'),
-        pass_total=Count(Case(When(final_test_status__in=['Pass','Conditional Pass'], then=1), output_field=IntegerField()))
-    ).order_by('year', 'month')
-    months = [f"{item['year']}-{item['month']}" for item in month_stats]
-    pass_data = [item['pass_total'] for item in month_stats]
-    total_data = [item['total'] for item in month_stats]
-
-    project_stats = qs.values('project_code').annotate(
+    # ==================== 2. Customer & Month 统计 ====================
+    month_stats = tasks.values('year', 'month', 'customer').annotate(
         total=Count('id')
-    ).order_by('-total')[:10]
+    ).order_by('year', 'month', 'customer')
 
+    months_set = set()
+    customers_set = set()
+    month_data = {}
+    for stat in month_stats:
+        ym = f"{stat['year']}-{stat['month']}"
+        months_set.add(ym)
+        customers_set.add(stat['customer'])
+        month_data[(ym, stat['customer'])] = stat['total']
+
+    months = sorted(list(months_set), key=lambda x: (int(x.split('-')[0]), x.split('-')[1]))
+    customers_list = sorted(list(customers_set))
+
+    customer_month_table = []
+    for ym in months:
+        row = {'Month': ym}
+        for cust in customers_list:
+            row[cust] = month_data.get((ym, cust), 0)
+        row['Total'] = sum(row[cust] for cust in customers_list)
+        customer_month_table.append(row)
+    total_row = {'Month': 'Total'}
+    for cust in customers_list:
+        total_row[cust] = sum(row[cust] for row in customer_month_table)
+    total_row['Total'] = sum(total_row[cust] for cust in customers_list)
+    customer_month_table.append(total_row)
+
+    # ==================== 3. Project 统计 ====================
+    project_stats_qs = tasks.values('project_code').annotate(
+        pass_cnt=Count(Case(When(final_test_status='Pass', then=1), output_field=IntegerField())),
+        cond_pass_cnt=Count(Case(When(final_test_status='Conditional Pass', then=1), output_field=IntegerField())),
+        fail_cnt=Count(Case(When(final_test_status='Fail', then=1), output_field=IntegerField())),
+        ongoing_cnt=Count(
+            Case(When(final_test_status__in=['Testing', 'Pending'], then=1), output_field=IntegerField())),
+        planning_cnt=Count(Case(When(final_test_status='Planning', then=1), output_field=IntegerField())),
+    ).order_by('project_code')
+    project_table = []
+    for item in project_stats_qs:
+        total = item['pass_cnt'] + item['cond_pass_cnt'] + item['fail_cnt'] + item['ongoing_cnt'] + item['planning_cnt']
+        project_table.append({
+            'Project': item['project_code'],
+            'Pass': item['pass_cnt'] + item['cond_pass_cnt'],
+            'Fail': item['fail_cnt'],
+            'Ongoing': item['ongoing_cnt'],
+            'Planning': item['planning_cnt'],
+            'Total': total,
+        })
+
+    # ==================== 4. Category 统计 ====================
+    details_qs = SustainTestDetail.objects.filter(task__in=tasks)
+    category_stats = details_qs.values('test_category').annotate(
+        pass_cnt=Count(Case(When(test_status='Pass', then=1), output_field=IntegerField())),
+        cond_pass_cnt=Count(Case(When(test_status='Conditional Pass', then=1), output_field=IntegerField())),
+        fail_cnt=Count(Case(When(test_status='Fail', then=1), output_field=IntegerField())),
+        ongoing_cnt=Count(Case(When(test_status__in=['Testing', 'Pending'], then=1), output_field=IntegerField())),
+        planning_cnt=Count(Case(When(test_status='Planning', then=1), output_field=IntegerField())),
+    ).order_by('test_category')
+    category_table = []
+    for item in category_stats:
+        if not item['test_category']:
+            continue
+        total = item['pass_cnt'] + item['cond_pass_cnt'] + item['fail_cnt'] + item['ongoing_cnt'] + item['planning_cnt']
+        category_table.append({
+            'Category': item['test_category'],
+            'Pass': item['pass_cnt'] + item['cond_pass_cnt'],
+            'Fail': item['fail_cnt'],
+            'Ongoing': item['ongoing_cnt'],
+            'Planning': item['planning_cnt'],
+            'Total': total,
+        })
+
+    # ==================== 5. Project & Month 统计 ====================
+    project_month_stats = tasks.values('year', 'month', 'project_code').annotate(
+        total=Count('id')
+    ).order_by('year', 'month', 'project_code')
+    project_month_dict = {}
+    months_set_proj = set()
+    projects_set = set()
+    for stat in project_month_stats:
+        ym = f"{stat['year']}-{stat['month']}"
+        months_set_proj.add(ym)
+        projects_set.add(stat['project_code'])
+        project_month_dict[(ym, stat['project_code'])] = stat['total']
+    months_proj = sorted(list(months_set_proj), key=lambda x: (int(x.split('-')[0]), x.split('-')[1]))
+    projects_list = sorted(list(projects_set))
+    project_month_table = []
+    for ym in months_proj:
+        row = {'Month': ym}
+        for proj in projects_list:
+            row[proj] = project_month_dict.get((ym, proj), 0)
+        row['Total'] = sum(row[proj] for proj in projects_list)
+        project_month_table.append(row)
+    total_row_proj = {'Month': 'Total'}
+    for proj in projects_list:
+        total_row_proj[proj] = sum(row[proj] for row in project_month_table)
+    total_row_proj['Total'] = sum(total_row_proj[proj] for proj in projects_list)
+    project_month_table.append(total_row_proj)
+
+    # ==================== 6. Category & Month 统计 ====================
+    # 通过 task 关联获取 year, month
+    category_month_stats = details_qs.values('task__year', 'task__month', 'test_category').annotate(
+        total=Count('id')
+    ).order_by('task__year', 'task__month', 'test_category')
+
+    cat_month_dict = {}
+    months_set_cat = set()
+    categories_set = set()
+    for stat in category_month_stats:
+        ym = f"{stat['task__year']}-{stat['task__month']}"
+        cat = stat['test_category']
+        if not cat:
+            continue
+        months_set_cat.add(ym)
+        categories_set.add(cat)
+        cat_month_dict[(ym, cat)] = stat['total']
+    months_cat = sorted(list(months_set_cat), key=lambda x: (int(x.split('-')[0]), x.split('-')[1]))
+    categories_list = sorted(list(categories_set))
+    category_month_table = []
+    for ym in months_cat:
+        row = {'Month': ym}
+        for cat in categories_list:
+            row[cat] = cat_month_dict.get((ym, cat), 0)
+        row['Total'] = sum(row[cat] for cat in categories_list)
+        category_month_table.append(row)
+    total_row_cat = {'Month': 'Total'}
+    for cat in categories_list:
+        total_row_cat[cat] = sum(row[cat] for row in category_month_table)
+    total_row_cat['Total'] = sum(total_row_cat[cat] for cat in categories_list)
+    category_month_table.append(total_row_cat)
+
+    # 返回所有数据
     return JsonResponse({
-        'customer_table': customer_table,
-        'customer_series': [],
-        'month_labels': months,
-        'pass_series': {'name': 'Pass/Conditional Pass', 'data': pass_data},
-        'total_series': {'name': 'Total Tasks', 'data': total_data},
-        'project_top10': list(project_stats),
+        'customer_series_table': customer_series_stats,
+        'customer_month_table': customer_month_table,
+        'customer_month_columns': customers_list,
+        'customer_month_months': months,
+        'project_table': project_table,
+        'category_table': category_table,
+        'project_month_table': project_month_table,
+        'project_month_projects': projects_list,
+        'project_month_months': months_proj,
+        'category_month_table': category_month_table,
+        'category_month_categories': categories_list,
+        'category_month_months': months_cat,
     })

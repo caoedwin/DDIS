@@ -851,7 +851,7 @@
            <template scope="scope">
                 <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(Remark, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
                 </div>
-               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remarkrow.Remark }</span>
+               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remark }</span>
                 </template>{% comment %}#New{% endcomment %}
       </el-table-column>
       <el-table-column width="120" label="修改" fixed="right">

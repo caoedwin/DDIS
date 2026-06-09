@@ -7,58 +7,148 @@
     .dashboard-container { padding: 20px; }
     .chart-box { background: #F5F7FA; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
     .el-table { margin-top: 10px; }
+    .el-collapse-item__header {
+        background-image: linear-gradient(to right, rgba(0,139,139,0), rgba(0,139,139,1));
+        font-weight: bold;
+    }
+    .pass-cell { background-color: #67C23A; color: white; text-align: center; }
+    .fail-cell { background-color: #F56C6C; color: white; text-align: center; }
+    .ongoing-cell { background-color: #E6A23C; color: white; text-align: center; }
+    .planning-cell { background-color: #909399; color: white; text-align: center; }
+    .total-cell { background-color: #409EFF; color: white; text-align: center; }
 </style>
 {% endblock %}
 {% block content %}
 <div id="app">
     <el-backtop></el-backtop>
     <div class="dashboard-container">
-        <div class="row">
+        <div class="row align-items-center" style="margin-bottom: 20px;">
             <div class="col-md-3">
                 <label>Year:</label>
-                <el-date-picker v-model="selectedYear" type="year" value-format="yyyy" placeholder="选择年份" clearable></el-date-picker>
+                <el-date-picker v-model="selectedYear" type="year" value-format="yyyy" placeholder="选择年份" clearable style="width: 100%;"></el-date-picker>
             </div>
             <div class="col-md-3">
                 <label>Customer:</label>
-                <el-select v-model="selectedCustomer" placeholder="全部客户" clearable>
+                <el-select v-model="selectedCustomer" placeholder="全部客户" clearable filterable style="width: 100%;">
                     <el-option v-for="c in customers" :key="c" :label="c" :value="c"></el-option>
                 </el-select>
             </div>
             <div class="col-md-2">
-                <el-button type="primary" @click="loadData" :loading="loading">查询</el-button>
+                <el-button type="primary" @click="loadAllData" :loading="loading" style="margin-top: 26px;">查询</el-button>
             </div>
         </div>
 
-        <!-- 客户统计表格 -->
-        <div class="chart-box">
-            <h4>按客户统计</h4>
-            <el-table :data="customerTable" border stripe v-loading="loading">
-                <el-table-column prop="Customer" label="Customer" width="150"></el-table-column>
-                <el-table-column prop="Pass" label="Pass" width="100"></el-table-column>
-                <el-table-column prop="Fail" label="Fail" width="100"></el-table-column>
-                <el-table-column prop="Ongoing" label="Ongoing" width="100"></el-table-column>
-                <el-table-column prop="Planning" label="Planning" width="100"></el-table-column>
-                <el-table-column prop="Total" label="Total"></el-table-column>
-            </el-table>
-        </div>
+        <el-collapse v-model="activeNames">
+            <!-- 1. Customer & Series -->
+            <el-collapse-item title="C38 SW Sustain Task Distributed By Customer&Series" name="1">
+                <el-table :data="customerSeriesTable" border stripe v-loading="loading" style="width: 100%">
+                    <el-table-column prop="Customer" label="Customer" width="150"></el-table-column>
+                    <el-table-column prop="Series" label="Series" width="150"></el-table-column>
+                    <el-table-column prop="Pass" label="Pass" min-width="80">
+                        <template slot-scope="scope"><span class="pass-cell" style="display:block">${ scope.row.Pass }</span></template>
+                    </el-table-column>
+                    <el-table-column prop="Fail" label="Fail" min-width="80">
+                        <template slot-scope="scope"><span class="fail-cell" style="display:block">${ scope.row.Fail }</span></template>
+                    </el-table-column>
+                    <el-table-column prop="Ongoing" label="Ongoing" min-width="80">
+                        <template slot-scope="scope"><span class="ongoing-cell" style="display:block">${ scope.row.Ongoing }</span></template>
+                    </el-table-column>
+                    <el-table-column prop="Planning" label="Planning" min-width="80">
+                        <template slot-scope="scope"><span class="planning-cell" style="display:block">${ scope.row.Planning }</span></template>
+                    </el-table-column>
+                    <el-table-column prop="Total" label="Total" min-width="80">
+                        <template slot-scope="scope"><span class="total-cell" style="display:block">${ scope.row.Total }</span></template>
+                    </el-table-column>
+                </el-table>
+                <div class="chart-box" style="margin-top:20px">
+                    <div id="chartCustomerSeries" style="height:400px;"></div>
+                </div>
+            </el-collapse-item>
 
-        <!-- 柱状图：客户维度 -->
-        <div class="chart-box">
-            <h4>客户任务分布柱状图</h4>
-            <div id="customerChart" style="height:400px;"></div>
-        </div>
+            <!-- 2. Customer & Month -->
+            <el-collapse-item title="C38 SW Sustain Task Distributed By Customer and Month" name="2">
+                <el-table :data="customerMonthTable" border stripe v-loading="loading" style="width: 100%">
+                    <el-table-column prop="Month" label="Month" width="100" fixed="left"></el-table-column>
+                    <el-table-column v-for="cust in customerMonthColumns" :key="cust" :label="cust" :prop="cust" min-width="100">
+                        <template slot-scope="scope">
+                            <span class="total-cell" style="display:block">${ scope.row[cust] || 0 }</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="Total" label="Total" min-width="100">
+                        <template slot-scope="scope"><span class="total-cell" style="display:block">${ scope.row.Total }</span></template>
+                    </el-table-column>
+                </el-table>
+                <div class="chart-box" style="margin-top:20px">
+                    <div id="chartCustomerMonth" style="height:400px;"></div>
+                </div>
+            </el-collapse-item>
 
-        <!-- 月度趋势图 -->
-        <div class="chart-box">
-            <h4>月度任务趋势</h4>
-            <div id="monthTrendChart" style="height:400px;"></div>
-        </div>
+            <!-- 3. Project -->
+            <el-collapse-item title="C38 SW Sustain Task Distributed By Project" name="3">
+                <el-table :data="projectTable" border stripe v-loading="loading" style="width: 100%">
+                    <el-table-column prop="Project" label="Project" width="200"></el-table-column>
+                    <el-table-column prop="Pass" label="Pass"><template slot-scope="scope"><span class="pass-cell" style="display:block">${ scope.row.Pass }</span></template></el-table-column>
+                    <el-table-column prop="Fail" label="Fail"><template slot-scope="scope"><span class="fail-cell" style="display:block">${ scope.row.Fail }</span></template></el-table-column>
+                    <el-table-column prop="Ongoing" label="Ongoing"><template slot-scope="scope"><span class="ongoing-cell" style="display:block">${ scope.row.Ongoing }</span></template></el-table-column>
+                    <el-table-column prop="Planning" label="Planning"><template slot-scope="scope"><span class="planning-cell" style="display:block">${ scope.row.Planning }</span></template></el-table-column>
+                    <el-table-column prop="Total" label="Total"><template slot-scope="scope"><span class="total-cell" style="display:block">${ scope.row.Total }</span></template></el-table-column>
+                </el-table>
+                <div class="chart-box" style="margin-top:20px">
+                    <div id="chartProject" style="height:400px;"></div>
+                </div>
+            </el-collapse-item>
 
-        <!-- Top10 项目 -->
-        <div class="chart-box">
-            <h4>Top10 项目任务数</h4>
-            <div id="projectTopChart" style="height:400px;"></div>
-        </div>
+            <!-- 4. Category -->
+            <el-collapse-item title="C38 SW Sustain Task Distributed By Category" name="4">
+                <el-table :data="categoryTable" border stripe v-loading="loading" style="width: 100%">
+                    <el-table-column prop="Category" label="TP Category" width="200"></el-table-column>
+                    <el-table-column prop="Pass" label="Pass"><template slot-scope="scope"><span class="pass-cell" style="display:block">${ scope.row.Pass }</span></template></el-table-column>
+                    <el-table-column prop="Fail" label="Fail"><template slot-scope="scope"><span class="fail-cell" style="display:block">${ scope.row.Fail }</span></template></el-table-column>
+                    <el-table-column prop="Ongoing" label="Ongoing"><template slot-scope="scope"><span class="ongoing-cell" style="display:block">${ scope.row.Ongoing }</span></template></el-table-column>
+                    <el-table-column prop="Planning" label="Planning"><template slot-scope="scope"><span class="planning-cell" style="display:block">${ scope.row.Planning }</span></template></el-table-column>
+                    <el-table-column prop="Total" label="Total"><template slot-scope="scope"><span class="total-cell" style="display:block">${ scope.row.Total }</span></template></el-table-column>
+                </el-table>
+                <div class="chart-box" style="margin-top:20px">
+                    <div id="chartCategory" style="height:400px;"></div>
+                </div>
+            </el-collapse-item>
+
+            <!-- 5. Project & Month -->
+            <el-collapse-item title="C38 SW Sustain Task Distributed By Project & Month" name="5">
+                <el-table :data="projectMonthTable" border stripe v-loading="loading" style="width: 100%">
+                    <el-table-column prop="Month" label="Month" width="100" fixed="left"></el-table-column>
+                    <el-table-column v-for="proj in projectMonthProjects" :key="proj" :label="proj" :prop="proj" min-width="100">
+                        <template slot-scope="scope">
+                            <span class="total-cell" style="display:block">${ scope.row[proj] || 0 }</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="Total" label="Total" min-width="100">
+                        <template slot-scope="scope"><span class="total-cell" style="display:block">${ scope.row.Total }</span></template>
+                    </el-table-column>
+                </el-table>
+                <div class="chart-box" style="margin-top:20px">
+                    <div id="chartProjectMonth" style="height:400px;"></div>
+                </div>
+            </el-collapse-item>
+
+            <!-- 6. Category & Month -->
+            <el-collapse-item title="C38 SW Sustain Task Distributed By Category & Month" name="6">
+                <el-table :data="categoryMonthTable" border stripe v-loading="loading" style="width: 100%">
+                    <el-table-column prop="Month" label="Month" width="100" fixed="left"></el-table-column>
+                    <el-table-column v-for="cat in categoryMonthCategories" :key="cat" :label="cat" :prop="cat" min-width="100">
+                        <template slot-scope="scope">
+                            <span class="total-cell" style="display:block">${ scope.row[cat] || 0 }</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="Total" label="Total" min-width="100">
+                        <template slot-scope="scope"><span class="total-cell" style="display:block">${ scope.row.Total }</span></template>
+                    </el-table-column>
+                </el-table>
+                <div class="chart-box" style="margin-top:20px">
+                    <div id="chartCategoryMonth" style="height:400px;"></div>
+                </div>
+            </el-collapse-item>
+        </el-collapse>
     </div>
 </div>
 {% endblock %}
@@ -75,68 +165,222 @@
             selectedYear: '',
             selectedCustomer: '',
             customers: [],
-            customerTable: [],
             loading: false,
+            activeNames: ['1','2','3','4','5','6'],
+            customerSeriesTable: [],
+            customerMonthTable: [],
+            customerMonthColumns: [],
+            customerMonthMonths: [],
+            projectTable: [],
+            categoryTable: [],
+            projectMonthTable: [],
+            projectMonthProjects: [],
+            projectMonthMonths: [],
+            categoryMonthTable: [],
+            categoryMonthCategories: [],
+            categoryMonthMonths: [],
         },
         mounted() {
             this.loadCustomers();
-            this.loadData();
+            this.loadAllData();
         },
         methods: {
             loadCustomers() {
-                axios.get('/Sustain/api/get_customers/').then(res => { this.customers = res.data; });
+                axios.get('/Sustain/api/get_customers/').then(res => {
+                    this.customers = res.data;
+                }).catch(() => {});
             },
-            loadData() {
+            loadAllData() {
                 this.loading = true;
-                axios.get('/Sustain/api/dashboard_data/', {
+                axios.get('/Sustain/api/summary_data/', {
                     params: { year: this.selectedYear, customer: this.selectedCustomer }
                 }).then(res => {
-                    this.customerTable = res.data.customer_table;
-                    this.renderCustomerChart(res.data.customer_series);
-                    this.renderMonthTrend(res.data.month_labels, res.data.pass_series, res.data.total_series);
-                    this.renderProjectTop(res.data.project_top10);
+                    const d = res.data;
+                    this.customerSeriesTable = d.customer_series_table || [];
+                    this.customerMonthTable = d.customer_month_table || [];
+                    this.customerMonthColumns = d.customer_month_columns || [];
+                    this.customerMonthMonths = d.customer_month_months || [];
+                    this.projectTable = d.project_table || [];
+                    this.categoryTable = d.category_table || [];
+                    this.projectMonthTable = d.project_month_table || [];
+                    this.projectMonthProjects = d.project_month_projects || [];
+                    this.projectMonthMonths = d.project_month_months || [];
+                    this.categoryMonthTable = d.category_month_table || [];
+                    this.categoryMonthCategories = d.category_month_categories || [];
+                    this.categoryMonthMonths = d.category_month_months || [];
                     this.loading = false;
-                }).catch(() => this.loading = false);
-            },
-            renderCustomerChart(seriesData) {
-                let chart = echarts.init(document.getElementById('customerChart'));
-                chart.setOption({
-                    tooltip: { trigger: 'axis' },
-                    legend: { data: ['Pass', 'Fail', 'Ongoing', 'Planning'] },
-                    xAxis: { type: 'category', data: this.customerTable.map(item => item.Customer) },
-                    yAxis: { type: 'value' },
-                    series: [
-                        { name: 'Pass', type: 'bar', data: this.customerTable.map(item => item.Pass) },
-                        { name: 'Fail', type: 'bar', data: this.customerTable.map(item => item.Fail) },
-                        { name: 'Ongoing', type: 'bar', data: this.customerTable.map(item => item.Ongoing) },
-                        { name: 'Planning', type: 'bar', data: this.customerTable.map(item => item.Planning) }
-                    ]
-                });
-                window.addEventListener('resize', () => chart.resize());
-            },
-            renderMonthTrend(labels, passSeries, totalSeries) {
-                let chart = echarts.init(document.getElementById('monthTrendChart'));
-                chart.setOption({
-                    tooltip: { trigger: 'axis' },
-                    legend: { data: [passSeries.name, totalSeries.name] },
-                    xAxis: { type: 'category', data: labels },
-                    yAxis: { type: 'value' },
-                    series: [
-                        { name: passSeries.name, type: 'line', data: passSeries.data },
-                        { name: totalSeries.name, type: 'line', data: totalSeries.data }
-                    ]
+                    this.$nextTick(() => {
+                        this.renderCustomerSeriesChart();
+                        this.renderCustomerMonthChart();
+                        this.renderProjectChart();
+                        this.renderCategoryChart();
+                        this.renderProjectMonthChart();
+                        this.renderCategoryMonthChart();
+                    });
+                }).catch(() => {
+                    this.loading = false;
+                    this.$message.error('加载数据失败');
                 });
             },
-            renderProjectTop(projects) {
-                let chart = echarts.init(document.getElementById('projectTopChart'));
+            renderCustomerSeriesChart() {
+                let chart = echarts.init(document.getElementById('chartCustomerSeries'));
+                if (!this.customerSeriesTable.length) {
+                    chart.setOption({
+                        title: { show: true, text: '暂无数据', left: 'center', top: 'center' }
+                    }, true);
+                    return;
+                }
+                let categories = ['Pass', 'Fail', 'Ongoing', 'Planning'];
+                let seriesData = categories.map(cat => ({
+                    name: cat,
+                    type: 'bar',
+                    data: this.customerSeriesTable.map(item => item[cat]),
+                    itemStyle: {
+                        color: cat === 'Pass' ? '#67C23A' : (cat === 'Fail' ? '#F56C6C' : (cat === 'Ongoing' ? '#E6A23C' : '#909399'))
+                    }
+                }));
                 chart.setOption({
                     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-                    xAxis: { type: 'category', data: projects.map(p => p.project_code) },
+                    legend: { data: categories, top: 'bottom' },
+                    grid: { left: '3%', right: '4%', containLabel: true },
+                    xAxis: { type: 'category', data: this.customerSeriesTable.map(item => `${item.Customer} (${item.Series})`), axisLabel: { rotate: 45 } },
                     yAxis: { type: 'value' },
-                    series: [{ name: '任务数', type: 'bar', data: projects.map(p => p.total) }]
+                    series: seriesData
+                }, true);
+                window.addEventListener('resize', () => chart.resize());
+            },
+            renderCustomerMonthChart() {
+                let chart = echarts.init(document.getElementById('chartCustomerMonth'));
+                if (!this.customerMonthMonths.length) {
+                    chart.setOption({
+                        title: { show: true, text: '暂无数据', left: 'center', top: 'center' }
+                    }, true);
+                    return;
+                }
+                let series = this.customerMonthColumns.map(cust => ({
+                    name: cust,
+                    type: 'bar',
+                    data: this.customerMonthTable.filter(row => row.Month !== 'Total').map(row => row[cust] || 0),
+                    itemStyle: { color: '#409EFF' }
+                }));
+                series.push({
+                    name: '合计',
+                    type: 'line',
+                    data: this.customerMonthTable.filter(row => row.Month !== 'Total').map(row => row.Total),
+                    lineStyle: { color: '#FF8C00', width: 2 },
+                    symbol: 'circle',
+                    symbolSize: 6
                 });
+                chart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: [...this.customerMonthColumns, '合计'], top: 'bottom' },
+                    xAxis: { type: 'category', data: this.customerMonthMonths, axisLabel: { rotate: 45 } },
+                    yAxis: { type: 'value' },
+                    series: series
+                }, true);
+                window.addEventListener('resize', () => chart.resize());
+            },
+            renderProjectChart() {
+                let chart = echarts.init(document.getElementById('chartProject'));
+                if (!this.projectTable.length) {
+                    chart.setOption({
+                        title: { show: true, text: '暂无数据', left: 'center', top: 'center' }
+                    }, true);
+                    return;
+                }
+                let categories = ['Pass', 'Fail', 'Ongoing', 'Planning'];
+                let seriesData = categories.map(cat => ({
+                    name: cat,
+                    type: 'bar',
+                    data: this.projectTable.map(item => item[cat]),
+                    itemStyle: {
+                        color: cat === 'Pass' ? '#67C23A' : (cat === 'Fail' ? '#F56C6C' : (cat === 'Ongoing' ? '#E6A23C' : '#909399'))
+                    }
+                }));
+                chart.setOption({
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                    legend: { data: categories, top: 'bottom' },
+                    grid: { left: '3%', right: '4%', containLabel: true },
+                    xAxis: { type: 'category', data: this.projectTable.map(item => item.Project), axisLabel: { rotate: 45 } },
+                    yAxis: { type: 'value' },
+                    series: seriesData
+                }, true);
+                window.addEventListener('resize', () => chart.resize());
+            },
+            renderCategoryChart() {
+                let chart = echarts.init(document.getElementById('chartCategory'));
+                if (!this.categoryTable.length) {
+                    chart.setOption({
+                        title: { show: true, text: '暂无数据', left: 'center', top: 'center' }
+                    }, true);
+                    return;
+                }
+                let categories = ['Pass', 'Fail', 'Ongoing', 'Planning'];
+                let seriesData = categories.map(cat => ({
+                    name: cat,
+                    type: 'bar',
+                    data: this.categoryTable.map(item => item[cat]),
+                    itemStyle: {
+                        color: cat === 'Pass' ? '#67C23A' : (cat === 'Fail' ? '#F56C6C' : (cat === 'Ongoing' ? '#E6A23C' : '#909399'))
+                    }
+                }));
+                chart.setOption({
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                    legend: { data: categories, top: 'bottom' },
+                    grid: { left: '3%', right: '4%', containLabel: true },
+                    xAxis: { type: 'category', data: this.categoryTable.map(item => item.Category), axisLabel: { rotate: 45 } },
+                    yAxis: { type: 'value' },
+                    series: seriesData
+                }, true);
+                window.addEventListener('resize', () => chart.resize());
+            },
+            renderProjectMonthChart() {
+                let chart = echarts.init(document.getElementById('chartProjectMonth'));
+                if (!this.projectMonthMonths.length) {
+                    chart.setOption({
+                        title: { show: true, text: '暂无数据', left: 'center', top: 'center' }
+                    }, true);
+                    return;
+                }
+                let series = this.projectMonthProjects.map(proj => ({
+                    name: proj,
+                    type: 'bar',
+                    data: this.projectMonthTable.filter(row => row.Month !== 'Total').map(row => row[proj] || 0),
+                    barCategoryGap: '20%'
+                }));
+                chart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: this.projectMonthProjects, top: 'bottom', type: 'scroll' },
+                    xAxis: { type: 'category', data: this.projectMonthMonths, axisLabel: { rotate: 45 } },
+                    yAxis: { type: 'value' },
+                    series: series
+                }, true);
+                window.addEventListener('resize', () => chart.resize());
+            },
+            renderCategoryMonthChart() {
+                let chart = echarts.init(document.getElementById('chartCategoryMonth'));
+                if (!this.categoryMonthMonths.length) {
+                    chart.setOption({
+                        title: { show: true, text: '暂无数据', left: 'center', top: 'center' }
+                    }, true);
+                    return;
+                }
+                let series = this.categoryMonthCategories.map(cat => ({
+                    name: cat,
+                    type: 'bar',
+                    data: this.categoryMonthTable.filter(row => row.Month !== 'Total').map(row => row[cat] || 0),
+                    barCategoryGap: '20%'
+                }));
+                chart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: this.categoryMonthCategories, top: 'bottom', type: 'scroll' },
+                    xAxis: { type: 'category', data: this.categoryMonthMonths, axisLabel: { rotate: 45 } },
+                    yAxis: { type: 'value' },
+                    series: series
+                }, true);
+                window.addEventListener('resize', () => chart.resize());
             }
         }
-    })
+    });
 </script>
 {% endblock %}

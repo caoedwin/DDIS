@@ -15,6 +15,6 @@ urlpatterns = [
     path('api/save_task/', views.save_task, name='save_task'),
     path('api/delete_task/', views.delete_task, name='delete_task'),
     path('api/upload_excel/', views.upload_excel, name='upload_excel'),
-    path('api/dashboard_data/', views.dashboard_data, name='dashboard_data'),
     path('api/batch_delete_tasks/', views.batch_delete_tasks, name='batch_delete_tasks'),
+    path('api/summary_data/', views.summary_data, name='summary_data'),
 ]
