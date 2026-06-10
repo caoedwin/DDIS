@@ -642,6 +642,52 @@
     body.disable-theme-transition * {
         transition: none !important;
     }
+    /* ========= Element UI 弹窗（el-dialog）深色模式适配 ========= */
+    /* 弹窗整体背景 */
+    body.theme-dark .el-dialog {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    
+    /* 弹窗头部 */
+    body.theme-dark .el-dialog__header {
+        background-color: #1e2a36 !important;
+        border-bottom: 1px solid #4a627a !important;
+    }
+    body.theme-dark .el-dialog__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close:hover {
+        color: #ffffff !important;
+    }
+    
+    /* 弹窗主体 */
+    body.theme-dark .el-dialog__body {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    
+    /* 弹窗底部 */
+    body.theme-dark .el-dialog__footer {
+        background-color: #1e2a36 !important;
+        border-top: 1px solid #4a627a !important;
+    }
+    
+    /* 弹窗内表单标签 */
+    body.theme-dark .el-form-item__label {
+        color: #eef2ff !important;
+    }
+    
+    /* 弹窗内分割线 */
+    body.theme-dark .el-divider__text,
+    body.theme-dark .el-divider {
+        background-color: transparent !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
 </style>
 <body class="sidebar-collapse pace-done theme-light">
     <!-- 侧边栏、头部等原有内容... (保持不变，仅增加主题切换按钮) -->

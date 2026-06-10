@@ -9,15 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="49dc6e49-0cbb-4f1d-b6a9-9b615cad6699" name="Default Changelist" comment="Default Changelist">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sustain/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Sustain/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sustain/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Sustain/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/all-2026-06-05.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/all-2026-06-05.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/info-2026-06-05.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/info-2026-06-05.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/A32LessonLProject/Lesson_result.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/A32LessonLProject/Lesson_result.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/ABOProjectLessonL/Lesson_result.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ABOProjectLessonL/Lesson_result.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/LessonProjectME/Lesson_result.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/LessonProjectME/Lesson_result.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Sustain/summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Sustain/summary.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,27 +237,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Django Server.DDIS.executor&quot;: &quot;Run&quot;,
-    &quot;Django 服务器.DDIS.executor&quot;: &quot;Run&quot;,
-    &quot;Python.CapitalExpenditureexcelTrans - ui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.excelTransAIO.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/djangoproject/Reliability_Row_data/Sustain&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Django Server.DDIS.executor": "Run",
+    "Django 服务器.DDIS.executor": "Run",
+    "Python.CapitalExpenditureexcelTrans - ui.executor": "Run",
+    "Python.dev_needs.executor": "Run",
+    "Python.excelTransAIO.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "django.template.preview.state": "SHOW_EDITOR",
+    "last_opened_file_path": "C:/djangoproject/DMS",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\djangoproject\Reliability_Row_data\Sustain" />
@@ -299,7 +292,7 @@
       <visibility group="运行配置" flag="true" />
     </myKeys>
   </component>
-  <component name="RunManager" selected="Django 服务器.DDIS">
+  <component name="RunManager" selected="Python.dev_needs">
     <configuration name="CapitalExpenditureexcelTrans - ui" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DDIS" />
       <option name="ENV_FILES" value="" />
@@ -338,6 +331,26 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev_needs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DDIS" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../PythonProject/dev_score" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../PythonProject/dev_score/dev_needs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -438,29 +451,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="DDIS" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop/rowdata/excelTrans" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/rowdata/excelTrans/test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="DDIS" type="Python.DjangoServer" factoryName="Django server">
       <module name="DDIS" />
       <option name="ENV_FILES" value="" />
@@ -489,19 +479,19 @@
     <list>
       <item itemvalue="Django 服务器.DDIS" />
       <item itemvalue="Python.models" />
+      <item itemvalue="Python.dev_needs" />
       <item itemvalue="Python.excelTransAIO" />
       <item itemvalue="Python.CapitalExpenditureexcelTrans - ui" />
       <item itemvalue="Python.excelTrans (1)" />
       <item itemvalue="Python.excelTrans" />
-      <item itemvalue="Python.test (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.dev_needs" />
         <item itemvalue="Python.excelTransAIO" />
         <item itemvalue="Python.CapitalExpenditureexcelTrans - ui" />
         <item itemvalue="Python.excelTrans" />
         <item itemvalue="Python.excelTrans (1)" />
-        <item itemvalue="Python.test (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -791,7 +781,7 @@
       <workItem from="1778716841924" duration="60393000" />
       <workItem from="1779675152038" duration="55708000" />
       <workItem from="1780020675732" duration="65911000" />
-      <workItem from="1780896521005" duration="18903000" />
+      <workItem from="1780896521005" duration="32780000" />
     </task>
     <servers />
   </component>
