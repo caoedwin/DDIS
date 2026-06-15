@@ -8434,3 +8434,400 @@ def TestPlanSW_search_AIO(request):
 
 
     return render(request, 'TestPlanSWOS/TestPlanSW_search_AIO.html', locals())
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.renderers import JSONRenderer
+from django.http import Http404, HttpResponse
+from .authentication import MyJWTAuthentication
+from .permissions import MyPermission
+from .serializers import (
+    TestItemSWOSSerializer, TestProjectSWOSSerializer, TestPlanSWOSSerializer,
+    RetestItemSWOSSerializer, FFRTByRDOSSerializer,
+    TestProjectSWAIOOSSerializer, TestPlanSWAIOOSSerializer
+)
+from TestPlanSWOS.models import (
+    TestItemSW, TestProjectSW, TestPlanSW, RetestItemSW, FFRTByRD,
+    TestProjectSWAIO, TestPlanSWAIO
+)
+
+
+# 通用查询参数解析函数
+def get_query_params(request, model_fields):
+    filters = {}
+    for field in model_fields:
+        value = request.GET.get(field)
+        if value is not None and value != '':
+            filters[field] = value
+    return filters
+
+
+# -------------------- TestItemSW API --------------------
+class TestItemOSList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in TestItemSW._meta.fields if f.name != 'id'])
+        queryset = TestItemSW.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestItemSWOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TestItemSWOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TestItemOSDetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return TestItemSW.objects.get(pk=pk)
+        except TestItemSW.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestItemSWOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = TestItemSWOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# -------------------- TestProjectSW API --------------------
+class TestProjectOSList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in TestProjectSW._meta.fields if f.name != 'id'])
+        queryset = TestProjectSW.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestProjectSWOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TestProjectSWOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TestProjectOSDetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return TestProjectSW.objects.get(pk=pk)
+        except TestProjectSW.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestProjectSWOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = TestProjectSWOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# -------------------- TestPlanSW API --------------------
+class TestPlanOSList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in TestPlanSW._meta.fields if f.name != 'id'])
+        if not filters:
+            return Response(
+                {"error": "请提供至少一个过滤条件，例如 Customer、Phase 等"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        queryset = TestPlanSW.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestPlanSWOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TestPlanSWOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TestPlanOSDetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return TestPlanSW.objects.get(pk=pk)
+        except TestPlanSW.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestPlanSWOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = TestPlanSWOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# -------------------- RetestItemSW API --------------------
+class RetestItemOSList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in RetestItemSW._meta.fields if f.name != 'id'])
+        queryset = RetestItemSW.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = RetestItemSWOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = RetestItemSWOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RetestItemOSDetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return RetestItemSW.objects.get(pk=pk)
+        except RetestItemSW.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = RetestItemSWOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = RetestItemSWOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# -------------------- FFRTByRD API --------------------
+class FFRTByRDOSList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in FFRTByRD._meta.fields if f.name != 'id'])
+        queryset = FFRTByRD.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = FFRTByRDOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = FFRTByRDOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FFRTByRDOSDetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return FFRTByRD.objects.get(pk=pk)
+        except FFRTByRD.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = FFRTByRDOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = FFRTByRDOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# -------------------- TestProjectSWAIO API --------------------
+class TestProjectOSAIOList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in TestProjectSWAIO._meta.fields if f.name != 'id'])
+        queryset = TestProjectSWAIO.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestProjectSWAIOOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TestProjectSWAIOOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TestProjectOSAIODetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return TestProjectSWAIO.objects.get(pk=pk)
+        except TestProjectSWAIO.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestProjectSWAIOOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = TestProjectSWAIOOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# -------------------- TestPlanSWAIO API --------------------
+class TestPlanOSAIOList(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get(self, request):
+        filters = get_query_params(request, [f.name for f in TestPlanSWAIO._meta.fields if f.name != 'id'])
+        queryset = TestPlanSWAIO.objects.filter(**filters)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestPlanSWAIOOSSerializer(queryset, many=True, fields=fields)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TestPlanSWAIOOSSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TestPlanOSAIODetail(APIView):
+    authentication_classes = [MyJWTAuthentication]
+    permission_classes = [MyPermission]
+
+    def get_object(self, pk):
+        try:
+            return TestPlanSWAIO.objects.get(pk=pk)
+        except TestPlanSWAIO.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        obj = self.get_object(pk)
+        fields_param = request.GET.get('fields')
+        fields = fields_param.split(',') if fields_param else None
+        serializer = TestPlanSWAIOOSSerializer(obj, fields=fields)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        obj = self.get_object(pk)
+        serializer = TestPlanSWAIOOSSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        obj = self.get_object(pk)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

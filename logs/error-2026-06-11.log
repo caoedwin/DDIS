@@ -1,0 +1,25 @@
+[2026-06-11 10:12:29,817] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSW/api/testplans/ 500 [0.46, 127.0.0.1:49303]
+[2026-06-11 13:34:19,694] [log.py:228] [log:log_response] [ERROR]- Internal Server Error: /TestPlanSWOS/api/testprojects/
+Traceback (most recent call last):
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Python3129\mecheck\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\django\views\generic\base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "C:\Python3129\mecheck\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\djangoproject\Reliability_Row_data\TestPlanSWOS\views.py", line 8520, in get
+    filters = get_query_params(request, [f.name for f in TestProjectOS._meta.fields if f.name != 'id'])
+NameError: name 'TestProjectOS' is not defined
+[2026-06-11 13:34:19,698] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /TestPlanSWOS/api/testprojects/?Customer=C38(NB)&Project=GLMA0_Win11S%20SV2&fields=id,Customer,BaseTime 500 [4.17, 127.0.0.1:59777]

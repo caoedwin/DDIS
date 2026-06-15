@@ -33,7 +33,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             return False
         else:
             data = {"userId": user.id, "token": str(refresh.access_token), "refresh": str(refresh)}
-            print(data)
         # data = {"userId": user.id, "token": str(refresh.access_token), "refresh": str(refresh)}
         return data
 
