@@ -9,9 +9,10 @@
     .search-card, .stats-card, .table-card {
         padding: 0px;
         margin-bottom: 0px;
-        background: transparent;
+        background: rgba(255,255,255,0.1);
         border-radius: 0px;
     }
+    /* 修复统计表格最后一行显示不全的问题 */
     .stats-card {
         margin-bottom: 20px;
         overflow: visible;
@@ -44,6 +45,7 @@
         font-size: 13px;
         margin: 5px 0;
     }
+    .el-form-item__label { color: white; }
     .el-table .cell { text-align: left; }
     .action-buttons { display: flex; gap: 5px; }
     .stats-table {
@@ -65,6 +67,7 @@
     .el-table__header-wrapper .el-table__header th {
         background-color: #f5f7fa;
     }
+    /* 列设置弹窗样式 */
     .column-group {
         margin-bottom: 16px;
         border-bottom: 1px solid #EBEEF5;
@@ -86,13 +89,15 @@
         width: 120px;
         margin-right: 0;
     }
+    /* 表格工具栏样式 */
     .table-toolbar {
         margin-bottom: 12px;
         text-align: right;
     }
+    /* ECharts 图表容器样式 */
     .chart-card {
         margin-bottom: 20px;
-        background: transparent;
+        background: rgba(255,255,255,0.1);
         border-radius: 8px;
         padding: 16px;
     }
@@ -148,7 +153,7 @@
         </el-form>
     </div>
 
-    <!-- ECharts 图表 -->
+    <!-- ECharts 统计图表卡片 -->
     <div class="chart-card" v-if="statsLoaded">
         <div class="chart-header">
             <div class="chart-title">DQA NRE 指标对比图</div>
@@ -169,7 +174,7 @@
         <div id="statsChart"></div>
     </div>
 
-    <!-- 统计表格 -->
+    <!-- 统计数据表格（原有表格，保留用于详细数据查看） -->
     <div class="stats-card" v-if="statsLoaded">
         <div class="stats-header">DQA NRE to PM (详细数据)</div>
         <el-table :data="statsRows" border stripe class="stats-table">
@@ -194,7 +199,7 @@
         </el-table>
     </div>
 
-    <!-- 数据表格 -->
+    <!-- 数据表格 - 支持列显隐 -->
     <div class="table-card">
         <div class="table-toolbar">
             <el-button type="default" size="small" @click="openColumnSettings" icon="el-icon-setting">列设置</el-button>
@@ -267,7 +272,8 @@
         </el-pagination>
     </div>
 
-    <!-- 弹窗 -->
+    <!-- 以下为弹窗（新增/编辑/上传/错误等），与之前保持一致，因篇幅省略，实际使用时请保留完整弹窗代码 -->
+    <!-- 新增/编辑弹窗 -->
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="70%" @close="resetForm">
         <el-form ref="pcrForm" :model="form" :rules="rules" label-width="140px">
             <el-row :gutter="20">
@@ -316,6 +322,7 @@
         </div>
     </el-dialog>
 
+    <!-- Excel上传弹窗 -->
     <el-dialog title="Excel批量上传" :visible.sync="showUploadDialog" width="500px">
         <el-upload drag action="#" :auto-upload="false" :on-change="handleExcelChange" :file-list="excelFileList" :limit="1">
             <i class="el-icon-upload"></i>
@@ -329,6 +336,7 @@
         </div>
     </el-dialog>
 
+    <!-- 重复数据展示弹窗 -->
     <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
         <el-table :data="duplicateTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
@@ -341,6 +349,7 @@
         </div>
     </el-dialog>
 
+    <!-- 错误信息展示弹窗 -->
     <el-dialog title="错误信息（未导入）" :visible.sync="errorDialogVisible" width="70%">
         <el-table :data="errorTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
@@ -351,6 +360,7 @@
         </div>
     </el-dialog>
 
+    <!-- 列设置弹窗 -->
     <el-dialog title="选择显示的列" :visible.sync="columnSettingsVisible" width="700px">
         <div class="column-group">
             <div class="column-group-title">基本信息</div>
@@ -389,7 +399,7 @@
         </div>
         <div class="column-group">
             <div class="column-group-title">说明</div>
-            <div class="column-checkbox-group" style="font-size:12px; color: var(--text-color, #909399);">
+            <div class="column-checkbox-group" style="color:#909399; font-size:12px;">
                 <span>序号列和操作列固定显示，不可隐藏</span>
             </div>
         </div>
@@ -405,6 +415,7 @@
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/Element/index.js"></script>
 <script src="/static/js/xlsx/xlsx.js"></script>
+<!-- 引入 ECharts -->
 <script src="/static/js/echart/echart.js"></script>
 <script>
 new Vue({
@@ -476,202 +487,280 @@ new Vue({
                 remark: true,
                 attachment: true,
             },
-            dimensionMap: new Map(),
+            // ECharts 配置
+            chartMetric: 'sample_qty',   // 当前指标
+            chartType: 'bar',           // 图表类型 bar/line
+            chartInstance: null,
             metricLabels: {
                 sample_qty: 'Sample Qty',
                 hc_qty: 'HC Qty',
                 hc_days: 'HC Days',
                 pd: 'PD',
                 device_fee_usd: 'Device fee (USD)'
-            },
-            chartMetric: 'sample_qty',
-            chartType: 'bar',
-            chartInstance: null,
-            _themeObserver: null,
+            }
         }
     },
     computed: {
         showNreGroup() {
             return this.colVisible.sample_qty || this.colVisible.hc_qty || this.colVisible.hc_days || this.colVisible.pd || this.colVisible.device_fee_usd;
         },
+        // 图表所需数据：维度数组和对应指标数值数组
+        chartData() {
+            if (!this.statsRows.length) return { dimensions: [], values: [] };
+            const dimensions = this.statsRows.map(row => row.dimension);
+            const values = this.statsRows.map(row => parseFloat(row[this.chartMetric]) || 0);
+            return { dimensions, values };
+        }
     },
     watch: {
+        // 当统计数据加载完成、指标或图表类型变化时更新图表
         statsLoaded(newVal) {
-            if (newVal && this.dimensionMap.size) {
+            if (newVal && this.statsRows.length) {
                 this.$nextTick(() => this.initChart());
             }
         },
-        chartMetric() { this.updateChart(); },
-        chartType() { this.updateChart(); },
+        chartMetric() {
+            this.updateChart();
+        },
+        chartType() {
+            this.updateChart();
+        },
+        statsRows: {
+            handler() {
+                this.updateChart();
+            },
+            deep: true
+        }
     },
     mounted() {
         this.loadColumnSettings();
         this.searchData();
         window.addEventListener('resize', this.handleResize);
-        // 监听主题变化
-        this._themeObserver = new MutationObserver(() => {
-            if (this.chartInstance) this.updateChart();
-        });
-        this._themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.handleResize);
-        if (this._themeObserver) this._themeObserver.disconnect();
-        if (this.chartInstance) this.chartInstance.dispose();
+        if (this.chartInstance) {
+            this.chartInstance.dispose();
+        }
     },
     methods: {
-        // ---- 图表相关 ----
-        getThemeColors() {
-            const isDark = document.body.classList.contains('theme-dark');
-            return {
-                axisLabel: isDark ? '#eee' : '#333',
-                axisLine: isDark ? '#555' : '#ccc',
-                splitLine: isDark ? '#444' : '#ddd',
-                nameText: isDark ? '#ddd' : '#444',
-                legendText: isDark ? '#eee' : '#333',
-            };
-        },
+        // 初始化 ECharts
         initChart() {
             const dom = document.getElementById('statsChart');
             if (!dom) return;
-            if (this.chartInstance) this.chartInstance.dispose();
+            if (this.chartInstance) {
+                this.chartInstance.dispose();
+            }
             this.chartInstance = echarts.init(dom);
             this.updateChart();
         },
+        // 根据维度名称判断所属系列
+        getSeriesKey(dimension) {
+            if (dimension.includes('NB')) return 'NB';
+            if (dimension.includes('AIO')) return 'AIO';
+            return 'Total';
+        },
+    
+        // 获取多系列数据
+        getMultiSeriesData() {
+            const dimensions = this.statsRows.map(row => row.dimension);
+            const values = this.statsRows.map(row => parseFloat(row[this.chartMetric]) || 0);
+            
+            const nbData = [];
+            const aioData = [];
+            const totalData = [];
+            
+            dimensions.forEach((dim, idx) => {
+                const val = values[idx];
+                const key = this.getSeriesKey(dim);
+                if (key === 'NB') {
+                    nbData.push(val);
+                    aioData.push(null);
+                    totalData.push(null);
+                } else if (key === 'AIO') {
+                    nbData.push(null);
+                    aioData.push(val);
+                    totalData.push(null);
+                } else {
+                    nbData.push(null);
+                    aioData.push(null);
+                    totalData.push(val);
+                }
+            });
+            
+            return { dimensions, nbData, aioData, totalData };
+        },
+    
         updateChart() {
-            if (!this.chartInstance || !this.dimensionMap || this.dimensionMap.size === 0) return;
-            const colors = this.getThemeColors();
-            const dimensions = Array.from(this.dimensionMap.keys());
-            const metric = this.chartMetric;
-            const nb_npi_vals = [], nb_inv_vals = [], aio_npi_vals = [], aio_inv_vals = [];
-            for (let dim of dimensions) {
-                const parts = this.dimensionMap.get(dim).parts[metric];
-                nb_npi_vals.push(parts.nb_npi);
-                nb_inv_vals.push(parts.nb_inv);
-                aio_npi_vals.push(parts.aio_npi);
-                aio_inv_vals.push(parts.aio_inv);
+            if (!this.chartInstance || !this.statsRows.length) return;
+            
+            const { dimensions, nbData, aioData, totalData } = this.getMultiSeriesData();
+            const metricName = this.metricLabels[this.chartMetric];
+            
+            // 根据图表类型构建 series
+            let series = [];
+            if (this.chartType === 'bar') {
+                series = [
+                    {
+                        name: 'NB',
+                        type: 'bar',
+                        data: nbData,
+                        itemStyle: { color: '#5470c6' },
+                        barGap: '0.1',
+                        barCategoryGap: '0.2'
+                    },
+                    {
+                        name: 'AIO',
+                        type: 'bar',
+                        data: aioData,
+                        itemStyle: { color: '#fac858' }
+                    },
+                    {
+                        name: 'Total',
+                        type: 'bar',
+                        data: totalData,
+                        itemStyle: { color: '#91cc75' }
+                    }
+                ];
+            } else { // line
+                series = [
+                    {
+                        name: 'NB',
+                        type: 'line',
+                        data: nbData,
+                        lineStyle: { color: '#5470c6', width: 2 },
+                        symbol: 'circle',
+                        symbolSize: 6,
+                        connectNulls: false
+                    },
+                    {
+                        name: 'AIO',
+                        type: 'line',
+                        data: aioData,
+                        lineStyle: { color: '#fac858', width: 2 },
+                        symbol: 'diamond',
+                        symbolSize: 6,
+                        connectNulls: false
+                    },
+                    {
+                        name: 'Total',
+                        type: 'line',
+                        data: totalData,
+                        lineStyle: { color: '#91cc75', width: 2 },
+                        symbol: 'roundRect',
+                        symbolSize: 6,
+                        connectNulls: false
+                    }
+                ];
             }
-            const metricName = this.metricLabels[metric];
+            
             const option = {
-                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-                legend: {
-                    data: this.chartType === 'bar' ? ['NB NPI', 'NB INV', 'AIO NPI', 'AIO INV'] : [metricName],
-                    textStyle: { color: colors.legendText }
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' }
                 },
-                grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
+                legend: {
+                    data: ['NB', 'AIO', 'Total'],
+                    textStyle: { color: '#fff' }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '10%',
+                    containLabel: true
+                },
                 xAxis: {
                     type: 'category',
                     data: dimensions,
-                    axisLabel: { rotate: 35, interval: 0, margin: 10, color: colors.axisLabel, fontSize: 11 },
-                    axisLine: { lineStyle: { color: colors.axisLine } }
+                    axisLabel: {
+                        rotate: 35,
+                        interval: 0,
+                        margin: 10,
+                        color: '#ccc',
+                        fontSize: 11
+                    },
+                    axisLine: { lineStyle: { color: '#555' } }
                 },
                 yAxis: {
                     type: 'value',
                     name: metricName,
-                    nameTextStyle: { color: colors.nameText },
-                    axisLabel: { color: colors.axisLabel },
-                    splitLine: { lineStyle: { color: colors.splitLine } }
+                    nameTextStyle: { color: '#ddd' },
+                    axisLabel: { color: '#ccc' },
+                    splitLine: { lineStyle: { color: '#333' } }
                 },
-                series: this.chartType === 'bar' ? [
-                    { name: 'NB NPI', type: 'bar', stack: 'total', data: nb_npi_vals, itemStyle: { color: '#5470c6' } },
-                    { name: 'NB INV', type: 'bar', stack: 'total', data: nb_inv_vals, itemStyle: { color: '#91cc75' } },
-                    { name: 'AIO NPI', type: 'bar', stack: 'total', data: aio_npi_vals, itemStyle: { color: '#fac858' } },
-                    { name: 'AIO INV', type: 'bar', stack: 'total', data: aio_inv_vals, itemStyle: { color: '#ee6666' } }
-                ] : [{
-                    name: metricName,
-                    type: 'line',
-                    data: dimensions.map(dim => this.dimensionMap.get(dim)[metric]),
-                    lineStyle: { color: '#409EFF', width: 2 },
-                    symbol: 'circle',
-                    symbolSize: 6
-                }]
+                series: series
             };
+            
             this.chartInstance.setOption(option, true);
             this.chartInstance.resize();
         },
         handleResize() {
-            if (this.chartInstance) this.chartInstance.resize();
+            if (this.chartInstance) {
+                this.chartInstance.resize();
+            }
         },
-
-        // ---- 数据构建 ----
+        // 构建17行统计数据
         buildStatsRows() {
-            const getVal = (obj, field, sub = 'total') => {
-                if (obj && obj[sub] && typeof obj[sub][field] !== 'undefined') {
-                    let num = parseFloat(obj[sub][field]);
+            const getVal = (obj, field) => {
+                if (obj && typeof obj[field] !== 'undefined' && obj[field] !== null) {
+                    let num = parseFloat(obj[field]);
                     return isNaN(num) ? 0 : num;
                 }
                 return 0;
             };
-            const nb_npi = this.stats.NB_NPI;
-            const nb_inv = this.stats.NB_INV;
-            const aio_npi = this.stats.AIO_NPI;
-            const aio_inv = this.stats.AIO_INV;
-            const rowsConfig = [
-                { dim: 'Total (Perform+Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'total'), nb_inv: getVal(nb_inv, m, 'total'), aio_npi: getVal(aio_npi, m, 'total'), aio_inv: getVal(aio_inv, m, 'total') }) },
-                { dim: 'Total (Perform)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'perform'), nb_inv: getVal(nb_inv, m, 'perform'), aio_npi: getVal(aio_npi, m, 'perform'), aio_inv: getVal(aio_inv, m, 'perform') }) },
-                { dim: 'Total (Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'plan'), nb_inv: getVal(nb_inv, m, 'plan'), aio_npi: getVal(aio_npi, m, 'plan'), aio_inv: getVal(aio_inv, m, 'plan') }) },
-                { dim: 'NB Total (Perform+Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'total'), nb_inv: getVal(nb_inv, m, 'total'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB Total (Perform)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'perform'), nb_inv: getVal(nb_inv, m, 'perform'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB Total (Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'plan'), nb_inv: getVal(nb_inv, m, 'plan'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'AIO total (Perform+Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'total'), aio_inv: getVal(aio_inv, m, 'total') }) },
-                { dim: 'AIO total (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'perform'), aio_inv: getVal(aio_inv, m, 'perform') }) },
-                { dim: 'AIO total (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'plan'), aio_inv: getVal(aio_inv, m, 'plan') }) },
-                { dim: 'NB NPI (Perform)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'perform'), nb_inv: 0, aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB NPI (Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'plan'), nb_inv: 0, aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB INV (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: getVal(nb_inv, m, 'perform'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB INV (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: getVal(nb_inv, m, 'plan'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'AIO NPI (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'perform'), aio_inv: 0 }) },
-                { dim: 'AIO NPI (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'plan'), aio_inv: 0 }) },
-                { dim: 'AIO INV (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: 0, aio_inv: getVal(aio_inv, m, 'perform') }) },
-                { dim: 'AIO INV (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: 0, aio_inv: getVal(aio_inv, m, 'plan') }) }
-            ];
-            const dimensionMap = new Map();
-            rowsConfig.forEach(cfg => {
-                const dim = cfg.dim;
-                const parts5 = {
-                    sample_qty: cfg.formula('sample_qty'),
-                    hc_qty: cfg.formula('hc_qty'),
-                    hc_days: cfg.formula('hc_days'),
-                    pd: cfg.formula('pd'),
-                    device_fee_usd: cfg.formula('device_fee_usd')
-                };
-                const total = (metric) => {
-                    const p = parts5[metric];
-                    return p.nb_npi + p.nb_inv + p.aio_npi + p.aio_inv;
-                };
-                dimensionMap.set(dim, {
-                    sample_qty: total('sample_qty'),
-                    hc_qty: total('hc_qty'),
-                    hc_days: total('hc_days'),
-                    pd: total('pd'),
-                    device_fee_usd: total('device_fee_usd'),
-                    parts: parts5
-                });
-            });
-            this.dimensionMap = dimensionMap;
-            this.statsRows = [];
-            for (let [dim, values] of dimensionMap.entries()) {
-                this.statsRows.push({
-                    dimension: dim,
-                    sample_qty: values.sample_qty.toFixed(1),
-                    hc_qty: values.hc_qty.toFixed(1),
-                    hc_days: values.hc_days.toFixed(1),
-                    pd: values.pd.toFixed(1),
-                    device_fee_usd: values.device_fee_usd.toFixed(2)
-                });
-            }
+            const formatSample = (val) => { let n = getVal(val, 'sample_qty'); return n.toFixed(1); };
+            const formatHcQty = (val) => { let n = getVal(val, 'hc_qty'); return n.toFixed(1); };
+            const formatHcDays = (val) => { let n = getVal(val, 'hc_days'); return n.toFixed(1); };
+            const formatPd = (val) => { let n = getVal(val, 'pd'); return n.toFixed(1); };
+            const formatDevice = (val) => { let n = getVal(val, 'device_fee_usd'); return n.toFixed(2); };
+            
+            const rows = [];
+            const totalData = this.stats.total;
+            rows.push({ dimension: 'Total (Perform+Plan)', sample_qty: formatSample(totalData.total), hc_qty: formatHcQty(totalData.total), hc_days: formatHcDays(totalData.total), pd: formatPd(totalData.total), device_fee_usd: formatDevice(totalData.total) });
+            rows.push({ dimension: 'Total (Perform)', sample_qty: formatSample(totalData.perform), hc_qty: formatHcQty(totalData.perform), hc_days: formatHcDays(totalData.perform), pd: formatPd(totalData.perform), device_fee_usd: formatDevice(totalData.perform) });
+            rows.push({ dimension: 'Total (Plan)', sample_qty: formatSample(totalData.plan), hc_qty: formatHcQty(totalData.plan), hc_days: formatHcDays(totalData.plan), pd: formatPd(totalData.plan), device_fee_usd: formatDevice(totalData.plan) });
+            
+            const nbData = this.stats.NB;
+            rows.push({ dimension: 'NB Total (Perform+Plan)', sample_qty: formatSample(nbData.total), hc_qty: formatHcQty(nbData.total), hc_days: formatHcDays(nbData.total), pd: formatPd(nbData.total), device_fee_usd: formatDevice(nbData.total) });
+            rows.push({ dimension: 'NB Total (Perform)', sample_qty: formatSample(nbData.perform), hc_qty: formatHcQty(nbData.perform), hc_days: formatHcDays(nbData.perform), pd: formatPd(nbData.perform), device_fee_usd: formatDevice(nbData.perform) });
+            rows.push({ dimension: 'NB Total (Plan)', sample_qty: formatSample(nbData.plan), hc_qty: formatHcQty(nbData.plan), hc_days: formatHcDays(nbData.plan), pd: formatPd(nbData.plan), device_fee_usd: formatDevice(nbData.plan) });
+            
+            const aioData = this.stats.AIO;
+            rows.push({ dimension: 'AIO total (Perform+Plan)', sample_qty: formatSample(aioData.total), hc_qty: formatHcQty(aioData.total), hc_days: formatHcDays(aioData.total), pd: formatPd(aioData.total), device_fee_usd: formatDevice(aioData.total) });
+            rows.push({ dimension: 'AIO total (Perform)', sample_qty: formatSample(aioData.perform), hc_qty: formatHcQty(aioData.perform), hc_days: formatHcDays(aioData.perform), pd: formatPd(aioData.perform), device_fee_usd: formatDevice(aioData.perform) });
+            rows.push({ dimension: 'AIO total (Plan)', sample_qty: formatSample(aioData.plan), hc_qty: formatHcQty(aioData.plan), hc_days: formatHcDays(aioData.plan), pd: formatPd(aioData.plan), device_fee_usd: formatDevice(aioData.plan) });
+            
+            const nbNpi = this.stats.NB_NPI;
+            rows.push({ dimension: 'NB NPI (Perform)', sample_qty: formatSample(nbNpi.perform), hc_qty: formatHcQty(nbNpi.perform), hc_days: formatHcDays(nbNpi.perform), pd: formatPd(nbNpi.perform), device_fee_usd: formatDevice(nbNpi.perform) });
+            rows.push({ dimension: 'NB NPI (Plan)', sample_qty: formatSample(nbNpi.plan), hc_qty: formatHcQty(nbNpi.plan), hc_days: formatHcDays(nbNpi.plan), pd: formatPd(nbNpi.plan), device_fee_usd: formatDevice(nbNpi.plan) });
+            
+            const nbInv = this.stats.NB_INV;
+            rows.push({ dimension: 'NB INV (Perform)', sample_qty: formatSample(nbInv.perform), hc_qty: formatHcQty(nbInv.perform), hc_days: formatHcDays(nbInv.perform), pd: formatPd(nbInv.perform), device_fee_usd: formatDevice(nbInv.perform) });
+            rows.push({ dimension: 'NB INV (Plan)', sample_qty: formatSample(nbInv.plan), hc_qty: formatHcQty(nbInv.plan), hc_days: formatHcDays(nbInv.plan), pd: formatPd(nbInv.plan), device_fee_usd: formatDevice(nbInv.plan) });
+            
+            const aioNpi = this.stats.AIO_NPI;
+            rows.push({ dimension: 'AIO NPI (Perform)', sample_qty: formatSample(aioNpi.perform), hc_qty: formatHcQty(aioNpi.perform), hc_days: formatHcDays(aioNpi.perform), pd: formatPd(aioNpi.perform), device_fee_usd: formatDevice(aioNpi.perform) });
+            rows.push({ dimension: 'AIO NPI (Plan)', sample_qty: formatSample(aioNpi.plan), hc_qty: formatHcQty(aioNpi.plan), hc_days: formatHcDays(aioNpi.plan), pd: formatPd(aioNpi.plan), device_fee_usd: formatDevice(aioNpi.plan) });
+            
+            const aioInv = this.stats.AIO_INV;
+            rows.push({ dimension: 'AIO INV (Perform)', sample_qty: formatSample(aioInv.perform), hc_qty: formatHcQty(aioInv.perform), hc_days: formatHcDays(aioInv.perform), pd: formatPd(aioInv.perform), device_fee_usd: formatDevice(aioInv.perform) });
+            rows.push({ dimension: 'AIO INV (Plan)', sample_qty: formatSample(aioInv.plan), hc_qty: formatHcQty(aioInv.plan), hc_days: formatHcDays(aioInv.plan), pd: formatPd(aioInv.plan), device_fee_usd: formatDevice(aioInv.plan) });
+            
+            this.statsRows = rows;
+            // 图表将在 watch 中自动更新
         },
-
-        // ---- 导出Excel ----
+        
         exportToExcel() {
             if (!this.statsLoaded || !this.tableData.length) {
                 this.$message.warning('暂无数据可导出');
                 return;
             }
+            
             const statsHeaders = ['维度', 'Sample Qty', 'HC Qty', 'HC Days', 'PD', 'Device fee (USD)'];
             const statsRowsData = this.statsRows.map(row => [
                 row.dimension, row.sample_qty, row.hc_qty, row.hc_days, row.pd, row.device_fee_usd
             ]);
+            
             const mainHeaders = [
                 'No', 'PCR No', 'PCR Title', 'Customer', 'Project', 'Phase', 'Category',
                 'Receive Date', 'Status', 'Sample Qty', 'HC Qty', 'HC Days', 'PD',
@@ -685,6 +774,7 @@ new Vue({
                 row.whether_in_budget ? 'Yes' : 'No', row.in_budget_but_cost_add ? 'Yes' : 'No', row.remark,
                 row.attachment ? 'Yes' : 'No'
             ]);
+        
             const titleRowExtended = ['DQA NRE to PM', '', '', '', '', ''];
             const emptyRow = [''];
             const worksheetData = [titleRowExtended, statsHeaders, ...statsRowsData, emptyRow, mainHeaders, ...mainRows];
@@ -695,13 +785,13 @@ new Vue({
             XLSX.writeFile(wb, `PCR_Export_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.xlsx`);
             this.$message.success('导出成功');
         },
-
-        // ---- 通用工具 ----
+        
         getFullUrl(url) {
             if (!url) return '';
             if (url.startsWith('blob:') || url.startsWith('http')) return url;
             return window.location.origin + url;
         },
+        
         getEmptyForm() {
             return {
                 id: null, pcr_no: '', pcr_title: '', Customer: 'NB', Project: '', Compalproject: '',
@@ -712,14 +802,14 @@ new Vue({
                 attachment_url: '', attachment_base64: null,
             };
         },
+        
         resetForm() {
             this.form = this.getEmptyForm();
             this.attachmentFileList = [];
             this.attachmentChanged = false;
             if (this.$refs.pcrForm) this.$refs.pcrForm.clearValidate();
         },
-
-        // ---- 数据操作 ----
+        
         async searchData() {
             this.loading = true;
             try {
@@ -745,9 +835,11 @@ new Vue({
                 this.loading = false;
             }
         },
+        
         handleSizeChange(val) { this.pageSize = val; this.currentPage = 1; this.searchData(); },
         handleCurrentChange(val) { this.currentPage = val; this.searchData(); },
         openCreateDialog() { this.dialogTitle = '新增PCR'; this.resetForm(); this.dialogVisible = true; },
+        
         async openEditDialog(row) {
             this.dialogTitle = '编辑PCR';
             this.resetForm();
@@ -761,6 +853,7 @@ new Vue({
             }
             this.dialogVisible = true;
         },
+        
         handleAttachmentChange(file, fileList) {
             this.attachmentChanged = true;
             this.attachmentFileList = fileList;
@@ -770,12 +863,14 @@ new Vue({
                 reader.readAsDataURL(file.raw);
             }
         },
+        
         clearAttachment() {
             this.form.attachment_url = '';
             this.form.attachment_base64 = null;
             this.attachmentFileList = [];
             this.attachmentChanged = true;
         },
+        
         async submitForm() {
             this.$refs.pcrForm.validate(async (valid) => {
                 if (!valid) return;
@@ -812,6 +907,7 @@ new Vue({
                 }
             });
         },
+        
         async deleteRow(row) {
             this.$confirm('确定删除该记录吗？', '提示', { type: 'warning' }).then(async () => {
                 try {
@@ -827,9 +923,9 @@ new Vue({
                 }
             }).catch(() => {});
         },
-
-        // ---- Excel上传 ----
+        
         handleExcelChange(file, fileList) { this.excelFileList = [file]; },
+        
         async uploadExcel() {
             if (!this.excelFileList.length) { this.$message.warning('请选择文件'); return; }
             const formData = new FormData();
@@ -861,9 +957,11 @@ new Vue({
                 this.uploading = false;
             }
         },
+        
         downloadTemplate() {
             window.open('/static/PCR_Template.xlsx', '_blank');
         },
+
         parseDuplicates(duplicates) {
             return duplicates.map(item => {
                 const match = item.match(/第(\d+)行:\s*(.+?)\s*-\s*(.+?)\s*-\s*(.+)/);
@@ -874,6 +972,7 @@ new Vue({
                 }
             });
         },
+
         parseErrors(errors) {
             return errors.map(item => {
                 const match = item.match(/第(\d+)行:\s*(.+)/);
@@ -885,15 +984,18 @@ new Vue({
             });
         },
 
-        // ---- 列设置 ----
-        openColumnSettings() { this.columnSettingsVisible = true; },
+        openColumnSettings() {
+            this.columnSettingsVisible = true;
+        },
         saveColumnSettings() {
             localStorage.setItem('pcr_column_settings', JSON.stringify(this.colVisible));
             this.columnSettingsVisible = false;
             this.$message.success('列显示设置已保存');
         },
         resetColumnSettings() {
-            for (let key in this.colVisible) this.colVisible[key] = true;
+            for (let key in this.colVisible) {
+                this.colVisible[key] = true;
+            }
             localStorage.setItem('pcr_column_settings', JSON.stringify(this.colVisible));
             this.$message.success('已重置为全部显示');
         },
