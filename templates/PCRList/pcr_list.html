@@ -508,7 +508,6 @@ new Vue({
         this.loadColumnSettings();
         this.searchData();
         window.addEventListener('resize', this.handleResize);
-        // 监听主题变化
         this._themeObserver = new MutationObserver(() => {
             if (this.chartInstance) this.updateChart();
         });
@@ -538,6 +537,7 @@ new Vue({
             this.chartInstance = echarts.init(dom);
             this.updateChart();
         },
+        // 修改 updateChart 增加 tooltip 过滤零值
         updateChart() {
             if (!this.chartInstance || !this.dimensionMap || this.dimensionMap.size === 0) return;
             const colors = this.getThemeColors();
@@ -553,7 +553,22 @@ new Vue({
             }
             const metricName = this.metricLabels[metric];
             const option = {
-                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function(params) {
+                        let html = `<strong>${params[0].axisValue}</strong><br/>`;
+                        let total = 0;
+                        params.forEach(p => {
+                            if (p.value > 0) {
+                                html += `${p.marker} ${p.seriesName}: ${p.value}<br/>`;
+                                total += p.value;
+                            }
+                        });
+                        html += `<strong>合计: ${total}</strong>`;
+                        return html;
+                    }
+                },
                 legend: {
                     data: this.chartType === 'bar' ? ['NB NPI', 'NB INV', 'AIO NPI', 'AIO INV'] : [metricName],
                     textStyle: { color: colors.legendText }
