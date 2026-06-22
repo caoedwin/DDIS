@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}管理员后台{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .dashboard-card {
+        text-align: center;
+        padding: 30px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .dashboard-card .icon {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+    .dashboard-card .title {
+        font-size: 16px;
+        color: #333;
+    }
+    .dashboard-card .count {
+        font-size: 28px;
+        font-weight: bold;
+        color: #409EFF;
+        margin-top: 10px;
+    }
+    .stat-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+    }
+    .stat-card .label {
+        font-size: 14px;
+        color: #909399;
+    }
+    .stat-card .value {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+    }
+    .stat-card .value.primary { color: #409EFF; }
+    .stat-card .value.success { color: #67C23A; }
+    .stat-card .value.warning { color: #E6A23C; }
+    .stat-card .value.danger { color: #F56C6C; }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <div style="padding: 20px;">
+        <h2>📊 管理后台</h2>
+        
+        <!-- 统计卡片 -->
+        <el-row :gutter="20" style="margin-top: 20px;">
+            <el-col :span="6">
+                <div class="stat-card">
+                    <div class="label">总产品数</div>
+                    <div class="value primary">${ stats.total_products }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="stat-card">
+                    <div class="label">总订单数</div>
+                    <div class="value success">${ stats.total_orders }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="stat-card">
+                    <div class="label">待处理订单</div>
+                    <div class="value warning">${ stats.pending_orders }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="stat-card">
+                    <div class="label">待审核评价</div>
+                    <div class="value danger">${ stats.pending_reviews }</div>
+                </div>
+            </el-col>
+        </el-row>
+
+        <!-- 功能卡片 -->
+        <el-row :gutter="20" style="margin-top: 30px;">
+            <el-col :span="6">
+                <div class="dashboard-card" @click="goTo('/sales/admin/products/')">
+                    <div class="icon">📦</div>
+                    <div class="title">产品管理</div>
+                    <div class="count">${ stats.total_products }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="dashboard-card" @click="goTo('/sales/admin/warehouses/')">
+                    <div class="icon">🏠</div>
+                    <div class="title">仓库管理</div>
+                    <div class="count">${ stats.total_warehouses }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="dashboard-card" @click="goTo('/sales/admin/orders/')">
+                    <div class="icon">📋</div>
+                    <div class="title">订单管理</div>
+                    <div class="count">${ stats.total_orders }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="dashboard-card" @click="goTo('/sales/admin/reviews/')">
+                    <div class="icon">⭐</div>
+                    <div class="title">评价管理</div>
+                    <div class="count">${ stats.total_reviews }</div>
+                </div>
+            </el-col>
+        </el-row>
+        
+        <el-row :gutter="20" style="margin-top: 20px;">
+            <el-col :span="6">
+                <div class="dashboard-card" @click="goTo('/sales/admin/feedbacks/')">
+                    <div class="icon">💬</div>
+                    <div class="title">反馈管理</div>
+                    <div class="count">${ stats.total_feedbacks }</div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="dashboard-card" @click="goTo('/sales/')">
+                    <div class="icon">🏪</div>
+                    <div class="title">前台商城</div>
+                    <div class="count">前往查看</div>
+                </div>
+            </el-col>
+        </el-row>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            stats: {
+                total_products: 0,
+                total_orders: 0,
+                pending_orders: 0,
+                pending_reviews: 0,
+                total_warehouses: 0,
+                total_reviews: 0,
+                total_feedbacks: 0,
+            }
+        },
+        mounted() {
+            this.loadStats();
+        },
+        methods: {
+            loadStats() {
+                axios.get('/sales/api/products/?page=1&page_size=1').then(res => {
+                    this.stats.total_products = res.data.total || 0;
+                });
+                axios.get('/sales/api/orders/?page=1&page_size=1').then(res => {
+                    this.stats.total_orders = res.data.total || 0;
+                });
+                axios.get('/sales/api/warehouses/').then(res => {
+                    this.stats.total_warehouses = res.data.length || 0;
+                });
+                // 其他统计需要额外API
+            },
+            goTo(url) {
+                window.location.href = url;
+            }
+        }
+    });
+</script>
+{% endblock %}

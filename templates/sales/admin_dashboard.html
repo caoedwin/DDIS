@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}产品销售管理{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .product-card { margin: 10px; padding: 15px; border: 1px solid #EBEEF5; border-radius: 8px; background: #fff; }
+    .product-price { color: #F56C6C; font-size: 20px; font-weight: bold; }
+    .product-stock { color: #909399; }
+    .admin-actions { margin: 10px 0; }
+    .search-bar { margin-bottom: 20px; }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <el-backtop></el-backtop>
+    <div style="padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>产品列表</h2>
+            <div>
+                <el-button type="success" size="small" @click="openAddDialog" v-if="canEdit" icon="el-icon-plus">新增产品</el-button>
+                <el-button type="info" size="small" @click="syncStock" v-if="canEdit" icon="el-icon-refresh">同步库存到Redis</el-button>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <el-input 
+                v-model="searchKeyword" 
+                placeholder="搜索产品名称或描述" 
+                style="width: 300px; margin-right: 10px;"
+                @keyup.enter="loadProducts">
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <el-button type="primary" @click="loadProducts">搜索</el-button>
+            <el-button @click="searchKeyword='';loadProducts()">重置</el-button>
+        </div>
+
+        <!-- 产品列表 -->
+        <el-row :gutter="20">
+            <el-col :span="6" v-for="p in products" :key="p.id" style="margin-bottom:20px;">
+                <el-card class="product-card" :body-style="{ padding: '15px' }">
+                    <div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>${ p.name }</span>
+                        <div>
+                            <el-button type="text" size="mini" icon="el-icon-edit" @click="editProduct(p)" v-if="canEdit" title="编辑"></el-button>
+                            <el-button type="text" size="mini" style="color:red" icon="el-icon-delete" @click="deleteProduct(p)" v-if="canEdit" title="删除"></el-button>
+                        </div>
+                    </div>
+                    <div>价格：<span class="product-price">￥${ p.price }</span></div>
+                    <div class="product-stock">库存：${ p.stock }</div>
+                    <div class="product-stock" style="font-size:12px;color:#999;">${ p.description || '暂无描述' }</div>
+                    <div style="margin-top:15px;">
+                        <el-button type="primary" size="small" @click="buyProduct(p)">立即购买</el-button>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+
+        <!-- 分页 -->
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[8, 16, 24, 32]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
+    </div>
+
+    <!-- 购买弹窗 -->
+    <el-dialog title="确认购买" :visible.sync="buyDialogVisible" width="500px">
+        <div v-if="selectedProduct">
+            <p>产品：${ selectedProduct.name }</p>
+            <p>单价：￥${ selectedProduct.price }</p>
+            <p>库存：${ selectedProduct.stock }</p>
+            <el-form label-width="100px">
+                <el-form-item label="数量">
+                    <el-input-number v-model="quantity" :min="1" :max="selectedProduct.stock" @change="updateTotal"></el-input-number>
+                </el-form-item>
+                <el-form-item label="支付方式">
+                    <el-select v-model="paymentMethod" placeholder="选择支付方式">
+                        <el-option label="微信支付" value="WECHAT"></el-option>
+                        <el-option label="支付宝" value="ALIPAY"></el-option>
+                        <el-option label="银行卡" value="BANK"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="总金额">
+                    <span style="color:#F56C6C; font-size:20px;">￥${ totalAmount }</span>
+                </el-form-item>
+            </el-form>
+        </div>
+        <span slot="footer">
+            <el-button @click="buyDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submitOrder" :loading="submitting">确定支付</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 新增/编辑产品弹窗 -->
+    <el-dialog :title="productDialogTitle" :visible.sync="productDialogVisible" width="600px">
+        <el-form :model="productForm" label-width="100px" ref="productForm">
+            <el-form-item label="产品名称" required>
+                <el-input v-model="productForm.name" placeholder="请输入产品名称"></el-input>
+            </el-form-item>
+            <el-form-item label="价格" required>
+                <el-input-number v-model="productForm.price" :precision="2" :step="1" :min="0" style="width:100%"></el-input-number>
+            </el-form-item>
+            <el-form-item label="库存" required>
+                <el-input-number v-model="productForm.stock" :min="0" :step="1" style="width:100%"></el-input-number>
+            </el-form-item>
+            <el-form-item label="描述">
+                <el-input type="textarea" v-model="productForm.description" :rows="3" placeholder="请输入产品描述"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="productDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="saveProduct" :loading="productSaving">保存</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 支付结果弹窗 -->
+    <el-dialog title="支付结果" :visible.sync="resultDialogVisible" width="400px">
+        <div v-if="payResult">
+            <el-alert :title="payResult.message" :type="payResult.success ? 'success' : 'error'" show-icon></el-alert>
+            <p v-if="payResult.order_no">订单号：${ payResult.order_no }</p>
+            <p v-if="payResult.paid_at">支付时间：${ payResult.paid_at }</p>
+        </div>
+        <span slot="footer">
+            <el-button @click="resultDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            products: [],
+            selectedProduct: null,
+            quantity: 1,
+            paymentMethod: 'WECHAT',
+            totalAmount: 0,
+            buyDialogVisible: false,
+            submitting: false,
+            resultDialogVisible: false,
+            payResult: {},
+            canEdit: {{ can_edit|yesno:"true,false" }},
+            
+            // 分页
+            currentPage: 1,
+            pageSize: 8,
+            total: 0,
+            searchKeyword: '',
+            
+            // 产品弹窗
+            productDialogVisible: false,
+            productDialogTitle: '新增产品',
+            productForm: {
+                id: null,
+                name: '',
+                price: 0,
+                stock: 0,
+                description: ''
+            },
+            productSaving: false,
+        },
+        mounted() {
+            this.loadProducts();
+        },
+        methods: {
+            loadProducts() {
+                axios.get('/sales/api/products/', {
+                    params: {
+                        search: this.searchKeyword,
+                        page: this.currentPage,
+                        page_size: this.pageSize
+                    }
+                }).then(res => {
+                    this.products = res.data.products;
+                    this.total = res.data.total;
+                }).catch(() => {
+                    this.$message.error('加载产品失败');
+                });
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.loadProducts();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.loadProducts();
+            },
+            
+            // 购买
+            buyProduct(product) {
+                this.selectedProduct = product;
+                this.quantity = 1;
+                this.paymentMethod = 'WECHAT';
+                this.totalAmount = product.price;
+                this.buyDialogVisible = true;
+            },
+            updateTotal() {
+                if (this.selectedProduct) {
+                    this.totalAmount = (this.selectedProduct.price * this.quantity).toFixed(2);
+                }
+            },
+            submitOrder() {
+                if (!this.selectedProduct) return;
+                if (this.quantity < 1) {
+                    this.$message.warning('数量至少为1');
+                    return;
+                }
+                if (this.quantity > this.selectedProduct.stock) {
+                    this.$message.warning('库存不足');
+                    return;
+                }
+                this.submitting = true;
+                axios.post('/sales/api/create_order/', {
+                    product_id: this.selectedProduct.id,
+                    quantity: this.quantity,
+                    payment_method: this.paymentMethod
+                }, {
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                }).then(res => {
+                    const orderData = res.data;
+                    return axios.post('/sales/api/pay/', {
+                        idempotent_key: orderData.idempotent_key
+                    }, {
+                        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                    });
+                }).then(res => {
+                    this.submitting = false;
+                    this.buyDialogVisible = false;
+                    const payRes = res.data;
+                    if (payRes.status === 'success' || payRes.paid) {
+                        this.payResult = {
+                            success: true,
+                            message: '支付成功',
+                            order_no: payRes.order_no,
+                            paid_at: payRes.paid_at
+                        };
+                    } else if (payRes.status === 'processing') {
+                        this.payResult = {
+                            success: true,
+                            message: '支付处理中，请稍后查询订单状态',
+                            order_no: payRes.order_no,
+                        };
+                    } else {
+                        this.payResult = {
+                            success: false,
+                            message: payRes.message || '支付失败，请重试',
+                        };
+                    }
+                    this.resultDialogVisible = true;
+                    this.loadProducts();
+                }).catch(err => {
+                    this.submitting = false;
+                    this.buyDialogVisible = false;
+                    let msg = err.response?.data?.error || '操作失败';
+                    this.$message.error(msg);
+                });
+            },
+            
+            // 产品管理
+            openAddDialog() {
+                this.productForm = {
+                    id: null,
+                    name: '',
+                    price: 0,
+                    stock: 0,
+                    description: ''
+                };
+                this.productDialogTitle = '新增产品';
+                this.productDialogVisible = true;
+            },
+            editProduct(product) {
+                this.productForm = {
+                    id: product.id,
+                    name: product.name,
+                    price: parseFloat(product.price),
+                    stock: product.stock,
+                    description: product.description || ''
+                };
+                this.productDialogTitle = '编辑产品';
+                this.productDialogVisible = true;
+            },
+            saveProduct() {
+                if (!this.productForm.name) {
+                    this.$message.warning('请输入产品名称');
+                    return;
+                }
+                this.productSaving = true;
+                const url = this.productForm.id ? 
+                    `/sales/api/product/update/${this.productForm.id}/` : 
+                    '/sales/api/product/create/';
+                axios.post(url, this.productForm, {
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                }).then(res => {
+                    this.productSaving = false;
+                    this.productDialogVisible = false;
+                    this.$message.success(res.data.message);
+                    this.loadProducts();
+                }).catch(err => {
+                    this.productSaving = false;
+                    this.$message.error(err.response?.data?.error || '操作失败');
+                });
+            },
+            deleteProduct(product) {
+                this.$confirm(`确定要删除产品 "${product.name}" 吗？`, '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    axios.post(`/sales/api/product/delete/${product.id}/`, {}, {
+                        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                    }).then(res => {
+                        this.$message.success(res.data.message);
+                        this.loadProducts();
+                    }).catch(err => {
+                        this.$message.error(err.response?.data?.error || '删除失败');
+                    });
+                }).catch(() => {});
+            },
+            
+            // 同步库存
+            syncStock() {
+                axios.post('/sales/api/sync_stock/', {}, {
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                }).then(res => {
+                    this.$message.success(res.data.message);
+                }).catch(() => {
+                    this.$message.error('同步失败');
+                });
+            }
+        },
+        watch: {
+            quantity() {
+                this.updateTotal();
+            }
+        }
+    });
+</script>
+{% endblock %}
