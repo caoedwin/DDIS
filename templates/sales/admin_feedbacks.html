@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}仓库管理 - 管理员{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .search-bar { margin-bottom: 20px; }
+    .el-table .cell { white-space: pre-line; }
+</style>
+{% endblock %}
+{% block content %}
+<div id="app" v-cloak>
+    <div style="padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>🏠 仓库管理</h2>
+            <div>
+                <el-button type="primary" @click="openAddDialog" icon="el-icon-plus">新增仓库</el-button>
+                <el-button @click="goBack">返回后台</el-button>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <el-input v-model="searchKeyword" placeholder="搜索仓库编号、名称、地区" style="width: 300px; margin-right: 10px;" @keyup.enter="loadWarehouses">
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <el-button type="primary" @click="loadWarehouses">搜索</el-button>
+            <el-button @click="searchKeyword='';loadWarehouses()">重置</el-button>
+        </div>
+
+        <!-- 仓库列表 -->
+        <el-table :data="warehouses" border stripe v-loading="loading" style="width: 100%">
+            <el-table-column prop="warehouse_code" label="仓库编号" width="150" fixed="left"></el-table-column>
+            <el-table-column prop="name" label="仓库名称" width="180"></el-table-column>
+            <el-table-column prop="region" label="地区" width="120"></el-table-column>
+            <el-table-column prop="address" label="地址" min-width="200"></el-table-column>
+            <el-table-column prop="contact_person" label="联系人" width="120"></el-table-column>
+            <el-table-column prop="contact_phone" label="联系电话" width="150"></el-table-column>
+            <el-table-column prop="is_active" label="状态" width="80">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.is_active ? 'success' : 'danger'" size="small">
+                        ${ scope.row.is_active ? '启用' : '停用' }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="created_at" label="创建时间" width="160"></el-table-column>
+            <el-table-column label="操作" width="200" fixed="right">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="editWarehouse(scope.row)">编辑</el-button>
+                    <el-button type="text" size="small" @click="viewWarehouseProducts(scope.row)">库存</el-button>
+                    <el-button type="text" size="small" style="color:red" @click="deleteWarehouse(scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
+    </div>
+
+    <!-- 新增/编辑仓库弹窗 -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="600px" @close="resetForm">
+        <el-form :model="form" label-width="100px" ref="warehouseForm">
+            <el-form-item label="仓库编号" required>
+                <el-input v-model="form.warehouse_code" :disabled="!!form.id" placeholder="请输入仓库编号"></el-input>
+            </el-form-item>
+            <el-form-item label="仓库名称" required>
+                <el-input v-model="form.name" placeholder="请输入仓库名称"></el-input>
+            </el-form-item>
+            <el-form-item label="地区" required>
+                <el-input v-model="form.region" placeholder="请输入地区"></el-input>
+            </el-form-item>
+            <el-form-item label="详细地址" required>
+                <el-input type="textarea" v-model="form.address" :rows="2" placeholder="请输入详细地址"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人">
+                <el-input v-model="form.contact_person" placeholder="请输入联系人"></el-input>
+            </el-form-item>
+            <el-form-item label="联系电话">
+                <el-input v-model="form.contact_phone" placeholder="请输入联系电话"></el-input>
+            </el-form-item>
+            <el-form-item label="状态">
+                <el-switch v-model="form.is_active" active-text="启用" inactive-text="停用"></el-switch>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="saveWarehouse" :loading="saving">保存</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 仓库库存查看弹窗 -->
+    <el-dialog title="仓库库存详情" :visible.sync="productDialogVisible" width="700px">
+        <div>
+            <div style="margin-bottom: 15px;">
+                <strong>仓库：</strong>${ currentWarehouseName }
+            </div>
+            <el-table :data="warehouseProducts" border stripe>
+                <el-table-column prop="product_code" label="产品编号" width="150"></el-table-column>
+                <el-table-column prop="product_name" label="产品名称" min-width="180"></el-table-column>
+                <el-table-column prop="stock" label="库存" width="120">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.stock <= scope.row.min_stock ? 'danger' : 'success'" size="small">
+                            ${ scope.row.stock }
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="reserved_stock" label="预留库存" width="120"></el-table-column>
+                <el-table-column prop="min_stock" label="最低库存" width="120"></el-table-column>
+                <el-table-column prop="max_stock" label="最高库存" width="120"></el-table-column>
+            </el-table>
+        </div>
+        <span slot="footer">
+            <el-button @click="productDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            warehouses: [],
+            loading: false,
+            currentPage: 1,
+            pageSize: 20,
+            total: 0,
+            searchKeyword: '',
+            
+            dialogVisible: false,
+            dialogTitle: '新增仓库',
+            form: {
+                id: null,
+                warehouse_code: '',
+                name: '',
+                region: '',
+                address: '',
+                contact_person: '',
+                contact_phone: '',
+                is_active: true,
+            },
+            saving: false,
+            
+            productDialogVisible: false,
+            currentWarehouseName: '',
+            warehouseProducts: [],
+            csrf_token: '{{ csrf_token }}',
+        },
+        mounted() {
+            this.loadWarehouses();
+        },
+        methods: {
+            loadWarehouses() {
+                this.loading = true;
+                axios.get('/sales/api/warehouses/', {
+                    params: {
+                        search: this.searchKeyword,
+                        page: this.currentPage,
+                        page_size: this.pageSize
+                    }
+                }).then(res => {
+                    this.warehouses = res.data.results || res.data;
+                    this.total = res.data.total || this.warehouses.length;
+                    this.loading = false;
+                }).catch(() => {
+                    this.loading = false;
+                    this.$message.error('加载仓库失败');
+                });
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.loadWarehouses();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.loadWarehouses();
+            },
+            
+            openAddDialog() {
+                this.form = {
+                    id: null,
+                    warehouse_code: '',
+                    name: '',
+                    region: '',
+                    address: '',
+                    contact_person: '',
+                    contact_phone: '',
+                    is_active: true,
+                };
+                this.dialogTitle = '新增仓库';
+                this.dialogVisible = true;
+            },
+            editWarehouse(row) {
+                this.form = {
+                    id: row.id,
+                    warehouse_code: row.warehouse_code,
+                    name: row.name,
+                    region: row.region || '',
+                    address: row.address || '',
+                    contact_person: row.contact_person || '',
+                    contact_phone: row.contact_phone || '',
+                    is_active: row.is_active,
+                };
+                this.dialogTitle = '编辑仓库';
+                this.dialogVisible = true;
+            },
+            saveWarehouse() {
+                if (!this.form.warehouse_code || !this.form.name || !this.form.region || !this.form.address) {
+                    this.$message.warning('请填写完整信息');
+                    return;
+                }
+                this.saving = true;
+                const url = this.form.id ? `/sales/api/warehouse/update/${this.form.id}/` : '/sales/api/warehouse/create/';
+                axios.post(url, this.form, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.saving = false;
+                    this.dialogVisible = false;
+                    this.$message.success(res.data.message);
+                    this.loadWarehouses();
+                }).catch(err => {
+                    this.saving = false;
+                    this.$message.error(err.response?.data?.error || '操作失败');
+                });
+            },
+            deleteWarehouse(row) {
+                this.$confirm(`确定删除仓库 "${row.name}" 吗？`, '提示', { type: 'warning' }).then(() => {
+                    axios.post(`/sales/api/warehouse/delete/${row.id}/`, {}, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    }).then(res => {
+                        this.$message.success(res.data.message);
+                        this.loadWarehouses();
+                    }).catch(err => {
+                        this.$message.error(err.response?.data?.error || '删除失败');
+                    });
+                }).catch(() => {});
+            },
+            
+            viewWarehouseProducts(row) {
+                this.currentWarehouseName = row.name;
+                axios.get(`/sales/api/warehouse/${row.id}/products/`).then(res => {
+                    this.warehouseProducts = res.data;
+                    this.productDialogVisible = true;
+                }).catch(() => {
+                    this.$message.error('加载库存失败');
+                });
+            },
+            
+            goBack() {
+                window.location.href = '/sales/admin/';
+            },
+            resetForm() {}
+        }
+    });
+</script>
+{% endblock %}
