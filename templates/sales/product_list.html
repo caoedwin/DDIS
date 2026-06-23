@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}产品购买{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+
+    /* ----- 产品卡片（跟随主题） ----- */
+    .product-card {
+        margin: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    .product-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+    }
+
+    body.theme-light .product-card {
+        background: #ffffff;
+        border: 1px solid #EBEEF5;
+        color: #1f2d3d;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    body.theme-light .product-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+
+    body.theme-dark .product-card {
+        background: #1e2a36;
+        border: 1px solid #4a627a;
+        color: #eef2ff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    body.theme-dark .product-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    /* ----- 卡片标题 ----- */
+    .product-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+    body.theme-light .product-name {
+        color: #1f2d3d;
+    }
+    body.theme-dark .product-name {
+        color: #eef2ff;
+    }
+
+    /* ----- 产品价格（保持红色，在深色模式下更醒目） ----- */
+    .product-price {
+        color: #F56C6C;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    /* ----- 库存信息 ----- */
+    .product-stock {
+        font-size: 14px;
+    }
+    body.theme-light .product-stock {
+        color: #909399;
+    }
+    body.theme-dark .product-stock {
+        color: #a0b3c9;
+    }
+
+    /* ----- 产品图片 ----- */
+    .product-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    /* ----- 无图片占位（跟随主题） ----- */
+    .no-image-placeholder {
+        width: 100%;
+        height: 180px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: background 0.2s, color 0.2s;
+    }
+    body.theme-light .no-image-placeholder {
+        background: #f5f7fa;
+        color: #c0c4cc;
+    }
+    body.theme-dark .no-image-placeholder {
+        background: #2c3e50;
+        color: #8ea3b9;
+    }
+
+    /* ----- 页面标题 ----- */
+    body.theme-light h2 {
+        color: #1f2d3d;
+    }
+    body.theme-dark h2 {
+        color: #ffffff;
+    }
+
+    /* ----- 弹窗（购买弹窗）深色模式 ----- */
+    body.theme-dark .el-dialog {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__header {
+        background-color: #1e2a36 !important;
+        border-bottom: 1px solid #4a627a !important;
+    }
+    body.theme-dark .el-dialog__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__body {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__footer {
+        background-color: #1e2a36 !important;
+        border-top: 1px solid #4a627a !important;
+    }
+
+    /* ----- 弹窗内文字 ----- */
+    body.theme-dark .el-dialog__body p {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-form-item__label {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-form-item__content {
+        color: #eef2ff !important;
+    }
+
+    /* ----- 弹窗内总金额 ----- */
+    .total-amount {
+        font-size: 20px;
+        color: #F56C6C;
+    }
+
+    /* ----- 输入框、选择器深色模式 ----- */
+    body.theme-dark .el-input__inner,
+    body.theme-dark .el-textarea__inner,
+    body.theme-dark .el-select .el-input__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input__inner::placeholder {
+        color: #8ea3b9 !important;
+    }
+    body.theme-dark .el-input-number__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input-number__increase,
+    body.theme-dark .el-input-number__decrease {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input-number__increase:hover,
+    body.theme-dark .el-input-number__decrease:hover {
+        background-color: #3a5a78 !important;
+    }
+
+    /* ----- 选择器下拉深色模式 ----- */
+    body.theme-dark .el-select-dropdown {
+        background-color: #1e2a36 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-select-dropdown__item {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-select-dropdown__item:hover {
+        background-color: #3a5a78 !important;
+    }
+    body.theme-dark .el-select-dropdown__item.selected {
+        background-color: #2c3e50 !important;
+        color: #67c23a !important;
+    }
+
+    /* ----- 按钮深色模式 ----- */
+    body.theme-dark .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        border-color: #6a8aab !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--primary {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--primary:hover {
+        background-color: #66b1ff !important;
+        border-color: #66b1ff !important;
+    }
+
+    /* ----- 警告框深色模式 ----- */
+    body.theme-dark .el-alert {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-alert__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-alert--success .el-alert__title {
+        color: #67c23a !important;
+    }
+    body.theme-dark .el-alert--error .el-alert__title {
+        color: #f56c6c !important;
+    }
+
+    /* ----- 消息框深色模式 ----- */
+    body.theme-dark .el-message-box {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__content {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__btns .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__btns .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+
+    /* ----- 返回顶部按钮（el-backtop）深色模式 ----- */
+    body.theme-dark .el-backtop {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border: 1px solid #4a627a !important;
+    }
+    body.theme-dark .el-backtop:hover {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="app" v-cloak>
+    <el-backtop></el-backtop>
+    <div style="padding: 20px;">
+        <h2>🛒 产品列表</h2>
+
+        <!-- 产品列表 -->
+        <el-row :gutter="20">
+            <el-col :span="6" v-for="p in products" :key="p.id" style="margin-bottom:20px;">
+                <el-card class="product-card" :body-style="{ padding: '15px' }" @click.native="goDetail(p.id)">
+                    <!-- 图片区域 -->
+                    <div style="text-align:center;margin-bottom:10px;">
+                        <img v-if="p.cover_image" :src="p.cover_image" class="product-image" />
+                        <div v-else class="no-image-placeholder">暂无图片</div>
+                    </div>
+                    <div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="product-name">${ p.name }</span>
+                    </div>
+                    <div>价格：<span class="product-price">￥${ p.price }</span></div>
+                    <div class="product-stock">库存：${ p.stock }</div>
+                    <div style="margin-top:15px;">
+                        <el-button type="primary" size="small" @click.stop="buyProduct(p)">立即购买</el-button>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+
+    <!-- 购买弹窗 -->
+    <el-dialog title="确认购买" :visible.sync="buyDialogVisible" width="500px">
+        <div v-if="selectedProduct">
+            <p><strong>产品：</strong>${ selectedProduct.name }</p>
+            <p><strong>单价：</strong>￥${ selectedProduct.price }</p>
+            <p><strong>库存：</strong>${ selectedProduct.stock }</p>
+            <el-form label-width="100px">
+                <el-form-item label="数量">
+                    <el-input-number v-model="quantity" :min="1" :max="selectedProduct.stock" @change="updateTotal"></el-input-number>
+                </el-form-item>
+                <el-form-item label="支付方式">
+                    <el-select v-model="paymentMethod" placeholder="选择支付方式">
+                        <el-option label="微信支付" value="WECHAT"></el-option>
+                        <el-option label="支付宝" value="ALIPAY"></el-option>
+                        <el-option label="银行卡" value="BANK"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="总金额">
+                    <span class="total-amount">￥${ totalAmount }</span>
+                </el-form-item>
+            </el-form>
+        </div>
+        <span slot="footer">
+            <el-button @click="buyDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submitOrder" :loading="submitting">确定支付</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 支付结果弹窗 -->
+    <el-dialog title="支付结果" :visible.sync="resultDialogVisible" width="400px">
+        <div v-if="payResult">
+            <el-alert :title="payResult.message" :type="payResult.success ? 'success' : 'error'" show-icon></el-alert>
+            <p v-if="payResult.order_no"><strong>订单号：</strong>${ payResult.order_no }</p>
+            <p v-if="payResult.paid_at"><strong>支付时间：</strong>${ payResult.paid_at }</p>
+        </div>
+        <span slot="footer">
+            <el-button @click="resultDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            products: [],
+            selectedProduct: null,
+            quantity: 1,
+            paymentMethod: 'WECHAT',
+            totalAmount: 0,
+            buyDialogVisible: false,
+            submitting: false,
+            resultDialogVisible: false,
+            payResult: {},
+            csrf_token: '{{ csrf_token }}',
+        },
+        mounted() {
+            this.loadProducts();
+        },
+        methods: {
+            loadProducts() {
+                axios.get('/sales/api/products/purchase/').then(res => {
+                    this.products = res.data;
+                }).catch(() => {
+                    this.$message.error('加载产品失败');
+                });
+            },
+            buyProduct(product) {
+                // 阻止卡片点击事件冒泡
+                event.stopPropagation();
+                this.selectedProduct = product;
+                this.quantity = 1;
+                this.paymentMethod = 'WECHAT';
+                this.totalAmount = product.price;
+                this.buyDialogVisible = true;
+            },
+            updateTotal() {
+                if (this.selectedProduct) {
+                    this.totalAmount = (this.selectedProduct.price * this.quantity).toFixed(2);
+                }
+            },
+            submitOrder() {
+                if (!this.selectedProduct) return;
+                if (this.quantity < 1) {
+                    this.$message.warning('数量至少为1');
+                    return;
+                }
+                if (this.quantity > this.selectedProduct.stock) {
+                    this.$message.warning('库存不足');
+                    return;
+                }
+                this.submitting = true;
+                axios.post('/sales/api/create_order/', {
+                    product_id: this.selectedProduct.id,
+                    quantity: this.quantity,
+                    payment_method: this.paymentMethod
+                }, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    const orderData = res.data;
+                    return axios.post('/sales/api/pay/', {
+                        idempotent_key: orderData.idempotent_key
+                    }, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    });
+                }).then(res => {
+                    this.submitting = false;
+                    this.buyDialogVisible = false;
+                    const payRes = res.data;
+                    if (payRes.status === 'success' || payRes.paid) {
+                        this.payResult = {
+                            success: true,
+                            message: '支付成功',
+                            order_no: payRes.order_no,
+                            paid_at: payRes.paid_at
+                        };
+                    } else if (payRes.status === 'processing') {
+                        this.payResult = {
+                            success: true,
+                            message: '支付处理中，请稍后查询订单状态',
+                            order_no: payRes.order_no,
+                        };
+                    } else {
+                        this.payResult = {
+                            success: false,
+                            message: payRes.message || '支付失败，请重试',
+                        };
+                    }
+                    this.resultDialogVisible = true;
+                    this.loadProducts(); // 刷新库存
+                }).catch(err => {
+                    this.submitting = false;
+                    this.buyDialogVisible = false;
+                    let msg = err.response?.data?.error || '操作失败';
+                    this.$message.error(msg);
+                });
+            },
+            goDetail(productId) {
+                window.location.href = `/sales/product/${productId}/`;
+            },
+        },
+        watch: {
+            quantity() {
+                this.updateTotal();
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,182 +1,147 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}管理员后台{% endblock %}
+{% block title %}支付结果{% endblock %}
 {% block css %}
-<link rel="stylesheet" href="/static/css/ElementUI.css">
 <style>
-    [v-cloak] { display: none; }
-    .dashboard-card {
+    /* ----- 支付结果页面（跟随主题） ----- */
+    .payment-result-container {
+        padding: 50px;
         text-align: center;
-        padding: 30px;
-        cursor: pointer;
-        transition: all 0.3s;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.2s, color 0.2s;
     }
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
+    /* 浅色模式 */
+    body.theme-light .payment-result-container {
+        background: #ffffff;
+        color: #1f2d3d;
     }
-    .dashboard-card .icon {
-        font-size: 48px;
-        margin-bottom: 10px;
+
+    /* 深色模式 */
+    body.theme-dark .payment-result-container {
+        background: #1a2a3a;
+        color: #eef2ff;
     }
-    .dashboard-card .title {
-        font-size: 16px;
-        color: #333;
-    }
-    .dashboard-card .count {
-        font-size: 28px;
-        font-weight: bold;
-        color: #409EFF;
-        margin-top: 10px;
-    }
-    .stat-card {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+    /* ----- 图标样式 ----- */
+    .result-icon {
+        font-size: 72px;
+        line-height: 1;
         margin-bottom: 20px;
     }
-    .stat-card .label {
-        font-size: 14px;
-        color: #909399;
+    .result-icon.success {
+        color: #67C23A;
     }
-    .stat-card .value {
-        font-size: 32px;
+    .result-icon.fail {
+        color: #F56C6C;
+    }
+
+    /* ----- 标题 ----- */
+    .result-title {
+        font-size: 28px;
         font-weight: bold;
-        color: #333;
+        margin-bottom: 15px;
     }
-    .stat-card .value.primary { color: #409EFF; }
-    .stat-card .value.success { color: #67C23A; }
-    .stat-card .value.warning { color: #E6A23C; }
-    .stat-card .value.danger { color: #F56C6C; }
+    body.theme-light .result-title {
+        color: #1f2d3d;
+    }
+    body.theme-dark .result-title {
+        color: #eef2ff;
+    }
+    .result-title.success {
+        color: #67C23A;
+    }
+    .result-title.fail {
+        color: #F56C6C;
+    }
+
+    /* ----- 详情信息 ----- */
+    .result-detail {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    body.theme-light .result-detail {
+        color: #606266;
+    }
+    body.theme-dark .result-detail {
+        color: #b0c4d8;
+    }
+
+    /* ----- 按钮样式（适配主题） ----- */
+    .btn-primary {
+        background-color: #409EFF;
+        border-color: #409EFF;
+        color: #ffffff;
+        padding: 10px 30px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px 10px;
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-primary:hover {
+        background-color: #66b1ff;
+        border-color: #66b1ff;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .btn-info {
+        background-color: #909399;
+        border-color: #909399;
+        color: #ffffff;
+        padding: 10px 30px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px 10px;
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-info:hover {
+        background-color: #a6a9ad;
+        border-color: #a6a9ad;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    /* 深色模式下按钮文字确保白色 */
+    body.theme-dark .btn-primary,
+    body.theme-dark .btn-info {
+        color: #ffffff !important;
+    }
+
+    /* ----- 按钮容器 ----- */
+    .result-actions {
+        margin-top: 25px;
+    }
 </style>
 {% endblock %}
-{% block content %}
-<div id="app" v-cloak>
-    <div style="padding: 20px;">
-        <h2>📊 管理后台</h2>
-        
-        <!-- 统计卡片 -->
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总产品数</div>
-                    <div class="value primary">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总订单数</div>
-                    <div class="value success">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待处理订单</div>
-                    <div class="value warning">${ stats.pending_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待审核评价</div>
-                    <div class="value danger">${ stats.pending_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
 
-        <!-- 功能卡片 -->
-        <el-row :gutter="20" style="margin-top: 30px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/products/')">
-                    <div class="icon">📦</div>
-                    <div class="title">产品管理</div>
-                    <div class="count">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/warehouses/')">
-                    <div class="icon">🏠</div>
-                    <div class="title">仓库管理</div>
-                    <div class="count">${ stats.total_warehouses }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/orders/')">
-                    <div class="icon">📋</div>
-                    <div class="title">订单管理</div>
-                    <div class="count">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/reviews/')">
-                    <div class="icon">⭐</div>
-                    <div class="title">评价管理</div>
-                    <div class="count">${ stats.total_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
-        
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/feedbacks/')">
-                    <div class="icon">💬</div>
-                    <div class="title">反馈管理</div>
-                    <div class="count">${ stats.total_feedbacks }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/')">
-                    <div class="icon">🏪</div>
-                    <div class="title">前台商城</div>
-                    <div class="count">前往查看</div>
-                </div>
-            </el-col>
-        </el-row>
-    </div>
+{% block content %}
+<div class="payment-result-container">
+    {% if success %}
+        <!-- ===== 支付成功 ===== -->
+        <div class="result-icon success">✓</div>
+        <h2 class="result-title success">支付成功！</h2>
+        <div class="result-detail">订单号：{{ order.order_no }}</div>
+        <div class="result-detail">支付金额：￥{{ order.total_amount }}</div>
+        <div class="result-detail">支付时间：{{ order.paid_at|date:'Y-m-d H:i:s' }}</div>
+        <div class="result-actions">
+            <a href="/sales/" class="btn-primary">返回商城</a>
+            <a href="/sales/order/{{ order.order_no }}/" class="btn-info">查看订单</a>
+        </div>
+    {% else %}
+        <!-- ===== 支付失败 ===== -->
+        <div class="result-icon fail">✗</div>
+        <h2 class="result-title fail">支付失败</h2>
+        <div class="result-detail">{{ error|default:'支付遇到问题，请稍后重试' }}</div>
+        <div class="result-actions">
+            <a href="/sales/" class="btn-primary">返回商城</a>
+        </div>
+    {% endif %}
 </div>
-{% endblock %}
-{% block scripts %}
-<script src="/static/js/vue.min.js"></script>
-<script src="/static/js/Element/index.js"></script>
-<script src="/static/js/axios.min.js"></script>
-<script>
-    new Vue({
-        el: '#app',
-        delimiters: ['${', '}'],
-        data: {
-            stats: {
-                total_products: 0,
-                total_orders: 0,
-                pending_orders: 0,
-                pending_reviews: 0,
-                total_warehouses: 0,
-                total_reviews: 0,
-                total_feedbacks: 0,
-            }
-        },
-        mounted() {
-            this.loadStats();
-        },
-        methods: {
-            loadStats() {
-                axios.get('/sales/api/products/?page=1&page_size=1').then(res => {
-                    this.stats.total_products = res.data.total || 0;
-                });
-                axios.get('/sales/api/orders/?page=1&page_size=1').then(res => {
-                    this.stats.total_orders = res.data.total || 0;
-                });
-                axios.get('/sales/api/warehouses/').then(res => {
-                    this.stats.total_warehouses = res.data.length || 0;
-                });
-                // 其他统计需要额外API
-            },
-            goTo(url) {
-                window.location.href = url;
-            }
-        }
-    });
-</script>
 {% endblock %}

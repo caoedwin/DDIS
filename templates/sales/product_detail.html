@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}产品详情{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .detail-container { padding: 20px; }
+
+    /* ----- 图片画廊 ----- */
+    .image-gallery {
+        width: 100%;
+        max-height: 400px;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #f5f7fa;
+        transition: background 0.2s;
+    }
+    body.theme-dark .image-gallery {
+        background: #2c3e50;
+    }
+    .image-gallery img {
+        width: 100%;
+        height: 400px;
+        object-fit: contain;
+    }
+
+    .thumbnails {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+    .thumbnails img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border 0.3s;
+    }
+    .thumbnails img:hover,
+    .thumbnails img.active {
+        border-color: #409EFF;
+    }
+    body.theme-dark .thumbnails img {
+        border-color: #4a627a;
+    }
+    body.theme-dark .thumbnails img:hover,
+    body.theme-dark .thumbnails img.active {
+        border-color: #409EFF;
+    }
+
+    /* ----- 产品信息卡片（跟随主题） ----- */
+    .product-info {
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    body.theme-light .product-info {
+        background: #ffffff;
+        color: #1f2d3d;
+        border: 1px solid #eef2f6;
+    }
+    body.theme-dark .product-info {
+        background: #1e2a36;
+        color: #eef2ff;
+        border: 1px solid #4a627a;
+    }
+
+    /* ----- 产品名称 ----- */
+    .product-name {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    body.theme-light .product-name {
+        color: #1f2d3d;
+    }
+    body.theme-dark .product-name {
+        color: #eef2ff;
+    }
+
+    /* ----- 产品价格（保持红色，在深色模式下更醒目） ----- */
+    .product-price {
+        font-size: 28px;
+        font-weight: bold;
+        color: #F56C6C;
+    }
+
+    /* ----- 产品描述 ----- */
+    .product-desc {
+        margin-top: 10px;
+    }
+    body.theme-light .product-desc {
+        color: #606266;
+    }
+    body.theme-dark .product-desc {
+        color: #b0c4d8;
+    }
+
+    /* ----- 库存信息 ----- */
+    .product-stock {
+        margin: 15px 0;
+    }
+    body.theme-light .product-stock {
+        color: #606266;
+    }
+    body.theme-dark .product-stock {
+        color: #b0c4d8;
+    }
+
+    /* ----- 评价区域 ----- */
+    .review-item {
+        border-bottom: 1px solid;
+        padding: 10px 0;
+        transition: border-color 0.2s;
+    }
+    body.theme-light .review-item {
+        border-color: #EBEEF5;
+    }
+    body.theme-dark .review-item {
+        border-color: #4a627a;
+    }
+
+    .review-user {
+        font-weight: bold;
+    }
+    body.theme-light .review-user {
+        color: #1f2d3d;
+    }
+    body.theme-dark .review-user {
+        color: #eef2ff;
+    }
+
+    .review-content {
+        margin-top: 4px;
+    }
+    body.theme-light .review-content {
+        color: #606266;
+    }
+    body.theme-dark .review-content {
+        color: #c8d8e8;
+    }
+
+    .review-time {
+        font-size: 12px;
+    }
+    body.theme-light .review-time {
+        color: #909399;
+    }
+    body.theme-dark .review-time {
+        color: #8ea3b9;
+    }
+
+    /* ----- 暂无提示 ----- */
+    .no-data-text {
+        margin-top: 10px;
+    }
+    body.theme-light .no-data-text {
+        color: #909399;
+    }
+    body.theme-dark .no-data-text {
+        color: #8ea3b9;
+    }
+
+    /* ----- 评价分割线 ----- */
+    body.theme-light .el-divider {
+        border-color: #EBEEF5;
+    }
+    body.theme-dark .el-divider {
+        border-color: #4a627a;
+    }
+    body.theme-light .el-divider__text {
+        color: #1f2d3d;
+        background-color: #ffffff;
+    }
+    body.theme-dark .el-divider__text {
+        color: #eef2ff;
+        background-color: #1e2a36;
+    }
+
+    /* ----- 返回按钮 ----- */
+    body.theme-dark .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        border-color: #6a8aab !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--primary {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--primary:hover {
+        background-color: #66b1ff !important;
+        border-color: #66b1ff !important;
+    }
+
+    /* ----- 数字输入框深色模式 ----- */
+    body.theme-dark .el-input-number__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input-number__increase,
+    body.theme-dark .el-input-number__decrease {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input-number__increase:hover,
+    body.theme-dark .el-input-number__decrease:hover {
+        background-color: #3a5a78 !important;
+    }
+
+    /* ----- 评分组件深色模式 ----- */
+    body.theme-dark .el-rate__text {
+        color: #eef2ff !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="app" v-cloak>
+    <div class="detail-container">
+        <el-button @click="goBack" icon="el-icon-back" style="margin-bottom:20px;">返回列表</el-button>
+
+        <el-row :gutter="30">
+            <!-- 左侧图片 -->
+            <el-col :span="12">
+                <div class="image-gallery">
+                    <img :src="currentImage" alt="产品图片" />
+                </div>
+                <div class="thumbnails" v-if="images.length > 0">
+                    <img v-for="(img, idx) in images" :key="idx"
+                         :src="img.image"
+                         @click="currentImage = img.image"
+                         :class="{ active: currentImage === img.image }" />
+                </div>
+                <div v-else class="no-data-text">暂无图片</div>
+            </el-col>
+
+            <!-- 右侧信息 -->
+            <el-col :span="12">
+                <div class="product-info">
+                    <div class="product-name">${ product.name }</div>
+                    <div class="product-price">￥${ product.price }</div>
+                    <div class="product-desc">${ product.description || '暂无描述' }</div>
+                    <div class="product-stock">
+                        <span>库存：${ product.stock }</span>
+                    </div>
+                    <div>
+                        <el-input-number v-model="quantity" :min="1" :max="product.stock" style="margin-right:10px;"></el-input-number>
+                        <el-button type="primary" @click="buyNow" :loading="submitting">立即购买</el-button>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
+        <!-- 评价区域 -->
+        <el-divider>用户评价</el-divider>
+        <div v-if="reviews.length > 0">
+            <div v-for="r in reviews" :key="r.id" class="review-item">
+                <div>
+                    <span class="review-user">${ r.user_name }</span>
+                    <el-rate v-model="r.rating" disabled show-score text-color="#ff9900" style="display:inline-block;margin-left:10px;"></el-rate>
+                </div>
+                <div class="review-content">${ r.content }</div>
+                <div class="review-time">${ r.created_at }</div>
+            </div>
+        </div>
+        <div v-else class="no-data-text">暂无评价</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            product: {},
+            images: [],
+            currentImage: '',
+            quantity: 1,
+            reviews: [],
+            submitting: false,  // 添加提交状态
+            csrf_token: '{{ csrf_token }}',
+        },
+        mounted() {
+            this.loadProduct();
+        },
+        methods: {
+            loadProduct() {
+                const productId = window.location.pathname.split('/').filter(Boolean).pop();
+                axios.get(`/sales/api/product/${productId}/`).then(res => {
+                    this.product = res.data;
+                    // 加载图片
+                    axios.get(`/sales/api/product/${productId}/images/`).then(res2 => {
+                        this.images = res2.data;
+                        if (this.images.length > 0) {
+                            this.currentImage = this.images[0].image;
+                        }
+                    });
+                    // 加载评价
+                    axios.get(`/sales/api/product/${productId}/reviews/`).then(res3 => {
+                        this.reviews = res3.data.reviews || [];
+                    });
+                }).catch(() => {
+                    this.$message.error('加载产品失败');
+                });
+            },
+            buyNow() {
+                if (!this.product.id) {
+                    this.$message.warning('产品信息不完整');
+                    return;
+                }
+                if (this.quantity < 1) {
+                    this.$message.warning('数量至少为1');
+                    return;
+                }
+                if (this.quantity > this.product.stock) {
+                    this.$message.warning('库存不足');
+                    return;
+                }
+                this.submitting = true;
+                // 让用户选择支付方式（简化：默认微信支付）
+                const paymentMethod = 'WECHAT';
+                axios.post('/sales/api/create_order/', {
+                    product_id: this.product.id,
+                    quantity: this.quantity,
+                    payment_method: paymentMethod
+                }, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    const orderData = res.data;
+                    return axios.post('/sales/api/pay/', {
+                        idempotent_key: orderData.idempotent_key
+                    }, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    });
+                }).then(res => {
+                    this.submitting = false;
+                    const payRes = res.data;
+                    if (payRes.status === 'success' || payRes.paid) {
+                        this.$message.success('支付成功！');
+                        // 可跳转到订单详情页,用户的订单详情页没写
+                        //if (payRes.order_no) {
+                        //    setTimeout(() => {
+                        //        window.location.href = `/sales/order/${payRes.order_no}/`;
+                        //    }, 1500);
+                        //}
+                    } else if (payRes.status === 'processing') {
+                        this.$message.info(payRes.message || '支付处理中，请稍后查询');
+                    } else {
+                        this.$message.info(payRes.message || '支付提交成功');
+                    }
+                }).catch(err => {
+                    this.submitting = false;
+                    const msg = err.response?.data?.error || '操作失败，请重试';
+                    this.$message.error(msg);
+                });
+            },
+            goBack() {
+                window.history.back();
+            },
+        }
+    });
+</script>
+{% endblock %}

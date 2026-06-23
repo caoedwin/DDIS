@@ -124,6 +124,7 @@ urlpatterns = [
     path('UElist/', include('UElist.urls', namespace='UElist')),
     path('PCRList/', include('PCRList.urls', namespace='PCRList')),
     path('Sustain/', include('Sustain.urls', namespace='Sustain')),
+    path('sales/', include('sales.urls', namespace='sales')),
 ]#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

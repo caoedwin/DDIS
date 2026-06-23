@@ -6,64 +6,55 @@
 <link rel="stylesheet" href="/static/css/ElementUI.css">
 <style>
     [v-cloak] { display: none; }
-    .search-card, .stats-card, .table-card {
+    .search-card {
         padding: 0px;
-        margin-bottom: 0px;
+        margin-bottom: 16px;
         background: transparent;
-        border-radius: 0px;
     }
-    .stats-card {
-        margin-bottom: 20px;
-        overflow: visible;
+    /* 折叠面板自定义样式（适配深色/浅色主题） */
+    .el-collapse {
+        border: none;
     }
-    .stats-table {
-        overflow: visible;
-    }
-    .stats-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-top: 15px;
-    }
-    .stat-box {
-        background: rgba(64,158,255,0.2);
-        border-radius: 8px;
-        padding: 10px 15px;
-        min-width: 180px;
-        flex: 1;
-    }
-    .stat-title {
-        font-weight: bold;
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 8px;
-        padding-bottom: 5px;
-    }
-    .stat-row {
-        display: flex;
-        justify-content: space-between;
-        font-size: 13px;
-        margin: 5px 0;
-    }
-    .el-table .cell { text-align: left; }
-    .action-buttons { display: flex; gap: 5px; }
-    .stats-table {
-        width: 100%;
-        font-size: 13px;
-    }
-    .stats-table th, .stats-table td {
-        text-align: center;
-        padding: 6px 0;
-    }
-    .stats-header {
-        margin: 0 0 12px 0;
-        font-size: 18px;
+    .el-collapse-item__header {
         font-weight: 600;
-        color: #409EFF;
-        border-left: 4px solid #409EFF;
-        padding-left: 12px;
+        font-size: 16px;
+        background: transparent;
+        border-bottom: 1px solid #ebeef5;
+        padding-left: 0;
     }
-    .el-table__header-wrapper .el-table__header th {
-        background-color: #f5f7fa;
+    .el-collapse-item__wrap {
+        background: transparent;
+        border: none;
+    }
+    .el-collapse-item__content {
+        padding: 12px 0;
+        background: transparent;
+    }
+    /* 统计表格紧凑样式 */
+    .stats-table-compact .el-table__body td,
+    .stats-table-compact .el-table__header th {
+        padding: 4px 0;
+        font-size: 12px;
+    }
+    .stats-table-compact .cell {
+        line-height: 1.4;
+    }
+    /* 图表卡片内边距减小 */
+    .chart-card {
+        padding: 8px 0;
+        background: transparent;
+        margin-bottom: 8px;
+    }
+    .chart-header {
+        margin-bottom: 8px;
+    }
+    #statsChart {
+        height: 320px;
+    }
+    /* 表格工具栏 */
+    .table-toolbar {
+        margin-bottom: 12px;
+        text-align: right;
     }
     .column-group {
         margin-bottom: 16px;
@@ -86,39 +77,41 @@
         width: 120px;
         margin-right: 0;
     }
-    .table-toolbar {
-        margin-bottom: 12px;
-        text-align: right;
+    /* ---------- PCR 页面深色模式适配 ---------- */
+    /* 指标对比标题 */
+    body.theme-dark .chart-title {
+        color: #eef2ff !important;
     }
-    .chart-card {
-        margin-bottom: 20px;
-        background: transparent;
-        border-radius: 8px;
-        padding: 16px;
+
+    /* 折叠面板标题（加强覆盖，确保生效） */
+    body.theme-dark .el-collapse-item__header {
+        color: #eef2ff !important;
+        border-bottom-color: #4a627a !important;
     }
-    .chart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-        flex-wrap: wrap;
-        gap: 12px;
+
+    /* 列设置弹窗中的分组标题 */
+    body.theme-dark .column-group-title {
+        color: #66b1ff !important;  /* 亮蓝色，更醒目 */
     }
-    .chart-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #409EFF;
-        border-left: 4px solid #409EFF;
-        padding-left: 12px;
+
+    /* 统计表格“维度”列文字 */
+    body.theme-dark .stats-table-compact .el-table__body td .cell {
+        color: #eef2ff !important;
     }
-    .chart-controls {
-        display: flex;
-        gap: 12px;
+
+    /* 表格工具栏的按钮文字（如果默认不够亮） */
+    body.theme-dark .table-toolbar .el-button--default,
+    body.theme-dark .table-toolbar .el-button--danger,
+    body.theme-dark .table-toolbar .el-button--primary {
+        color: #eef2ff !important;
     }
-    #statsChart {
-        width: 100%;
-        height: 400px;
+
+    /* 图表下拉框和单选框文字（Element UI 组件，base 已有覆盖，但可加强） */
+    body.theme-dark .el-select .el-input__inner,
+    body.theme-dark .el-radio-button__inner {
+        color: #eef2ff !important;
     }
+
 </style>
 {% endblock %}
 {% block content %}
@@ -148,127 +141,142 @@
         </el-form>
     </div>
 
-    <!-- ECharts 图表 -->
-    <div class="chart-card" v-if="statsLoaded">
-        <div class="chart-header">
-            <div class="chart-title">DQA NRE 指标对比图</div>
-            <div class="chart-controls">
-                <el-select v-model="chartMetric" placeholder="选择指标" size="small" style="width:140px">
-                    <el-option label="Sample Qty" value="sample_qty"></el-option>
-                    <el-option label="HC Qty" value="hc_qty"></el-option>
-                    <el-option label="HC Days" value="hc_days"></el-option>
-                    <el-option label="PD" value="pd"></el-option>
-                    <el-option label="Device fee (USD)" value="device_fee_usd"></el-option>
-                </el-select>
-                <el-radio-group v-model="chartType" size="small">
-                    <el-radio-button label="bar">柱状图</el-radio-button>
-                    <el-radio-button label="line">折线图</el-radio-button>
-                </el-radio-group>
-            </div>
-        </div>
-        <div id="statsChart"></div>
-    </div>
-
-    <!-- 统计表格 -->
-    <div class="stats-card" v-if="statsLoaded">
-        <div class="stats-header">DQA NRE to PM (详细数据)</div>
-        <el-table :data="statsRows" border stripe class="stats-table">
-            <el-table-column prop="dimension" label="维度" width="200"></el-table-column>
-            <el-table-column label="DQA NRE mail to PM" align="center">
-                <el-table-column prop="sample_qty" label="Sample Q'ty" width="130">
-                    <template slot-scope="scope">${ scope.row.sample_qty }</template>
-                </el-table-column>
-                <el-table-column prop="hc_qty" label="HC Q'ty" width="120">
-                    <template slot-scope="scope">${ scope.row.hc_qty }</template>
-                </el-table-column>
-                <el-table-column prop="hc_days" label="HC Days" width="120">
-                    <template slot-scope="scope">${ scope.row.hc_days }</template>
-                </el-table-column>
-                <el-table-column prop="pd" label="PD" width="100">
-                    <template slot-scope="scope">${ scope.row.pd }</template>
-                </el-table-column>
-                <el-table-column prop="device_fee_usd" label="Device fee (USD)" width="150">
-                    <template slot-scope="scope">${ scope.row.device_fee_usd }</template>
-                </el-table-column>
-            </el-table-column>
-        </el-table>
-    </div>
-
-    <!-- 数据表格 -->
-    <div class="table-card">
-        <div class="table-toolbar">
-            <el-button type="default" size="small" @click="openColumnSettings" icon="el-icon-setting">列设置</el-button>
-        </div>
-        <el-table :data="tableData" border stripe v-loading="loading">
-            <el-table-column type="index" width="50" label="No" fixed="left"></el-table-column>
-            <el-table-column v-if="colVisible.pcr_no" prop="pcr_no" label="PCR No" width="150" fixed="left"></el-table-column>
-            <el-table-column v-if="colVisible.pcr_title" prop="pcr_title" label="PCR Title" min-width="200" fixed="left"></el-table-column>
-            <el-table-column v-if="colVisible.Customer" prop="Customer" label="Customer" width="80"></el-table-column>
-            <el-table-column v-if="colVisible.Project" prop="Project" label="Project" width="150"></el-table-column>
-            <el-table-column v-if="colVisible.phase" prop="phase" label="NPI or INV" width="100"></el-table-column>
-            <el-table-column v-if="colVisible.category" prop="category" label="Category" width="120"></el-table-column>
-            <el-table-column v-if="colVisible.receive_date" prop="receive_date" label="Receive Date" width="110"></el-table-column>
-            <el-table-column v-if="colVisible.status" prop="status" label="Status" width="100"></el-table-column>
-
-            <el-table-column v-if="showNreGroup" label="DQA NRE mail to PM" align="center">
-                <el-table-column v-if="colVisible.sample_qty" prop="sample_qty" label="Sample Q'ty" width="100">
-                    <template slot-scope="scope">${ scope.row.sample_qty }</template>
-                </el-table-column>
-                <el-table-column v-if="colVisible.hc_qty" prop="hc_qty" label="HC Q'ty" width="100">
-                    <template slot-scope="scope">${ scope.row.hc_qty }</template>
-                </el-table-column>
-                <el-table-column v-if="colVisible.hc_days" prop="hc_days" label="HC Days" width="100">
-                    <template slot-scope="scope">${ scope.row.hc_days }</template>
-                </el-table-column>
-                <el-table-column v-if="colVisible.pd" prop="pd" label="PD" width="80">
-                    <template slot-scope="scope">${ scope.row.pd }</template>
-                </el-table-column>
-                <el-table-column v-if="colVisible.device_fee_usd" prop="device_fee_usd" label="Device fee (USD)" width="130">
-                    <template slot-scope="scope">${ scope.row.device_fee_usd ? scope.row.device_fee_usd.toFixed(2) : '0.00' }</template>
-                </el-table-column>
-            </el-table-column>
-
-            <el-table-column v-if="colVisible.pm_send_nre_to_sales" prop="pm_send_nre_to_sales" label="PM send NRE to Sales" width="130">
-                <template slot-scope="scope">${ scope.row.pm_send_nre_to_sales ? 'Yes' : 'No' }</template>
-            </el-table-column>
-            <el-table-column v-if="colVisible.execution_start" prop="execution_start" label="Execution Start" width="110"></el-table-column>
-            <el-table-column v-if="colVisible.execution_end" prop="execution_end" label="Execution End" width="110"></el-table-column>
-            <el-table-column v-if="colVisible.whether_in_budget" prop="whether_in_budget" label="Whether In Budget" width="120">
-                <template slot-scope="scope">${ scope.row.whether_in_budget ? 'Yes' : 'No' }</template>
-            </el-table-column>
-            <el-table-column v-if="colVisible.in_budget_but_cost_add" prop="in_budget_but_cost_add" label="In budget but cost add" width="140">
-                <template slot-scope="scope">${ scope.row.in_budget_but_cost_add ? 'Yes' : 'No' }</template>
-            </el-table-column>
-            <el-table-column v-if="colVisible.remark" prop="remark" label="Remark" min-width="200" show-overflow-tooltip></el-table-column>
-            <el-table-column v-if="colVisible.attachment" label="報NRE郵件" width="100">
-                <template slot-scope="scope">
-                    <a v-if="scope.row.attachment" :href="getFullUrl(scope.row.attachment)" target="_blank">下载</a>
-                    <span v-else>-</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="150" fixed="right">
-                <template slot-scope="scope">
-                    <div class="action-buttons">
-                        <el-button type="primary" size="mini" icon="el-icon-edit" @click="openEditDialog(scope.row)"></el-button>
-                        <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteRow(scope.row)"></el-button>
+    <!-- 使用折叠面板分模块 -->
+    <el-collapse v-model="activeCollapse">
+        <!-- 模块1：统计概览（包含图表+统计表格） -->
+        <el-collapse-item title="📊 统计概览" name="stats">
+            <div v-if="statsLoaded">
+                <!-- ECharts 图表 -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="chart-title">指标对比</span>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <el-select v-model="chartMetric" placeholder="选择指标" size="small" style="width:140px">
+                                <el-option label="Sample Qty" value="sample_qty"></el-option>
+                                <el-option label="HC Qty" value="hc_qty"></el-option>
+                                <el-option label="HC Days" value="hc_days"></el-option>
+                                <el-option label="PD" value="pd"></el-option>
+                                <el-option label="Device fee (USD)" value="device_fee_usd"></el-option>
+                            </el-select>
+                            <el-radio-group v-model="chartType" size="small">
+                                <el-radio-button label="bar">柱状图</el-radio-button>
+                                <el-radio-button label="line">折线图</el-radio-button>
+                            </el-radio-group>
+                        </div>
                     </div>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[20,50,100]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            style="margin-top:20px; text-align:right;">
-        </el-pagination>
-    </div>
+                    <div id="statsChart"></div>
+                </div>
 
-    <!-- 弹窗 -->
-    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="70%" @close="resetForm">
+                <!-- 统计表格（紧凑版） -->
+                <div style="margin-top:8px;">
+                    <el-table :data="statsRows" border stripe size="mini" class="stats-table-compact" style="width:100%;">
+                        <el-table-column prop="dimension" label="维度" width="180"></el-table-column>
+                        <el-table-column label="DQA NRE mail to PM" align="center">
+                            <el-table-column prop="sample_qty" label="Sample Q'ty" width="110">
+                                <template slot-scope="scope">${ scope.row.sample_qty }</template>
+                            </el-table-column>
+                            <el-table-column prop="hc_qty" label="HC Q'ty" width="100">
+                                <template slot-scope="scope">${ scope.row.hc_qty }</template>
+                            </el-table-column>
+                            <el-table-column prop="hc_days" label="HC Days" width="100">
+                                <template slot-scope="scope">${ scope.row.hc_days }</template>
+                            </el-table-column>
+                            <el-table-column prop="pd" label="PD" width="80">
+                                <template slot-scope="scope">${ scope.row.pd }</template>
+                            </el-table-column>
+                            <el-table-column prop="device_fee_usd" label="Device fee (USD)" width="130">
+                                <template slot-scope="scope">${ scope.row.device_fee_usd }</template>
+                            </el-table-column>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </div>
+            <div v-else style="text-align:center; padding:20px; color:#909399;">暂无统计数据</div>
+        </el-collapse-item>
+
+        <!-- 模块2：PCR 数据列表（默认展开） -->
+        <el-collapse-item title="📋 PCR 数据列表" name="list">
+            <div class="table-card">
+                <div class="table-toolbar">
+                    <el-button type="danger" size="small" @click="batchDelete" :loading="multiDeleteLoading" :disabled="selectedRows.length === 0">
+                        批量删除 (${ selectedRows.length })
+                    </el-button>
+                    <el-button type="default" size="small" @click="openColumnSettings" icon="el-icon-setting">列设置</el-button>
+                </div>
+                <el-table :data="tableData" border stripe v-loading="loading" size="medium" @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55" :selectable="checkSelectable" align="center"></el-table-column>
+                    <el-table-column type="index" width="50" label="No" fixed="left"></el-table-column>
+                    <el-table-column v-if="colVisible.pcr_no" prop="pcr_no" label="PCR No" width="150" fixed="left"></el-table-column>
+                    <el-table-column v-if="colVisible.pcr_title" prop="pcr_title" label="PCR Title" min-width="200" fixed="left"></el-table-column>
+                    <el-table-column v-if="colVisible.Customer" prop="Customer" label="Customer" width="80"></el-table-column>
+                    <el-table-column v-if="colVisible.Project" prop="Project" label="Project" width="150"></el-table-column>
+                    <el-table-column v-if="colVisible.phase" prop="phase" label="NPI or INV" width="100"></el-table-column>
+                    <el-table-column v-if="colVisible.category" prop="category" label="Category" width="120"></el-table-column>
+                    <el-table-column v-if="colVisible.receive_date" prop="receive_date" label="Receive Date" width="110"></el-table-column>
+                    <el-table-column v-if="colVisible.status" prop="status" label="Status" width="100"></el-table-column>
+
+                    <el-table-column v-if="showNreGroup" label="DQA NRE mail to PM" align="center">
+                        <el-table-column v-if="colVisible.sample_qty" prop="sample_qty" label="Sample Q'ty" width="100">
+                            <template slot-scope="scope">${ scope.row.sample_qty }</template>
+                        </el-table-column>
+                        <el-table-column v-if="colVisible.hc_qty" prop="hc_qty" label="HC Q'ty" width="100">
+                            <template slot-scope="scope">${ scope.row.hc_qty }</template>
+                        </el-table-column>
+                        <el-table-column v-if="colVisible.hc_days" prop="hc_days" label="HC Days" width="100">
+                            <template slot-scope="scope">${ scope.row.hc_days }</template>
+                        </el-table-column>
+                        <el-table-column v-if="colVisible.pd" prop="pd" label="PD" width="80">
+                            <template slot-scope="scope">${ scope.row.pd }</template>
+                        </el-table-column>
+                        <el-table-column v-if="colVisible.device_fee_usd" prop="device_fee_usd" label="Device fee (USD)" width="130">
+                            <template slot-scope="scope">${ scope.row.device_fee_usd ? scope.row.device_fee_usd.toFixed(2) : '0.00' }</template>
+                        </el-table-column>
+                    </el-table-column>
+
+                    <el-table-column v-if="colVisible.pm_send_nre_to_sales" prop="pm_send_nre_to_sales" label="PM send NRE to Sales" width="130">
+                        <template slot-scope="scope">${ scope.row.pm_send_nre_to_sales ? 'Yes' : 'No' }</template>
+                    </el-table-column>
+                    <el-table-column v-if="colVisible.execution_start" prop="execution_start" label="Execution Start" width="110"></el-table-column>
+                    <el-table-column v-if="colVisible.execution_end" prop="execution_end" label="Execution End" width="110"></el-table-column>
+                    <el-table-column v-if="colVisible.whether_in_budget" prop="whether_in_budget" label="Whether In Budget" width="120">
+                        <template slot-scope="scope">${ scope.row.whether_in_budget ? 'Yes' : 'No' }</template>
+                    </el-table-column>
+                    <el-table-column v-if="colVisible.in_budget_but_cost_add" prop="in_budget_but_cost_add" label="In budget but cost add" width="140">
+                        <template slot-scope="scope">${ scope.row.in_budget_but_cost_add ? 'Yes' : 'No' }</template>
+                    </el-table-column>
+                    <el-table-column v-if="colVisible.remark" prop="remark" label="Remark" min-width="200" show-overflow-tooltip></el-table-column>
+                    <el-table-column v-if="colVisible.attachment" label="報NRE郵件" width="100">
+                        <template slot-scope="scope">
+                            <a v-if="scope.row.attachment" :href="getFullUrl(scope.row.attachment)" target="_blank">下载</a>
+                            <span v-else>-</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="150" fixed="right">
+                        <template slot-scope="scope">
+                            <div class="action-buttons">
+                                <el-button type="primary" size="mini" icon="el-icon-edit" @click="openEditDialog(scope.row)"></el-button>
+                                <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteRow(scope.row)"></el-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[20,50,100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total"
+                    style="margin-top:20px; text-align:right;">
+                </el-pagination>
+            </div>
+        </el-collapse-item>
+    </el-collapse>
+
+    <!-- 弹窗区域（保持不变） -->
+    <!-- 新增/编辑弹窗 -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="90%" @close="resetForm">
         <el-form ref="pcrForm" :model="form" :rules="rules" label-width="140px">
             <el-row :gutter="20">
                 <el-col :span="12"><el-form-item label="PCR No" prop="pcr_no"><el-input v-model="form.pcr_no"></el-input></el-form-item></el-col>
@@ -316,19 +324,28 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="Excel批量上传" :visible.sync="showUploadDialog" width="500px">
+    <!-- Excel上传弹窗 -->
+    <!-- Excel上传弹窗 -->
+    <el-dialog
+        title="Excel批量上传"
+        :visible.sync="showUploadDialog"
+        width="500px"
+        :close-on-click-modal="!uploading"
+        :close-on-press-escape="!uploading"
+        :before-close="handleUploadDialogClose">
         <el-upload drag action="#" :auto-upload="false" :on-change="handleExcelChange" :file-list="excelFileList" :limit="1">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
             <div class="el-upload__tip" slot="tip">支持.xlsx, .xls格式，表头需包含英文列名</div>
         </el-upload>
         <div slot="footer">
-            <el-button @click="showUploadDialog = false">取消</el-button>
+            <el-button @click="showUploadDialog = false" :disabled="uploading">取消</el-button>
             <el-button type="primary" @click="uploadExcel" :loading="uploading">上传</el-button>
             <el-button type="info" @click="downloadTemplate">下载模板</el-button>
         </div>
     </el-dialog>
 
+    <!-- 重复数据弹窗 -->
     <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
         <el-table :data="duplicateTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
@@ -341,7 +358,8 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="错误信息（未导入）" :visible.sync="errorDialogVisible" width="70%">
+    <!-- 错误信息弹窗 -->
+    <el-dialog title="错误信息（未导入）" :visible.sync="errorDialogVisible" width="85%">
         <el-table :data="errorTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
             <el-table-column prop="message" label="错误详情" min-width="400"></el-table-column>
@@ -351,6 +369,7 @@
         </div>
     </el-dialog>
 
+    <!-- 列设置弹窗 -->
     <el-dialog title="选择显示的列" :visible.sync="columnSettingsVisible" width="700px">
         <div class="column-group">
             <div class="column-group-title">基本信息</div>
@@ -412,6 +431,8 @@ new Vue({
     delimiters: ['${', '}'],
     data() {
         return {
+            selectedRows: [],           // 选中的行数据
+            multiDeleteLoading: false,
             searchForm: { dateRange: [] },
             stats: {
                 total: { perform: {}, plan: {}, total: {} },
@@ -488,6 +509,7 @@ new Vue({
             chartType: 'bar',
             chartInstance: null,
             _themeObserver: null,
+            activeCollapse: ['stats', 'list'], // 默认两个都展开（accordion模式下只能展开一个，改为数组模式）
         }
     },
     computed: {
@@ -519,6 +541,56 @@ new Vue({
         if (this.chartInstance) this.chartInstance.dispose();
     },
     methods: {
+        handleUploadDialogClose(done) {
+            if (this.uploading) {
+                this.$message.warning('正在上传中，请稍候...');
+                return;
+            }
+            done();
+        },
+        // 判断行是否可选（只有可删除的记录才能被选中）
+        checkSelectable(row) {
+            return row.can_delete === true;
+        },
+
+        // 表格选择变化事件
+        handleSelectionChange(selection) {
+            this.selectedRows = selection;
+        },
+
+        // 批量删除
+        async batchDelete() {
+            if (this.selectedRows.length === 0) {
+                this.$message.warning('请选择要删除的记录');
+                return;
+            }
+            // 确认对话框
+            try {
+                await this.$confirm(`确认删除选中的 ${this.selectedRows.length} 条记录吗？`, '提示', { type: 'warning' });
+            } catch {
+                return;
+            }
+            this.multiDeleteLoading = true;
+            try {
+                const ids = this.selectedRows.map(row => row.id);
+                const res = await axios.post('/PCRList/api/batch_delete/', { ids });
+                if (res.data.success) {
+                    this.$message.success(`成功删除 ${res.data.deleted_count} 条记录`);
+                    // 如果有部分失败，显示错误信息
+                    if (res.data.errors && res.data.errors.length) {
+                        this.$message.warning(`部分删除失败：${res.data.errors.join('；')}`);
+                    }
+                    this.selectedRows = [];
+                    this.searchData(); // 刷新列表
+                } else {
+                    this.$message.error(res.data.message);
+                }
+            } catch(e) {
+                this.$message.error('批量删除失败');
+            } finally {
+                this.multiDeleteLoading = false;
+            }
+        },
         // ---- 图表相关 ----
         getThemeColors() {
             const isDark = document.body.classList.contains('theme-dark');
@@ -537,7 +609,6 @@ new Vue({
             this.chartInstance = echarts.init(dom);
             this.updateChart();
         },
-        // 修改 updateChart 增加 tooltip 过滤零值
         updateChart() {
             if (!this.chartInstance || !this.dimensionMap || this.dimensionMap.size === 0) return;
             const colors = this.getThemeColors();
@@ -754,6 +825,14 @@ new Vue({
                 this.stats = statsRes.data;
                 this.statsLoaded = true;
                 this.buildStatsRows();
+                // 新增：数据更新后重新绘制图表
+                this.$nextTick(() => {
+                    if (this.chartInstance) {
+                        this.updateChart();
+                    } else {
+                        this.initChart();
+                    }
+                });
             } catch(e) {
                 this.$message.error('加载失败');
             } finally {
@@ -877,7 +956,7 @@ new Vue({
             }
         },
         downloadTemplate() {
-            window.open('/static/PCR_Template.xlsx', '_blank');
+            window.open('/static/src/modelfiles/PCR_Template.xlsx', '_blank');
         },
         parseDuplicates(duplicates) {
             return duplicates.map(item => {

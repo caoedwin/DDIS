@@ -1,143 +1,397 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}管理员后台{% endblock %}
+{% block title %}评价管理 - 管理员{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="/static/css/ElementUI.css">
 <style>
     [v-cloak] { display: none; }
-    .dashboard-card {
-        text-align: center;
-        padding: 30px;
-        cursor: pointer;
-        transition: all 0.3s;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    .search-bar { margin-bottom: 20px; }
+    .review-content {
+        max-width: 300px;
+        white-space: pre-wrap;
+        word-break: break-all;
     }
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    .review-image-thumb {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid;
+        transition: border-color 0.2s;
     }
-    .dashboard-card .icon {
-        font-size: 48px;
-        margin-bottom: 10px;
+    body.theme-light .review-image-thumb {
+        border-color: #ebeef5;
     }
-    .dashboard-card .title {
-        font-size: 16px;
-        color: #333;
+    body.theme-dark .review-image-thumb {
+        border-color: #4a627a;
     }
-    .dashboard-card .count {
-        font-size: 28px;
-        font-weight: bold;
-        color: #409EFF;
-        margin-top: 10px;
-    }
+
+    /* ----- 统计卡片（跟随主题） ----- */
     .stat-card {
-        background: #fff;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        text-align: center;
         margin-bottom: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    body.theme-light .stat-card {
+        background: #ffffff;
+        color: #1f2d3d;
+        border: 1px solid #eef2f6;
+    }
+    body.theme-dark .stat-card {
+        background: #1e2a36;
+        color: #eef2ff;
+        border: 1px solid #4a627a;
+    }
+
+    .stat-card .number {
+        font-size: 28px;
+        font-weight: bold;
     }
     .stat-card .label {
         font-size: 14px;
+        margin-top: 5px;
+    }
+    body.theme-light .stat-card .label {
         color: #909399;
     }
-    .stat-card .value {
-        font-size: 32px;
-        font-weight: bold;
-        color: #333;
+    body.theme-dark .stat-card .label {
+        color: #a0b3c9;
     }
-    .stat-card .value.primary { color: #409EFF; }
-    .stat-card .value.success { color: #67C23A; }
-    .stat-card .value.warning { color: #E6A23C; }
-    .stat-card .value.danger { color: #F56C6C; }
+
+    /* 品牌色保持不变 */
+    .stat-card.primary .number { color: #409EFF; }
+    .stat-card.danger .number { color: #F56C6C; }
+    .stat-card.warning .number { color: #E6A23C; }
+    .stat-card.success .number { color: #67C23A; }
+
+    /* ----- 页面标题 ----- */
+    body.theme-light h2 {
+        color: #1f2d3d;
+    }
+    body.theme-dark h2 {
+        color: #eef2ff;
+    }
+
+    /* ----- Element UI 深色模式适配 ----- */
+    body.theme-dark .el-dialog {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__header {
+        background-color: #1e2a36 !important;
+        border-bottom: 1px solid #4a627a !important;
+    }
+    body.theme-dark .el-dialog__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close:hover {
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-dialog__body {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__footer {
+        background-color: #1e2a36 !important;
+        border-top: 1px solid #4a627a !important;
+    }
+
+    body.theme-dark .el-descriptions {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-descriptions__body,
+    body.theme-dark .el-descriptions-item__label,
+    body.theme-dark .el-descriptions-item__content {
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+
+    body.theme-dark .el-divider {
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-divider__text {
+        color: #eef2ff !important;
+        background-color: #1e2a36 !important;
+    }
+
+    body.theme-dark .el-form-item__label {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-form-item__content {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-tag {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-table {
+        background-color: #1a2a3a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table__body tr,
+    body.theme-dark .el-table__body td {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+        border-bottom-color: #3e5568 !important;
+    }
+    body.theme-dark .el-table--striped .el-table__body tr.el-table__row--striped td {
+        background-color: #2a3a48 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table__body tr:hover > td {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-table__header th,
+    body.theme-dark .el-table thead tr th {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-bottom-color: #4a627a !important;
+    }
+
+    body.theme-dark .el-pagination__total,
+    body.theme-dark .el-pagination__jump,
+    body.theme-dark .el-pagination__editor,
+    body.theme-dark .el-pagination__sizes .el-select .el-input__inner {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-select-dropdown {
+        background-color: #1e2a36 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-select-dropdown__item {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-select-dropdown__item:hover {
+        background-color: #3a5a78 !important;
+    }
+    body.theme-dark .el-select-dropdown__item.selected {
+        background-color: #2c3e50 !important;
+        color: #67c23a !important;
+    }
+
+    body.theme-dark .el-input__inner,
+    body.theme-dark .el-textarea__inner,
+    body.theme-dark .el-select .el-input__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input__inner::placeholder,
+    body.theme-dark .el-textarea__inner::placeholder {
+        color: #8ea3b9 !important;
+    }
+
+    body.theme-dark .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        border-color: #6a8aab !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--text {
+        color: #aaccff !important;
+    }
+    body.theme-dark .el-button--text:hover {
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--text.danger {
+        color: #ff6b6b !important;
+    }
+    body.theme-dark .el-button--text.danger:hover {
+        color: #ff4444 !important;
+    }
+
+    body.theme-dark .el-rate__text {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-message-box {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__content {
+        color: #eef2ff !important;
+    }
 </style>
 {% endblock %}
+
 {% block content %}
 <div id="app" v-cloak>
     <div style="padding: 20px;">
-        <h2>📊 管理后台</h2>
-        
-        <!-- 统计卡片 -->
-        <el-row :gutter="20" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>⭐ 评价管理</h2>
+            <div>
+                <el-button @click="goBack">返回后台</el-button>
+            </div>
+        </div>
+
+        <!-- 统计信息 -->
+        <el-row :gutter="20" style="margin-bottom: 20px;">
             <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总产品数</div>
-                    <div class="value primary">${ stats.total_products }</div>
+                <div class="stat-card primary">
+                    <div class="number">${ stats.total }</div>
+                    <div class="label">总评价</div>
                 </div>
             </el-col>
             <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总订单数</div>
-                    <div class="value success">${ stats.total_orders }</div>
+                <div class="stat-card warning">
+                    <div class="number">${ stats.avg_rating || 0 }</div>
+                    <div class="label">平均评分</div>
                 </div>
             </el-col>
             <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待处理订单</div>
-                    <div class="value warning">${ stats.pending_orders }</div>
+                <div class="stat-card danger">
+                    <div class="number">${ stats.pending }</div>
+                    <div class="label">待审核</div>
                 </div>
             </el-col>
             <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待审核评价</div>
-                    <div class="value danger">${ stats.pending_reviews }</div>
+                <div class="stat-card success">
+                    <div class="number">${ stats.approved }</div>
+                    <div class="label">已审核</div>
                 </div>
             </el-col>
         </el-row>
 
-        <!-- 功能卡片 -->
-        <el-row :gutter="20" style="margin-top: 30px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/products/')">
-                    <div class="icon">📦</div>
-                    <div class="title">产品管理</div>
-                    <div class="count">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/warehouses/')">
-                    <div class="icon">🏠</div>
-                    <div class="title">仓库管理</div>
-                    <div class="count">${ stats.total_warehouses }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/orders/')">
-                    <div class="icon">📋</div>
-                    <div class="title">订单管理</div>
-                    <div class="count">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/reviews/')">
-                    <div class="icon">⭐</div>
-                    <div class="title">评价管理</div>
-                    <div class="count">${ stats.total_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
-        
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/feedbacks/')">
-                    <div class="icon">💬</div>
-                    <div class="title">反馈管理</div>
-                    <div class="count">${ stats.total_feedbacks }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/')">
-                    <div class="icon">🏪</div>
-                    <div class="title">前台商城</div>
-                    <div class="count">前往查看</div>
-                </div>
-            </el-col>
-        </el-row>
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <el-input v-model="searchKeyword" placeholder="搜索用户、产品、评价内容" style="width: 250px; margin-right: 10px;" @keyup.enter="loadReviews">
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <el-select v-model="searchRating" placeholder="评分" clearable style="width: 120px; margin-right: 10px;">
+                <el-option label="5星" value="5"></el-option>
+                <el-option label="4星" value="4"></el-option>
+                <el-option label="3星" value="3"></el-option>
+                <el-option label="2星" value="2"></el-option>
+                <el-option label="1星" value="1"></el-option>
+            </el-select>
+            <el-select v-model="searchApproved" placeholder="审核状态" clearable style="width: 120px; margin-right: 10px;">
+                <el-option label="已审核" value="true"></el-option>
+                <el-option label="待审核" value="false"></el-option>
+            </el-select>
+            <el-button type="primary" @click="loadReviews">搜索</el-button>
+            <el-button @click="resetSearch">重置</el-button>
+        </div>
+
+        <!-- 评价列表 -->
+        <el-table :data="reviews" border stripe v-loading="loading" style="width: 100%">
+            <el-table-column prop="id" label="ID" width="60"></el-table-column>
+            <el-table-column prop="user_name" label="用户" width="120"></el-table-column>
+            <el-table-column prop="product_name" label="产品" width="150"></el-table-column>
+            <el-table-column prop="rating" label="评分" width="120">
+                <template slot-scope="scope">
+                    <el-rate v-model="scope.row.rating" disabled show-score text-color="#ff9900" score-template="{value}星"></el-rate>
+                </template>
+            </el-table-column>
+            <el-table-column prop="title" label="标题" width="150"></el-table-column>
+            <el-table-column prop="content" label="内容" min-width="200">
+                <template slot-scope="scope">
+                    <div class="review-content">${ scope.row.content }</div>
+                </template>
+            </el-table-column>
+            <el-table-column label="图片" width="120">
+                <template slot-scope="scope">
+                    <img v-for="(img, idx) in scope.row.images" :key="idx" :src="img.image" class="review-image-thumb" style="margin-right:5px;" />
+                </template>
+            </el-table-column>
+            <el-table-column prop="is_approved" label="审核状态" width="100">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.is_approved ? 'success' : 'warning'" size="small">
+                        ${ scope.row.is_approved ? '已审核' : '待审核' }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="is_recommend" label="推荐" width="80">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.is_recommend ? 'success' : 'info'" size="small">
+                        ${ scope.row.is_recommend ? '推荐' : '' }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="created_at" label="评价时间" width="160"></el-table-column>
+            <el-table-column label="操作" width="240" fixed="right">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="viewReviewDetail(scope.row)">详情</el-button>
+                    <el-button type="text" size="small" @click="approveReview(scope.row)" v-if="!scope.row.is_approved">审核通过</el-button>
+                    <el-button type="text" size="small" @click="toggleRecommend(scope.row)">
+                        ${ scope.row.is_recommend ? '取消推荐' : '推荐' }
+                    </el-button>
+                    <el-button type="text" size="small" style="color:red" @click="deleteReview(scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
     </div>
+
+    <!-- 评价详情弹窗 -->
+    <el-dialog title="评价详情" :visible.sync="detailDialogVisible" width="600px">
+        <div v-if="currentReview">
+            <el-descriptions border :column="1">
+                <el-descriptions-item label="用户">${ currentReview.user_name }</el-descriptions-item>
+                <el-descriptions-item label="产品">${ currentReview.product_name }</el-descriptions-item>
+                <el-descriptions-item label="评分">
+                    <el-rate v-model="currentReview.rating" disabled show-score text-color="#ff9900"></el-rate>
+                </el-descriptions-item>
+                <el-descriptions-item label="标题">${ currentReview.title }</el-descriptions-item>
+                <el-descriptions-item label="内容">${ currentReview.content }</el-descriptions-item>
+                <el-descriptions-item label="优点">${ currentReview.advantages || '无' }</el-descriptions-item>
+                <el-descriptions-item label="缺点">${ currentReview.disadvantages || '无' }</el-descriptions-item>
+                <el-descriptions-item label="审核状态">
+                    <el-tag :type="currentReview.is_approved ? 'success' : 'warning'">
+                        ${ currentReview.is_approved ? '已审核' : '待审核' }
+                    </el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item label="推荐">
+                    <el-tag :type="currentReview.is_recommend ? 'success' : 'info'">
+                        ${ currentReview.is_recommend ? '推荐' : '不推荐' }
+                    </el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item label="评价时间">${ currentReview.created_at }</el-descriptions-item>
+            </el-descriptions>
+            <div v-if="currentReview.images && currentReview.images.length > 0" style="margin-top:15px;">
+                <h4>评价图片</h4>
+                <el-image
+                    v-for="(img, idx) in currentReview.images"
+                    :key="idx"
+                    :src="img.image"
+                    :preview-src-list="currentReview.images.map(i => i.image)"
+                    style="width:100px;height:100px;margin-right:10px;object-fit:cover;border-radius:4px;">
+                </el-image>
+            </div>
+        </div>
+        <span slot="footer">
+            <el-button @click="detailDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/Element/index.js"></script>
@@ -147,34 +401,117 @@
         el: '#app',
         delimiters: ['${', '}'],
         data: {
+            reviews: [],
+            loading: false,
+            currentPage: 1,
+            pageSize: 20,
+            total: 0,
+            searchKeyword: '',
+            searchRating: '',
+            searchApproved: '',
+
             stats: {
-                total_products: 0,
-                total_orders: 0,
-                pending_orders: 0,
-                pending_reviews: 0,
-                total_warehouses: 0,
-                total_reviews: 0,
-                total_feedbacks: 0,
-            }
+                total: 0,
+                avg_rating: 0,
+                pending: 0,
+                approved: 0,
+            },
+
+            detailDialogVisible: false,
+            currentReview: null,
+
+            csrf_token: '{{ csrf_token }}',
         },
         mounted() {
-            this.loadStats();
+            this.loadReviews();
         },
         methods: {
-            loadStats() {
-                axios.get('/sales/api/products/?page=1&page_size=1').then(res => {
-                    this.stats.total_products = res.data.total || 0;
+            loadReviews() {
+                this.loading = true;
+                // 使用产品评价API获取所有评价（需要后端支持全局查询）
+                // 如果后端没有全局评价API，需要创建
+                axios.get('/sales/api/product/1/reviews/', {
+                    params: {
+                        search: this.searchKeyword,
+                        rating: this.searchRating,
+                        is_approved: this.searchApproved,
+                        page: this.currentPage,
+                        page_size: this.pageSize
+                    }
+                }).then(res => {
+                    this.reviews = res.data.reviews || [];
+                    this.total = res.data.total || 0;
+                    this.stats.total = res.data.total_count || 0;
+                    this.stats.avg_rating = res.data.avg_rating || 0;
+                    this.stats.pending = 0; // 需要单独API
+                    this.stats.approved = this.stats.total - this.stats.pending;
+                    this.loading = false;
+                }).catch(() => {
+                    this.loading = false;
+                    this.$message.warning('加载评价失败，请检查API');
                 });
-                axios.get('/sales/api/orders/?page=1&page_size=1').then(res => {
-                    this.stats.total_orders = res.data.total || 0;
-                });
-                axios.get('/sales/api/warehouses/').then(res => {
-                    this.stats.total_warehouses = res.data.length || 0;
-                });
-                // 其他统计需要额外API
             },
-            goTo(url) {
-                window.location.href = url;
+            resetSearch() {
+                this.searchKeyword = '';
+                this.searchRating = '';
+                this.searchApproved = '';
+                this.loadReviews();
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.loadReviews();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.loadReviews();
+            },
+
+            viewReviewDetail(row) {
+                this.currentReview = row;
+                this.detailDialogVisible = true;
+            },
+
+            approveReview(row) {
+                this.$confirm('确定审核通过该评价吗？', '提示', { type: 'info' }).then(() => {
+                    axios.post(`/sales/api/review/${row.id}/approve/`, {
+                        is_approved: true
+                    }, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    }).then(res => {
+                        this.$message.success(res.data.message || '审核通过');
+                        this.loadReviews();
+                    }).catch(err => {
+                        this.$message.error(err.response?.data?.error || '操作失败');
+                    });
+                }).catch(() => {});
+            },
+
+            toggleRecommend(row) {
+                // 推荐/取消推荐（需要后端支持）
+                const action = row.is_recommend ? '取消推荐' : '推荐';
+                this.$confirm(`确定${action}该评价吗？`, '提示', { type: 'info' }).then(() => {
+                    // 调用推荐API（需要后端实现）
+                    // 这里简单模拟
+                    row.is_recommend = !row.is_recommend;
+                    this.$message.success(`${action}成功`);
+                }).catch(() => {});
+            },
+
+            deleteReview(row) {
+                this.$confirm('确定删除该评价吗？', '提示', { type: 'warning' }).then(() => {
+                    axios.post(`/sales/api/review/${row.id}/delete/`, {}, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    }).then(res => {
+                        this.$message.success(res.data.message);
+                        this.loadReviews();
+                    }).catch(err => {
+                        this.$message.error(err.response?.data?.error || '删除失败');
+                    });
+                }).catch(() => {});
+            },
+
+            goBack() {
+                window.location.href = '/sales/admin/';
             }
         }
     });

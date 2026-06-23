@@ -1,143 +1,503 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}管理员后台{% endblock %}
+{% block title %}产品管理 - 管理员{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="/static/css/ElementUI.css">
 <style>
     [v-cloak] { display: none; }
-    .dashboard-card {
-        text-align: center;
-        padding: 30px;
+    .search-bar { margin-bottom: 20px; }
+
+    /* ----- 产品缩略图（跟随主题） ----- */
+    .product-image-thumb {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid;
+        transition: border-color 0.2s;
+    }
+    body.theme-light .product-image-thumb {
+        border-color: #ebeef5;
+    }
+    body.theme-dark .product-image-thumb {
+        border-color: #4a627a;
+    }
+
+    .no-image-placeholder {
+        width: 50px;
+        height: 50px;
+        border-radius: 4px;
+        border: 1px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    body.theme-light .no-image-placeholder {
+        background: #f5f7fa;
+        color: #c0c4cc;
+        border-color: #ebeef5;
+    }
+    body.theme-dark .no-image-placeholder {
+        background: #2c3e50;
+        color: #8ea3b9;
+        border-color: #4a627a;
+    }
+
+    /* ----- 上传组件 ----- */
+    .upload-demo .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
         cursor: pointer;
-        transition: all 0.3s;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.2s;
     }
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    .upload-demo .el-upload:hover {
+        border-color: #409EFF;
     }
-    .dashboard-card .icon {
-        font-size: 48px;
-        margin-bottom: 10px;
+    body.theme-light .upload-demo .el-upload {
+        border-color: #d9d9d9;
     }
-    .dashboard-card .title {
-        font-size: 16px;
-        color: #333;
+    body.theme-dark .upload-demo .el-upload {
+        border-color: #4a627a;
     }
-    .dashboard-card .count {
-        font-size: 28px;
-        font-weight: bold;
-        color: #409EFF;
-        margin-top: 10px;
+    body.theme-dark .upload-demo .el-upload i {
+        color: #8ea3b9;
     }
-    .stat-card {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        margin-bottom: 20px;
+
+    .el-table .cell { white-space: pre-line; }
+
+    /* ----- 页面标题 ----- */
+    body.theme-light h2 {
+        color: #1f2d3d;
     }
-    .stat-card .label {
-        font-size: 14px;
-        color: #909399;
+    body.theme-dark h2 {
+        color: #eef2ff;
     }
-    .stat-card .value {
-        font-size: 32px;
-        font-weight: bold;
-        color: #333;
+
+    /* ----- 弹窗内标签文字 ----- */
+    body.theme-light .el-form-item__label {
+        color: #1f2d3d !important;
     }
-    .stat-card .value.primary { color: #409EFF; }
-    .stat-card .value.success { color: #67C23A; }
-    .stat-card .value.warning { color: #E6A23C; }
-    .stat-card .value.danger { color: #F56C6C; }
+    body.theme-dark .el-form-item__label {
+        color: #eef2ff !important;
+    }
+
+    /* ----- 弹窗内 strong 标签 ----- */
+    body.theme-light strong {
+        color: #1f2d3d;
+    }
+    body.theme-dark strong {
+        color: #eef2ff;
+    }
+
+    /* ----- Element UI 深色模式适配 ----- */
+    body.theme-dark .el-dialog {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__header {
+        background-color: #1e2a36 !important;
+        border-bottom: 1px solid #4a627a !important;
+    }
+    body.theme-dark .el-dialog__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close:hover {
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-dialog__body {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__footer {
+        background-color: #1e2a36 !important;
+        border-top: 1px solid #4a627a !important;
+    }
+
+    body.theme-dark .el-table {
+        background-color: #1a2a3a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table__body tr,
+    body.theme-dark .el-table__body td {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+        border-bottom-color: #3e5568 !important;
+    }
+    body.theme-dark .el-table--striped .el-table__body tr.el-table__row--striped td {
+        background-color: #2a3a48 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table__body tr:hover > td {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-table__header th,
+    body.theme-dark .el-table thead tr th {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-bottom-color: #4a627a !important;
+    }
+
+    body.theme-dark .el-pagination__total,
+    body.theme-dark .el-pagination__jump,
+    body.theme-dark .el-pagination__editor,
+    body.theme-dark .el-pagination__sizes .el-select .el-input__inner {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-select-dropdown {
+        background-color: #1e2a36 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-select-dropdown__item {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-select-dropdown__item:hover {
+        background-color: #3a5a78 !important;
+    }
+    body.theme-dark .el-select-dropdown__item.selected {
+        background-color: #2c3e50 !important;
+        color: #67c23a !important;
+    }
+
+    body.theme-dark .el-input__inner,
+    body.theme-dark .el-textarea__inner,
+    body.theme-dark .el-select .el-input__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input__inner::placeholder,
+    body.theme-dark .el-textarea__inner::placeholder {
+        color: #8ea3b9 !important;
+    }
+
+    body.theme-dark .el-input-number__increase,
+    body.theme-dark .el-input-number__decrease {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input-number__increase:hover,
+    body.theme-dark .el-input-number__decrease:hover {
+        background-color: #3a5a78 !important;
+    }
+
+    body.theme-dark .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        border-color: #6a8aab !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--text {
+        color: #aaccff !important;
+    }
+    body.theme-dark .el-button--text:hover {
+        color: #ffffff !important;
+    }
+
+    body.theme-dark .el-switch__core {
+        background-color: #4a627a !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-switch.is-checked .el-switch__core {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+    }
+
+    body.theme-dark .el-tag {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-tag--success {
+        background-color: #2d6a2d !important;
+        border-color: #2d6a2d !important;
+    }
+    body.theme-dark .el-tag--danger {
+        background-color: #6a2d2d !important;
+        border-color: #6a2d2d !important;
+    }
+    body.theme-dark .el-tag--info {
+        background-color: #3a4a5a !important;
+        border-color: #3a4a5a !important;
+    }
+    body.theme-dark .el-tag--warning {
+        background-color: #6a5a2d !important;
+        border-color: #6a5a2d !important;
+    }
+
+    body.theme-dark .el-upload-dragger {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-upload__text {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-upload__tip {
+        color: #8ea3b9 !important;
+    }
+
+    body.theme-dark .el-message-box {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__content {
+        color: #eef2ff !important;
+    }
 </style>
 {% endblock %}
+
 {% block content %}
 <div id="app" v-cloak>
     <div style="padding: 20px;">
-        <h2>📊 管理后台</h2>
-        
-        <!-- 统计卡片 -->
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总产品数</div>
-                    <div class="value primary">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总订单数</div>
-                    <div class="value success">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待处理订单</div>
-                    <div class="value warning">${ stats.pending_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待审核评价</div>
-                    <div class="value danger">${ stats.pending_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>📦 产品管理</h2>
+            <div>
+                <el-button type="primary" @click="openAddDialog" icon="el-icon-plus">新增产品</el-button>
+                <el-button type="info" @click="syncStock" icon="el-icon-refresh">同步库存到Redis</el-button>
+                <el-button @click="goBack">返回后台</el-button>
+            </div>
+        </div>
 
-        <!-- 功能卡片 -->
-        <el-row :gutter="20" style="margin-top: 30px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/products/')">
-                    <div class="icon">📦</div>
-                    <div class="title">产品管理</div>
-                    <div class="count">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/warehouses/')">
-                    <div class="icon">🏠</div>
-                    <div class="title">仓库管理</div>
-                    <div class="count">${ stats.total_warehouses }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/orders/')">
-                    <div class="icon">📋</div>
-                    <div class="title">订单管理</div>
-                    <div class="count">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/reviews/')">
-                    <div class="icon">⭐</div>
-                    <div class="title">评价管理</div>
-                    <div class="count">${ stats.total_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
-        
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/feedbacks/')">
-                    <div class="icon">💬</div>
-                    <div class="title">反馈管理</div>
-                    <div class="count">${ stats.total_feedbacks }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/')">
-                    <div class="icon">🏪</div>
-                    <div class="title">前台商城</div>
-                    <div class="count">前往查看</div>
-                </div>
-            </el-col>
-        </el-row>
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <el-input v-model="searchKeyword" placeholder="搜索产品编号、名称、品牌" style="width: 250px; margin-right: 10px;" @keyup.enter="loadProducts">
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <el-input v-model="searchCategory" placeholder="分类" style="width: 150px; margin-right: 10px;" @keyup.enter="loadProducts"></el-input>
+            <el-select v-model="searchStatus" placeholder="状态" clearable style="width: 120px; margin-right: 10px;">
+                <el-option label="上架" value="true"></el-option>
+                <el-option label="下架" value="false"></el-option>
+            </el-select>
+            <el-button type="primary" @click="loadProducts">搜索</el-button>
+            <el-button @click="resetSearch">重置</el-button>
+        </div>
+
+        <!-- 产品列表 -->
+        <el-table :data="products" border stripe v-loading="loading" style="width: 100%">
+            <el-table-column prop="product_code" label="产品编号" width="150" fixed="left"></el-table-column>
+            <el-table-column label="图片" width="80">
+                <template slot-scope="scope">
+                    <img v-if="scope.row.cover_image" :src="scope.row.cover_image" class="product-image-thumb" />
+                    <div v-else class="no-image-placeholder">无图</div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="name" label="产品名称" width="180"></el-table-column>
+            <el-table-column prop="category" label="分类" width="100"></el-table-column>
+            <el-table-column prop="brand" label="品牌" width="100"></el-table-column>
+            <el-table-column prop="price" label="价格" width="100">
+                <template slot-scope="scope">￥${ scope.row.price }</template>
+            </el-table-column>
+            <el-table-column prop="stock" label="总库存" width="100"></el-table-column>
+            <el-table-column label="仓库库存" min-width="200">
+                <template slot-scope="scope">
+                    <span v-for="(w, idx) in scope.row.warehouses" :key="idx" style="display:inline-block;margin-right:10px;font-size:12px;">
+                        ${ w.warehouse_name }: ${ w.stock }
+                    </span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="is_active" label="状态" width="80">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.is_active ? 'success' : 'danger'" size="small">
+                        ${ scope.row.is_active ? '上架' : '下架' }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="created_at" label="创建时间" width="160"></el-table-column>
+            <el-table-column label="操作" width="200" fixed="right">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="editProduct(scope.row)">编辑</el-button>
+                    <el-button type="text" size="small" @click="manageImages(scope.row)">图片</el-button>
+                    <el-button type="text" size="small" @click="manageWarehouse(scope.row)">库存</el-button>
+                    <el-button type="text" size="small" style="color:red" @click="deleteProduct(scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
     </div>
+
+    <!-- 产品编辑弹窗 -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="800px" @close="resetForm">
+        <el-form :model="form" label-width="100px" ref="productForm">
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="产品编号" required>
+                        <el-input v-model="form.product_code" :disabled="!!form.id" placeholder="请输入产品编号"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="产品名称" required>
+                        <el-input v-model="form.name" placeholder="请输入产品名称"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="分类">
+                        <el-input v-model="form.category" placeholder="请输入分类"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="品牌">
+                        <el-input v-model="form.brand" placeholder="请输入品牌"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8">
+                    <el-form-item label="价格" required>
+                        <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" style="width:100%"></el-input-number>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="总库存" required>
+                        <el-input-number v-model="form.stock" :min="0" style="width:100%"></el-input-number>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="上架状态">
+                        <el-switch v-model="form.is_active" active-text="上架" inactive-text="下架"></el-switch>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="8">
+                    <el-form-item label="重量(kg)">
+                        <el-input-number v-model="form.weight" :precision="2" :step="0.5" :min="0" style="width:100%"></el-input-number>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="尺寸">
+                        <el-input v-model="form.dimensions" placeholder="长x宽x高"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="颜色">
+                        <el-input v-model="form.color" placeholder="请输入颜色"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-form-item label="描述">
+                <el-input type="textarea" v-model="form.description" :rows="3" placeholder="请输入产品描述"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="saveProduct" :loading="saving">保存</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 图片管理弹窗 -->
+    <el-dialog title="产品图片管理" :visible.sync="imageDialogVisible" width="700px">
+        <div>
+            <div style="margin-bottom: 15px;">
+                <el-upload
+                    class="upload-demo"
+                    action="/sales/api/product/image/upload/"
+                    :headers="uploadHeaders"
+                    :data="uploadData"
+                    :on-success="handleImageUploadSuccess"
+                    :on-error="handleImageUploadError"
+                    :before-upload="beforeImageUpload"
+                    :limit="10"
+                    multiple
+                    accept="image/*"
+                    list-type="picture-card"
+                    name="image">
+                    <i class="el-icon-plus"></i>
+                    <div slot="tip" class="el-upload__tip" style="font-size:12px;">
+                        支持 jpg/png 格式，单张不超过 5MB
+                    </div>
+                </el-upload>
+            </div>
+            <el-table :data="productImages" border stripe>
+                <el-table-column label="图片" width="120">
+                    <template slot-scope="scope">
+                        <img :src="scope.row.image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;" />
+                    </template>
+                </el-table-column>
+                <el-table-column prop="description" label="描述"></el-table-column>
+                <el-table-column label="封面" width="80">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.is_cover ? 'success' : 'info'" size="small">
+                            ${ scope.row.is_cover ? '封面' : '' }
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180">
+                    <template slot-scope="scope">
+                        <el-button type="text" size="small" @click="setCover(scope.row)" v-if="!scope.row.is_cover">设为封面</el-button>
+                        <el-button type="text" size="small" style="color:red" @click="deleteImage(scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <span slot="footer">
+            <el-button @click="imageDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 仓库库存管理弹窗 -->
+    <el-dialog title="仓库库存管理" :visible.sync="warehouseDialogVisible" width="700px">
+        <div>
+            <div style="margin-bottom: 15px;">
+                <strong>产品：</strong>${ currentProductName }
+            </div>
+            <el-table :data="warehouseStock" border stripe>
+                <el-table-column prop="warehouse_name" label="仓库名称" width="180"></el-table-column>
+                <el-table-column prop="warehouse_code" label="仓库编号" width="150"></el-table-column>
+                <el-table-column label="库存" width="150">
+                    <template slot-scope="scope">
+                        <el-input-number v-model="scope.row.stock" :min="0" size="small" style="width:120px;"></el-input-number>
+                    </template>
+                </el-table-column>
+                <el-table-column label="最低库存" width="150">
+                    <template slot-scope="scope">
+                        <el-input-number v-model="scope.row.min_stock" :min="0" size="small" style="width:120px;"></el-input-number>
+                    </template>
+                </el-table-column>
+                <el-table-column label="最高库存" width="150">
+                    <template slot-scope="scope">
+                        <el-input-number v-model="scope.row.max_stock" :min="0" size="small" style="width:120px;"></el-input-number>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="100">
+                    <template slot-scope="scope">
+                        <el-button type="text" size="small" @click="saveWarehouseStock(scope.row)">保存</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <span slot="footer">
+            <el-button @click="warehouseDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/Element/index.js"></script>
@@ -147,34 +507,290 @@
         el: '#app',
         delimiters: ['${', '}'],
         data: {
-            stats: {
-                total_products: 0,
-                total_orders: 0,
-                pending_orders: 0,
-                pending_reviews: 0,
-                total_warehouses: 0,
-                total_reviews: 0,
-                total_feedbacks: 0,
-            }
+            products: [],
+            loading: false,
+            currentPage: 1,
+            pageSize: 20,
+            total: 0,
+            searchKeyword: '',
+            searchCategory: '',
+            searchStatus: '',
+
+            dialogVisible: false,
+            dialogTitle: '新增产品',
+            form: {
+                id: null,
+                product_code: '',
+                name: '',
+                price: 0,
+                stock: 0,
+                category: '',
+                brand: '',
+                description: '',
+                weight: null,
+                dimensions: '',
+                color: '',
+                is_active: true,
+            },
+            saving: false,
+
+            imageDialogVisible: false,
+            currentProductId: null,
+            currentProductName: '',
+            productImages: [],
+            uploadHeaders: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            uploadData: {
+                product_id: null,
+                is_cover: 'false'
+            },
+
+            warehouseDialogVisible: false,
+            warehouseStock: [],
+            allWarehouses: [],
+            csrf_token: '{{ csrf_token }}',
         },
         mounted() {
-            this.loadStats();
+            this.loadProducts();
+            this.loadWarehouses();
         },
         methods: {
-            loadStats() {
-                axios.get('/sales/api/products/?page=1&page_size=1').then(res => {
-                    this.stats.total_products = res.data.total || 0;
+            loadProducts() {
+                this.loading = true;
+                axios.get('/sales/api/products/', {
+                    params: {
+                        search: this.searchKeyword,
+                        category: this.searchCategory,
+                        is_active: this.searchStatus,
+                        page: this.currentPage,
+                        page_size: this.pageSize
+                    }
+                }).then(res => {
+                    this.products = res.data.products || [];
+                    this.total = res.data.total || 0;
+                    this.loading = false;
+                }).catch(() => {
+                    this.loading = false;
+                    this.$message.error('加载产品失败');
                 });
-                axios.get('/sales/api/orders/?page=1&page_size=1').then(res => {
-                    this.stats.total_orders = res.data.total || 0;
-                });
-                axios.get('/sales/api/warehouses/').then(res => {
-                    this.stats.total_warehouses = res.data.length || 0;
-                });
-                // 其他统计需要额外API
             },
-            goTo(url) {
-                window.location.href = url;
+            loadWarehouses() {
+                axios.get('/sales/api/warehouses/').then(res => {
+                    this.allWarehouses = res.data.results || res.data || [];
+                }).catch(() => {
+                    this.allWarehouses = [];
+                });
+            },
+            resetSearch() {
+                this.searchKeyword = '';
+                this.searchCategory = '';
+                this.searchStatus = '';
+                this.loadProducts();
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.loadProducts();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.loadProducts();
+            },
+
+            openAddDialog() {
+                this.form = {
+                    id: null,
+                    product_code: '',
+                    name: '',
+                    price: 0,
+                    stock: 0,
+                    category: '',
+                    brand: '',
+                    description: '',
+                    weight: null,
+                    dimensions: '',
+                    color: '',
+                    is_active: true,
+                };
+                this.dialogTitle = '新增产品';
+                this.dialogVisible = true;
+            },
+            editProduct(row) {
+                this.form = {
+                    id: row.id,
+                    product_code: row.product_code,
+                    name: row.name,
+                    price: parseFloat(row.price),
+                    stock: row.stock,
+                    category: row.category || '',
+                    brand: row.brand || '',
+                    description: row.description || '',
+                    weight: row.weight ? parseFloat(row.weight) : null,
+                    dimensions: row.dimensions || '',
+                    color: row.color || '',
+                    is_active: row.is_active,
+                };
+                this.dialogTitle = '编辑产品';
+                this.dialogVisible = true;
+            },
+            saveProduct() {
+                if (!this.form.product_code || !this.form.name) {
+                    this.$message.warning('请填写产品编号和名称');
+                    return;
+                }
+                this.saving = true;
+                const url = this.form.id ? `/sales/api/product/update/${this.form.id}/` : '/sales/api/product/create/';
+                axios.post(url, this.form, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.saving = false;
+                    this.dialogVisible = false;
+                    this.$message.success(res.data.message);
+                    this.loadProducts();
+                }).catch(err => {
+                    this.saving = false;
+                    this.$message.error(err.response?.data?.error || '操作失败');
+                });
+            },
+            deleteProduct(row) {
+                this.$confirm(`确定删除产品 "${row.name}" 吗？`, '提示', { type: 'warning' }).then(() => {
+                    axios.post(`/sales/api/product/delete/${row.id}/`, {}, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    }).then(res => {
+                        this.$message.success(res.data.message);
+                        this.loadProducts();
+                    }).catch(err => {
+                        this.$message.error(err.response?.data?.error || '删除失败');
+                    });
+                }).catch(() => {});
+            },
+
+            // ===== 图片管理 =====
+            manageImages(row) {
+                this.currentProductId = row.id;
+                this.currentProductName = row.name;
+                this.uploadData.product_id = row.id;
+                this.loadImages(row.id);
+                this.imageDialogVisible = true;
+            },
+            loadImages(productId) {
+                axios.get(`/sales/api/product/${productId}/images/`).then(res => {
+                    this.productImages = res.data || [];
+                }).catch(() => {
+                    this.productImages = [];
+                });
+            },
+            handleImageUploadSuccess(res, file, fileList) {
+                if (res.success) {
+                    this.$message.success('图片上传成功');
+                    this.loadImages(this.currentProductId);
+                } else {
+                    this.$message.error(res.error || '上传失败');
+                }
+            },
+            handleImageUploadError(err) {
+                let errorMsg = '上传失败';
+                if (err.response && err.response.data && err.response.data.error) {
+                    errorMsg = err.response.data.error;
+                }
+                this.$message.error(errorMsg);
+            },
+            beforeImageUpload(file) {
+                const isImage = file.type.startsWith('image/');
+                const isLt5M = file.size / 1024 / 1024 < 5;
+                if (!isImage) {
+                    this.$message.error('只能上传图片文件');
+                    return false;
+                }
+                if (!isLt5M) {
+                    this.$message.error('图片大小不能超过5MB');
+                    return false;
+                }
+                return true;
+            },
+            setCover(row) {
+                this.$confirm('确定将该图片设为封面吗？', '提示', { type: 'info' }).then(() => {
+                    axios.post(`/sales/api/product/image/set_cover/${row.id}/`, {}, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    }).then(res => {
+                        this.$message.success(res.data.message || '设置封面成功');
+                        this.loadImages(this.currentProductId);
+                    }).catch(err => {
+                        this.$message.error(err.response?.data?.error || '设置封面失败');
+                    });
+                }).catch(() => {});
+            },
+            deleteImage(row) {
+                this.$confirm('确定删除该图片吗？', '提示', { type: 'warning' }).then(() => {
+                    axios.post(`/sales/api/product/image/delete/${row.id}/`, {}, {
+                        headers: { 'X-CSRFToken': this.csrf_token }
+                    }).then(res => {
+                        this.$message.success(res.data.message);
+                        this.loadImages(this.currentProductId);
+                    });
+                }).catch(() => {});
+            },
+
+            // ===== 仓库库存管理 =====
+            manageWarehouse(row) {
+                this.currentProductId = row.id;
+                this.currentProductName = row.name;
+                this.warehouseStock = this.allWarehouses.map(w => ({
+                    warehouse_id: w.id,
+                    warehouse_name: w.name,
+                    warehouse_code: w.warehouse_code,
+                    stock: 0,
+                    min_stock: 0,
+                    max_stock: 0,
+                }));
+                if (this.allWarehouses.length > 0) {
+                    this.loadWarehouseStock(this.currentProductId);
+                }
+                this.warehouseDialogVisible = true;
+            },
+            loadWarehouseStock(productId) {
+                this.allWarehouses.forEach((w, idx) => {
+                    axios.get(`/sales/api/warehouse/${w.id}/products/`).then(res => {
+                        const data = res.data || [];
+                        const found = data.find(item => item.product_id === productId);
+                        if (found) {
+                            this.warehouseStock[idx].stock = found.stock || 0;
+                            this.warehouseStock[idx].min_stock = found.min_stock || 0;
+                            this.warehouseStock[idx].max_stock = found.max_stock || 0;
+                        }
+                    }).catch(() => {});
+                });
+            },
+            saveWarehouseStock(row) {
+                axios.post('/sales/api/warehouse/product/update/', {
+                    product_id: this.currentProductId,
+                    warehouse_id: row.warehouse_id,
+                    stock: row.stock,
+                    min_stock: row.min_stock,
+                    max_stock: row.max_stock,
+                }, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.$message.success(res.data.message || '保存成功');
+                }).catch(err => {
+                    this.$message.error(err.response?.data?.error || '保存失败');
+                });
+            },
+
+            syncStock() {
+                axios.post('/sales/api/sync_stock/', {}, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.$message.success(res.data.message);
+                }).catch(() => {
+                    this.$message.error('同步失败');
+                });
+            },
+            goBack() {
+                window.location.href = '/sales/admin/';
+            },
+            resetForm() {
+                // 重置表单
             }
         }
     });

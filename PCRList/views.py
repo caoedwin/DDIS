@@ -99,6 +99,15 @@ def check_permission(user, compalproject):
 @require_http_methods(["POST"])
 def pcr_list_api(request):
     """获取 PCR 列表（支持时间段筛选，仅包含 execution_start 和 execution_end 均非空的记录）"""
+    # 获取当前用户
+    onlineuser = request.session.get('account')
+    user_info = None
+    if onlineuser:
+        try:
+            user_info = UserInfo.objects.get(account=onlineuser)
+        except UserInfo.DoesNotExist:
+            pass
+    """获取 PCR 列表（支持时间段筛选，仅包含 execution_start 和 execution_end 均非空的记录）"""
     data = json.loads(request.body)
     start_date = data.get('start_date')
     end_date = data.get('end_date')
@@ -133,6 +142,9 @@ def pcr_list_api(request):
 
     data_list = []
     for pcr in page_obj:
+        can_delete = False
+        if user_info:
+            can_delete = check_permission(user_info, pcr.Compalproject)
         data_list.append({
             'id': pcr.id,
             'pcr_no': pcr.pcr_no,
@@ -157,6 +169,7 @@ def pcr_list_api(request):
             'remark': pcr.remark,
             'attachment': "/media/" + pcr.attachment.url if pcr.attachment else '',
             'created_by': pcr.created_by.username if pcr.created_by else '',
+            'can_delete': can_delete,
         })
 
     return JsonResponse({
@@ -387,6 +400,49 @@ def pcr_delete_api(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
 
+@csrf_exempt
+@require_http_methods(["POST"])
+def pcr_batch_delete_api(request):
+    """批量删除 PCR 记录（仅允许有权限的用户删除其有权操作的项目）"""
+    try:
+        onlineuser = request.session.get('account')
+        if not onlineuser:
+            return JsonResponse({'success': False, 'message': '用户未登录'}, status=401)
+        user_info = UserInfo.objects.get(account=onlineuser)
+
+        data = json.loads(request.body)
+        ids = data.get('ids', [])
+        if not ids:
+            return JsonResponse({'success': False, 'message': '未提供ID列表'})
+
+        deleted_count = 0
+        errors = []
+
+        for pk in ids:
+            try:
+                pcr = PCR.objects.get(id=pk)
+                # 权限检查
+                if not check_permission(user_info, pcr.Compalproject):
+                    errors.append(f'ID {pk} 无权限删除')
+                    continue
+                pcr.delete()
+                deleted_count += 1
+            except PCR.DoesNotExist:
+                errors.append(f'ID {pk} 不存在')
+            except Exception as e:
+                errors.append(f'ID {pk} 删除失败: {str(e)}')
+
+        return JsonResponse({
+            'success': True,
+            'deleted_count': deleted_count,
+            'errors': errors
+        })
+    except UserInfo.DoesNotExist:
+        return JsonResponse({'success': False, 'message': '用户信息不存在'}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'message': '请求数据格式错误'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 # ---------- 安全转换函数 ----------
 def safe_float(value):

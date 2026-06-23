@@ -1,21 +1,499 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}支付结果{% endblock %}
+{% block title %}商户支付配置{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/ElementUI.css">
+<style>
+    [v-cloak] { display: none; }
+    .config-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* ----- 页面标题（强化深色模式）----- */
+    body.theme-light h2 {
+        color: #1f2d3d;
+    }
+    body.theme-dark h2 {
+        color: #ffffff !important;
+    }
+
+    /* ----- 卡片样式（跟随主题）----- */
+    .config-card {
+        border-radius: 8px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    /* 浅色模式 */
+    body.theme-light .config-card {
+        background: #ffffff;
+        color: #1f2d3d;
+        border: 1px solid #eef2f6;
+    }
+    body.theme-light .config-card h3 {
+        color: #1f2d3d;
+        border-bottom: 1px solid #EBEEF5;
+        padding-bottom: 12px;
+    }
+    /* 深色模式 */
+    body.theme-dark .config-card {
+        background: #1e2a36;
+        color: #eef2ff;
+        border: 1px solid #4a627a;
+    }
+    body.theme-dark .config-card h3 {
+        color: #eef2ff;
+        border-bottom: 1px solid #4a627a;
+        padding-bottom: 12px;
+    }
+
+    /* ----- 帮助文字 ----- */
+    .help-text {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+    body.theme-light .help-text {
+        color: #909399;
+    }
+    body.theme-dark .help-text {
+        color: #a0b3c9;
+    }
+
+    /* ----- Element UI 深色模式适配（完整）----- */
+    /* 表单标签 */
+    body.theme-dark .el-form-item__label {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-form-item__content {
+        color: #eef2ff !important;
+    }
+
+    /* 输入框、文本域、选择器 */
+    body.theme-dark .el-input__inner,
+    body.theme-dark .el-textarea__inner,
+    body.theme-dark .el-select .el-input__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input__inner::placeholder,
+    body.theme-dark .el-textarea__inner::placeholder {
+        color: #8ea3b9 !important;
+    }
+    body.theme-dark .el-input.is-disabled .el-input__inner {
+        background-color: #1e2a36 !important;
+        color: #8ea3b9 !important;
+        border-color: #3a4a5a !important;
+    }
+    body.theme-dark .el-input.is-disabled .el-input__inner::placeholder {
+        color: #6a7a8a !important;
+    }
+
+    /* 文本域 */
+    body.theme-dark .el-textarea__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+
+    /* 选择器下拉 */
+    body.theme-dark .el-select-dropdown {
+        background-color: #1e2a36 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-select-dropdown__item {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-select-dropdown__item:hover {
+        background-color: #3a5a78 !important;
+    }
+    body.theme-dark .el-select-dropdown__item.selected {
+        background-color: #2c3e50 !important;
+        color: #67c23a !important;
+    }
+
+    /* 按钮 */
+    body.theme-dark .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        border-color: #6a8aab !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--primary {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-button--primary:hover {
+        background-color: #66b1ff !important;
+        border-color: #66b1ff !important;
+    }
+    body.theme-dark .el-button.is-disabled,
+    body.theme-dark .el-button.is-disabled:hover {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #8ea3b9 !important;
+    }
+
+    /* 单选按钮组 */
+    body.theme-dark .el-radio-button__inner {
+        color: #eef2ff !important;
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-radio-button__inner:hover {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+        color: #ffffff !important;
+        box-shadow: -1px 0 0 0 #409EFF;
+    }
+
+    /* 警告框 */
+    body.theme-dark .el-alert {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-alert__title,
+    body.theme-dark .el-alert__description {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-alert--info .el-alert__title {
+        color: #aaccff !important;
+    }
+    body.theme-dark .el-alert--info .el-alert__description {
+        color: #c8d8e8 !important;
+    }
+
+    /* 弹窗（如果有） */
+    body.theme-dark .el-dialog {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__header {
+        background-color: #1e2a36 !important;
+        border-bottom: 1px solid #4a627a !important;
+    }
+    body.theme-dark .el-dialog__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__body {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-dialog__footer {
+        background-color: #1e2a36 !important;
+        border-top: 1px solid #4a627a !important;
+    }
+
+    /* 消息框 */
+    body.theme-dark .el-message-box {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__title {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__content {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__btns .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message-box__btns .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-message-box__btns .el-button--primary {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+        color: #ffffff !important;
+    }
+
+    /* 开关 */
+    body.theme-dark .el-switch__core {
+        background-color: #4a627a !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-switch.is-checked .el-switch__core {
+        background-color: #409EFF !important;
+        border-color: #409EFF !important;
+    }
+
+    /* 通知（toast） */
+    body.theme-dark .el-message {
+        background-color: #1e2a36 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-message__content {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-message--success {
+        background-color: #1e3a2a !important;
+        border-color: #2d6a2d !important;
+    }
+    body.theme-dark .el-message--error {
+        background-color: #3a1e1e !important;
+        border-color: #6a2d2d !important;
+    }
+    body.theme-dark .el-message--warning {
+        background-color: #3a2e1a !important;
+        border-color: #6a5a2d !important;
+    }
+    body.theme-dark .el-message--info {
+        background-color: #1a2a3a !important;
+        border-color: #2a4a6a !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="padding: 50px; text-align: center;">
-    {% if success %}
-        <div style="color: #67C23A; font-size: 48px;">✓</div>
-        <h2 style="color: #67C23A;">支付成功！</h2>
-        <p>订单号：{{ order.order_no }}</p>
-        <p>支付金额：￥{{ order.total_amount }}</p>
-        <p>支付时间：{{ order.paid_at|date:'Y-m-d H:i:s' }}</p>
-        <a href="/sales/" class="btn btn-primary">返回商城</a>
-        <a href="/sales/order/{{ order.order_no }}/" class="btn btn-info">查看订单</a>
-    {% else %}
-        <div style="color: #F56C6C; font-size: 48px;">✗</div>
-        <h2 style="color: #F56C6C;">支付失败</h2>
-        <p>{{ error|default:'支付遇到问题，请稍后重试' }}</p>
-        <a href="/sales/" class="btn btn-primary">返回商城</a>
-    {% endif %}
+<div id="app" v-cloak>
+    <div class="config-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>⚙️ 商户支付配置</h2>
+            <div>
+                <el-button @click="goBack">返回</el-button>
+            </div>
+        </div>
+
+        <el-alert
+            title="配置说明"
+            type="info"
+            description="请根据您使用的支付方式填写对应的配置信息。微信支付和支付宝的配置信息请在对应的商户平台获取。"
+            show-icon
+            style="margin-bottom: 20px;">
+        </el-alert>
+
+        <el-form :model="form" label-width="140px" ref="configForm" @submit.native.prevent="saveConfig">
+            <!-- 基本信息 -->
+            <div class="config-card">
+                <h3>📋 基本信息</h3>
+                <el-form-item label="商户名称" required>
+                    <el-input v-model="form.seller_name" placeholder="请输入商户名称（店铺名称）"></el-input>
+                </el-form-item>
+                <el-form-item label="商户编号">
+                    <el-input v-model="form.seller_code" disabled></el-input>
+                    <div class="help-text">商户编号由系统自动生成，不可修改</div>
+                </el-form-item>
+            </div>
+
+            <!-- 支付方式选择 -->
+            <div class="config-card">
+                <h3>💳 支付方式</h3>
+                <el-form-item label="支付服务商" required>
+                    <el-radio-group v-model="form.payment_provider">
+                        <el-radio-button label="WECHAT">
+                            <i class="el-icon-wechat" style="color:#07C160;"></i> 微信支付
+                        </el-radio-button>
+                        <el-radio-button label="ALIPAY">
+                            <i class="el-icon-alipay" style="color:#1677FF;"></i> 支付宝
+                        </el-radio-button>
+                        <el-radio-button label="BANK">
+                            <i class="el-icon-bank-card"></i> 银行转账
+                        </el-radio-button>
+                    </el-radio-group>
+                    <div class="help-text">选择您使用的支付服务商，系统将根据您的选择展示对应的配置项</div>
+                </el-form-item>
+            </div>
+
+            <!-- 微信支付配置 -->
+            <div class="config-card" v-show="form.payment_provider === 'WECHAT'">
+                <h3>📱 微信支付配置</h3>
+                <el-alert
+                    title="如何获取微信支付配置？"
+                    type="info"
+                    description="登录微信支付商户平台 → 产品中心 → 开发配置，获取 AppID、商户号、API密钥等信息。"
+                    show-icon
+                    style="margin-bottom: 15px;">
+                </el-alert>
+                <el-form-item label="AppID" required>
+                    <el-input v-model="form.wechat_appid" placeholder="请输入微信公众平台 AppID"></el-input>
+                    <div class="help-text">微信公众平台中的 AppID</div>
+                </el-form-item>
+                <el-form-item label="商户号" required>
+                    <el-input v-model="form.wechat_mchid" placeholder="请输入微信支付商户号"></el-input>
+                    <div class="help-text">微信支付商户平台中的商户号</div>
+                </el-form-item>
+                <el-form-item label="API密钥" required>
+                    <el-input v-model="form.wechat_api_key" type="password" placeholder="请输入API密钥" show-password></el-input>
+                    <div class="help-text">微信支付商户平台中的 API 密钥（32位）</div>
+                </el-form-item>
+                <el-form-item label="证书路径">
+                    <el-input v-model="form.wechat_cert_path" placeholder="请输入证书文件路径（可选）"></el-input>
+                    <div class="help-text">如使用证书支付，请填写证书文件路径</div>
+                </el-form-item>
+                <el-form-item label="密钥路径">
+                    <el-input v-model="form.wechat_key_path" placeholder="请输入密钥文件路径（可选）"></el-input>
+                    <div class="help-text">如使用证书支付，请填写密钥文件路径</div>
+                </el-form-item>
+            </div>
+
+            <!-- 支付宝配置 -->
+            <div class="config-card" v-show="form.payment_provider === 'ALIPAY'">
+                <h3>💰 支付宝配置</h3>
+                <el-alert
+                    title="如何获取支付宝配置？"
+                    type="info"
+                    description="登录支付宝开放平台 → 开发者中心 → 网页&移动应用，获取 AppID、公钥、私钥等信息。"
+                    show-icon
+                    style="margin-bottom: 15px;">
+                </el-alert>
+                <el-form-item label="AppID" required>
+                    <el-input v-model="form.alipay_app_id" placeholder="请输入支付宝 AppID"></el-input>
+                    <div class="help-text">支付宝开放平台中的应用 ID</div>
+                </el-form-item>
+                <el-form-item label="应用私钥" required>
+                    <el-input type="textarea" v-model="form.alipay_private_key" :rows="4" placeholder="请输入应用私钥（PEM格式）"></el-input>
+                    <div class="help-text">应用私钥，用于签名</div>
+                </el-form-item>
+                <el-form-item label="支付宝公钥" required>
+                    <el-input type="textarea" v-model="form.alipay_public_key" :rows="4" placeholder="请输入支付宝公钥（PEM格式）"></el-input>
+                    <div class="help-text">支付宝的公钥，用于验证回调签名</div>
+                </el-form-item>
+                <el-form-item label="网关地址">
+                    <el-input v-model="form.alipay_gateway" placeholder="https://openapi.alipay.com/gateway.do"></el-input>
+                    <div class="help-text">支付宝网关地址，一般不需要修改</div>
+                </el-form-item>
+            </div>
+
+            <!-- 银行转账配置 -->
+            <div class="config-card" v-show="form.payment_provider === 'BANK'">
+                <h3>🏦 银行转账配置</h3>
+                <el-alert
+                    title="银行转账说明"
+                    type="info"
+                    description="用户将通过银行转账方式付款，您需要提供以下银行账户信息，用户付款后需要人工对账确认。"
+                    show-icon
+                    style="margin-bottom: 15px;">
+                </el-alert>
+                <el-form-item label="银行名称" required>
+                    <el-input v-model="form.bank_name" placeholder="请输入银行名称，如：中国工商银行"></el-input>
+                </el-form-item>
+                <el-form-item label="开户名" required>
+                    <el-input v-model="form.bank_account_name" placeholder="请输入开户名（公司全称或个人姓名）"></el-input>
+                </el-form-item>
+                <el-form-item label="银行卡号" required>
+                    <el-input v-model="form.bank_account_number" placeholder="请输入银行卡号"></el-input>
+                </el-form-item>
+                <el-form-item label="开户行">
+                    <el-input v-model="form.bank_branch" placeholder="请输入开户行支行名称（可选）"></el-input>
+                </el-form-item>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div style="text-align: center; margin-top: 30px;">
+                <el-button type="primary" size="large" @click="saveConfig" :loading="saving" style="width: 200px;">
+                    保存配置
+                </el-button>
+            </div>
+        </el-form>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/Element/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            form: {
+                id: null,
+                seller_name: '',
+                seller_code: '',
+                payment_provider: 'WECHAT',
+                wechat_appid: '',
+                wechat_mchid: '',
+                wechat_api_key: '',
+                wechat_cert_path: '',
+                wechat_key_path: '',
+                alipay_app_id: '',
+                alipay_private_key: '',
+                alipay_public_key: '',
+                alipay_gateway: 'https://openapi.alipay.com/gateway.do',
+                bank_name: '',
+                bank_account_name: '',
+                bank_account_number: '',
+                bank_branch: '',
+            },
+            saving: false,
+            csrf_token: '{{ csrf_token }}',
+        },
+        mounted() {
+            this.loadConfig();
+        },
+        methods: {
+            loadConfig() {
+                axios.get('/sales/api/seller_config/get/').then(res => {
+                    this.form = res.data;
+                }).catch(() => {
+                    this.$message.error('加载配置失败，请刷新重试');
+                });
+            },
+            saveConfig() {
+                // 验证必填字段
+                if (!this.form.seller_name) {
+                    this.$message.warning('请填写商户名称');
+                    return;
+                }
+
+                const provider = this.form.payment_provider;
+                if (provider === 'WECHAT') {
+                    if (!this.form.wechat_appid || !this.form.wechat_mchid || !this.form.wechat_api_key) {
+                        this.$message.warning('请填写完整的微信支付配置');
+                        return;
+                    }
+                } else if (provider === 'ALIPAY') {
+                    if (!this.form.alipay_app_id || !this.form.alipay_private_key || !this.form.alipay_public_key) {
+                        this.$message.warning('请填写完整的支付宝配置');
+                        return;
+                    }
+                } else if (provider === 'BANK') {
+                    if (!this.form.bank_name || !this.form.bank_account_name || !this.form.bank_account_number) {
+                        this.$message.warning('请填写完整的银行转账配置');
+                        return;
+                    }
+                }
+
+                this.saving = true;
+                axios.post('/sales/api/seller_config/save/', this.form, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.saving = false;
+                    if (res.data.success) {
+                        this.$message.success(res.data.message);
+                        this.loadConfig();
+                    } else {
+                        this.$message.error(res.data.error || '保存失败');
+                    }
+                }).catch(err => {
+                    this.saving = false;
+                    this.$message.error(err.response?.data?.error || '保存失败，请重试');
+                });
+            },
+            goBack() {
+                window.history.back();
+            }
+        }
+    });
+</script>
 {% endblock %}

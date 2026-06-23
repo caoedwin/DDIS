@@ -709,6 +709,27 @@
         color: #eef2ff !important;
         background-color: #2c3e50 !important;
     }
+    /* ----- 深色模式：图表切换按钮（el-radio-button）适配 ----- */
+    /* 未选中状态：深色背景 + 亮色文字 */
+    body.theme-dark .el-radio-button__inner {
+        color: #eef2ff !important;
+        background-color: #2c3e50 !important;      /* 深色背景 */
+        border-color: #4a627a !important;          /* 深色边框 */
+    }
+    
+    /* 鼠标悬停未选中状态：稍微亮一点 */
+    body.theme-dark .el-radio-button__inner:hover {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+    
+    /* 选中状态：保持 Element UI 默认蓝色，也可自定义 */
+    body.theme-dark .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+        background-color: #409EFF !important;      /* 蓝色 */
+        border-color: #409EFF !important;
+        color: #ffffff !important;
+        box-shadow: -1px 0 0 0 #409EFF;            /* 去掉默认阴影，或保持 */
+    }
 </style>
 <body class="sidebar-collapse pace-done theme-light">
     <!-- 侧边栏、头部等原有内容... (保持不变，仅增加主题切换按钮) -->

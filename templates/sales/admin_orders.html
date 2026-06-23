@@ -1,143 +1,337 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}管理员后台{% endblock %}
+{% block title %}订单管理 - 管理员{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="/static/css/ElementUI.css">
 <style>
     [v-cloak] { display: none; }
-    .dashboard-card {
-        text-align: center;
-        padding: 30px;
-        cursor: pointer;
-        transition: all 0.3s;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    .search-bar { margin-bottom: 20px; }
+    .status-tag { font-size: 12px; }
+
+    /* ----- 页面标题 ----- */
+    body.theme-light h2 {
+        color: #1f2d3d;
     }
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    body.theme-dark h2 {
+        color: #eef2ff;
     }
-    .dashboard-card .icon {
-        font-size: 48px;
-        margin-bottom: 10px;
+
+    /* ----- Element UI 深色模式适配 ----- */
+    body.theme-dark .el-dialog {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
     }
-    .dashboard-card .title {
-        font-size: 16px;
-        color: #333;
+    body.theme-dark .el-dialog__header {
+        background-color: #1e2a36 !important;
+        border-bottom: 1px solid #4a627a !important;
     }
-    .dashboard-card .count {
-        font-size: 28px;
-        font-weight: bold;
-        color: #409EFF;
-        margin-top: 10px;
+    body.theme-dark .el-dialog__title {
+        color: #eef2ff !important;
     }
-    .stat-card {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        margin-bottom: 20px;
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close {
+        color: #eef2ff !important;
     }
-    .stat-card .label {
-        font-size: 14px;
-        color: #909399;
+    body.theme-dark .el-dialog__headerbtn .el-dialog__close:hover {
+        color: #ffffff !important;
     }
-    .stat-card .value {
-        font-size: 32px;
-        font-weight: bold;
-        color: #333;
+    body.theme-dark .el-dialog__body {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
     }
-    .stat-card .value.primary { color: #409EFF; }
-    .stat-card .value.success { color: #67C23A; }
-    .stat-card .value.warning { color: #E6A23C; }
-    .stat-card .value.danger { color: #F56C6C; }
+    body.theme-dark .el-dialog__footer {
+        background-color: #1e2a36 !important;
+        border-top: 1px solid #4a627a !important;
+    }
+
+    body.theme-dark .el-descriptions {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-descriptions__body,
+    body.theme-dark .el-descriptions-item__label,
+    body.theme-dark .el-descriptions-item__content {
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+
+    body.theme-dark .el-divider {
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-divider__text {
+        color: #eef2ff !important;
+        background-color: #1e2a36 !important;
+    }
+
+    body.theme-dark .el-form-item__label {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-form-item__content {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-tag {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-table {
+        background-color: #1a2a3a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table__body tr,
+    body.theme-dark .el-table__body td {
+        background-color: #1e2a36 !important;
+        color: #eef2ff !important;
+        border-bottom-color: #3e5568 !important;
+    }
+    body.theme-dark .el-table--striped .el-table__body tr.el-table__row--striped td {
+        background-color: #2a3a48 !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-table__body tr:hover > td {
+        background-color: #3a5a78 !important;
+        color: #ffffff !important;
+    }
+    body.theme-dark .el-table__header th,
+    body.theme-dark .el-table thead tr th {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-bottom-color: #4a627a !important;
+    }
+
+    body.theme-dark .el-pagination__total,
+    body.theme-dark .el-pagination__jump,
+    body.theme-dark .el-pagination__editor,
+    body.theme-dark .el-pagination__sizes .el-select .el-input__inner {
+        color: #eef2ff !important;
+    }
+
+    body.theme-dark .el-select-dropdown {
+        background-color: #1e2a36 !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-select-dropdown__item {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-select-dropdown__item:hover {
+        background-color: #3a5a78 !important;
+    }
+    body.theme-dark .el-select-dropdown__item.selected {
+        background-color: #2c3e50 !important;
+        color: #67c23a !important;
+    }
+
+    body.theme-dark .el-input__inner,
+    body.theme-dark .el-textarea__inner,
+    body.theme-dark .el-select .el-input__inner {
+        background-color: #2c3e50 !important;
+        color: #eef2ff !important;
+        border-color: #4a627a !important;
+    }
+    body.theme-dark .el-input__inner::placeholder,
+    body.theme-dark .el-textarea__inner::placeholder {
+        color: #8ea3b9 !important;
+    }
+
+    body.theme-dark .el-button--default {
+        background-color: #2c3e50 !important;
+        border-color: #4a627a !important;
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-button--default:hover {
+        background-color: #3a5a78 !important;
+        border-color: #6a8aab !important;
+        color: #ffffff !important;
+    }
+
+    body.theme-dark .el-timeline-item__content {
+        color: #eef2ff !important;
+    }
+    body.theme-dark .el-timeline-item__timestamp {
+        color: #a0b3c9 !important;
+    }
 </style>
 {% endblock %}
+
 {% block content %}
 <div id="app" v-cloak>
     <div style="padding: 20px;">
-        <h2>📊 管理后台</h2>
-        
-        <!-- 统计卡片 -->
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总产品数</div>
-                    <div class="value primary">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">总订单数</div>
-                    <div class="value success">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待处理订单</div>
-                    <div class="value warning">${ stats.pending_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="stat-card">
-                    <div class="label">待审核评价</div>
-                    <div class="value danger">${ stats.pending_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>📋 订单管理</h2>
+            <div>
+                <el-button @click="goBack">返回后台</el-button>
+            </div>
+        </div>
 
-        <!-- 功能卡片 -->
-        <el-row :gutter="20" style="margin-top: 30px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/products/')">
-                    <div class="icon">📦</div>
-                    <div class="title">产品管理</div>
-                    <div class="count">${ stats.total_products }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/warehouses/')">
-                    <div class="icon">🏠</div>
-                    <div class="title">仓库管理</div>
-                    <div class="count">${ stats.total_warehouses }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/orders/')">
-                    <div class="icon">📋</div>
-                    <div class="title">订单管理</div>
-                    <div class="count">${ stats.total_orders }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/reviews/')">
-                    <div class="icon">⭐</div>
-                    <div class="title">评价管理</div>
-                    <div class="count">${ stats.total_reviews }</div>
-                </div>
-            </el-col>
-        </el-row>
-        
-        <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/admin/feedbacks/')">
-                    <div class="icon">💬</div>
-                    <div class="title">反馈管理</div>
-                    <div class="count">${ stats.total_feedbacks }</div>
-                </div>
-            </el-col>
-            <el-col :span="6">
-                <div class="dashboard-card" @click="goTo('/sales/')">
-                    <div class="icon">🏪</div>
-                    <div class="title">前台商城</div>
-                    <div class="count">前往查看</div>
-                </div>
-            </el-col>
-        </el-row>
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <el-input v-model="searchKeyword" placeholder="搜索订单号、用户、产品、收货人" style="width: 250px; margin-right: 10px;" @keyup.enter="loadOrders">
+                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <el-select v-model="searchStatus" placeholder="订单状态" clearable style="width: 150px; margin-right: 10px;">
+                <el-option label="待支付" value="PENDING"></el-option>
+                <el-option label="支付中" value="PAYING"></el-option>
+                <el-option label="已支付" value="PAID"></el-option>
+                <el-option label="已发货" value="SHIPPED"></el-option>
+                <el-option label="已送达" value="DELIVERED"></el-option>
+                <el-option label="已完成" value="COMPLETED"></el-option>
+                <el-option label="已取消" value="CANCELLED"></el-option>
+                <el-option label="退款中" value="REFUNDING"></el-option>
+                <el-option label="已退款" value="REFUNDED"></el-option>
+            </el-select>
+            <el-button type="primary" @click="loadOrders">搜索</el-button>
+            <el-button @click="resetSearch">重置</el-button>
+        </div>
+
+        <!-- 订单列表 -->
+        <el-table :data="orders" border stripe v-loading="loading" style="width: 100%">
+            <el-table-column prop="order_no" label="订单号" width="180" fixed="left"></el-table-column>
+            <el-table-column prop="user_name" label="用户" width="120"></el-table-column>
+            <el-table-column prop="product_name" label="商品" width="150"></el-table-column>
+            <el-table-column prop="quantity" label="数量" width="80"></el-table-column>
+            <el-table-column prop="total_amount" label="总金额" width="120">
+                <template slot-scope="scope">￥${ scope.row.total_amount }</template>
+            </el-table-column>
+            <el-table-column prop="payment_method" label="支付方式" width="100"></el-table-column>
+            <el-table-column prop="status_display" label="状态" width="100">
+                <template slot-scope="scope">
+                    <el-tag :type="getStatusType(scope.row.status)" size="small">
+                        ${ scope.row.status_display }
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="receiver_name" label="收货人" width="100"></el-table-column>
+            <el-table-column prop="receiver_phone" label="收货电话" width="130"></el-table-column>
+            <el-table-column prop="logistics_company" label="物流公司" width="120"></el-table-column>
+            <el-table-column prop="logistics_no" label="物流单号" width="150"></el-table-column>
+            <el-table-column prop="created_at" label="创建时间" width="160"></el-table-column>
+            <el-table-column label="操作" width="220" fixed="right">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="viewOrderDetail(scope.row)">详情</el-button>
+                    <el-button type="text" size="small" @click="updateLogistics(scope.row)">物流</el-button>
+                    <el-button type="text" size="small" @click="updateStatus(scope.row)">状态</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin-top:20px; text-align:right;">
+        </el-pagination>
     </div>
+
+    <!-- 订单详情弹窗 -->
+    <el-dialog title="订单详情" :visible.sync="detailDialogVisible" width="800px">
+        <div v-if="currentOrder">
+            <el-descriptions border :column="2">
+                <el-descriptions-item label="订单号">${ currentOrder.order_no }</el-descriptions-item>
+                <el-descriptions-item label="用户">${ currentOrder.user_name }</el-descriptions-item>
+                <el-descriptions-item label="商品">${ currentOrder.product_name }</el-descriptions-item>
+                <el-descriptions-item label="数量">${ currentOrder.quantity }</el-descriptions-item>
+                <el-descriptions-item label="总金额">￥${ currentOrder.total_amount }</el-descriptions-item>
+                <el-descriptions-item label="支付方式">${ currentOrder.payment_method }</el-descriptions-item>
+                <el-descriptions-item label="状态">
+                    <el-tag :type="getStatusType(currentOrder.status)">${ currentOrder.status_display }</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item label="创建时间">${ currentOrder.created_at }</el-descriptions-item>
+                <el-descriptions-item label="支付时间">${ currentOrder.paid_at || '未支付' }</el-descriptions-item>
+                <el-descriptions-item label="发货时间">${ currentOrder.shipped_at || '未发货' }</el-descriptions-item>
+                <el-descriptions-item label="送达时间">${ currentOrder.delivered_at || '未送达' }</el-descriptions-item>
+            </el-descriptions>
+
+            <el-divider>收货信息</el-divider>
+            <el-descriptions border :column="2">
+                <el-descriptions-item label="收货人">${ currentOrder.receiver_name || '未填写' }</el-descriptions-item>
+                <el-descriptions-item label="收货电话">${ currentOrder.receiver_phone || '未填写' }</el-descriptions-item>
+                <el-descriptions-item label="收货地址" :span="2">${ currentOrder.receiver_address || '未填写' }</el-descriptions-item>
+            </el-descriptions>
+
+            <el-divider>物流信息</el-divider>
+            <el-descriptions border :column="2">
+                <el-descriptions-item label="物流公司">${ currentOrder.logistics_company || '未填写' }</el-descriptions-item>
+                <el-descriptions-item label="物流单号">${ currentOrder.logistics_no || '未填写' }</el-descriptions-item>
+                <el-descriptions-item label="物流状态" :span="2">${ currentOrder.logistics_status || '未填写' }</el-descriptions-item>
+            </el-descriptions>
+
+            <!-- 物流追踪 -->
+            <div v-if="logisticsTracks.length > 0" style="margin-top: 15px;">
+                <h4>物流追踪</h4>
+                <el-timeline>
+                    <el-timeline-item
+                        v-for="(track, idx) in logisticsTracks"
+                        :key="idx"
+                        :timestamp="track.track_time"
+                        placement="top"
+                        :type="idx === 0 ? 'primary' : ''">
+                        ${ track.content }
+                        <div style="font-size:12px;color:#999;">${ track.location }</div>
+                    </el-timeline-item>
+                </el-timeline>
+            </div>
+        </div>
+        <span slot="footer">
+            <el-button @click="detailDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 更新物流弹窗 -->
+    <el-dialog title="更新物流信息" :visible.sync="logisticsDialogVisible" width="500px">
+        <el-form :model="logisticsForm" label-width="100px">
+            <el-form-item label="物流公司">
+                <el-input v-model="logisticsForm.logistics_company" placeholder="请输入物流公司"></el-input>
+            </el-form-item>
+            <el-form-item label="物流单号">
+                <el-input v-model="logisticsForm.logistics_no" placeholder="请输入物流单号"></el-input>
+            </el-form-item>
+            <el-form-item label="物流状态">
+                <el-select v-model="logisticsForm.logistics_status" style="width:100%">
+                    <el-option label="待发货" value="待发货"></el-option>
+                    <el-option label="已发货" value="已发货"></el-option>
+                    <el-option label="运输中" value="运输中"></el-option>
+                    <el-option label="派送中" value="派送中"></el-option>
+                    <el-option label="已签收" value="已签收"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="logisticsDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="saveLogistics" :loading="logisticsSaving">保存</el-button>
+        </span>
+    </el-dialog>
+
+    <!-- 更新状态弹窗 -->
+    <el-dialog title="更新订单状态" :visible.sync="statusDialogVisible" width="450px">
+        <el-form label-width="100px">
+            <el-form-item label="当前状态">
+                <el-tag :type="getStatusType(currentOrderForStatus?.status)">${ currentOrderForStatus?.status_display }</el-tag>
+            </el-form-item>
+            <el-form-item label="新状态">
+                <el-select v-model="newStatus" placeholder="请选择新状态" style="width:100%">
+                    <el-option label="待支付" value="PENDING"></el-option>
+                    <el-option label="支付中" value="PAYING"></el-option>
+                    <el-option label="已支付" value="PAID"></el-option>
+                    <el-option label="已发货" value="SHIPPED"></el-option>
+                    <el-option label="已送达" value="DELIVERED"></el-option>
+                    <el-option label="已完成" value="COMPLETED"></el-option>
+                    <el-option label="已取消" value="CANCELLED"></el-option>
+                    <el-option label="退款中" value="REFUNDING"></el-option>
+                    <el-option label="已退款" value="REFUNDED"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="statusDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="saveStatus" :loading="statusSaving">确认更新</el-button>
+        </span>
+    </el-dialog>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/Element/index.js"></script>
@@ -147,34 +341,155 @@
         el: '#app',
         delimiters: ['${', '}'],
         data: {
-            stats: {
-                total_products: 0,
-                total_orders: 0,
-                pending_orders: 0,
-                pending_reviews: 0,
-                total_warehouses: 0,
-                total_reviews: 0,
-                total_feedbacks: 0,
-            }
+            orders: [],
+            loading: false,
+            currentPage: 1,
+            pageSize: 20,
+            total: 0,
+            searchKeyword: '',
+            searchStatus: '',
+
+            detailDialogVisible: false,
+            currentOrder: null,
+            logisticsTracks: [],
+
+            logisticsDialogVisible: false,
+            logisticsForm: {
+                order_no: '',
+                logistics_company: '',
+                logistics_no: '',
+                logistics_status: '',
+            },
+            logisticsSaving: false,
+
+            statusDialogVisible: false,
+            currentOrderForStatus: null,
+            newStatus: '',
+            statusSaving: false,
+
+            csrf_token: '{{ csrf_token }}',
         },
         mounted() {
-            this.loadStats();
+            this.loadOrders();
         },
         methods: {
-            loadStats() {
-                axios.get('/sales/api/products/?page=1&page_size=1').then(res => {
-                    this.stats.total_products = res.data.total || 0;
+            loadOrders() {
+                this.loading = true;
+                axios.get('/sales/api/orders/', {
+                    params: {
+                        search: this.searchKeyword,
+                        status: this.searchStatus,
+                        page: this.currentPage,
+                        page_size: this.pageSize
+                    }
+                }).then(res => {
+                    this.orders = res.data.orders || [];
+                    this.total = res.data.total || 0;
+                    this.loading = false;
+                }).catch(() => {
+                    this.loading = false;
+                    this.$message.error('加载订单失败');
                 });
-                axios.get('/sales/api/orders/?page=1&page_size=1').then(res => {
-                    this.stats.total_orders = res.data.total || 0;
-                });
-                axios.get('/sales/api/warehouses/').then(res => {
-                    this.stats.total_warehouses = res.data.length || 0;
-                });
-                // 其他统计需要额外API
             },
-            goTo(url) {
-                window.location.href = url;
+            resetSearch() {
+                this.searchKeyword = '';
+                this.searchStatus = '';
+                this.loadOrders();
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.loadOrders();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.loadOrders();
+            },
+            getStatusType(status) {
+                const map = {
+                    'PENDING': 'warning',
+                    'PAYING': 'warning',
+                    'PAID': 'success',
+                    'SHIPPED': 'primary',
+                    'DELIVERED': 'success',
+                    'COMPLETED': 'success',
+                    'CANCELLED': 'danger',
+                    'REFUNDING': 'warning',
+                    'REFUNDED': 'info',
+                };
+                return map[status] || 'info';
+            },
+
+            viewOrderDetail(row) {
+                this.currentOrder = row;
+                this.detailDialogVisible = true;
+                // 加载物流追踪
+                axios.get(`/sales/api/order/${row.order_no}/logistics/`).then(res => {
+                    this.logisticsTracks = res.data.tracks || [];
+                }).catch(() => {
+                    this.logisticsTracks = [];
+                });
+            },
+
+            updateLogistics(row) {
+                this.logisticsForm = {
+                    order_no: row.order_no,
+                    logistics_company: row.logistics_company || '',
+                    logistics_no: row.logistics_no || '',
+                    logistics_status: row.logistics_status || '',
+                };
+                this.logisticsDialogVisible = true;
+            },
+            saveLogistics() {
+                if (!this.logisticsForm.logistics_company || !this.logisticsForm.logistics_no) {
+                    this.$message.warning('请填写物流公司和物流单号');
+                    return;
+                }
+                this.logisticsSaving = true;
+                axios.post(`/sales/api/order/${this.logisticsForm.order_no}/update_logistics/`, {
+                    logistics_company: this.logisticsForm.logistics_company,
+                    logistics_no: this.logisticsForm.logistics_no,
+                    logistics_status: this.logisticsForm.logistics_status,
+                }, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.logisticsSaving = false;
+                    this.logisticsDialogVisible = false;
+                    this.$message.success(res.data.message);
+                    this.loadOrders();
+                }).catch(err => {
+                    this.logisticsSaving = false;
+                    this.$message.error(err.response?.data?.error || '操作失败');
+                });
+            },
+
+            updateStatus(row) {
+                this.currentOrderForStatus = row;
+                this.newStatus = row.status;
+                this.statusDialogVisible = true;
+            },
+            saveStatus() {
+                if (!this.newStatus) {
+                    this.$message.warning('请选择新状态');
+                    return;
+                }
+                this.statusSaving = true;
+                axios.post(`/sales/api/order/update_status/${this.currentOrderForStatus.order_no}/`, {
+                    status: this.newStatus
+                }, {
+                    headers: { 'X-CSRFToken': this.csrf_token }
+                }).then(res => {
+                    this.statusSaving = false;
+                    this.statusDialogVisible = false;
+                    this.$message.success(res.data.message);
+                    this.loadOrders();
+                }).catch(err => {
+                    this.statusSaving = false;
+                    this.$message.error(err.response?.data?.error || '操作失败');
+                });
+            },
+
+            goBack() {
+                window.location.href = '/sales/admin/';
             }
         }
     });

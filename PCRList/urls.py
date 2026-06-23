@@ -15,4 +15,5 @@ urlpatterns = [
     path('api/update/', views.pcr_update_api, name='pcr_update_api'),
     path('api/delete/', views.pcr_delete_api, name='pcr_delete_api'),
     path('api/upload_excel/', views.pcr_upload_excel_api, name='pcr_upload_excel_api'),
+    path('api/batch_delete/', views.pcr_batch_delete_api, name='pcr_batch_delete_api'),
 ]

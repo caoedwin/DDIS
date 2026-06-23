@@ -216,6 +216,7 @@ INSTALLED_APPS = [
     'UElist',
     'PCRList',
     'Sustain',
+    'sales',
 ]
 
 MIDDLEWARE = [
@@ -483,8 +484,8 @@ STATICFILES_DIRS = (
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_ROOT = 'c:\media'
-MEDIA_URL = 'c:/media/'
+MEDIA_ROOT = r'c:/media'  # 使用原始字符串，避免转义问题
+MEDIA_URL = '/media/'     # URL 必须以 / 开头
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 即项目路径下的media文件夹，没有则自动创建
 MEDIAFILES_DIRS = (
     os.path.join(BASE_DIR, 'media'),
@@ -616,3 +617,20 @@ CELERY_BEAT_SCHEDULE = {
         # 'args': ()
     }
 }
+
+# Redis 业务配置（用于库存预扣、分布式锁、幂等缓存）
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_PASSWORD = 'DCT2019'   # 与 channel 层一致
+REDIS_DB_BUSINESS = 3        # 使用独立的 db，不与 celery/channels 冲突
+
+## 可选：配置 Django 缓存后端（方便统一管理）
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'django_redis.cache.RedisCache',
+#        'LOCATION': f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB_BUSINESS}',
+#        'OPTIONS': {
+#            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#        }
+#    }
+#}
