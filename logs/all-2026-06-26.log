@@ -380,3 +380,12 @@ TypeError: Object of type date is not JSON serializable
 [2026-06-26 09:58:49,714] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /A31LessonLProject/Lesson_SearchByProject/?action=search&customer=A31&csrfmiddlewaretoken=uz40q4asohMc7AboD9ftxyAJWXMXJc17jYHt2ztCfed1gIO32NAzvKeyaKOuDtYv 200 [0.30, 127.0.0.1:64905]
 [2026-06-26 09:58:55,849] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-06-26 09:58:55: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/A31LessonLProject/Lesson_SearchByProject/'>
 [2026-06-26 09:58:55,869] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /A31LessonLProject/Lesson_SearchByProject/ 200 [0.15, 127.0.0.1:64905]
+[2026-06-26 10:35:07,199] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-06-26 10:35:07: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/'>
+[2026-06-26 10:35:07,278] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET / 200 [0.60, 127.0.0.1:60776]
+[2026-06-26 10:35:07,443] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:57852]
+[2026-06-26 10:35:07,547] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-06-26 10:35:07: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PermInfo/'>
+[2026-06-26 10:35:07,553] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:57852]
+[2026-06-26 10:35:07,563] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PermInfo/ 200 [0.03, 127.0.0.1:60776]
+[2026-06-26 10:35:07,621] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-06-26 10:35:07: C1010S3/edwin/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-06-26 10:35:07,720] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.15, 127.0.0.1:60776]
+[2026-06-26 10:35:08,350] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:57852]

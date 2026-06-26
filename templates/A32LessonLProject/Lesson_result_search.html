@@ -470,6 +470,10 @@
                     this.tableData = res.data['content'].sort(this.sortFun("Category",  'ascending'));//用sort-change方法对分页后台排序时，默认排序列;
                     {#this.choose = false;#}
                     this.tableloading2=false;
+                    // 新增：重新布局
+                    this.$nextTick(() => {
+                      this.$refs.multipleTable.doLayout();
+                    });
            })
       },
       //取消查找
@@ -543,7 +547,7 @@
           //生成出行号、列号、结果的集合
           {#console.log(typeof (row.project), row.project)#}
          let resultArr = row.project.map((res,index) => {
-             let colIndex = 9+2*index;
+             let colIndex = 10+2*index;
              return { result : res.result,index:colIndex,row:rowIndex} })
           for(let item in resultArr){
               //判断当前扫描的列数 和 result所在的列数
@@ -572,6 +576,16 @@
                this.customerError = false;
            }
        },
+        tableData: {
+            handler() {
+              this.$nextTick(() => {
+                if (this.$refs.multipleTable) {
+                  this.$refs.multipleTable.doLayout();
+                }
+              });
+            },
+            deep: true // 如果数据内部有变更也可触发
+          },
     },
   })
 </script>
