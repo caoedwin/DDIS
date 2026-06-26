@@ -648,6 +648,10 @@ p a{
               </template>
 
           </el-table-column>
+          <el-table-column width="120" label="StartDate" prop="start_date"></el-table-column>
+            <el-table-column width="120" label="EndDate" prop="end_date"></el-table-column>
+            <el-table-column width="120" label="已有设备ID" prop="existing_device_id"></el-table-column>
+            <el-table-column width="120" label="新增设备需求" prop="new_device_requirement"></el-table-column>
           <!--需編輯-->
           <el-table-column width="120" prop="starttime" >
               <template slot="header" slot-scope="scope">
@@ -798,6 +802,17 @@ p a{
                   </el-tooltip>
               </template>
           </el-table-column>{% comment %}#New{% endcomment %}
+          <el-table-column width="120" label="TC Category" prop="tc_category"></el-table-column>
+            <el-table-column width="120" label="FeatureReady1" prop="feature_ready_1"></el-table-column>
+            <el-table-column width="100" label="EE" prop="ee"></el-table-column>
+            <el-table-column width="120" label="Item1" prop="item_1"></el-table-column>
+            <el-table-column width="120" label="FeatureReady2" prop="feature_ready_2"></el-table-column>
+            <el-table-column width="100" label="BIOS" prop="bios"></el-table-column>
+            <el-table-column width="120" label="Item2" prop="item_2"></el-table-column>
+            <el-table-column width="120" label="FeatureReady3" prop="feature_ready_3"></el-table-column>
+            <el-table-column width="100" label="SA" prop="sa"></el-table-column>
+            <el-table-column width="120" label="Item3" prop="item_3"></el-table-column>
+            <el-table-column width="120" label="FeatureReady4" prop="feature_ready_4"></el-table-column>
 
       </el-table>
 

@@ -8,11 +8,37 @@ from app01.models import UserInfo, ProjectinfoinDCT
 import datetime,json,simplejson
 from django.db.models import Max,Min,Sum,Count,Q
 from django.views.decorators.csrf import csrf_exempt
+from django.core.serializers.json import DjangoJSONEncoder
 
 # phase list 需要与TestPlanSW额edit, search里面的phaseName一样,斌且需要是C38和AIO的phase的并集， Summary里的coloroder需要添加ui应的颜色
 phase_list = [
     "A(EVT)", "EVT Regression1", "EVT Regression2", "EVT Regression3", "EVT Regression4", "EVT Regression5", "EVT Regression6", "B(FVT)", "B(SDV)", 'FVT Regression1', 'FVT Regression2', 'FVT Regression3', 'FVT Regression4', 'FVT Regression5', 'FVT Regression6', 'FVT Regression7', 'FVT Regression8', "C(SIT)", "SIT2", 'SIT Regression1', 'SIT Regression2', 'SIT Regression3', 'SIT Regression4', 'SIT Regression5', 'SIT Regression6', 'SIT Regression7', 'SIT Regression8', "EELP+", 'GSKU', "Wave","Wave2","Wave3","Wave4","Wave5","OOC","OOC2","OOC3","OOC4","OOC5","OOC6","FFRT","FFRT2","FFRT3","FFRT4","FFRT5","FFRT6","Others", 'Downgrade','SIT_U9','U9_FFRT','U9_FFRT2','U9_FFRT3','GSKU_FFRT','GSKU_FFRT2','GSKU_FFRT3','DG_FFRT','DG_FFRT2','DG_FFRT3',
 ]
+
+SW_NEW_FIELDS_MAP = {
+    'StartDate': 'start_date',
+    'EndDate': 'end_date',
+    '已有设备ID': 'existing_device_id',
+    '新增设备需求': 'new_device_requirement',
+    'TC Category': 'tc_category',
+    'Feature Ready1': 'feature_ready_1',
+    'EE': 'ee',
+    'Item1': 'item_1',
+    'Feature Ready2': 'feature_ready_2',
+    'BIOS': 'bios',
+    'Item2': 'item_2',
+    'Feature Ready3': 'feature_ready_3',
+    'SA': 'sa',
+    'Item3': 'item_3',
+    'Feature Ready4': 'feature_ready_4',
+}
+
+AIO_NEW_FIELDS_MAP = {
+    'StartDate': 'start_date',
+    'EndDate': 'end_date',
+    '已有设备ID': 'existing_device_id',
+    '新增设备需求': 'new_device_requirement',
+}
 
 # Create your views here.
 def TestPlanSW_summary(request):
@@ -1730,7 +1756,7 @@ def TestPlanSW_summary(request):
             'canExport': canExport,
         }
         # print(data)
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
     return render(request, 'TestPlanSW/TestPlanSW_Summary.html', locals())
 
 def TestPlanSW_Edit(request):
@@ -2509,7 +2535,7 @@ def TestPlanSW_Edit(request):
             updateData = {
                 "MockData": title,
             }
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
         # elif request.GET.get("action") == "search":
         #     # if request.GET.get("customer") == "C38(NB)":
         #         Customer = request.GET.get('customer')
@@ -2584,7 +2610,7 @@ def TestPlanSW_Edit(request):
         #             "selectMsg": combine,
         #             "canEdit": canEdit
         #         }
-        #         return HttpResponse(json.dumps(updateData), content_type="application/json")
+        #         return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
 
         elif request.GET.get("action") == "getContent":
             Customer = request.GET.get('customer')
@@ -2729,7 +2755,22 @@ def TestPlanSW_Edit(request):
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS':i.BaseTimeSupport,'TFC':i.TimewConfigFollowmatrix,'conAtime':i.ConfigAutomationTime,'conLtime':i.ConfigLeverageTime,
-                                'conSitemInAll':i.ConfigSmartItemPer,'conStime':i.ConfigSmartTime,'proTS':i.ProjectTestSKUOptimize,'ATO':i.AttendTimeOptimize
+                                'conSitemInAll':i.ConfigSmartItemPer,'conStime':i.ConfigSmartTime,'proTS':i.ProjectTestSKUOptimize,'ATO':i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
                     # print(newContents)
             else:
@@ -2802,7 +2843,22 @@ def TestPlanSW_Edit(request):
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
                                 'conSitemInAll': i.ConfigSmartItemPer, 'CST': i.ConfigSmartTime,
-                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize
+                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
                     # print(newContents)
                     # print(x)
@@ -2813,7 +2869,7 @@ def TestPlanSW_Edit(request):
                 "canEdit": canEdit
             }
             # print(updateData)
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
             # if request.GET.get("contents") == "Basic":
             #     return HttpResponse(json.dumps(newContents), content_type="application/json")
             # if request.GET.get("contents") == "Interaction":
@@ -2973,7 +3029,22 @@ def TestPlanSW_Edit(request):
                                 'Remark': i.Remark, # New
                                 # no need edit
                                 'BTS':i.BaseTimeSupport,'TFC':i.TimewConfigFollowmatrix,'conAtime':i.ConfigAutomationTime,'conLtime':i.ConfigLeverageTime,
-                                'conSitemInAll':i.ConfigSmartItemPer,'conStime':i.ConfigSmartTime,'proTS':i.ProjectTestSKUOptimize,'ATO':i.AttendTimeOptimize
+                                'conSitemInAll':i.ConfigSmartItemPer,'conStime':i.ConfigSmartTime,'proTS':i.ProjectTestSKUOptimize,'ATO':i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
                     # print(newContents)
             else:
@@ -3046,7 +3117,22 @@ def TestPlanSW_Edit(request):
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
                                 'conSitemInAll': i.ConfigSmartItemPer, 'CST': i.ConfigSmartTime,
-                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize
+                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
                     # print(newContents)
                     # print(x)
@@ -3057,7 +3143,7 @@ def TestPlanSW_Edit(request):
                 "canEdit": canEdit
             }
             # print(updateData)
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
             # if request.GET.get("contents") == "Basic":
             #     return HttpResponse(json.dumps(newContents), content_type="application/json")
             # if request.GET.get("contents") == "Interaction":
@@ -3175,8 +3261,58 @@ def TestPlanSW_Edit(request):
                 updatedate['Attention'] = request.POST.get('Attention')
             if 'Remark' in request.POST.keys():#new
                 updatedate['Remark'] = request.POST.get('Remark')
+
+            # 在 updatedate 中添加
+            if 'start_date' in request.POST.keys():
+                updatedate['start_date'] = request.POST.get('start_date')
+            if 'end_date' in request.POST.keys():
+                updatedate['end_date'] = request.POST.get('end_date')
+            if 'existing_device_id' in request.POST.keys():
+                updatedate['existing_device_id'] = request.POST.get('existing_device_id')
+            if 'new_device_requirement' in request.POST.keys():
+                updatedate['new_device_requirement'] = request.POST.get('new_device_requirement')
+            if 'tc_category' in request.POST.keys():
+                updatedate['tc_category'] = request.POST.get('tc_category')
+            if 'feature_ready_1' in request.POST.keys():
+                updatedate['feature_ready_1'] = request.POST.get('feature_ready_1')
+            if 'ee' in request.POST.keys():
+                updatedate['ee'] = request.POST.get('ee')
+            if 'item_1' in request.POST.keys():
+                updatedate['item_1'] = request.POST.get('item_1')
+            if 'feature_ready_2' in request.POST.keys():
+                updatedate['feature_ready_2'] = request.POST.get('feature_ready_2')
+            if 'bios' in request.POST.keys():
+                updatedate['bios'] = request.POST.get('bios')
+            if 'item_2' in request.POST.keys():
+                updatedate['item_2'] = request.POST.get('item_2')
+            if 'feature_ready_3' in request.POST.keys():
+                updatedate['feature_ready_3'] = request.POST.get('feature_ready_3')
+            if 'sa' in request.POST.keys():
+                updatedate['sa'] = request.POST.get('sa')
+            if 'item_3' in request.POST.keys():
+                updatedate['item_3'] = request.POST.get('item_3')
+            if 'feature_ready_4' in request.POST.keys():
+                updatedate['feature_ready_4'] = request.POST.get('feature_ready_4')
+
             updatedate['editor'] = request.session.get('user_name')
             updatedate['edit_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            # ========== 在 updatedate 字典构建完成后，添加新字段 ==========
+            # 新增字段（前端会以同名参数提交，字段名与模型一致）
+            new_field_names_sw = [
+                'start_date', 'end_date', 'existing_device_id', 'new_device_requirement',
+                'tc_category', 'feature_ready_1', 'ee', 'item_1',
+                'feature_ready_2', 'bios', 'item_2',
+                'feature_ready_3', 'sa', 'item_3',
+                'feature_ready_4'
+            ]
+            for field in new_field_names_sw:
+                if field in request.POST:
+                    value = request.POST.get(field)
+                    if field in ['start_date', 'end_date']:
+                        updatedate[field] = value if value else None
+                    else:
+                        updatedate[field] = value
 
             if 'planOptimize' in request.POST.keys():
                 # print('ppp')
@@ -3334,6 +3470,23 @@ def TestPlanSW_Edit(request):
                     k+=1
                 adddic['editor'] = request.session.get('user_name')
                 adddic['edit_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                # ========== 在 adddic 字典构建完成后，SKU 处理之后，添加新字段 ==========
+                # 新增字段
+                new_field_names_sw = [
+                    'start_date', 'end_date', 'existing_device_id', 'new_device_requirement',
+                    'tc_category', 'feature_ready_1', 'ee', 'item_1',
+                    'feature_ready_2', 'bios', 'item_2',
+                    'feature_ready_3', 'sa', 'item_3',
+                    'feature_ready_4'
+                ]
+                for field in new_field_names_sw:
+                    if field in request.POST:
+                        value = request.POST.get(field)
+                        if field in ['start_date', 'end_date']:
+                            adddic[field] = value if value else None
+                        else:
+                            adddic[field] = value
                 # print(adddic)
                 # print(updatedic)
                 # for m in updatedic:
@@ -3630,6 +3783,13 @@ def TestPlanSW_Edit(request):
                                         editplan.Remark = i['Remark']
                                     editplan.editor = request.session.get('user_name')
                                     editplan.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                    for excel_key, model_field in SW_NEW_FIELDS_MAP.items():
+                                        if excel_key in i.keys():
+                                            value = i[excel_key]
+                                            if model_field in ['start_date', 'end_date']:
+                                                setattr(editplan, model_field, value if value else None)
+                                            else:
+                                                setattr(editplan, model_field, value)
                                     editplan.save()
                                 #create
                                 else:
@@ -3897,6 +4057,14 @@ def TestPlanSW_Edit(request):
                                     updatedic["Attention"] = i.get('Attention', '')
                                     if 'Remark' in i.keys():# New
                                         updatedic["Remark"] = i['Remark']
+                                    # ========== 在 updatedic 字典构建完成后，添加新字段（来自 Excel） ==========
+                                    for excel_key, model_field in SW_NEW_FIELDS_MAP.items():
+                                        if excel_key in i.keys():
+                                            value = i[excel_key]
+                                            if model_field in ['start_date', 'end_date']:
+                                                updatedic[model_field] = value if value else None
+                                            else:
+                                                updatedic[model_field] = value
 
 
                                     # print(updatedic)
@@ -4199,6 +4367,14 @@ def TestPlanSW_Edit(request):
                                         editplan.Remark = i['Remark']
                                     editplan.editor = request.session.get('user_name')
                                     editplan.edit_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                    # ========== 在 editplan 对象设置其他属性后，添加新字段 ==========
+                                    for excel_key, model_field in SW_NEW_FIELDS_MAP.items():
+                                        if excel_key in i.keys():
+                                            value = i[excel_key]
+                                            if model_field in ['start_date', 'end_date']:
+                                                setattr(editplan, model_field, value if value else None)
+                                            else:
+                                                setattr(editplan, model_field, value)
                                     editplan.save()
                             else:#create
 
@@ -4472,6 +4648,15 @@ def TestPlanSW_Edit(request):
                                 updatedic["Attention"] = i.get('Attention', '')
                                 if 'Remark' in i.keys():  # New
                                     updatedic["Remark"] = i['Remark']
+
+                                # ========== 在 updatedic 字典构建完成后，添加新字段（来自 Excel） ==========
+                                for excel_key, model_field in SW_NEW_FIELDS_MAP.items():
+                                    if excel_key in i.keys():
+                                        value = i[excel_key]
+                                        if model_field in ['start_date', 'end_date']:
+                                            updatedic[model_field] = value if value else None
+                                        else:
+                                            updatedic[model_field] = value
 
                                 # print(updatedic)
                                 # for m in updatedic:
@@ -5220,7 +5405,7 @@ def TestPlanSW_search(request):
             updateData = {
                 "MockData": title,
             }
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
         # elif request.GET.get("action") == "search":
         #     # if request.GET.get("customer") == "C38(NB)":
         #     Customer = request.GET.get('customer')
@@ -5277,7 +5462,7 @@ def TestPlanSW_search(request):
         #         "selectMsg": combine,
         #         # "canEdit": canEdit
         #     }
-        #     return HttpResponse(json.dumps(updateData), content_type="application/json")
+        #     return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
         elif request.GET.get("action") == "getContent":#qishi mokeddata已经不要了，放到POST里面获取了，点击
             Customer = request.GET.get('customer')
             Project = request.GET.get('project')
@@ -5617,7 +5802,22 @@ def TestPlanSW_search(request):
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'conAtime': i.ConfigAutomationTime, 'conLtime': i.ConfigLeverageTime,
                                 'conSitemInAll': i.ConfigSmartItem, 'conStime': i.ConfigSmartTime,
-                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize
+                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
                         # basetimeSum += i.BaseTime
                         # unattendtimeSum += i.TDMSUnattendedTime
@@ -5737,7 +5937,22 @@ def TestPlanSW_search(request):
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
                                 'conSitemInAll': i.ConfigSmartItemPer, 'CST': i.ConfigSmartTime,
-                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize
+                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
 
                     Sums['basetimeSum'] = TestPlanSW.objects.filter(**dicPlan).aggregate(Sum('BaseTime'))[
@@ -5787,7 +6002,7 @@ def TestPlanSW_search(request):
                 "skuSHU": skuSHU,
             }
             # print(updateData)
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
             # if request.GET.get("contents") == "Basic":
             #     return HttpResponse(json.dumps(newContents), content_type="application/json")
             # if request.GET.get("contents") == "Interaction":
@@ -5911,7 +6126,22 @@ def TestPlanSW_search(request):
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'conAtime': i.ConfigAutomationTime, 'conLtime': i.ConfigLeverageTime,
                                 'conSitemInAll': i.ConfigSmartItemPer, 'conStime': i.ConfigSmartTime,
-                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize
+                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize,
+                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
 
             else:
@@ -5987,7 +6217,22 @@ def TestPlanSW_search(request):
                                 'BTS': i.BaseTimeSupport, 'TFC': i.TimewConfigFollowmatrix,
                                 'CAT': i.ConfigAutomationTime, 'CLT': i.ConfigLeverageTime,
                                 'conSitemInAll': i.ConfigSmartItemPer, 'CST': i.ConfigSmartTime,
-                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize
+                                'proTS': i.ProjectTestSKUOptimize, 'ATO': i.AttendTimeOptimize,
+                                                                'start_date': i.start_date,
+                                'end_date': i.end_date,
+                                'existing_device_id': i.existing_device_id,
+                                'new_device_requirement': i.new_device_requirement,
+                                'tc_category': i.tc_category,
+                                'feature_ready_1': i.feature_ready_1,
+                                'ee': i.ee,
+                                'item_1': i.item_1,
+                                'feature_ready_2': i.feature_ready_2,
+                                'bios': i.bios,
+                                'item_2': i.item_2,
+                                'feature_ready_3': i.feature_ready_3,
+                                'sa': i.sa,
+                                'item_3': i.item_3,
+                                'feature_ready_4': i.feature_ready_4,
                             })
         if request.POST.get("isGetData") == "searchalert":
             Customer = request.POST.get("Customer")
@@ -6456,7 +6701,7 @@ def TestPlanSW_search(request):
             'canExport': canExport,
         }
         # print(data)
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
 
 
     return render(request, 'TestPlanSW/TestPlanSW_search.html', locals())
@@ -7307,7 +7552,7 @@ def TestPlanSW_Edit_AIO(request):
             updateData = {
                 "MockData": title,
             }
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
         # elif request.GET.get("action") == "search":
         #     # if request.GET.get("customer") == "C38(NB)":
         #         Customer = request.GET.get('customer')
@@ -7382,7 +7627,7 @@ def TestPlanSW_Edit_AIO(request):
         #             "selectMsg": combine,
         #             "canEdit": canEdit
         #         }
-        #         return HttpResponse(json.dumps(updateData), content_type="application/json")
+        #         return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
 
         elif request.GET.get("action") == "getContent":
             Customer = request.GET.get('customer')
@@ -7469,7 +7714,12 @@ def TestPlanSW_Edit_AIO(request):
                          "conSitemInAll": i.ConfigSmartItemper,
                          "CST": i.ConfigSmarttime, "comments": i.Comments, "proTS": i.ProjecttestSKUOptimize, "ATO": i.AttendtimeOptimize,
                          "planOptimize": planOptimize,
-                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime},)
+                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime,
+                         'start_date': i.start_date,
+                         'end_date': i.end_date,
+                         'existing_device_id': i.existing_device_id,
+                         'new_device_requirement': i.new_device_requirement,
+                         },)
                 # print(newContents)
                 # print(x)
         # print(newContents)
@@ -7478,8 +7728,8 @@ def TestPlanSW_Edit_AIO(request):
                 "SKU": SKU,
                 "canEdit": canEdit
             }
-            # print(updateData)
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            #print(updateData)
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
             # if request.GET.get("contents") == "Basic":
             #     return HttpResponse(json.dumps(newContents), content_type="application/json")
             # if request.GET.get("contents") == "Interaction":
@@ -7579,7 +7829,12 @@ def TestPlanSW_Edit_AIO(request):
                          "conSitemInAll": i.ConfigSmartItemper,
                          "CST": i.ConfigSmarttime, "comments": i.Comments, "proTS": i.ProjecttestSKUOptimize, "ATO": i.AttendtimeOptimize,
                          "planOptimize": planOptimize,
-                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime},)
+                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime,
+                         'start_date': i.start_date,
+                         'end_date': i.end_date,
+                         'existing_device_id': i.existing_device_id,
+                         'new_device_requirement': i.new_device_requirement,
+                         },)
                 # print(newContents)
                 # print(x)
         # print(newContents)
@@ -7589,7 +7844,7 @@ def TestPlanSW_Edit_AIO(request):
                 "canEdit": canEdit
             }
             # print(updateData)
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
             # if request.GET.get("contents") == "Basic":
             #     return HttpResponse(json.dumps(newContents), content_type="application/json")
             # if request.GET.get("contents") == "Interaction":
@@ -7611,7 +7866,7 @@ def TestPlanSW_Edit_AIO(request):
                 # "SKU": SKU,
                 # "editResult": 1,
             }
-            return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
         if request.POST.get('action')=='edit':
             # print(request.POST)
             updatedate = {
@@ -7669,12 +7924,40 @@ def TestPlanSW_Edit_AIO(request):
                 updatedate['ConfigRetesttime'] = request.POST.get('CRT')
             if 'conSitemInAll' in request.POST.keys():
                 updatedate['ConfigSmartItemper'] = request.POST.get('conSitemInAll')
+
+            if 'start_date' in request.POST.keys():
+                updatedate['start_date'] = request.POST.get('start_date')
+            if 'end_date' in request.POST.keys():
+                updatedate['end_date'] = request.POST.get('end_date')
+            if 'existing_device_id' in request.POST.keys():
+                updatedate['existing_device_id'] = request.POST.get('existing_device_id')
+            if 'new_device_requirement' in request.POST.keys():
+                updatedate['new_device_requirement'] = request.POST.get('new_device_requirement')
+
             updatedate['editor'] = request.session.get('user_name')
             updatedate['edit_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if 'start_date' in request.POST.keys():
+                updatedate['start_date'] = request.POST.get('start_date') if request.POST.get('start_date') else None
+            if 'end_date' in request.POST.keys():
+                updatedate['end_date'] = request.POST.get('end_date') if request.POST.get('end_date') else None
+            # 其他两个字符字段直接赋值
+            if 'existing_device_id' in request.POST.keys():
+                updatedate['existing_device_id'] = request.POST.get('existing_device_id')
+            if 'new_device_requirement' in request.POST.keys():
+                updatedate['new_device_requirement'] = request.POST.get('new_device_requirement')
             if 'planOptimize' in request.POST.keys():
                 # print('ppp')
                 planOptimize = request.POST.getlist('planOptimize',[])
             # print(planOptimize,'111')
+            if 'start_date' in request.POST.keys():
+                updatedate['start_date'] = request.POST.get('start_date') if request.POST.get('start_date') else None
+            if 'end_date' in request.POST.keys():
+                updatedate['end_date'] = request.POST.get('end_date') if request.POST.get('end_date') else None
+            # 其他两个字符字段直接赋值
+            if 'existing_device_id' in request.POST.keys():
+                updatedate['existing_device_id'] = request.POST.get('existing_device_id')
+            if 'new_device_requirement' in request.POST.keys():
+                updatedate['new_device_requirement'] = request.POST.get('new_device_requirement')
 
             Projectinfos = TestProjectSWAIO.objects.filter(**dic_Project).first()
             # print(dic_Project)
@@ -7750,7 +8033,7 @@ def TestPlanSW_Edit_AIO(request):
                             for m in keywords:
                                 if m in i.keys():
                                     # print(m == 'Weight')
-                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                    if m in ['start_date', 'end_date', 'Weight', 'BaseTimeWeight']:
                                         # print(m)
                                         if i[m]:
                                             updatedic[m] = i[m]
@@ -7759,7 +8042,7 @@ def TestPlanSW_Edit_AIO(request):
                                     else:
                                         updatedic[m] = i[m]
                                 else:
-                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                    if m in ['start_date', 'end_date', 'Weight', 'BaseTimeWeight']:
                                         updatedic[m] = None
                                     else:
                                         updatedic[m] = ""
@@ -7768,6 +8051,13 @@ def TestPlanSW_Edit_AIO(request):
                             #     print(TestPlanSWAIO.objects.filter(**check_dic_inplan))
                             updatedic["editor"] = request.session.get('user_name')
                             updatedic["edit_time"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            for excel_key, model_field in AIO_NEW_FIELDS_MAP.items():
+                                if excel_key in i.keys():
+                                    value = i[excel_key]
+                                    if model_field in ['start_date', 'end_date']:
+                                        updatedic[model_field] = value if value else None
+                                    else:
+                                        updatedic[model_field] = value
                             TestPlanSWAIO.objects.filter(**check_dic_inplan).update(**updatedic)
                         else:#create
 
@@ -7788,7 +8078,7 @@ def TestPlanSW_Edit_AIO(request):
                                 # print(m,m in i.keys())
                                 if m in i.keys():
                                     # print(m == 'Weight')
-                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                    if m in ['start_date', 'end_date', 'Weight', 'BaseTimeWeight']:
                                         # print(m)
                                         if i[m]:
                                             updatedic[m] = i[m]
@@ -7797,13 +8087,20 @@ def TestPlanSW_Edit_AIO(request):
                                     else:
                                         updatedic[m] = i[m]
                                 else:
-                                    if m == 'Weight' or m == 'BaseTimeWeight':
+                                    if m in ['start_date', 'end_date', 'Weight', 'BaseTimeWeight']:
                                         updatedic[m] = None
                                     else:
                                         updatedic[m] = ""
                                 # if j =='DQMS_AttendTime':
                                 #     print(i[j])
-                            # print("C", updatedic)
+                            for excel_key, model_field in AIO_NEW_FIELDS_MAP.items():
+                                if excel_key in i.keys():
+                                    value = i[excel_key]
+                                    if model_field in ['start_date', 'end_date']:
+                                        updatedic[model_field] = value if value else None
+                                    else:
+                                        updatedic[model_field] = value
+                            #print("C", updatedic)
                             TestPlanSWAIO.objects.create(**updatedic)
 
             Phase = responseData['phase']
@@ -7884,7 +8181,12 @@ def TestPlanSW_Edit_AIO(request):
                          "CST": i.ConfigSmarttime, "comments": i.Comments, "proTS": i.ProjecttestSKUOptimize,
                          "ATO": i.AttendtimeOptimize,
                          "planOptimize": planOptimize,
-                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime}, )
+                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime,
+                         'start_date': i.start_date,
+                         'end_date': i.end_date,
+                         'existing_device_id': i.existing_device_id,
+                         'new_device_requirement': i.new_device_requirement,
+                         }, )
                 # print(newContents)
                 # print(x)
             updateData = {
@@ -7895,7 +8197,7 @@ def TestPlanSW_Edit_AIO(request):
                 "canEdit": canEdit,
             }
             # print(updateData)
-            return HttpResponse(json.dumps(updateData), content_type="application/json")
+            return HttpResponse(json.dumps(updateData, cls=DjangoJSONEncoder), content_type="application/json")
         #update
     return render(request, 'TestPlanSW/TestPlanSW_edit_AIO.html', locals())
 #TestPlan_ME search
@@ -8169,7 +8471,7 @@ def TestPlanSW_search_AIO(request):
                 "rdchangelist": rdchangelist,
                 "canExport": canExport,
             }
-            return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
     if request.method == "POST":
         if request.POST.get("isGetData") == "first":
             selectItem
@@ -8508,7 +8810,12 @@ def TestPlanSW_search_AIO(request):
                          "CST": i.ConfigSmarttime, "comments": i.Comments, "proTS": i.ProjecttestSKUOptimize,
                          "ATO": i.AttendtimeOptimize,
                          "planOptimize": planOptimize,
-                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime}, )
+                         "CRC": i.ConfigRetestCycle, "CRS": i.ConfigRetestSKU, "CRT": i.ConfigRetesttime,
+                         'start_date': i.start_date,
+                         'end_date': i.end_date,
+                         'existing_device_id': i.existing_device_id,
+                         'new_device_requirement': i.new_device_requirement,
+                         }, )
         data = {
             "content": newContents,
             "SKU": SKU,
@@ -8521,7 +8828,7 @@ def TestPlanSW_search_AIO(request):
             "rdchangelist": rdchangelist,
         }
         # print(data)
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
 
 
     return render(request, 'TestPlanSW/TestPlanSW_search_AIO.html', locals())

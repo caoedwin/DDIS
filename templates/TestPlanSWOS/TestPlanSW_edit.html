@@ -606,6 +606,42 @@
                <span v-else="scope.row.isSet && (canEdit)">${ scope.row.schedule }</span>
                 </template>
       </el-table-column>
+      <!-- 新增列：StartDate -->
+      <el-table-column width="120" label="StartDate" prop="start_date">
+          <template slot-scope="scope">
+              <div v-if="scope.row.isSet && canEdit">
+                  <el-date-picker v-model="startDate[scope.$index + (currentPage-1)*pagesize]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+              </div>
+              <span v-else>${ scope.row.start_date }</span>
+          </template>
+      </el-table-column>
+      <!-- EndDate -->
+      <el-table-column width="120" label="EndDate" prop="end_date">
+          <template slot-scope="scope">
+              <div v-if="scope.row.isSet && canEdit">
+                  <el-date-picker v-model="endDate[scope.$index + (currentPage-1)*pagesize]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+              </div>
+              <span v-else>${ scope.row.end_date }</span>
+          </template>
+      </el-table-column>
+      <!-- 已有设备ID -->
+      <el-table-column width="120" label="已有设备ID" prop="existing_device_id">
+          <template slot-scope="scope">
+              <div v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="existingDeviceId[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.existing_device_id }</span>
+          </template>
+      </el-table-column>
+      <!-- 新增设备需求 -->
+      <el-table-column width="120" label="新增设备需求" prop="new_device_requirement">
+          <template slot-scope="scope">
+              <div v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="newDeviceRequirement[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.new_device_requirement }</span>
+          </template>
+      </el-table-column>
       <!--需編輯-->
       <el-table-column width="120"  >
           <template slot="header" slot-scope="scope">
@@ -827,20 +863,95 @@
               </div>
                <span v-else="scope.row.isSet && canEdit">${ scope.row.CRT }</span>
                 </template>
-      </el-table-column>'
-      <!--需編輯-->
-      <el-table-column width="180"  label="Remark">
-          <template slot="header" slot-scope="scope" >
-              <el-tooltip content="Remark" placement="top" effect="light" class="headerStyle" popper-class="tooltipsFont">
-                  <span><i class="el-icon-info"></i>Remark</span>
-              </el-tooltip>
+      </el-table-column>
+      <!-- 新增列：Remark之后，修改之前 -->
+      <el-table-column width="120" label="TC Category" prop="tc_category">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="tcCategory[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.tc_category }</span>
           </template>
-
-           <template scope="scope">
-                <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit"><input placeholder="請輸入內容" type="text"  v-model.lazy="Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}]"  class="el-input__inner"><span @click="clear(Remark, scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %})" :class="{'clearShow':Remark[scope.$index + (currentPage-1)*pagesize{% comment %}+scrollArray[0]{% endcomment %}] !== ''}" class="inputClear"><i class="el-icon-circle-close"></i></span>
-                </div>
-               <span v-else="scope.row.isSet && (canEdit)">${ scope.row.Remark }</span>
-                </template>{% comment %}#New{% endcomment %}
+      </el-table-column>
+      <el-table-column width="120" label="Feature ready1" prop="feature_ready_1">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="featureReady1[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.feature_ready_1 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="EE" prop="ee">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="ee[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.ee }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="Item1" prop="item_1">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="item1[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.item_1 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="Feature ready2" prop="feature_ready_2">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="featureReady2[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.feature_ready_2 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="BIOS" prop="bios">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="bios[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.bios }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="Item2" prop="item_2">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="item2[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.item_2 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="Feature ready3" prop="feature_ready_3">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="featureReady3[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.feature_ready_3 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="SA" prop="sa">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="sa[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.sa }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="Item3" prop="item_3">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="item3[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.item_3 }</span>
+          </template>
+      </el-table-column>
+      <el-table-column width="120" label="Feature ready4" prop="feature_ready_4">
+          <template slot-scope="scope">
+              <div class="el-input el-input--suffix" v-if="scope.row.isSet && canEdit">
+                  <input type="text" v-model="featureReady4[scope.$index + (currentPage-1)*pagesize]" class="el-input__inner">
+              </div>
+              <span v-else>${ scope.row.feature_ready_4 }</span>
+          </template>
       </el-table-column>
       <el-table-column width="120" label="修改" fixed="right">
           <template slot-scope="scope">
@@ -1229,6 +1340,22 @@
         CRT:[],
         proTS:[],
         ATO:[],
+        // 新增字段数组
+        startDate: [],
+        endDate: [],
+        existingDeviceId: [],
+        newDeviceRequirement: [],
+        tcCategory: [],
+        featureReady1: [],
+        ee: [],
+        item1: [],
+        featureReady2: [],
+        bios: [],
+        item2: [],
+        featureReady3: [],
+        sa: [],
+        item3: [],
+        featureReady4: [],
         //分頁變量
         currentPage:1,
         pagesize:100,
@@ -1430,6 +1557,22 @@
         this.proTS=[];
         this.ATO=[];
         this.Remark=[];
+        // 新增字段清空
+        this.startDate = [];
+        this.endDate = [];
+        this.existingDeviceId = [];
+        this.newDeviceRequirement = [];
+        this.tcCategory = [];
+        this.featureReady1 = [];
+        this.ee = [];
+        this.item1 = [];
+        this.featureReady2 = [];
+        this.bios = [];
+        this.item2 = [];
+        this.featureReady3 = [];
+        this.sa = [];
+        this.item3 = [];
+        this.featureReady4 = [];
         for(let i = 0,length=this.planOptimize.length;i<length;i++){
             this.planOptimize[i]=[];
         }
@@ -1462,6 +1605,22 @@
           Vue.set(this.CRT,index,row.CRT);
           Vue.set(this.Remark,index,row.Remark);
           Vue.set(this.conSitemInAll,index,row.conSitemInAll);
+          // 新增字段赋值
+          Vue.set(this.startDate, index, row.start_date);
+          Vue.set(this.endDate, index, row.end_date);
+          Vue.set(this.existingDeviceId, index, row.existing_device_id);
+          Vue.set(this.newDeviceRequirement, index, row.new_device_requirement);
+          Vue.set(this.tcCategory, index, row.tc_category);
+          Vue.set(this.featureReady1, index, row.feature_ready_1);
+          Vue.set(this.ee, index, row.ee);
+          Vue.set(this.item1, index, row.item_1);
+          Vue.set(this.featureReady2, index, row.feature_ready_2);
+          Vue.set(this.bios, index, row.bios);
+          Vue.set(this.item2, index, row.item_2);
+          Vue.set(this.featureReady3, index, row.feature_ready_3);
+          Vue.set(this.sa, index, row.sa);
+          Vue.set(this.item3, index, row.item_3);
+          Vue.set(this.featureReady4, index, row.feature_ready_4);
           Vue.set(this.planOptimize,index,[]);
           for(let i = 0 , length = row.planOptimize.length;i<length;i++){
               console.log(this.planOptimize[index]);
@@ -1556,6 +1715,22 @@
           if(this.Remark[index] !== row.Remark){
               changeFlag =1;
           }
+          // 新增字段变更检测
+          if (this.startDate[index] !== row.start_date) changeFlag = 1;
+          if (this.endDate[index] !== row.end_date) changeFlag = 1;
+          if (this.existingDeviceId[index] !== row.existing_device_id) changeFlag = 1;
+          if (this.newDeviceRequirement[index] !== row.new_device_requirement) changeFlag = 1;
+          if (this.tcCategory[index] !== row.tc_category) changeFlag = 1;
+          if (this.featureReady1[index] !== row.feature_ready_1) changeFlag = 1;
+          if (this.ee[index] !== row.ee) changeFlag = 1;
+          if (this.item1[index] !== row.item_1) changeFlag = 1;
+          if (this.featureReady2[index] !== row.feature_ready_2) changeFlag = 1;
+          if (this.bios[index] !== row.bios) changeFlag = 1;
+          if (this.item2[index] !== row.item_2) changeFlag = 1;
+          if (this.featureReady3[index] !== row.feature_ready_3) changeFlag = 1;
+          if (this.sa[index] !== row.sa) changeFlag = 1;
+          if (this.item3[index] !== row.item_3) changeFlag = 1;
+          if (this.featureReady4[index] !== row.feature_ready_4) changeFlag = 1;
           for(let i = 0 , length =this.planOptimize[index].length;i<length;i++){
               console.log("planOptimize",this.planOptimize[index][i],row.planOptimize[i]);
               if(this.planOptimize[index][i] !== row.planOptimize[i]){
@@ -1566,7 +1741,23 @@
               alert("輸入值未發生改變");
               return false;
           }else{
-              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index],'Remark':this.Remark[index]}
+              let result =  {'action':'edit','customer':this.showCustomer,'project':this.showProject,'phase':this.showPhase,'category':this.showCategory,'ID':row.id,'FS':this.FS[index],'BTS':this.BTS[index],'TFC':this.TFC[index],'starttime':this.starttime[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'TE':this.TE[index],'schedule':this.schedule[index],'conAitem':this.conAitem[index],'conLitem':this.conLitem[index],'conSitem':this.conSitem[index],'CAT':this.CAT[index],'CLT':this.CLT[index],'CST':this.CST[index],'proTS':this.proTS[index],'ATO':this.ATO[index],'planOptimize':this.planOptimize[index],'RemarkforFeatureWeightadjust':this.RemarkforFeatureWeightadjust[index],'comments1':this.comments1[index],'comments2':this.comments2[index],'CRC':this.CRC[index],'CRS':this.CRS[index],'CRT':this.CRT[index],'conSitemInAll':this.conSitemInAll[index],'Remark':this.Remark[index],
+                  'start_date': this.startDate[index],
+                  'end_date': this.endDate[index],
+                  'existing_device_id': this.existingDeviceId[index],
+                  'new_device_requirement': this.newDeviceRequirement[index],
+                  'tc_category': this.tcCategory[index],
+                  'feature_ready_1': this.featureReady1[index],
+                  'ee': this.ee[index],
+                  'item_1': this.item1[index],
+                  'feature_ready_2': this.featureReady2[index],
+                  'bios': this.bios[index],
+                  'item_2': this.item2[index],
+                  'feature_ready_3': this.featureReady3[index],
+                  'sa': this.sa[index],
+                  'item_3': this.item3[index],
+                  'feature_ready_4': this.featureReady4[index]
+              }
               axios.post("/TestPlanSWOS/TestPlanSWOS-edit/" ,Qs.stringify(result, {indices:false}),{
                     headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                 }).then((res) => {
@@ -1597,6 +1788,22 @@
                          row.proTS = this.proTS[index] ;
                          row.ATO = this.ATO[index] ;
                          row.conSitemInAll = this.conSitemInAll[index] ;
+                         // 更新新增字段
+                         row.start_date = this.startDate[index];
+                         row.end_date = this.endDate[index];
+                         row.existing_device_id = this.existingDeviceId[index];
+                         row.new_device_requirement = this.newDeviceRequirement[index];
+                         row.tc_category = this.tcCategory[index];
+                         row.feature_ready_1 = this.featureReady1[index];
+                         row.ee = this.ee[index];
+                         row.item_1 = this.item1[index];
+                         row.feature_ready_2 = this.featureReady2[index];
+                         row.bios = this.bios[index];
+                         row.item_2 = this.item2[index];
+                         row.feature_ready_3 = this.featureReady3[index];
+                         row.sa = this.sa[index];
+                         row.item_3 = this.item3[index];
+                         row.feature_ready_4 = this.featureReady4[index];
                          for(let i = 0,length = this.planOptimize[index].length;i<length;i++){
                              row.planOptimize[i] = this.planOptimize[index][i];
                          }
@@ -2179,7 +2386,7 @@
       },
       fetchCategoryList() {
             if (this.customer !== '' && this.project !== '' && this.phase !== '') {
-                axios.get("/TestPlanSW/TestPlanSW-edit/?action=getCategory&customer=" +
+                axios.get("/TestPlanSWOS/TestPlanSWOS-edit/?action=getCategory&customer=" +
                           this.customer + "&project=" + this.project + "&phase=" + this.phase, {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',

@@ -603,6 +603,10 @@ p a{
               </el-tooltip>
           </template>
       </el-table-column>
+      <el-table-column width="120" label="StartDate" prop="start_date"></el-table-column>
+        <el-table-column width="120" label="EndDate" prop="end_date"></el-table-column>
+        <el-table-column width="120" label="已有设备ID" prop="existing_device_id"></el-table-column>
+        <el-table-column width="120" label="新增设备需求" prop="new_device_requirement"></el-table-column>
       <!--需編輯-->
       <el-table-column width="120" prop="NUMX" >
           <template slot="header" slot-scope="scope">
@@ -861,7 +865,7 @@ p a{
           }
         },
         created(){
-        axios.get("/TestPlanSW/TestPlanSW-search-AIO/?action=first" ,{
+        axios.get("/TestPlanSWOS/TestPlanSWOS-search-AIO/?action=first" ,{
                     headers:{ 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','X-CSRFToken':$("[name='csrfmiddlewaretoken']").val()} //改变头格式，原生默认上传json格式
                 }).then((res) => {
                     this.selectMsg=res.data;

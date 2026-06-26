@@ -335,6 +335,10 @@ class TestPlanSW(models.Model):
         null=True, default='')  # New
     TE=models.CharField('TE',max_length=30, blank=True, null=True, default='')
     Schedule=models.CharField('Schedule',max_length=40, blank=True, null=True, default='')
+    start_date = models.DateField('StartDate', blank=True, null=True)
+    end_date = models.DateField('EndDate', blank=True, null=True)
+    existing_device_id = models.CharField('已有设备ID', max_length=100, blank=True, null=True)
+    new_device_requirement = models.CharField('新增设备需求', max_length=200, blank=True, null=True)
     ProjectTestSKUfollowMatrix=models.FloatField('Project test SKU-follow matrix', max_length=10, blank=True, null=True,)
     TimewConfigFollowmatrix=models.FloatField('Time w/ Config-follow matrix', max_length=20, blank=True, null=True,)
     ConfigAutomationItem=models.CharField('Config-Automation Item',choices=ChoiceYN,max_length=5, blank=True, null=True, default='')
@@ -394,6 +398,19 @@ class TestPlanSW(models.Model):
     # 在 TestPlanSW 类中添加
     Attention = models.TextField('Attention', blank=True, null=True, default='')
     Remark = models.CharField('Remark', max_length=3500, blank=True, null=True, default='')# New
+
+    tc_category = models.CharField('TC Category', max_length=100, blank=True, null=True)
+    feature_ready_1 = models.CharField('Feature ready', max_length=10, blank=True, null=True)  # 对应第一个Feature ready
+    ee = models.CharField('EE', max_length=100, blank=True, null=True)
+    item_1 = models.CharField('Item', max_length=200, blank=True, null=True)
+    feature_ready_2 = models.CharField('Feature ready', max_length=10, blank=True, null=True)
+    bios = models.CharField('BIOS', max_length=100, blank=True, null=True)
+    item_2 = models.CharField('Item', max_length=200, blank=True, null=True)
+    feature_ready_3 = models.CharField('Feature ready', max_length=10, blank=True, null=True)
+    sa = models.CharField('SA', max_length=100, blank=True, null=True)
+    item_3 = models.CharField('Item', max_length=200, blank=True, null=True)
+    feature_ready_4 = models.CharField('Feature ready', max_length=10, blank=True, null=True)
+
     editor = models.CharField('editor',max_length=100, blank=True, null=True, default='')
     edit_time = models.CharField('edit_time', max_length=26, blank=True, null=True, default='')
     class Meta:
@@ -556,6 +573,11 @@ class RetestItemSW(models.Model):
         null=True, default='')  # New
     TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
     Schedule = models.CharField('Schedule', max_length=40, blank=True, null=True, default='')
+
+    start_date = models.DateField('StartDate', blank=True, null=True)
+    end_date = models.DateField('EndDate', blank=True, null=True)
+    existing_device_id = models.CharField('已有设备ID', max_length=100, blank=True, null=True)
+    new_device_requirement = models.CharField('新增设备需求', max_length=200, blank=True, null=True)
     ProjectTestSKUfollowMatrix = models.FloatField('Project test SKU-follow matrix', max_length=10, blank=True,
                                                    null=True, )
     TimewConfigFollowmatrix = models.FloatField('Time w/ Config-follow matrix', max_length=20, blank=True, null=True, )
@@ -619,6 +641,17 @@ class RetestItemSW(models.Model):
     Remark = models.CharField('Remark', max_length=1500, blank=True, null=True, default='')
     # 在 TestPlanSW 类中添加
     Attention = models.TextField('Attention', blank=True, null=True, default='')
+    tc_category = models.CharField('TC Category', max_length=100, blank=True, null=True)
+    feature_ready_1 = models.CharField('Feature ready', max_length=10, blank=True, null=True)  # 对应第一个Feature ready
+    ee = models.CharField('EE', max_length=100, blank=True, null=True)
+    item_1 = models.CharField('Item', max_length=200, blank=True, null=True)
+    feature_ready_2 = models.CharField('Feature ready', max_length=10, blank=True, null=True)
+    bios = models.CharField('BIOS', max_length=100, blank=True, null=True)
+    item_2 = models.CharField('Item', max_length=200, blank=True, null=True)
+    feature_ready_3 = models.CharField('Feature ready', max_length=10, blank=True, null=True)
+    sa = models.CharField('SA', max_length=100, blank=True, null=True)
+    item_3 = models.CharField('Item', max_length=200, blank=True, null=True)
+    feature_ready_4 = models.CharField('Feature ready', max_length=10, blank=True, null=True)
     editor = models.CharField('editor', max_length=100, blank=True, null=True, default='')
     edit_time = models.CharField('edit_time', max_length=26, blank=True, null=True, default='')
     class Meta:
@@ -896,6 +929,10 @@ class TestPlanSWAIO(models.Model):
     BaseTimeWeight = models.FloatField('Base Time*Weight', max_length=20, blank=True, null=True)  # New 2026-05
     TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
     Schedule=models.CharField('Schedule',max_length=40, blank=True, null=True, default='')
+    start_date = models.DateField('StartDate', blank=True, null=True)
+    end_date = models.DateField('EndDate', blank=True, null=True)
+    existing_device_id = models.CharField('已有设备ID', max_length=100, blank=True, null=True)
+    new_device_requirement = models.CharField('新增设备需求', max_length=200, blank=True, null=True)
     Configalltestunits=models.CharField('Configalltestunits', max_length=10, blank=True, null=True,)
     Configalltesttime=models.CharField('Configalltesttime', max_length=20, blank=True, null=True,)
     ConfigAutomationItem=models.CharField('ConfigAutomationItem',max_length=20, blank=True, null=True, default='')
