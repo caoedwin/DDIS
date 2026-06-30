@@ -562,7 +562,7 @@
                 </template>
       </el-table-column>
       <!-- StartDate -->
-      <el-table-column width="130" label="StartDate" prop="start_date">
+      {% comment %}<el-table-column width="130" label="StartDate" prop="start_date">
           <template slot-scope="scope">
               <div v-if="showEdit[scope.$index] && canEdit">
                   <el-date-picker v-model="startDate[scope.$index + (currentPage-1)*pagesize]" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
@@ -596,7 +596,7 @@
               </div>
               <span v-else>${ scope.row.new_device_requirement }</span>
           </template>
-      </el-table-column>
+      </el-table-column>{% endcomment %}
       <!--无需編輯-->
       <el-table-column width="160" >-
           <template slot="header" slot-scope="scope">

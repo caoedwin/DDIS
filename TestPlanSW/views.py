@@ -18,7 +18,7 @@ phase_list = [
 SW_NEW_FIELDS_MAP = {
     'StartDate': 'start_date',
     'EndDate': 'end_date',
-    '已有设备ID': 'existing_device_id',
+    '设备ID': 'existing_device_id',
     '新增设备需求': 'new_device_requirement',
     'TC Category': 'tc_category',
     'Feature Ready1': 'feature_ready_1',
@@ -36,7 +36,7 @@ SW_NEW_FIELDS_MAP = {
 AIO_NEW_FIELDS_MAP = {
     'StartDate': 'start_date',
     'EndDate': 'end_date',
-    '已有设备ID': 'existing_device_id',
+    '设备ID': 'existing_device_id',
     '新增设备需求': 'new_device_requirement',
 }
 
