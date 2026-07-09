@@ -333,7 +333,7 @@
         :close-on-click-modal="!uploading"
         :close-on-press-escape="!uploading"
         :before-close="handleUploadDialogClose">
-        <el-upload drag action="#" :auto-upload="false" :on-change="handleExcelChange" :file-list="excelFileList" :limit="1">
+        <el-upload ref="excelUpload" drag action="#" :auto-upload="false" :on-change="handleExcelChange" :file-list="excelFileList" :limit="1">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
             <div class="el-upload__tip" slot="tip">支持.xlsx, .xls格式，表头需包含英文列名</div>
@@ -347,6 +347,10 @@
 
     <!-- 重复数据弹窗 -->
     <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
+        <!-- 新增提示 -->
+        <div style="margin-bottom: 12px; color: #E6A23C; font-size: 14px;">
+            <i class="el-icon-warning-outline"></i> 提示：PCR No、PCR Title、Project 三者一致，判定为重复数据，只能上传一条。
+        </div>
         <el-table :data="duplicateTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
             <el-table-column prop="pcr_no" label="PCR No" width="180"></el-table-column>
@@ -925,7 +929,10 @@ new Vue({
         // ---- Excel上传 ----
         handleExcelChange(file, fileList) { this.excelFileList = [file]; },
         async uploadExcel() {
-            if (!this.excelFileList.length) { this.$message.warning('请选择文件'); return; }
+            if (!this.excelFileList.length) {
+                this.$message.warning('请选择文件');
+                return;
+            }
             const formData = new FormData();
             formData.append('excel_file', this.excelFileList[0].raw);
             this.uploading = true;
@@ -953,6 +960,11 @@ new Vue({
                 this.$message.error('上传失败');
             } finally {
                 this.uploading = false;
+                // 关键：清空文件列表，解决二次上传问题
+                if (this.$refs.excelUpload) {
+                    this.$refs.excelUpload.clearFiles();
+                }
+                this.excelFileList = [];
             }
         },
         downloadTemplate() {

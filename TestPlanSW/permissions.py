@@ -41,7 +41,8 @@ class MyPermission(BasePermission):
             except:
                 groups = []
         # print(group,groups)
-        r1 = request.method in ('GET', 'HEAD', 'OPTIONS') and Role.objects.filter(name="API_CQM").first() in groups# 只读接口判断只要是API_CQM就能读取
+        r1 = request.method in ('GET', 'HEAD', 'OPTIONS') and Role.objects.filter(
+            name="API_CQM").first() in groups  # 只读接口判断只要是API_CQM就能读取
         r2 = group and groups
         r3 = group in groups
 
