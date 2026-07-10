@@ -523,6 +523,7 @@ new Vue({
         },
     },
     watch: {
+        // 原有的监听
         statsLoaded(newVal) {
             if (newVal && this.dimensionMap.size) {
                 this.$nextTick(() => this.initChart());
@@ -530,6 +531,22 @@ new Vue({
         },
         chartMetric() { this.updateChart(); },
         chartType() { this.updateChart(); },
+        
+        // ✅ 新增：监听折叠面板展开状态
+        activeCollapse(newVal) {
+            // 当 'stats' 面板被展开时
+            if (newVal.includes('stats')) {
+                this.$nextTick(() => {
+                    if (this.chartInstance) {
+                        // 如果图表已存在，更新数据（同时会触发 resize）
+                        this.updateChart();
+                    } else {
+                        // 如果未初始化，则初始化
+                        this.initChart();
+                    }
+                });
+            }
+        },
     },
     mounted() {
         this.loadColumnSettings();
