@@ -563,7 +563,7 @@ def pcr_upload_excel_api(request):
     col_index_map = {k: int(v) for k, v in col_index_map.items()}
 
     # 检查必要字段
-    required_db_fields = ['pcr_no', 'pcr_title', 'Project', 'Customer', 'phase', 'status']
+    required_db_fields = ['pcr_no', 'pcr_title', 'Compalproject', 'Project', 'Customer', 'phase', 'status']
     missing = [f for f in required_db_fields if f not in col_index_map]
     if missing:
         return JsonResponse({'success': False, 'message': f'缺少必要的列映射: {missing}，请检查表头'})
@@ -653,8 +653,8 @@ def pcr_upload_excel_api(request):
             receive_date_val = None
             if 'receive_date' in col_index_map and col_index_map['receive_date'] < len(row):
                 receive_date_val = parse_date(row[col_index_map['receive_date']])
-            if receive_date_val is None:
-                receive_date_val = date.today()   # 避免 NOT NULL 约束错误
+            # if receive_date_val is None:
+            #     receive_date_val = date.today()   # 避免 NOT NULL 约束错误
 
             create_data = {
                 'pcr_no': pcr_no,

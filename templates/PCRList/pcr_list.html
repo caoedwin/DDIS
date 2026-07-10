@@ -253,10 +253,11 @@
                     </el-table-column>
                     <el-table-column label="操作" width="150" fixed="right">
                         <template slot-scope="scope">
-                            <div class="action-buttons">
+                            <div class="action-buttons" v-if="scope.row.can_delete">
                                 <el-button type="primary" size="mini" icon="el-icon-edit" @click="openEditDialog(scope.row)"></el-button>
                                 <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteRow(scope.row)"></el-button>
                             </div>
+                            <span v-else style="color:#909399; font-size:12px;">无权限</span>
                         </template>
                     </el-table-column>
                 </el-table>
