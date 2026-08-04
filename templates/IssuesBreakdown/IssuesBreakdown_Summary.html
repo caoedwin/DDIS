@@ -154,10 +154,9 @@
                 <label for="customer">Customer</label>
                 <select ref="Customer" @change="changeCustomer" v-model="customer"
                         style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <option value="C38(NB)">C38(NB)</option>
-                    <option value="C38(AIO)">C38(AIO)</option>
-                    <option value="C85">C85</option>
-                    <option value="T88(AIO)">T88(AIO)</option>
+                    <option v-for="item in customerOptions" :key="item.value" :value="item.value">
+                        ${ item.label }
+                    </option>
                 </select>
                 <div class="inputError" v-cloak v-show="customerError">不能為空</div>
             </div>
@@ -245,6 +244,7 @@
             data: function () {
                 return {
                     // 搜索条件
+                    customerOptions: [],
                     labelname: "",
                     propName: "",
                     customer: '',
@@ -280,16 +280,18 @@
                     }).then((res) => {
                         this.ProjectCodeOption = res.data.ProjectCodeOption;
                         this.elbuttonloading = false;
+                        this.customerOptions = res.data.customerOptions || [];
                     });
                 },
 
 
                 changeCustomer: function () {
-                    if (this.$refs.Customer.value === "") {
-                        this.departmentOptions = [""];
-                        return false;
+                    if (!this.customer) {
+                        this.SectionProjectcode = [];
+                        this.ProjectcodeCompal = "";
+                        return;
                     }
-                    this.SectionProjectcode = this.ProjectCodeOption[this.$refs.Customer.value];
+                    this.SectionProjectcode = this.ProjectCodeOption[this.customer] || [];
                     this.ProjectcodeCompal = "";
                 },
 

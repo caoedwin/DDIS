@@ -171,11 +171,9 @@
                 <label for="customer">Customer</label>
                 <select ref="Customer" @change="changeCustomer" v-model="customer"
                         style="height:40px;width:100px;border-radius:5px 5px 5px 5px;">
-                    <option value="C38(NB)">C38(NB)</option>
-                    <option value="C38(AIO)">C38(AIO)</option>
-                    <option value="C85">C85</option>
-                    <option value="T88(AIO)">T88(AIO)</option>
-                    {#                       <option v-for="(item,key,index) in customerOptions" >${ key }</option>#}
+                    <option v-for="item in customerOptions" :key="item.value" :value="item.value">
+                        ${ item.label }
+                    </option>
                 </select>
                 <div class="inputError" v-cloak v-show="customerError">不能為空</div>
             </div>
@@ -223,10 +221,12 @@
                 <el-form ref="form" :model="form" :rules="rules" :label-position="labelPosition" label-width="180px">
                     <el-form-item label="Customer" prop="Customer">
                         <el-select v-model="form.Customer" placeholder="請選擇" @change="changeProjectcode">
-                            <el-option label="C38(NB)" value="C38(NB)"></el-option>
-                            <el-option label="C38(AIO)" value="C38(AIO)"></el-option>
-                            <el-option label="C85" value="C85"></el-option>
-                            <el-option label="T88(AIO)" value="T88(AIO)"></el-option>
+                            <el-option
+                                v-for="item in customerOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Projectcode(Compal)" prop="ProjectcodeCompal">
@@ -388,6 +388,7 @@
             delimiters: ['${', '}'],
             data: function () {
                 return {
+                    customerOptions: [],
                     excelFile: null,
                     uploadFile: null,
                     fileName: "未選擇文件",
@@ -399,7 +400,6 @@
                     customer: '',
                     editpermission: 0,
                     permission: 0,
-                    customerOptions: {},
                     customerError: false,
                     department: '',
                     departmentOptions: [],
@@ -467,6 +467,7 @@
                         //console.log(this.totalNum)
                         this.elbuttonloading = false;
                         this.tableloading = false;
+                        this.customerOptions = res.data.customerOptions || [];
                         this.$nextTick(() => {
                             this.$refs.tableRef.doLayout()
                         })
@@ -525,14 +526,14 @@
 
                 //级联
                 changeCustomer: function () {
-                    if (this.$refs.Customer.value === "") {
-                        this.departmentOptions = [""];
-                        return false;
+                    if (!this.customer) {
+                        this.SectionProjectcode = [];
+                        this.ProjectcodeCompal = "";
+                        return;
                     }
-                    this.SectionProjectcode = this.ProjectCodeOption[this.$refs.Customer.value];
+                    this.SectionProjectcode = this.ProjectCodeOption[this.customer] || [];
                     this.ProjectcodeCompal = "";
                 },
-
                 changeProjectcode: function () {
                     this.SectionProjectcode = this.ProjectCodeOption[this.form.Customer];
                 },

@@ -21,6 +21,7 @@ class Reversinator(object):
         return other.obj < self.obj
 
 
+# Create your views here.
 headermodel_Departments = {
     '年份': 'Year', '公司別': 'Companys', '廠區': 'Plants', '處': 'CHU', '部': 'BU', '課': 'KE',
     '客戶別': 'Customer', '部門代碼': 'Department_Code', '管理者': 'Manager',
@@ -70,25 +71,30 @@ def Infos_upload(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     Skin = request.COOKIES.get('Skin_raw')
+    # print(Skin)
     if not Skin:
         Skin = "/static/src/blue.jpg"
     weizhi = "PersonalInfo/Infos_upload"
-    err_ok = 0
+    err_ok = 0  # excel上传1为重复
     err_msg = ''
-    result = 0
+    result = 0  # 为1 forms 上传重复
     canEdit = 1
     onlineuser = request.session.get('account')
+    # print(UserInfo.objects.get(account=onlineuser))
 
+    # print(request.POST)
     if request.method == 'POST':
-        if request.POST.get("type") == "xlsx":
+        if request.POST.get("type") == "xlsx":  # 部門代碼
             xlsxlist = request.POST.get('upload')
             Departmentlist = [
                 {'Year': '年份',
                  'Department_Code': '部門代碼', }
             ]
+            # 验证，先验证再上传,必须要先验证，如果边验证边上传，一旦报错，下次再传就无法通过同机种验证
             rownum = 0
             startupload = 0
             for i in simplejson.loads(xlsxlist):
+                # print(type(i),i)
                 rownum += 1
                 modeldata = {}
                 for key, value in i.items():
@@ -96,16 +102,22 @@ def Infos_upload(request):
                 if 'Year' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，年份不能爲空""" % rownum
+                    err_msg = """
+                第"%s"條數據，年份不能爲空
+                                    """ % rownum
                     break
                 if 'Department_Code' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，部門代碼不能爲空""" % rownum
+                    err_msg = """
+                第"%s"條數據，部門代碼不能爲空
+                                    """ % rownum
                     break
             if startupload:
                 for i in simplejson.loads(xlsxlist):
@@ -115,10 +127,17 @@ def Infos_upload(request):
                     Check_dic = {"Year": modeldata['Year'],
                                  'Department_Code': modeldata['Department_Code'],
                                  }
-                    if Departments.objects.filter(**Check_dic).first():
+                    # print(Check_dic)
+                    exsitdata = {}
+                    if Departments.objects.filter(
+                            **Check_dic).first():  # 已存在的不覆盖，提示去edit修改,如果允许excel修改的话这里需要将CQM_history也记录下来
                         err_ok = 1
                         Departmentlist.append(Check_dic)
+                        # print(Departmentlist, err_ok)
                     else:
+                        # updatedic = {}
+                        # for j in modeldata.keys():
+                        #     updatedic[j] = modeldata[j]
                         Departments.objects.create(**modeldata)
             datajason = {
                 'err_ok': err_ok,
@@ -127,14 +146,15 @@ def Infos_upload(request):
                 'content': Departmentlist
             }
             return HttpResponse(json.dumps(datajason), content_type="application/json")
-
-        if request.POST.get("type") == "xlsx1":
+        if request.POST.get("type") == "xlsx1":  # 職位信息
             xlsxlist = request.POST.get('upload')
             Positionlist = [
                 {'Grade': '職等', 'Item': '項次', 'Positions_Code': '職稱代碼', }]
             rownum = 0
             startupload = 0
+            # print(simplejson.loads(xlsxlist))
             for i in simplejson.loads(xlsxlist):
+                # print(type(i),i)
                 rownum += 1
                 modeldata = {}
                 for key, value in i.items():
@@ -142,44 +162,72 @@ def Infos_upload(request):
                 if 'Grade' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，職等不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，職等不能爲空
+                                                """ % rownum
+                    break
+                if 'Grade' in modeldata.keys():
+                    startupload = 1
+                else:
+                    # canEdit = 0
+                    startupload = 0
+                    err_ok = 2
+                    err_msg = """
+                            第"%s"條數據，職等不能爲空
+                                                """ % rownum
                     break
                 if 'Item' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，項次不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，項次不能爲空
+                                                """ % rownum
                     break
                 if 'Nationality' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，國籍不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，國籍不能爲空
+                                                """ % rownum
                     break
                 if 'Positions_Code' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，職稱代碼不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，職稱代碼不能爲空
+                                                """ % rownum
                     break
                 if 'Positions_Name' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，職稱不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，職稱不能爲空
+                                                """ % rownum
                     break
                 if 'Year' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，年份不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，年份不能爲空
+                                                """ % rownum
                     break
             if startupload:
                 for i in simplejson.loads(xlsxlist):
@@ -189,10 +237,18 @@ def Infos_upload(request):
                     Check_dic = {'Grade': modeldata['Grade'], 'Item': modeldata['Item'],
                                  'Positions_Code': modeldata['Positions_Code'], 'Year': modeldata['Year'],
                                  }
-                    if Positions.objects.filter(**Check_dic).first():
+                    # print(Check_dic)
+                    exsitdata = {}
+                    if Positions.objects.filter(
+                            **Check_dic).first():  # 已存在的不覆盖，提示去edit修改,如果允许excel修改的话这里需要将CQM_history也记录下来
                         err_ok = 1
-                        Positionlist.append(Check_dic)
+                        Positionlist.append(
+                            Check_dic)
+                        # print(Departmentlist, err_ok)
                     else:
+                        # updatedic = {}
+                        # for j in modeldata.keys():
+                        #     updatedic[j] = modeldata[j]
                         Positions.objects.create(**modeldata)
             datajason = {
                 'err_ok': err_ok,
@@ -201,49 +257,72 @@ def Infos_upload(request):
                 'content': Positionlist
             }
             return HttpResponse(json.dumps(datajason), content_type="application/json")
-
-        if request.POST.get("type") == "xlsx2":
+            pass
+        if request.POST.get("type") == "xlsx2":  # 專業信息
             xlsxlist = request.POST.get('upload')
             MajorIfolist = [
                 {'Education': '學歷', 'category': '大類',
                  'Major': '專業',
-                 # 'MajorForExcel': '專業 for 公式查找', 'Subject': '學科', 'Categories': '門類',
+                 # 'MajorForExcel': '專業 for 公式查找', 'Subject': '學科', 'Categories': '門類', 
                  }]
             rownum = 0
             startupload = 0
             for i in simplejson.loads(xlsxlist):
+                # print(type(i),i)
                 rownum += 1
                 modeldata = {}
+                # print(i)
                 for key, value in i.items():
                     modeldata[headermodel_MajorIfo[key]] = value
                 if 'Education' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，學歷不能爲空""" % rownum
+                    err_msg = """
+                                        第"%s"條數據，學歷不能爲空
+                                                            """ % rownum
                     break
                 if 'Categories' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，大類不能爲空""" % rownum
+                    err_msg = """
+                                        第"%s"條數據，大類不能爲空
+                                                            """ % rownum
                     break
                 if 'Major' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，專業不能爲空""" % rownum
+                    err_msg = """
+                                        第"%s"條數據，專業不能爲空
+                                                            """ % rownum
                     break
+                # if 'MajorForExcel' in modeldata.keys():
+                #     startupload = 1
+                # else:
+                #     # canEdit = 0
+                #     startupload = 0
+                #     err_ok = 2
+                #     err_msg = """
+                #                         第"%s"條數據，專業 for 公式查找 不能爲空
+                #                                             """ % rownum
+                #     break
             if startupload:
                 for i in simplejson.loads(xlsxlist):
                     modeldata = {}
                     for key, value in i.items():
                         modeldata[headermodel_MajorIfo[key]] = value
                     Check_dic = {'Education': modeldata['Education'], 'Categories': modeldata['Categories'],
+                                 # 'Subject': modeldata['Subject'], 'category': modeldata['category'],
                                  'Major': modeldata['Major'],
+                                 # 'MajorForExcel': modeldata['MajorForExcel'],
                                  }
                     if 'Subject' in modeldata.keys():
                         Check_dic['Subject'] = modeldata['Subject']
@@ -253,10 +332,18 @@ def Infos_upload(request):
                         Check_dic['category'] = modeldata['category']
                     else:
                         Check_dic['category'] = ''
-                    if MajorIfo.objects.filter(**Check_dic).first():
+                    # print(Check_dic)
+                    exsitdata = {}
+                    if MajorIfo.objects.filter(
+                            **Check_dic).first():  # 已存在的不覆盖，提示去edit修改,如果允许excel修改的话这里需要将CQM_history也记录下来
                         err_ok = 1
-                        MajorIfolist.append(Check_dic)
+                        MajorIfolist.append(
+                            Check_dic)
+                        # print(Departmentlist, err_ok)
                     else:
+                        # updatedic = {}
+                        # for j in modeldata.keys():
+                        #     updatedic[j] = modeldata[j]
                         MajorIfo.objects.create(**modeldata)
             datajason = {
                 'err_ok': err_ok,
@@ -265,14 +352,15 @@ def Infos_upload(request):
                 'content': MajorIfolist
             }
             return HttpResponse(json.dumps(datajason), content_type="application/json")
-
-        if request.POST.get("type") == "xlsx3":
+            pass
+        if request.POST.get("type") == "xlsx3":  # 加班信息
             xlsxlist = request.POST.get('upload')
             WorkOvertimelist = [
                 {'Year': '年份', 'Mounth': '月份', 'GroupNum': '工號', }]
             rownum = 0
             startupload = 0
             for i in simplejson.loads(xlsxlist):
+                # print(type(i),i)
                 rownum += 1
                 modeldata = {}
                 for key, value in i.items():
@@ -280,23 +368,32 @@ def Infos_upload(request):
                 if 'GroupNum' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，工號不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，工號不能爲空
+                                                """ % rownum
                     break
                 if 'Year' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，年份不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，年份不能爲空
+                                                """ % rownum
                     break
                 if 'Mounth' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，月份不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，月份不能爲空
+                                                """ % rownum
                     break
             if startupload:
                 for i in simplejson.loads(xlsxlist):
@@ -306,10 +403,18 @@ def Infos_upload(request):
                     Check_dic = {"Year": modeldata['Year'],
                                  'Mounth': modeldata['Mounth'], 'GroupNum': modeldata['GroupNum'],
                                  }
-                    if WorkOvertime.objects.filter(**Check_dic).first():
+                    # print(Check_dic)
+                    exsitdata = {}
+                    if WorkOvertime.objects.filter(
+                            **Check_dic).first():  # 已存在的不覆盖，提示去edit修改,如果允许excel修改的话这里需要将CQM_history也记录下来
                         err_ok = 1
-                        WorkOvertimelist.append(Check_dic)
+                        WorkOvertimelist.append(
+                            Check_dic)
+                        # print(Departmentlist, err_ok)
                     else:
+                        # updatedic = {}
+                        # for j in modeldata.keys():
+                        #     updatedic[j] = modeldata[j]
                         WorkOvertime.objects.create(**modeldata)
             datajason = {
                 'err_ok': err_ok,
@@ -318,14 +423,15 @@ def Infos_upload(request):
                 'content': WorkOvertimelist
             }
             return HttpResponse(json.dumps(datajason), content_type="application/json")
-
-        if request.POST.get("type") == "xlsx4":
+            pass
+        if request.POST.get("type") == "xlsx4":  # 請假信息
             xlsxlist = request.POST.get('upload')
             LeaveInfolist = [
                 {'Year': '年份', 'Mounth': '月份', 'GroupNum': '工號', }]
             rownum = 0
             startupload = 0
             for i in simplejson.loads(xlsxlist):
+                # print(type(i),i)
                 rownum += 1
                 modeldata = {}
                 for key, value in i.items():
@@ -333,23 +439,32 @@ def Infos_upload(request):
                 if 'GroupNum' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，工號不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，工號不能爲空
+                                                """ % rownum
                     break
                 if 'Year' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，年份不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，年份不能爲空
+                                                """ % rownum
                     break
                 if 'Mounth' in modeldata.keys():
                     startupload = 1
                 else:
+                    # canEdit = 0
                     startupload = 0
                     err_ok = 2
-                    err_msg = """第"%s"條數據，月份不能爲空""" % rownum
+                    err_msg = """
+                            第"%s"條數據，月份不能爲空
+                                                """ % rownum
                     break
             if startupload:
                 for i in simplejson.loads(xlsxlist):
@@ -359,10 +474,18 @@ def Infos_upload(request):
                     Check_dic = {"Year": modeldata['Year'],
                                  'Mounth': modeldata['Mounth'], 'GroupNum': modeldata['GroupNum'],
                                  }
-                    if LeaveInfo.objects.filter(**Check_dic).first():
+                    # print(Check_dic)
+                    exsitdata = {}
+                    if LeaveInfo.objects.filter(
+                            **Check_dic).first():  # 已存在的不覆盖，提示去edit修改,如果允许excel修改的话这里需要将CQM_history也记录下来
                         err_ok = 1
-                        LeaveInfolist.append(Check_dic)
+                        LeaveInfolist.append(
+                            Check_dic)
+                        # print(Departmentlist, err_ok)
                     else:
+                        # updatedic = {}
+                        # for j in modeldata.keys():
+                        #     updatedic[j] = modeldata[j]
                         LeaveInfo.objects.create(**modeldata)
             datajason = {
                 'err_ok': err_ok,
@@ -371,6 +494,7 @@ def Infos_upload(request):
                 'content': LeaveInfolist
             }
             return HttpResponse(json.dumps(datajason), content_type="application/json")
+            pass
 
     return render(request, 'PersonalInfo/Infos_upload.html', locals())
 
@@ -6065,12 +6189,6 @@ def Summary2(request):
                                 yusuandic[j[0]] = 0
                             DateNow_begin = datetime.datetime.strptime(YearNow + "-" + j[1].split("-")[1] + "-1",
                                                                        '%Y-%m-%d')
-                            # ---- 在职人数计算公式 ----
-                            # 1# 所有在当月最后一天前入职且未离职（或离职日期晚于该日）的人数
-                            # 2# 计算当月内部转调影响：
-                            # 转入本客户（原客户不为空，且转职日期>=当月最后一天，即转职发生在该日之后，则当天仍算原客户，不计入本客户）
-                            # 3# 转出本客户（原客户为本客户，转职日期>=当月最后一天，则该员工当天仍算本客户？实际逻辑：转出后从本客户减去）
-                            # 4最终在职 = 总在职 - 转入本客户（因为转入但转职日未到，实际不在本客户） + 转出本客户（转出但转职日未到，实际仍在本客户）
                             # print(DateNow_begin)
                             DateNow = datetime.datetime.strptime(YearNow + j[1], '%Y-%m-%d')
                             Test_Endperiod = [DateNow_begin, DateNow]
@@ -6963,12 +7081,6 @@ def Summary2(request):
                                 yusuandic[j[0]] = 0
                             DateNow_begin = datetime.datetime.strptime(YearNow + "-" + j[1].split("-")[1] + "-1",
                                                                        '%Y-%m-%d')
-                            # ---- 在职人数计算公式 ----
-                            # 1# 所有在当月最后一天前入职且未离职（或离职日期晚于该日）的人数
-                            # 2# 计算当月内部转调影响：
-                            # 转入本客户（原客户不为空，且转职日期>=当月最后一天，即转职发生在该日之后，则当天仍算原客户，不计入本客户）
-                            # 3# 转出本客户（原客户为本客户，转职日期>=当月最后一天，则该员工当天仍算本客户？实际逻辑：转出后从本客户减去）
-                            # 4最终在职 = 总在职 - 转入本客户（因为转入但转职日未到，实际不在本客户） + 转出本客户（转出但转职日未到，实际仍在本客户）
                             # print(DateNow_begin)
                             DateNow = datetime.datetime.strptime(YearNow + j[1], '%Y-%m-%d')
                             Test_Endperiod = [DateNow_begin, DateNow]

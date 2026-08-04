@@ -8,6 +8,7 @@ class IssuesBreakdown(models.Model):
         ('C38(NB)-SMB', 'C38(NB)-SMB'),
         ('C38(AIO)', 'C38(AIO)'),
         ('T88(AIO)', 'T88(AIO)'),
+        ('A08(NB)', 'A08(NB)'),
         ('A39', 'A39'),
         ('C85', 'C85'),
         ('T88(NB)', 'T88(NB)'),

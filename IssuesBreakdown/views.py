@@ -179,6 +179,13 @@ def IssuesBreakdown_edit(request):
 
     canEdit = 0  # 1:能编辑 0:不能编辑
 
+    # 从模型字段的 choices 中提取客户列表，过滤掉空值
+    customer_options = [
+        {'value': code, 'label': label}
+        for code, label in IssuesBreakdown._meta.get_field('Customer').choices
+        if code != ''
+    ]
+
     # roles = []
     # onlineuser = request.session.get('account')
     # # print(UserInfo.objects.get(account=onlineuser))
@@ -500,6 +507,7 @@ def IssuesBreakdown_edit(request):
             "ProjectCodeOption": ProjectCodeOption,
             "content": mock_data,
             "permission": canEdit,
+            "customerOptions": customer_options,  # 新增
 
         }
         # print(data)
@@ -542,6 +550,13 @@ def IssuesBreakdown_Summary(request):
         for j in IssuesBreakdown.objects.filter(Customer=i["Customer"]).values("Project").distinct():
             Projectlist.append({"Projectcode": j["Project"]})
         ProjectCodeOption[i['Customer']] = Projectlist
+
+    # 从模型字段的 choices 中提取客户列表，过滤掉空值
+    customer_options = [
+        {'value': code, 'label': label}
+        for code, label in IssuesBreakdown._meta.get_field('Customer').choices
+        if code != ''
+    ]
 
     # 表格數據
     mock_data1 = [
@@ -822,6 +837,7 @@ def IssuesBreakdown_Summary(request):
             "Category_Option": Category_Option,
             "NewF_Option": NewF_Option,
             "ProjectCodeOption": ProjectCodeOption,
+            "customerOptions": customer_options,  # 新增
         }
         # print(data)
         return HttpResponse(json.dumps(data), content_type="application/json")
