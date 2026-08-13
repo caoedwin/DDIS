@@ -1,4 +1,4 @@
-# pcr/models.py
+# PCRList/models.py
 from django.db import models
 from django.core.validators import MinValueValidator
 from app01.models import UserInfo
@@ -21,6 +21,9 @@ class PCR(models.Model):
         ('T88(AIO)', 'T88(AIO)'),
     ]
     Customer = models.CharField(max_length=10, choices=Customer_CHOICES, verbose_name="Customer")
+
+    # 新增 Year 字段
+    year = models.CharField(max_length=10, blank=True, verbose_name="Year")
 
     # 项目信息：Project 用于显示，Compalproject 用于关联 CQMProject 表做权限控制
     Project = models.CharField(max_length=500, verbose_name="Project")
@@ -94,7 +97,6 @@ class PCR(models.Model):
         ordering = ['-receive_date']
         verbose_name = "PCR"
         verbose_name_plural = "PCR"
-        # 唯一约束：PCR No + Project + PCR Title
         unique_together = [['pcr_no', 'Project', 'pcr_title']]
         indexes = [
             models.Index(fields=['Project', 'phase', 'status']),

@@ -6,95 +6,31 @@
 <link rel="stylesheet" href="/static/css/ElementUI.css">
 <style>
     [v-cloak] { display: none; }
-    .search-card {
-        padding: 0px;
-        margin-bottom: 16px;
-        background: transparent;
-    }
-    .el-collapse {
-        border: none;
-    }
-    .el-collapse-item__header {
-        font-weight: 600;
-        font-size: 16px;
-        background: transparent;
-        border-bottom: 1px solid #ebeef5;
-        padding-left: 0;
-    }
-    .el-collapse-item__wrap {
-        background: transparent;
-        border: none;
-    }
-    .el-collapse-item__content {
-        padding: 12px 0;
-        background: transparent;
-    }
+    .search-card { padding: 0px; margin-bottom: 16px; background: transparent; }
+    .el-collapse { border: none; }
+    .el-collapse-item__header { font-weight: 600; font-size: 16px; background: transparent; border-bottom: 1px solid #ebeef5; padding-left: 0; }
+    .el-collapse-item__wrap { background: transparent; border: none; }
+    .el-collapse-item__content { padding: 12px 0; background: transparent; }
     .stats-table-compact .el-table__body td,
-    .stats-table-compact .el-table__header th {
-        padding: 4px 0;
-        font-size: 12px;
-    }
-    .stats-table-compact .cell {
-        line-height: 1.4;
-    }
-    .chart-card {
-        padding: 8px 0;
-        background: transparent;
-        margin-bottom: 8px;
-    }
-    .chart-header {
-        margin-bottom: 8px;
-    }
-    #statsChart {
-        height: 320px;
-    }
-    .table-toolbar {
-        margin-bottom: 12px;
-        text-align: right;
-    }
-    .column-group {
-        margin-bottom: 16px;
-        border-bottom: 1px solid #EBEEF5;
-        padding-bottom: 8px;
-    }
-    .column-group-title {
-        font-weight: 600;
-        margin-bottom: 12px;
-        color: #409EFF;
-        font-size: 14px;
-    }
-    .column-checkbox-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 16px;
-    }
-    .column-checkbox-group .el-checkbox {
-        width: 120px;
-        margin-right: 0;
-    }
-    body.theme-dark .chart-title {
-        color: #eef2ff !important;
-    }
-    body.theme-dark .el-collapse-item__header {
-        color: #eef2ff !important;
-        border-bottom-color: #4a627a !important;
-    }
-    body.theme-dark .column-group-title {
-        color: #66b1ff !important;
-    }
-    body.theme-dark .stats-table-compact .el-table__body td .cell {
-        color: #eef2ff !important;
-    }
+    .stats-table-compact .el-table__header th { padding: 4px 0; font-size: 12px; }
+    .stats-table-compact .cell { line-height: 1.4; }
+    .chart-card { padding: 8px 0; background: transparent; margin-bottom: 8px; }
+    .chart-header { margin-bottom: 8px; }
+    #statsChart { height: 320px; }
+    .table-toolbar { margin-bottom: 12px; text-align: right; }
+    .column-group { margin-bottom: 16px; border-bottom: 1px solid #EBEEF5; padding-bottom: 8px; }
+    .column-group-title { font-weight: 600; margin-bottom: 12px; color: #409EFF; font-size: 14px; }
+    .column-checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+    .column-checkbox-group .el-checkbox { width: 120px; margin-right: 0; }
+    body.theme-dark .chart-title { color: #eef2ff !important; }
+    body.theme-dark .el-collapse-item__header { color: #eef2ff !important; border-bottom-color: #4a627a !important; }
+    body.theme-dark .column-group-title { color: #66b1ff !important; }
+    body.theme-dark .stats-table-compact .el-table__body td .cell { color: #eef2ff !important; }
     body.theme-dark .table-toolbar .el-button--default,
     body.theme-dark .table-toolbar .el-button--danger,
-    body.theme-dark .table-toolbar .el-button--primary {
-        color: #eef2ff !important;
-    }
+    body.theme-dark .table-toolbar .el-button--primary { color: #eef2ff !important; }
     body.theme-dark .el-select .el-input__inner,
-    body.theme-dark .el-radio-button__inner {
-        color: #eef2ff !important;
-    }
+    body.theme-dark .el-radio-button__inner { color: #eef2ff !important; }
 </style>
 {% endblock %}
 {% block content %}
@@ -106,28 +42,14 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="时间范围（重叠）">
-                        <el-date-picker
-                            v-model="searchForm.dateRange"
-                            type="daterange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd"
-                            :clearable="true">
+                        <el-date-picker v-model="searchForm.dateRange" type="daterange" range-separator="至"
+                            start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :clearable="true">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="success" @click="openCreateDialog" icon="el-icon-plus">新增PCR</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="warning" @click="showUploadDialog = true" icon="el-icon-upload">Excel上传</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="info" @click="exportToExcel" icon="el-icon-download">导出Excel</el-button>
-                    </el-form-item>
+                    <el-form-item><el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button></el-form-item>
+                    <el-form-item><el-button type="success" @click="openCreateDialog" icon="el-icon-plus">新增PCR</el-button></el-form-item>
+                    <el-form-item><el-button type="warning" @click="showUploadDialog = true" icon="el-icon-upload">Excel上传</el-button></el-form-item>
+                    <el-form-item><el-button type="info" @click="exportToExcel" icon="el-icon-download">导出Excel</el-button></el-form-item>
                     <el-form-item>
                         <el-button type="text" @click="advancedVisible = !advancedVisible" :title="advancedVisible ? '收起高级筛选' : '展开高级筛选'">
                             ${ advancedVisible ? '收起' : '高级筛选' }
@@ -138,51 +60,31 @@
             </el-row>
 
             <el-row v-show="advancedVisible" style="margin-top:10px;">
-                <el-col :span="5">
+                <el-col :span="6">
                     <el-form-item label="Customer" label-width="80px">
                         <el-select v-model="searchForm.customer" clearable placeholder="全部" style="width:130px;">
-                            <el-option
-                                v-for="item in filterOptions.customer_choices"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
+                            <el-option v-for="item in filterOptions.customer_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="5">
+                <el-col :span="6">
                     <el-form-item label="Phase" label-width="80px">
                         <el-select v-model="searchForm.phase" clearable placeholder="全部" style="width:130px;">
-                            <el-option
-                                v-for="item in filterOptions.phase_choices"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
+                            <el-option v-for="item in filterOptions.phase_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="5">
-                    <el-form-item label="接收年份" label-width="80px">
-                        <el-select v-model="searchForm.year" clearable placeholder="全部年份" style="width:130px;">
-                            <el-option
-                                v-for="item in filterOptions.year_choices"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
+                <el-col :span="6">
+                    <el-form-item label="Year" label-width="80px">
+                        <el-select v-model="searchForm.year" clearable placeholder="全部" style="width:130px;">
+                            <el-option v-for="item in filterOptions.year_field_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="5">
-                    <el-form-item label="Compal Project" label-width="120px">
+                <el-col :span="6">
+                    <el-form-item label="Compal Project" label-width="100px">
                         <el-select v-model="searchForm.compalproject" clearable filterable placeholder="全部项目" style="width:130px;">
-                            <el-option
-                                v-for="item in filterOptions.compalproject_choices"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
+                            <el-option v-for="item in filterOptions.compalproject_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -219,26 +121,15 @@
                     </div>
                     <div id="statsChart"></div>
                 </div>
-
                 <div style="margin-top:8px;">
                     <el-table :data="statsRows" border stripe size="mini" class="stats-table-compact" style="width:100%;">
                         <el-table-column prop="dimension" label="维度" width="180"></el-table-column>
                         <el-table-column label="DQA NRE mail to PM" align="center">
-                            <el-table-column prop="sample_qty" label="Sample Q'ty" width="110">
-                                <template slot-scope="scope">${ scope.row.sample_qty }</template>
-                            </el-table-column>
-                            <el-table-column prop="hc_qty" label="HC Q'ty" width="100">
-                                <template slot-scope="scope">${ scope.row.hc_qty }</template>
-                            </el-table-column>
-                            <el-table-column prop="hc_days" label="HC Days" width="100">
-                                <template slot-scope="scope">${ scope.row.hc_days }</template>
-                            </el-table-column>
-                            <el-table-column prop="pd" label="PD" width="80">
-                                <template slot-scope="scope">${ scope.row.pd }</template>
-                            </el-table-column>
-                            <el-table-column prop="device_fee_usd" label="Device fee (USD)" width="130">
-                                <template slot-scope="scope">${ scope.row.device_fee_usd }</template>
-                            </el-table-column>
+                            <el-table-column prop="sample_qty" label="Sample Q'ty" width="110"></el-table-column>
+                            <el-table-column prop="hc_qty" label="HC Q'ty" width="100"></el-table-column>
+                            <el-table-column prop="hc_days" label="HC Days" width="100"></el-table-column>
+                            <el-table-column prop="pd" label="PD" width="80"></el-table-column>
+                            <el-table-column prop="device_fee_usd" label="Device fee (USD)" width="130"></el-table-column>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -259,7 +150,8 @@
                     <el-table-column type="index" width="50" label="No" fixed="left"></el-table-column>
                     <el-table-column v-if="colVisible.pcr_no" prop="pcr_no" label="PCR No" width="150" fixed="left"></el-table-column>
                     <el-table-column v-if="colVisible.pcr_title" prop="pcr_title" label="PCR Title" min-width="200" fixed="left"></el-table-column>
-                    <el-table-column v-if="colVisible.Customer" prop="Customer" label="Customer" width="80"></el-table-column>
+                    <el-table-column v-if="colVisible.Customer" prop="Customer" label="Customer" width="100"></el-table-column>
+                    <el-table-column v-if="colVisible.year" prop="year" label="Year" width="80"></el-table-column>
                     <el-table-column v-if="colVisible.Project" prop="Project" label="Project" width="150"></el-table-column>
                     <el-table-column v-if="colVisible.phase" prop="phase" label="NPI or INV" width="100"></el-table-column>
                     <el-table-column v-if="colVisible.category" prop="category" label="Category" width="120"></el-table-column>
@@ -267,18 +159,10 @@
                     <el-table-column v-if="colVisible.status" prop="status" label="Status" width="100"></el-table-column>
 
                     <el-table-column v-if="showNreGroup" label="DQA NRE mail to PM" align="center">
-                        <el-table-column v-if="colVisible.sample_qty" prop="sample_qty" label="Sample Q'ty" width="100">
-                            <template slot-scope="scope">${ scope.row.sample_qty }</template>
-                        </el-table-column>
-                        <el-table-column v-if="colVisible.hc_qty" prop="hc_qty" label="HC Q'ty" width="100">
-                            <template slot-scope="scope">${ scope.row.hc_qty }</template>
-                        </el-table-column>
-                        <el-table-column v-if="colVisible.hc_days" prop="hc_days" label="HC Days" width="100">
-                            <template slot-scope="scope">${ scope.row.hc_days }</template>
-                        </el-table-column>
-                        <el-table-column v-if="colVisible.pd" prop="pd" label="PD" width="80">
-                            <template slot-scope="scope">${ scope.row.pd }</template>
-                        </el-table-column>
+                        <el-table-column v-if="colVisible.sample_qty" prop="sample_qty" label="Sample Q'ty" width="100"></el-table-column>
+                        <el-table-column v-if="colVisible.hc_qty" prop="hc_qty" label="HC Q'ty" width="100"></el-table-column>
+                        <el-table-column v-if="colVisible.hc_days" prop="hc_days" label="HC Days" width="100"></el-table-column>
+                        <el-table-column v-if="colVisible.pd" prop="pd" label="PD" width="80"></el-table-column>
                         <el-table-column v-if="colVisible.device_fee_usd" prop="device_fee_usd" label="Device fee (USD)" width="130">
                             <template slot-scope="scope">${ scope.row.device_fee_usd ? scope.row.device_fee_usd.toFixed(2) : '0.00' }</template>
                         </el-table-column>
@@ -312,21 +196,16 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[20,50,100]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                    :current-page="currentPage" :page-sizes="[20,50,100]" :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper" :total="total"
                     style="margin-top:20px; text-align:right;">
                 </el-pagination>
             </div>
         </el-collapse-item>
     </el-collapse>
 
-    <!-- 弹窗区域 -->
+    <!-- 新增/编辑弹窗 -->
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="90%" @close="resetForm">
         <el-form ref="pcrForm" :model="form" :rules="rules" label-width="140px">
             <el-row :gutter="20">
@@ -337,47 +216,40 @@
                 <el-col :span="8">
                     <el-form-item label="Customer" prop="Customer">
                         <el-select v-model="form.Customer">
-                            <el-option
-                                v-for="item in filterOptions.customer_choices"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
+                            <el-option v-for="item in filterOptions.customer_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="Year" prop="year">
+                        <el-input v-model="form.year" placeholder="请输入年份"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8"><el-form-item label="Project" prop="Project"><el-input v-model="form.Project"></el-input></el-form-item></el-col>
+            </el-row>
+            <el-row :gutter="20">
                 <el-col :span="8"><el-form-item label="Compal Project" prop="Compalproject"><el-input v-model="form.Compalproject"></el-input></el-form-item></el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="8">
-                    <el-form-item label="Phase" prop="phase">
-                        <el-select v-model="form.phase">
-                            <el-option
-                                v-for="item in filterOptions.phase_choices"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
+                <el-col :span="8"><el-form-item label="Phase" prop="phase">
+                    <el-select v-model="form.phase">
+                        <el-option v-for="item in filterOptions.phase_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="Category" prop="category"><el-input v-model="form.category"></el-input></el-form-item></el-col>
-                <el-col :span="8"><el-form-item label="Receive Date" prop="receive_date"><el-date-picker v-model="form.receive_date" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
             </el-row>
             <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="Receive Date" prop="receive_date"><el-date-picker v-model="form.receive_date" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="Sample Qty" prop="sample_qty"><el-input-number v-model="form.sample_qty" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="HC Qty" prop="hc_qty"><el-input-number v-model="form.hc_qty" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
-                <el-col :span="8"><el-form-item label="HC Days" prop="hc_days"><el-input-number v-model="form.hc_days" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
             </el-row>
             <el-row :gutter="20">
+                <el-col :span="8"><el-form-item label="HC Days" prop="hc_days"><el-input-number v-model="form.hc_days" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="Device Fee (USD)" prop="device_fee_usd"><el-input-number v-model="form.device_fee_usd" :min="0" :precision="2"></el-input-number></el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="PM send NRE to Sales"><el-switch v-model="form.pm_send_nre_to_sales"></el-switch></el-form-item></el-col>
-                <el-col :span="8"><el-form-item label="Status" prop="status"><el-select v-model="form.status"><el-option label="Perform" value="Perform"></el-option><el-option label="Plan" value="Plan"></el-option><el-option label="On going" value="On going"></el-option></el-select></el-form-item></el-col>
             </el-row>
             <el-row :gutter="20">
-                <el-col :span="12"><el-form-item label="Execution Start"><el-date-picker v-model="form.execution_start" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
-                <el-col :span="12"><el-form-item label="Execution End"><el-date-picker v-model="form.execution_end" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Status" prop="status"><el-select v-model="form.status"><el-option label="Perform" value="Perform"></el-option><el-option label="Plan" value="Plan"></el-option><el-option label="On going" value="On going"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Execution Start"><el-date-picker v-model="form.execution_start" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
+                <el-col :span="8"><el-form-item label="Execution End"><el-date-picker v-model="form.execution_end" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="12"><el-form-item label="Whether In Budget"><el-switch v-model="form.whether_in_budget"></el-switch></el-form-item></el-col>
@@ -397,13 +269,9 @@
         </div>
     </el-dialog>
 
-    <el-dialog
-        title="Excel批量上传"
-        :visible.sync="showUploadDialog"
-        width="500px"
-        :close-on-click-modal="!uploading"
-        :close-on-press-escape="!uploading"
-        :before-close="handleUploadDialogClose">
+    <!-- Excel上传弹窗 -->
+    <el-dialog title="Excel批量上传" :visible.sync="showUploadDialog" width="500px"
+        :close-on-click-modal="!uploading" :close-on-press-escape="!uploading" :before-close="handleUploadDialogClose">
         <el-upload ref="excelUpload" drag action="#" :auto-upload="false" :on-change="handleExcelChange" :file-list="excelFileList" :limit="1">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
@@ -416,6 +284,7 @@
         </div>
     </el-dialog>
 
+    <!-- 重复数据弹窗 -->
     <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
         <div style="margin-bottom: 12px; color: #E6A23C; font-size: 14px;">
             <i class="el-icon-warning-outline"></i> 提示：PCR No、PCR Title、Project 三者一致，判定为重复数据，只能上传一条。
@@ -426,21 +295,19 @@
             <el-table-column prop="project" label="Project" width="200"></el-table-column>
             <el-table-column prop="pcr_title" label="PCR Title" min-width="250"></el-table-column>
         </el-table>
-        <div slot="footer">
-            <el-button type="primary" @click="duplicateDialogVisible = false">关 闭</el-button>
-        </div>
+        <div slot="footer"><el-button type="primary" @click="duplicateDialogVisible = false">关 闭</el-button></div>
     </el-dialog>
 
+    <!-- 错误信息弹窗 -->
     <el-dialog title="错误信息（未导入）" :visible.sync="errorDialogVisible" width="85%">
         <el-table :data="errorTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
             <el-table-column prop="message" label="错误详情" min-width="400"></el-table-column>
         </el-table>
-        <div slot="footer">
-            <el-button type="primary" @click="errorDialogVisible = false">关 闭</el-button>
-        </div>
+        <div slot="footer"><el-button type="primary" @click="errorDialogVisible = false">关 闭</el-button></div>
     </el-dialog>
 
+    <!-- 列设置弹窗 -->
     <el-dialog title="选择显示的列" :visible.sync="columnSettingsVisible" width="700px">
         <div class="column-group">
             <div class="column-group-title">基本信息</div>
@@ -448,6 +315,7 @@
                 <el-checkbox v-model="colVisible.pcr_no">PCR No</el-checkbox>
                 <el-checkbox v-model="colVisible.pcr_title">PCR Title</el-checkbox>
                 <el-checkbox v-model="colVisible.Customer">Customer</el-checkbox>
+                <el-checkbox v-model="colVisible.year">Year</el-checkbox>
                 <el-checkbox v-model="colVisible.Project">Project</el-checkbox>
                 <el-checkbox v-model="colVisible.phase">NPI or INV</el-checkbox>
                 <el-checkbox v-model="colVisible.category">Category</el-checkbox>
@@ -490,6 +358,7 @@
     </el-dialog>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="/static/js/axios.min.js"></script>
 <script src="/static/js/vue.min.js"></script>
@@ -506,7 +375,7 @@ new Vue({
             filterOptions: {
                 customer_choices: [],
                 phase_choices: [],
-                year_choices: [],
+                year_field_choices: [],
                 compalproject_choices: []
             },
             searchForm: {
@@ -518,7 +387,7 @@ new Vue({
             },
             selectedRows: [],
             multiDeleteLoading: false,
-            stats: {},  // 不再使用，保留为空
+            stats: {},
             statsLoaded: false,
             statsRows: [],
             tableData: [],
@@ -533,6 +402,7 @@ new Vue({
                 pcr_no: [{ required: true, message: '请输入PCR No' }],
                 pcr_title: [{ required: true, message: '请输入PCR Title' }],
                 Customer: [{ required: true }],
+                year: [],
                 Project: [{ required: true }],
                 Compalproject: [{ required: true }],
                 phase: [{ required: true }],
@@ -545,6 +415,7 @@ new Vue({
             submitting: false,
             showUploadDialog: false,
             excelFileList: [],
+            excelFile: null,
             uploading: false,
             duplicateDialogVisible: false,
             duplicateTableData: [],
@@ -555,6 +426,7 @@ new Vue({
                 pcr_no: true,
                 pcr_title: true,
                 Customer: true,
+                year: true,
                 Project: true,
                 phase: true,
                 category: true,
@@ -595,8 +467,8 @@ new Vue({
     },
     watch: {
         statsLoaded(newVal) {
-            if (newVal && this.dimensionMap.size) {
-                this.$nextTick(() => this.initChart());
+            if (newVal && this.dimensionMap.size && this.chartInstance) {
+                this.chartInstance.resize();
             }
         },
         chartMetric() { this.updateChart(); },
@@ -635,7 +507,7 @@ new Vue({
                     this.filterOptions = {
                         customer_choices: res.data.customer_choices || [],
                         phase_choices: res.data.phase_choices || [],
-                        year_choices: res.data.year_choices || [],
+                        year_field_choices: res.data.year_field_choices || [],
                         compalproject_choices: res.data.compalproject_choices || [],
                     };
                 }
@@ -735,14 +607,8 @@ new Vue({
             }
 
             const option = {
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: { type: 'shadow' }
-                },
-                legend: {
-                    data: legendData,
-                    textStyle: { color: colors.legendText }
-                },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                legend: { data: legendData, textStyle: { color: colors.legendText } },
                 grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
                 xAxis: {
                     type: 'category',
@@ -769,36 +635,25 @@ new Vue({
         buildStatsRows(statsData) {
             try {
                 console.log('🔍 统计数据原始响应:', statsData);
-        
                 const customers = statsData.customers || [];
                 const phases = statsData.phases || ['NPI', 'INV'];
                 const data = statsData.data || {};
-        
-                // 辅助函数：安全转换为数字
-                const toNum = (val) => {
-                    const num = parseFloat(val);
-                    return isNaN(num) ? 0 : num;
-                };
-        
-                // 构建所有组合列表
+
+                const toNum = (val) => { const num = parseFloat(val); return isNaN(num) ? 0 : num; };
                 const combos = [];
                 for (let c of customers) {
                     for (let p of phases) {
                         combos.push({ cust: c, phase: p, key: c + '_' + p });
                     }
                 }
-        
-                // 定义所有维度行（包括总体、客户总体、客户+阶段组合）
+
                 const dims = [];
-                // Overall 行
                 if (data.overall) {
                     dims.push({ label: 'Overall (Perform+Plan+Ongoing)', statusKey: 'Total', dataKey: 'overall' });
                     dims.push({ label: 'Overall (Perform)', statusKey: 'Perform', dataKey: 'overall' });
                     dims.push({ label: 'Overall (Plan)', statusKey: 'Plan', dataKey: 'overall' });
                     dims.push({ label: 'Overall (Ongoing)', statusKey: 'Ongoing', dataKey: 'overall' });
                 }
-        
-                // 每个客户总体
                 for (let c of customers) {
                     let key = 'customer_' + c;
                     if (data[key]) {
@@ -808,8 +663,6 @@ new Vue({
                         dims.push({ label: `${c} (Ongoing)`, statusKey: 'Ongoing', dataKey: key });
                     }
                 }
-        
-                // 每个客户+阶段组合（只显示三种状态）
                 for (let c of customers) {
                     for (let p of phases) {
                         let comboKey = c + '_' + p;
@@ -820,32 +673,26 @@ new Vue({
                         }
                     }
                 }
-        
+
                 const dimensionMap = new Map();
                 const metrics = ['sample_qty', 'hc_qty', 'hc_days', 'pd', 'device_fee_usd'];
-        
+
                 for (let dim of dims) {
                     const source = data[dim.dataKey];
                     if (!source) continue;
                     const statusData = source[dim.statusKey];
                     if (!statusData) continue;
-        
+
                     const parts = {};
-                    // 遍历所有组合，判断是否属于当前维度
                     for (let combo of combos) {
                         let include = false;
-                        if (dim.dataKey === 'overall') {
-                            // 总体包含所有组合
-                            include = true;
-                        } else if (dim.dataKey.startsWith('customer_')) {
-                            // 客户总体只包含该客户相关的组合
+                        if (dim.dataKey === 'overall') include = true;
+                        else if (dim.dataKey.startsWith('customer_')) {
                             const cust = dim.dataKey.replace('customer_', '');
                             include = (combo.cust === cust);
                         } else {
-                            // 具体组合（如 'AIO_NPI'）只包含该组合本身
                             include = (dim.dataKey === combo.key);
                         }
-        
                         if (include) {
                             const comboSource = data[combo.key];
                             if (comboSource) {
@@ -865,12 +712,10 @@ new Vue({
                                 parts[combo.key] = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
                             }
                         } else {
-                            // 不属于该维度，置0
                             parts[combo.key] = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
                         }
                     }
-        
-                    // 计算该维度的总和（用于表格显示）
+
                     let totalVals = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
                     for (let combo of combos) {
                         let p = parts[combo.key];
@@ -880,7 +725,7 @@ new Vue({
                         totalVals.pd += p.pd;
                         totalVals.device_fee_usd += p.device_fee_usd;
                     }
-        
+
                     dimensionMap.set(dim.label, {
                         sample_qty: totalVals.sample_qty,
                         hc_qty: totalVals.hc_qty,
@@ -890,10 +735,9 @@ new Vue({
                         parts: parts
                     });
                 }
-        
+
                 this.dimensionMap = dimensionMap;
-        
-                // 生成统计表格数据
+
                 this.statsRows = [];
                 for (let [dim, values] of dimensionMap.entries()) {
                     this.statsRows.push({
@@ -905,8 +749,7 @@ new Vue({
                         device_fee_usd: values.device_fee_usd.toFixed(2)
                     });
                 }
-        
-                // 触发图表渲染
+
                 this.$nextTick(() => {
                     if (this.chartInstance) {
                         this.updateChart();
@@ -916,7 +759,6 @@ new Vue({
                 });
             } catch (e) {
                 console.error('❌ buildStatsRows 出错:', e);
-                // 降级处理
                 this.statsRows = [];
                 this.dimensionMap = new Map();
                 this.$message.error('统计数据解析失败，请查看控制台错误');
@@ -932,13 +774,13 @@ new Vue({
                 row.dimension, row.sample_qty, row.hc_qty, row.hc_days, row.pd, row.device_fee_usd
             ]);
             const mainHeaders = [
-                'No', 'PCR No', 'PCR Title', 'Customer', 'Project', 'Phase', 'Category',
+                'No', 'PCR No', 'PCR Title', 'Customer', 'Year', 'Project', 'Phase', 'Category',
                 'Receive Date', 'Status', 'Sample Qty', 'HC Qty', 'HC Days', 'PD',
                 'Device Fee (USD)', 'PM send NRE to Sales', 'Execution Start', 'Execution End',
                 'Whether In Budget', 'In budget but cost add', 'Remark', '報NRE郵件'
             ];
             const mainRows = this.tableData.map((row, index) => [
-                index + 1, row.pcr_no, row.pcr_title, row.Customer, row.Project, row.phase, row.category,
+                index + 1, row.pcr_no, row.pcr_title, row.Customer, row.year, row.Project, row.phase, row.category,
                 row.receive_date, row.status, row.sample_qty, row.hc_qty, row.hc_days, row.pd,
                 row.device_fee_usd, row.pm_send_nre_to_sales ? 'Yes' : 'No', row.execution_start, row.execution_end,
                 row.whether_in_budget ? 'Yes' : 'No', row.in_budget_but_cost_add ? 'Yes' : 'No', row.remark,
@@ -961,7 +803,7 @@ new Vue({
         },
         getEmptyForm() {
             return {
-                id: null, pcr_no: '', pcr_title: '', Customer: '', Project: '', Compalproject: '',
+                id: null, pcr_no: '', pcr_title: '', Customer: '', year: '', Project: '', Compalproject: '',
                 phase: '', category: '', receive_date: '', status: 'Plan',
                 sample_qty: 0, hc_qty: 0, hc_days: 0, device_fee_usd: 0,
                 pm_send_nre_to_sales: false, execution_start: '', execution_end: '',
@@ -1023,6 +865,7 @@ new Vue({
             this.form.execution_start = row.execution_start || '';
             this.form.execution_end = row.execution_end || '';
             this.form.attachment_url = row.attachment;
+            this.form.year = row.year || '';
             if (row.attachment) {
                 this.attachmentFileList = [{ name: row.attachment.split('/').pop(), url: row.attachment }];
             }
@@ -1094,14 +937,17 @@ new Vue({
                 }
             }).catch(() => {});
         },
-        handleExcelChange(file, fileList) { this.excelFileList = [file]; },
+        handleExcelChange(file, fileList) {
+            this.excelFile = file.raw;
+            this.excelFileList = [file];
+        },
         async uploadExcel() {
-            if (!this.excelFileList.length) {
+            if (!this.excelFile) {
                 this.$message.warning('请选择文件');
                 return;
             }
             const formData = new FormData();
-            formData.append('excel_file', this.excelFileList[0].raw);
+            formData.append('excel_file', this.excelFile);
             this.uploading = true;
             try {
                 const res = await axios.post('/PCRList/api/upload_excel/', formData, {
@@ -1131,6 +977,7 @@ new Vue({
                     this.$refs.excelUpload.clearFiles();
                 }
                 this.excelFileList = [];
+                this.excelFile = null;
             }
         },
         downloadTemplate() {
