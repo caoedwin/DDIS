@@ -467,8 +467,14 @@ new Vue({
     },
     watch: {
         statsLoaded(newVal) {
-            if (newVal && this.dimensionMap.size && this.chartInstance) {
-                this.chartInstance.resize();
+            if (newVal && this.dimensionMap.size) {
+                this.$nextTick(() => {
+                    if (this.chartInstance) {
+                        this.chartInstance.resize();
+                    } else {
+                        this.initChart();
+                    }
+                });
             }
         },
         chartMetric() { this.updateChart(); },
@@ -826,6 +832,9 @@ new Vue({
         async searchData() {
             this.loading = true;
             try {
+                // ⭐ 先刷新筛选下拉选项（Year、Compal Project 等）
+                await this.fetchFilterOptions();
+        
                 const dateRange = this.searchForm.dateRange || [];
                 const params = {
                     start_date: dateRange[0] || '',
@@ -840,7 +849,7 @@ new Vue({
                 const listRes = await axios.post('/PCRList/api/list/', params);
                 this.tableData = listRes.data.data;
                 this.total = listRes.data.total;
-
+        
                 const statsParams = {
                     start_date: dateRange[0] || '',
                     end_date: dateRange[1] || '',
@@ -849,6 +858,7 @@ new Vue({
                 this.buildStatsRows(statsRes.data);
                 this.statsLoaded = true;
             } catch(e) {
+                console.error('搜索失败:', e);
                 this.$message.error('加载失败');
             } finally {
                 this.loading = false;
