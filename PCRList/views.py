@@ -109,8 +109,43 @@ def pcr_list_api(request):
             pass
     """获取 PCR 列表（支持时间段筛选，仅包含 execution_start 和 execution_end 均非空的记录）"""
     data = json.loads(request.body)
+    action = data.get('action', 'list')  # 默认为 'list'
+    # ---------- 处理获取筛选选项 ----------
+    if action == 'options':
+        customer_choices = [{'value': code, 'label': label} for code, label in PCR.Customer_CHOICES]
+        phase_choices = [{'value': code, 'label': label} for code, label in PCR.PHASE_CHOICES]
+        years = PCR.objects.dates('receive_date', 'year', order='DESC')
+        year_choices = [{'value': year.year, 'label': str(year.year)} for year in years if year]
+        compalprojects = (PCR.objects.filter(Compalproject__isnull=False)
+                          .exclude(Compalproject='')
+                          .values_list('Compalproject', flat=True)
+                          .distinct()
+                          .order_by('Compalproject'))
+        compalproject_choices = [{'value': proj, 'label': proj} for proj in compalprojects]
+
+        return JsonResponse({
+            'action': 'options',
+            'customer_choices': customer_choices,
+            'phase_choices': phase_choices,
+            'year_choices': year_choices,
+            'compalproject_choices': compalproject_choices,
+        })
+
     start_date = data.get('start_date')
     end_date = data.get('end_date')
+    # 新增搜索参数
+    customer = data.get('customer', '').strip()
+    phase = data.get('phase', '').strip()
+    # 安全处理年份：可能是整数或字符串
+    year_raw = data.get('year')
+    if year_raw is not None:
+        year = str(year_raw).strip()
+        year = year if year else None
+    else:
+        year = None
+    compalproject = data.get('compalproject', '').strip()
+    print(compalproject)
+
     page = int(data.get('page', 1))
     page_size = int(data.get('page_size', 20))
 
@@ -136,6 +171,21 @@ def pcr_list_api(request):
             execution_end__isnull=False,
             execution_start__lte=end_date
         )
+
+    # 2. 新增搜索条件（AND 关系）
+    if customer:
+        queryset = queryset.filter(Customer=customer)
+    if phase:
+        queryset = queryset.filter(phase=phase)
+    if year:
+        try:
+            year_int = int(year)
+            queryset = queryset.filter(receive_date__year=year_int)
+        except ValueError:
+            pass  # 忽略非法年份
+    if compalproject:
+        queryset = queryset.filter(Compalproject__icontains=compalproject)
+        print(queryset)
 
     paginator = Paginator(queryset, page_size)
     page_obj = paginator.get_page(page)
@@ -182,86 +232,94 @@ def pcr_list_api(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def pcr_statistics_api(request):
-    """统计数据（仅统计 execution_start 和 execution_end 均非空的记录）"""
+    """
+    统计数据（动态客户+阶段，包含 Perform / Plan / Ongoing 及合计）
+    当未选择时间范围时，统计所有记录；当选择时间范围时，只统计 execution_start/end 非空且重叠的记录。
+    """
     data = json.loads(request.body)
     start_date = data.get('start_date')
     end_date = data.get('end_date')
 
-    # 基础筛选：只包含两个日期都不为空的记录
-    base_queryset = PCR.objects.filter(
-        execution_start__isnull=False,
-        execution_end__isnull=False
-    )
-
-    # 再根据传入的时间范围进行重叠筛选
-    if start_date and end_date:
-        base_queryset = base_queryset.filter(
-            execution_start__lte=end_date,
-            execution_end__gte=start_date
+    # 根据是否传入时间范围决定基础查询集
+    if start_date or end_date:
+        # 有时间范围：必须两个日期都不为空，再按重叠筛选
+        base_queryset = PCR.objects.filter(
+            execution_start__isnull=False,
+            execution_end__isnull=False
         )
-    elif start_date:
-        base_queryset = base_queryset.filter(execution_end__gte=start_date)
-    elif end_date:
-        base_queryset = base_queryset.filter(execution_start__lte=end_date)
+        if start_date and end_date:
+            base_queryset = base_queryset.filter(
+                execution_start__lte=end_date,
+                execution_end__gte=start_date
+            )
+        elif start_date:
+            base_queryset = base_queryset.filter(execution_end__gte=start_date)
+        elif end_date:
+            base_queryset = base_queryset.filter(execution_start__lte=end_date)
+    else:
+        # 无时间范围：统计所有记录（不过滤日期）
+        base_queryset = PCR.objects.all()
 
-    def stats(qs, customer=None, phase=None):
-        """聚合统计函数，返回 Perform 和 Plan 的五项指标"""
-        q = qs
-        if customer:
-            q = q.filter(Customer=customer)
-        if phase:
-            q = q.filter(phase=phase)
+    # 获取客户列表和阶段
+    customers = list(base_queryset.values_list('Customer', flat=True).distinct().order_by('Customer'))
+    phases = ['NPI', 'INV']
 
-        perform = q.filter(status='Perform').aggregate(
-            sample=Coalesce(Sum('sample_qty'), 0),
+    # 聚合函数（已包含 'On going' 和 'Ongoing' 的兼容处理）
+    def aggregate_by_status(qs):
+        perform = qs.filter(status='Perform').aggregate(
+            sample_qty=Coalesce(Sum('sample_qty'), 0),
             hc_qty=Coalesce(Sum('hc_qty'), 0),
             hc_days=Coalesce(Sum('hc_days'), 0),
             pd=Coalesce(Sum('pd'), 0),
-            dev=Coalesce(Sum('device_fee_usd'), 0)
+            device_fee_usd=Coalesce(Sum('device_fee_usd'), 0)
         )
-        plan = q.filter(status='Plan').aggregate(
-            sample=Coalesce(Sum('sample_qty'), 0),
+        plan = qs.filter(status='Plan').aggregate(
+            sample_qty=Coalesce(Sum('sample_qty'), 0),
             hc_qty=Coalesce(Sum('hc_qty'), 0),
             hc_days=Coalesce(Sum('hc_days'), 0),
             pd=Coalesce(Sum('pd'), 0),
-            dev=Coalesce(Sum('device_fee_usd'), 0)
+            device_fee_usd=Coalesce(Sum('device_fee_usd'), 0)
         )
-        total = {
-            'sample_qty': float(perform['sample'] + plan['sample']),
-            'hc_qty': float(perform['hc_qty'] + plan['hc_qty']),
-            'hc_days': float(perform['hc_days'] + plan['hc_days']),
-            'pd': float(perform['pd'] + plan['pd']),
-            'device_fee_usd': float(perform['dev'] + plan['dev'])
-        }
+        # 兼容两种写法
+        ongoing = qs.filter(Q(status='Ongoing') | Q(status='On going')).aggregate(
+            sample_qty=Coalesce(Sum('sample_qty'), 0),
+            hc_qty=Coalesce(Sum('hc_qty'), 0),
+            hc_days=Coalesce(Sum('hc_days'), 0),
+            pd=Coalesce(Sum('pd'), 0),
+            device_fee_usd=Coalesce(Sum('device_fee_usd'), 0)
+        )
+        total = {}
+        for key in perform.keys():
+            total[key] = perform[key] + plan[key] + ongoing[key]
         return {
-            'perform': {
-                'sample_qty': float(perform['sample']),
-                'hc_qty': float(perform['hc_qty']),
-                'hc_days': float(perform['hc_days']),
-                'pd': float(perform['pd']),
-                'device_fee_usd': float(perform['dev'])
-            },
-            'plan': {
-                'sample_qty': float(plan['sample']),
-                'hc_qty': float(plan['hc_qty']),
-                'hc_days': float(plan['hc_days']),
-                'pd': float(plan['pd']),
-                'device_fee_usd': float(plan['dev'])
-            },
-            'total': total
+            'Perform': perform,
+            'Plan': plan,
+            'Ongoing': ongoing,
+            'Total': total
         }
 
     result = {
-        'total': stats(base_queryset),
-        'NB': stats(base_queryset, customer='NB'),
-        'AIO': stats(base_queryset, customer='AIO'),
-        'NB_NPI': stats(base_queryset, customer='NB', phase='NPI'),
-        'NB_INV': stats(base_queryset, customer='NB', phase='INV'),
-        'AIO_NPI': stats(base_queryset, customer='AIO', phase='NPI'),
-        'AIO_INV': stats(base_queryset, customer='AIO', phase='INV'),
+        'customers': customers,
+        'phases': phases,
+        'data': {}
     }
-    return JsonResponse(result)
 
+    result['data']['overall'] = aggregate_by_status(base_queryset)
+
+    for cust in customers:
+        qs_cust = base_queryset.filter(Customer=cust)
+        result['data'][f'customer_{cust}'] = aggregate_by_status(qs_cust)
+
+    for phase in phases:
+        qs_phase = base_queryset.filter(phase=phase)
+        result['data'][f'phase_{phase}'] = aggregate_by_status(qs_phase)
+
+    for cust in customers:
+        for phase in phases:
+            qs_comb = base_queryset.filter(Customer=cust, phase=phase)
+            result['data'][f'{cust}_{phase}'] = aggregate_by_status(qs_comb)
+
+    return JsonResponse(result)
 @csrf_exempt
 @require_http_methods(["POST"])
 def pcr_create_api(request):

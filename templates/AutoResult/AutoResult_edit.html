@@ -293,6 +293,22 @@ height: 100% !important; //设置高优先，以覆盖内联样式
         </el-table-column>
         <el-table-column prop="FunctionInt" label="功能簡介" width="180" align="center">
         </el-table-column>
+        <el-table-column label="培训人员名单" width="140" align="center">
+            <template scope="scope">
+                <div class="training-thumb-container" v-if="scope.row.TrainingStaff && scope.row.TrainingStaff.length">
+                    <el-image
+                        v-for="(img, idx) in scope.row.TrainingStaff.slice(0, 3)"
+                        :key="idx"
+                        :src="img.url"
+                        class="training-thumb"
+                        fit="cover"
+                        :preview-src-list="scope.row.TrainingStaff.map(i => i.url)"
+                    ></el-image>
+                    <span v-if="scope.row.TrainingStaff.length > 3" class="training-more">+${ scope.row.TrainingStaff.length - 3 }</span>
+                </div>
+                <span v-else>无</span>
+            </template>
+        </el-table-column>
         <el-table-column prop="Comments" label="備註" align="center"  fixed="right">
             <template slot-scope="scope">
                 <textarea class="edit-cell" cols="6" rows="4" v-if="showEdit[scope.$index]"  v-model="scope.row.Comments"></textarea>

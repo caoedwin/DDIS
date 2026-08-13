@@ -109,6 +109,12 @@ class AutoItems(models.Model):
     Ver = models.CharField(max_length=30, null=True, blank=True, verbose_name='工具版本')
     FunDescription = models.CharField(max_length=1000, null=True, blank=True, verbose_name='功能簡介')
     Comment = models.CharField(max_length=1000, null=True, blank=True, verbose_name='Comment')
+    TrainingStaff = models.ManyToManyField(
+        'PICS',
+        related_name='training_items',
+        blank=True,
+        verbose_name='培训人员名单'
+    )
     Attachment = models.ManyToManyField(files, related_name='Attachment', blank=True, verbose_name='工具及Sop')
     # Photo = models.ManyToManyField(PICS, related_name='pics', blank=True, verbose_name='图片表')
     class Meta:

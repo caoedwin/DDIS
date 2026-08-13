@@ -1,0 +1,47 @@
+	首先，这是我的django系统的项目文案夹，python3.7.2+django2.1.7+mysql8+vue离线版(非前后端分离，包括elementui+echart也都是离线版，在html页面的js导入下载好的js文件，路由是用django的路由)，api用的是django的simplejwt。
+	里面包含的系统系统有很多，一个app就是一个系统。前端的菜单和基础框架都是基于base.html.其他app的都是在这个基础上扩展的（{% extends 'base.html' %}）。
+	基于以上情况，每新开发一个系统（新增一个app），都不能影响其他已有系统（已有的app），包括公共的settings，url等等，这是最重要的。
+	对于新增的系统，请根据我的row data和逻辑，先帮我设计生成完整models.py和admin.py。再根据前端需求和功能，生成后端view.py和url.py(子系统的url)在生成url时，只生成返回html的路由，其他的请求（增删改查等等）都是通过request的get或post携带对应功能的key来区分是哪个按钮或功能。最后再生成对应的html页面，html页面都是基于base.html扩展的，可以参考其他app的，但是坚决不能修改到其他app的任何文件和功能。
+	新app的通用需求如下：
+一：models和admin
+1对于每一个模型，都需要有创建人，创建时间和更新时间（created_by = models.ForeignKey(
+        UserInfo,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        verbose_name="创建者"
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新时间")），如果有固定下拉菜单的最好使用choices=Customer_CHOICES，rowdata，如附件
+2还有工作逻辑种需要的数据有：
+二：view.py和url
+1view里面所有choices都要从models里面获取，再返回到前端，前端不要写死。
+三：前端数据录入页面
+1所有的下拉选项都需要可以输入匹配下拉项，因为下拉选项都很多。
+2如果有owner这种，要用穿梭框（例如：<label style="font-size: 16px;font-weight: bold;margin-left: 15px;" for="Owner">负责人</label>
+                 <el-autocomplete
+                          class="inline-input"
+                          v-model="Owner"
+                          ref="Owner"
+                          clearable
+                          :fetch-suggestions="querySearch"
+                          placeholder="请输入负责人名称筛选"
+                          @select="handleSelect"
+                        >
+                     <template slot-scope="{ item }">
+                         <div style="text-align: center">${ item.value }&nbsp;(${ item.number })</div>
+                     </template>
+                 </el-autocomplete>），无论多对多(modelsl里面是ManyToManyField)还是一对多还是一对一。
+3每个页面都需要有搜索，新增，模板下载，excel上传，导出，批量删除，修改这几个按钮和功能，且除了搜索都需要有权限的区分（后端返回的数据每条都带有一个canedit=true或者false）。批量删除和编辑都是多选框（<el-table-column type="selection" width="55" :selectable="checkSelectable" align="center"></el-table-column>），canedit时true的才能勾选，编辑时只能勾选一条，一条以上点击编辑按钮有提示。与后端的交互，都需要有成功，失败原因，以及如果不可覆盖，提示成功上传几条，重复几条，哪些是重复数据。编辑和新增用一个函数。
+4对于table的显示，前端需要有列设定按钮，用于客户选择显示哪些列内容，且需要分页显示，默认每页100条数据（<el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[20,50,100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total"
+                    style="margin-top:20px; text-align:right;">
+                </el-pagination>）。导出的数据如果是models里面的数据需要和上传模板一致，方便导出的数据可以直接用于上传。
+四前端dashboard统计页面
+1.如果需要根据公式统计数据，既要显示统计表格，也要显示echart图表。如果需要by不同的维度（by时间，年份或者月份，by客户别等，看有多少一般看models里面有多少用choice的字段）
+

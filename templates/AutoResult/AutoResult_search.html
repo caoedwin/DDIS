@@ -189,6 +189,44 @@
     color: coral;
     margin-left: 15px;
 }
+  /* 培训名单图片缩略图样式 */
+.training-thumb {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin: 2px;
+}
+.training-thumb-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.training-more {
+    font-size: 12px;
+    color: #999;
+    margin-left: 4px;
+}
+/* 培训名单图片缩略图样式 */
+.training-thumb {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin: 2px;
+}
+.training-thumb-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.training-more {
+    font-size: 12px;
+    color: #999;
+    margin-left: 4px;
+}
     </style>
 {% endblock %}
 {% block content %}
@@ -290,6 +328,22 @@
         <el-table-column prop="Status" label="Status" width="70" align="center">
         </el-table-column>
         <el-table-column prop="FunctionInt" label="功能簡介" align="center">
+        </el-table-column>
+        <el-table-column label="培训人员名单" width="140" align="center">
+            <template scope="scope">
+                <div class="training-thumb-container" v-if="scope.row.TrainingStaff && scope.row.TrainingStaff.length">
+                    <el-image
+                        v-for="(img, idx) in scope.row.TrainingStaff.slice(0, 3)"
+                        :key="idx"
+                        :src="img.url"
+                        class="training-thumb"
+                        fit="cover"
+                        :preview-src-list="scope.row.TrainingStaff.map(i => i.url)"
+                    ></el-image>
+                    <span v-if="scope.row.TrainingStaff.length > 3" class="training-more">+${ scope.row.TrainingStaff.length - 3 }</span>
+                </div>
+                <span v-else>无</span>
+            </template>
         </el-table-column>
     </el-table>
     <div class="block">
@@ -495,16 +549,22 @@
 
      },
         computed:{
-                datas(){//必须是el-table里面绑定的数据变量,不能与axios接受的变量名一样
-                    const search=this.search;
-                    if(search){
-                        return this.tableContent.filter(data=>{//axios返回时接受数据的变量
-                            return Object.keys(data).some(key=>{
-                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase())>-1
-                            })
+                datas() {
+                    const search = this.search;
+                    if (search) {
+                        return this.tableContent.filter(data => {
+                            // 先检查所有普通字段
+                            let match = Object.keys(data).some(key => {
+                                return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
+                            });
+                            // 如果未匹配，再检查 TrainingStaffNames
+                            if (!match && data.TrainingStaffNames) {
+                                match = data.TrainingStaffNames.toLowerCase().indexOf(search.toLowerCase()) > -1;
+                            }
+                            return match;
                         })
                     }
-                    return this.tableContent//axios返回时接受数据的变量
+                    return this.tableContent
                 },
                 total_computed () {
                     this.Totalsize = this.datas.length;//edwin:export数据的个数

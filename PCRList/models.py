@@ -14,8 +14,11 @@ class PCR(models.Model):
     pcr_title = models.CharField(max_length=200, verbose_name="PCR Title")
 
     Customer_CHOICES = [
-        ('NB', 'NB'),
-        ('AIO', 'AIO'),
+        ('C38(NB)', 'C38(NB)'),
+        ('C38(AIO)', 'C38(AIO)'),
+        ('A08(NB)', 'A08(NB)'),
+        ('T89(NB)', 'T89(NB)'),
+        ('T88(AIO)', 'T88(AIO)'),
     ]
     Customer = models.CharField(max_length=10, choices=Customer_CHOICES, verbose_name="Customer")
 

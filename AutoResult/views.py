@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime, os
 from django.http import HttpResponse
 import datetime, json, simplejson
-from .models import AutoItems, AutoResult, AutoProject, files
+from .models import AutoItems, AutoResult, AutoProject, files, PICS
 from CQM.models import CQM, CQMProject, CQM_history
 from CQM.models import CQM as CQMtest
 from app01.models import UserInfo, ProjectinfoinDCT
@@ -170,6 +170,16 @@ def AutoItem_edit(request):
                             fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
                             AutoItems_object.save()
 
+                            # 处理培训人员图片（多图）
+                            new_training_images = request.FILES.getlist('new_training_images')  # 前端多图上传的 name
+                            for img_file in new_training_images:
+                                # 创建 PICS 实例
+                                pic_obj = PICS(pic=img_file, single=img_file.name)
+                                pic_obj.save()
+                                AutoItems_object.TrainingStaff.add(pic_obj)
+
+                            AutoItems_object.save()
+
                     # mock_data
                     ckeck_dic = {}
                     Customer = request.POST.get('CustomerSearch')
@@ -233,6 +243,25 @@ def AutoItem_edit(request):
                         fileslist.delete()  # 删除实体文件 model中的files_SopRom_delete方法
 
                         AutoItems_object = AutoItems.objects.get(id=ID)
+
+                        AutoItems_object.save()
+
+                        # 处理待删除的图片 ID（前端传来 JSON 数组）
+                        training_images_to_delete = json.loads(request.POST.get('training_images_to_delete', '[]'))
+                        if training_images_to_delete:
+                            pics_to_remove = PICS.objects.filter(id__in=training_images_to_delete)
+                            AutoItems_object.TrainingStaff.remove(*pics_to_remove)
+                            # 删除实体文件（可选）
+                            for pic in pics_to_remove:
+                                pic.pic.delete(save=False)
+                                pic.delete()
+
+                        # 处理新增上传的图片
+                        new_training_images = request.FILES.getlist('new_training_images')
+                        for img_file in new_training_images:
+                            pic_obj = PICS(pic=img_file, single=img_file.name)
+                            pic_obj.save()
+                            AutoItems_object.TrainingStaff.add(pic_obj)
 
                         AutoItems_object.save()
 
@@ -531,6 +560,13 @@ def AutoItem_edit(request):
                     # print(mock_data)
 
         for i in mock_datalist:
+            training_images = []
+            for pic in i.TrainingStaff.all():
+                training_images.append({
+                    'id': pic.id,
+                    'url': pic.pic.url if pic.pic else '',
+                    'name': pic.single or ''
+                })
             Attachmentlist = []
             for h in i.Attachment.all():
                 Attachmentlist.append({"id": h.id, "url": "/media/" + str(h.files)})
@@ -549,6 +585,7 @@ def AutoItem_edit(request):
                  "Owner": i.Owner,
                  "Comment": i.Comment,
                  "Attachment": Attachmentlist,
+                 'TrainingStaff': training_images,  # 列表格式
                  }
             )
 
@@ -711,6 +748,13 @@ def AutoResult_edit(request):
                     Attachmentlist = []
                     for h in i.Attachment.all():
                         Attachmentlist.append({"id": h.id, "url": "/media/" + str(h.files)})
+                    training_staff = []
+                    training_names = []
+                    for pic in i.TrainingStaff.all():
+                        url = pic.pic.url if pic.pic else ''
+                        name = pic.single or ''
+                        training_staff.append({'id': pic.id, 'url': url, 'name': name})
+                        training_names.append(name)
                     mock_data.append(
                         {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                          "BaseBenfit": i.BaseIncome,
@@ -724,6 +768,8 @@ def AutoResult_edit(request):
                          "FunctionInt": i.FunDescription,
                          "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments,
                          "Attachment": Attachmentlist,
+                         'TrainingStaff': training_staff,
+                         'TrainingStaffNames': ', '.join(training_names),
                          }
                     )
             if request.POST.get('isGetData') == 'SAVE':
@@ -793,6 +839,14 @@ def AutoResult_edit(request):
                         if AutoResult.objects.filter(**check_dic).first().Cycles:
                             ProjectData = int(AutoResult.objects.filter(**check_dic).first().Cycles)
                         Comments = AutoResult.objects.filter(**check_dic).first().Comments
+                    # 添加培训图片信息
+                    training_staff = []
+                    training_names = []
+                    for pic in i.TrainingStaff.all():
+                        url = pic.pic.url if pic.pic else ''
+                        name = pic.single or ''
+                        training_staff.append({'id': pic.id, 'url': url, 'name': name})
+                        training_names.append(name)
                     mock_data.append(
                         {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                          "BaseBenfit": i.BaseIncome,
@@ -804,7 +858,9 @@ def AutoResult_edit(request):
                          "Import_Date": str(i.Import_Date) if i.Import_Date else '',
                          "Ver": i.Ver,
                          "FunctionInt": i.FunDescription,
-                         "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
+                         "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments,
+                         'TrainingStaff': training_staff,
+                         'TrainingStaffNames': ', '.join(training_names),
                          }
                     )
         else:
@@ -974,6 +1030,14 @@ def AutoResult_edit(request):
                                 ProjectData = int(AutoResult.objects.filter(**check_dic).first().Cycles)
                             Comments = AutoResult.objects.filter(**check_dic).first().Comments
                             # print(ProjectData, Comments)
+                        # 添加培训图片信息
+                        training_staff = []
+                        training_names = []
+                        for pic in i.TrainingStaff.all():
+                            url = pic.pic.url if pic.pic else ''
+                            name = pic.single or ''
+                            training_staff.append({'id': pic.id, 'url': url, 'name': name})
+                            training_names.append(name)
                         mock_data.append(
                             {"id": i.id, "Number": i.Number, "CG": i.Customer, "VA_NVA": i.ValueIf,
                              "BaseBenfit": i.BaseIncome,
@@ -985,7 +1049,9 @@ def AutoResult_edit(request):
                              "Import_Date": str(i.Import_Date) if i.Import_Date else '',
                              "Ver": i.Ver,
                              "FunctionInt": i.FunDescription,
-                             "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments
+                             "Owner": i.Owner, "Comment": i.Comment, "ProjectData": ProjectData, "Comments": Comments,
+                             'TrainingStaff': training_staff,
+                             'TrainingStaffNames': ', '.join(training_names),
                              }
                         )
 
@@ -1230,6 +1296,13 @@ def AutoResult_search(request):
                 SummaryBenfit = SummaryProject * float(i.BaseIncome)
                 NPIBenfit = NPIProject * float(i.BaseIncome)
                 # print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                training_staff = []
+                training_names = []
+                for pic in i.TrainingStaff.all():
+                    url = pic.pic.url if pic.pic else ''
+                    name = pic.single or ''
+                    training_staff.append({'id': pic.id, 'url': url, 'name': name})
+                    training_names.append(name)
 
                 mock_data.append(
                     {"id": i.id, "ProjectResult": ProjectResult, "Number": i.Number, "CG": i.Customer,
@@ -1243,6 +1316,8 @@ def AutoResult_search(request):
                      "Import_Date": str(i.Import_Date) if i.Import_Date else '',
                      "Ver": i.Ver,
                      "FunctionInt": i.FunDescription,
+                     'TrainingStaff': training_staff,
+                     'TrainingStaffNames': ', '.join(training_names),
                      "Comments": i.Comment}
                 )
         data = {

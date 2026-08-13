@@ -11,7 +11,6 @@
         margin-bottom: 16px;
         background: transparent;
     }
-    /* 折叠面板自定义样式（适配深色/浅色主题） */
     .el-collapse {
         border: none;
     }
@@ -30,7 +29,6 @@
         padding: 12px 0;
         background: transparent;
     }
-    /* 统计表格紧凑样式 */
     .stats-table-compact .el-table__body td,
     .stats-table-compact .el-table__header th {
         padding: 4px 0;
@@ -39,7 +37,6 @@
     .stats-table-compact .cell {
         line-height: 1.4;
     }
-    /* 图表卡片内边距减小 */
     .chart-card {
         padding: 8px 0;
         background: transparent;
@@ -51,7 +48,6 @@
     #statsChart {
         height: 320px;
     }
-    /* 表格工具栏 */
     .table-toolbar {
         margin-bottom: 12px;
         text-align: right;
@@ -77,76 +73,133 @@
         width: 120px;
         margin-right: 0;
     }
-    /* ---------- PCR 页面深色模式适配 ---------- */
-    /* 指标对比标题 */
     body.theme-dark .chart-title {
         color: #eef2ff !important;
     }
-
-    /* 折叠面板标题（加强覆盖，确保生效） */
     body.theme-dark .el-collapse-item__header {
         color: #eef2ff !important;
         border-bottom-color: #4a627a !important;
     }
-
-    /* 列设置弹窗中的分组标题 */
     body.theme-dark .column-group-title {
-        color: #66b1ff !important;  /* 亮蓝色，更醒目 */
+        color: #66b1ff !important;
     }
-
-    /* 统计表格“维度”列文字 */
     body.theme-dark .stats-table-compact .el-table__body td .cell {
         color: #eef2ff !important;
     }
-
-    /* 表格工具栏的按钮文字（如果默认不够亮） */
     body.theme-dark .table-toolbar .el-button--default,
     body.theme-dark .table-toolbar .el-button--danger,
     body.theme-dark .table-toolbar .el-button--primary {
         color: #eef2ff !important;
     }
-
-    /* 图表下拉框和单选框文字（Element UI 组件，base 已有覆盖，但可加强） */
     body.theme-dark .el-select .el-input__inner,
     body.theme-dark .el-radio-button__inner {
         color: #eef2ff !important;
     }
-
 </style>
 {% endblock %}
 {% block content %}
 <div id="app" v-cloak>
     <el-backtop></el-backtop>
 
-    <!-- 搜索条件 -->
     <div class="search-card">
         <el-form :inline="true" :model="searchForm" label-width="120px">
-            <el-form-item label="时间范围（重叠）">
-                <el-date-picker
-                    v-model="searchForm.dateRange"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    value-format="yyyy-MM-dd"
-                    :clearable="true">
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
-                <el-button type="success" @click="openCreateDialog" icon="el-icon-plus">新增PCR</el-button>
-                <el-button type="warning" @click="showUploadDialog = true" icon="el-icon-upload">Excel上传</el-button>
-                <el-button type="info" @click="exportToExcel" icon="el-icon-download">导出Excel</el-button>
-            </el-form-item>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="时间范围（重叠）">
+                        <el-date-picker
+                            v-model="searchForm.dateRange"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd"
+                            :clearable="true">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="success" @click="openCreateDialog" icon="el-icon-plus">新增PCR</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="warning" @click="showUploadDialog = true" icon="el-icon-upload">Excel上传</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="info" @click="exportToExcel" icon="el-icon-download">导出Excel</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="text" @click="advancedVisible = !advancedVisible" :title="advancedVisible ? '收起高级筛选' : '展开高级筛选'">
+                            ${ advancedVisible ? '收起' : '高级筛选' }
+                            <i :class="advancedVisible ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+                        </el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row v-show="advancedVisible" style="margin-top:10px;">
+                <el-col :span="5">
+                    <el-form-item label="Customer" label-width="80px">
+                        <el-select v-model="searchForm.customer" clearable placeholder="全部" style="width:130px;">
+                            <el-option
+                                v-for="item in filterOptions.customer_choices"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-form-item label="Phase" label-width="80px">
+                        <el-select v-model="searchForm.phase" clearable placeholder="全部" style="width:130px;">
+                            <el-option
+                                v-for="item in filterOptions.phase_choices"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-form-item label="接收年份" label-width="80px">
+                        <el-select v-model="searchForm.year" clearable placeholder="全部年份" style="width:130px;">
+                            <el-option
+                                v-for="item in filterOptions.year_choices"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-form-item label="Compal Project" label-width="120px">
+                        <el-select v-model="searchForm.compalproject" clearable filterable placeholder="全部项目" style="width:130px;">
+                            <el-option
+                                v-for="item in filterOptions.compalproject_choices"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row v-show="advancedVisible" style="margin-top:6px;">
+                <el-col :span="24">
+                    <span style="font-size:12px; color:#909399;">
+                        <i class="el-icon-info"></i> 提示：高级筛选条件仅对下方“PCR数据列表”生效，统计概览仅受时间范围影响。
+                    </span>
+                </el-col>
+            </el-row>
         </el-form>
     </div>
 
-    <!-- 使用折叠面板分模块 -->
     <el-collapse v-model="activeCollapse">
-        <!-- 模块1：统计概览（包含图表+统计表格） -->
         <el-collapse-item title="📊 统计概览" name="stats">
             <div v-if="statsLoaded">
-                <!-- ECharts 图表 -->
                 <div class="chart-card">
                     <div class="chart-header">
                         <span class="chart-title">指标对比</span>
@@ -167,7 +220,6 @@
                     <div id="statsChart"></div>
                 </div>
 
-                <!-- 统计表格（紧凑版） -->
                 <div style="margin-top:8px;">
                     <el-table :data="statsRows" border stripe size="mini" class="stats-table-compact" style="width:100%;">
                         <el-table-column prop="dimension" label="维度" width="180"></el-table-column>
@@ -194,7 +246,6 @@
             <div v-else style="text-align:center; padding:20px; color:#909399;">暂无统计数据</div>
         </el-collapse-item>
 
-        <!-- 模块2：PCR 数据列表（默认展开） -->
         <el-collapse-item title="📋 PCR 数据列表" name="list">
             <div class="table-card">
                 <div class="table-toolbar">
@@ -275,8 +326,7 @@
         </el-collapse-item>
     </el-collapse>
 
-    <!-- 弹窗区域（保持不变） -->
-    <!-- 新增/编辑弹窗 -->
+    <!-- 弹窗区域 -->
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="90%" @close="resetForm">
         <el-form ref="pcrForm" :model="form" :rules="rules" label-width="140px">
             <el-row :gutter="20">
@@ -284,12 +334,34 @@
                 <el-col :span="12"><el-form-item label="PCR Title" prop="pcr_title"><el-input v-model="form.pcr_title"></el-input></el-form-item></el-col>
             </el-row>
             <el-row :gutter="20">
-                <el-col :span="8"><el-form-item label="Customer" prop="Customer"><el-select v-model="form.Customer"><el-option label="NB" value="NB"></el-option><el-option label="AIO" value="AIO"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8">
+                    <el-form-item label="Customer" prop="Customer">
+                        <el-select v-model="form.Customer">
+                            <el-option
+                                v-for="item in filterOptions.customer_choices"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
                 <el-col :span="8"><el-form-item label="Project" prop="Project"><el-input v-model="form.Project"></el-input></el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="Compal Project" prop="Compalproject"><el-input v-model="form.Compalproject"></el-input></el-form-item></el-col>
             </el-row>
             <el-row :gutter="20">
-                <el-col :span="8"><el-form-item label="Phase" prop="phase"><el-select v-model="form.phase"><el-option label="NPI" value="NPI"></el-option><el-option label="INV" value="INV"></el-option></el-select></el-form-item></el-col>
+                <el-col :span="8">
+                    <el-form-item label="Phase" prop="phase">
+                        <el-select v-model="form.phase">
+                            <el-option
+                                v-for="item in filterOptions.phase_choices"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
                 <el-col :span="8"><el-form-item label="Category" prop="category"><el-input v-model="form.category"></el-input></el-form-item></el-col>
                 <el-col :span="8"><el-form-item label="Receive Date" prop="receive_date"><el-date-picker v-model="form.receive_date" type="date" value-format="yyyy-MM-dd"></el-date-picker></el-form-item></el-col>
             </el-row>
@@ -325,8 +397,6 @@
         </div>
     </el-dialog>
 
-    <!-- Excel上传弹窗 -->
-    <!-- Excel上传弹窗 -->
     <el-dialog
         title="Excel批量上传"
         :visible.sync="showUploadDialog"
@@ -346,9 +416,7 @@
         </div>
     </el-dialog>
 
-    <!-- 重复数据弹窗 -->
     <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
-        <!-- 新增提示 -->
         <div style="margin-bottom: 12px; color: #E6A23C; font-size: 14px;">
             <i class="el-icon-warning-outline"></i> 提示：PCR No、PCR Title、Project 三者一致，判定为重复数据，只能上传一条。
         </div>
@@ -363,7 +431,6 @@
         </div>
     </el-dialog>
 
-    <!-- 错误信息弹窗 -->
     <el-dialog title="错误信息（未导入）" :visible.sync="errorDialogVisible" width="85%">
         <el-table :data="errorTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
@@ -374,7 +441,6 @@
         </div>
     </el-dialog>
 
-    <!-- 列设置弹窗 -->
     <el-dialog title="选择显示的列" :visible.sync="columnSettingsVisible" width="700px">
         <div class="column-group">
             <div class="column-group-title">基本信息</div>
@@ -436,18 +502,23 @@ new Vue({
     delimiters: ['${', '}'],
     data() {
         return {
-            selectedRows: [],           // 选中的行数据
-            multiDeleteLoading: false,
-            searchForm: { dateRange: [] },
-            stats: {
-                total: { perform: {}, plan: {}, total: {} },
-                NB: { perform: {}, plan: {}, total: {} },
-                AIO: { perform: {}, plan: {}, total: {} },
-                NB_NPI: { perform: {}, plan: {} },
-                NB_INV: { perform: {}, plan: {} },
-                AIO_NPI: { perform: {}, plan: {} },
-                AIO_INV: { perform: {}, plan: {} }
+            advancedVisible: false,
+            filterOptions: {
+                customer_choices: [],
+                phase_choices: [],
+                year_choices: [],
+                compalproject_choices: []
             },
+            searchForm: {
+                dateRange: [],
+                customer: '',
+                phase: '',
+                year: '',
+                compalproject: ''
+            },
+            selectedRows: [],
+            multiDeleteLoading: false,
+            stats: {},  // 不再使用，保留为空
             statsLoaded: false,
             statsRows: [],
             tableData: [],
@@ -514,7 +585,7 @@ new Vue({
             chartType: 'bar',
             chartInstance: null,
             _themeObserver: null,
-            activeCollapse: ['stats', 'list'], // 默认两个都展开（accordion模式下只能展开一个，改为数组模式）
+            activeCollapse: ['stats', 'list'],
         }
     },
     computed: {
@@ -523,7 +594,6 @@ new Vue({
         },
     },
     watch: {
-        // 原有的监听
         statsLoaded(newVal) {
             if (newVal && this.dimensionMap.size) {
                 this.$nextTick(() => this.initChart());
@@ -531,17 +601,12 @@ new Vue({
         },
         chartMetric() { this.updateChart(); },
         chartType() { this.updateChart(); },
-        
-        // ✅ 新增：监听折叠面板展开状态
         activeCollapse(newVal) {
-            // 当 'stats' 面板被展开时
             if (newVal.includes('stats')) {
                 this.$nextTick(() => {
                     if (this.chartInstance) {
-                        // 如果图表已存在，更新数据（同时会触发 resize）
                         this.updateChart();
                     } else {
-                        // 如果未初始化，则初始化
                         this.initChart();
                     }
                 });
@@ -550,7 +615,7 @@ new Vue({
     },
     mounted() {
         this.loadColumnSettings();
-        this.searchData();
+        this.fetchFilterOptions();
         window.addEventListener('resize', this.handleResize);
         this._themeObserver = new MutationObserver(() => {
             if (this.chartInstance) this.updateChart();
@@ -563,6 +628,21 @@ new Vue({
         if (this.chartInstance) this.chartInstance.dispose();
     },
     methods: {
+        async fetchFilterOptions() {
+            try {
+                const res = await axios.post('/PCRList/api/list/', { action: 'options' });
+                if (res.data.action === 'options') {
+                    this.filterOptions = {
+                        customer_choices: res.data.customer_choices || [],
+                        phase_choices: res.data.phase_choices || [],
+                        year_choices: res.data.year_choices || [],
+                        compalproject_choices: res.data.compalproject_choices || [],
+                    };
+                }
+            } catch (e) {
+                console.warn('获取筛选选项失败', e);
+            }
+        },
         handleUploadDialogClose(done) {
             if (this.uploading) {
                 this.$message.warning('正在上传中，请稍候...');
@@ -570,23 +650,17 @@ new Vue({
             }
             done();
         },
-        // 判断行是否可选（只有可删除的记录才能被选中）
         checkSelectable(row) {
             return row.can_delete === true;
         },
-
-        // 表格选择变化事件
         handleSelectionChange(selection) {
             this.selectedRows = selection;
         },
-
-        // 批量删除
         async batchDelete() {
             if (this.selectedRows.length === 0) {
                 this.$message.warning('请选择要删除的记录');
                 return;
             }
-            // 确认对话框
             try {
                 await this.$confirm(`确认删除选中的 ${this.selectedRows.length} 条记录吗？`, '提示', { type: 'warning' });
             } catch {
@@ -598,12 +672,11 @@ new Vue({
                 const res = await axios.post('/PCRList/api/batch_delete/', { ids });
                 if (res.data.success) {
                     this.$message.success(`成功删除 ${res.data.deleted_count} 条记录`);
-                    // 如果有部分失败，显示错误信息
                     if (res.data.errors && res.data.errors.length) {
                         this.$message.warning(`部分删除失败：${res.data.errors.join('；')}`);
                     }
                     this.selectedRows = [];
-                    this.searchData(); // 刷新列表
+                    this.searchData();
                 } else {
                     this.$message.error(res.data.message);
                 }
@@ -613,7 +686,6 @@ new Vue({
                 this.multiDeleteLoading = false;
             }
         },
-        // ---- 图表相关 ----
         getThemeColors() {
             const isDark = document.body.classList.contains('theme-dark');
             return {
@@ -636,34 +708,39 @@ new Vue({
             const colors = this.getThemeColors();
             const dimensions = Array.from(this.dimensionMap.keys());
             const metric = this.chartMetric;
-            const nb_npi_vals = [], nb_inv_vals = [], aio_npi_vals = [], aio_inv_vals = [];
-            for (let dim of dimensions) {
-                const parts = this.dimensionMap.get(dim).parts[metric];
-                nb_npi_vals.push(parts.nb_npi);
-                nb_inv_vals.push(parts.nb_inv);
-                aio_npi_vals.push(parts.aio_npi);
-                aio_inv_vals.push(parts.aio_inv);
+
+            const firstDim = this.dimensionMap.values().next().value;
+            if (!firstDim || !firstDim.parts) return;
+            const comboKeys = Object.keys(firstDim.parts);
+            if (comboKeys.length === 0) return;
+
+            const seriesData = [];
+            const legendData = [];
+            for (let comboKey of comboKeys) {
+                let name = comboKey.replace('_', ' ');
+                legendData.push(name);
+                let values = dimensions.map(dim => {
+                    let val = this.dimensionMap.get(dim).parts[comboKey];
+                    return val ? val[metric] : 0;
+                });
+                let seriesItem = {
+                    name: name,
+                    type: this.chartType,
+                    data: values,
+                };
+                if (this.chartType === 'bar') {
+                    seriesItem.stack = 'total';
+                }
+                seriesData.push(seriesItem);
             }
-            const metricName = this.metricLabels[metric];
+
             const option = {
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: { type: 'shadow' },
-                    formatter: function(params) {
-                        let html = `<strong>${params[0].axisValue}</strong><br/>`;
-                        let total = 0;
-                        params.forEach(p => {
-                            if (p.value > 0) {
-                                html += `${p.marker} ${p.seriesName}: ${p.value}<br/>`;
-                                total += p.value;
-                            }
-                        });
-                        html += `<strong>合计: ${total}</strong>`;
-                        return html;
-                    }
+                    axisPointer: { type: 'shadow' }
                 },
                 legend: {
-                    data: this.chartType === 'bar' ? ['NB NPI', 'NB INV', 'AIO NPI', 'AIO INV'] : [metricName],
+                    data: legendData,
                     textStyle: { color: colors.legendText }
                 },
                 grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
@@ -675,102 +752,176 @@ new Vue({
                 },
                 yAxis: {
                     type: 'value',
-                    name: metricName,
+                    name: this.metricLabels[metric],
                     nameTextStyle: { color: colors.nameText },
                     axisLabel: { color: colors.axisLabel },
                     splitLine: { lineStyle: { color: colors.splitLine } }
                 },
-                series: this.chartType === 'bar' ? [
-                    { name: 'NB NPI', type: 'bar', stack: 'total', data: nb_npi_vals, itemStyle: { color: '#5470c6' } },
-                    { name: 'NB INV', type: 'bar', stack: 'total', data: nb_inv_vals, itemStyle: { color: '#91cc75' } },
-                    { name: 'AIO NPI', type: 'bar', stack: 'total', data: aio_npi_vals, itemStyle: { color: '#fac858' } },
-                    { name: 'AIO INV', type: 'bar', stack: 'total', data: aio_inv_vals, itemStyle: { color: '#ee6666' } }
-                ] : [{
-                    name: metricName,
-                    type: 'line',
-                    data: dimensions.map(dim => this.dimensionMap.get(dim)[metric]),
-                    lineStyle: { color: '#409EFF', width: 2 },
-                    symbol: 'circle',
-                    symbolSize: 6
-                }]
+                series: seriesData
             };
+
             this.chartInstance.setOption(option, true);
             this.chartInstance.resize();
         },
         handleResize() {
             if (this.chartInstance) this.chartInstance.resize();
         },
-
-        // ---- 数据构建 ----
-        buildStatsRows() {
-            const getVal = (obj, field, sub = 'total') => {
-                if (obj && obj[sub] && typeof obj[sub][field] !== 'undefined') {
-                    let num = parseFloat(obj[sub][field]);
+        buildStatsRows(statsData) {
+            try {
+                console.log('🔍 统计数据原始响应:', statsData);
+        
+                const customers = statsData.customers || [];
+                const phases = statsData.phases || ['NPI', 'INV'];
+                const data = statsData.data || {};
+        
+                // 辅助函数：安全转换为数字
+                const toNum = (val) => {
+                    const num = parseFloat(val);
                     return isNaN(num) ? 0 : num;
+                };
+        
+                // 构建所有组合列表
+                const combos = [];
+                for (let c of customers) {
+                    for (let p of phases) {
+                        combos.push({ cust: c, phase: p, key: c + '_' + p });
+                    }
                 }
-                return 0;
-            };
-            const nb_npi = this.stats.NB_NPI;
-            const nb_inv = this.stats.NB_INV;
-            const aio_npi = this.stats.AIO_NPI;
-            const aio_inv = this.stats.AIO_INV;
-            const rowsConfig = [
-                { dim: 'Total (Perform+Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'total'), nb_inv: getVal(nb_inv, m, 'total'), aio_npi: getVal(aio_npi, m, 'total'), aio_inv: getVal(aio_inv, m, 'total') }) },
-                { dim: 'Total (Perform)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'perform'), nb_inv: getVal(nb_inv, m, 'perform'), aio_npi: getVal(aio_npi, m, 'perform'), aio_inv: getVal(aio_inv, m, 'perform') }) },
-                { dim: 'Total (Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'plan'), nb_inv: getVal(nb_inv, m, 'plan'), aio_npi: getVal(aio_npi, m, 'plan'), aio_inv: getVal(aio_inv, m, 'plan') }) },
-                { dim: 'NB Total (Perform+Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'total'), nb_inv: getVal(nb_inv, m, 'total'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB Total (Perform)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'perform'), nb_inv: getVal(nb_inv, m, 'perform'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB Total (Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'plan'), nb_inv: getVal(nb_inv, m, 'plan'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'AIO total (Perform+Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'total'), aio_inv: getVal(aio_inv, m, 'total') }) },
-                { dim: 'AIO total (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'perform'), aio_inv: getVal(aio_inv, m, 'perform') }) },
-                { dim: 'AIO total (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'plan'), aio_inv: getVal(aio_inv, m, 'plan') }) },
-                { dim: 'NB NPI (Perform)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'perform'), nb_inv: 0, aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB NPI (Plan)', formula: (m) => ({ nb_npi: getVal(nb_npi, m, 'plan'), nb_inv: 0, aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB INV (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: getVal(nb_inv, m, 'perform'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'NB INV (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: getVal(nb_inv, m, 'plan'), aio_npi: 0, aio_inv: 0 }) },
-                { dim: 'AIO NPI (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'perform'), aio_inv: 0 }) },
-                { dim: 'AIO NPI (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: getVal(aio_npi, m, 'plan'), aio_inv: 0 }) },
-                { dim: 'AIO INV (Perform)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: 0, aio_inv: getVal(aio_inv, m, 'perform') }) },
-                { dim: 'AIO INV (Plan)', formula: (m) => ({ nb_npi: 0, nb_inv: 0, aio_npi: 0, aio_inv: getVal(aio_inv, m, 'plan') }) }
-            ];
-            const dimensionMap = new Map();
-            rowsConfig.forEach(cfg => {
-                const dim = cfg.dim;
-                const parts5 = {
-                    sample_qty: cfg.formula('sample_qty'),
-                    hc_qty: cfg.formula('hc_qty'),
-                    hc_days: cfg.formula('hc_days'),
-                    pd: cfg.formula('pd'),
-                    device_fee_usd: cfg.formula('device_fee_usd')
-                };
-                const total = (metric) => {
-                    const p = parts5[metric];
-                    return p.nb_npi + p.nb_inv + p.aio_npi + p.aio_inv;
-                };
-                dimensionMap.set(dim, {
-                    sample_qty: total('sample_qty'),
-                    hc_qty: total('hc_qty'),
-                    hc_days: total('hc_days'),
-                    pd: total('pd'),
-                    device_fee_usd: total('device_fee_usd'),
-                    parts: parts5
+        
+                // 定义所有维度行（包括总体、客户总体、客户+阶段组合）
+                const dims = [];
+                // Overall 行
+                if (data.overall) {
+                    dims.push({ label: 'Overall (Perform+Plan+Ongoing)', statusKey: 'Total', dataKey: 'overall' });
+                    dims.push({ label: 'Overall (Perform)', statusKey: 'Perform', dataKey: 'overall' });
+                    dims.push({ label: 'Overall (Plan)', statusKey: 'Plan', dataKey: 'overall' });
+                    dims.push({ label: 'Overall (Ongoing)', statusKey: 'Ongoing', dataKey: 'overall' });
+                }
+        
+                // 每个客户总体
+                for (let c of customers) {
+                    let key = 'customer_' + c;
+                    if (data[key]) {
+                        dims.push({ label: `${c} (Perform+Plan+Ongoing)`, statusKey: 'Total', dataKey: key });
+                        dims.push({ label: `${c} (Perform)`, statusKey: 'Perform', dataKey: key });
+                        dims.push({ label: `${c} (Plan)`, statusKey: 'Plan', dataKey: key });
+                        dims.push({ label: `${c} (Ongoing)`, statusKey: 'Ongoing', dataKey: key });
+                    }
+                }
+        
+                // 每个客户+阶段组合（只显示三种状态）
+                for (let c of customers) {
+                    for (let p of phases) {
+                        let comboKey = c + '_' + p;
+                        if (data[comboKey]) {
+                            dims.push({ label: `${c} ${p} (Perform)`, statusKey: 'Perform', dataKey: comboKey });
+                            dims.push({ label: `${c} ${p} (Plan)`, statusKey: 'Plan', dataKey: comboKey });
+                            dims.push({ label: `${c} ${p} (Ongoing)`, statusKey: 'Ongoing', dataKey: comboKey });
+                        }
+                    }
+                }
+        
+                const dimensionMap = new Map();
+                const metrics = ['sample_qty', 'hc_qty', 'hc_days', 'pd', 'device_fee_usd'];
+        
+                for (let dim of dims) {
+                    const source = data[dim.dataKey];
+                    if (!source) continue;
+                    const statusData = source[dim.statusKey];
+                    if (!statusData) continue;
+        
+                    const parts = {};
+                    // 遍历所有组合，判断是否属于当前维度
+                    for (let combo of combos) {
+                        let include = false;
+                        if (dim.dataKey === 'overall') {
+                            // 总体包含所有组合
+                            include = true;
+                        } else if (dim.dataKey.startsWith('customer_')) {
+                            // 客户总体只包含该客户相关的组合
+                            const cust = dim.dataKey.replace('customer_', '');
+                            include = (combo.cust === cust);
+                        } else {
+                            // 具体组合（如 'AIO_NPI'）只包含该组合本身
+                            include = (dim.dataKey === combo.key);
+                        }
+        
+                        if (include) {
+                            const comboSource = data[combo.key];
+                            if (comboSource) {
+                                const comboStatus = comboSource[dim.statusKey];
+                                if (comboStatus) {
+                                    parts[combo.key] = {
+                                        sample_qty: toNum(comboStatus.sample_qty),
+                                        hc_qty: toNum(comboStatus.hc_qty),
+                                        hc_days: toNum(comboStatus.hc_days),
+                                        pd: toNum(comboStatus.pd),
+                                        device_fee_usd: toNum(comboStatus.device_fee_usd)
+                                    };
+                                } else {
+                                    parts[combo.key] = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
+                                }
+                            } else {
+                                parts[combo.key] = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
+                            }
+                        } else {
+                            // 不属于该维度，置0
+                            parts[combo.key] = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
+                        }
+                    }
+        
+                    // 计算该维度的总和（用于表格显示）
+                    let totalVals = { sample_qty: 0, hc_qty: 0, hc_days: 0, pd: 0, device_fee_usd: 0 };
+                    for (let combo of combos) {
+                        let p = parts[combo.key];
+                        totalVals.sample_qty += p.sample_qty;
+                        totalVals.hc_qty += p.hc_qty;
+                        totalVals.hc_days += p.hc_days;
+                        totalVals.pd += p.pd;
+                        totalVals.device_fee_usd += p.device_fee_usd;
+                    }
+        
+                    dimensionMap.set(dim.label, {
+                        sample_qty: totalVals.sample_qty,
+                        hc_qty: totalVals.hc_qty,
+                        hc_days: totalVals.hc_days,
+                        pd: totalVals.pd,
+                        device_fee_usd: totalVals.device_fee_usd,
+                        parts: parts
+                    });
+                }
+        
+                this.dimensionMap = dimensionMap;
+        
+                // 生成统计表格数据
+                this.statsRows = [];
+                for (let [dim, values] of dimensionMap.entries()) {
+                    this.statsRows.push({
+                        dimension: dim,
+                        sample_qty: values.sample_qty.toFixed(1),
+                        hc_qty: values.hc_qty.toFixed(1),
+                        hc_days: values.hc_days.toFixed(1),
+                        pd: values.pd.toFixed(1),
+                        device_fee_usd: values.device_fee_usd.toFixed(2)
+                    });
+                }
+        
+                // 触发图表渲染
+                this.$nextTick(() => {
+                    if (this.chartInstance) {
+                        this.updateChart();
+                    } else {
+                        this.initChart();
+                    }
                 });
-            });
-            this.dimensionMap = dimensionMap;
-            this.statsRows = [];
-            for (let [dim, values] of dimensionMap.entries()) {
-                this.statsRows.push({
-                    dimension: dim,
-                    sample_qty: values.sample_qty.toFixed(1),
-                    hc_qty: values.hc_qty.toFixed(1),
-                    hc_days: values.hc_days.toFixed(1),
-                    pd: values.pd.toFixed(1),
-                    device_fee_usd: values.device_fee_usd.toFixed(2)
-                });
+            } catch (e) {
+                console.error('❌ buildStatsRows 出错:', e);
+                // 降级处理
+                this.statsRows = [];
+                this.dimensionMap = new Map();
+                this.$message.error('统计数据解析失败，请查看控制台错误');
             }
         },
-
-        // ---- 导出Excel ----
         exportToExcel() {
             if (!this.statsLoaded || !this.tableData.length) {
                 this.$message.warning('暂无数据可导出');
@@ -803,8 +954,6 @@ new Vue({
             XLSX.writeFile(wb, `PCR_Export_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.xlsx`);
             this.$message.success('导出成功');
         },
-
-        // ---- 通用工具 ----
         getFullUrl(url) {
             if (!url) return '';
             if (url.startsWith('blob:') || url.startsWith('http')) return url;
@@ -812,8 +961,8 @@ new Vue({
         },
         getEmptyForm() {
             return {
-                id: null, pcr_no: '', pcr_title: '', Customer: 'NB', Project: '', Compalproject: '',
-                phase: 'NPI', category: '', receive_date: '', status: 'Plan',
+                id: null, pcr_no: '', pcr_title: '', Customer: '', Project: '', Compalproject: '',
+                phase: '', category: '', receive_date: '', status: 'Plan',
                 sample_qty: 0, hc_qty: 0, hc_days: 0, device_fee_usd: 0,
                 pm_send_nre_to_sales: false, execution_start: '', execution_end: '',
                 whether_in_budget: true, in_budget_but_cost_add: false, remark: '',
@@ -826,35 +975,37 @@ new Vue({
             this.attachmentChanged = false;
             if (this.$refs.pcrForm) this.$refs.pcrForm.clearValidate();
         },
-
-        // ---- 数据操作 ----
+        resetAdvanced() {
+            this.searchForm.customer = '';
+            this.searchForm.phase = '';
+            this.searchForm.year = '';
+            this.searchForm.compalproject = '';
+        },
         async searchData() {
             this.loading = true;
             try {
+                const dateRange = this.searchForm.dateRange || [];
                 const params = {
-                    start_date: this.searchForm.dateRange ? this.searchForm.dateRange[0] : '',
-                    end_date: this.searchForm.dateRange ? this.searchForm.dateRange[1] : '',
+                    start_date: dateRange[0] || '',
+                    end_date: dateRange[1] || '',
+                    customer: this.searchForm.customer || '',
+                    phase: this.searchForm.phase || '',
+                    year: this.searchForm.year || '',
+                    compalproject: this.searchForm.compalproject || '',
                     page: this.currentPage,
                     page_size: this.pageSize,
                 };
                 const listRes = await axios.post('/PCRList/api/list/', params);
                 this.tableData = listRes.data.data;
                 this.total = listRes.data.total;
-                const statsRes = await axios.post('/PCRList/api/statistics/', {
-                    start_date: this.searchForm.dateRange ? this.searchForm.dateRange[0] : '',
-                    end_date: this.searchForm.dateRange ? this.searchForm.dateRange[1] : '',
-                });
-                this.stats = statsRes.data;
+
+                const statsParams = {
+                    start_date: dateRange[0] || '',
+                    end_date: dateRange[1] || '',
+                };
+                const statsRes = await axios.post('/PCRList/api/statistics/', statsParams);
+                this.buildStatsRows(statsRes.data);
                 this.statsLoaded = true;
-                this.buildStatsRows();
-                // 新增：数据更新后重新绘制图表
-                this.$nextTick(() => {
-                    if (this.chartInstance) {
-                        this.updateChart();
-                    } else {
-                        this.initChart();
-                    }
-                });
             } catch(e) {
                 this.$message.error('加载失败');
             } finally {
@@ -943,8 +1094,6 @@ new Vue({
                 }
             }).catch(() => {});
         },
-
-        // ---- Excel上传 ----
         handleExcelChange(file, fileList) { this.excelFileList = [file]; },
         async uploadExcel() {
             if (!this.excelFileList.length) {
@@ -978,7 +1127,6 @@ new Vue({
                 this.$message.error('上传失败');
             } finally {
                 this.uploading = false;
-                // 关键：清空文件列表，解决二次上传问题
                 if (this.$refs.excelUpload) {
                     this.$refs.excelUpload.clearFiles();
                 }
@@ -1008,8 +1156,6 @@ new Vue({
                 }
             });
         },
-
-        // ---- 列设置 ----
         openColumnSettings() { this.columnSettingsVisible = true; },
         saveColumnSettings() {
             localStorage.setItem('pcr_column_settings', JSON.stringify(this.colVisible));
