@@ -60,30 +60,37 @@
             </el-row>
 
             <el-row v-show="advancedVisible" style="margin-top:10px;">
-                <el-col :span="6">
+                <el-col :span="4">
                     <el-form-item label="Customer" label-width="80px">
-                        <el-select v-model="searchForm.customer" clearable placeholder="全部" style="width:130px;">
+                        <el-select v-model="searchForm.customer" clearable placeholder="全部" style="width:120px;">
                             <el-option v-for="item in filterOptions.customer_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item label="Phase" label-width="80px">
-                        <el-select v-model="searchForm.phase" clearable placeholder="全部" style="width:130px;">
+                <el-col :span="4">
+                    <el-form-item label="Phase" label-width="60px">
+                        <el-select v-model="searchForm.phase" clearable placeholder="全部" style="width:80px;">
                             <el-option v-for="item in filterOptions.phase_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item label="Year" label-width="80px">
-                        <el-select v-model="searchForm.year" clearable placeholder="全部" style="width:130px;">
+                <el-col :span="4">
+                    <el-form-item label="Year" label-width="60px">
+                        <el-select v-model="searchForm.year" clearable placeholder="全部" style="width:80px;">
                             <el-option v-for="item in filterOptions.year_field_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item label="Compal Project" label-width="100px">
-                        <el-select v-model="searchForm.compalproject" clearable filterable placeholder="全部项目" style="width:130px;">
+                <el-col :span="4">
+                    <el-form-item label="Category" label-width="80px">
+                        <el-select v-model="searchForm.category" clearable placeholder="全部" style="width:100px;">
+                            <el-option v-for="item in filterOptions.category_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="CompalProject" label-width="100px">
+                        <el-select v-model="searchForm.compalproject" clearable filterable placeholder="全部项目" style="width:120px;">
                             <el-option v-for="item in filterOptions.compalproject_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
@@ -92,7 +99,7 @@
             <el-row v-show="advancedVisible" style="margin-top:6px;">
                 <el-col :span="24">
                     <span style="font-size:12px; color:#909399;">
-                        <i class="el-icon-info"></i> 提示：高级筛选条件仅对下方“PCR数据列表”生效，统计概览仅受时间范围影响。
+                        <i class="el-icon-info"></i> 提示：高级筛选条件仅对下方“PCR数据列表”生效,方便数据上传；统计概览仅受时间范围影响。
                     </span>
                 </el-col>
             </el-row>
@@ -287,12 +294,12 @@
     <!-- 重复数据弹窗 -->
     <el-dialog title="重复数据（未导入）" :visible.sync="duplicateDialogVisible" width="80%">
         <div style="margin-bottom: 12px; color: #E6A23C; font-size: 14px;">
-            <i class="el-icon-warning-outline"></i> 提示：PCR No、PCR Title、Project 三者一致，判定为重复数据，只能上传一条。
+            <i class="el-icon-warning-outline"></i> 提示：PCR No、Compal Project、PCR Title 三者一致，判定为重复数据，只能上传一条。
         </div>
         <el-table :data="duplicateTableData" border stripe>
             <el-table-column prop="row" label="Excel行号" width="100"></el-table-column>
             <el-table-column prop="pcr_no" label="PCR No" width="180"></el-table-column>
-            <el-table-column prop="project" label="Project" width="200"></el-table-column>
+            <el-table-column prop="Compalproject" label="Compal Project" width="200"></el-table-column>
             <el-table-column prop="pcr_title" label="PCR Title" min-width="250"></el-table-column>
         </el-table>
         <div slot="footer"><el-button type="primary" @click="duplicateDialogVisible = false">关 闭</el-button></div>
@@ -376,14 +383,16 @@ new Vue({
                 customer_choices: [],
                 phase_choices: [],
                 year_field_choices: [],
-                compalproject_choices: []
+                compalproject_choices: [],
+                category_choices: []   // 新增
             },
             searchForm: {
                 dateRange: [],
                 customer: '',
                 phase: '',
                 year: '',
-                compalproject: ''
+                compalproject: '',
+                category: ''   // 新增
             },
             selectedRows: [],
             multiDeleteLoading: false,
@@ -515,6 +524,7 @@ new Vue({
                         phase_choices: res.data.phase_choices || [],
                         year_field_choices: res.data.year_field_choices || [],
                         compalproject_choices: res.data.compalproject_choices || [],
+                        category_choices: res.data.category_choices || [],
                     };
                 }
             } catch (e) {
@@ -828,6 +838,7 @@ new Vue({
             this.searchForm.phase = '';
             this.searchForm.year = '';
             this.searchForm.compalproject = '';
+            this.searchForm.category = '';
         },
         async searchData() {
             this.loading = true;
@@ -843,6 +854,7 @@ new Vue({
                     phase: this.searchForm.phase || '',
                     year: this.searchForm.year || '',
                     compalproject: this.searchForm.compalproject || '',
+                    category: this.searchForm.category || '',
                     page: this.currentPage,
                     page_size: this.pageSize,
                 };
@@ -997,9 +1009,9 @@ new Vue({
             return duplicates.map(item => {
                 const match = item.match(/第(\d+)行:\s*(.+?)\s*-\s*(.+?)\s*-\s*(.+)/);
                 if (match) {
-                    return { row: match[1], pcr_no: match[2], project: match[3], pcr_title: match[4] };
+                    return { row: match[1], pcr_no: match[2], compalproject: match[3], pcr_title: match[4] };
                 } else {
-                    return { row: '?', pcr_no: '解析失败', project: '', pcr_title: item };
+                    return { row: '?', pcr_no: '解析失败', compalproject: '', pcr_title: item };
                 }
             });
         },

@@ -6,7 +6,7 @@ from CQM.models import CQMProject
 
 class PICS(models.Model):
     # id = models.AutoField(max_length=10, primary_key=True, verbose_name='id')
-    pic = models.ImageField(upload_to='Adapter/PIC/',verbose_name='图片地址')
+    pic = models.ImageField(upload_to='Auto/PIC/',verbose_name='图片地址')
     single = models.CharField(max_length=200,null=True, blank=True,verbose_name='图片名称')
     def __unicode__(self):  # __str__ on Python 3
         return (self.id,self.pic)

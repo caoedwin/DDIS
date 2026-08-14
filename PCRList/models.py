@@ -26,7 +26,7 @@ class PCR(models.Model):
     year = models.CharField(max_length=10, blank=True, verbose_name="Year")
 
     # 项目信息：Project 用于显示，Compalproject 用于关联 CQMProject 表做权限控制
-    Project = models.CharField(max_length=500, verbose_name="Project")
+    Project = models.CharField(max_length=500, blank=True, verbose_name="Project")
     Compalproject = models.CharField(max_length=50, verbose_name="Compal Project")
 
     # 阶段 NPI / INV

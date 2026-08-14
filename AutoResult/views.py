@@ -564,7 +564,7 @@ def AutoItem_edit(request):
             for pic in i.TrainingStaff.all():
                 training_images.append({
                     'id': pic.id,
-                    'url': pic.pic.url if pic.pic else '',
+                    'url': "/media/" + str(pic.pic) if pic.pic else '',
                     'name': pic.single or ''
                 })
             Attachmentlist = []
@@ -751,7 +751,7 @@ def AutoResult_edit(request):
                     training_staff = []
                     training_names = []
                     for pic in i.TrainingStaff.all():
-                        url = pic.pic.url if pic.pic else ''
+                        url = "/media/" + str(pic.pic) if pic.pic else ''
                         name = pic.single or ''
                         training_staff.append({'id': pic.id, 'url': url, 'name': name})
                         training_names.append(name)
@@ -843,7 +843,7 @@ def AutoResult_edit(request):
                     training_staff = []
                     training_names = []
                     for pic in i.TrainingStaff.all():
-                        url = pic.pic.url if pic.pic else ''
+                        url = "/media/" + str(pic.pic) if pic.pic else ''
                         name = pic.single or ''
                         training_staff.append({'id': pic.id, 'url': url, 'name': name})
                         training_names.append(name)
@@ -1034,7 +1034,7 @@ def AutoResult_edit(request):
                         training_staff = []
                         training_names = []
                         for pic in i.TrainingStaff.all():
-                            url = pic.pic.url if pic.pic else ''
+                            url = "/media/" + str(pic.pic) if pic.pic else ''
                             name = pic.single or ''
                             training_staff.append({'id': pic.id, 'url': url, 'name': name})
                             training_names.append(name)
@@ -1299,7 +1299,7 @@ def AutoResult_search(request):
                 training_staff = []
                 training_names = []
                 for pic in i.TrainingStaff.all():
-                    url = pic.pic.url if pic.pic else ''
+                    url = "/media/" + str(pic.pic) if pic.pic else ''
                     name = pic.single or ''
                     training_staff.append({'id': pic.id, 'url': url, 'name': name})
                     training_names.append(name)

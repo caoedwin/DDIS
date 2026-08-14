@@ -17,9 +17,6 @@ from CQM.models import CQMProject
 from app01.models import UserInfo
 
 def parse_request_data(request):
-    """
-    解析 JSON 或 FormData 请求，返回统一字典。
-    """
     content_type = request.content_type or ''
     if 'application/json' in content_type:
         data = json.loads(request.body)
@@ -72,6 +69,8 @@ def check_permission(user, compalproject):
 
 @csrf_exempt
 @require_http_methods(["POST"])
+@csrf_exempt
+@require_http_methods(["POST"])
 def pcr_list_api(request):
     onlineuser = request.session.get('account')
     user_info = None
@@ -87,7 +86,6 @@ def pcr_list_api(request):
     if action == 'options':
         customer_choices = [{'value': code, 'label': label} for code, label in PCR.Customer_CHOICES]
         phase_choices = [{'value': code, 'label': label} for code, label in PCR.PHASE_CHOICES]
-        # 独立 Year 字段的去重选项
         year_field_choices = (
             PCR.objects.exclude(year='')
             .values_list('year', flat=True)
@@ -101,29 +99,35 @@ def pcr_list_api(request):
                           .distinct()
                           .order_by('Compalproject'))
         compalproject_choices = [{'value': proj, 'label': proj} for proj in compalprojects]
+        # 新增 Category 去重
+        categories = (PCR.objects.exclude(category='')
+                      .values_list('category', flat=True)
+                      .distinct()
+                      .order_by('category'))
+        category_choices = [{'value': cat, 'label': cat} for cat in categories]
 
         return JsonResponse({
             'action': 'options',
             'customer_choices': customer_choices,
             'phase_choices': phase_choices,
-            'year_field_choices': year_field_choices,   # 注意 key 改为 year_field_choices
+            'year_field_choices': year_field_choices,
             'compalproject_choices': compalproject_choices,
+            'category_choices': category_choices,
         })
 
     start_date = data.get('start_date')
     end_date = data.get('end_date')
     customer = data.get('customer', '').strip()
     phase = data.get('phase', '').strip()
-    # 独立的 year 字段
     year = data.get('year', '').strip()
     compalproject = data.get('compalproject', '').strip()
+    category = data.get('category', '').strip()
 
     page = int(data.get('page', 1))
     page_size = int(data.get('page_size', 20))
 
     queryset = PCR.objects.all()
 
-    # 日期重叠筛选（保持不变）
     if start_date and end_date:
         queryset = queryset.filter(
             execution_start__isnull=False,
@@ -144,15 +148,16 @@ def pcr_list_api(request):
             execution_start__lte=end_date
         )
 
-    # 其他筛选（使用独立的 year 字段）
     if customer:
         queryset = queryset.filter(Customer=customer)
     if phase:
         queryset = queryset.filter(phase=phase)
     if year:
-        queryset = queryset.filter(year=year)   # 直接匹配字符串
+        queryset = queryset.filter(year=year)
     if compalproject:
         queryset = queryset.filter(Compalproject__icontains=compalproject)
+    if category:
+        queryset = queryset.filter(category=category)
 
     paginator = Paginator(queryset, page_size)
     page_obj = paginator.get_page(page)
@@ -292,24 +297,26 @@ def pcr_create_api(request):
 
         data = parse_request_data(request)
 
-        compalproject = data.get('Compalproject', data.get('Project'))
+        compalproject = data.get('Compalproject', '').strip()
+        if not compalproject:
+            return JsonResponse({'success': False, 'message': 'Compal Project 不能为空'}, status=400)
+
         if not check_permission(user_info, compalproject):
             return JsonResponse({'success': False, 'message': '无权限操作该项目'}, status=403)
 
         pcr_no = data.get('pcr_no')
-        project = data.get('Project')
         pcr_title = data.get('pcr_title')
-        if not pcr_no or not project or not pcr_title:
-            return JsonResponse({'success': False, 'message': 'PCR No, Project, PCR Title 不能为空'})
-        if PCR.objects.filter(pcr_no=pcr_no, Project=project, pcr_title=pcr_title).exists():
-            return JsonResponse({'success': False, 'message': 'PCR No+Project+Title 已存在'})
+        if not pcr_no or not pcr_title:
+            return JsonResponse({'success': False, 'message': 'PCR No 和 PCR Title 不能为空'}, status=400)
+        if PCR.objects.filter(pcr_no=pcr_no, Compalproject=compalproject, pcr_title=pcr_title).exists():
+            return JsonResponse({'success': False, 'message': 'PCR No + Compal Project + PCR Title 已存在'}, status=400)
 
         pcr = PCR.objects.create(
             pcr_no=pcr_no,
             pcr_title=pcr_title,
             Customer=data.get('Customer', 'NB'),
-            year=data.get('year', ''),          # 新增
-            Project=project,
+            year=data.get('year', ''),
+            Project=data.get('Project', ''),
             Compalproject=compalproject,
             phase=data.get('phase', 'NPI'),
             category=data.get('category', ''),
@@ -359,10 +366,14 @@ def pcr_update_api(request):
             return JsonResponse({'success': False, 'message': '无权限操作该项目'}, status=403)
 
         new_pcr_no = data.get('pcr_no', pcr.pcr_no)
-        new_project = data.get('Project', pcr.Project)
+        new_compalproject = data.get('Compalproject', pcr.Compalproject)
         new_pcr_title = data.get('pcr_title', pcr.pcr_title)
-        if PCR.objects.filter(pcr_no=new_pcr_no, Project=new_project, pcr_title=new_pcr_title).exclude(id=record_id).exists():
-            return JsonResponse({'success': False, 'message': 'PCR No+Project+Title 已存在'})
+
+        if not new_compalproject:
+            return JsonResponse({'success': False, 'message': 'Compal Project 不能为空'}, status=400)
+
+        if PCR.objects.filter(pcr_no=new_pcr_no, Compalproject=new_compalproject, pcr_title=new_pcr_title).exclude(id=record_id).exists():
+            return JsonResponse({'success': False, 'message': 'PCR No + Compal Project + PCR Title 已存在'}, status=400)
 
         for field in ['pcr_no', 'pcr_title', 'Customer', 'year', 'Project', 'Compalproject',
                       'phase', 'category', 'receive_date', 'status', 'sample_qty', 'hc_qty',
@@ -490,7 +501,7 @@ def pcr_upload_excel_api(request):
 
     header_row_idx = None
     subheader_row_idx = None
-    required_keywords = ['pcr no', 'project', 'customer', 'status']
+    required_keywords = ['pcr no', 'compal project', 'customer', 'status']   # 修改为 compal project
 
     for i in range(len(rows)):
         row = rows[i]
@@ -508,7 +519,7 @@ def pcr_upload_excel_api(request):
     if header_row_idx is None:
         return JsonResponse({
             'success': False,
-            'message': '未找到包含 "PCR No", "Project", "Customer", "Status" 的表头行，请检查Excel格式'
+            'message': '未找到包含 "PCR No", "Compal Project", "Customer", "Status" 的表头行，请检查Excel格式'
         })
 
     main_headers = [str(cell).strip() if cell else '' for cell in rows[header_row_idx]]
@@ -519,9 +530,9 @@ def pcr_upload_excel_api(request):
         'pcr_no': ['PCR No', 'PCR No.', 'PCR Number'],
         'pcr_title': ['PCR Title', 'Title', 'PCR标题'],
         'Customer': ['Customer', '客户'],
-        'year': ['Year', '年份'],           # 新增 Year 映射
+        'year': ['Year', '年份'],
         'Project': ['Project', '项目'],
-        'Compalproject': ['Compal Project', 'Compalproject', 'Compal项目'],
+        'Compalproject': ['Compal Project', 'Compalproject', 'Compal项目'],   # 保持映射
         'phase': ['Phase', 'NPI or INV', '阶段'],
         'category': ['Category', '类别'],
         'receive_date': ['Receive Date', '接收日期'],
@@ -561,7 +572,7 @@ def pcr_upload_excel_api(request):
 
     col_index_map = {k: int(v) for k, v in col_index_map.items()}
 
-    required_db_fields = ['pcr_no', 'pcr_title', 'Compalproject', 'Project', 'Customer', 'phase', 'status']
+    required_db_fields = ['pcr_no', 'pcr_title', 'Compalproject', 'Customer', 'phase', 'status']  # 移除 Project
     missing = [f for f in required_db_fields if f not in col_index_map]
     if missing:
         return JsonResponse({'success': False, 'message': f'缺少必要的列映射: {missing}，请检查表头'})
@@ -612,21 +623,22 @@ def pcr_upload_excel_api(request):
 
         try:
             pcr_no = truncate_str(row[pcr_col], 50)
-            project_col = col_index_map['Project']
-            project = truncate_str(row[project_col], 50) if project_col < len(row) else ''
-            pcr_title_col = col_index_map['pcr_title']
-            pcr_title = truncate_str(row[pcr_title_col], 200) if pcr_title_col < len(row) else ''
-
-            if PCR.objects.filter(pcr_no=pcr_no, Project=project, pcr_title=pcr_title).exists():
-                duplicates.append(f"第{idx+1}行: {pcr_no} - {project} - {pcr_title}")
+            compal_col = col_index_map['Compalproject']
+            compalproject = truncate_str(row[compal_col], 50) if compal_col < len(row) else ''
+            if not compalproject:
+                errors.append(f"第{idx+1}行: Compal Project 不能为空")
                 continue
 
-            compal_col = col_index_map.get('Compalproject', -1)
-            compalproject = ''
-            if compal_col != -1 and compal_col < len(row):
-                compalproject = truncate_str(row[compal_col], 50)
-            else:
-                compalproject = project
+            pcr_title_col = col_index_map['pcr_title']
+            pcr_title = truncate_str(row[pcr_title_col], 200) if pcr_title_col < len(row) else ''
+            if not pcr_title:
+                errors.append(f"第{idx+1}行: PCR Title 不能为空")
+                continue
+
+            # 唯一性检查：pcr_no + Compalproject + pcr_title
+            if PCR.objects.filter(pcr_no=pcr_no, Compalproject=compalproject, pcr_title=pcr_title).exists():
+                duplicates.append(f"第{idx+1}行: {pcr_no} - {compalproject} - {pcr_title}")
+                continue
 
             if not check_permission(user_info, compalproject):
                 errors.append(f"第{idx+1}行: 无权限操作机种 {compalproject}")
@@ -644,17 +656,21 @@ def pcr_upload_excel_api(request):
             if 'receive_date' in col_index_map and col_index_map['receive_date'] < len(row):
                 receive_date_val = parse_date(row[col_index_map['receive_date']])
 
-            # 读取 Year 字段
             year_val = ''
             if 'year' in col_index_map and col_index_map['year'] < len(row):
                 year_val = truncate_str(row[col_index_map['year']], 10)
+
+            # Project 字段可为空
+            project_val = ''
+            if 'Project' in col_index_map and col_index_map['Project'] < len(row):
+                project_val = truncate_str(row[col_index_map['Project']], 500)
 
             create_data = {
                 'pcr_no': pcr_no,
                 'pcr_title': pcr_title,
                 'Customer': row[col_index_map['Customer']] if col_index_map['Customer'] < len(row) else 'NB',
-                'year': year_val,   # 新增
-                'Project': project,
+                'year': year_val,
+                'Project': project_val,
                 'Compalproject': compalproject,
                 'phase': row[col_index_map['phase']] if col_index_map['phase'] < len(row) else 'NPI',
                 'category': category_val,
