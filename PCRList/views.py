@@ -190,7 +190,7 @@ def pcr_list_api(request):
             'whether_in_budget': pcr.whether_in_budget,
             'in_budget_but_cost_add': pcr.in_budget_but_cost_add,
             'remark': pcr.remark,
-            'attachment': "/media/" + pcr.attachment.url if pcr.attachment else '',
+            'attachment': pcr.attachment.url if pcr.attachment else '',
             'created_by': pcr.created_by.username if pcr.created_by else '',
             'can_delete': can_delete,
         })
