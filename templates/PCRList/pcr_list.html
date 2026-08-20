@@ -60,41 +60,42 @@
             </el-row>
 
             <el-row v-show="advancedVisible" style="margin-top:10px;">
-                <el-col :span="4">
-                    <el-form-item label="Customer" label-width="80px">
+                <el-col :span="5">
+                    <el-form-item label="Customer" label-width="70px">
                         <el-select v-model="searchForm.customer" clearable placeholder="全部" style="width:120px;">
                             <el-option v-for="item in filterOptions.customer_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="4">
-                    <el-form-item label="Phase" label-width="60px">
+                <el-col :span="3">
+                    <el-form-item label="Phase" label-width="40px">
                         <el-select v-model="searchForm.phase" clearable placeholder="全部" style="width:80px;">
                             <el-option v-for="item in filterOptions.phase_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="4">
-                    <el-form-item label="Year" label-width="60px">
+                <el-col :span="3">
+                    <el-form-item label="Year" label-width="40px">
                         <el-select v-model="searchForm.year" clearable placeholder="全部" style="width:80px;">
                             <el-option v-for="item in filterOptions.year_field_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="4">
-                    <el-form-item label="Category" label-width="80px">
+                    <el-form-item label="Category" label-width="60px">
                         <el-select v-model="searchForm.category" clearable placeholder="全部" style="width:100px;">
                             <el-option v-for="item in filterOptions.category_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="9">
                     <el-form-item label="CompalProject" label-width="100px">
                         <el-select v-model="searchForm.compalproject" clearable filterable placeholder="全部项目" style="width:120px;">
                             <el-option v-for="item in filterOptions.compalproject_choices" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
+                <el-button type="info" @click="downloadconvert">INV转换工具</el-button>
             </el-row>
             <el-row v-show="advancedVisible" style="margin-top:6px;">
                 <el-col :span="24">
@@ -1004,6 +1005,9 @@ new Vue({
         },
         downloadTemplate() {
             window.open('/static/src/modelfiles/PCR_Template.xlsx', '_blank');
+        },
+        downloadconvert() {
+            window.open('/static/src/modelfiles/PCR_convert.zip');
         },
         parseDuplicates(duplicates) {
             return duplicates.map(item => {
