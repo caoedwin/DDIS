@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试矩阵 + 精确工作量统计</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { background: #f0f2f5; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .container { max-width: 1600px; margin: 0 auto; background: #fff; padding: 24px 30px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+    .header h1 { margin: 0; font-weight: 500; font-size: 24px; color: #1f2f3d; }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      background: #f5f7fa;
+      padding: 12px 20px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    .search-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .search-item label {
+      font-weight: 600;
+      color: #333;
+      white-space: nowrap;
+    }
+    .search-item .el-select {
+      width: 200px;
+    }
+    .btn-search {
+      margin-left: auto;
+    }
+
+    .table-wrapper { overflow-x: auto; margin-top: 12px; border-radius: 8px; border: 1px solid #e4e7ed; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 800px; }
+    th, td { border: 1px solid #e4e7ed; padding: 8px 6px; text-align: center; vertical-align: middle; }
+    th { background: #f5f7fa; font-weight: 600; color: #1f2f3d; position: sticky; top: 0; z-index: 10; }
+    .case-id { font-weight: 500; color: #409eff; }
+    .case-name { text-align: left; padding-left: 12px; }
+    .version-tag { font-size: 11px; background: #ecf5ff; color: #409eff; padding: 0 8px; border-radius: 10px; line-height: 20px; }
+    .result-badge { font-size: 12px; font-weight: 500; padding: 0 12px; border-radius: 12px; line-height: 24px; min-width: 48px; display: inline-block; }
+    .result-pass { background: #e1f3d8; color: #2e7d32; }
+    .result-fail { background: #fde2e2; color: #c62828; }
+    .result-block { background: #fff3e0; color: #e65100; }
+    .result-untested { background: #f4f4f4; color: #757575; }
+    .no-data { color: #b0b8c4; font-size: 12px; }
+
+    .stats-area { margin-top: 30px; display: grid; grid-template-columns: 60% 40%; gap: 24px; }
+    .stats-card { background: #fafbfc; border-radius: 12px; padding: 16px 20px; border: 1px solid #e4e7ed; }
+    .stats-card h3 { margin: 0 0 12px 0; font-weight: 500; color: #1f2f3d; font-size: 16px; }
+    .stats-table { width: 100%; font-size: 13px; }
+    .stats-table th, .stats-table td { border: none; padding: 6px 4px; text-align: left; }
+    .stats-table th { background: transparent; font-weight: 600; color: #606266; border-bottom: 2px solid #dcdfe6; }
+    .stats-table tr:nth-child(even) { background: #f8f9fa; }
+    .phase-tooltip { cursor: help; border-bottom: 1px dashed #909399; }
+    .chart-container { width: 100%; height: 420px; }
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e4e7ed; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .legend-color { width: 14px; height: 14px; border-radius: 4px; }
+    .workload-note { font-size: 12px; color: #909399; margin-top: 6px; background: #f4f6f9; padding: 6px 12px; border-radius: 6px; }
+    @media (max-width: 960px) { .stats-area { grid-template-columns: 1fr; } .search-item .el-select { width: 150px; } }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="container">
+    <div class="header">
+      <h1>测试用例阶段结果矩阵</h1>
+      <div class="project-selector">
+        <el-button size="small" type="primary" @click="refreshData">刷新数据</el-button>
+      </div>
+    </div>
+
+    <!-- 搜索栏（仅 Customer + Project） -->
+    <div class="search-bar">
+      <div class="search-item">
+        <label>Customer</label>
+        <el-select v-model="selectedCustomer" placeholder="请选择" @change="onCustomerChange" clearable>
+          <el-option v-for="c in customerList" :key="c" :label="c" :value="c"></el-option>
+        </el-select>
+      </div>
+      <div class="search-item">
+        <label>Project</label>
+        <el-select v-model="selectedProject" placeholder="请选择" filterable @change="onProjectChange" clearable>
+          <el-option v-for="p in projectList" :key="p" :label="p" :value="p"></el-option>
+        </el-select>
+      </div>
+      <el-button class="btn-search" type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table-wrapper" v-if="currentProjectData">
+      <table>
+        <thead>
+          <tr>
+            <th style="min-width:80px;">Case ID</th>
+            <th style="min-width:160px; text-align:left;">Case Name</th>
+            <th v-for="phase in displayPhases" :key="phase" style="min-width:130px;">
+              <div>{{ phase }}</div>
+              <div style="font-weight:normal; font-size:11px; color:#909399;">版本 / 结果 / 工时</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in tableData" :key="row.caseId">
+            <td class="case-id">{{ row.caseId }}</td>
+            <td class="case-name">{{ row.caseName }}</td>
+            <td v-for="phase in displayPhases" :key="phase">
+              <div v-if="row.phaseDetails[phase]" style="display:flex; flex-direction:column; gap:2px; align-items:center;">
+                <span class="version-tag">{{ row.phaseDetails[phase].version || '—' }}</span>
+                <span class="result-badge" :class="resultClass(row.phaseDetails[phase].result)">{{ row.phaseDetails[phase].result || '未测' }}</span>
+                <span style="font-size:11px; color:#909399;">{{ row.phaseDetails[phase].baseTime || 0 }} min</span>
+              </div>
+              <span v-else class="no-data">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else style="text-align:center; padding:30px; color:#909399;">请选择 Customer 和 Project</div>
+
+    <!-- 图例 -->
+    <div class="legend">
+      <span style="font-weight:600; color:#333;">结果图例：</span>
+      <span class="legend-item"><span class="legend-color" style="background:#e1f3d8;"></span> PASS</span>
+      <span class="legend-item"><span class="legend-color" style="background:#fde2e2;"></span> FAIL</span>
+      <span class="legend-item"><span class="legend-color" style="background:#fff3e0;"></span> BLOCK</span>
+      <span class="legend-item"><span class="legend-color" style="background:#f4f4f4;"></span> 未测</span>
+    </div>
+
+    <!-- 统计区域 -->
+    
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      selectedCustomer: '',
+      selectedProject: '',
+      // Mock 数据按 Customer 分组
+      mockData: {
+        'C38(NB)': {
+          projects: {
+            'FLMS0': {
+              phases: ['B(FVT)', 'C(SIT)', 'FFRT', 'FFRT2', 'GSKU', 'OOC', 'Wave'],
+              cases: (() => {
+                const names = ['张工','李工','王工','赵工','陈工','刘工','周工','吴工','郑工','孙工','林工','何工','黄工','马工','朱工'];
+                const cases = [];
+                for (let i = 1; i <= 20; i++) {
+                  const caseId = `CASE${String(i).padStart(3, '0')}`;
+                  const caseName = `测试用例 ${i}`;
+                  const details = {};
+                  const phases = ['B(FVT)', 'C(SIT)', 'FFRT', 'FFRT2', 'GSKU', 'OOC', 'Wave'];
+                  phases.forEach(phase => {
+                    if (Math.random() < 0.3) { details[phase] = null; return; }
+                    const count = Math.floor(Math.random() * 4) + 1;
+                    const shuffled = [...names].sort(() => Math.random() - 0.5);
+                    const selected = shuffled.slice(0, count);
+                    const te = selected.join(',');
+                    const baseTime = Math.floor(Math.random() * 120) + 30;
+                    const result = ['PASS', 'FAIL', 'BLOCK', ''][Math.floor(Math.random() * 4)];
+                    const version = result ? `v${Math.floor(Math.random()*5)+1}.${Math.floor(Math.random()*10)}` : null;
+                    details[phase] = { version, result, te, baseTime: result ? baseTime : 0 };
+                  });
+                  cases.push({ caseId, caseName, details });
+                }
+                return cases;
+              })()
+            },
+            'FL4C4': {
+              phases: ['B(FVT)', 'C(SIT)', 'FFRT', 'OOC'],
+              cases: [
+                { caseId: 'PFA001', caseName: 'PERFORMANCE TEST', details: {
+                    'B(FVT)': { version: '5.0.0', result: 'PASS', te: '陈工,刘工', baseTime: 150 },
+                    'C(SIT)': { version: '5.0.1', result: 'PASS', te: '陈工', baseTime: 130 },
+                    'FFRT': { version: '5.0.2', result: 'PASS', te: '刘工', baseTime: 110 },
+                    'OOC': { version: '5.0.3', result: 'FAIL', te: '陈工,刘工', baseTime: 95 }
+                  }
+                },
+                { caseId: 'PFA002', caseName: 'STRESS TEST', details: {
+                    'B(FVT)': { version: '6.1.0', result: 'PASS', te: '陈工', baseTime: 80 },
+                    'C(SIT)': { version: '6.1.1', result: 'FAIL', te: '刘工', baseTime: 120 },
+                    'FFRT': { version: '6.1.2', result: 'BLOCK', te: '陈工,刘工', baseTime: 100 },
+                    'OOC': { version: '6.1.3', result: 'PASS', te: '刘工', baseTime: 60 }
+                  }
+                }
+              ]
+            },
+            'ELMV2': {
+              phases: ['B(FVT)', 'C(SIT)', 'FFRT'],
+              cases: [
+                { caseId: 'ELM001', caseName: 'BASE TEST', details: {
+                    'B(FVT)': { version: '1.0', result: 'PASS', te: '王工', baseTime: 80 },
+                    'C(SIT)': { version: '1.1', result: 'PASS', te: '王工,李工', baseTime: 120 },
+                    'FFRT': { version: '1.2', result: 'PASS', te: '李工', baseTime: 60 }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        'C38(AIO)': {
+          projects: {
+            'AIO_PROJ1': {
+              phases: ['A(EVT)', 'B(FVT)', 'C(SIT)'],
+              cases: [
+                { caseId: 'AIO001', caseName: 'AIO BASIC', details: {
+                    'A(EVT)': { version: '1.0', result: 'PASS', te: '张工', baseTime: 100 },
+                    'B(FVT)': { version: '1.1', result: 'PASS', te: '张工,李工', baseTime: 150 },
+                    'C(SIT)': { version: '1.2', result: 'PASS', te: '李工', baseTime: 120 }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    computed: {
+      customerList() {
+        return Object.keys(this.mockData).sort();
+      },
+      projectList() {
+        if (!this.selectedCustomer) return [];
+        const cust = this.mockData[this.selectedCustomer];
+        return cust ? Object.keys(cust.projects).sort() : [];
+      },
+      currentProjectData() {
+        if (!this.selectedCustomer || !this.selectedProject) return null;
+        const cust = this.mockData[this.selectedCustomer];
+        if (!cust) return null;
+        return cust.projects[this.selectedProject] || null;
+      },
+      // 直接显示该项目所有 Phase，无需筛选
+      displayPhases() {
+        const data = this.currentProjectData;
+        return data ? data.phases : [];
+      },
+      tableData() {
+        const data = this.currentProjectData;
+        if (!data) return [];
+        return data.cases.map(c => ({
+          caseId: c.caseId,
+          caseName: c.caseName,
+          phaseDetails: c.details || {}
+        }));
+      },
+      // 统计基于全部 Phase
+      phaseStats() {
+        const data = this.currentProjectData;
+        if (!data) return [];
+        const phases = this.displayPhases;
+        const cases = data.cases;
+        const phaseMap = {};
+        phases.forEach(p => {
+          phaseMap[p] = { teSet: new Set(), totalWorkload: 0, personWorkload: {} };
+        });
+        cases.forEach(c => {
+          const details = c.details || {};
+          for (const phase of phases) {
+            const info = details[phase];
+            if (!info || !info.te || info.te.trim() === '') continue;
+            const baseTime = parseFloat(info.baseTime) || 0;
+            if (baseTime === 0) continue;
+            const teList = info.te.split(',').map(s => s.trim()).filter(s => s);
+            if (teList.length === 0) continue;
+            const perPerson = baseTime / teList.length;
+            phaseMap[phase].totalWorkload += baseTime;
+            teList.forEach(person => {
+              phaseMap[phase].teSet.add(person);
+              if (!phaseMap[phase].personWorkload[person]) {
+                phaseMap[phase].personWorkload[person] = 0;
+              }
+              phaseMap[phase].personWorkload[person] += perPerson;
+            });
+          }
+        });
+        return phases.map(phase => {
+          const data = phaseMap[phase];
+          const teArray = Array.from(data.teSet || []);
+          const total = Math.round(data.totalWorkload * 100) / 100 || 0;
+          const count = teArray.length;
+          const avg = count > 0 ? Math.round((total / count) * 100) / 100 : 0;
+          return { phase, teList: teArray, totalWorkload: total, avgWorkload: avg, personWorkload: data.personWorkload || {} };
+        });
+      },
+      stackedChartData() {
+        const stats = this.phaseStats;
+        const allPersons = new Set();
+        const phasePersonMap = {};
+        stats.forEach(stat => {
+          phasePersonMap[stat.phase] = stat.personWorkload;
+          Object.keys(stat.personWorkload).forEach(p => allPersons.add(p));
+        });
+        const persons = Array.from(allPersons).sort();
+        const phases = stats.map(s => s.phase);
+        const series = phases.map(phase => ({
+          name: phase,
+          type: 'bar',
+          stack: 'total',
+          data: persons.map(p => phasePersonMap[phase]?.[p] || 0),
+          itemStyle: { color: this.phaseColor(phase) }
+        }));
+        return { persons, series };
+      }
+    },
+    methods: {
+      resultClass(result) {
+        if (!result) return 'result-untested';
+        const r = result.toUpperCase();
+        if (r === 'PASS') return 'result-pass';
+        if (r === 'FAIL') return 'result-fail';
+        if (r === 'BLOCK') return 'result-block';
+        return 'result-untested';
+      },
+      phaseColor(phase) {
+        const colors = ['#409eff','#67c23a','#e6a23c','#f56c6c','#909399','#9b59b6','#1abc9c','#d87c7c','#f7b731'];
+        const idx = this.displayPhases.indexOf(phase);
+        return colors[idx % colors.length];
+      },
+      onCustomerChange() {
+        this.selectedProject = '';
+        this.clearChart();
+      },
+      onProjectChange() {
+        this.clearChart();
+        // 自动查询
+        this.doSearch();
+      },
+      doSearch() {
+        if (!this.selectedCustomer || !this.selectedProject) {
+          this.$message('请选择 Customer 和 Project');
+          return;
+        }
+        this.$nextTick(() => {
+          this.renderChart();
+        });
+      },
+      refreshData() {
+        this.$message('数据已刷新（模拟）');
+        this.doSearch();
+      },
+      clearChart() {
+        if (this.chartInstance) {
+          this.chartInstance.dispose();
+          this.chartInstance = null;
+        }
+      },
+      renderChart() {
+        this.clearChart();
+        const container = this.$refs.chartContainer;
+        if (!container) return;
+        const { persons, series } = this.stackedChartData;
+        if (persons.length === 0 || series.length === 0) return;
+        const chart = echarts.init(container);
+        const option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            formatter: function(params) {
+              let html = `<strong>${params[0].axisValue}</strong><br/>`;
+              let total = 0;
+              params.forEach(p => {
+                if (p.value > 0) {
+                  html += `${p.marker} ${p.seriesName}: ${p.value.toFixed(1)} min<br/>`;
+                  total += p.value;
+                }
+              });
+              html += `<strong>合计: ${total.toFixed(1)} min</strong>`;
+              return html;
+            }
+          },
+          legend: {
+            data: this.phaseStats.map(s => s.phase),
+            top: 0,
+            right: 0,
+            icon: 'roundRect',
+            itemWidth: 12,
+            itemHeight: 12
+          },
+          grid: {
+            left: '6%',
+            right: '4%',
+            bottom: '18%',
+            top: '18%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: persons,
+            axisLabel: { fontSize: 11, rotate: 30, fontWeight: 500 }
+          },
+          yAxis: {
+            type: 'value',
+            name: '工作量 (分钟)',
+            nameTextStyle: { fontSize: 12 }
+          },
+          series: series
+        };
+        chart.setOption(option);
+        chart.resize();
+        this.chartInstance = chart;
+      }
+    },
+    mounted() {
+      if (this.customerList.length) {
+        this.selectedCustomer = this.customerList[0];
+        this.onCustomerChange();
+        if (this.projectList.length) {
+          this.selectedProject = this.projectList[0];
+          this.onProjectChange();
+        }
+      }
+    },
+    beforeDestroy() {
+      this.clearChart();
+    },
+    watch: {
+      selectedCustomer() {
+        this.onCustomerChange();
+      },
+      selectedProject() {
+        this.onProjectChange();
+      }
+    }
+  });
+</script>
+</body>
+</html>

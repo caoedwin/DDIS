@@ -19,6 +19,7 @@ class TestItemSW(models.Model):
     Phase_choice = (
         # ('Select Phase', 'Select Phase'),
         ('', ''),
+        ('A(EVT)', 'A(EVT)'),
         ('B(FVT)', 'B(FVT)'),
         ('C(SIT)', 'C(SIT)'),
         # ('Wave', 'Wave'),
@@ -211,6 +212,15 @@ class TestPlanSW(models.Model):
         ('S', 'S'),
     )
 
+    RESULT_CHOICES = (
+        ('', ''),  # 未测试
+        ('PASS', 'PASS'),
+        ('FAIL', 'FAIL'),
+        ('BLOCK', 'BLOCK'),
+        ('NS', 'NS'),
+        ('NA', 'NA'),
+    )
+
     #测试当下的版本信息
     Customer_choice = (
         # ('Select Customer', 'Select Customer'),
@@ -334,6 +344,8 @@ class TestPlanSW(models.Model):
         'Remark for Feature Weight adjust(TL僅可調整且只能根據定義進行調整 feature weight，定義外的測項不可自行調整)', max_length=1500, blank=True,
         null=True, default='')  # New
     TE=models.CharField('TE',max_length=30, blank=True, null=True, default='')
+    Result = models.CharField('Result', choices=RESULT_CHOICES, max_length=10, blank=True, null=True, default='')
+    ECR = models.CharField('ECR', max_length=200, blank=True, null=True, default='')
     Schedule=models.CharField('Schedule',max_length=40, blank=True, null=True, default='')
     start_date = models.DateField('StartDate', blank=True, null=True)
     end_date = models.DateField('EndDate', blank=True, null=True)
@@ -452,6 +464,16 @@ class RetestItemSW(models.Model):
         ('L', 'L'),
         ('S', 'S'),
     )
+
+    RESULT_CHOICES = (
+        ('', ''),  # 未测试
+        ('PASS', 'PASS'),
+        ('FAIL', 'FAIL'),
+        ('BLOCK', 'BLOCK'),
+        ('NS', 'NS'),
+        ('NA', 'NA'),
+    )
+
     Phase_choice = (
         # ('Select Phase', 'Select Phase'),
         ('', ''),
@@ -572,6 +594,8 @@ class RetestItemSW(models.Model):
         'Remark for Feature Weight adjust(TL僅可調整且只能根據定義進行調整 feature weight，定義外的測項不可自行調整)', max_length=1500, blank=True,
         null=True, default='')  # New
     TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
+    Result = models.CharField('Result', choices=RESULT_CHOICES, max_length=10, blank=True, null=True, default='')
+    ECR = models.CharField('ECR', max_length=200, blank=True, null=True, default='')
     Schedule = models.CharField('Schedule', max_length=40, blank=True, null=True, default='')
 
     start_date = models.DateField('StartDate', blank=True, null=True)
@@ -817,6 +841,15 @@ class TestPlanSWAIO(models.Model):
         ('S', 'S'),
     )
 
+    RESULT_CHOICES = (
+        ('', ''),  # 未测试
+        ('PASS', 'PASS'),
+        ('FAIL', 'FAIL'),
+        ('BLOCK', 'BLOCK'),
+        ('NS', 'NS'),
+        ('NA', 'NA'),
+    )
+
     #测试当下的版本信息
     Customer_choice = (
         # ('Select Customer', 'Select Customer'),
@@ -928,6 +961,8 @@ class TestPlanSWAIO(models.Model):
     Weight = models.FloatField('Weight', max_length=20, blank=True, null=True)  # New 2026-05
     BaseTimeWeight = models.FloatField('Base Time*Weight', max_length=20, blank=True, null=True)  # New 2026-05
     TE = models.CharField('TE', max_length=30, blank=True, null=True, default='')
+    Result = models.CharField('Result', choices=RESULT_CHOICES, max_length=10, blank=True, null=True, default='')
+    ECR = models.CharField('ECR', max_length=200, blank=True, null=True, default='')
     Schedule=models.CharField('Schedule',max_length=40, blank=True, null=True, default='')
     start_date = models.DateField('StartDate', blank=True, null=True)
     end_date = models.DateField('EndDate', blank=True, null=True)

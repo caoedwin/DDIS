@@ -2745,7 +2745,7 @@ def TestPlanSW_Edit(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -2831,7 +2831,7 @@ def TestPlanSW_Edit(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -3019,7 +3019,7 @@ def TestPlanSW_Edit(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -3105,7 +3105,7 @@ def TestPlanSW_Edit(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -3188,6 +3188,10 @@ def TestPlanSW_Edit(request):
                 updatedate['RemarkforFeatureWeightadjust'] = request.POST.get('RemarkforFeatureWeightadjust')
             if 'TE' in request.POST.keys():
                 updatedate['TE'] = request.POST.get('TE')
+            if 'Result' in request.POST.keys():
+                updatedate['Result'] = request.POST.get('Result')
+            if 'ECR' in request.POST.keys():
+                updatedate['ECR'] = request.POST.get('ECR')
             if 'schedule' in request.POST.keys():
                 updatedate['Schedule'] = request.POST.get('schedule')
             if 'starttime' in request.POST.keys():
@@ -3429,6 +3433,8 @@ def TestPlanSW_Edit(request):
                     adddic['BaseTimeSupport'] = float(request.POST.get('BTS'))
                 adddic['RemarkforFeatureWeightadjust'] = request.POST.get('RemarkforFeatureWeightadjust')# New
                 adddic['TE'] = request.POST.get('TE')
+                adddic['Result'] = request.POST.get('Result', '')
+                adddic['ECR'] = request.POST.get('ECR', '')
                 adddic['Schedule'] = request.POST.get('schedule')
                 if request.POST.get('starttime'):
                     adddic['ProjectTestSKUfollowMatrix'] = float(request.POST.get('starttime'))
@@ -3631,6 +3637,10 @@ def TestPlanSW_Edit(request):
                                         editplan.RemarkforFeatureWeightadjust = i['RemarkforFeatureWeightadjust']
                                     if 'TE' in i.keys():
                                         editplan.TE = i['TE']
+                                    if 'Result' in i.keys():
+                                        editplan.Result = i['Result']
+                                    if 'ECR' in i.keys():
+                                        editplan.ECR = i['ECR']
                                     if 'Schedule' in i.keys():
                                         editplan.Schedule = i['Schedule']
                                     if 'ProjectTestSKUfollowMatrix' in i.keys():
@@ -3904,6 +3914,15 @@ def TestPlanSW_Edit(request):
                                         updatedic["RemarkforFeatureWeightadjust"] = i['RemarkforFeatureWeightadjust']
                                     if 'TE' in i.keys():
                                         updatedic["TE"] = i['TE']
+                                    # 在 updatedic 字典中添加
+                                    if 'Result' in i.keys():
+                                        updatedic['Result'] = i['Result']
+                                    else:
+                                        updatedic['Result'] = ''  # 或 None
+                                    if 'ECR' in i.keys():
+                                        updatedic['ECR'] = i['ECR']
+                                    else:
+                                        updatedic['ECR'] = ''  # 或 None
                                     if 'Schedule' in i.keys():
                                         updatedic["Schedule"] = i['Schedule']
                                     if 'ProjectTestSKUfollowMatrix' in i.keys():
@@ -4212,6 +4231,10 @@ def TestPlanSW_Edit(request):
                                         editplan.RemarkforFeatureWeightadjust = i['RemarkforFeatureWeightadjust']
                                     if 'TE' in i.keys():
                                         editplan.TE = i['TE']
+                                    if 'Result' in i.keys():
+                                        editplan.Result = i['Result']
+                                    if 'ECR' in i.keys():
+                                        editplan.ECR = i['ECR']
                                     if 'Schedule' in i.keys():
                                         editplan.Schedule = i['Schedule']
                                     if 'ProjectTestSKUfollowMatrix' in i.keys():
@@ -4493,6 +4516,10 @@ def TestPlanSW_Edit(request):
                                     updatedic["RemarkforFeatureWeightadjust"] = i['RemarkforFeatureWeightadjust']
                                 if 'TE' in i.keys():
                                     updatedic["TE"] = i['TE']
+                                if 'Result' in i.keys():
+                                    updatedic["Result"] = i['Result']
+                                if 'ECR' in i.keys():
+                                    updatedic["ECR"] = i['ECR']
                                 if 'Schedule' in i.keys():
                                     updatedic["Schedule"] = i['Schedule']
                                 if 'ProjectTestSKUfollowMatrix' in i.keys():
@@ -5790,7 +5817,7 @@ def TestPlanSW_search(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -5925,7 +5952,7 @@ def TestPlanSW_search(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -6115,7 +6142,7 @@ def TestPlanSW_search(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'comments2': i.CommentsSmart, "planOptimize": planOptimize, 'CRC': i.ConfigRetestCycle,
@@ -6205,7 +6232,7 @@ def TestPlanSW_search(request):
                                 'FS': i.FeatureSupport,
                                 'FeatureWeight': i.FeatureWeight, # New
                                 'RemarkforFeatureWeightadjust': i.RemarkforFeatureWeightadjust, # New
-                                'TE': i.TE, 'schedule': i.Schedule,
+                                'TE': i.TE, 'Result': i.Result, 'ECR': i.ECR, 'schedule': i.Schedule,
                                 'starttime': i.ProjectTestSKUfollowMatrix, 'conAitem': i.ConfigAutomationItem,
                                 'conLitem': i.ConfigLeverageItem, 'comments1': i.CommentsLeverage,
                                 'conSitem': i.ConfigSmartItem,
@@ -7708,7 +7735,7 @@ def TestPlanSW_Edit_AIO(request):
                          "SDV": i.SDV, "SIT": i.SIT, "Coverage": i.Coverage, "FS": i.FeatureSupport, "BTS": i.Basetimesupport,
                          'FeatureWeight': i.Weight,  # New
                          'BTWeight': i.BaseTimeWeight,  # New
-                         "TE": i.TE, "schedule": i.Schedule,
+                         "TE": i.TE, 'Result': i.Result, 'ECR': i.ECR, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
                          "conSitemInAll": i.ConfigSmartItemper,
@@ -7823,7 +7850,7 @@ def TestPlanSW_Edit_AIO(request):
                          "SDV": i.SDV, "SIT": i.SIT, "Coverage": i.Coverage, "FS": i.FeatureSupport, "BTS": i.Basetimesupport,
                          'FeatureWeight': i.Weight,  # New
                          'BTWeight': i.BaseTimeWeight,  # New
-                         "TE": i.TE, "schedule": i.Schedule,
+                         "TE": i.TE, 'Result': i.Result, 'ECR': i.ECR, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
                          "conSitemInAll": i.ConfigSmartItemper,
@@ -7898,6 +7925,10 @@ def TestPlanSW_Edit_AIO(request):
                     updatedate['Weight'] = None
             if 'TE' in request.POST.keys():
                 updatedate['TE'] = request.POST.get('TE')
+            if 'Result' in request.POST.keys():
+                updatedate['Result'] = request.POST.get('Result')
+            if 'ECR' in request.POST.keys():
+                updatedate['ECR'] = request.POST.get('ECR')
             if 'NUMX_TIME' in request.POST.keys():
                 updatedate['Configalltesttime'] = request.POST.get('NUMX_TIME')
             if 'NUMX' in request.POST.keys():
@@ -8174,7 +8205,7 @@ def TestPlanSW_Edit_AIO(request):
                          "BTS": i.Basetimesupport,
                          'FeatureWeight': i.Weight,  # New
                          'BTWeight': i.BaseTimeWeight,  # New
-                         "TE": i.TE, "schedule": i.Schedule,
+                         "TE": i.TE, 'Result': i.Result, 'ECR': i.ECR, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
                          "conSitemInAll": i.ConfigSmartItemper,
@@ -8803,7 +8834,7 @@ def TestPlanSW_search_AIO(request):
                          "BTS": i.Basetimesupport,
                          'FeatureWeight': i.Weight,  # New
                          'BTWeight': i.BaseTimeWeight,  # New
-                         "TE": i.TE, "schedule": i.Schedule,
+                         "TE": i.TE, 'Result': i.Result, 'ECR': i.ECR, "schedule": i.Schedule,
                          "NUMX": i.Configalltestunits, "NUMX_TIME": i.Configalltesttime, "NUMA": i.ConfigAutomationItem,
                          "CAT": i.ConfigAutomationtime, "NUML": i.ConfigLeverageItem, "CLT": i.ConfigLeveragetime,
                          "conSitemInAll": i.ConfigSmartItemper,

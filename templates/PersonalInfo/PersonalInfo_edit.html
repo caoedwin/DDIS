@@ -967,7 +967,7 @@ label{
                  });
             },
 
-         exportExcel: function () {
+         {% comment %}exportExcel: function () {
              /* 从表生成工作簿对象 */
              {#console.log(document.querySelector("#out-table"));#}
              let temp = [];
@@ -1014,7 +1014,82 @@ label{
                  temp = [];
                  return wbout;
              }, 100);
-         },
+         },{% endcomment %}
+            
+            exportExcel: function () {
+                // 定义表头顺序
+                const headers = ['狀態','報到日期','轉職日期','原客户','原課別','離職日期','預計離職日期','離職原因','離職詳情','離職去向','新公司名稱','薪資','最近一次績效','客戶','部門','課別','集團員工','SAP員工','中文姓名','英文姓名','性別','現職稱','最近一次晉升日期','入職職稱','晉升次數','是否承認工作經驗','畢業年度','學歷','學校','專業','專業歸屬','英語','身份証號','籍貫省份','籍貫縣市','戶口省份','戶口縣市','手機號碼','頭像'];
+                // 定义字段映射
+                const fieldMap = {
+                    '狀態': 'Status',
+                    '報到日期': 'RegistrationDate',
+                    '轉職日期': 'transferDate',
+                    '原客户': 'OldCustomer',
+                    '原課別': 'OldDepartmentCode',
+                    '離職日期': 'DepartureDate',
+                    '預計離職日期': 'ExpectedDepartureDate',
+                    '離職原因': 'DepartureReasons',
+                    '離職詳情': 'DepartureDetails',
+                    '離職去向': 'DepartureTo',
+                    '新公司名稱': 'NewCompanyName',
+                    '薪資': 'Salary',
+                    '最近一次績效': 'LastAchievements',
+                    '客戶': 'Customer',
+                    '部門': 'Department',
+                    '課別': 'Lesson',
+                    '集團員工': 'GroupEmployees',
+                    'SAP員工': 'SAPEmployees',
+                    '中文姓名': 'ChineseName',
+                    '英文姓名': 'EnglishName',
+                    '性別': 'Gender',
+                    '現職稱': 'CurrentTitle',
+                    '最近一次晉升日期': 'LastPromotionDate',
+                    '入職職稱': 'EntryTitle',
+                    '晉升次數': 'PromotionNumber',
+                    '是否承認工作經驗': 'WorkExperience',
+                    '畢業年度': 'GraduationYear',
+                    '學歷': 'Education',
+                    '學校': 'School',
+                    '專業': 'Profession',
+                    '專業歸屬': 'ProfessionAttribution',
+                    '英語': 'English',
+                    '身份証號': 'IdNumber',
+                    '籍貫省份': 'NativeProvince',
+                    '籍貫縣市': 'NativeCity',
+                    '戶口省份': 'HukouProvinces',
+                    '戶口縣市': 'HukouCity',
+                    '手機號碼': 'PhoneNumber',
+                    '頭像': '' // 留空
+                };
+                // 构建数据数组
+                let data = [];
+                data.push(headers); // 第一行表头
+                // 遍历 this.tableContent
+                this.tableContent.forEach(item => {
+                    let row = [];
+                    headers.forEach(header => {
+                        let key = fieldMap[header];
+                        let val = '';
+                        if (key && key !== '') {
+                            val = item[key] !== undefined ? item[key] : '';
+                        }
+                        // 对于日期，确保是字符串格式 yyyy-mm-dd (如果已经是字符串则直接使用)
+                        row.push(val);
+                    });
+                    data.push(row);
+                });
+                // 使用 XLSX 创建 workbook
+                let wb = XLSX.utils.book_new();
+                let ws = XLSX.utils.aoa_to_sheet(data);
+                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                // 导出
+                var wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+                try {
+                    saveAs(new Blob([wbout], { type: "application/octet-stream" }), "人员信息模板.xlsx");
+                } catch (e) {
+                    console.log(e);
+                }
+            },
 
 
             //级联

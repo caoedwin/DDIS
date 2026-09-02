@@ -8,9 +8,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49dc6e49-0cbb-4f1d-b6a9-9b615cad6699" name="Default Changelist" comment="Default Changelist">
+      <change afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_Result_search.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_Result_searchv2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/TestPlanSW/TestPlanSW_Result_searchv3.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/all-2026-08-20.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/all-2026-08-20.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/info-2026-08-20.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/info-2026-08-20.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PersonalInfo/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/PersonalInfo/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestPlanSW/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestPlanSW/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestPlanSW/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestPlanSW/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/src/modelfiles/excelTrans.zip" beforeDir="false" afterPath="$PROJECT_DIR$/static/src/modelfiles/excelTrans.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/PersonalInfo/PersonalInfo_edit.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,6 +249,7 @@
     &quot;Django Server.DDIS.executor&quot;: &quot;Run&quot;,
     &quot;Django 服务器.DDIS.executor&quot;: &quot;Run&quot;,
     &quot;Python.CapitalExpenditureexcelTrans - ui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Excel_InputNB.executor&quot;: &quot;Run&quot;,
     &quot;Python.PCRconvert.executor&quot;: &quot;Run&quot;,
     &quot;Python.dev_needs.executor&quot;: &quot;Run&quot;,
     &quot;Python.excelTrans (1).executor&quot;: &quot;Run&quot;,
@@ -251,7 +258,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
     &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/djangoproject/DMS&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/djangoproject/Reliability_Row_data/templates/TestPlanSW&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -265,11 +272,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\djangoproject\Reliability_Row_data\templates\TestPlanSW" />
       <recent name="C:\djangoproject\Reliability_Row_data\PersonalInfo" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates\sales" />
       <recent name="C:\djangoproject\Reliability_Row_data\sales" />
       <recent name="C:\djangoproject\Reliability_Row_data\templates\PCRList" />
-      <recent name="C:\djangoproject\Reliability_Row_data\app01" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\djangoproject\Reliability_Row_data\templates\Bouncing" />
@@ -297,7 +304,7 @@
     </myKeys>
   </component>
   <component name="RunManager" selected="Django 服务器.DDIS">
-    <configuration name="CapitalExpenditureexcelTrans - ui" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Excel_InputNB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DDIS" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -306,12 +313,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../PythonProject/DDIS_CapitalExpenditure" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../PythonProject/DDISExcel" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../PythonProject/DDIS_CapitalExpenditure/CapitalExpenditureexcelTrans - ui.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../PythonProject/DDISExcel/Excel_InputNB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -394,9 +401,6 @@
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../PythonProject/DDISExcel" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -461,19 +465,19 @@
     <list>
       <item itemvalue="Django 服务器.DDIS" />
       <item itemvalue="Python.models" />
+      <item itemvalue="Python.Excel_InputNB" />
       <item itemvalue="Python.PCRconvert" />
-      <item itemvalue="Python.CapitalExpenditureexcelTrans - ui" />
       <item itemvalue="Python.dev_needs" />
       <item itemvalue="Python.excelTrans (1)" />
       <item itemvalue="Python.excelTransAIO" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.excelTrans (1)" />
+        <item itemvalue="Python.Excel_InputNB" />
         <item itemvalue="Python.PCRconvert" />
         <item itemvalue="Python.excelTransAIO" />
-        <item itemvalue="Python.excelTrans (1)" />
         <item itemvalue="Python.dev_needs" />
-        <item itemvalue="Python.CapitalExpenditureexcelTrans - ui" />
       </list>
     </recent_temporary>
   </component>
@@ -774,6 +778,8 @@
       <workItem from="1785210377846" duration="32240000" />
       <workItem from="1786352373297" duration="66454000" />
       <workItem from="1787204584223" duration="10464000" />
+      <workItem from="1788159792255" duration="19022000" />
+      <workItem from="1788251719354" duration="8244000" />
     </task>
     <servers />
   </component>

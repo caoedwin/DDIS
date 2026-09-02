@@ -12,6 +12,24 @@ from .models import local_identity, Departments, Positions, MajorIfo, Portraits,
     PersonalInfoHisByYear, MainPower, WorkOvertime, LeaveInfo, PublicAreaM
 from django.db.models.functions import ExtractYear
 
+DATE_FIELDS = ["RegistrationDate", "QuitDate", "LastPromotionData", "transferDate", "PlanQuitDate"]
+# 在循环开始前定义一个日期解析函数
+def parse_date(value):
+    if not value or not value.strip():
+        return ''
+    # 尝试常见分隔符
+    for sep in ('-', '/', '.'):
+        parts = value.split(sep)
+        if len(parts) == 3:
+            # 检查是否都为数字
+            if all(p.isdigit() for p in parts):
+                # 补零并组合成 YYYY-MM-DD
+                y, m, d = parts[0].zfill(4), parts[1].zfill(2), parts[2].zfill(2)
+                return f"{y}-{m}-{d}"
+    # 如果都不符合，返回空
+    return ''
+
+
 
 class Reversinator(object):
     def __init__(self, obj):
@@ -1178,6 +1196,9 @@ def PersonalInfo_edit(request):
                                 "IdCard": IdCard, "NativeProvince": NativeProvince, "NativeCounty": NativeCounty,
                                 "ResidenceProvince": ResidenceProvince,
                                 "ResidenceCounty": ResidenceCounty, "MobileNum": MobileNum, }
+                for field in DATE_FIELDS:
+                    if field in updatadivPer and updatadivPer[field] == '':
+                        updatadivPer[field] = None
                 # print(updatadivPer)
                 # print(YearSearch,YearNow)
                 if not YearSearch or YearSearch == YearNow:  # 当年的到PersonalInfo里面修改,年份为空默认修改当年数据,并且职位发生变化时存到PersonalInfoHisByPer
@@ -1493,6 +1514,9 @@ def PersonalInfo_edit(request):
                                 "IdCard": IdCard, "NativeProvince": NativeProvince, "NativeCounty": NativeCounty,
                                 "ResidenceProvince": ResidenceProvince,
                                 "ResidenceCounty": ResidenceCounty, "MobileNum": MobileNum, }
+                for field in DATE_FIELDS:
+                    if field in updatadivPer and updatadivPer[field] == '':
+                        updatadivPer[field] = None
                 # print(YearSearch)
                 if not YearSearch or YearSearch == YearNow:  # 当年的添加到PersonalInfo里面,年份为空默认修改当年数据
                     print('1')
@@ -2154,23 +2178,16 @@ def PersonalInfo_edit(request):
                                 modeldata = {}
                                 for key, value in i.items():
                                     if key in headermodel_PersonalInfo.keys():
-                                        if headermodel_PersonalInfo[key] == "RegistrationDate" or \
-                                                headermodel_PersonalInfo[
-                                                    key] == "QuitDate" or headermodel_PersonalInfo[
-                                            key] == "LastPromotionData" or headermodel_PersonalInfo[
-                                            key] == "transferDate":
-                                            # value = value.replace('/', '-')
-                                            # value = value.replace('.', '-')
-                                            if len(value.split("/")) == 3:
-                                                modeldata[headermodel_PersonalInfo[key]] = value.split("/")[0] + "-" + \
-                                                                                           value.split("/")[1] + "-" + \
-                                                                                           value.split("/")[2]
-                                            else:
-                                                modeldata[headermodel_PersonalInfo[key]] = value.split("-")[0] + "-" + \
-                                                                                           value.split("-")[1] + "-" + \
-                                                                                           value.split("-")[2]
+                                        field = headermodel_PersonalInfo[key]
+                                        # 如果是日期字段，使用解析函数
+                                        if field in ["RegistrationDate", "QuitDate", "LastPromotionData",
+                                                     "transferDate"]:
+                                            modeldata[field] = parse_date(value)
                                         else:
-                                            modeldata[headermodel_PersonalInfo[key]] = value
+                                            modeldata[field] = value
+                                        for field in DATE_FIELDS:
+                                            if field in modeldata and modeldata[field] == '':
+                                                modeldata[field] = None
                                 modeldata['Year'] = responseData['historyYear']
                                 checkHisPer = {'Year': modeldata['Year'], 'GroupNum': modeldata['GroupNum']}
                                 # print(modeldata)
@@ -2199,22 +2216,16 @@ def PersonalInfo_edit(request):
                                 modeldata = {}
                                 for key, value in i.items():
                                     if key in headermodel_PersonalInfo.keys():
-                                        if headermodel_PersonalInfo[key] == "RegistrationDate" or \
-                                                headermodel_PersonalInfo[key] == "QuitDate" or headermodel_PersonalInfo[
-                                            key] == "LastPromotionData" or headermodel_PersonalInfo[
-                                            key] == "transferDate":
-                                            # value = value.replace('/', '-')
-                                            # value = value.replace('.', '-')
-                                            if len(value.split("/")) == 3:
-                                                modeldata[headermodel_PersonalInfo[key]] = value.split("/")[0] + "-" + \
-                                                                                           value.split("/")[1] + "-" + \
-                                                                                           value.split("/")[2]
-                                            else:
-                                                modeldata[headermodel_PersonalInfo[key]] = value.split("-")[0] + "-" + \
-                                                                                           value.split("-")[1] + "-" + \
-                                                                                           value.split("-")[2]
+                                        field = headermodel_PersonalInfo[key]
+                                        # 如果是日期字段，使用解析函数
+                                        if field in ["RegistrationDate", "QuitDate", "LastPromotionData",
+                                                     "transferDate"]:
+                                            modeldata[field] = parse_date(value)
                                         else:
-                                            modeldata[headermodel_PersonalInfo[key]] = value
+                                            modeldata[field] = value
+                                        for field in DATE_FIELDS:
+                                            if field in modeldata and modeldata[field] == '':
+                                                modeldata[field] = None
                                 Check_dic = {
                                     'GroupNum': modeldata['GroupNum'],
                                 }
@@ -2248,6 +2259,7 @@ def PersonalInfo_edit(request):
                                         if "EngName" in modeldata.keys():
                                             PersonalInfoHisByPerCreate['EngName'] = modeldata['EngName']
                                         PersonalInfoHisByPer.objects.create(**PersonalInfoHisByPerCreate)
+                                        print(modeldata)
                                         PersonalInfo.objects.filter(
                                             **Check_dic).update(**modeldata)
                                         for perhis in PersonalInfoHisByYear.objects.filter(**Check_dic):

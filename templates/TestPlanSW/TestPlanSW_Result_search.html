@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试用例阶段结果矩阵（原型）</title>
+  <!-- 使用 Vue 2 CDN 和 Element UI 样式（可选） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .project-selector {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .project-selector label {
+      font-weight: 600;
+      color: #333;
+    }
+    .project-selector select {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #dcdfe6;
+      background: white;
+      font-size: 14px;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e4e7ed;
+      padding: 8px 6px;
+      text-align: center;
+      vertical-align: middle;
+      min-width: 100px;
+    }
+    th {
+      background: #f5f7fa;
+      font-weight: 600;
+      color: #1f2f3d;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .case-id {
+      font-weight: 500;
+      color: #409eff;
+      cursor: default;
+    }
+    .case-name {
+      text-align: left;
+      padding-left: 12px;
+      font-weight: 400;
+      color: #303133;
+    }
+    .phase-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+    }
+    .version-tag {
+      font-size: 11px;
+      background: #ecf5ff;
+      color: #409eff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    .result-badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 12px;
+      border-radius: 12px;
+      display: inline-block;
+      min-width: 50px;
+    }
+    .result-pass {
+      background: #e1f3d8;
+      color: #2e7d32;
+    }
+    .result-fail {
+      background: #fde2e2;
+      color: #c62828;
+    }
+    .result-block {
+      background: #fff3e0;
+      color: #e65100;
+    }
+    .result-untested {
+      background: #f4f4f4;
+      color: #757575;
+    }
+    .no-data {
+      color: #b0b8c4;
+      font-size: 12px;
+    }
+    .summary-row {
+      background: #fafbfc;
+      font-weight: 500;
+    }
+    .summary-row td {
+      border-top: 2px solid #409eff;
+    }
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #e4e7ed;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="container">
+    <div class="header">
+      <h2 style="margin:0; font-weight: 500;">测试用例阶段结果矩阵</h2>
+      <div class="project-selector">
+        <label for="projectSelect">选择机种：</label>
+        <select id="projectSelect" v-model="selectedProject" @change="onProjectChange">
+          <option v-for="proj in projects" :value="proj" :key="proj">{{ proj }}</option>
+        </select>
+        <el-button size="small" type="primary" @click="refreshData">刷新</el-button>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="min-width:80px;">Case ID</th>
+            <th style="min-width:160px; text-align:left;">Case Name</th>
+            <th v-for="phase in phases" :key="phase" style="min-width:120px;">
+              <div>{{ phase }}</div>
+              <div style="font-weight:normal; font-size:11px; color:#909399;">版本 / 结果</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in tableData" :key="row.caseId">
+            <td class="case-id">{{ row.caseId }}</td>
+            <td class="case-name">{{ row.caseName }}</td>
+            <td v-for="phase in phases" :key="phase">
+              <div class="phase-cell">
+                <span v-if="row.phaseResults[phase]" class="version-tag">{{ row.phaseResults[phase].version || '—' }}</span>
+                <span v-else class="no-data">—</span>
+                <span v-if="row.phaseResults[phase]" 
+                      class="result-badge" 
+                      :class="resultClass(row.phaseResults[phase].result)">
+                  {{ row.phaseResults[phase].result || '未测' }}
+                </span>
+                <span v-else class="no-data">未测</span>
+              </div>
+            </td>
+          </tr>
+          <!-- 总计行（举例：统计各阶段通过率等，可选） -->
+          <tr class="summary-row">
+            <td colspan="2" style="text-align:right; font-weight:600;">通过率</td>
+            <td v-for="phase in phases" :key="phase">
+              <span style="color:#409eff;">{{ getPassRate(phase) }}%</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 图例 -->
+    <div class="legend">
+      <span style="font-weight:600; color:#333;">结果图例：</span>
+      <span class="legend-item"><span class="legend-color" style="background:#e1f3d8;"></span> PASS</span>
+      <span class="legend-item"><span class="legend-color" style="background:#fde2e2;"></span> FAIL</span>
+      <span class="legend-item"><span class="legend-color" style="background:#fff3e0;"></span> BLOCK</span>
+      <span class="legend-item"><span class="legend-color" style="background:#f4f4f4;"></span> 未测</span>
+    </div>
+  </div>
+</div>
+
+<!-- 引入 Vue 和 Element UI -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      selectedProject: 'FLMS0',
+      projects: ['FLMS0', 'FL4C4', 'ELMV2', 'FLY00'],
+      // Mock 数据：按机种存储
+      mockData: {
+        'FLMS0': {
+          phases: ['B(FVT)', 'C(SIT)', 'FFRT', 'FFRT2', 'GSKU'],
+          cases: [
+            { caseId: 'BFA001', caseName: 'BIOS SETUP', results: {
+                'B(FVT)': { version: '3.1.5', result: 'PASS' },
+                'C(SIT)': { version: '3.1.6', result: 'PASS' },
+                'FFRT': { version: '3.1.7', result: 'FAIL' },
+                'FFRT2': { version: '3.1.8', result: 'BLOCK' },
+                'GSKU': { version: '3.1.9', result: 'PASS' }
+              }
+            },
+            { caseId: 'BFA002', caseName: 'ACPI TEST', results: {
+                'B(FVT)': { version: '2.2.0', result: 'PASS' },
+                'C(SIT)': { version: '2.2.1', result: 'FAIL' },
+                'FFRT': { version: '2.2.2', result: 'PASS' },
+                'FFRT2': { version: null, result: '' },
+                'GSKU': { version: '2.2.3', result: 'PASS' }
+              }
+            },
+            { caseId: 'IAA001', caseName: 'USB INTERFACE', results: {
+                'B(FVT)': { version: '1.0.0', result: 'PASS' },
+                'C(SIT)': { version: '1.0.1', result: 'PASS' },
+                'FFRT': { version: null, result: '' },
+                'FFRT2': { version: null, result: '' },
+                'GSKU': { version: '1.0.2', result: 'PASS' }
+              }
+            },
+            { caseId: 'CTA001', caseName: 'WIFI CONNECTIVITY', results: {
+                'B(FVT)': { version: '4.2.0', result: 'PASS' },
+                'C(SIT)': { version: '4.2.1', result: 'BLOCK' },
+                'FFRT': { version: '4.2.2', result: 'FAIL' },
+                'FFRT2': { version: '4.2.3', result: 'PASS' },
+                'GSKU': { version: '4.2.4', result: 'PASS' }
+              }
+            }
+          ]
+        },
+        'FL4C4': {
+          phases: ['B(FVT)', 'C(SIT)', 'FFRT', 'OOC'],
+          cases: [
+            { caseId: 'PFA001', caseName: 'PERFORMANCE TEST', results: {
+                'B(FVT)': { version: '5.0.0', result: 'PASS' },
+                'C(SIT)': { version: '5.0.1', result: 'PASS' },
+                'FFRT': { version: '5.0.2', result: 'PASS' },
+                'OOC': { version: '5.0.3', result: 'FAIL' }
+              }
+            }
+          ]
+        }
+      }
+    },
+    computed: {
+      // 当前选中的机种数据
+      currentData() {
+        return this.mockData[this.selectedProject] || { phases: [], cases: [] };
+      },
+      phases() {
+        return this.currentData.phases || [];
+      },
+      tableData() {
+        // 将 cases 转换为表格行，确保每个 phase 都有数据
+        return this.currentData.cases.map(c => ({
+          caseId: c.caseId,
+          caseName: c.caseName,
+          phaseResults: c.results || {}
+        }));
+      }
+    },
+    methods: {
+      onProjectChange() {
+        // 可在此触发数据请求（模拟）
+        console.log('切换机种至:', this.selectedProject);
+      },
+      refreshData() {
+        this.$message('刷新数据（模拟）');
+      },
+      resultClass(result) {
+        if (!result) return 'result-untested';
+        const r = result.toUpperCase();
+        if (r === 'PASS') return 'result-pass';
+        if (r === 'FAIL') return 'result-fail';
+        if (r === 'BLOCK') return 'result-block';
+        return 'result-untested';
+      },
+      getPassRate(phase) {
+        // 计算该阶段通过率（示例）
+        const rows = this.tableData;
+        let total = 0, pass = 0;
+        rows.forEach(row => {
+          const res = row.phaseResults[phase];
+          if (res && res.result) {
+            total++;
+            if (res.result.toUpperCase() === 'PASS') pass++;
+          }
+        });
+        return total === 0 ? 0 : Math.round((pass / total) * 100);
+      }
+    },
+    mounted() {
+      // 模拟初始加载
+    }
+  });
+</script>
+</body>
+</html>

@@ -327,7 +327,7 @@
                     </el-form>
                 </div>
                 {#            由於每次更新都是年初excel整體上傳，而不是在系統中編輯，故而系統中沒有歷史記錄，就無法算出晉升次數以及每次晉升日期，故決定拿掉這部分信息#}
-                {% comment %}<el-table  border :data="tableData">
+                <el-table  border :data="tableData">
                 <el-table-column type="index" :index="indexMethod" ></el-table-column>
                 <el-table-column  prop="Department" label="部門代碼"  width="130"></el-table-column>
                 <el-table-column  prop="GroupEmployees" label="工號"  width="100"></el-table-column>
@@ -337,7 +337,7 @@
                 <el-table-column  prop="PromotionDate" label="晉升日期"    width="120"></el-table-column>
                 <el-table-column  prop="Intervaltime" label="間隔時間（年）"></el-table-column>
                 <el-table-column  prop="beizhu" label=" "  ></el-table-column>
-       </el-table>{% endcomment %}
+       </el-table>
             </template>
         </el-dialog>
     </div>
