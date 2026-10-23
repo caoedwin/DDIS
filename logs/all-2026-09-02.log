@@ -250,3 +250,421 @@ Traceback (most recent call last):
 django.core.exceptions.ValidationError: ['’‘ 必须为合法的日期格式，请使用 YYYY-MM-DD 格式。']
 [2026-09-02 10:23:50,658] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:23:50: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-edit/'>
 [2026-09-02 10:23:50,672] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP POST /PersonalInfo/PersonalInfo-edit/ 500 [1.89, 127.0.0.1:60638]
+[2026-09-02 10:26:15,149] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:26:15: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-edit/'>
+[2026-09-02 10:26:15,176] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-edit/ 200 [0.97, 127.0.0.1:57721]
+[2026-09-02 10:30:30,690] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:30: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/PersonalInfo-edit/'>
+[2026-09-02 10:30:30,705] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/PersonalInfo-edit/ 200 [0.16, 127.0.0.1:57075]
+[2026-09-02 10:30:30,821] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:30: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2026-09-02 10:30:30,861] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.06, 127.0.0.1:57075]
+[2026-09-02 10:30:30,869] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.04, 127.0.0.1:61653]
+[2026-09-02 10:30:30,877] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.04, 127.0.0.1:63348]
+[2026-09-02 10:30:30,918] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:60077]
+[2026-09-02 10:30:31,112] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:61653]
+[2026-09-02 10:30:31,130] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.03, 127.0.0.1:63348]
+[2026-09-02 10:30:31,144] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:60077]
+[2026-09-02 10:30:32,366] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-edit/'>
+[2026-09-02 10:30:32,383] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-edit/ 200 [1.14, 127.0.0.1:63348]
+[2026-09-02 10:30:32,417] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-02 10:30:32,441] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [1.13, 127.0.0.1:61653]
+[2026-09-02 10:30:34,249] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:34: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/ManPower-search/'>
+[2026-09-02 10:30:34,262] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/ManPower-search/ 200 [0.10, 127.0.0.1:61653]
+[2026-09-02 10:30:34,353] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:34: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2026-09-02 10:30:34,412] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.10, 127.0.0.1:61653]
+[2026-09-02 10:30:34,442] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:61653]
+[2026-09-02 10:30:34,452] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.01, 127.0.0.1:63348]
+[2026-09-02 10:30:34,507] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:54677]
+[2026-09-02 10:30:34,509] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:54677]
+[2026-09-02 10:30:34,589] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:63348]
+[2026-09-02 10:30:34,639] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:63348]
+[2026-09-02 10:30:35,205] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:35: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/ManPower-search/'>
+[2026-09-02 10:30:35,237] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/ManPower-search/ 200 [0.39, 127.0.0.1:63348]
+[2026-09-02 10:30:35,258] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:35: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-02 10:30:35,288] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.43, 127.0.0.1:61653]
+[2026-09-02 10:30:41,008] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:41: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/PersonalInfo/PersonalInfo-search/'>
+[2026-09-02 10:30:41,029] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /PersonalInfo/PersonalInfo-search/ 200 [0.08, 127.0.0.1:61653]
+[2026-09-02 10:30:41,101] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:41: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/.well-known/appspecific/com.chrome.devtools.json'>
+[2026-09-02 10:30:41,128] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /.well-known/appspecific/com.chrome.devtools.json 200 [0.04, 127.0.0.1:61653]
+[2026-09-02 10:30:41,143] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/css/bootstrap.min.css.map 404 [0.01, 127.0.0.1:61653]
+[2026-09-02 10:30:41,155] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/lib/bootstrap.min.js.map 404 [0.01, 127.0.0.1:61653]
+[2026-09-02 10:30:41,215] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:51649]
+[2026-09-02 10:30:41,217] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:51649]
+[2026-09-02 10:30:41,304] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/axios.min.map 404 [0.01, 127.0.0.1:61653]
+[2026-09-02 10:30:41,360] [runserver.py:149] [runserver:log_action] [WARNING]- HTTP GET /static/js/xlsx/FileSaver.min.js.map 404 [0.01, 127.0.0.1:61653]
+[2026-09-02 10:30:42,577] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:42: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-search/'>
+[2026-09-02 10:30:42,599] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-search/ 200 [1.16, 127.0.0.1:61653]
+[2026-09-02 10:30:42,632] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:42: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-02 10:30:42,657] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [1.10, 127.0.0.1:63348]
+[2026-09-02 10:30:44,044] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:44: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-search/'>
+[2026-09-02 10:30:44,060] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-search/ 200 [0.06, 127.0.0.1:63348]
+[2026-09-02 10:30:58,214] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:30:58: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-search/'>
+[2026-09-02 10:30:58,241] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-search/ 200 [0.09, 127.0.0.1:63348]
+[2026-09-02 10:31:21,250] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:31:21: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-search/'>
+[2026-09-02 10:31:44,507] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-search/ 200 [25.11, 127.0.0.1:59515]
+[2026-09-02 10:31:51,319] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:31:51: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/PersonalInfo/PersonalInfo-search/'>
+[2026-09-02 10:31:51,338] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /PersonalInfo/PersonalInfo-search/ 200 [0.06, 127.0.0.1:49807]
+[2026-09-02 10:31:51,456] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 10:31:51: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/media/Portraits/VpmeyYc_m_a29d3fe6092b7ee64539ea03f6c4d90d_sx_501938_www790-1372tplv-5mmsx3fu_4CYYHH2.jpeg'>
+[2026-09-02 10:31:51,487] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /media/Portraits/VpmeyYc_m_a29d3fe6092b7ee64539ea03f6c4d90d_sx_501938_www790-1372tplv-5mmsx3fu_4CYYHH2.jpeg 200 [0.11, 127.0.0.1:49807]
+[2026-09-02 10:35:43,510] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:60077]
+[2026-09-02 10:40:41,078] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:54677]
+[2026-09-02 14:41:02,869] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 14:41:02: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/'>
+[2026-09-02 14:41:03,238] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET / 302 [0.56, 127.0.0.1:63761]
+[2026-09-02 14:41:03,248] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 14:41:03: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-02 14:41:03,251] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:63761]
+[2026-09-02 14:41:03,283] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/vendor/fontawesome-free/css/all.min.css 200 [0.02, 127.0.0.1:63761]
+[2026-09-02 14:41:03,330] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/sb-admin.css 200 [0.07, 127.0.0.1:62472]
+[2026-09-02 14:41:03,360] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/bootstrap.min.css 200 [0.10, 127.0.0.1:59860]
+[2026-09-02 14:41:03,384] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/test1.css 200 [0.12, 127.0.0.1:64673]
+[2026-09-02 14:41:03,531] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/vendor/jquery/jquery.min.js 200 [0.27, 127.0.0.1:58583]
+[2026-09-02 14:41:03,588] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/vendor/bootstrap/js/bootstrap.bundle.min.js 200 [0.32, 127.0.0.1:63450]
+[2026-09-02 14:41:03,599] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/vendor/jquery-easing/jquery.easing.min.js 200 [0.31, 127.0.0.1:63761]
+[2026-09-02 14:41:03,615] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/src/ocean.jpg 200 [0.23, 127.0.0.1:64673]
+[2026-09-02 14:41:03,629] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 14:41:03: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-02 14:41:03,631] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.01, 127.0.0.1:64673]
+[2026-09-02 14:41:03,641] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 14:41:03: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-02 14:41:03,644] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:64673]
+[2026-09-02 15:10:08,167] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:08: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-02 15:10:08,169] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.05, 127.0.0.1:63699]
+[2026-09-02 15:10:08,197] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:08: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-02 15:10:08,200] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.07, 127.0.0.1:63698]
+[2026-09-02 15:10:08,232] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:08: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-02 15:10:08,234] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:63701]
+[2026-09-02 15:10:08,273] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:08: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-02 15:10:08,276] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.15, 127.0.0.1:63700]
+[2026-09-02 15:10:08,573] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:08: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-02 15:10:08,576] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.40, 127.0.0.1:63705]
+[2026-09-02 15:10:09,331] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:09: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-02 15:10:09,333] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.12, 127.0.0.1:63707]
+[2026-09-02 15:10:09,422] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:09: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-02 15:10:09,426] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.18, 127.0.0.1:63708]
+[2026-09-02 15:10:09,744] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-02 15:10:09: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-02 15:10:09,746] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.46, 127.0.0.1:63711]
+[2026-09-03 07:52:55,494] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:55,504] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.10, 127.0.0.1:54319]
+[2026-09-03 07:52:55,525] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:55,528] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:54320]
+[2026-09-03 07:52:55,565] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:55,568] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:54321]
+[2026-09-03 07:52:55,596] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:55,598] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.14, 127.0.0.1:54322]
+[2026-09-03 07:52:55,905] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:55: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 07:52:55,908] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.37, 127.0.0.1:54325]
+[2026-09-03 07:52:56,618] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:56: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 07:52:56,621] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.07, 127.0.0.1:54327]
+[2026-09-03 07:52:56,907] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:56: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 07:52:56,910] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.33, 127.0.0.1:54329]
+[2026-09-03 07:52:56,939] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:56: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 07:52:56,941] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.33, 127.0.0.1:54331]
+[2026-09-03 07:52:56,957] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:56: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:56,960] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.15, 127.0.0.1:50609]
+[2026-09-03 07:52:57,001] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:57: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:57,004] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.19, 127.0.0.1:50608]
+[2026-09-03 07:52:57,046] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:57: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:57,048] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.23, 127.0.0.1:50610]
+[2026-09-03 07:52:57,080] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:57: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 07:52:57,081] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.26, 127.0.0.1:50611]
+[2026-09-03 07:52:57,339] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:57: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 07:52:57,341] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.36, 127.0.0.1:50616]
+[2026-09-03 07:52:58,110] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:58: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 07:52:58,112] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.08, 127.0.0.1:50618]
+[2026-09-03 07:52:58,437] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:58: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 07:52:58,440] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.36, 127.0.0.1:50620]
+[2026-09-03 07:52:58,487] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 07:52:58: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 07:52:58,490] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.39, 127.0.0.1:50622]
+[2026-09-03 08:50:00,421] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:00: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 08:50:00,432] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.12, 127.0.0.1:61107]
+[2026-09-03 08:50:00,475] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:00: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 08:50:00,479] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.15, 127.0.0.1:61106]
+[2026-09-03 08:50:00,515] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:00: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 08:50:00,518] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.15, 127.0.0.1:61105]
+[2026-09-03 08:50:00,544] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:00: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 08:50:00,547] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.18, 127.0.0.1:61104]
+[2026-09-03 08:50:00,586] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:00: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 08:50:00,588] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [0.14, 127.0.0.1:61110]
+[2026-09-03 08:50:00,887] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:00: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 08:50:00,890] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.38, 127.0.0.1:61112]
+[2026-09-03 08:50:01,678] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:01: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 08:50:01,680] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.16, 127.0.0.1:61114]
+[2026-09-03 08:50:01,994] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 08:50:01: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 08:50:01,997] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.43, 127.0.0.1:61115]
+[2026-09-03 09:02:55,516] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:02:55,518] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.03, 127.0.0.1:62657]
+[2026-09-03 09:02:55,546] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:02:55,548] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:62655]
+[2026-09-03 09:02:55,563] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:02:55,566] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.08, 127.0.0.1:62658]
+[2026-09-03 09:02:55,590] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:55: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:02:55,592] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.10, 127.0.0.1:62656]
+[2026-09-03 09:02:55,928] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:55: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 09:02:55,932] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [0.41, 127.0.0.1:62661]
+[2026-09-03 09:02:56,624] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:56: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 09:02:56,627] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.07, 127.0.0.1:62663]
+[2026-09-03 09:02:56,652] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:56: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 09:02:56,655] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.08, 127.0.0.1:62665]
+[2026-09-03 09:02:56,926] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:02:56: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 09:02:56,930] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [1.33, 127.0.0.1:62666]
+[2026-09-03 09:19:27,200] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:27: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:19:27,202] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.02, 127.0.0.1:49671]
+[2026-09-03 09:19:27,233] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:27: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:19:27,235] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.05, 127.0.0.1:49674]
+[2026-09-03 09:19:27,263] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:27: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:19:27,266] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.08, 127.0.0.1:49675]
+[2026-09-03 09:19:27,289] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:27: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:19:27,294] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:49672]
+[2026-09-03 09:19:27,628] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:27: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 09:19:27,630] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.41, 127.0.0.1:49678]
+[2026-09-03 09:19:28,382] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:28: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 09:19:28,384] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.13, 127.0.0.1:49681]
+[2026-09-03 09:19:28,661] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:28: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 09:19:28,664] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.39, 127.0.0.1:49683]
+[2026-09-03 09:19:28,719] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:19:28: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 09:19:28,721] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.42, 127.0.0.1:49685]
+[2026-09-03 09:28:13,623] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:13: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:28:13,626] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.08, 127.0.0.1:54712]
+[2026-09-03 09:28:13,660] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:13: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:28:13,664] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:54713]
+[2026-09-03 09:28:13,696] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:13: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:28:13,698] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.14, 127.0.0.1:54715]
+[2026-09-03 09:28:13,728] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:13: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:28:13,730] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.17, 127.0.0.1:54714]
+[2026-09-03 09:28:14,662] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:14: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 09:28:14,664] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.02, 127.0.0.1:54718]
+[2026-09-03 09:28:14,978] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:14: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 09:28:14,980] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [1.30, 127.0.0.1:54720]
+[2026-09-03 09:28:15,398] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:15: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 09:28:15,400] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.69, 127.0.0.1:54722]
+[2026-09-03 09:28:15,461] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:28:15: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 09:28:15,463] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.73, 127.0.0.1:54724]
+[2026-09-03 09:42:38,552] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:38: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:42:38,555] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.02, 127.0.0.1:54000]
+[2026-09-03 09:42:38,571] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:38: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:42:38,574] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.04, 127.0.0.1:53999]
+[2026-09-03 09:42:38,608] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:38: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:42:38,610] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.07, 127.0.0.1:54001]
+[2026-09-03 09:42:38,626] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:38: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:42:38,629] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.09, 127.0.0.1:54002]
+[2026-09-03 09:42:38,934] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:38: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 09:42:38,939] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.38, 127.0.0.1:54005]
+[2026-09-03 09:42:39,701] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:39: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 09:42:39,705] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.11, 127.0.0.1:54007]
+[2026-09-03 09:42:40,020] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:40: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 09:42:40,023] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.40, 127.0.0.1:54009]
+[2026-09-03 09:42:40,045] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:42:40: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 09:42:40,048] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.39, 127.0.0.1:54011]
+[2026-09-03 09:55:51,228] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:51: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:55:51,231] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.04, 127.0.0.1:52339]
+[2026-09-03 09:55:51,248] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:51: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:55:51,251] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:52340]
+[2026-09-03 09:55:51,287] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:51: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:55:51,289] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.09, 127.0.0.1:52341]
+[2026-09-03 09:55:51,319] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:51: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 09:55:51,322] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.12, 127.0.0.1:52342]
+[2026-09-03 09:55:51,617] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:51: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 09:55:51,620] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.36, 127.0.0.1:52347]
+[2026-09-03 09:55:52,322] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:52: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 09:55:52,323] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.06, 127.0.0.1:52345]
+[2026-09-03 09:55:52,629] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:52: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 09:55:52,631] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.34, 127.0.0.1:52349]
+[2026-09-03 09:55:52,668] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 09:55:52: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 09:55:52,671] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.31, 127.0.0.1:52351]
+[2026-09-03 10:10:30,812] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:30: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:10:30,815] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.02, 127.0.0.1:53903]
+[2026-09-03 10:10:30,843] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:30: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:10:30,846] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.05, 127.0.0.1:53904]
+[2026-09-03 10:10:30,862] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:30: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:10:30,865] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:53905]
+[2026-09-03 10:10:30,893] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:30: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:10:30,897] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.09, 127.0.0.1:53906]
+[2026-09-03 10:10:31,602] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:31: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 10:10:31,606] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [0.78, 127.0.0.1:53909]
+[2026-09-03 10:10:31,878] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:31: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 10:10:31,880] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.01, 127.0.0.1:53911]
+[2026-09-03 10:10:31,933] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:31: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 10:10:31,936] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.06, 127.0.0.1:53913]
+[2026-09-03 10:10:32,201] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:10:32: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 10:10:32,204] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [1.30, 127.0.0.1:53915]
+[2026-09-03 10:17:31,696] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:31: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:17:31,699] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.02, 127.0.0.1:54877]
+[2026-09-03 10:17:31,719] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:31: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:17:31,722] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.05, 127.0.0.1:54875]
+[2026-09-03 10:17:31,744] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:31: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:17:31,746] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:54874]
+[2026-09-03 10:17:31,772] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:31: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:17:31,775] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.09, 127.0.0.1:54876]
+[2026-09-03 10:17:32,155] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:32: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 10:17:32,158] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [0.43, 127.0.0.1:54881]
+[2026-09-03 10:17:32,200] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:32: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 10:17:32,203] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [0.47, 127.0.0.1:54880]
+[2026-09-03 10:17:33,173] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:33: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 10:17:33,177] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.42, 127.0.0.1:54884]
+[2026-09-03 10:17:33,532] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:17:33: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 10:17:33,537] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [1.75, 127.0.0.1:54886]
+[2026-09-03 10:24:41,687] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:41: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:24:41,690] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.03, 127.0.0.1:63349]
+[2026-09-03 10:24:41,710] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:41: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:24:41,712] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.04, 127.0.0.1:63350]
+[2026-09-03 10:24:41,732] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:41: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:24:41,735] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:63351]
+[2026-09-03 10:24:41,771] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:41: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:24:41,774] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.10, 127.0.0.1:63352]
+[2026-09-03 10:24:42,144] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:42: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 10:24:42,147] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [0.45, 127.0.0.1:63355]
+[2026-09-03 10:24:42,488] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:42: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 10:24:42,493] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.77, 127.0.0.1:63357]
+[2026-09-03 10:24:43,384] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:43: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 10:24:43,388] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.63, 127.0.0.1:63360]
+[2026-09-03 10:24:43,437] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:24:43: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 10:24:43,443] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.66, 127.0.0.1:63361]
+[2026-09-03 10:39:49,684] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:49: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:39:49,689] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.03, 127.0.0.1:52537]
+[2026-09-03 10:39:49,730] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:49: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:39:49,732] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:52539]
+[2026-09-03 10:39:49,759] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:49: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:39:49,762] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.09, 127.0.0.1:52540]
+[2026-09-03 10:39:49,781] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:49: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:39:49,784] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:52538]
+[2026-09-03 10:39:50,514] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:50: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 10:39:50,517] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [0.80, 127.0.0.1:52543]
+[2026-09-03 10:39:50,793] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:50: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 10:39:50,797] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [1.03, 127.0.0.1:52545]
+[2026-09-03 10:39:50,855] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:50: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 10:39:50,857] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.09, 127.0.0.1:52547]
+[2026-09-03 10:39:51,134] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:39:51: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 10:39:51,136] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.34, 127.0.0.1:52549]
+[2026-09-03 10:51:45,521] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:45: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:51:45,523] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.03, 127.0.0.1:52482]
+[2026-09-03 10:51:45,548] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:45: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:51:45,550] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:52483]
+[2026-09-03 10:51:45,578] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:45: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:51:45,581] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.09, 127.0.0.1:52481]
+[2026-09-03 10:51:45,594] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:45: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 10:51:45,596] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.10, 127.0.0.1:52484]
+[2026-09-03 10:51:45,857] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:45: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 10:51:45,859] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.30, 127.0.0.1:52487]
+[2026-09-03 10:51:46,147] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:46: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 10:51:46,150] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [0.58, 127.0.0.1:52489]
+[2026-09-03 10:51:46,871] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:46: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 10:51:46,875] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.27, 127.0.0.1:52491]
+[2026-09-03 10:51:46,925] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 10:51:46: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 10:51:46,927] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.31, 127.0.0.1:52493]
+[2026-09-03 11:08:05,593] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:05: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:08:05,595] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.02, 127.0.0.1:51871]
+[2026-09-03 11:08:05,610] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:05: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:08:05,611] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.03, 127.0.0.1:51872]
+[2026-09-03 11:08:05,628] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:05: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:08:05,630] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.05, 127.0.0.1:51873]
+[2026-09-03 11:08:05,647] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:05: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:08:05,650] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.06, 127.0.0.1:51875]
+[2026-09-03 11:08:05,906] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:05: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 11:08:05,908] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [0.31, 127.0.0.1:51877]
+[2026-09-03 11:08:06,499] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:06: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 11:08:06,501] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [0.88, 127.0.0.1:51878]
+[2026-09-03 11:08:06,731] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:06: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 11:08:06,733] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [1.10, 127.0.0.1:51880]
+[2026-09-03 11:08:06,769] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:08:06: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 11:08:06,771] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.11, 127.0.0.1:51883]
+[2026-09-03 11:22:06,675] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:06: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:22:06,678] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.05, 127.0.0.1:61087]
+[2026-09-03 11:22:06,752] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:06: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:22:06,789] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [0.11, 127.0.0.1:61089]
+[2026-09-03 11:22:08,608] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:08: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects/'>
+[2026-09-03 11:22:08,624] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects/ 200 [1.94, 127.0.0.1:61090]
+[2026-09-03 11:22:08,707] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:08: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:22:08,712] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [1.99, 127.0.0.1:61092]
+[2026-09-03 11:22:08,748] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:08: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/TestPlanSW/api/token/'>
+[2026-09-03 11:22:08,750] [runserver.py:141] [runserver:log_action] [INFO]- HTTP POST /TestPlanSW/api/token/ 200 [1.96, 127.0.0.1:61093]
+[2026-09-03 11:22:09,856] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:09: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSW/api/testprojects_aio/'>
+[2026-09-03 11:22:09,880] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSW/api/testprojects_aio/ 200 [3.07, 127.0.0.1:61094]
+[2026-09-03 11:22:10,007] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:10: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects_aio/'>
+[2026-09-03 11:22:10,009] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects_aio/ 200 [1.18, 127.0.0.1:49674]
+[2026-09-03 11:22:11,283] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 11:22:11: None/API_CQM/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/TestPlanSWOS/api/testprojects/'>
+[2026-09-03 11:22:11,285] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /TestPlanSWOS/api/testprojects/ 200 [2.34, 127.0.0.1:49675]
+[2026-09-03 13:12:58,365] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 13:12:58: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2026-09-03 13:12:58,374] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 302 [0.09, 127.0.0.1:52838]
+[2026-09-03 13:12:58,515] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 13:12:58: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-03 13:12:58,518] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.14, 127.0.0.1:52838]
+[2026-09-03 13:12:58,739] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 13:12:58: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-03 13:12:58,744] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.09, 127.0.0.1:52838]
+[2026-09-03 13:12:58,750] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-03 13:12:58: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-03 13:12:58,753] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:52838]
+[2026-09-04 14:22:53,497] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:22:53: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-04 14:22:53,508] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.11, 127.0.0.1:55552]
+[2026-09-04 14:22:53,690] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:22:53: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-04 14:22:53,693] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.04, 127.0.0.1:55552]
+[2026-09-04 14:22:53,701] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:22:53: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-04 14:22:53,705] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:55552]
+[2026-09-04 14:22:56,501] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:22:56: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: POST '/login/?next='>
+[2026-09-04 14:22:56,650] [runserver.py:147] [runserver:log_action] [INFO]- HTTP POST /login/?next= 302 [0.88, 127.0.0.1:55552]
+[2026-09-04 14:22:56,706] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:22:56: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-04 14:22:56,761] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /login/ 302 [0.10, 127.0.0.1:55552]
+[2026-09-04 14:22:57,124] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:22:57: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2026-09-04 14:22:57,139] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.37, 127.0.0.1:55552]
+[2026-09-04 14:22:57,249] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/download_UPK/element-ui@2.12.0/lib/theme-chalk/index.css 200 [0.10, 127.0.0.1:55552]
+[2026-09-04 14:22:57,305] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/calendar2/pignose.calendar.min.css 200 [0.15, 127.0.0.1:62705]
+[2026-09-04 14:22:57,345] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/chartist/chartist.min.css 200 [0.17, 127.0.0.1:58815]
+[2026-09-04 14:22:57,378] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/font-awesome.min.css 200 [0.18, 127.0.0.1:54623]
+[2026-09-04 14:22:57,407] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/themify-icons.css 200 [0.21, 127.0.0.1:52360]
+[2026-09-04 14:22:57,438] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/owl.carousel.min.css 200 [0.24, 127.0.0.1:64655]
+[2026-09-04 14:22:57,463] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/owl.theme.default.min.css 200 [0.21, 127.0.0.1:55552]
+[2026-09-04 14:22:57,489] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/menubar/sidebar.css 200 [0.14, 127.0.0.1:58815]
+[2026-09-04 14:22:57,539] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/node_modules/bootstrap-icons/font/bootstrap-icons.css 200 [0.16, 127.0.0.1:54623]
+[2026-09-04 14:22:57,581] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/helper.css 200 [0.17, 127.0.0.1:52360]
+[2026-09-04 14:22:57,612] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/style.css 200 [0.17, 127.0.0.1:64655]
+[2026-09-04 14:22:57,637] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/uploadbutton.css 200 [0.17, 127.0.0.1:55552]
+[2026-09-04 14:22:57,656] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/toastr-master/build/toastr.min.css 200 [0.17, 127.0.0.1:58815]
+[2026-09-04 14:22:57,671] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/ElementUI.css 200 [0.13, 127.0.0.1:54623]
+[2026-09-04 14:22:57,680] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/admin/assets/fonts/themify.woff?-fvbane 200 [0.08, 127.0.0.1:52360]
+[2026-09-04 14:22:57,723] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d 200 [0.11, 127.0.0.1:64655]
+[2026-09-04 14:22:58,024] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /static/css/lib/weather-icons.css 500 [0.72, 127.0.0.1:62705]
+[2026-09-04 14:22:58,031] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/jquery.min.js 200 [0.39, 127.0.0.1:55552]
+[2026-09-04 14:22:58,095] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/jquery.nanoscroller.min.js 200 [0.44, 127.0.0.1:58815]
+[2026-09-04 14:22:58,162] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/menubar/sidebar.js 200 [0.49, 127.0.0.1:54623]
+[2026-09-04 14:22:58,199] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/preloader/pace.min.js 200 [0.52, 127.0.0.1:52360]
+[2026-09-04 14:22:58,208] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/admin/assets/fonts/themify.ttf?-fvbane 200 [0.48, 127.0.0.1:64655]
+[2026-09-04 14:22:58,276] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/bootstrap.min.js 200 [0.25, 127.0.0.1:62705]
+[2026-09-04 14:22:58,340] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/calendar-2/moment.latest.min.js 200 [0.24, 127.0.0.1:58815]
+[2026-09-04 14:22:58,435] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/calendar-2/pignose.calendar.min.js 200 [0.27, 127.0.0.1:54623]
+[2026-09-04 14:22:58,475] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/calendar-2/pignose.init.js 200 [0.28, 127.0.0.1:52360]
+[2026-09-04 14:22:58,540] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/circle-progress/circle-progress.min.js 200 [0.33, 127.0.0.1:64655]
+[2026-09-04 14:22:58,595] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/fonts/themify.woff?-fvbane 200 [0.32, 127.0.0.1:62705]
+[2026-09-04 14:22:58,638] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/circle-progress/circle-progress-init.js 200 [0.30, 127.0.0.1:58815]
+[2026-09-04 14:22:58,734] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/sparklinechart/jquery.sparkline.min.js 200 [0.30, 127.0.0.1:54623]
+[2026-09-04 14:22:58,790] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/sparklinechart/sparkline.init.js 200 [0.31, 127.0.0.1:52360]
+[2026-09-04 14:22:58,886] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/owl-carousel/owl.carousel.min.js 200 [0.34, 127.0.0.1:64655]
+[2026-09-04 14:22:58,921] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/lib/owl-carousel/owl.carousel-init.js 200 [0.32, 127.0.0.1:62705]
+[2026-09-04 14:22:58,946] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/date.js 200 [0.31, 127.0.0.1:58815]
+[2026-09-04 14:22:59,037] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /static/js/scripts.js 500 [1.01, 127.0.0.1:55552]
+[2026-09-04 14:22:59,149] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/vendor/datatables/jquery.dataTables.js 200 [0.41, 127.0.0.1:54623]
+[2026-09-04 14:22:59,244] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/datapicker.js 200 [0.45, 127.0.0.1:52360]
+[2026-09-04 14:22:59,513] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/xlsx/xlsx.core.min.js 200 [0.63, 127.0.0.1:64655]
+[2026-09-04 14:22:59,595] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/toastr-master/build/toastr.min.js 200 [0.67, 127.0.0.1:62705]
+[2026-09-04 14:22:59,678] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:50737]
+[2026-09-04 14:22:59,729] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/es6/polyfill.min.js 200 [0.78, 127.0.0.1:58815]
+[2026-09-04 14:22:59,822] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/axios.min.js 200 [0.78, 127.0.0.1:55552]
+[2026-09-04 14:23:00,053] [runserver.py:154] [runserver:log_action] [ERROR]- HTTP GET /static/js/vue.min.js 500 [0.90, 127.0.0.1:54623]
+[2026-09-04 14:23:00,184] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/Element/index.js 200 [0.94, 127.0.0.1:52360]
+[2026-09-04 14:23:00,213] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/Element/icon.js 200 [0.70, 127.0.0.1:64655]
+[2026-09-04 14:23:00,259] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/Element/message.js 200 [0.66, 127.0.0.1:62705]
+[2026-09-04 14:23:00,601] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/xlsx/xlsx.js 200 [0.87, 127.0.0.1:58815]
+[2026-09-04 14:23:00,698] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50737]
+[2026-09-04 14:23:00,763] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:23:00: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-04 14:23:00,852] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.13, 127.0.0.1:58815]
+[2026-09-04 14:40:31,594] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:40:31: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2026-09-04 14:40:31,612] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 200 [0.05, 127.0.0.1:59621]
+[2026-09-04 14:40:31,633] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:50737]
+[2026-09-04 14:40:31,667] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/lib/weather-icons.css 200 [0.03, 127.0.0.1:59621]
+[2026-09-04 14:40:31,729] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/scripts.js 200 [0.10, 127.0.0.1:50553]
+[2026-09-04 14:40:31,793] [runserver.py:162] [runserver:log_action] [INFO]- WebSocket HANDSHAKING /ws/msg/Reliability_Row_data/ [127.0.0.1:52893]
+[2026-09-04 14:40:31,945] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/js/vue.min.js 200 [0.31, 127.0.0.1:62410]
+[2026-09-04 14:40:31,952] [runserver.py:158] [runserver:log_action] [INFO]- WebSocket CONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:52893]
+[2026-09-04 14:40:32,226] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /static/css/fonts/element-icons.ttf 200 [0.02, 127.0.0.1:62410]
+[2026-09-04 14:40:32,381] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-04 14:40:32: C1010S3/AnonymousUser/Edwin> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-04 14:40:32,482] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 200 [0.18, 127.0.0.1:62410]
+[2026-09-04 14:59:20,087] [runserver.py:160] [runserver:log_action] [INFO]- WebSocket DISCONNECT /ws/msg/Reliability_Row_data/ [127.0.0.1:52893]
+[2026-09-07 11:53:02,169] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-07 11:53:02: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/Navigations/'>
+[2026-09-07 11:53:02,192] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /Navigations/ 302 [0.13, 127.0.0.1:56415]
+[2026-09-07 11:53:02,254] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-07 11:53:02: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-07 11:53:02,259] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.06, 127.0.0.1:56415]
+[2026-09-07 11:53:02,457] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-07 11:53:02: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/favicon.ico'>
+[2026-09-07 11:53:02,462] [runserver.py:147] [runserver:log_action] [INFO]- HTTP GET /favicon.ico 302 [0.06, 127.0.0.1:56415]
+[2026-09-07 11:53:02,471] [UserIP.py:93] [UserIP:process_response] [INFO]- 2026-09-07 11:53:02: None/AnonymousUser/None> None/None/None > 127.0.0.1/127.0.0.1 > <AsgiRequest: GET '/login/'>
+[2026-09-07 11:53:02,475] [runserver.py:141] [runserver:log_action] [INFO]- HTTP GET /login/ 200 [0.01, 127.0.0.1:56415]
